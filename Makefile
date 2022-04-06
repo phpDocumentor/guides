@@ -8,7 +8,7 @@ fix-code-style:
 
 .PHONY: phpstan
 phpstan:
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpstan analyse src --no-progress --level max --configuration phpstan.neon
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpstan --configuration=phpstan.neon
 
 .PHONY: psaml
 psalm:
