@@ -61,14 +61,6 @@ final class ListItem
     }
 
     /**
-     * @param mixed $value
-     */
-    public function addText($value): void
-    {
-        $this->text[] = $value;
-    }
-
-    /**
      * @return mixed[]
      */
     public function toArray(): array

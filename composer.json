@@ -23,6 +23,7 @@
     },
     "require": {
         "php": "^7.4||^8.0",
+        "ext-mbstring": "*",
         "league/flysystem": "^1.0",
         "phpdocumentor/flyfinder": "^1.1",
         "twig/twig": "~2.0",
@@ -31,13 +32,15 @@
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
         "symfony/translation-contracts": "^2.1",
-        "league/uri": "^6.5"
+        "league/uri": "^6.5",
+        "league/uri-interfaces": "^2.3",
+        "psr/log": "^1.1"
     },
     "require-dev": {
-        "psr/log": "^1.0",
         "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.22",
         "phpstan/phpstan": "^1.5",
-        "phpspec/prophecy-phpunit": "^2.0"
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan-webmozart-assert": "^1.1"
     }
 }

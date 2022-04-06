@@ -1,9 +1,9 @@
 .PHONY: code-style
-phpcs:
+code-style:
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest -d memory_limit=1024M -s
 
 .PHONY: fix-code-style
-phpcs:
+fix-code-style:
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest phpcbf
 
 .PHONY: phpstan
