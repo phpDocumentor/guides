@@ -16,8 +16,13 @@
         }
     },
     "minimum-stability": "stable",
+    "config": {
+        "platform": {
+            "php": "7.4.1"
+        }
+    },
     "require": {
-        "php": "7.4||^8.0",
+        "php": "^7.4||^8.0",
         "league/flysystem": "^1.0",
         "phpdocumentor/flyfinder": "^1.1",
         "twig/twig": "~2.0",
