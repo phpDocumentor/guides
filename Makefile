@@ -18,6 +18,10 @@ psalm:
 test:
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit
 
+.PHONY: dependency-analysis
+dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json
+
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style phpstan psalm
 
