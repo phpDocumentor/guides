@@ -114,7 +114,7 @@ class RenderContext
         return '';
     }
 
-    public function canonicalUrl(string $url): ?string
+    public function canonicalUrl(string $url): string
     {
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }

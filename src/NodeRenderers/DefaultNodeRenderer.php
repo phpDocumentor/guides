@@ -21,8 +21,7 @@ use function is_string;
 
 class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {

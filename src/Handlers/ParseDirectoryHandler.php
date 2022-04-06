@@ -10,6 +10,7 @@ use League\Tactician\CommandBus;
 use phpDocumentor\Guides\FileCollector;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
+use Webmozart\Assert\Assert;
 use function sprintf;
 
 final class ParseDirectoryHandler
@@ -46,6 +47,7 @@ final class ParseDirectoryHandler
             );
         }
 
+        Assert::allIsInstanceOf($documents, DocumentNode::class);
         return $documents;
     }
 

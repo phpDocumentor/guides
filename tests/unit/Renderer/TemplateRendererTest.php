@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
-use phpDocumentor\Faker\Faker;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
@@ -26,15 +25,13 @@ use function sprintf;
  */
 final class TemplateRendererTest extends TestCase
 {
-    use Faker;
-
     /**
      * @covers ::__construct
      * @covers ::render
      */
     public function testRenderTemplateUsingProvidedTwigEnvironment(): void
     {
-        $renderedOutput = $this->faker()->paragraph;
+        $renderedOutput = 'some text';
         $basePath = '/base/path';
         $template = 'mytemplate.html.twig';
         $data = ['key1' => 'value2'];
