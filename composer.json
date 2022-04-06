@@ -3,6 +3,7 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
+    "description": "Core library to parse and render MarkupLanguages, focused on documentation",
     "autoload": {
         "psr-4": {
             "phpDocumentor\\Guides\\": "src/"
