@@ -45,8 +45,7 @@ final class DefinitionListRule implements Rule
     {
         $buffer = new Buffer();
 
-        while (
-            $documentIterator->getNextLine() !== null
+        while ($documentIterator->getNextLine() !== null
             && $this->isDefinitionListEnded($documentIterator->current(), $documentIterator->getNextLine()) === false
         ) {
             $buffer->push($documentIterator->current());

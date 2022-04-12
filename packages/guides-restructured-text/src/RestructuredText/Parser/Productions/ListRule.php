@@ -83,8 +83,7 @@ final class ListRule implements Rule
         $this->isListLine($documentIterator->current(), $listMarker, $listOffset);
         $buffer->push($documentIterator->current());
 
-        while (
-            $documentIterator->getNextLine() !== null
+        while ($documentIterator->getNextLine() !== null
             && (
                 $this->isListLine($documentIterator->getNextLine(), $listMarker, $listOffset)
                 || $this->isBlockLine($documentIterator->getNextLine(), max(1, $listOffset))

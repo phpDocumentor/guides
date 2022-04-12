@@ -134,8 +134,7 @@ final class DirectiveRule implements Rule
 
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void
     {
-        while (
-            $documentIterator->valid()
+        while ($documentIterator->valid()
             && ($directiveOption = $this->lineDataParser->parseDirectiveOption($documentIterator->current())) !== null
         ) {
             $directive->setOption($directiveOption->getName(), $directiveOption->getValue());

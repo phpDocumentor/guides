@@ -88,8 +88,7 @@ class ResolvedReference
     private function validateAttributes(array $attributes): void
     {
         foreach ($attributes as $attribute => $_value) {
-            if (
-                !is_string($attribute)
+            if (!is_string($attribute)
                 || $attribute === 'href'
                 || !(bool) preg_match('/^[a-zA-Z\_][\w\.\-_]+$/', $attribute)
             ) {
