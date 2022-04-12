@@ -2,7 +2,7 @@
   "sub-splits": [
     {
       "name": "guides-core",
-      "directory": "packages/guides-core",
+      "directory": "packages/guides",
       "target": "git@github.com:phpDocumentor/guides-core.git"
     },
     {
