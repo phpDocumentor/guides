@@ -1,14 +1,15 @@
-name: Sub-split Publishing
-on:
+name: "Sub-split Publishing"
+
+on: # yamllint disable-line rule:truthy
   create:
     tags:
-      - '*'
+      - "*"
   delete:
     tags:
-      - '*'
+      - "*"
   push:
     paths:
-      - 'packages/**/*'
+      - "packages/**/*"
     branches:
       - "main"
 
@@ -19,20 +20,20 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
         with:
-          fetch-depth: '0'
-          persist-credentials: 'false'
+          fetch-depth: "0"
+          persist-credentials: "false"
       - uses: "frankdejonge/use-github-token@1.0.1"
         with:
-          authentication: 'phpdoc-bot:${{ secrets.BOT_TOKEN }}'
+          authentication: "phpdoc-bot:${{ secrets.BOT_TOKEN }}"
       - name: "Cache splitsh-lite"
         id: "splitsh-cache"
         uses: "actions/cache@v2"
         with:
-          path: './.splitsh'
-          key: '${{ runner.os }}-splitsh-d-101'
+          path: "./.splitsh"
+          key: "${{ runner.os }}-splitsh-d-101"
       - uses: "frankdejonge/use-subsplit-publish@1.0.0-beta.3"
         with:
-          source-branch: 'main'
-          config-path: './config.subsplit-publish.json'
-          splitsh-path: './.splitsh/splitsh-lite'
-          splitsh-version: 'v1.0.1'
+          source-branch: "main"
+          config-path: "./config.subsplit-publish.json"
+          splitsh-path: "./.splitsh/splitsh-lite"
+          splitsh-version: "v1.0.1"
