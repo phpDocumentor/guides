@@ -1,0 +1,17 @@
+parameters:
+  level: max
+  inferPrivatePropertyTypeFromConstructor: true
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    # FlyFinder plugin adds a find method to FlySystem's Filesystem
+    - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
+
+  paths:
+    - packages/guides/src
+    - packages/guides-markdown/src
+    - packages/guides-restructured-text/src
+    - packages/guides/tests
+#    - packages/guides-markdown/tests
+    - packages/guides-restructured-text/tests
+
+  tmpDir: .build/phpstan/

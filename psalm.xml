@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<psalm
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+>
+    <projectFiles>
+        <directory name="packages/guides/src" />
+        <directory name="packages/guides/tests" />
+
+        <directory name="packages/guides-markdown/src" />
+<!--        <directory name="packages/guides-markdown/tests" />-->
+
+        <directory name="packages/guides-restructured-text/src" />
+        <directory name="packages/guides-restructured-text/tests" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+
+
+    <issueHandlers>
+        <LessSpecificReturnType errorLevel="info" />
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="League\Flysystem\FilesystemInterface::find"/>
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+    </issueHandlers>
+</psalm>

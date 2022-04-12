@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use phpDocumentor\Faker\Faker;
+use Faker\Factory;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
@@ -18,7 +18,6 @@ use function current;
 
 final class SpanParserTest extends TestCase
 {
-    use Faker;
     use ProphecyTrait;
 
     /** @var ParserContext&ObjectProphecy */
@@ -29,6 +28,7 @@ final class SpanParserTest extends TestCase
 
     public function setUp(): void
     {
+        $this->faker = Factory::create();
         $this->parserContext = $this->prophesize(ParserContext::class);
         $this->parserContext->resetAnonymousStack()->hasReturnVoid();
         $this->spanProcessor = new SpanParser();
@@ -225,7 +225,7 @@ TEXT
 
     public function testEmailAddressesAreReplacedWithToken(): void
     {
-        $email = $this->faker()->email;
+        $email = $this->faker->email;
 
         $result = $this->spanProcessor->parse($email, $this->parserContext->reveal());
         $tokens = $result->getTokens();
@@ -246,7 +246,7 @@ TEXT
 
     public function testInlineUrlsAreReplacedWithToken(): void
     {
-        $url = $this->faker()->url;
+        $url = $this->faker->url;
 
         $result = $this->spanProcessor->parse($url, $this->parserContext->reveal());
         $tokens = $result->getTokens();

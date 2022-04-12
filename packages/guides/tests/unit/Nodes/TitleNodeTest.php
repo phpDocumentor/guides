@@ -13,22 +13,12 @@ namespace phpDocumentor\Guides\Nodes;
  * @link https://phpdoc.org
  */
 
-use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\ParserContext;
+use PHPUnit\Framework\TestCase;
 
-final class TitleNodeTest extends MockeryTestCase
+final class TitleNodeTest extends TestCase
 {
     public function test_it_can_be_created_with_a_title_slug_and_depth(): void
     {
-        $environment = m::mock(ParserContext::class);
-        $environment->shouldReceive('getTitleLetters')->andReturn(['a']);
-        $environment->shouldReceive('resetAnonymousStack');
-
-        $parser = m::mock(MarkupLanguageParser::class);
-        $parser->shouldReceive('getEnvironment')->andReturn($environment);
-
         $titleNode = new SpanNode('Raw String');
         $node = new TitleNode($titleNode, 1);
         $node->setTarget('target');

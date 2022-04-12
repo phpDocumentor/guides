@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="phpDocumentor">
+ <description>The coding standard for phpDocumentor.</description>
+
+    <file>packages</file>
+    <file>packages</file>
+
+    <exclude-pattern>packages/*/examples/*\.php</exclude-pattern>
+
+    <arg value="p"/>
+    <rule ref="PSR2">
+        <include-pattern>*\.php</include-pattern>
+    </rule>
+
+    <!-- Set the minimum PHP version for PHPCompatibility.
+         This should be kept in sync with the requirements in the composer.json file. -->
+    <config name="testVersion" value="7.4-"/>
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+          <exclude-pattern>*/tests/*/*.php</exclude-pattern>
+    </rule>
+</ruleset>

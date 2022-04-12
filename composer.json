@@ -1,0 +1,52 @@
+{
+    "name": "phpdocumentor/guides",
+    "description": "Markup parsers and rendering packages, focused on documentation",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "config": {
+        "platform": {
+            "php": "7.4.1"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": "packages/guides/src",
+            "phpDocumentor\\Guides\\RestructuredText\\": "packages/guides-restructured-text/src/RestructuredText",
+            "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/src/Markdown"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": "packages/guides/tests/unit/",
+            "phpDocumentor\\Guides\\RestructuredText\\": "packages/guides-restructured-text/tests/unit",
+            "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit"
+        }
+    },
+    "require": {
+        "php": "^7.4||^8.0",
+        "ext-mbstring": "*",
+        "league/flysystem": "^1.0",
+        "phpdocumentor/flyfinder": "^1.1",
+        "twig/twig": "~2.0",
+        "webmozart/assert": "^1.10",
+        "league/tactician": "^1.1",
+        "psr/event-dispatcher": "^1.0",
+        "symfony/string": "^5.4",
+        "symfony/translation-contracts": "^2.1",
+        "league/uri": "^6.5",
+        "league/uri-interfaces": "^2.3",
+        "psr/log": "^1.1",
+        "doctrine/event-manager": "^1.1",
+        "doctrine/lexer": "^1.2",
+        "league/commonmark": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.22",
+        "phpstan/phpstan": "^1.5",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan-webmozart-assert": "^1.1",
+        "fakerphp/faker": "^1.19"
+    }
+}
