@@ -21,7 +21,7 @@
         "league/flysystem": "^1.0",
         "phpdocumentor/flyfinder": "^1.1",
         "twig/twig": "~2.0",
-        "webmozart/assert": "^1.3",
+        "webmozart/assert": "^1.10",
         "league/tactician": "^1.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
