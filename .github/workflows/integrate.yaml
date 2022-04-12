@@ -114,7 +114,7 @@ jobs:
       - name: "Code style check"
         uses: "phpDocumentor/coding-standard@latest"
         with:
-          args: -s
+          args: "-s"
 
   dependency-analysis:
     name: "Dependency Analysis"
@@ -229,6 +229,7 @@ jobs:
 
         dependencies:
           - "lowest"
+          - "locked"
           - "highest"
 
     steps:
