@@ -1,0 +1,19 @@
+{
+  "sub-splits": [
+    {
+      "name": "guides-core",
+      "directory": "packages/guides-core",
+      "target": "git@github.com:phpDocumentor/guides-core.git"
+    },
+    {
+      "name": "guides-markdown",
+      "directory": "packages/guides-markdown",
+      "target": "git@github.com:phpDocumentor/guides-markdown.git"
+    },
+    {
+      "name": "guides-restructured-text",
+      "directory": "packages/guides-restructured-text",
+      "target": "git@github.com:phpDocumentor/guides-restructured-text.git"
+    }
+  ]
+}
