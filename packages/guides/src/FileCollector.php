@@ -47,9 +47,11 @@ class FileCollector
         // completely populate the splFileInfos property
         $this->fileInfos = [];
         foreach ($files as $fileInfo) {
-            // Make paths relative to the provided source folder
-            $fileInfo['path'] = substr($fileInfo['path'], strlen($directory) + 1);
-            $fileInfo['dirname'] = substr($fileInfo['dirname'], strlen($directory) + 1) ?: '';
+            if (strlen($directory) > 0) {
+                // Make paths relative to the provided source folder
+                $fileInfo['path'] = substr($fileInfo['path'], strlen($directory) + 1);
+                $fileInfo['dirname'] = substr($fileInfo['dirname'], strlen($directory) + 1) ?: '';
+            }
 
             $documentPath = $this->getFilenameFromFile($fileInfo);
 
