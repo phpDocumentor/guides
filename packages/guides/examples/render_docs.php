@@ -12,14 +12,9 @@ use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\ParseFileHandler;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Parser;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use phpDocumentor\Guides\Twig\AssetsExtension;
-use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
-use Twig\Environment;
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../../guides-restructured-text/vendor/autoload.php';
@@ -44,12 +39,7 @@ $commandbus = QuickStart::create(
                     return $event;
                 }
             },
-            new Parser(
-                new UrlGenerator(),
-                [
-                    MarkupLanguageParser::createInstance()
-                ]
-            )
+            \phpDocumentor\Guides\Setup\QuickStart::createRstParser()
         )
     ]
 );
@@ -72,61 +62,7 @@ $parseDirCommand = new ParseDirectoryCommand(
 
 $documents = $parseDirectoryHandler->handle($parseDirCommand);
 
-$nodeRenderers = new ArrayObject();
-$nodeFactoryCallback = static function () use ($nodeRenderers) {
-    return new \phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory(
-        $nodeRenderers,
-        new \phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer()
-    );
-};
-
-$twigBuilder = new EnvironmentBuilder();
-$renderer = new \phpDocumentor\Guides\Renderer(
-    [
-        new \phpDocumentor\Guides\Renderer\OutputFormatRenderer(
-            'html',
-            new \phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory($nodeFactoryCallback),
-            new \phpDocumentor\Guides\Renderer\TemplateRenderer($twigBuilder)
-        ),
-    ],
-    $twigBuilder
-);
-
-$nodeRenderers[] = new \phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer($renderer);
-$nodeRenderers[] = new \phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer(
-    $renderer,
-    new \phpDocumentor\Guides\References\ReferenceResolver([new \phpDocumentor\Guides\References\Resolver\DocResolver()]),
-    $logger,
-    new UrlGenerator()
-);
-$nodeRenderers[] = new \phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer($renderer);
-
-$config = new \phpDocumentor\Guides\Configuration();
-foreach ($config->htmlNodeTemplates() as $node => $template) {
-    $nodeRenderers[] = new \phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer(
-        $renderer,
-        $template,
-        $node
-    );
-}
-
-$twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer) {
-    $twig = new Environment(
-        new \Twig\Loader\FilesystemLoader(
-            [
-                __DIR__  . '/../resources/template'
-            ]
-        )
-    );
-    $twig->addExtension(new AssetsExtension(
-        $logger,
-        $renderer,
-        new UrlGenerator(),
-    ));
-
-    return $twig;
-});
-
+$renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer();
 $renderDocumentHandler = new \phpDocumentor\Guides\Handlers\RenderDocumentHandler($renderer);
 
 foreach ($documents as $document) {

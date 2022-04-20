@@ -47,6 +47,9 @@
         "phpstan/phpstan": "^1.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^1.1",
-        "fakerphp/faker": "^1.19"
+        "fakerphp/faker": "^1.19",
+        "symfony/finder": "^5.4",
+        "gajus/dindent": "^2.0",
+        "league/flysystem-memory": "^1.0"
     }
 }

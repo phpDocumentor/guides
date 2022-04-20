@@ -19,6 +19,10 @@ static-code-analysis: vendor ## Runs a static code analysis with phpstan/phpstan
 test: ## Runs unit tests with phpunit/phpunit
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit
 
+.PHONY: test-functional
+test-functional: ## Runs unit tests with phpunit/phpunit
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=functional
+
 .PHONY: dependency-analysis
 dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json

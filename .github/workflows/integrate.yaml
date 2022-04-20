@@ -265,4 +265,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run unit tests with phpunit/phpunit"
-        run: "vendor/bin/phpunit --colors=always"
+        run: "vendor/bin/phpunit --colors=always --testsuite=unit"
+
+      - name: "Run functional tests with phpunit/phpunit"
+        run: "vendor/bin/phpunit --colors=always --testsuite=functional"
