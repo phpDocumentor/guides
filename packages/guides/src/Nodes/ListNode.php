@@ -39,6 +39,11 @@ final class ListNode extends Node
         return $this->items;
     }
 
+    public function getChildren(): array
+    {
+        return $this->items;
+    }
+
     public function isOrdered(): bool
     {
         return $this->ordered;
