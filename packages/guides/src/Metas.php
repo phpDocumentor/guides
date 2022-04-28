@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\References\InternalTarget;
 
 final class Metas
 {
     /** @var DocumentEntry[] */
     private array $entries;
+
+    /** @var array<string, InternalTarget> */
+    private $internalLinkTargets = [];
 
     /**
      * @param DocumentEntry[] $entries
@@ -52,5 +56,15 @@ final class Metas
     public function findDocument(string $filePath): ?DocumentEntry
     {
         return $this->entries[$filePath] ?? null;
+    }
+
+    public function addLinkTarget(string $anchorName, InternalTarget $target): void
+    {
+        $this->internalLinkTargets[$anchorName] = $target;
+    }
+
+    public function getInternalTarget(string $anchorName): ?InternalTarget
+    {
+        return $this->internalLinkTargets[$anchorName] ?? null;
     }
 }
