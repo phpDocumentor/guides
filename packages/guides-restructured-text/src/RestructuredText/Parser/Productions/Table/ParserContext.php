@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Table;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
-use phpDocumentor\Guides\RestructuredText\Parser\TableSeparatorLineConfig;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
 
 final class ParserContext
 {
