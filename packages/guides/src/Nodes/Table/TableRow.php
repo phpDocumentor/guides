@@ -26,9 +26,9 @@ final class TableRow
     /** @var TableColumn[] */
     private array $columns = [];
 
-    public function addColumn(string $content, int $colSpan): void
+    public function addColumn(TableColumn $tableColumn): void
     {
-        $this->columns[] = new TableColumn($content, $colSpan);
+        $this->columns[] = $tableColumn;
     }
 
     /**
