@@ -29,10 +29,11 @@ final class TableColumn
 
     private ?Node $node = null;
 
-    public function __construct(string $content, int $colSpan)
+    public function __construct(string $content, int $colSpan, ?Node $node = null)
     {
         $this->content = trim($content);
         $this->colSpan = $colSpan;
+        $this->node = $node;
     }
 
     public function getContent(): string
