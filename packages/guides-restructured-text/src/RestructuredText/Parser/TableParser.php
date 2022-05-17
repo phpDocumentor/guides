@@ -107,7 +107,7 @@ class TableParser
         if (count($parts) > 1) {
             return new TableSeparatorLineConfig(
                 $header,
-                $pretty ? TableNode::TYPE_PRETTY : TableNode::TYPE_SIMPLE,
+                $pretty ? Productions\TableRule::TYPE_PRETTY : Productions\TableRule::TYPE_SIMPLE,
                 $parts,
                 $chars[0],
                 $line
@@ -119,7 +119,7 @@ class TableParser
 
     public function guessTableType(string $line): string
     {
-        return $line[0] === self::SIMPLE_TABLE_LETTER ? TableNode::TYPE_SIMPLE : TableNode::TYPE_PRETTY;
+        return $line[0] === self::SIMPLE_TABLE_LETTER ? Productions\TableRule::TYPE_SIMPLE : Productions\TableRule::TYPE_PRETTY;
     }
 
     /**

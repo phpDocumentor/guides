@@ -36,6 +36,7 @@ final class TableRuleTest extends TestCase
      * @dataProvider prettyTableBasicsProvider
      * @dataProvider gridTableWithColSpanProvider
      * @dataProvider gridTableWithRowSpanProvider
+     * @dataProvider gridTableFollowUpTextProvider
      */
     public function testSimpleTableCreation(string $input, array $rows, $headers): void
     {
@@ -287,6 +288,34 @@ RST;
         yield [$input, $expected, [2]];
     }
 
+    public function gridTableFollowUpTextProvider(): \Generator
+    {
+        $input = <<<RST
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| keywords                          | string        |
++-----------------------------------+---------------+
+
+Some text
+RST;
+
+        $headerRow = new TableRow();
+        $headerRow->addColumn($this->createColumnNode('Property'));
+        $headerRow->addColumn($this->createColumnNode('Data Type'));
+
+        $row3 = new TableRow();
+        $row3->addColumn($this->createColumnNode('keywords'));
+        $row3->addColumn($this->createColumnNode('string'));
+
+        $expected = [
+            2 => $headerRow,
+            4 => $row3
+        ];
+
+        yield [$input, $expected, [2]];
+    }
+
     //Add error cases with invalid table formats
 
     public function testTableNotClosed(): void
@@ -367,6 +396,50 @@ in file test
 +===================================+===============+
 | description                       | string        |
 +===================================+===============+
+| author                            | string        |
++-----------------------------------+---------------+
+| keywords                          | string        |
++-----------------------------------+---------------+
+ERROR
+            ,
+            $context
+        );
+    }
+
+    public function testNotEndingWithWhiteLine(): void
+    {
+        $input = <<<RST
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
+| author                            | string        |
++-----------------------------------+---------------+
+| keywords                          | string        |
++-----------------------------------+---------------+
+SOME more text here
+RST;
+
+        $context = $this->getParserContext();
+        $parser = $this->prophesize(MarkupLanguageParser::class);
+        $parser->getEnvironment()->willReturn($context);
+        $rule = new TableRule($parser->reveal());
+        $lineIterator = new LinesIterator();
+        $lineIterator->load($input);
+
+        $rule->apply($lineIterator);
+
+        self::assertContainsError(<<<'ERROR'
+Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
+in file test
+
+
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
 | author                            | string        |
 +-----------------------------------+---------------+
 | keywords                          | string        |
