@@ -11,7 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 
 class SimpleTableBuilder extends AbstractTableBuilder
 {
-    protected function compile(): TableNode
+    protected function compile(ParserContext $context): TableNode
     {
         $rows = [];
         $headers = [];
@@ -19,7 +19,7 @@ class SimpleTableBuilder extends AbstractTableBuilder
         // determine if there is second === separator line (other than
         // the last line): this would mean there are header rows
         $finalHeadersRow = 0;
-        foreach ($this->separatorLineConfigs as $i => $separatorLine) {
+        foreach ($context->getLineSeparators() as $i => $separatorLine) {
             // skip the first line: we're looking for the *next* line
             if ($i === 0) {
                 continue;
@@ -36,15 +36,15 @@ class SimpleTableBuilder extends AbstractTableBuilder
 
         // if the final header row is *after* the last data line, it's not
         // really a header "ending" and so there are no headers
-        $lastDataLineNumber = array_keys($this->rawDataLines)[count($this->rawDataLines) - 1];
+        $lastDataLineNumber = array_keys($context->getDataLines())[count($context->getDataLines()) - 1];
         if ($finalHeadersRow > $lastDataLineNumber) {
             $finalHeadersRow = 0;
         }
 
         // todo - support "---" in the future for colspan
-        $columnRanges = $this->separatorLineConfigs[0]->getPartRanges();
+        $columnRanges = $context->getLineSeparators()[0]->getPartRanges();
         $lastColumnRangeEnd = array_values($columnRanges)[count($columnRanges) - 1][1];
-        foreach ($this->rawDataLines as $i => $line) {
+        foreach ($context->getDataLines() as $i => $line) {
             $row = new TableRow();
             // loop over where all the columns should be
 
@@ -55,7 +55,7 @@ class SimpleTableBuilder extends AbstractTableBuilder
                 if ($previousColumnEnd !== null && !$isRangeBeyondText) {
                     $gapText = mb_substr($line, $previousColumnEnd, $columnRange[0] - $previousColumnEnd);
                     if (mb_strlen(trim($gapText)) !== 0) {
-                        $this->addError(
+                        $context->addError(
                             sprintf('Malformed table: content "%s" appears in the "gap" on row "%s"', $gapText, $line)
                         );
                     }
@@ -103,7 +103,7 @@ class SimpleTableBuilder extends AbstractTableBuilder
                 try {
                     $previousRow->absorbRowContent($row);
                 } catch (InvalidTableStructure $e) {
-                    $this->addError($e->getMessage());
+                    $context->addError($e->getMessage());
                 }
 
                 unset($rows[$i]);
