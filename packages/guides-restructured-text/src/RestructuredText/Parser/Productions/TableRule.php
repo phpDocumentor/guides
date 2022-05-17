@@ -15,14 +15,15 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\Exception\UnknownTableType;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\GridTableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\SimpleTableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\TableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\TableParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\Exception\UnknownTableType;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\SimpleTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableParser;
 
 use function trim;
 
