@@ -20,12 +20,12 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\Exception\UnknownTableType;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\GridTableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\SimpleTableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\Table\TableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\TableParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\Exception\UnknownTableType;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\SimpleTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableParser;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function trim;

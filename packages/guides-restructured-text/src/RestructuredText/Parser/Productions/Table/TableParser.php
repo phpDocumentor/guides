@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
 use Exception;
 use phpDocumentor\Guides\Nodes\TableNode;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
 use function count;
 use function in_array;
 use function sprintf;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Table;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableNode;
