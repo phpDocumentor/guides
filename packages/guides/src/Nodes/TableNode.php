@@ -152,11 +152,10 @@ class TableNode extends Node
             $this->compile();
         }
 
-        $tableAsString = $this->getTableAsString();
-
         if (count($this->errors) > 0) {
+            $tableAsString = $this->getTableAsString();
             $parser->getEnvironment()
-                ->addError(sprintf("%s\nin file %s\n\n%s", $this->errors[0], $parser->getFilename(), $tableAsString));
+                ->addError(sprintf("%s\nin file %s\n\n%s", $this->errors[0], $parser->getEnvironment()->getCurrentFileName(), $tableAsString));
 
             $this->data = [];
             $this->headers = [];
@@ -262,7 +261,7 @@ class TableNode extends Node
                 }
 
                 $content = trim($content);
-                $row->addColumn($content, 1);
+                $row->addColumn(new TableColumn($content, 1));
 
                 $previousColumnEnd = $columnRange[1];
             }
@@ -397,8 +396,10 @@ class TableNode extends Node
                     } else {
                         // we just hit a proper "gap" record the line up until now
                         $row->addColumn(
-                            mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
-                            $currentSpan
+                            new TableColumn(
+                                mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
+                                $currentSpan
+                            )
                         );
                         $currentSpan = 1;
                         $currentColumnStart = null;
@@ -422,8 +423,10 @@ class TableNode extends Node
                 }
 
                 $row->addColumn(
-                    mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
-                    $currentSpan
+                    new TableColumn(
+                        mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
+                        $currentSpan
+                    )
                 );
             }
 
