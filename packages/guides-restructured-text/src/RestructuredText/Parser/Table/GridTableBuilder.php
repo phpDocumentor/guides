@@ -13,16 +13,16 @@ use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 
 class GridTableBuilder extends AbstractTableBuilder
 {
-    protected function compile(): TableNode
+    protected function compile(ParserContext $context): TableNode
     {
         // loop over ALL separator lines to find ALL of the column ranges
         /** @var array<int, int> $columnRanges */
         $columnRanges = [];
         $finalHeadersRow = 0;
-        foreach ($this->separatorLineConfigs as $rowIndex => $separatorLine) {
+        foreach ($context->getLineSeparators() as $rowIndex => $separatorLine) {
             if ($separatorLine->isHeader()) {
                 if ($finalHeadersRow !== 0) {
-                    $this->addError(
+                    $context->addError(
                         sprintf(
                             'Malformed table: multiple "header rows" using "===" were found. See table '
                             . 'lines "%d" and "%d"',
@@ -74,14 +74,14 @@ class GridTableBuilder extends AbstractTableBuilder
         /** @var TableRow[] $rows */
         $rows = [];
         $partialSeparatorRows = [];
-        foreach ($this->rawDataLines as $rowIndex => $line) {
+        foreach ($context->getDataLines() as $rowIndex => $line) {
             $row = new TableRow();
 
             // if the row is part separator row, part content, this
             // is a rowspan situation - e.g.
             // |           +----------------+----------------------------+
             // look for +-----+ pattern
-            if (preg_match('/\+[-]+\+/', $this->rawDataLines[$rowIndex]) === 1) {
+            if (preg_match('/\+[-]+\+/', $line) === 1) {
                 $partialSeparatorRows[$rowIndex] = true;
             }
 
@@ -92,7 +92,7 @@ class GridTableBuilder extends AbstractTableBuilder
             foreach ($columnRanges as $start => $end) {
                 // a content line that ends before it should
                 if ($end >= mb_strlen($line)) {
-                    $this->addError(sprintf(
+                    $context->addError(sprintf(
                         "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
                         $line
                     ));
@@ -219,7 +219,7 @@ class GridTableBuilder extends AbstractTableBuilder
                 try {
                     $row->absorbRowContent($targetRow);
                 } catch (InvalidTableStructure $e) {
-                    $this->addError($e->getMessage());
+                    $context->addError($e->getMessage());
                 }
 
                 $nextRowCounter++;

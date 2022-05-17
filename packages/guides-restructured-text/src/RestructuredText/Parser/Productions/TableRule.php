@@ -22,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Table\Exception\UnknownTableType;
 use phpDocumentor\Guides\RestructuredText\Parser\Table\GridTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Table\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Table\SimpleTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Table\TableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\TableParser;
@@ -77,15 +78,20 @@ final class TableRule implements Rule
         }
         $builder = $this->builders[$this->tableParser->guessTableType($line)];
         $tableSeparatorLineConfig = $this->tableParser->parseTableSeparatorLine($line);
+        if ($tableSeparatorLineConfig === null) {
+            return null;
+        }
 
-        $builder->pushSeparatorLine($tableSeparatorLineConfig);
-        $builder->pushSeparatorLine($tableSeparatorLineConfig);
+        $context = new ParserContext();
+
+        $context->pushSeparatorLine($tableSeparatorLineConfig);
+        $context->pushSeparatorLine($tableSeparatorLineConfig);
 
         while ($documentIterator->getNextLine() !== null) {
             $documentIterator->next();
             $separatorLineConfig = $this->tableParser->parseTableSeparatorLine($documentIterator->current());
             if ($separatorLineConfig !== null) {
-                $builder->pushSeparatorLine($separatorLineConfig);
+                $context->pushSeparatorLine($separatorLineConfig);
                 // if an empty line follows a separator line, then it is the end of the table
                 if ($documentIterator->getNextLine() === null || trim($documentIterator->getNextLine()) === '') {
                     break;
@@ -94,9 +100,9 @@ final class TableRule implements Rule
                 continue;
             }
 
-            $builder->pushContentLine($documentIterator->current());
+            $context->pushContentLine($documentIterator->current());
         }
 
-        return $builder->buildNode($this->parser, $this->lineChecker);
+        return $builder->buildNode($context, $this->parser, $this->lineChecker);
     }
 }
