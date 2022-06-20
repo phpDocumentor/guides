@@ -61,6 +61,12 @@ jobs:
 
   coding-standards:
     name: "Coding Standards"
+    uses: "phpDocumentor/.github/.github/workflows/coding-standards.yml@main"
+    with:
+      php-version: "8.0"
+
+  lint:
+    name: "Lint yaml & Composer"
 
     runs-on: "ubuntu-latest"
 
@@ -98,23 +104,6 @@ jobs:
 
       - name: "Determine composer cache directory"
         uses: "ergebnis/.github/actions/composer/determine-cache-directory@1.4.1"
-
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v3"
-        with:
-          path: "${{ env.COMPOSER_CACHE_DIR }}"
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-
-      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
-        uses: "ergebnis/.github/actions/composer/install@1.4.1"
-        with:
-          dependencies: "${{ matrix.dependencies }}"
-
-      - name: "Code style check"
-        uses: "phpDocumentor/coding-standard@latest"
-        with:
-          args: "-s"
 
   dependency-analysis:
     name: "Dependency Analysis"
