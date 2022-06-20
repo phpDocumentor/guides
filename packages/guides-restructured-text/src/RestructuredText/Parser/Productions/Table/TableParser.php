@@ -8,7 +8,6 @@ use Exception;
 use phpDocumentor\Guides\Nodes\TableNode;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
 use function count;
 use function in_array;
 use function sprintf;
@@ -17,6 +16,10 @@ use function trim;
 
 class TableParser
 {
+
+    //We should have some simple value objects that represent valid combinations.
+    //So we can simplify all kind of checks in this class.
+
     private const SIMPLE_TABLE_LETTER = '=';
     // "-" is valid as a separator in a simple table, except
     // on the first and last lines
@@ -35,8 +38,6 @@ class TableParser
      */
     public function parseTableSeparatorLine(string $line): ?TableSeparatorLineConfig
     {
-        $header = false;
-        $pretty = false;
         $line = trim($line);
 
         if ($line === '') {
@@ -51,72 +52,22 @@ class TableParser
         }
 
         if ($chars[0] === self::PRETTY_TABLE_JOINT && $chars[1] === self::PRETTY_TABLE_LETTER) {
-            $pretty = true;
             // reverse the chars: - is the line char, + is the space char
-            $chars = [self::PRETTY_TABLE_LETTER, self::PRETTY_TABLE_JOINT];
-        } elseif ($chars[0] === self::PRETTY_TABLE_JOINT && $chars[1] === self::PRETTY_TABLE_HEADER) {
-            $pretty = true;
-            $header = true;
+            return $this->createSeparatorLineConfig($line, [self::PRETTY_TABLE_LETTER, self::PRETTY_TABLE_JOINT], false, true);
+        }
+
+        if ($chars[0] === self::PRETTY_TABLE_JOINT && $chars[1] === self::PRETTY_TABLE_HEADER) {
             // reverse the chars: = is the line char, + is the space char
-            $chars = [self::PRETTY_TABLE_HEADER, self::PRETTY_TABLE_JOINT];
-        } else {
-            // either a simple table or not a separator line
-
-            // if line char is not "=" or "-", not a separator line
-            if (!in_array($chars[0], [self::SIMPLE_TABLE_LETTER, self::SIMPLE_TABLE_LETTER_ALT], true)) {
-                return null;
-            }
-
-            // if space char is not a space, not a separator line
-            if ($chars[1] !== ' ') {
-                return null;
-            }
+            return $this->createSeparatorLineConfig($line, [self::PRETTY_TABLE_HEADER, self::PRETTY_TABLE_JOINT], true, true);
         }
 
-        $parts = [];
-        /** @var int|null $currentPartStart */
-        $currentPartStart = null;
-
-        for ($i = 0; $i < strlen($line); $i++) {
-            // we found the "line char": "-" or "="
-            if ($line[$i] === $chars[0]) {
-                if ($currentPartStart === null) {
-                    $currentPartStart = $i;
-                }
-
-                continue;
-            }
-
-            if ($line[$i] !== $chars[1]) {
-                throw new Exception(sprintf('Unexpected char "%s"', $line[$i]));
-            }
-
-            // found the "space" char
-            // record the part "range" if we're at the end of a range
-            if ($currentPartStart === null) {
-                continue;
-            }
-
-            $parts[] = [$currentPartStart, $i];
-            $currentPartStart = null;
+        if ($chars[0] === self::SIMPLE_TABLE_LETTER && $chars[1] === ' ') {
+            return $this->createSeparatorLineConfig($line, [self::SIMPLE_TABLE_LETTER, ' '], true, false);
         }
 
-        // finish the last "part"
-        if ($currentPartStart !== null) {
-            $parts[] = [$currentPartStart, $i];
+        if ($chars[0] === self::SIMPLE_TABLE_LETTER_ALT && $chars[1] === ' ') {
+            return $this->createSeparatorLineConfig($line, [self::SIMPLE_TABLE_LETTER_ALT, ' '], false, false);
         }
-
-        if (count($parts) > 1) {
-            return new TableSeparatorLineConfig(
-                $header,
-                $pretty ? Productions\TableRule::TYPE_PRETTY : Productions\TableRule::TYPE_SIMPLE,
-                $parts,
-                $chars[0],
-                $line
-            );
-        }
-
-        return null;
     }
 
     public function guessTableType(string $line): string
@@ -138,7 +89,8 @@ class TableParser
         $lineChar = $line[0];
         $spaceChar = null;
 
-        for ($i = 0; $i < strlen($line); $i++) {
+        $length = strlen($line);
+        for ($i = 0; $i < $length; $i++) {
             if ($line[$i] === $lineChar) {
                 continue;
             }
@@ -159,5 +111,52 @@ class TableParser
         }
 
         return [$lineChar, $spaceChar];
+    }
+
+    private function createSeparatorLineConfig(string $line, array $chars, bool $header, bool $pretty): ?\phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig
+    {
+        //Chars[0] is the line char
+        //chars[1] is the column marker in the table line
+        $parts = [];
+        $strlen = strlen($line);
+
+        //If we are handling a pretty table, the first char is a +
+        $currentPartStart = $i = $pretty ? 1 : 0;
+        $i++;
+
+        for ($i; $i < $strlen; $i++) {
+            //If our previous char was also a column marker there is something wrong.
+            if (($line[$i - 1] ?? null) === $chars[1]) {
+                throw new Exception(sprintf('Unexpected char "%s"', $line[$i]));
+            }
+
+            if ($line[$i] === $chars[1]) {
+                $parts[] = [$currentPartStart, $i];
+                $currentPartStart = ++$i;
+                continue;
+            }
+
+            //Only allow line chars
+            if ($line[$i] !== $chars[0]) {
+                throw new Exception(sprintf('Unexpected char "%s"', $line[$i]));
+            }
+        }
+
+        // finish the last "part" for non pretty tables.
+        if ($pretty === false) {
+            $parts[] = [$currentPartStart, $i];
+        }
+
+        if (count($parts) <= 1) {
+            return null;
+        }
+
+        return new TableSeparatorLineConfig(
+            $header,
+            $pretty ? Productions\TableRule::TYPE_PRETTY : Productions\TableRule::TYPE_SIMPLE,
+            $parts,
+            $chars[0],
+            $line
+        );
     }
 }
