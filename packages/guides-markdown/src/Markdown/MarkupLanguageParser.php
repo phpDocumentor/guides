@@ -92,7 +92,7 @@ final class MarkupLanguageParser implements ParserInterface
 
             // ignore all Entering events; these are only used to switch to another context and context switching
             // is defined above
-            if ($event->isEntering()) {
+            if                ($event->isEntering()) {
                 continue;
             }
 
