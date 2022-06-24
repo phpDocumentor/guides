@@ -19,6 +19,10 @@ static-code-analysis: vendor ## Runs a static code analysis with phpstan/phpstan
 test: ## Runs unit tests with phpunit/phpunit
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit
 
+.PHONY: test-unit
+test-unit: ## Runs unit tests with phpunit/phpunit
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=unit
+
 .PHONY: test-functional
 test-functional: ## Runs unit tests with phpunit/phpunit
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=functional

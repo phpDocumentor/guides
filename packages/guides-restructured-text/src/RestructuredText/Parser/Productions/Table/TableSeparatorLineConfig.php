@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\TableNode;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use function in_array;
 use function sprintf;
 
@@ -37,7 +38,7 @@ final class TableSeparatorLineConfig
         string $lineCharacter,
         string $rawContent
     ) {
-        if (!in_array($tableType, [TableNode::TYPE_SIMPLE, TableNode::TYPE_PRETTY], true)) {
+        if (!in_array($tableType, [Productions\TableRule::TYPE_SIMPLE, Productions\TableRule::TYPE_PRETTY], true)) {
             throw new InvalidArgumentException(sprintf('Invalid table type'));
         }
 
@@ -59,7 +60,7 @@ final class TableSeparatorLineConfig
 
     public function isSimpleTableType(): bool
     {
-        return $this->tableType === TableNode::TYPE_SIMPLE;
+        return $this->tableType === Productions\TableRule::TYPE_SIMPLE;
     }
 
     /**

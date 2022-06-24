@@ -7,7 +7,7 @@
         colors="true"
         verbose="true"
         forceCoversAnnotation="false"
-        beStrictAboutCoversAnnotation="true"
+        beStrictAboutCoversAnnotation="false"
         beStrictAboutTodoAnnotatedTests="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"

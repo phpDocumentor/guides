@@ -52,9 +52,6 @@ class MarkupLanguageParser implements ParserInterface
     /** @var Directive[] */
     private $directives = [];
 
-    /** @var string|null */
-    private $filename = null;
-
     /** @var DocumentParser|null */
     private $documentParser;
 
@@ -147,11 +144,6 @@ class MarkupLanguageParser implements ParserInterface
         }
 
         return $this->documentParser->getDocument();
-    }
-
-    public function getFilename(): string
-    {
-        return $this->filename ?: '(unknown)';
     }
 
     public function parse(ParserContext $environment, string $contents): DocumentNode

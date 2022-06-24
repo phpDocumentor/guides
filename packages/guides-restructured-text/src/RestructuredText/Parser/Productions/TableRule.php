@@ -20,7 +20,12 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Parser\TableParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\Exception\UnknownTableType;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\SimpleTableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableParser;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function trim;
@@ -30,6 +35,9 @@ use function trim;
  */
 final class TableRule implements Rule
 {
+    public const TYPE_PRETTY = 'pretty';
+    public const TYPE_SIMPLE = 'simple';
+
     /** @var MarkupLanguageParser */
     private $parser;
 
@@ -39,11 +47,17 @@ final class TableRule implements Rule
     /** @var TableParser */
     private $tableParser;
 
+    /** @var TableBuilder[] */
+    private array $builders = [];
+
     public function __construct(MarkupLanguageParser $parser)
     {
         $this->parser = $parser;
         $this->lineChecker = new LineChecker(new LineDataParser($parser, new SpanParser()));
         $this->tableParser = new TableParser();
+
+        $this->builders[self::TYPE_SIMPLE] = new SimpleTableBuilder();
+        $this->builders[self::TYPE_PRETTY] = new GridTableBuilder();
     }
 
     public function applies(DocumentParser $documentParser): bool
@@ -58,15 +72,26 @@ final class TableRule implements Rule
             return null;
         }
 
+        $type = $this->tableParser->guessTableType($line);
+        if (isset($this->builders[$type]) === false) {
+            throw new UnknownTableType($type);
+        }
+        $builder = $this->builders[$this->tableParser->guessTableType($line)];
         $tableSeparatorLineConfig = $this->tableParser->parseTableSeparatorLine($line);
-        $node = new TableNode($tableSeparatorLineConfig, $this->tableParser->guessTableType($line));
-        $node->pushSeparatorLine($tableSeparatorLineConfig);
+        if ($tableSeparatorLineConfig === null) {
+            return null;
+        }
+
+        $context = new ParserContext();
+
+        $context->pushSeparatorLine($tableSeparatorLineConfig);
+        $context->pushSeparatorLine($tableSeparatorLineConfig);
 
         while ($documentIterator->getNextLine() !== null) {
             $documentIterator->next();
             $separatorLineConfig = $this->tableParser->parseTableSeparatorLine($documentIterator->current());
             if ($separatorLineConfig !== null) {
-                $node->pushSeparatorLine($separatorLineConfig);
+                $context->pushSeparatorLine($separatorLineConfig);
                 // if an empty line follows a separator line, then it is the end of the table
                 if ($documentIterator->getNextLine() === null || trim($documentIterator->getNextLine()) === '') {
                     break;
@@ -75,11 +100,9 @@ final class TableRule implements Rule
                 continue;
             }
 
-            $node->pushContentLine($documentIterator->current());
+            $context->pushContentLine($documentIterator->current());
         }
 
-        $node->finalize($this->parser, $this->lineChecker);
-
-        return $node;
+        return $builder->buildNode($context, $this->parser, $this->lineChecker);
     }
 }
