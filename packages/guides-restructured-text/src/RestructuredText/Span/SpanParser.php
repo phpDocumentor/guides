@@ -277,6 +277,10 @@ class SpanParser
 
     private function parseInterpretedText(): string
     {
+        if ($this->lexer->token === null) {
+            return ':';
+        }
+
         $startPosition = $this->lexer->token['position'];
         $domain = null;
         $role = null;
@@ -349,6 +353,10 @@ class SpanParser
 
     private function parseNamedReference(ParserContext $parserContext): string
     {
+        if ($this->lexer->token === null) {
+            return '`';
+        }
+
         $startPosition = $this->lexer->token['position'];
         $text = '';
         $url = null;
@@ -397,6 +405,10 @@ class SpanParser
 
     private function parseEmbeddedUrl(): ?string
     {
+        if ($this->lexer->token === null) {
+            return null;
+        }
+
         $startPosition = $this->lexer->token['position'];
         $text = '';
         $this->lexer->moveNext();
