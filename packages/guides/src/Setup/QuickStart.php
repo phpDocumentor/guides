@@ -88,7 +88,7 @@ final class QuickStart
             );
         }
 
-        $twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer) {
+        $twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer): Environment {
             $twig = new Environment(
                 new FilesystemLoader(
                     [

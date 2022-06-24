@@ -81,7 +81,7 @@ class SpanParser
     {
         return preg_replace_callback(
             '/``(.+)``(?!`)/mUsi',
-            function (array $match) {
+            function (array $match): string {
                 $id = $this->generateId();
                 $this->tokens[$id] = new LiteralToken(
                     $id,
