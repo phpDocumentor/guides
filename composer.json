@@ -1,5 +1,4 @@
 {
-    "name": "phpdocumentor/guides",
     "description": "Markup parsers and rendering packages, focused on documentation",
     "type": "library",
     "license": "MIT",

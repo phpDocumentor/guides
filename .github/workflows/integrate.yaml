@@ -23,7 +23,9 @@ jobs:
 
   lint:
     name: "Lint"
-    uses: "phpDocumentor/.github/.github/workflows/lint.yml@v0.1.0"
+    uses: "phpDocumentor/.github/.github/workflows/lint.yml@main"
+    with:
+      composer-options: "--no-check-publish --ansi"
 
   static-analysis:
     name: "Static analysis"
