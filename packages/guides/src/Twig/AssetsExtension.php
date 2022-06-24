@@ -112,13 +112,14 @@ final class AssetsExtension extends AbstractExtension
             return $path;
         }
 
+        $canonicalUrl = $environment->canonicalUrl($path);
+        Assert::string($canonicalUrl);
         $sourcePath = $environment->getSourcePath() . '/' . $path;
         $outputPath = $this->urlGenerator->absoluteUrl(
             dirname($environment->getDestinationPath()),
-            $environment->canonicalUrl($path)
+            $canonicalUrl
         );
 
-        Assert::string($outputPath);
         if ($environment->getOrigin()->has($sourcePath) === false) {
             $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
 

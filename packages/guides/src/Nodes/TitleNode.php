@@ -14,17 +14,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Webmozart\Assert\Assert;
 
 class TitleNode extends Node
 {
-    /** @var SpanNode */
-    protected $value;
-
     /** @var int */
     protected $level;
-
-    /** @var string */
-    protected $token;
 
     /** @var string */
     protected $id;
@@ -35,14 +30,10 @@ class TitleNode extends Node
     public function __construct(Node $value, int $level)
     {
         parent::__construct($value);
+        Assert::isInstanceOf($value, SpanNode::class);
 
         $this->level = $level;
-        $this->id = (new AsciiSlugger())->slug($this->value->getValue())->lower()->toString();
-    }
-
-    public function getValue(): SpanNode
-    {
-        return $this->value;
+        $this->id = (new AsciiSlugger())->slug($value->getValueString())->lower()->toString();
     }
 
     public function getLevel(): int

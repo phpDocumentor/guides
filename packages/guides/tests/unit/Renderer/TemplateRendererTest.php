@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use Faker\Factory;
-use phpDocumentor\Faker\Faker;
+use Faker\Generator;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
@@ -27,6 +27,8 @@ use function sprintf;
  */
 final class TemplateRendererTest extends TestCase
 {
+    private Generator $faker;
+
     protected function setUp(): void
     {
         $this->faker = Factory::create();

@@ -108,7 +108,7 @@ class ParserContext
         return $this->links;
     }
 
-    private function relativeUrl(?string $url): string
+    private function relativeUrl(string $url): string
     {
         return $this->urlGenerator->relativeUrl($url);
     }

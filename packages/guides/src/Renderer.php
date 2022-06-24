@@ -66,6 +66,7 @@ class Renderer implements FullDocumentNodeRenderer
         return $this->outputRenderer->renderDocument($node, $environment);
     }
 
+    /** @psalm-assert OutputFormatRenderer $this->outputRenderer */
     private function setOutputRenderer(RenderContext $environment): void
     {
         foreach ($this->outputFormatRenderers as $outputFormatRenderer) {

@@ -21,6 +21,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
@@ -52,7 +53,7 @@ final class QuickStart
     {
         $logger = new TestLogger();
         $nodeRenderers = new ArrayObject();
-        $nodeFactoryCallback = static function () use ($nodeRenderers) {
+        $nodeFactoryCallback = static function () use ($nodeRenderers): NodeRendererFactory {
             return new InMemoryNodeRendererFactory(
                 $nodeRenderers,
                 new DefaultNodeRenderer()

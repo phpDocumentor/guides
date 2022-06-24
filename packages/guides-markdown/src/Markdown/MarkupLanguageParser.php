@@ -43,8 +43,8 @@ final class MarkupLanguageParser implements ParserInterface
     /** @var array<AbstractBlock> */
     private $parsers;
 
-    /** @var DocumentNode */
-    private $document;
+    /** @var DocumentNode|null */
+    private $document = null;
 
     public function __construct()
     {
@@ -73,9 +73,9 @@ final class MarkupLanguageParser implements ParserInterface
         return $this->parseDocument($ast->walker(), md5($contents));
     }
 
-    public function parseDocument(NodeWalker $walker, string $hash): DocumentNode
+    private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->environment->getCurrentAbsolutePath());
+        $document = new DocumentNode($hash, $this->getEnvironment()->getCurrentAbsolutePath());
         $this->document = $document;
 
         while ($event = $walker->next()) {
@@ -92,7 +92,7 @@ final class MarkupLanguageParser implements ParserInterface
 
             // ignore all Entering events; these are only used to switch to another context and context switching
             // is defined above
-            if                ($event->isEntering()) {
+            if ($event->isEntering()) {
                 continue;
             }
 
@@ -115,7 +115,7 @@ final class MarkupLanguageParser implements ParserInterface
             }
 
             if ($node instanceof Text) {
-                $spanNode = SpanNode::create($this, $node->getLiteral());
+                $spanNode = new SpanNode($node->getLiteral(), []);
                 $document->addNode($spanNode);
                 continue;
             }
@@ -157,16 +157,12 @@ final class MarkupLanguageParser implements ParserInterface
 
     public function parseParagraph(NodeWalker $walker): ParagraphNode
     {
-        $parser = new Parsers\Paragraph();
-
-        return $parser->parse($this, $walker);
+        return (new Parsers\Paragraph())->parse($this, $walker);
     }
 
     public function parseListBlock(NodeWalker $walker): ListNode
     {
-        $parser = new Parsers\ListBlock();
-
-        return $parser->parse($this, $walker);
+        return (new Parsers\ListBlock())->parse($this, $walker);
     }
 
     public function getEnvironment(): ParserContext

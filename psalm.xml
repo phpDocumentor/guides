@@ -4,26 +4,33 @@
         xmlns="https://getpsalm.org/schema/config"
 >
     <projectFiles>
-        <directory name="packages/guides/src" />
-        <directory name="packages/guides/tests" />
+        <directory name="packages/guides/src"/>
+        <directory name="packages/guides/tests"/>
 
-        <directory name="packages/guides-markdown/src" />
+        <directory name="packages/guides-markdown/src"/>
 <!--        <directory name="packages/guides-markdown/tests" />-->
 
-        <directory name="packages/guides-restructured-text/src" />
-        <directory name="packages/guides-restructured-text/tests" />
+        <directory name="packages/guides-restructured-text/src"/>
+        <directory name="packages/guides-restructured-text/tests"/>
         <ignoreFiles>
-            <directory name="vendor" />
+            <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
 
 
     <issueHandlers>
-        <LessSpecificReturnType errorLevel="info" />
+        <LessSpecificReturnType errorLevel="info"/>
+        <MissingConstructor errorLevel="info" />
+        <PropertyNotSetInConstructor errorLevel="info" />
+        <DeprecatedClass errorLevel="info">
+            <errorLevel type="info">
+                <referencedClass name="phpDocumentor\Guides\Nodes\TemplatedNode" />
+            </errorLevel>
+        </DeprecatedClass>
         <UndefinedInterfaceMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="League\Flysystem\FilesystemInterface::find"/>
             </errorLevel>
         </UndefinedInterfaceMethod>
     </issueHandlers>
-</psalm>
+<plugins><pluginClass class="Psalm\PhpUnitPlugin\Plugin"/></plugins></psalm>

@@ -33,7 +33,7 @@ final class GenericNode extends Node
     private $name;
 
     /**
-     * @param Node|callable|string|null $value
+     * @param Node|string|null $value
      */
     public function __construct(string $name, $value = null)
     {

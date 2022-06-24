@@ -68,12 +68,7 @@ class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, No
 
     private function isMain(DocumentNode $node): bool
     {
-        $nodes = $node->getNodes(
-            static function ($node) {
-                return $node instanceof MainNode;
-            }
-        );
-
+        $nodes = $node->getNodes(MainNode::class);
         return count($nodes) !== 0;
     }
 
