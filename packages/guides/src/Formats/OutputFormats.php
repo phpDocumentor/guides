@@ -12,7 +12,7 @@ use function strtolower;
 final class OutputFormats
 {
     /** @var OutputFormat[] */
-    private $outputFormats = [];
+    private array $outputFormats = [];
 
     /**
      * @param iterable<OutputFormat> $outputFormats

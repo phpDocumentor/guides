@@ -25,7 +25,7 @@ use function in_array;
 final class Files implements IteratorAggregate
 {
     /** @var string[] */
-    private $files = [];
+    private array $files = [];
 
     public function add(string $filename): void
     {

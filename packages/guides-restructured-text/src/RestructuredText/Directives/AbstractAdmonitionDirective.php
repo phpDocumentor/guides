@@ -20,11 +20,9 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $text;
+    private string $text;
     private SpanParser $spanParser;
 
     public function __construct(string $name, string $text, SpanParser $spanParser)

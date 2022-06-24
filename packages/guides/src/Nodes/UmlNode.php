@@ -6,8 +6,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 class UmlNode extends Node
 {
-    /** @var string */
-    private $caption = '';
+    private string $caption = '';
 
     public function setCaption(string $caption): void
     {

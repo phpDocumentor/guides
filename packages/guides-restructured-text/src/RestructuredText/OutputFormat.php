@@ -8,8 +8,7 @@ use phpDocumentor\Guides\Formats\OutputFormat as BaseFormat;
 
 class OutputFormat implements BaseFormat
 {
-    /** @var string */
-    private $fileExtension;
+    private string $fileExtension;
 
     public function __construct(string $fileExtension)
     {

@@ -26,11 +26,9 @@ use Webmozart\Assert\Assert;
 
 class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, NodeRendererFactoryAware
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

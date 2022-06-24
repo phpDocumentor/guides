@@ -20,11 +20,10 @@ use function array_search;
 
 final class DocumentRule implements Rule
 {
-    /** @var DocumentParser */
-    private $documentParser;
+    private DocumentParser $documentParser;
 
     /** @var Rule[] */
-    private $productions;
+    private array $productions;
 
     /**
      * @param DirectiveHandler[] $directiveHandlers

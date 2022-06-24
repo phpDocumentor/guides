@@ -18,8 +18,7 @@ use phpDocumentor\Guides\UrlGenerator;
  */
 class Image extends Directive
 {
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     public function __construct(UrlGenerator $urlGenerator)
     {

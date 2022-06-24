@@ -22,8 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 
 final class SidebarNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

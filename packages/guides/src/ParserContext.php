@@ -16,41 +16,34 @@ use function trim;
 
 class ParserContext
 {
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
-    /** @var int */
-    private $initialHeaderLevel;
+    private int $initialHeaderLevel;
 
-    /** @var int */
-    private $currentTitleLevel = 0;
+    private int $currentTitleLevel = 0;
 
     /** @var string[] */
-    private $titleLetters = [];
+    private array $titleLetters = [];
 
-    /** @var string */
-    private $currentFileName;
+    private string $currentFileName;
 
-    /** @var FilesystemInterface */
-    private $origin;
+    private FilesystemInterface $origin;
 
-    /** @var string */
-    private $currentDirectory;
+    private string $currentDirectory;
 
     /** @var string[] */
-    private $variables = [];
+    private array $variables = [];
 
     /** @var string[] */
-    private $links = [];
+    private array $links = [];
 
     /** @var string[] */
-    private $anonymous = [];
+    private array $anonymous = [];
 
     /** @var string[] */
-    private $errors = [];
+    private array $errors = [];
 
-    /** @var string */
-    private $currentAbsolutePath = '';
+    private string $currentAbsolutePath = '';
 
     public function __construct(
         string $currentFileName,

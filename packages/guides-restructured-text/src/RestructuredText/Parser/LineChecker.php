@@ -8,8 +8,7 @@ use function preg_match;
 
 class LineChecker
 {
-    /** @var LineDataParser */
-    private $lineParser;
+    private LineDataParser $lineParser;
 
     public function __construct(LineDataParser $lineParser)
     {

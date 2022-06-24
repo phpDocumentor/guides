@@ -26,8 +26,7 @@ use function trim;
 
 final class DocumentNode extends Node
 {
-    /** @var string */
-    private $hash;
+    private string $hash;
 
     /**
      * Header nodes are rendered in the head of a html page.
@@ -35,13 +34,13 @@ final class DocumentNode extends Node
      *
      * @var MetadataNode[]
      */
-    private $headerNodes = [];
+    private array $headerNodes = [];
 
     /** @var Node[] */
-    private $nodes = [];
+    private array $nodes = [];
 
     /** @var string[] */
-    private $dependencies = [];
+    private array $dependencies = [];
 
     /**
      * Variables are replacements in a document.
@@ -51,7 +50,7 @@ final class DocumentNode extends Node
      *
      * @var array<string|Node>
      */
-    private $variables = [];
+    private array $variables = [];
 
     /** @var string Absolute file path of this document */
     private string $filePath;
@@ -134,10 +133,8 @@ final class DocumentNode extends Node
         }
 
         $subDocumentTitles = array_map(
-            static function (DocumentNode $node): array {
-                return $node->getTitles();
-            },
-            $this->getNodes(__CLASS__)
+            static fn(DocumentNode $node): array => $node->getTitles(),
+            $this->getNodes(self::class)
         );
 
         return array_merge($titles, ...$subDocumentTitles);

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use ArrayObject;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -32,14 +34,11 @@ class DocumentParser
     /** @var ArrayObject<int, TitleNode> public is temporary */
     public $openSectionsAsTitleNodes;
 
-    /** @var DocumentNode */
-    private $document;
+    private ?DocumentNode $document = null;
 
-    /** @var LinesIterator */
-    private $documentIterator;
+    private LinesIterator $documentIterator;
 
-    /** @var Productions\Rule */
-    private $startingRule;
+    private Rule $startingRule;
     private MarkupLanguageParser $parser;
 
     /**
@@ -52,7 +51,7 @@ class DocumentParser
         $this->documentIterator = new LinesIterator();
         $this->openSectionsAsTitleNodes = new ArrayObject();
 
-        $this->startingRule = new Productions\DocumentRule($this, $parser, $directives);
+        $this->startingRule = new DocumentRule($this, $parser, $directives);
         $this->parser = $parser;
     }
 

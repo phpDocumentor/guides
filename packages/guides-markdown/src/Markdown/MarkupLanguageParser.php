@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown;
 
+use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
+use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
+use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
@@ -34,17 +37,14 @@ use function strtolower;
 
 final class MarkupLanguageParser implements ParserInterface
 {
-    /** @var MarkdownParser */
-    private $markdownParser;
+    private MarkdownParser $markdownParser;
 
-    /** @var ParserContext|null */
-    private $environment;
+    private ?ParserContext $environment = null;
 
     /** @var array<AbstractBlock> */
-    private $parsers;
+    private array $parsers;
 
-    /** @var DocumentNode|null */
-    private $document = null;
+    private ?DocumentNode $document = null;
 
     public function __construct()
     {
@@ -52,9 +52,9 @@ final class MarkupLanguageParser implements ParserInterface
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
         $this->parsers = [
-            new Parsers\Paragraph(),
-            new Parsers\ListBlock(),
-            new Parsers\ThematicBreak(),
+            new Paragraph(),
+            new ListBlock(),
+            new ThematicBreak(),
         ];
     }
 
@@ -96,7 +96,7 @@ final class MarkupLanguageParser implements ParserInterface
                 continue;
             }
 
-            if (!$event->isEntering() && $node instanceof Document) {
+            if ($node instanceof Document) {
                 return $document;
             }
 
@@ -157,12 +157,12 @@ final class MarkupLanguageParser implements ParserInterface
 
     public function parseParagraph(NodeWalker $walker): ParagraphNode
     {
-        return (new Parsers\Paragraph())->parse($this, $walker);
+        return (new Paragraph())->parse($this, $walker);
     }
 
     public function parseListBlock(NodeWalker $walker): ListNode
     {
-        return (new Parsers\ListBlock())->parse($this, $walker);
+        return (new ListBlock())->parse($this, $walker);
     }
 
     public function getEnvironment(): ParserContext

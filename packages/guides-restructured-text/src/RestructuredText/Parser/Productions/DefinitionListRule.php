@@ -28,8 +28,7 @@ use function trim;
  */
 final class DefinitionListRule implements Rule
 {
-    /** @var LineDataParser */
-    private $lineDataParser;
+    private LineDataParser $lineDataParser;
 
     public function __construct(LineDataParser $parser)
     {

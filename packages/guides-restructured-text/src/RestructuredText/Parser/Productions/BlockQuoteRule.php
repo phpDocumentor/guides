@@ -30,8 +30,7 @@ use function trim;
  */
 final class BlockQuoteRule implements Rule
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
     public function __construct(MarkupLanguageParser $parser)
     {

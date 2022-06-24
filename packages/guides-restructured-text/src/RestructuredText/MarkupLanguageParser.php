@@ -46,17 +46,14 @@ use function strtolower;
 
 class MarkupLanguageParser implements ParserInterface
 {
-    /** @var ParserContext|null */
-    private $environment;
+    private ?ParserContext $environment = null;
 
     /** @var Directive[] */
-    private $directives = [];
+    private array $directives = [];
 
-    /** @var string|null */
-    private $filename = null;
+    private ?string $filename = null;
 
-    /** @var DocumentParser|null */
-    private $documentParser;
+    private ?DocumentParser $documentParser = null;
 
     /**
      * @param iterable<Directive> $directives

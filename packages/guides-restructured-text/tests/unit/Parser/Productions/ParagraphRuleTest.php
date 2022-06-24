@@ -58,9 +58,7 @@ final class ParagraphRuleTest extends TestCase
         $spanParser->parse(
             Argument::any(),
             Argument::any()
-        )->will(function ($args) {
-            return new SpanNode(implode("\n", $args[0]));
-        });
+        )->will(fn($args) => new SpanNode(implode("\n", $args[0])));
 
         $rule = new ParagraphRule(
             $parser->reveal(),

@@ -30,14 +30,12 @@ use function trim;
 
 final class AssetsExtension extends AbstractExtension
 {
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     /** @var PlantumlRenderer|null */
     private $plantumlRenderer;
 
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(

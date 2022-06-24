@@ -13,13 +13,13 @@ use function trim;
 final class ListItemNode extends Node
 {
     /** @var string the list marker used for this item */
-    private $prefix;
+    private string $prefix;
 
     /** @var bool whether the list marker represents an enumerated list */
-    private $ordered;
+    private bool $ordered;
 
     /** @var Node[] */
-    private $contents;
+    private array $contents;
 
     /**
      * @param Node[] $contents
@@ -53,8 +53,6 @@ final class ListItemNode extends Node
 
     public function getContentsAsString(): string
     {
-        return trim(array_reduce($this->contents, static function (string $contents, Node $node): string {
-            return $contents . $node->getValueString() . "\n";
-        }, ''));
+        return trim(array_reduce($this->contents, static fn(string $contents, Node $node): string => $contents . $node->getValueString() . "\n", ''));
     }
 }

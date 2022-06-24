@@ -17,8 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class SidebarNode extends Node
 {
-    /** @var string */
-    private $title;
+    private string $title;
 
     public function __construct(string $title, ?Node $value = null)
     {

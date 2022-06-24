@@ -20,8 +20,7 @@ use function sprintf;
 
 final class TemplateRenderer
 {
-    /** @var string */
-    private $basePath;
+    private string $basePath;
     private EnvironmentBuilder $builder;
 
     public function __construct(EnvironmentBuilder $builder, string $basePath = 'guides')

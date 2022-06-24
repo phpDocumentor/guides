@@ -27,11 +27,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
  */
 final class LinkRule implements Rule
 {
-    /** @var LineDataParser */
-    private $lineDataParser;
+    private LineDataParser $lineDataParser;
 
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
     public function __construct(LineDataParser $lineDataParser, MarkupLanguageParser $parser)
     {

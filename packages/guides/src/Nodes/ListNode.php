@@ -15,11 +15,10 @@ namespace phpDocumentor\Guides\Nodes;
 
 final class ListNode extends Node
 {
-    /** @var bool */
-    private $ordered;
+    private bool $ordered;
 
     /** @var ListItemNode[] */
-    private $items;
+    private array $items;
 
     /**
      * @param ListItemNode[] $items

@@ -22,23 +22,17 @@ namespace phpDocumentor\Guides\Span;
  */
 class CrossReferenceNode extends SpanToken
 {
-    /** @var string */
-    private $id;
+    private ?string $id;
 
-    /** @var string */
-    private $literal;
+    private string $literal;
 
-    /** @var string|null */
-    private $role;
+    private ?string $role;
 
-    /** @var string|null */
-    private $domain;
+    private ?string $domain;
 
-    /** @var string|null */
-    private $anchor;
+    private ?string $anchor;
 
-    /** @var string|null */
-    private $text;
+    private ?string $text;
 
     public function __construct(
         string $id,

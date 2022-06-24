@@ -21,17 +21,13 @@ use function trim;
 
 final class TableColumn
 {
-    /** @var string */
-    private $content;
+    private string $content;
 
-    /** @var int */
-    private $colSpan;
+    private int $colSpan;
 
-    /** @var int */
-    private $rowSpan = 1;
+    private int $rowSpan = 1;
 
-    /** @var Node|null */
-    private $node;
+    private ?Node $node = null;
 
     public function __construct(string $content, int $colSpan)
     {

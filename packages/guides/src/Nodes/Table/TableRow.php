@@ -24,7 +24,7 @@ use function sprintf;
 final class TableRow
 {
     /** @var TableColumn[] */
-    private $columns = [];
+    private array $columns = [];
 
     public function addColumn(string $content, int $colSpan): void
     {
@@ -89,9 +89,7 @@ final class TableRow
         return implode(
             ' | ',
             array_map(
-                static function (TableColumn $column) {
-                    return $column->getContent();
-                },
+                static fn(TableColumn $column) => $column->getContent(),
                 $this->columns
             )
         );

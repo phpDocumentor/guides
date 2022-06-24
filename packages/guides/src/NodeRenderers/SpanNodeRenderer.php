@@ -38,11 +38,9 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     /** @var Renderer */
     protected $renderer;
 
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
-    /** @var ReferenceResolver */
-    private $referenceResolver;
+    private ReferenceResolver $referenceResolver;
 
     private LoggerInterface $logger;
     protected UrlGenerator $urlGenerator;
@@ -117,9 +115,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
-            function (array $matches): string {
-                return $this->strongEmphasis($matches[1]);
-            },
+            fn(array $matches): string => $this->strongEmphasis($matches[1]),
             $span
         );
     }
@@ -128,9 +124,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
-            function (array $matches): string {
-                return $this->emphasis($matches[1]);
-            },
+            fn(array $matches): string => $this->emphasis($matches[1]),
             $span
         );
     }

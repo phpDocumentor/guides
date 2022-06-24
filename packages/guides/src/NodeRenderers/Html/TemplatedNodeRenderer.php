@@ -13,8 +13,7 @@ use Webmozart\Assert\Assert;
 
 final class TemplatedNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

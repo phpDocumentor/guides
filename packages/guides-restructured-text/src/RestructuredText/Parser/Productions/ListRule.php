@@ -57,8 +57,7 @@ final class ListRule implements Rule
          # (or eol, if text starts on a new line)
         /ux';
 
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
     public function __construct(MarkupLanguageParser $parser)
     {
@@ -167,7 +166,7 @@ final class ListRule implements Rule
      */
     public function isIndented(string $line, int $minIndent = 1): bool
     {
-        return strpos($line, str_repeat(' ', $minIndent)) === 0;
+        return strpos($line, (string) str_repeat(' ', $minIndent)) === 0;
     }
 
     /**

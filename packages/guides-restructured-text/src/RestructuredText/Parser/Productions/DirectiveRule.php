@@ -30,20 +30,16 @@ use function sprintf;
  */
 final class DirectiveRule implements Rule
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
-    /** @var DocumentParser */
-    private $documentParser;
+    private DocumentParser $documentParser;
 
-    /** @var LineDataParser */
-    private $lineDataParser;
+    private LineDataParser $lineDataParser;
 
-    /** @var LiteralBlockRule */
-    private $literalBlockRule;
+    private LiteralBlockRule $literalBlockRule;
 
     /** @var DirectiveHandler[] */
-    private $directives;
+    private array $directives;
 
     /**
      * @param DirectiveHandler[] $directives

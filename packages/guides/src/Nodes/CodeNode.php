@@ -19,7 +19,7 @@ class CodeNode extends Node
     protected $language;
 
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
-    private $startingLineNumber;
+    private ?int $startingLineNumber = null;
 
     /**
      * @param string[] $lines

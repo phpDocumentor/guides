@@ -31,11 +31,9 @@ use function trim;
  */
 final class ParagraphRule implements Rule
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
-    /** @var DocumentParser */
-    private $documentParser;
+    private DocumentParser $documentParser;
     private SpanParser $spanParser;
 
     public function __construct(MarkupLanguageParser $parser, DocumentParser $documentParser, SpanParser $spanParser)

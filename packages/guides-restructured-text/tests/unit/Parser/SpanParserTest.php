@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use Faker\Generator;
 use Faker\Factory;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
@@ -18,13 +19,16 @@ use function current;
 
 final class SpanParserTest extends TestCase
 {
+    /**
+     * @var Generator|mixed
+     */
+    public $faker;
     use ProphecyTrait;
 
     /** @var ParserContext&ObjectProphecy */
     private $parserContext;
 
-    /** @var SpanParser */
-    private $spanProcessor;
+    private SpanParser $spanProcessor;
 
     public function setUp(): void
     {
@@ -42,7 +46,7 @@ final class SpanParserTest extends TestCase
         );
         $token = current($result->getTokens());
 
-        self::assertStringNotContainsString('``inline literals``', $result->getValue());
+        self::assertStringNotContainsString('``inline literals``', $result->getValueString());
         self::assertInstanceOf(LiteralToken::class, $token);
         self::assertEquals(SpanToken::TYPE_LITERAL, $token->getType());
         self::assertEquals(
@@ -56,7 +60,7 @@ final class SpanParserTest extends TestCase
     {
         $result = $this->spanProcessor->parse($input, $this->parserContext->reveal());
 
-        self::assertSame($input, $result->getValue());
+        self::assertSame($input, $result->getValueString());
         self::assertCount(0, $result->getTokens());
     }
 
@@ -83,7 +87,7 @@ final class SpanParserTest extends TestCase
             'This text is an example of role:`mis-used`.',
             $this->parserContext->reveal()
         );
-        self::assertMatchesRegularExpression('#This text is an example of [a-z0-9]{40}\\.#', $result->getValue());
+        self::assertMatchesRegularExpression('#This text is an example of [a-z0-9]{40}\\.#', $result->getValueString());
     }
 
     /** @dataProvider namedHyperlinkReferenceProvider */
@@ -106,7 +110,7 @@ final class SpanParserTest extends TestCase
             ],
             $token->getTokenData()
         );
-        self::assertRegExp($referenceId, $result->getValue());
+        self::assertMatchesRegularExpression($referenceId, $result->getValueString());
 
         if ($url === '') {
             return;
@@ -191,7 +195,7 @@ TEXT
         $result = $this->spanProcessor->parse('Some _`internal ref` in text.', $this->parserContext->reveal());
         $token = current($result->getTokens());
 
-        self::assertStringNotContainsString('_`internal ref`', $result->getValue());
+        self::assertStringNotContainsString('_`internal ref`', $result->getValueString());
         self::assertInstanceOf(SpanToken::class, $token);
         self::assertEquals(SpanToken::TYPE_LINK, $token->getType());
         self::assertEquals(
@@ -206,11 +210,13 @@ TEXT
 
     public function testFootNoteReferencesAreReplaced(): void
     {
+        $result = null;
+        $token = null;
         $this->markTestSkipped('Footnotes are not supported yet');
         $result = $this->spanProcessor->parse('Please RTFM [1]_.', $this->parserContext->reveal());
         $token = current($result->getTokens());
 
-        self::assertStringNotContainsString('[1]_', $result->getValue());
+        self::assertStringNotContainsString('[1]_', $result->getValueString());
         self::assertInstanceOf(SpanToken::class, $token);
         self::assertEquals(SpanToken::TYPE_REFERENCE, $token->getType());
         self::assertEquals(
@@ -231,7 +237,7 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertStringNotContainsString($email, $result->getValue());
+        self::assertStringNotContainsString($email, $result->getValueString());
         self::assertCount(1, $tokens);
         self::assertSame(SpanToken::TYPE_LINK, $token->getType());
         self::assertSame(
@@ -252,7 +258,7 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertStringNotContainsString($url, $result->getValue());
+        self::assertStringNotContainsString($url, $result->getValueString());
         self::assertCount(1, $tokens);
         self::assertSame(SpanToken::TYPE_LINK, $token->getType());
         self::assertSame(
@@ -280,7 +286,7 @@ TEXT
         $result = $this->spanProcessor->parse($span, $this->parserContext->reveal());
         $token = current($result->getTokens());
 
-        self::assertStringNotContainsString($replaced, $result->getValue());
+        self::assertStringNotContainsString($replaced, $result->getValueString());
         self::assertInstanceOf(CrossReferenceNode::class, $token);
         self::assertEquals($url, $token->getUrl());
         self::assertEquals($role, $token->getRole());
@@ -347,7 +353,7 @@ TEXT
     public function testNoReplacementsAreDoneWhenNotNeeded(): void
     {
         $result = $this->spanProcessor->parse('Raw token', $this->parserContext->reveal());
-        self::assertSame('Raw token', $result->getValue());
+        self::assertSame('Raw token', $result->getValueString());
         self::assertEmpty($result->getTokens());
     }
 }

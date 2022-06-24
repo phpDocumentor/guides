@@ -11,8 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
 class Toctree extends Directive
 {
-    /** @var ToctreeBuilder */
-    private $toctreeBuilder;
+    private ToctreeBuilder $toctreeBuilder;
 
     public function __construct(ToctreeBuilder $toctreeBuilder)
     {

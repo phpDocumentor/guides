@@ -30,14 +30,11 @@ use function trim;
  */
 final class TableRule implements Rule
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
-    /** @var LineChecker */
-    private $lineChecker;
+    private LineChecker $lineChecker;
 
-    /** @var TableParser */
-    private $tableParser;
+    private TableParser $tableParser;
 
     public function __construct(MarkupLanguageParser $parser)
     {

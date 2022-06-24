@@ -11,7 +11,7 @@ namespace phpDocumentor\Guides\Nodes;
 final class TemplatedNode extends Node
 {
     /** @var array<string, mixed> */
-    private $data;
+    private array $data;
 
     /**
      * @param array<string, mixed> $data

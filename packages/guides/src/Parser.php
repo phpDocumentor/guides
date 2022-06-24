@@ -28,18 +28,15 @@ use function getcwd;
  */
 final class Parser
 {
-    /** @var ?ParserContext */
-    private $parserContext = null;
+    private ?ParserContext $parserContext = null;
 
-    /** @var ?Metas */
-    private $metas = null;
+    private ?Metas $metas = null;
 
 
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     /** @var MarkupLanguageParser[] */
-    private $parserStrategies = [];
+    private array $parserStrategies = [];
 
     /**
      * @param iterable<MarkupLanguageParser> $parserStrategies

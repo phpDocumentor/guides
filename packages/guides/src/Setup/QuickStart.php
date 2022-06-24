@@ -53,12 +53,10 @@ final class QuickStart
     {
         $logger = new TestLogger();
         $nodeRenderers = new ArrayObject();
-        $nodeFactoryCallback = static function () use ($nodeRenderers): NodeRendererFactory {
-            return new InMemoryNodeRendererFactory(
-                $nodeRenderers,
-                new DefaultNodeRenderer()
-            );
-        };
+        $nodeFactoryCallback = static fn(): NodeRendererFactory => new InMemoryNodeRendererFactory(
+            $nodeRenderers,
+            new DefaultNodeRenderer()
+        );
 
         $twigBuilder = new EnvironmentBuilder();
         $renderer = new Renderer(

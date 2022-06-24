@@ -8,11 +8,9 @@ use League\Flysystem\FilesystemInterface;
 
 final class ParseDirectoryCommand
 {
-    /** @var FilesystemInterface */
-    private $origin;
+    private FilesystemInterface $origin;
 
-    /** @var string */
-    private $directory;
+    private string $directory;
 
     private string $inputFormat;
 

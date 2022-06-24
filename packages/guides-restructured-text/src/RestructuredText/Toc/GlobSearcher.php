@@ -12,8 +12,7 @@ use function rtrim;
 
 class GlobSearcher
 {
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     public function __construct(UrlGenerator $urlGenerator)
     {

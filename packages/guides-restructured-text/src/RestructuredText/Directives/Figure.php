@@ -23,8 +23,7 @@ use function assert;
  */
 class Figure extends SubDirective
 {
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     public function __construct(UrlGenerator $urlGenerator)
     {

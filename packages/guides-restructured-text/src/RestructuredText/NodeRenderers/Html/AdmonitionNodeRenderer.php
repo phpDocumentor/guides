@@ -22,8 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 
 class AdmonitionNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

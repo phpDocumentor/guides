@@ -25,35 +25,30 @@ use function sprintf;
 
 final class Entry
 {
-    /** @var string */
-    private $file;
+    private string $file;
 
-    /** @var string */
-    private $url;
+    private string $url;
 
-    /** @var string */
-    private $title;
+    private string $title;
 
     /** @var string[][]|string[][][] */
-    private $titles;
+    private array $titles;
 
     /** @var mixed[][] */
-    private $tocs;
+    private array $tocs;
 
-    /** @var int */
-    private $mtime;
-
-    /** @var string[] */
-    private $depends;
+    private int $mtime;
 
     /** @var string[] */
-    private $resolvedDependencies = [];
+    private array $depends;
 
     /** @var string[] */
-    private $links;
+    private array $resolvedDependencies = [];
 
-    /** @var string|null */
-    private $parent;
+    /** @var string[] */
+    private array $links;
+
+    private ?string $parent = null;
 
     /**
      * @param string[][]|string[][][] $titles

@@ -17,8 +17,7 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionList;
 
 class DefinitionListNode extends Node
 {
-    /** @var DefinitionList */
-    private $definitionList;
+    private DefinitionList $definitionList;
 
     public function __construct(DefinitionList $definitionList)
     {

@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
+use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
+use phpDocumentor\Guides\RenderContext;
 
 use Flyfinder\Finder;
 use League\Flysystem\Adapter\Local;
@@ -63,16 +66,16 @@ $parseDirCommand = new ParseDirectoryCommand(
 $documents = $parseDirectoryHandler->handle($parseDirCommand);
 
 $renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer();
-$renderDocumentHandler = new \phpDocumentor\Guides\Handlers\RenderDocumentHandler($renderer);
+$renderDocumentHandler = new RenderDocumentHandler($renderer);
 
 foreach ($documents as $document) {
     echo "Render: " . $document->getFilePath() . PHP_EOL;
 
     try {
         $renderDocumentHandler->handle(
-            new \phpDocumentor\Guides\Handlers\RenderDocumentCommand(
+            new RenderDocumentCommand(
                 $document,
-                \phpDocumentor\Guides\RenderContext::forDocument(
+                RenderContext::forDocument(
                     $document,
                     $sourceFileSystem,
                     new Filesystem(new Local(__DIR__ . '/out')),
@@ -83,7 +86,7 @@ foreach ($documents as $document) {
                 )
             )
         );
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         echo "Error:" . $e->getMessage() . PHP_EOL;
     }
 }

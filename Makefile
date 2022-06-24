@@ -16,8 +16,12 @@ static-code-analysis: vendor ## Runs a static code analysis with phpstan/phpstan
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/psalm
 
 .PHONY: test
-test: ## Runs unit tests with phpunit/phpunit
+test: test-unit test-functional ## Runs all test suites with phpunit/phpunit
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit
+
+.PHONY: test-unit
+test-unit: ## Runs unit tests with phpunit/phpunit
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=unit
 
 .PHONY: test-functional
 test-functional: ## Runs unit tests with phpunit/phpunit
@@ -28,8 +32,12 @@ dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json
 
 vendor: composer.json composer.lock
-	composer validate --strict
+	composer validate --no-check-publish
 	composer install --no-interaction --no-progress
+
+.PHONY: rector
+rector: ## Refactor code using rector
+	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/rector process packages
 
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style static-code-analysis

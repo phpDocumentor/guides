@@ -25,23 +25,17 @@ use function trim;
 
 class RenderContext
 {
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
-    /** @var string */
-    private $currentFileName = '';
+    private string $currentFileName = '';
 
-    /** @var FilesystemInterface */
-    private $origin;
+    private FilesystemInterface $origin;
 
-    /** @var Metas */
-    private $metas;
+    private Metas $metas;
 
-    /** @var string */
-    private $destinationPath;
+    private string $destinationPath;
 
-    /** @var string */
-    private $currentAbsolutePath = '';
+    private string $currentAbsolutePath = '';
 
     private string $outputFormat;
     private DocumentNode $document;

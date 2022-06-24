@@ -44,16 +44,14 @@ class TableNode extends Node
     public const TYPE_PRETTY = 'pretty';
 
     /** @var array<int, TableSeparatorLineConfig> */
-    private $separatorLineConfigs = [];
+    private array $separatorLineConfigs = [];
 
     /** @var string[] */
-    private $rawDataLines = [];
+    private array $rawDataLines = [];
 
-    /** @var int */
-    private $currentLineNumber = 0;
+    private int $currentLineNumber = 0;
 
-    /** @var bool */
-    private $isCompiled = false;
+    private bool $isCompiled = false;
 
     /** @var TableRow[] */
     protected $data = [];
@@ -62,7 +60,7 @@ class TableNode extends Node
     protected $headers = [];
 
     /** @var string[] */
-    private $errors = [];
+    private array $errors = [];
 
     /** @var string */
     protected $type;

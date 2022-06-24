@@ -50,9 +50,7 @@ final class TemplateRendererTest extends TestCase
         $twig->render(sprintf('%s/%s', $basePath, $template), $data)->willReturn($renderedOutput);
 
         $enviromentBuilder = new EnvironmentBuilder();
-        $enviromentBuilder->setEnvironmentFactory(static function () use ($twig) {
-            return $twig->reveal();
-        });
+        $enviromentBuilder->setEnvironmentFactory(static fn() => $twig->reveal());
 
         $renderer = new TemplateRenderer($enviromentBuilder, $basePath);
 

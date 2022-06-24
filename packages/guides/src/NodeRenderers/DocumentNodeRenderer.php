@@ -20,8 +20,7 @@ use phpDocumentor\Guides\RenderContext;
 
 class DocumentNodeRenderer implements NodeRenderer
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private NodeRendererFactory $nodeRendererFactory;
 
     public function __construct(NodeRendererFactory $nodeRendererFactory)
     {

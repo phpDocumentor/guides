@@ -17,8 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class TopicNode extends Node
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
     public function __construct(string $name, ?Node $value = null)
     {

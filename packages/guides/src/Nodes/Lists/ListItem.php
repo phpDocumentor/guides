@@ -6,14 +6,11 @@ namespace phpDocumentor\Guides\Nodes\Lists;
 
 final class ListItem
 {
-    /** @var string */
-    private $prefix;
+    private string $prefix;
 
-    /** @var bool */
-    private $ordered;
+    private bool $ordered;
 
-    /** @var int */
-    private $depth;
+    private int $depth;
 
     /** @var mixed */
     private $text;

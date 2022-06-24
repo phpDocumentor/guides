@@ -25,8 +25,7 @@ use function ltrim;
 
 class TocNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(Renderer $renderer, UrlGenerator $urlGenerator)

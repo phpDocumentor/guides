@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown\Parsers;
 
+use phpDocumentor\Guides\Nodes\Node;
 use League\CommonMark\Node\Block\Paragraph as CommonMarkParagraph;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
@@ -19,7 +20,7 @@ final class Paragraph extends AbstractBlock
     /**
      * @return Nodes\ParagraphNode
      */
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker): Nodes\Node
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker): Node
     {
         $context = new ParagraphNode(new SpanNode('', []));
 
