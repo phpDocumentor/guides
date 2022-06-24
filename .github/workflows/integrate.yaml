@@ -18,12 +18,14 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/coding-standards.yml@v0.1.0"
 
   dependency-analysis:
-    name: "Coding Standards"
+    name: "Dependency analysis"
     uses: "phpDocumentor/.github/.github/workflows/dependency-analysis.yml@v0.1.0"
 
-  lint:
-    name: "Lint"
-    uses: "phpDocumentor/.github/.github/workflows/lint.yml@v0.1.0"
+  lint-root:
+    name: "Lint root"
+    uses: "phpDocumentor/.github/.github/workflows/lint.yml@main"
+    with:
+      composer-options: "--no-check-publish --ansi"
 
   static-analysis:
     name: "Static analysis"
