@@ -84,6 +84,11 @@ final class DocumentNode extends Node
         return array_filter($this->nodes, $function);
     }
 
+    public function getChildren(): array
+    {
+        return $this->nodes;
+    }
+
     public function getTitle(): ?TitleNode
     {
         foreach ($this->nodes as $node) {

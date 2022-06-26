@@ -27,10 +27,10 @@ use function getcwd;
  */
 final class Parser
 {
-    /** @var ?ParserContext */
+    /** @var ParserContext|null */
     private $parserContext = null;
 
-    /** @var ?Metas */
+    /** @var Metas|null */
     private $metas = null;
 
 

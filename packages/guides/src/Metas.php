@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\References\InternalTarget;
 
 final class Metas
 {
@@ -22,6 +23,9 @@ final class Metas
 
     /** @var string[] */
     private $parents = [];
+
+    /** @var array<string, InternalTarget> */
+    private $internalLinkTargets = [];
 
     /**
      * @param Entry[] $entries
@@ -97,5 +101,15 @@ final class Metas
     public function setMetaEntries(array $metaEntries): void
     {
         $this->entries = $metaEntries;
+    }
+
+    public function addLinkTarget(string $anchorName, InternalTarget $target): void
+    {
+        $this->internalLinkTargets[$anchorName] = $target;
+    }
+
+    public function getInternalTarget(string $anchorName): ?InternalTarget
+    {
+        return $this->internalLinkTargets[$anchorName] ?? null;
     }
 }

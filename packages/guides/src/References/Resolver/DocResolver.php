@@ -13,7 +13,7 @@ final class DocResolver implements Resolver
 {
     public function supports(CrossReferenceNode $node, RenderContext $context): bool
     {
-        return $node->getRole() === 'doc' || $node->getRole() === 'ref';
+        return $node->getRole() === 'doc';
     }
 
     public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference

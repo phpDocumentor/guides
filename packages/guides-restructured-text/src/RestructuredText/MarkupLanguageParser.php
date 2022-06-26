@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText;
 
 use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\NodeTransformer\NodeTransformer;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BestPracticeDirective;
@@ -52,6 +53,9 @@ class MarkupLanguageParser implements ParserInterface
     /** @var Directive[] */
     private $directives = [];
 
+    /** @var iterable<NodeTransformer> */
+    private $transformers;
+
     /** @var string|null */
     private $filename = null;
 
@@ -60,10 +64,14 @@ class MarkupLanguageParser implements ParserInterface
 
     /**
      * @param iterable<Directive> $directives
+     * @param iterable<NodeTransformer> $transformers
      */
     public function __construct(
-        iterable $directives
+        iterable $directives,
+        iterable $transformers = []
     ) {
+        $this->transformers = $transformers;
+
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
@@ -169,6 +177,6 @@ class MarkupLanguageParser implements ParserInterface
 
     private function createDocumentParser(): DocumentParser
     {
-        return new DocumentParser($this, $this->directives);
+        return new DocumentParser($this, $this->directives, $this->transformers);
     }
 }

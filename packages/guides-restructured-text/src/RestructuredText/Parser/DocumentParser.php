@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use ArrayObject;
+use phpDocumentor\Guides\NodeTransformer\DocumentNodeTraverser;
+use phpDocumentor\Guides\NodeTransformer\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
@@ -41,18 +43,22 @@ class DocumentParser
     /** @var Productions\Rule */
     private $startingRule;
     private MarkupLanguageParser $parser;
+    private DocumentNodeTraverser $nodeTraverser;
 
     /**
-     * @param DirectiveHandler[] $directives
+     * @param DirectiveHandler[]        $directives
+     * @param iterable<NodeTransformer> $transformers
      */
     public function __construct(
         MarkupLanguageParser $parser,
-        array $directives
+        array $directives,
+        iterable $transformers
     ) {
         $this->documentIterator = new LinesIterator();
         $this->openSectionsAsTitleNodes = new ArrayObject();
 
         $this->startingRule = new Productions\DocumentRule($this, $parser, $directives);
+        $this->nodeTraverser = new DocumentNodeTraverser($transformers);
         $this->parser = $parser;
     }
 
@@ -64,6 +70,8 @@ class DocumentParser
         if ($this->startingRule->applies($this)) {
             $this->startingRule->apply($this->documentIterator, $this->document);
         }
+
+        $this->nodeTraverser->traverse($this->document);
 
         return $this->document;
     }
