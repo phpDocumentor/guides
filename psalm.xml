@@ -22,6 +22,11 @@
         <LessSpecificReturnType errorLevel="info"/>
         <MissingConstructor errorLevel="info" />
         <PropertyNotSetInConstructor errorLevel="info" />
+        <DeprecatedMethod errorLevel="info">
+            <errorLevel type="info">
+                <referencedMethod name="phpDocumentor\Guides\RestructuredText\Parser\LinesIterator::prev" />
+            </errorLevel>
+        </DeprecatedMethod>
         <DeprecatedClass errorLevel="info">
             <errorLevel type="info">
                 <referencedClass name="phpDocumentor\Guides\Nodes\TemplatedNode" />

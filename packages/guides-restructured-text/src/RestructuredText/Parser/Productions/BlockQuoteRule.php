@@ -48,8 +48,9 @@ final class BlockQuoteRule implements Rule
     {
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
+        $nextLine = $documentIterator->getNextLine();
 
-        while ($documentIterator->getNextLine() !== null && $this->isBlockLine($documentIterator->getNextLine())) {
+        while ($nextLine !== null && $this->isBlockLine($documentIterator->getNextLine())) {
             $documentIterator->next();
             $buffer->push($documentIterator->current());
         }
@@ -62,12 +63,16 @@ final class BlockQuoteRule implements Rule
         $blockNode = new BlockNode($lines);
 
         return new QuoteNode(
-            $this->parser->getSubParser()->parse($this->parser->getEnvironment(), $blockNode->getValue())
+            $this->parser->getSubParser()->parse($this->parser->getEnvironment(), $blockNode->getValueString())
         );
     }
 
-    private function isBlockLine(string $line): bool
+    private function isBlockLine(?string $line): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         if ($line !== '') {
             return trim($line[0]) === '';
         }

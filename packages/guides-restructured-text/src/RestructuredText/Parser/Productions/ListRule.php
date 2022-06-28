@@ -76,7 +76,7 @@ final class ListRule implements Rule
 
     public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
     {
-        $listOffset = 0;
+        $listOffset = null;
         $listMarker = null;
         $buffer = new Buffer();
         $this->isListLine($documentIterator->current(), $listMarker, $listOffset);
@@ -85,7 +85,7 @@ final class ListRule implements Rule
         while ($documentIterator->getNextLine() !== null
             && (
                 $this->isListLine($documentIterator->getNextLine(), $listMarker, $listOffset)
-                || $this->isBlockLine($documentIterator->getNextLine(), max(1, $listOffset))
+                || $this->isBlockLine($documentIterator->getNextLine(), $listOffset ?? 1)
             )
         ) {
             $documentIterator->next();
@@ -104,12 +104,16 @@ final class ListRule implements Rule
         return new ListNode($list, $list[0]->isOrdered());
     }
 
-    public function isListLine(
-        string $line,
+    private function isListLine(
+        ?string $line,
         ?string &$listMarker = null,
         ?int &$listOffset = 0,
         ?string $nextLine = null
     ): bool {
+        if ($line === null) {
+            return false;
+        }
+
         $isList = preg_match(self::LIST_MARKER, $line, $m) > 0;
         if (!$isList) {
             return false;
@@ -151,8 +155,12 @@ final class ListRule implements Rule
      * @param int $minIndent can be used to require a specific level of
      *                       indentation for non-blank lines (number of spaces)
      */
-    public function isBlockLine(string $line, int $minIndent = 1): bool
+    private function isBlockLine(?string $line, int $minIndent = 1): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         return trim($line) === '' || $this->isIndented($line, $minIndent);
     }
 
@@ -164,9 +172,9 @@ final class ListRule implements Rule
      *
      * @param int $minIndent can be used to require a specific level of indentation (number of spaces)
      */
-    public function isIndented(string $line, int $minIndent = 1): bool
+    private function isIndented(string $line, int $minIndent = 1): bool
     {
-        return strpos($line, (string) str_repeat(' ', $minIndent)) === 0;
+        return strpos($line, str_repeat(' ', $minIndent)) === 0;
     }
 
     /**
@@ -174,11 +182,11 @@ final class ListRule implements Rule
      *
      * @return ListItemNode[]
      */
-    public function parseList(array $lines): array
+    private function parseList(array $lines): array
     {
         $list = [];
         $currentItem = null;
-        $currentPrefix = null;
+        $currentPrefix = '';
         $currentOffset = 0;
 
         $createListItem = function (string $item, string $prefix): ListItemNode {
@@ -210,7 +218,7 @@ final class ListRule implements Rule
             }
 
             // the list item offset is determined by the offset of the first text
-            if (trim($currentItem) === '') {
+            if (trim($currentItem ?? '') === '') {
                 $currentOffset = strlen($line) - strlen(ltrim($line));
             }
 

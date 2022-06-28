@@ -93,8 +93,12 @@ final class ParagraphRule implements Rule
         return new ParagraphNode($this->spanParser->parse($lines, $this->parser->getEnvironment()));
     }
 
-    private function isWhiteline(string $line): bool
+    private function isWhiteline(?string $line): bool
     {
+        if ($line === null) {
+            return true;
+        }
+
         return trim($line) === '';
     }
 }

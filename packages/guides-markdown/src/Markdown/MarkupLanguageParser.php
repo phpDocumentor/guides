@@ -178,6 +178,10 @@ final class MarkupLanguageParser implements ParserInterface
 
     public function getDocument(): DocumentNode
     {
+        if ($this->document === null) {
+            throw new RuntimeException('Cannot get document as parser is not started');
+        }
+
         return $this->document;
     }
 }
