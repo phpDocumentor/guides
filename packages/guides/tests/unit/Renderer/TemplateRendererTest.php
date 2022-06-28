@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Faker\Factory;
 use Faker\Generator;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
@@ -27,6 +28,7 @@ use function sprintf;
  */
 final class TemplateRendererTest extends TestCase
 {
+    use ProphecyTrait;
     private Generator $faker;
 
     protected function setUp(): void
