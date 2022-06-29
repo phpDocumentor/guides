@@ -25,7 +25,7 @@ final class SpanParserTest extends TestCase
     public $faker;
     use ProphecyTrait;
 
-    /** @var ParserContext&ObjectProphecy */
+    /** @var ObjectProphecy<ParserContext> */
     private $parserContext;
 
     private SpanParser $spanProcessor;

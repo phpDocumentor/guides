@@ -69,6 +69,10 @@ class DocumentParser
 
     public function getDocument(): DocumentNode
     {
+        if ($this->document === null) {
+            throw new \RuntimeException('Cannot get document, parser is not started');
+        }
+
         return $this->document;
     }
 

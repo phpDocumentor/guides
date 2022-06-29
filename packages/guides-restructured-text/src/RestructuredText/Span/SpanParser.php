@@ -415,6 +415,10 @@ class SpanParser
 
         while (true) {
             $token = $this->lexer->token;
+            if ($token === null) {
+                break;
+            }
+
             switch ($token['type']) {
                 case SpanLexer::NAMED_REFERENCE_END:
                     //We did not find the expected SpanLexer::EMBEDED_URL_END
@@ -429,9 +433,7 @@ class SpanParser
                     $text .= $token['value'];
             }
 
-            if ($this->lexer->moveNext() === false && $this->lexer->token === null) {
-                break;
-            }
+            $this->lexer->moveNext();
         }
 
         $this->rollback($startPosition);
@@ -451,6 +453,10 @@ class SpanParser
         $anchor = '';
         while ($this->lexer->moveNext()) {
             $token = $this->lexer->token;
+            if ($token === null) {
+                break;
+            }
+
             switch ($token['type']) {
                 case SpanLexer::BACKTICK:
                 case SpanLexer::EMBEDED_URL_END:

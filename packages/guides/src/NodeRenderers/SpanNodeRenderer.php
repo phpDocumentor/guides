@@ -68,13 +68,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             throw new InvalidArgumentException('Invalid node presented');
         }
 
-        $value = $node->getValue();
+        $value = $node->getValueString();
 
         $span = $this->renderSyntaxes($value, $environment);
-
-        $span = $this->renderTokens($node, $span, $environment);
-
-        return $span;
+        return $this->renderTokens($node, $span, $environment);
     }
 
     /**
@@ -106,9 +103,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
         $span = $this->renderVariables($span, $environment);
 
-        $span = $this->renderBrs($span);
-
-        return $span;
+        return $this->renderBrs($span);
     }
 
     private function renderStrongEmphasis(string $span): string
@@ -146,6 +141,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 }
 
                 if ($variable instanceof Node) {
+                    assert($this->nodeRendererFactory !== null);
                     return $this->nodeRendererFactory->get($variable)->render($variable, $context);
                 }
 
