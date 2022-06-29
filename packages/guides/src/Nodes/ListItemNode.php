@@ -53,6 +53,12 @@ final class ListItemNode extends Node
 
     public function getContentsAsString(): string
     {
-        return trim(array_reduce($this->contents, static fn(string $contents, Node $node): string => $contents . $node->getValueString() . "\n", ''));
+        return trim(
+            array_reduce(
+                $this->contents,
+                static fn(string $contents, Node $node): string => $contents . $node->getValueString() . "\n",
+                ''
+            )
+        );
     }
 }

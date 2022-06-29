@@ -225,10 +225,16 @@ class SpanParser
         while ($this->lexer->token !== null) {
             switch ($this->lexer->token['type'] ?? '') {
                 case SpanLexer::NAMED_REFERENCE:
-                    $result .= $this->createNamedReference($parserContext, trim((string)$this->lexer->token['value'], '_'));
+                    $result .= $this->createNamedReference(
+                        $parserContext,
+                        trim((string)$this->lexer->token['value'], '_')
+                    );
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
-                    $result .= $this->createAnonymousReference($parserContext, trim((string)$this->lexer->token['value'], '_'));
+                    $result .= $this->createAnonymousReference(
+                        $parserContext,
+                        trim((string)$this->lexer->token['value'], '_')
+                    );
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
                     $result .= $this->parseInternalReference($parserContext);
