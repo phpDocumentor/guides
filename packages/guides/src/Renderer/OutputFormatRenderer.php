@@ -13,14 +13,11 @@ use phpDocumentor\Guides\RenderContext;
 
 class OutputFormatRenderer
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private NodeRendererFactory $nodeRendererFactory;
 
-    /** @var string */
-    private $format;
+    private string $format;
 
-    /** @var TemplateRenderer */
-    private $templateRenderer;
+    private TemplateRenderer $templateRenderer;
 
     public function __construct(
         string $format,

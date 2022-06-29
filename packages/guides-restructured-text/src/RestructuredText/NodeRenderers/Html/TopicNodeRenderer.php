@@ -22,8 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 
 final class TopicNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

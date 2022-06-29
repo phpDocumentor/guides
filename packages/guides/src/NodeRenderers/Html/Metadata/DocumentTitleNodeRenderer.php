@@ -12,8 +12,7 @@ use phpDocumentor\Guides\Renderer;
 
 final class DocumentTitleNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

@@ -28,8 +28,7 @@ use function ltrim;
 
 class TocNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(Renderer $renderer, UrlGenerator $urlGenerator)
@@ -94,7 +93,7 @@ class TocNodeRenderer implements NodeRenderer
             ];
 
             // render children until we hit the configured maxdepth
-            if (count($children) > 0 && $level < $node->getDepth()) {
+            if ((is_countable($children) ? count($children) : 0) > 0 && $level < $node->getDepth()) {
                 $this->buildLevel($environment, $node, $url, $children, $level + 1, $tocItem['children']);
             }
 

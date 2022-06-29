@@ -15,8 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 class SectionEndNode extends Node
 {
-    /** @var TitleNode */
-    private $titleNode;
+    private TitleNode $titleNode;
 
     public function __construct(TitleNode $titleNode)
     {

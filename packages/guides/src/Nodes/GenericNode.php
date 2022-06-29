@@ -29,11 +29,10 @@ namespace phpDocumentor\Guides\Nodes;
  */
 final class GenericNode extends Node
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
     /**
-     * @param Node|callable|string|null $value
+     * @param Node|string|null $value
      */
     public function __construct(string $name, $value = null)
     {

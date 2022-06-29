@@ -45,8 +45,12 @@ final class CommentRule implements Rule
         return null;
     }
 
-    private function isCommentLine(string $line): bool
+    private function isCommentLine(?string $line): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         return $this->isComment($line) || (trim($line) !== '' && $line[0] === ' ');
     }
 

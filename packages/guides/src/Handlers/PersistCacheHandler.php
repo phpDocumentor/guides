@@ -18,11 +18,9 @@ use phpDocumentor\Guides\Metas;
 
 final class PersistCacheHandler
 {
-    /** @var CachedMetasLoader */
-    private $cachedMetasLoader;
+    private CachedMetasLoader $cachedMetasLoader;
 
-    /** @var Metas */
-    private $metas;
+    private Metas $metas;
 
     public function __construct(CachedMetasLoader $cachedMetasLoader, Metas $metas)
     {

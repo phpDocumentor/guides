@@ -26,10 +26,9 @@ use function sprintf;
 class Renderer implements FullDocumentNodeRenderer
 {
     /** @var iterable<OutputFormatRenderer> */
-    private $outputFormatRenderers;
+    private iterable $outputFormatRenderers;
 
-    /** @var OutputFormatRenderer|null */
-    private $outputRenderer;
+    private ?OutputFormatRenderer $outputRenderer = null;
     private EnvironmentBuilder $environmentBuilder;
 
     /** @param iterable<OutputFormatRenderer> $outputFormatRenderers */
@@ -66,6 +65,7 @@ class Renderer implements FullDocumentNodeRenderer
         return $this->outputRenderer->renderDocument($node, $environment);
     }
 
+    /** @psalm-assert OutputFormatRenderer $this->outputRenderer */
     private function setOutputRenderer(RenderContext $environment): void
     {
         foreach ($this->outputFormatRenderers as $outputFormatRenderer) {

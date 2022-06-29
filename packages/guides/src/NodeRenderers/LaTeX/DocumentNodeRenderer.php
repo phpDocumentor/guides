@@ -29,11 +29,9 @@ use function count;
 
 class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, NodeRendererFactoryAware
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {
@@ -68,12 +66,7 @@ class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, No
 
     private function isMain(DocumentNode $node): bool
     {
-        $nodes = $node->getNodes(
-            static function ($node) {
-                return $node instanceof MainNode;
-            }
-        );
-
+        $nodes = $node->getNodes(MainNode::class);
         return count($nodes) !== 0;
     }
 

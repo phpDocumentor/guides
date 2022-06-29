@@ -22,8 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 
 final class ContainerNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {

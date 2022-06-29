@@ -15,11 +15,9 @@ namespace phpDocumentor\Guides\Handlers;
 
 final class LoadCacheCommand
 {
-    /** @var string */
-    private $cacheDirectory;
+    private string $cacheDirectory;
 
-    /** @var bool */
-    private $useCaching;
+    private bool $useCaching;
 
     public function __construct(string $cacheDirectory, bool $useCaching = true)
     {

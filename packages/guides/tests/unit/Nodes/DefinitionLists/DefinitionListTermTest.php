@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -23,6 +24,7 @@ use RuntimeException;
  */
 final class DefinitionListTermTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @covers ::__construct
      * @covers ::getTerm

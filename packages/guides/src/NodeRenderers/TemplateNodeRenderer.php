@@ -10,14 +10,11 @@ use phpDocumentor\Guides\Renderer;
 
 final class TemplateNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
-    /** @var string */
-    private $template;
+    private string $template;
 
-    /** @var string */
-    private $nodeClass;
+    private string $nodeClass;
 
     /** @param class-string<Node> $nodeClass */
     public function __construct(Renderer $renderer, string $template, string $nodeClass)

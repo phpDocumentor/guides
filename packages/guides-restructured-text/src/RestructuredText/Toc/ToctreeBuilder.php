@@ -16,11 +16,9 @@ use function strpos;
 
 class ToctreeBuilder
 {
-    /** @var GlobSearcher */
-    private $globSearcher;
+    private GlobSearcher $globSearcher;
 
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     public function __construct(GlobSearcher $globSearcher, UrlGenerator $urlGenerator)
     {
@@ -76,9 +74,7 @@ class ToctreeBuilder
     {
         return array_filter(
             array_map('trim', explode("\n", $node->getValueString())),
-            static function (string $file) {
-                return $file !== '';
-            }
+            static fn(string $file) => $file !== ''
         );
     }
 

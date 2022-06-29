@@ -28,8 +28,7 @@ use function trim;
  */
 final class DefinitionListRule implements Rule
 {
-    /** @var LineDataParser */
-    private $lineDataParser;
+    private LineDataParser $lineDataParser;
 
     public function __construct(LineDataParser $parser)
     {
@@ -62,12 +61,16 @@ final class DefinitionListRule implements Rule
         return new DefinitionListNode($definitionList);
     }
 
-    public function isDefinitionList(string $line): bool
+    public function isDefinitionList(?string $line): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         return strpos($line, '    ') === 0;
     }
 
-    public function isDefinitionListEnded(string $line, string $nextLine): bool
+    public function isDefinitionListEnded(string $line, ?string $nextLine): bool
     {
         if (trim($line) === '') {
             return false;

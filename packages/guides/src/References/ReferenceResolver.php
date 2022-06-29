@@ -24,7 +24,7 @@ use phpDocumentor\Guides\Span\CrossReferenceNode;
 final class ReferenceResolver
 {
     /** @var iterable<Resolver> */
-    private $resolvers;
+    private iterable $resolvers;
 
     /** @param iterable<Resolver> $resolvers */
     public function __construct(iterable $resolvers)

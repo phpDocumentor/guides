@@ -12,7 +12,7 @@ namespace phpDocumentor\Guides\Formats;
  *
  * @link https://phpdoc.org
  */
-
+use Prophecy\PhpUnit\ProphecyTrait;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class OutputFormatsTest extends TestCase
 {
+    use ProphecyTrait;
     /**
      * @covers ::__construct
      * @covers ::get

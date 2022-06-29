@@ -17,11 +17,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class AdmonitionNode extends Node
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $text;
+    private string $text;
 
     public function __construct(string $name, string $text, Node $value)
     {

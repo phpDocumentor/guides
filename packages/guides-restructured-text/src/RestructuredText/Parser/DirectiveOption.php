@@ -6,8 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 class DirectiveOption
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
     /** @var mixed */
     private $value;

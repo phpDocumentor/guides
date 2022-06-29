@@ -21,6 +21,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
@@ -52,12 +53,10 @@ final class QuickStart
     {
         $logger = new TestLogger();
         $nodeRenderers = new ArrayObject();
-        $nodeFactoryCallback = static function () use ($nodeRenderers) {
-            return new InMemoryNodeRendererFactory(
-                $nodeRenderers,
-                new DefaultNodeRenderer()
-            );
-        };
+        $nodeFactoryCallback = static fn(): NodeRendererFactory => new InMemoryNodeRendererFactory(
+            $nodeRenderers,
+            new DefaultNodeRenderer()
+        );
 
         $twigBuilder = new EnvironmentBuilder();
         $renderer = new Renderer(
@@ -89,7 +88,7 @@ final class QuickStart
             );
         }
 
-        $twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer) {
+        $twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer): Environment {
             $twig = new Environment(
                 new FilesystemLoader(
                     [

@@ -31,11 +31,9 @@ use function trim;
  */
 final class ParagraphRule implements Rule
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
 
-    /** @var DocumentParser */
-    private $documentParser;
+    private DocumentParser $documentParser;
     private SpanParser $spanParser;
 
     public function __construct(MarkupLanguageParser $parser, DocumentParser $documentParser, SpanParser $spanParser)
@@ -95,8 +93,12 @@ final class ParagraphRule implements Rule
         return new ParagraphNode($this->spanParser->parse($lines, $this->parser->getEnvironment()));
     }
 
-    private function isWhiteline(string $line): bool
+    private function isWhiteline(?string $line): bool
     {
+        if ($line === null) {
+            return true;
+        }
+
         return trim($line) === '';
     }
 }

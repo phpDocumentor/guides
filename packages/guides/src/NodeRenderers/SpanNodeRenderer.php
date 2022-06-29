@@ -38,11 +38,9 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     /** @var Renderer */
     protected $renderer;
 
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
-    /** @var ReferenceResolver */
-    private $referenceResolver;
+    private ReferenceResolver $referenceResolver;
 
     private LoggerInterface $logger;
     protected UrlGenerator $urlGenerator;
@@ -70,13 +68,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             throw new InvalidArgumentException('Invalid node presented');
         }
 
-        $value = $node->getValue();
+        $value = $node->getValueString();
 
         $span = $this->renderSyntaxes($value, $environment);
-
-        $span = $this->renderTokens($node, $span, $environment);
-
-        return $span;
+        return $this->renderTokens($node, $span, $environment);
     }
 
     /**
@@ -108,18 +103,14 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
         $span = $this->renderVariables($span, $environment);
 
-        $span = $this->renderBrs($span);
-
-        return $span;
+        return $this->renderBrs($span);
     }
 
     private function renderStrongEmphasis(string $span): string
     {
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
-            function (array $matches): string {
-                return $this->strongEmphasis($matches[1]);
-            },
+            fn(array $matches): string => $this->strongEmphasis($matches[1]),
             $span
         );
     }
@@ -128,9 +119,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
-            function (array $matches): string {
-                return $this->emphasis($matches[1]);
-            },
+            fn(array $matches): string => $this->emphasis($matches[1]),
             $span
         );
     }
@@ -152,6 +141,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 }
 
                 if ($variable instanceof Node) {
+                    assert($this->nodeRendererFactory !== null);
                     return $this->nodeRendererFactory->get($variable)->render($variable, $context);
                 }
 

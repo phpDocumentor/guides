@@ -59,8 +59,12 @@ final class LiteralBlockRule implements Rule
         return new CodeNode($lines);
     }
 
-    private function isBlockLine(string $line): bool
+    private function isBlockLine(?string $line): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         if ($line !== '') {
             return trim($line[0]) === '';
         }

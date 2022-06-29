@@ -33,7 +33,7 @@ abstract class SubDirective extends Directive
         $subParser = $parser->getSubParser();
 
         if ($node instanceof CodeNode) {
-            $document = $subParser->parse($parser->getEnvironment(), $node->getValue());
+            $document = $subParser->parse($parser->getEnvironment(), $node->getValueString());
         } else {
             $document = $node;
         }
@@ -46,9 +46,9 @@ abstract class SubDirective extends Directive
 
         $document = $parser->getDocument();
         if ($variable !== '') {
-            $document->addVariable($variable, $node);
+            $document->addVariable($variable, $newNode);
         } else {
-            $document->addNode($node);
+            $document->addNode($newNode);
         }
     }
 

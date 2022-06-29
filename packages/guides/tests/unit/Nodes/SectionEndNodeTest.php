@@ -28,7 +28,7 @@ final class SectionEndNodeTest extends TestCase
      */
     public function testASectionEndCanBeDefinedWithATitle(): void
     {
-        $titleNode = new TitleNode(new RawNode('Title'), 1);
+        $titleNode = new TitleNode(new SpanNode('Title'), 1);
 
         $node = new SectionEndNode($titleNode);
 

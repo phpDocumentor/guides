@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown;
 
+use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
+use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
+use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
@@ -34,17 +37,14 @@ use function strtolower;
 
 final class MarkupLanguageParser implements ParserInterface
 {
-    /** @var MarkdownParser */
-    private $markdownParser;
+    private MarkdownParser $markdownParser;
 
-    /** @var ParserContext|null */
-    private $environment;
+    private ?ParserContext $environment = null;
 
     /** @var array<AbstractBlock> */
-    private $parsers;
+    private array $parsers;
 
-    /** @var DocumentNode */
-    private $document;
+    private ?DocumentNode $document = null;
 
     public function __construct()
     {
@@ -52,9 +52,9 @@ final class MarkupLanguageParser implements ParserInterface
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
         $this->parsers = [
-            new Parsers\Paragraph(),
-            new Parsers\ListBlock(),
-            new Parsers\ThematicBreak(),
+            new Paragraph(),
+            new ListBlock(),
+            new ThematicBreak(),
         ];
     }
 
@@ -73,9 +73,9 @@ final class MarkupLanguageParser implements ParserInterface
         return $this->parseDocument($ast->walker(), md5($contents));
     }
 
-    public function parseDocument(NodeWalker $walker, string $hash): DocumentNode
+    private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->environment->getCurrentAbsolutePath());
+        $document = new DocumentNode($hash, $this->getEnvironment()->getCurrentAbsolutePath());
         $this->document = $document;
 
         while ($event = $walker->next()) {
@@ -92,11 +92,11 @@ final class MarkupLanguageParser implements ParserInterface
 
             // ignore all Entering events; these are only used to switch to another context and context switching
             // is defined above
-            if                ($event->isEntering()) {
+            if ($event->isEntering()) {
                 continue;
             }
 
-            if (!$event->isEntering() && $node instanceof Document) {
+            if ($node instanceof Document) {
                 return $document;
             }
 
@@ -115,7 +115,7 @@ final class MarkupLanguageParser implements ParserInterface
             }
 
             if ($node instanceof Text) {
-                $spanNode = SpanNode::create($this, $node->getLiteral());
+                $spanNode = new SpanNode($node->getLiteral(), []);
                 $document->addNode($spanNode);
                 continue;
             }
@@ -157,16 +157,12 @@ final class MarkupLanguageParser implements ParserInterface
 
     public function parseParagraph(NodeWalker $walker): ParagraphNode
     {
-        $parser = new Parsers\Paragraph();
-
-        return $parser->parse($this, $walker);
+        return (new Paragraph())->parse($this, $walker);
     }
 
     public function parseListBlock(NodeWalker $walker): ListNode
     {
-        $parser = new Parsers\ListBlock();
-
-        return $parser->parse($this, $walker);
+        return (new ListBlock())->parse($this, $walker);
     }
 
     public function getEnvironment(): ParserContext
@@ -182,6 +178,10 @@ final class MarkupLanguageParser implements ParserInterface
 
     public function getDocument(): DocumentNode
     {
+        if ($this->document === null) {
+            throw new RuntimeException('Cannot get document as parser is not started');
+        }
+
         return $this->document;
     }
 }

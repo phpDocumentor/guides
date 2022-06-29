@@ -22,7 +22,7 @@ use function trim;
 
 abstract class Node
 {
-    /** @var Node|callable|string|null */
+    /** @var Node|string|null */
     protected $value;
 
     /** @var string[] */
@@ -32,7 +32,7 @@ abstract class Node
     private $options;
 
     /**
-     * @param Node|callable|string|null $value
+     * @param Node|string|null $value
      */
     public function __construct($value = null)
     {
@@ -40,7 +40,7 @@ abstract class Node
     }
 
     /**
-     * @return Node|callable|string|null
+     * @return Node|string|null
      */
     public function getValue()
     {
@@ -48,7 +48,7 @@ abstract class Node
     }
 
     /**
-     * @param Node|callable|string|null $value
+     * @param Node|string|null $value
      */
     public function setValue($value): void
     {
@@ -86,15 +86,7 @@ abstract class Node
             return $this->value->getValueString();
         }
 
-        if (is_string($this->value)) {
-            return $this->value;
-        }
-
-        if (is_callable($this->value)) {
-            return ($this->value)();
-        }
-
-        return '';
+        return $this->value;
     }
 
     /**

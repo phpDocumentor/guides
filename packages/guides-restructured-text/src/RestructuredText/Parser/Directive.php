@@ -6,17 +6,14 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 class Directive
 {
-    /** @var string */
-    private $variable;
+    private string $variable;
 
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $data;
+    private string $data;
 
     /** @var mixed[] */
-    private $options;
+    private array $options;
 
     /**
      * @param mixed[] $options

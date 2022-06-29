@@ -28,10 +28,9 @@ use function trim;
 class LinesIterator implements Iterator
 {
     /** @var string[] */
-    private $lines = [];
+    private array $lines = [];
 
-    /** @var int */
-    private $position = 0;
+    private int $position = 0;
 
     public function load(string $document): void
     {

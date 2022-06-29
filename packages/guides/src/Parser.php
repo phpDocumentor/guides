@@ -17,6 +17,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use RuntimeException;
 
 use function getcwd;
@@ -27,18 +28,15 @@ use function getcwd;
  */
 final class Parser
 {
-    /** @var ?ParserContext */
-    private $parserContext = null;
+    private ?ParserContext $parserContext = null;
 
-    /** @var ?Metas */
-    private $metas = null;
+    private ?Metas $metas = null;
 
 
-    /** @var UrlGenerator */
-    private $urlGenerator;
+    private UrlGenerator $urlGenerator;
 
     /** @var MarkupLanguageParser[] */
-    private $parserStrategies = [];
+    private array $parserStrategies = [];
 
     /**
      * @param iterable<MarkupLanguageParser> $parserStrategies
@@ -59,6 +57,10 @@ final class Parser
         $this->parserStrategies[] = $strategy;
     }
 
+    /**
+     * @psalm-assert ParserContext $this->parserContext
+     * @psalm-assert Metas $this->metas
+     */
     public function prepare(
         Metas $metas,
         ?FilesystemInterface $origin,
@@ -155,7 +157,7 @@ final class Parser
         $this->metas->set(
             $document->getFilePath(),
             $this->parserContext->getUrl(),
-            $document->getTitle() ? $document->getTitle()->getValueString() : '',
+            $document->getTitle() instanceof TitleNode ? $document->getTitle()->getValueString() : '',
             $document->getTitles(),
             $this->compileTableOfContents($document, $this->parserContext),
             0, //TODO: remove this? as the md5 hash of documents should be used for caching

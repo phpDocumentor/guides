@@ -18,10 +18,10 @@ use phpDocumentor\Guides\Meta\Entry;
 final class Metas
 {
     /** @var Entry[] */
-    private $entries;
+    private array $entries;
 
     /** @var string[] */
-    private $parents = [];
+    private array $parents = [];
 
     /**
      * @param Entry[] $entries

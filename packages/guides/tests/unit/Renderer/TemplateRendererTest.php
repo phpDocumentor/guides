@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Faker\Factory;
-use phpDocumentor\Faker\Faker;
+use Faker\Generator;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
@@ -27,6 +28,9 @@ use function sprintf;
  */
 final class TemplateRendererTest extends TestCase
 {
+    use ProphecyTrait;
+    private Generator $faker;
+
     protected function setUp(): void
     {
         $this->faker = Factory::create();
@@ -48,9 +52,7 @@ final class TemplateRendererTest extends TestCase
         $twig->render(sprintf('%s/%s', $basePath, $template), $data)->willReturn($renderedOutput);
 
         $enviromentBuilder = new EnvironmentBuilder();
-        $enviromentBuilder->setEnvironmentFactory(static function () use ($twig) {
-            return $twig->reveal();
-        });
+        $enviromentBuilder->setEnvironmentFactory(static fn() => $twig->reveal());
 
         $renderer = new TemplateRenderer($enviromentBuilder, $basePath);
 

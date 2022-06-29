@@ -18,11 +18,10 @@ use function trim;
 
 class FileCollector
 {
-    /** @var Metas */
-    private $metas;
+    private Metas $metas;
 
     /** @var string[][] */
-    private $fileInfos = [];
+    private array $fileInfos = [];
 
     public function __construct(Metas $metas)
     {

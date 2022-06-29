@@ -30,14 +30,11 @@ use function trim;
 
 final class ParseFileHandler
 {
-    /** @var Metas */
-    private $metas;
+    private Metas $metas;
 
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
-    /** @var Parser */
-    private $parser;
+    private Parser $parser;
 
     private EventDispatcherInterface $eventDispatcher;
 

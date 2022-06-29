@@ -26,8 +26,7 @@ use function trim;
 
 final class DocumentNode extends Node
 {
-    /** @var string */
-    private $hash;
+    private string $hash;
 
     /**
      * Header nodes are rendered in the head of a html page.
@@ -35,13 +34,13 @@ final class DocumentNode extends Node
      *
      * @var MetadataNode[]
      */
-    private $headerNodes = [];
+    private array $headerNodes = [];
 
     /** @var Node[] */
-    private $nodes = [];
+    private array $nodes = [];
 
     /** @var string[] */
-    private $dependencies = [];
+    private array $dependencies = [];
 
     /**
      * Variables are replacements in a document.
@@ -51,7 +50,7 @@ final class DocumentNode extends Node
      *
      * @var array<string|Node>
      */
-    private $variables = [];
+    private array $variables = [];
 
     /** @var string Absolute file path of this document */
     private string $filePath;
@@ -73,15 +72,17 @@ final class DocumentNode extends Node
     }
 
     /**
-     * @return Node[]
+     * @template F as Node
+     * @param class-string<F>|null $nodeType
+     * @return (F is null?Node[]:F[])
      */
-    public function getNodes(?callable $function = null): array
+    public function getNodes(?string $nodeType = null): array
     {
-        if ($function === null) {
+        if ($nodeType === null) {
             return $this->nodes;
         }
 
-        return array_filter($this->nodes, $function);
+        return array_filter($this->nodes, static fn($node): bool => $node instanceof $nodeType);
     }
 
     public function getTitle(): ?TitleNode
@@ -100,11 +101,7 @@ final class DocumentNode extends Node
      */
     public function getTocs(): array
     {
-        return $this->getNodes(
-            static function ($node) {
-                return $node instanceof TocNode;
-            }
-        );
+        return $this->getNodes(TocNode::class);
     }
 
     /**
@@ -116,12 +113,12 @@ final class DocumentNode extends Node
         $levels = [&$titles];
 
         foreach ($this->nodes as $node) {
-            if (!($node instanceof TitleNode)) {
+            if ($node instanceof TitleNode === false) {
                 continue;
             }
 
             $level = $node->getLevel();
-            $text = $node->getValue()->getValue();
+            $text = $node->getValueString();
             $redirection = $node->getTarget();
             $value = $redirection !== '' ? [$text, $redirection] : $text;
 
@@ -136,12 +133,8 @@ final class DocumentNode extends Node
         }
 
         $subDocumentTitles = array_map(
-            static function (DocumentNode $node) {
-                return $node->getTitles();
-            },
-            $this->getNodes(static function ($node) {
-                return $node instanceof DocumentNode;
-            })
+            static fn(DocumentNode $node): array => $node->getTitles(),
+            $this->getNodes(self::class)
         );
 
         return array_merge($titles, ...$subDocumentTitles);
@@ -154,10 +147,6 @@ final class DocumentNode extends Node
     {
         if (is_string($node)) {
             $node = new RawNode($node);
-        }
-
-        if (!($node instanceof Node)) {
-            return;
         }
 
         $this->nodes[] = $node;

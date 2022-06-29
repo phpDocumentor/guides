@@ -30,14 +30,12 @@ use function trim;
 
 final class AssetsExtension extends AbstractExtension
 {
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     /** @var PlantumlRenderer|null */
     private $plantumlRenderer;
 
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(
@@ -112,13 +110,14 @@ final class AssetsExtension extends AbstractExtension
             return $path;
         }
 
+        $canonicalUrl = $environment->canonicalUrl($path);
+        Assert::string($canonicalUrl);
         $sourcePath = $environment->getSourcePath() . '/' . $path;
         $outputPath = $this->urlGenerator->absoluteUrl(
             dirname($environment->getDestinationPath()),
-            $environment->canonicalUrl($path)
+            $canonicalUrl
         );
 
-        Assert::string($outputPath);
         if ($environment->getOrigin()->has($sourcePath) === false) {
             $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
 

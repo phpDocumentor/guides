@@ -28,7 +28,7 @@ final class SectionBeginNodeTest extends TestCase
      */
     public function testASectionOpeningCanBeDefinedWithATitle(): void
     {
-        $titleNode = new TitleNode(new RawNode('Title'), 1);
+        $titleNode = new TitleNode(new SpanNode('Title'), 1);
 
         $node = new SectionBeginNode($titleNode);
 

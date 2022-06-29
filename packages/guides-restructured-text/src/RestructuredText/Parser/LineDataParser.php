@@ -21,8 +21,7 @@ use function trim;
 
 class LineDataParser
 {
-    /** @var MarkupLanguageParser */
-    private $parser;
+    private MarkupLanguageParser $parser;
     private SpanParser $spanParser;
 
     public function __construct(MarkupLanguageParser $parser, SpanParser $spanParser)
@@ -168,9 +167,7 @@ class LineDataParser
                 unset($parts[0]);
 
                 $classifiers = array_map(
-                    function (string $classifier) {
-                        return $this->spanParser->parse($classifier, $this->parser->getEnvironment());
-                    },
+                    fn(string $classifier) => $this->spanParser->parse($classifier, $this->parser->getEnvironment()),
                     array_map('trim', $parts)
                 );
 

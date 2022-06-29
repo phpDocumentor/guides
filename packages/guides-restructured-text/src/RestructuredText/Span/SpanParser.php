@@ -22,23 +22,19 @@ use function trim;
 
 class SpanParser
 {
-    /** @var int */
-    private $tokenId;
+    private int $tokenId = 0;
 
-    /** @var string */
-    private $prefix;
+    private string $prefix;
 
     /** @var SpanToken[] */
-    private $tokens = [];
+    private array $tokens = [];
 
-    /** @var SpanLexer */
-    private $lexer;
+    private SpanLexer $lexer;
 
     public function __construct()
     {
         $this->lexer = new SpanLexer();
-        $this->tokenId = 0;
-        $this->prefix = mt_rand() . '|' . time();
+        $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
 
     /** @param string|string[] $span */
@@ -85,7 +81,7 @@ class SpanParser
     {
         return preg_replace_callback(
             '/``(.+)``(?!`)/mUsi',
-            function (array $match) {
+            function (array $match): string {
                 $id = $this->generateId();
                 $this->tokens[$id] = new LiteralToken(
                     $id,
@@ -158,7 +154,7 @@ class SpanParser
             . ']+|(\([^\s()<>]+\)))*\)|[^\s\`!()\[\]{};:\'".,<>?«»“”‘’]))#';
 
         // Standalone hyperlink callback
-        $standaloneHyperlinkCallback = function ($match, $scheme = '') {
+        $standaloneHyperlinkCallback = function (array $match, string $scheme = ''): string {
             $id = $this->generateId();
             $url = $match[1];
 
@@ -193,7 +189,7 @@ class SpanParser
             . 'b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f'
             . '])+)\]))/msi';
 
-        $standaloneEmailAddressCallback = function (array $match) {
+        $standaloneEmailAddressCallback = function (array $match): string {
             $id = $this->generateId();
             $url = $match[1];
 
@@ -227,12 +223,18 @@ class SpanParser
     {
         $result = '';
         while ($this->lexer->token !== null) {
-            switch ($this->lexer->token['type']) {
+            switch ($this->lexer->token['type'] ?? '') {
                 case SpanLexer::NAMED_REFERENCE:
-                    $result .= $this->createNamedReference($parserContext, trim($this->lexer->token['value'], '_'));
+                    $result .= $this->createNamedReference(
+                        $parserContext,
+                        trim((string)$this->lexer->token['value'], '_')
+                    );
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
-                    $result .= $this->createAnonymousReference($parserContext, trim($this->lexer->token['value'], '_'));
+                    $result .= $this->createAnonymousReference(
+                        $parserContext,
+                        trim((string)$this->lexer->token['value'], '_')
+                    );
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
                     $result .= $this->parseInternalReference($parserContext);
@@ -262,7 +264,8 @@ class SpanParser
     private function parseInternalReference(ParserContext $parserContext): string
     {
         $text = '';
-        while ($this->lexer->moveNext()) {
+        $this->lexer->moveNext();
+        while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
             switch ($token['type']) {
                 case SpanLexer::BACKTICK:
@@ -271,6 +274,8 @@ class SpanParser
                 default:
                     $text .= $token['value'];
             }
+
+            $this->lexer->moveNext();
         }
 
         return $text;
@@ -278,6 +283,10 @@ class SpanParser
 
     private function parseInterpretedText(): string
     {
+        if ($this->lexer->token === null) {
+            return ':';
+        }
+
         $startPosition = $this->lexer->token['position'];
         $domain = null;
         $role = null;
@@ -350,6 +359,10 @@ class SpanParser
 
     private function parseNamedReference(ParserContext $parserContext): string
     {
+        if ($this->lexer->token === null) {
+            return '`';
+        }
+
         $startPosition = $this->lexer->token['position'];
         $text = '';
         $url = null;
@@ -398,12 +411,20 @@ class SpanParser
 
     private function parseEmbeddedUrl(): ?string
     {
+        if ($this->lexer->token === null) {
+            return null;
+        }
+
         $startPosition = $this->lexer->token['position'];
         $text = '';
         $this->lexer->moveNext();
 
         while (true) {
             $token = $this->lexer->token;
+            if ($token === null) {
+                break;
+            }
+
             switch ($token['type']) {
                 case SpanLexer::NAMED_REFERENCE_END:
                     //We did not find the expected SpanLexer::EMBEDED_URL_END
@@ -418,9 +439,7 @@ class SpanParser
                     $text .= $token['value'];
             }
 
-            if ($this->lexer->moveNext() === false && $this->lexer->token === null) {
-                break;
-            }
+            $this->lexer->moveNext();
         }
 
         $this->rollback($startPosition);
@@ -440,6 +459,10 @@ class SpanParser
         $anchor = '';
         while ($this->lexer->moveNext()) {
             $token = $this->lexer->token;
+            if ($token === null) {
+                break;
+            }
+
             switch ($token['type']) {
                 case SpanLexer::BACKTICK:
                 case SpanLexer::EMBEDED_URL_END:

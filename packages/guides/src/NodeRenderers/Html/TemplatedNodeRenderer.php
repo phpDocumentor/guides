@@ -13,8 +13,7 @@ use Webmozart\Assert\Assert;
 
 final class TemplatedNodeRenderer implements NodeRenderer
 {
-    /** @var Renderer */
-    private $renderer;
+    private Renderer $renderer;
 
     public function __construct(Renderer $renderer)
     {
@@ -25,7 +24,7 @@ final class TemplatedNodeRenderer implements NodeRenderer
     {
         Assert::isInstanceOf($node, TemplatedNode::class);
 
-        return $this->renderer->render($node->getValue(), $node->getData());
+        return $this->renderer->render($node->getValueString(), $node->getData());
     }
 
     public function supports(Node $node): bool

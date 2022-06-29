@@ -18,10 +18,9 @@ use phpDocumentor\Guides\Nodes\Node;
 class InMemoryNodeRendererFactory implements NodeRendererFactory
 {
     /** @var iterable<NodeRenderer> */
-    private $nodeRenderers;
+    private iterable $nodeRenderers;
 
-    /** @var NodeRenderer */
-    private $defaultNodeRenderer;
+    private NodeRenderer $defaultNodeRenderer;
 
     /**
      * @param iterable<NodeRenderer> $nodeRenderers

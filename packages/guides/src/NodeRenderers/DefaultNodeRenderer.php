@@ -21,8 +21,7 @@ use function is_string;
 
 class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
-    /** @var NodeRendererFactory */
-    private $nodeRendererFactory;
+    private ?NodeRendererFactory $nodeRendererFactory = null;
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {
@@ -39,10 +38,6 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 
         if (is_string($value)) {
             return $value;
-        }
-
-        if (is_callable($value)) {
-            return ($value)();
         }
 
         return '';

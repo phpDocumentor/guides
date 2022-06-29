@@ -10,14 +10,12 @@ class SpanToken
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var string */
-    private $id;
+    private string $id;
 
     /** @var string[] */
-    private $token;
+    private array $token;
 
     /**
      * @param string[] $token

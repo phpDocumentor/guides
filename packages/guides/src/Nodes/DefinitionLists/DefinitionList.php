@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 final class DefinitionList
 {
     /** @var DefinitionListTerm[] */
-    private $terms;
+    private array $terms;
 
     /**
      * @param DefinitionListTerm[] $terms
