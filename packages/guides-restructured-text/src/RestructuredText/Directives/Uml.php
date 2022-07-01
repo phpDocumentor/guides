@@ -6,10 +6,10 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\UmlNode;
+use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-
+use Webmozart\Assert\Assert;
 use function dirname;
 use function explode;
 use function sprintf;
@@ -89,6 +89,7 @@ final class Uml extends Directive
         }
 
         $value = $parserContext->getOrigin()->read($fileName);
+        Assert::string($value);
 
         return str_replace(['@startuml', '@enduml'], '', $value);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Graphs\Nodes;
 
 use PHPUnit\Framework\TestCase;
 

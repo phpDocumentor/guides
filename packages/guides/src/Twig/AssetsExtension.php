@@ -17,7 +17,6 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\UrlGenerator;
-use phpDocumentor\Transformer\Writer\Graph\PlantumlRenderer;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Twig\Extension\AbstractExtension;
@@ -32,20 +31,16 @@ final class AssetsExtension extends AbstractExtension
 {
     private LoggerInterface $logger;
 
-    /** @var PlantumlRenderer|null */
-    private $plantumlRenderer;
-
+    /** @var Renderer */
     private Renderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(
         LoggerInterface $logger,
         Renderer $renderer,
-        UrlGenerator $urlGenerator,
-        ?PlantumlRenderer $plantumlRenderer = null
+        UrlGenerator $urlGenerator
     ) {
         $this->logger = $logger;
-        $this->plantumlRenderer = $plantumlRenderer;
         $this->renderer = $renderer;
         $this->urlGenerator = $urlGenerator;
     }
@@ -55,7 +50,6 @@ final class AssetsExtension extends AbstractExtension
         return [
             new TwigFunction('asset', [$this, 'asset'], ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', [$this, 'renderNode'], ['is_safe' => ['html'], 'needs_context' => true]),
-            new TwigFunction('uml', [$this, 'uml'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -91,15 +85,6 @@ final class AssetsExtension extends AbstractExtension
         }
 
         return $this->renderer->renderNode($node, $environment);
-    }
-
-    public function uml(string $source): ?string
-    {
-        if ($this->plantumlRenderer === null) {
-            throw new RuntimeException('Uml renderer must be set in order to render uml diagrams');
-        }
-
-        return $this->plantumlRenderer->render($source);
     }
 
     private function copyAsset(

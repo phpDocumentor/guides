@@ -11,7 +11,6 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\SectionBeginNode;
 use phpDocumentor\Guides\Nodes\SectionEndNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
-use phpDocumentor\Guides\Nodes\UmlNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\ListNode;
@@ -30,7 +29,6 @@ return [
     SectionBeginNode::class => 'section-begin.html.twig',
     SectionEndNode::class => 'section-end.html.twig',
     ImageNode::class => 'image.html.twig',
-    UmlNode::class => 'uml.html.twig',
     CodeNode::class => 'code.html.twig',
     DefinitionListNode::class => 'definition-list.html.twig',
     ListNode::class => 'list.html.twig',

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use RuntimeException;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use ArrayObject;
@@ -70,7 +71,7 @@ class DocumentParser
     public function getDocument(): DocumentNode
     {
         if ($this->document === null) {
-            throw new \RuntimeException('Cannot get document, parser is not started');
+            throw new RuntimeException('Cannot get document, parser is not started');
         }
 
         return $this->document;
