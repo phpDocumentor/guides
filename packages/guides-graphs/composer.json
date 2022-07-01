@@ -1,0 +1,25 @@
+{
+    "name": "phpdocumentor/guides-graphs",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://www.phpdoc.org",
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": [
+                "tests/unit/"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.4.0||^8.0",
+        "phpdocumentor/guides": "^0.1",
+        "symfony/process": "^5.4",
+        "twig/twig": "~2.0"
+    }
+}

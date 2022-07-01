@@ -14,6 +14,11 @@
       "name": "guides-restructured-text",
       "directory": "packages/guides-restructured-text",
       "target": "git@github.com:phpDocumentor/guides-restructured-text.git"
+    },
+    {
+      "name": "guides-graphs",
+      "directory": "packages/guides-graphs",
+      "target": "git@github.com:phpDocumentor/guides-graphs.git"
     }
   ]
 }

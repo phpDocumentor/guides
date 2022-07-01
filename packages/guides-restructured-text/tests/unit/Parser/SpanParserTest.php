@@ -26,7 +26,7 @@ final class SpanParserTest extends TestCase
     use ProphecyTrait;
 
     /** @var ObjectProphecy<ParserContext> */
-    private $parserContext;
+    private ObjectProphecy $parserContext;
 
     private SpanParser $spanProcessor;
 
