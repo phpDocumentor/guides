@@ -35,7 +35,7 @@
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
         "symfony/translation-contracts": "^2.1",
-        "league/uri": "^6.5",
+        "league/uri": "^6.7",
         "league/uri-interfaces": "^2.3",
         "psr/log": "^1.1",
         "doctrine/event-manager": "^1.1",
