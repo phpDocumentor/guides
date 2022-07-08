@@ -149,13 +149,14 @@ class LineDataParser
             $definitionNodes = $this->parser->parseFragment($definitionListTerm['definition'])->getNodes();
             if (empty($definitionNodes)) {
                 return null;
-            } else if (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {
+            } elseif (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {
                 // if there is only one paragraph node, the value is put directly in the <dd> element
                 $definitionNodes = [$definitionNodes[0]->getValue()];
             } else {
                 // otherwise, .first and .last are added to the first and last nodes of the definition
                 $definitionNodes[0]->setClasses($definitionNodes[0]->getClasses() + ['first']);
-                $definitionNodes[count($definitionNodes) - 1]->setClasses($definitionNodes[count($definitionNodes) - 1]->getClasses() + ['last']);
+                $definitionNodes[count($definitionNodes) - 1]
+                    ->setClasses($definitionNodes[count($definitionNodes) - 1]->getClasses() + ['last']);
             }
 
             return new DefinitionListTerm(

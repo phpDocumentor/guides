@@ -35,7 +35,7 @@ term 2
 
     Definition 3
 RST
-);
+        );
 
         $documentParser = $this->prophesize(DocumentParser::class);
         $documentParser->getDocumentIterator()->willReturn($documentIterator);
