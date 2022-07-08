@@ -24,6 +24,9 @@ use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 
 use function md5;
 
+/**
+ * Our document parser contains
+ */
 class DocumentParser
 {
     /** @var bool public is temporary */

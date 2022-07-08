@@ -63,6 +63,11 @@ final class DirectiveRule implements Rule
         return $this->isDirective($documentParser->getDocumentIterator()->current());
     }
 
+    private function isDirective(string $line): bool
+    {
+        return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
+    }
+
     public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
     {
         $openingLine = $documentIterator->current();
@@ -118,12 +123,7 @@ final class DirectiveRule implements Rule
         return null;
     }
 
-    public function isDirective(string $line): bool
-    {
-        return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
-    }
-
-    public function getDirectiveHandler(Directive $directive): ?DirectiveHandler
+    private function getDirectiveHandler(Directive $directive): ?DirectiveHandler
     {
         return $this->directives[$directive->getName()] ?? null;
     }

@@ -37,7 +37,7 @@ final class DefinitionListRule implements Rule
 
     public function applies(DocumentParser $documentParser): bool
     {
-        return $this->isDefinitionList($documentParser->getDocumentIterator()->getNextLine() ?? '');
+        return $this->isDefinitionList($documentParser->getDocumentIterator()->getNextLine());
     }
 
     public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
@@ -61,7 +61,7 @@ final class DefinitionListRule implements Rule
         return new DefinitionListNode($definitionList);
     }
 
-    public function isDefinitionList(?string $line): bool
+    private function isDefinitionList(?string $line): bool
     {
         if ($line === null) {
             return false;
@@ -70,7 +70,7 @@ final class DefinitionListRule implements Rule
         return strpos($line, '    ') === 0;
     }
 
-    public function isDefinitionListEnded(string $line, ?string $nextLine): bool
+    private function isDefinitionListEnded(string $line, ?string $nextLine): bool
     {
         if (trim($line) === '') {
             return false;

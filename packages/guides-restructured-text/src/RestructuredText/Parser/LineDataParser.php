@@ -8,6 +8,8 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionList;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListTerm;
 use phpDocumentor\Guides\Nodes\Links\Link;
 use phpDocumentor\Guides\Nodes\Lists\ListItem;
+use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
@@ -138,71 +140,74 @@ class LineDataParser
      */
     public function parseDefinitionList(array $lines): DefinitionList
     {
-        $definitionList = [];
+        /** @var array{term: SpanNode, classifiers: list<SpanNode>, definition: string}|null $definitionListTerm */
         $definitionListTerm = null;
-        $currentDefinition = null;
+        $definitionList     = [];
 
+        $createDefinitionTerm = function (array $definitionListTerm): ?DefinitionListTerm {
+            // parse any markup in the definition (e.g. lists, directives)
+            $definitionNodes = $this->parser->parseFragment($definitionListTerm['definition'])->getNodes();
+            if (empty($definitionNodes)) {
+                return null;
+            } else if (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {
+                // if there is only one paragraph node, the value is put directly in the <dd> element
+                $definitionNodes = [$definitionNodes[0]->getValue()];
+            } else {
+                // otherwise, .first and .last are added to the first and last nodes of the definition
+                $definitionNodes[0]->setClasses($definitionNodes[0]->getClasses() + ['first']);
+                $definitionNodes[count($definitionNodes) - 1]->setClasses($definitionNodes[count($definitionNodes) - 1]->getClasses() + ['last']);
+            }
+
+            return new DefinitionListTerm(
+                $definitionListTerm['term'],
+                $definitionListTerm['classifiers'],
+                $definitionNodes
+            );
+        };
+
+        $currentOffset = 0;
         foreach ($lines as $key => $line) {
-            // term definition line
-            if ($definitionListTerm !== null && substr($line, 0, 4) === '    ') {
-                $definition = trim($line);
+            // indent or empty line = term definition line
+            if ($definitionListTerm !== null && (trim($line) === '') || $line[0] === ' ') {
+                if ($currentOffset === 0) {
+                    // first line of a definition determines the indentation offset
+                    $definition    = ltrim($line);
+                    $currentOffset = strlen($line) - strlen($definition);
+                } else {
+                    $definition = substr($line, $currentOffset);
+                }
 
-                $currentDefinition .= $definition . ' ';
+                $definitionListTerm['definition'] .= $definition . "\n";
 
-                // non empty string
+                // non empty string at the start of the line = definition term
             } elseif (trim($line) !== '') {
                 // we are starting a new term so if we have an existing
                 // term with definitions, add it to the definition list
                 if ($definitionListTerm !== null) {
-                    $definitionList[] = new DefinitionListTerm(
-                        $definitionListTerm['term'],
-                        $definitionListTerm['classifiers'],
-                        $definitionListTerm['definitions']
-                    );
+                    $definitionList[] = $createDefinitionTerm($definitionListTerm);
                 }
 
-                $parts = explode(' : ', trim($line));
+                $parts = explode(':', trim($line));
 
                 $term = $parts[0];
                 unset($parts[0]);
 
-                $classifiers = array_map(
-                    fn(string $classifier) => $this->spanParser->parse($classifier, $this->parser->getEnvironment()),
-                    array_map('trim', $parts)
-                );
+                $classifiers = array_map(function (string $classifier): SpanNode {
+                    return $this->spanParser->parse($classifier, $this->parser->getEnvironment());
+                }, array_map('trim', $parts));
 
+                $currentOffset      = 0;
                 $definitionListTerm = [
                     'term' => $this->spanParser->parse($term, $this->parser->getEnvironment()),
                     'classifiers' => $classifiers,
-                    'definitions' => [],
+                    'definition' => '',
                 ];
-
-                // last line
-            } elseif ($definitionListTerm !== null && trim($line) === '' && count($lines) - 1 === $key) {
-                if ($currentDefinition !== null) {
-                    $definitionListTerm['definitions'][] = $this->spanParser->parse(
-                        $currentDefinition,
-                        $this->parser->getEnvironment()
-                    );
-
-                    $currentDefinition = null;
-                }
-
-                $definitionList[] = new DefinitionListTerm(
-                    $definitionListTerm['term'],
-                    $definitionListTerm['classifiers'],
-                    $definitionListTerm['definitions']
-                );
-
-                // empty line, start of a new definition for the current term
-            } elseif ($currentDefinition !== null && $definitionListTerm !== null && trim($line) === '') {
-                $definitionListTerm['definitions'][] = $this->spanParser->parse(
-                    $currentDefinition,
-                    $this->parser->getEnvironment()
-                );
-
-                $currentDefinition = null;
             }
+        }
+
+        // append the last definition of the list
+        if ($definitionListTerm !== null) {
+            $definitionList[] = $createDefinitionTerm($definitionListTerm);
         }
 
         return new DefinitionList($definitionList);

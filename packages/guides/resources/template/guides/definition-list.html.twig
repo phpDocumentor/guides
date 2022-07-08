@@ -17,13 +17,7 @@
         {% if definitionListTerm.definitions|length > 1 %}
             <dd>
                 {% for definition in definitionListTerm.definitions %}
-                    {% if loop.first %}
-                        <p class="first">{{ renderNode(definition) }}</p>
-                    {% elseif loop.last %}
-                        <p class="last">{{ renderNode(definition) }}</p>
-                    {% else %}
-                        <p>{{ renderNode(definition) }}</p>
-                    {% endif %}
+                    {{ renderNode(definition) }}
                 {% endfor %}
             </dd>
         {% elseif definitionListTerm.definitions|length == 1 %}

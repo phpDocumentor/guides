@@ -30,6 +30,10 @@ use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\Renderer\OutputFormatRenderer;
 use phpDocumentor\Guides\Renderer\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\AdmonitionNodeRenderer;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\ContainerNodeRenderer;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\SidebarNodeRenderer;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\TopicNodeRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\UrlGenerator;
@@ -78,6 +82,10 @@ final class QuickStart
             new UrlGenerator()
         );
         $nodeRenderers[] = new TableNodeRenderer($renderer);
+        $nodeRenderers[] = new AdmonitionNodeRenderer($renderer);
+        $nodeRenderers[] = new ContainerNodeRenderer($renderer);
+        $nodeRenderers[] = new SidebarNodeRenderer($renderer);
+        $nodeRenderers[] = new TopicNodeRenderer($renderer);
 
         $config = new Configuration();
         foreach ($config->htmlNodeTemplates() as $node => $template) {
