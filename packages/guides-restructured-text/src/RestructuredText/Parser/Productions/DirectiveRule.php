@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Throwable;
@@ -32,8 +32,6 @@ final class DirectiveRule implements Rule
 {
     private MarkupLanguageParser $parser;
 
-    private DocumentParser $documentParser;
-
     private LineDataParser $lineDataParser;
 
     private LiteralBlockRule $literalBlockRule;
@@ -45,20 +43,18 @@ final class DirectiveRule implements Rule
      * @param DirectiveHandler[] $directives
      */
     public function __construct(
-        MarkupLanguageParser $parser,
-        DocumentParser $documentParser,
-        LineDataParser $lineDataParser,
-        LiteralBlockRule $literalBlockRule,
-        array $directives = []
+        MarkupLanguageParser  $parser,
+        LineDataParser        $lineDataParser,
+        LiteralBlockRule      $literalBlockRule,
+        array                 $directives = []
     ) {
         $this->parser = $parser;
         $this->lineDataParser = $lineDataParser;
         $this->literalBlockRule = $literalBlockRule;
-        $this->documentParser = $documentParser;
         $this->directives = $directives;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         return $this->isDirective($documentParser->getDocumentIterator()->current());
     }
@@ -68,8 +64,9 @@ final class DirectiveRule implements Rule
         return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
         $documentIterator->next();
         $directive = $this->lineDataParser->parseDirective($openingLine);
@@ -101,7 +98,7 @@ final class DirectiveRule implements Rule
         try {
             $directiveHandler->process(
                 $this->parser,
-                $this->interpretContentBlock($documentIterator),
+                $this->interpretContentBlock($documentParserContext),
                 $directive->getVariable(),
                 $directive->getData(),
                 $directive->getOptions()
@@ -139,12 +136,13 @@ final class DirectiveRule implements Rule
         }
     }
 
-    private function interpretContentBlock(LinesIterator $documentIterator): ?Node
+    private function interpretContentBlock(DocumentParserContext $documentParserContext): ?Node
     {
         $contentBlock = null;
-        $this->documentParser->nextIndentedBlockShouldBeALiteralBlock = true;
-        if ($documentIterator->valid() && $this->literalBlockRule->applies($this->documentParser)) {
-            $contentBlock = $this->literalBlockRule->apply($documentIterator);
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentParserContext->nextIndentedBlockShouldBeALiteralBlock = true;
+        if ($documentIterator->valid() && $this->literalBlockRule->applies($documentParserContext)) {
+            $contentBlock = $this->literalBlockRule->apply($documentParserContext);
         }
 
         return $contentBlock;

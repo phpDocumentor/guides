@@ -18,7 +18,7 @@ use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\Links\Link as LinkParser;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
@@ -37,15 +37,16 @@ final class LinkRule implements Rule
         $this->parser = $parser;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         $link = $this->lineDataParser->parseLink($documentParser->getDocumentIterator()->current());
 
         return $link !== null;
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $link = $this->lineDataParser->parseLink($documentIterator->current());
         if ($link === null) {
             throw new InvalidArgumentException();

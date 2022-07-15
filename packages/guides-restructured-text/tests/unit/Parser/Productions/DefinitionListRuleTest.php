@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
@@ -37,7 +37,7 @@ term 2
 RST
         );
 
-        $documentParser = $this->prophesize(DocumentParser::class);
+        $documentParser = $this->prophesize(DocumentParserContext::class);
         $documentParser->getDocumentIterator()->willReturn($documentIterator);
 
         $rule = new DefinitionListRule(
@@ -68,7 +68,7 @@ term 2
 RST
         );
 
-        $documentParser = $this->prophesize(DocumentParser::class);
+        $documentParser = $this->prophesize(DocumentParserContext::class);
         $documentParser->getDocumentIterator()->willReturn($documentIterator);
 
         $rule = new DefinitionListRule(

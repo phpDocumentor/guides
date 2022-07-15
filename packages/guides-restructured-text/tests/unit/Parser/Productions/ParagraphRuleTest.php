@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
@@ -52,7 +52,7 @@ final class ParagraphRuleTest extends TestCase
                 new UrlGenerator()
             )
         );
-        $documentParser = $this->prophesize(DocumentParser::class);
+        $documentParser = $this->prophesize(DocumentParserContext::class);
         $documentParser->getDocumentIterator()->willReturn($iterator);
         $spanParser = $this->prophesize(SpanParser::class);
         $spanParser->parse(
@@ -62,12 +62,11 @@ final class ParagraphRuleTest extends TestCase
 
         $rule = new ParagraphRule(
             $parser->reveal(),
-            $documentParser->reveal(),
             $spanParser->reveal()
         );
 
         self::assertTrue($rule->applies($documentParser->reveal()));
-        $result = $rule->apply($iterator);
+        $result = $rule->apply($documentParser->reveal());
         self::assertEquals(
             $node,
             $result

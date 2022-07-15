@@ -66,7 +66,7 @@ class LinesIterator implements Iterator
     /**
      * @deprecated Work around for Production's eating one line too many
      *
-     * @todo Revisit The Loop in {@see DocumentParser::parseLines()} and see if the Look Ahead timing should be done
+     * @todo Revisit The Loop in {@see DocumentParserContext::parseLines()} and see if the Look Ahead timing should be done
      *       differently
      */
     public function prev(): void

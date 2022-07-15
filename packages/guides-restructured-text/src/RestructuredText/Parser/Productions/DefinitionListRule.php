@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
@@ -35,26 +35,26 @@ final class DefinitionListRule implements Rule
         $this->lineDataParser = $parser;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         return $this->isDefinitionList($documentParser->getDocumentIterator()->getNextLine());
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
         $buffer = new Buffer();
 
-        while ($documentIterator->getNextLine() !== null
-            && $this->isDefinitionListEnded($documentIterator->current(), $documentIterator->getNextLine()) === false
+        while ($documentParserContext->getNextLine() !== null
+            && $this->isDefinitionListEnded($documentParserContext->current(), $documentParserContext->getNextLine()) === false
         ) {
-            $buffer->push($documentIterator->current());
-            $documentIterator->next();
+            $buffer->push($documentParserContext->current());
+            $documentParserContext->next();
         }
 
         // TODO: This is a workaround because the current Main Loop in {@see DocumentParser::parseLines()} expects
         //       the cursor position to rest at the last unprocessed line, but the logic above needs is always a step
         //       'too late' in detecting whether it should have stopped
-        $documentIterator->prev();
+        $documentParserContext->prev();
 
         $definitionList = $this->lineDataParser->parseDefinitionList($buffer->getLines());
 

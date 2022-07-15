@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
@@ -33,17 +33,16 @@ final class ParagraphRule implements Rule
 {
     private MarkupLanguageParser $parser;
 
-    private DocumentParser $documentParser;
+    private DocumentParserContext $documentParser;
     private SpanParser $spanParser;
 
-    public function __construct(MarkupLanguageParser $parser, DocumentParser $documentParser, SpanParser $spanParser)
+    public function __construct(MarkupLanguageParser $parser, SpanParser $spanParser)
     {
         $this->parser = $parser;
-        $this->documentParser = $documentParser;
         $this->spanParser = $spanParser;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         // Should be last in the series of rules; basically: if it ain't anything else, it is a paragraph.
         // This could prove to be wrong when we pull up the spec, but the existing implementation applies this concept
@@ -51,8 +50,10 @@ final class ParagraphRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
+
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
 
@@ -77,7 +78,7 @@ final class ParagraphRule implements Rule
                 $lastLine .= ':';
             }
 
-            $this->documentParser->nextIndentedBlockShouldBeALiteralBlock = true;
+            $documentParserContext->nextIndentedBlockShouldBeALiteralBlock = true;
 
             if ($lastLine !== '') {
                 $lines[] = $lastLine;

@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Webmozart\Assert\Assert;
 
@@ -64,7 +64,7 @@ final class ListRule implements Rule
         $this->parser = $parser;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         $documentIterator = $documentParser->getDocumentIterator();
 
@@ -74,8 +74,10 @@ final class ListRule implements Rule
             && $this->isListLine($documentIterator->current());
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
+
         $listOffset = null;
         $listMarker = null;
         $buffer = new Buffer();

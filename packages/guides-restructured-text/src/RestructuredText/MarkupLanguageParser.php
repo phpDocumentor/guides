@@ -35,7 +35,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\TopicDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Uml;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Wrap;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
@@ -53,24 +55,27 @@ class MarkupLanguageParser implements ParserInterface
 
     private ?string $filename = null;
 
-    private ?DocumentParser $documentParser = null;
+    private ?DocumentParserContext $documentParser = null;
+    private Rule $startingRule;
 
     /**
      * @param iterable<Directive> $directives
      */
     public function __construct(
+        Rule $startingRule,
         iterable $directives
     ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
+        $this->startingRule = $startingRule;
     }
 
     public static function createInstance(): self
     {
         $spanParser = new SpanParser();
 
-        return new self([
+        $directives = [
             new AdmonitionDirective($spanParser),
             new BestPracticeDirective($spanParser),
             new CautionDirective($spanParser),
@@ -103,7 +108,12 @@ class MarkupLanguageParser implements ParserInterface
             new Uml(),
             new WarningDirective($spanParser),
             new Wrap(),
-        ]);
+        ];
+
+        $documentRule = new DocumentRule($this, $directives);
+
+
+        return new self($documentRule, $directives);
     }
 
     public function supports(string $inputFormat): bool
@@ -164,8 +174,8 @@ class MarkupLanguageParser implements ParserInterface
         return $this->createDocumentParser()->parse($contents);
     }
 
-    private function createDocumentParser(): DocumentParser
+    private function createDocumentParser(): DocumentParserContext
     {
-        return new DocumentParser($this, $this->directives);
+        return new DocumentParserContext($this, $this->directives);
     }
 }

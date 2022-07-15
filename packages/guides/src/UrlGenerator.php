@@ -21,7 +21,7 @@ use function implode;
 use function ltrim;
 use function trim;
 
-final class UrlGenerator
+final class UrlGenerator implements UrlGeneratorInterface
 {
     public function generateUrl(string $path): string
     {

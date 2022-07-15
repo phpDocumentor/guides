@@ -18,8 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function array_values;
 use function count;
@@ -37,15 +36,16 @@ final class BlockQuoteRule implements Rule
         $this->parser = $parser;
     }
 
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->current());
 
         return $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
         $nextLine = $documentIterator->getNextLine();

@@ -27,7 +27,7 @@ use function md5;
 /**
  * Our document parser contains
  */
-class DocumentParser
+class DocumentParserContext
 {
     /** @var bool public is temporary */
     public $nextIndentedBlockShouldBeALiteralBlock = false;
@@ -55,7 +55,7 @@ class DocumentParser
         $this->documentIterator = new LinesIterator();
         $this->openSectionsAsTitleNodes = new ArrayObject();
 
-        $this->startingRule = new DocumentRule($this, $parser, $directives);
+        $this->startingRule = new DocumentRule($parser, $directives);
         $this->parser = $parser;
     }
 

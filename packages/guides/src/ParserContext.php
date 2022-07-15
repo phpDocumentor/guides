@@ -16,7 +16,7 @@ use function trim;
 
 class ParserContext
 {
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     private int $initialHeaderLevel;
 
@@ -50,7 +50,7 @@ class ParserContext
         string $currentDirectory,
         int $initialHeaderLevel,
         FilesystemInterface $origin,
-        UrlGenerator $urlGenerator
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->initialHeaderLevel = $initialHeaderLevel;
         $this->origin = $origin;

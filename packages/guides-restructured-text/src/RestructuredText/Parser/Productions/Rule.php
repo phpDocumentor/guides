@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 interface Rule
 {
-    public function applies(DocumentParser $documentParser): bool;
+    public function applies(DocumentParserContext $documentParser): bool;
 
     /**
      * Enters this state and loops through all relevant lines until a Node is produced.
@@ -32,5 +32,5 @@ interface Rule
      * that is considered that last relevant line. The document parser will advance the line after successfully parsing
      * this and to send the Parser into a line that belongs to another state.
      */
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node;
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node;
 }
