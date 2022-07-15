@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\ParserContext;
 use RuntimeException;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use ArrayObject;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -38,37 +37,32 @@ class DocumentParserContext
     /** @var ArrayObject<int, TitleNode> public is temporary */
     public $openSectionsAsTitleNodes;
 
-    private ?DocumentNode $document = null;
+    public ?DocumentNode $document = null;
 
     private LinesIterator $documentIterator;
-
-    private Rule $startingRule;
-    private MarkupLanguageParser $parser;
+    private ParserContext $context;
+    private MarkupLanguageParser $markupLanguageParser;
 
     /**
      * @param DirectiveHandler[] $directives
      */
-    public function __construct(
-        MarkupLanguageParser $parser,
-        array $directives
-    ) {
+    public function __construct(string $content, ParserContext $context, MarkupLanguageParser $markupLanguageParser)
+    {
         $this->documentIterator = new LinesIterator();
+        $this->documentIterator->load($content);
         $this->openSectionsAsTitleNodes = new ArrayObject();
-
-        $this->startingRule = new DocumentRule($parser, $directives);
-        $this->parser = $parser;
+        $this->context = $context;
+        $this->markupLanguageParser = $markupLanguageParser;
     }
 
-    public function parse(string $contents): DocumentNode
+    public function getContext(): ParserContext
     {
-        $this->document = new DocumentNode(md5($contents), $this->parser->getEnvironment()->getCurrentFileName());
-        $this->documentIterator->load($contents);
+        return $this->context;
+    }
 
-        if ($this->startingRule->applies($this)) {
-            $this->startingRule->apply($this->documentIterator, $this->document);
-        }
-
-        return $this->document;
+    public function getParser(): MarkupLanguageParser
+    {
+        return $this->markupLanguageParser;
     }
 
     public function getDocument(): DocumentNode
@@ -83,5 +77,13 @@ class DocumentParserContext
     public function getDocumentIterator(): LinesIterator
     {
         return $this->documentIterator;
+    }
+
+    public function withContents(string $contents): self
+    {
+        $that = clone $this;
+        $that->documentIterator->load($contents);
+
+        return $that;
     }
 }

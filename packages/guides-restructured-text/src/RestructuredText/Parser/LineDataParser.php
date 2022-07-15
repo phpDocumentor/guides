@@ -26,9 +26,8 @@ class LineDataParser
     private MarkupLanguageParser $parser;
     private SpanParser $spanParser;
 
-    public function __construct(MarkupLanguageParser $parser, SpanParser $spanParser)
+    public function __construct(SpanParser $spanParser)
     {
-        $this->parser = $parser;
         $this->spanParser = $spanParser;
     }
 
@@ -138,15 +137,16 @@ class LineDataParser
     /**
      * @param string[] $lines
      */
-    public function parseDefinitionList(array $lines): DefinitionList
+    public function parseDefinitionList(DocumentParserContext $documentParserContext, array $lines): DefinitionList
     {
         /** @var array{term: SpanNode, classifiers: list<SpanNode>, definition: string}|null $definitionListTerm */
         $definitionListTerm = null;
         $definitionList     = [];
 
-        $createDefinitionTerm = function (array $definitionListTerm): ?DefinitionListTerm {
+        $createDefinitionTerm = function (array $definitionListTerm) use ($documentParserContext): ?DefinitionListTerm {
             // parse any markup in the definition (e.g. lists, directives)
-            $definitionNodes = $this->parser->parseFragment($definitionListTerm['definition'])->getNodes();
+            $definitionNodes = $documentParserContext->getParser()->parseFragment($definitionListTerm['definition'])
+                ->getNodes();
             if (empty($definitionNodes)) {
                 return null;
             } elseif (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {
@@ -193,13 +193,13 @@ class LineDataParser
                 $term = $parts[0];
                 unset($parts[0]);
 
-                $classifiers = array_map(function (string $classifier): SpanNode {
-                    return $this->spanParser->parse($classifier, $this->parser->getEnvironment());
+                $classifiers = array_map(function (string $classifier) use ($documentParserContext): SpanNode {
+                    return $this->spanParser->parse($classifier, $documentParserContext->getContext());
                 }, array_map('trim', $parts));
 
                 $currentOffset      = 0;
                 $definitionListTerm = [
-                    'term' => $this->spanParser->parse($term, $this->parser->getEnvironment()),
+                    'term' => $this->spanParser->parse($term, $documentParserContext->getContext()),
                     'classifiers' => $classifiers,
                     'definition' => '',
                 ];

@@ -29,12 +29,9 @@ final class LinkRule implements Rule
 {
     private LineDataParser $lineDataParser;
 
-    private MarkupLanguageParser $parser;
-
-    public function __construct(LineDataParser $lineDataParser, MarkupLanguageParser $parser)
+    public function __construct(LineDataParser $lineDataParser)
     {
         $this->lineDataParser = $lineDataParser;
-        $this->parser = $parser;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -57,7 +54,7 @@ final class LinkRule implements Rule
             $node = new AnchorNode($link->getName());
         }
 
-        $this->parser->getEnvironment()->setLink($link->getName(), $link->getUrl());
+        $documentParserContext->getContext()->setLink($link->getName(), $link->getUrl());
 
         return $node;
     }

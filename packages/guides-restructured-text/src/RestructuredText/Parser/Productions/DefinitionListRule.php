@@ -42,21 +42,22 @@ final class DefinitionListRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
 
-        while ($documentParserContext->getNextLine() !== null
-            && $this->isDefinitionListEnded($documentParserContext->current(), $documentParserContext->getNextLine()) === false
+        while ($documentIterator->getNextLine() !== null
+            && $this->isDefinitionListEnded($documentIterator->current(), $documentIterator->getNextLine()) === false
         ) {
-            $buffer->push($documentParserContext->current());
-            $documentParserContext->next();
+            $buffer->push($documentIterator->current());
+            $documentIterator->next();
         }
 
         // TODO: This is a workaround because the current Main Loop in {@see DocumentParser::parseLines()} expects
         //       the cursor position to rest at the last unprocessed line, but the logic above needs is always a step
         //       'too late' in detecting whether it should have stopped
-        $documentParserContext->prev();
+        $documentIterator->prev();
 
-        $definitionList = $this->lineDataParser->parseDefinitionList($buffer->getLines());
+        $definitionList = $this->lineDataParser->parseDefinitionList($documentParserContext, $buffer->getLines());
 
         return new DefinitionListNode($definitionList);
     }

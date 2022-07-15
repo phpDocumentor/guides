@@ -36,10 +36,9 @@ final class TableRule implements Rule
 
     private TableParser $tableParser;
 
-    public function __construct(MarkupLanguageParser $parser)
+    public function __construct(LineDataParser $lineDataParser)
     {
-        $this->parser = $parser;
-        $this->lineChecker = new LineChecker(new LineDataParser($parser, new SpanParser()));
+        $this->lineChecker = new LineChecker($lineDataParser);
         $this->tableParser = new TableParser();
     }
 
@@ -76,7 +75,7 @@ final class TableRule implements Rule
             $node->pushContentLine($documentIterator->current());
         }
 
-        $node->finalize($this->parser, $this->lineChecker);
+        $node->finalize($documentParserContext->getParser(), $this->lineChecker);
 
         return $node;
     }

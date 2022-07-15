@@ -26,32 +26,30 @@ final class DocumentRule implements Rule
     /**
      * @param DirectiveHandler[] $directiveHandlers
      */
-    public function __construct(
-        MarkupLanguageParser  $parser,
-        array                 $directiveHandlers
-    ) {
+    public function __construct(array $directiveHandlers)
+    {
 
         $spanParser = new SpanParser();
-        $lineDataParser = new LineDataParser($parser, $spanParser);
+        $lineDataParser = new LineDataParser($spanParser);
 
         $literalBlockRule = new LiteralBlockRule();
 
         // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
         //       to use when consuming this library
         $this->productions = [
-            new TitleRule($parser, $spanParser),
+            new TitleRule($spanParser),
             new TransitionRule(), // Transition rule must follow Title rule
-            new LinkRule($lineDataParser, $parser),
+            new LinkRule($lineDataParser),
             $literalBlockRule,
-            new BlockQuoteRule($parser),
-            new ListRule($parser),
-            new DirectiveRule($parser, $lineDataParser, $literalBlockRule, $directiveHandlers),
+            new BlockQuoteRule(),
+            new ListRule(),
+            new DirectiveRule($lineDataParser, $literalBlockRule, $directiveHandlers),
             new CommentRule(),
             new DefinitionListRule($lineDataParser),
-            new TableRule($parser),
+            new TableRule($lineDataParser),
 
             // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
-            new ParagraphRule($parser, $spanParser),
+            new ParagraphRule($spanParser),
         ];
     }
 
@@ -62,9 +60,10 @@ final class DocumentRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
-        if ($on instanceof DocumentNode === false) {
-            throw new InvalidArgumentException('Expected a document to apply this compound rule on');
-        }
+        $on = $on ?? new DocumentNode(
+            md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),
+            $documentParserContext->getContext()->getCurrentFileName()
+        );
 
         $documentParserContext->lastTitleNode = null;
         $documentParserContext->openSectionsAsTitleNodes->exchangeArray([]); // clear it
@@ -99,8 +98,11 @@ final class DocumentRule implements Rule
         return $on;
     }
 
-    public function endOpenSection(DocumentParserContext $documentParserContext, DocumentNode $document, TitleNode $titleNode): void
-    {
+    public function endOpenSection(
+        DocumentParserContext $documentParserContext,
+        DocumentNode $document,
+        TitleNode $titleNode
+    ): void {
         $document->addNode(new SectionEndNode($titleNode));
 
         $key = array_search($titleNode, $documentParserContext->openSectionsAsTitleNodes->getArrayCopy(), true);

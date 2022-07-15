@@ -57,13 +57,6 @@ final class ListRule implements Rule
          # (or eol, if text starts on a new line)
         /ux';
 
-    private MarkupLanguageParser $parser;
-
-    public function __construct(MarkupLanguageParser $parser)
-    {
-        $this->parser = $parser;
-    }
-
     public function applies(DocumentParserContext $documentParser): bool
     {
         $documentIterator = $documentParser->getDocumentIterator();
@@ -101,7 +94,7 @@ final class ListRule implements Rule
             $buffer->push($documentIterator->current());
         }
 
-        $list = $this->parseList($buffer->getLines());
+        $list = $this->parseList($documentParserContext, $buffer->getLines());
 
         return new ListNode($list, $list[0]->isOrdered());
     }
@@ -184,16 +177,17 @@ final class ListRule implements Rule
      *
      * @return ListItemNode[]
      */
-    private function parseList(array $lines): array
+    private function parseList(DocumentParserContext $documentParserContext, array $lines): array
     {
         $list = [];
         $currentItem = null;
         $currentPrefix = '';
         $currentOffset = 0;
 
-        $createListItem = function (string $item, string $prefix): ListItemNode {
+        $createListItem = function (string $item, string $prefix) use ($documentParserContext): ListItemNode {
             // parse any markup in the list item (e.g. sublists, directives)
-            $nodes = $this->parser->getSubParser()->parse($this->parser->getEnvironment(), $item)->getNodes();
+            $nodes = $documentParserContext->getParser()
+                ->getSubParser()->parse($documentParserContext->getContext(), $item)->getNodes();
             if (count($nodes) === 1 && $nodes[0] instanceof ParagraphNode) {
                 // if there is only one paragraph node, the value is put directly in the <li> element
                 $nodes = [$nodes[0]->getValue()];

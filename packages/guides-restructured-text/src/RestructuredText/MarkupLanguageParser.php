@@ -110,7 +110,7 @@ class MarkupLanguageParser implements ParserInterface
             new Wrap(),
         ];
 
-        $documentRule = new DocumentRule($this, $directives);
+        $documentRule = new DocumentRule($directives);
 
 
         return new self($documentRule, $directives);
@@ -124,6 +124,7 @@ class MarkupLanguageParser implements ParserInterface
     public function getSubParser(): MarkupLanguageParser
     {
         return new MarkupLanguageParser(
+            $this->startingRule,
             $this->directives
         );
     }
@@ -164,18 +165,26 @@ class MarkupLanguageParser implements ParserInterface
     public function parse(ParserContext $environment, string $contents): DocumentNode
     {
         $this->environment = $environment;
-        $this->documentParser = $this->createDocumentParser();
 
-        return $this->documentParser->parse($contents);
+        $documentContext = new DocumentParserContext($contents, $environment, $this);
+
+        if ($this->startingRule->applies($documentContext)) {
+            return $this->startingRule->apply($documentContext);
+        }
+
+        throw new \InvalidArgumentException('Content is not a valid document content');
     }
 
-    public function parseFragment(string $contents): DocumentNode
+    /**
+     * @deprecated this should be replaced by proper usage of productions in other productions, by now this is a hack.
+     */
+    public function parseFragment(DocumentParserContext $documentParserContext, string $contents): DocumentNode
     {
-        return $this->createDocumentParser()->parse($contents);
-    }
+        $documentParserContext = $documentParserContext->withContents($contents);
+        if ($this->startingRule->applies($documentParserContext)) {
+            return $this->startingRule->apply($documentParserContext);
+        }
 
-    private function createDocumentParser(): DocumentParserContext
-    {
-        return new DocumentParserContext($this, $this->directives);
+        throw new \InvalidArgumentException('Content is not a valid document content');
     }
 }

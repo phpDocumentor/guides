@@ -72,12 +72,10 @@ class TitleRule implements Rule
         '~',
     ];
 
-    private MarkupLanguageParser $parser;
     private SpanParser $spanParser;
 
-    public function __construct(MarkupLanguageParser $parser, SpanParser $spanParser)
+    public function __construct(SpanParser $spanParser)
     {
-        $this->parser = $parser;
         $this->spanParser = $spanParser;
     }
 
@@ -114,13 +112,13 @@ class TitleRule implements Rule
             }
         }
 
-        $environment = $this->parser->getEnvironment();
+        $context = $documentParserContext->getContext();
 
         $letter = $overlineLetter ?: $underlineLetter;
-        $level = $environment->getLevel($letter);
-        $level = $environment->getInitialHeaderLevel() + $level - 1;
+        $level = $context->getLevel($letter);
+        $level = $context->getInitialHeaderLevel() + $level - 1;
 
-        $node = new TitleNode($this->spanParser->parse($title, $environment), $level);
+        $node = new TitleNode($this->spanParser->parse($title, $context), $level);
 
         $this->transitionBetweenSections($documentParserContext, $node, $on);
 
@@ -174,8 +172,11 @@ class TitleRule implements Rule
         return trim($line) !== '';
     }
 
-    private function transitionBetweenSections(DocumentParserContext $documentParserContext, TitleNode $node, DocumentNode $on): void
-    {
+    private function transitionBetweenSections(
+        DocumentParserContext $documentParserContext,
+        TitleNode $node,
+        DocumentNode $on
+    ): void {
         // TODO: Is this a Title parser, or actually a Section parser? :thinking_face:
         if ($documentParserContext->lastTitleNode !== null) {
             // current level is less than previous so we need to end all open sections
@@ -193,15 +194,21 @@ class TitleRule implements Rule
         $this->beginOpenSection($documentParserContext, $node, $on);
     }
 
-    private function beginOpenSection(DocumentParserContext $documentParserContext, TitleNode $node, DocumentNode $on): void
-    {
+    private function beginOpenSection(
+        DocumentParserContext $documentParserContext,
+        TitleNode $node,
+        DocumentNode $on
+    ): void {
         $documentParserContext->lastTitleNode = $node;
         $on->addNode(new SectionBeginNode($node));
         $documentParserContext->openSectionsAsTitleNodes->append($node);
     }
 
-    private function endOpenSection(DocumentParserContext $documentParserContext, TitleNode $titleNode, DocumentNode $on): void
-    {
+    private function endOpenSection(
+        DocumentParserContext $documentParserContext,
+        TitleNode $titleNode,
+        DocumentNode $on
+    ): void {
         $on->addNode(new SectionEndNode($titleNode));
 
         $key = array_search($titleNode, $documentParserContext->openSectionsAsTitleNodes->getArrayCopy(), true);

@@ -42,8 +42,8 @@ final class ParagraphRuleTest extends TestCase
         $iterator = new LinesIterator();
         $iterator->load($input);
 
-        $parser = $this->prophesize(MarkupLanguageParser::class);
-        $parser->getEnvironment()->willReturn(
+        $documentParser = $this->prophesize(DocumentParserContext::class);
+        $documentParser->getContext()->willReturn(
             new ParserContext(
                 'test',
                 'test',
@@ -52,7 +52,6 @@ final class ParagraphRuleTest extends TestCase
                 new UrlGenerator()
             )
         );
-        $documentParser = $this->prophesize(DocumentParserContext::class);
         $documentParser->getDocumentIterator()->willReturn($iterator);
         $spanParser = $this->prophesize(SpanParser::class);
         $spanParser->parse(
@@ -61,7 +60,6 @@ final class ParagraphRuleTest extends TestCase
         )->will(fn($args) => new SpanNode(implode("\n", $args[0])));
 
         $rule = new ParagraphRule(
-            $parser->reveal(),
             $spanParser->reveal()
         );
 

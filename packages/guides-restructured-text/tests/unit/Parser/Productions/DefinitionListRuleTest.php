@@ -19,7 +19,6 @@ final class DefinitionListRuleTest extends TestCase
     public function testAppliesReturnsTrueOnValidInput(): void
     {
         $lineData = new LineDataParser(
-            $this->prophesize(MarkupLanguageParser::class)->reveal(),
             $this->prophesize(SpanParser::class)->reveal()
         );
 
@@ -50,7 +49,6 @@ RST
     public function testAppliesReturnsFalse(): void
     {
         $lineData = new LineDataParser(
-            $this->prophesize(MarkupLanguageParser::class)->reveal(),
             $this->prophesize(SpanParser::class)->reveal()
         );
 

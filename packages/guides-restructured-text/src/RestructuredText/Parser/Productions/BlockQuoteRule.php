@@ -29,13 +29,6 @@ use function trim;
  */
 final class BlockQuoteRule implements Rule
 {
-    private MarkupLanguageParser $parser;
-
-    public function __construct(MarkupLanguageParser $parser)
-    {
-        $this->parser = $parser;
-    }
-
     public function applies(DocumentParserContext $documentParser): bool
     {
         $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->current());
@@ -63,7 +56,10 @@ final class BlockQuoteRule implements Rule
         $blockNode = new BlockNode($lines);
 
         return new QuoteNode(
-            $this->parser->getSubParser()->parse($this->parser->getEnvironment(), $blockNode->getValueString())
+            $documentParserContext->getParser()->getSubParser()->parse(
+                $documentParserContext->getContext(),
+                $blockNode->getValueString()
+            )
         );
     }
 

@@ -39,7 +39,6 @@ RST
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $markupLanguageParser->reveal(),
             $spanParser->reveal()
         );
 
@@ -75,7 +74,6 @@ RST
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $markupLanguageParser->reveal(),
             $spanParser->reveal()
         );
 
@@ -117,7 +115,10 @@ RST
     private function getSpanParser()
     {
         $spanParser = $this->prophesize(SpanParser::class);
-        $spanParser->parse(Argument::any(), Argument::type(ParserContext::class))->will(fn($args) => new SpanNode($args[0]));
+        $spanParser->parse(
+            Argument::any(),
+            Argument::type(ParserContext::class)
+        )->will(fn($args) => new SpanNode($args[0]));
         return $spanParser;
     }
 }

@@ -40,7 +40,8 @@ final class SectionRule implements Rule
         // If we detect a title, check the level:
         //If title level is same as current level, inject in on
         //if title level is deeper than create a new section.
-        //If title level is smaller than current, we need to return, as a new section should be create on or more levels up.
+        //If title level is smaller than current, we need to return,
+        //    as a new section should be create on or more levels up.
 
         while ($documentParserContext->valid()) {
             $on->addNode($this->createSection($documentParserContext));

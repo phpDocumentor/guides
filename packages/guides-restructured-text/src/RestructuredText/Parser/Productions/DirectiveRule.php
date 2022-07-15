@@ -30,8 +30,6 @@ use function sprintf;
  */
 final class DirectiveRule implements Rule
 {
-    private MarkupLanguageParser $parser;
-
     private LineDataParser $lineDataParser;
 
     private LiteralBlockRule $literalBlockRule;
@@ -43,12 +41,10 @@ final class DirectiveRule implements Rule
      * @param DirectiveHandler[] $directives
      */
     public function __construct(
-        MarkupLanguageParser  $parser,
         LineDataParser        $lineDataParser,
         LiteralBlockRule      $literalBlockRule,
         array                 $directives = []
     ) {
-        $this->parser = $parser;
         $this->lineDataParser = $lineDataParser;
         $this->literalBlockRule = $literalBlockRule;
         $this->directives = $directives;
@@ -80,14 +76,14 @@ final class DirectiveRule implements Rule
             $message = sprintf(
                 'Unknown directive: "%s" %sfor line "%s"',
                 $directive->getName(),
-                $this->parser->getEnvironment()->getCurrentFileName() !== '' ? sprintf(
+                $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
                     'in "%s" ',
-                    $this->parser->getEnvironment()->getCurrentFileName()
+                    $documentParserContext->getContext()->getCurrentFileName()
                 ) : '',
                 $openingLine
             );
 
-            $this->parser->getEnvironment()->addError($message);
+            $documentParserContext->getContext()->addError($message);
 
             return null;
         }
@@ -97,7 +93,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             $directiveHandler->process(
-                $this->parser,
+                $documentParserContext->getParser(),
                 $this->interpretContentBlock($documentParserContext),
                 $directive->getVariable(),
                 $directive->getData(),
@@ -107,14 +103,14 @@ final class DirectiveRule implements Rule
             $message = sprintf(
                 'Error while processing "%s" directive%s: %s',
                 $directiveHandler->getName(),
-                $this->parser->getEnvironment()->getCurrentFileName() !== '' ? sprintf(
+                $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
                     ' in "%s"',
-                    $this->parser->getEnvironment()->getCurrentFileName()
+                    $documentParserContext->getContext()->getCurrentFileName()
                 ) : '',
                 $e->getMessage()
             );
 
-            $this->parser->getEnvironment()->addError($message);
+            $documentParserContext->getContext()->addError($message);
         }
 
         return null;
