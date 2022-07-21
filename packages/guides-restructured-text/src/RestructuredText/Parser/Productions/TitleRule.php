@@ -13,15 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use InvalidArgumentException;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SectionBeginNode;
-use phpDocumentor\Guides\Nodes\SectionEndNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function array_search;
@@ -31,9 +25,6 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#sections
- *
- * @todo convert the TitleRule into a separate SectionRule that can nest itself and close itself when a lower-level
- *       title is encountered
  */
 class TitleRule implements Rule
 {
@@ -171,53 +162,5 @@ class TitleRule implements Rule
     private function isTextLine(string $line): bool
     {
         return trim($line) !== '';
-    }
-
-    private function transitionBetweenSections(
-        DocumentParserContext $documentParserContext,
-        TitleNode $node,
-        DocumentNode $on
-    ): void {
-        // TODO: Is this a Title parser, or actually a Section parser? :thinking_face:
-        if ($documentParserContext->lastTitleNode !== null) {
-            // current level is less than previous so we need to end all open sections
-            if ($node->getLevel() < $documentParserContext->lastTitleNode->getLevel()) {
-                foreach ($documentParserContext->openSectionsAsTitleNodes as $titleNode) {
-                    $this->endOpenSection($documentParserContext, $titleNode, $on);
-                }
-
-                // same level as the last so just close the last open section
-            } elseif ($node->getLevel() === $documentParserContext->lastTitleNode->getLevel()) {
-                $this->endOpenSection($documentParserContext, $documentParserContext->lastTitleNode, $on);
-            }
-        }
-
-        $this->beginOpenSection($documentParserContext, $node, $on);
-    }
-
-    private function beginOpenSection(
-        DocumentParserContext $documentParserContext,
-        TitleNode $node,
-        DocumentNode $on
-    ): void {
-        $documentParserContext->lastTitleNode = $node;
-        $on->addNode(new SectionBeginNode($node));
-        $documentParserContext->openSectionsAsTitleNodes->append($node);
-    }
-
-    private function endOpenSection(
-        DocumentParserContext $documentParserContext,
-        TitleNode $titleNode,
-        DocumentNode $on
-    ): void {
-        $on->addNode(new SectionEndNode($titleNode));
-
-        $key = array_search($titleNode, $documentParserContext->openSectionsAsTitleNodes->getArrayCopy(), true);
-
-        if ($key === false) {
-            return;
-        }
-
-        unset($documentParserContext->openSectionsAsTitleNodes[$key]);
     }
 }
