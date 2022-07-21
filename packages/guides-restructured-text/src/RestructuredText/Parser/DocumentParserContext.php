@@ -31,12 +31,6 @@ class DocumentParserContext
     /** @var bool public is temporary */
     public $nextIndentedBlockShouldBeALiteralBlock = false;
 
-    /** @var ?TitleNode public is temporary */
-    public $lastTitleNode;
-
-    /** @var ArrayObject<int, TitleNode> public is temporary */
-    public $openSectionsAsTitleNodes;
-
     public ?DocumentNode $document = null;
 
     private LinesIterator $documentIterator;
@@ -50,7 +44,6 @@ class DocumentParserContext
     {
         $this->documentIterator = new LinesIterator();
         $this->documentIterator->load($content);
-        $this->openSectionsAsTitleNodes = new ArrayObject();
         $this->context = $context;
         $this->markupLanguageParser = $markupLanguageParser;
     }
