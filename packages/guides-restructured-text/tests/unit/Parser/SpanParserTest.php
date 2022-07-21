@@ -73,6 +73,7 @@ final class SpanParserTest extends TestCase
             'Just a colon in a text' => ['This text is an example of role: mis-used.'],
             'Line ending with a colon' => ['to create new Symfony applications:'],
             'Embedded url start outside context' => ['This text is an example of <a>'],
+            'Just an text_with_underscores' => ['Just an text_with_underscores'],
         ];
     }
 

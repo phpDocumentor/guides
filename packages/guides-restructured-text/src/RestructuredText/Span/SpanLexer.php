@@ -42,7 +42,7 @@ final class SpanLexer extends AbstractLexer
     {
         return [
             '[a-z0-9-]+_{2}', //Inline href.
-            '[a-z0-9-]+_{1}', //Inline href.
+            '[a-z0-9-]+_{1}(?=[\s\.+])', //Inline href.
             '`_',
             '<',
             '>',
