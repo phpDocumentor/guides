@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetaNode;
@@ -26,6 +27,7 @@ return [
     QuoteNode::class => 'quote.html.twig',
     SeparatorNode::class => 'separator.html.twig',
     TitleNode::class => 'header-title.html.twig',
+    SectionNode::class => 'section.html.twig',
     SectionBeginNode::class => 'section-begin.html.twig',
     SectionEndNode::class => 'section-end.html.twig',
     ImageNode::class => 'image.html.twig',

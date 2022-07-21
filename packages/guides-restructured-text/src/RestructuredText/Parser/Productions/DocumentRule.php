@@ -37,7 +37,7 @@ final class DocumentRule implements Rule
         // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
         //       to use when consuming this library
         $this->productions = [
-            new TitleRule($spanParser),
+            new SectionRule(new TitleRule($spanParser), []),
             new TransitionRule(), // Transition rule must follow Title rule
             new LinkRule($lineDataParser),
             $literalBlockRule,
@@ -65,6 +65,7 @@ final class DocumentRule implements Rule
             $documentParserContext->getContext()->getCurrentFileName()
         );
 
+        $documentParserContext->setDocument($on);
         $documentParserContext->lastTitleNode = null;
         $documentParserContext->openSectionsAsTitleNodes->exchangeArray([]); // clear it
         $documentIterator = $documentParserContext->getDocumentIterator();

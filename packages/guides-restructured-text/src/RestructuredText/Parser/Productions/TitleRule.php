@@ -90,6 +90,7 @@ class TitleRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $node = null;
         $documentIterator = $documentParserContext->getDocumentIterator();
         $title = '';
         $overlineLetter = $this->currentLineIsAnOverline(
@@ -118,9 +119,9 @@ class TitleRule implements Rule
         $level = $context->getLevel($letter);
         $level = $context->getInitialHeaderLevel() + $level - 1;
 
-        $node = new TitleNode($this->spanParser->parse($title, $context), $level);
+        return new TitleNode($this->spanParser->parse($title, $context), $level);
 
-        $this->transitionBetweenSections($documentParserContext, $node, $on);
+        //$this->transitionBetweenSections($documentParserContext, $node, $on);
 
         return $node;
     }

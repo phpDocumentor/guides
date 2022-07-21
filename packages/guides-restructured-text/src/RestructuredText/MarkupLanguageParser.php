@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText;
 
+use InvalidArgumentException;
 use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\ParserContext;
@@ -172,7 +173,7 @@ class MarkupLanguageParser implements ParserInterface
             return $this->startingRule->apply($documentContext);
         }
 
-        throw new \InvalidArgumentException('Content is not a valid document content');
+        throw new InvalidArgumentException('Content is not a valid document content');
     }
 
     /**
@@ -185,6 +186,6 @@ class MarkupLanguageParser implements ParserInterface
             return $this->startingRule->apply($documentParserContext);
         }
 
-        throw new \InvalidArgumentException('Content is not a valid document content');
+        throw new InvalidArgumentException('Content is not a valid document content');
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use SplStack;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -13,18 +14,15 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 final class SectionRule implements Rule
 {
     private TitleRule $titleRule;
-    private DocumentParserContext $documentParser;
 
     /** @var Rule[] */
     private array $productions;
 
     /** @param Rule[] $productions */
-    public function __construct(TitleRule $titleRule, DocumentParserContext $documentParser, array $productions)
+    public function __construct(TitleRule $titleRule, array $productions)
     {
         $this->titleRule = $titleRule;
-        $this->documentParser = $documentParser;
         $this->productions = $productions;
-        $this->productions[] = $this;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -34,45 +32,64 @@ final class SectionRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
-        //First time we enter this, title level will be null.
-        // $on will be a DocumentNode.
+        $stack = new SplStack();
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        $section = $this->createSection($documentParserContext);
+        $on->addNode($section);
 
-        // If we detect a title, check the level:
-        //If title level is same as current level, inject in on
-        //if title level is deeper than create a new section.
-        //If title level is smaller than current, we need to return,
-        //    as a new section should be create on or more levels up.
+        $stack->push($on);
+        while ($documentIterator->valid()) {
+            $this->fillSection($documentParserContext, $section);
 
-        while ($documentParserContext->valid()) {
-            $on->addNode($this->createSection($documentParserContext));
+            if ($documentIterator->getNextLine()) {
+                $new = $this->createSection($documentParserContext);
+                if ($new->getTitle()->getLevel() === $section->getTitle()->getLevel()) {
+                    $stack->top()->addNode($new);
+                    $section = $new;
+                    continue;
+                }
+
+                if ($new->getTitle()->getLevel() > $section->getTitle()->getLevel()) {
+                    $section->addNode($new);
+                    $stack->push($section);
+                    $section = $new;
+                    continue;
+                }
+
+                if ($new->getTitle()->getLevel() < $section->getTitle()->getLevel()) {
+                    while ($new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()) {
+                        $stack->pop();
+                    }
+
+                    $stack->pop();
+                    $stack->top()->addNode($new);
+                    $section = $new;
+                }
+            }
         }
 
         return null;
     }
 
-    private function createSection(LinesIterator $documentIterator)
+    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): void
     {
-        $title = $this->titleRule->apply($documentIterator);
-        $section = new SectionNode($title);
-        $sections = [];
-
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
+        // this is done because we are transitioning to a method where a Substate can take the current
+        // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
-            if ($this->applies($this->documentParser)) {
-//                $sections[] = $section;
-//                $title = $this->titleRule->apply($documentIterator);
-//                $section = new SectionNode($title);
-
-                return $section;
+            if ($this->applies($documentParserContext)) {
+                return;
             }
 
             foreach ($this->productions as $production) {
-                if (!$production->applies($this->documentParser)) {
+                if (!$production->applies($documentParserContext)) {
                     continue;
                 }
 
-                $newNode = $production->apply($documentIterator, $section);
+                $newNode = $production->apply($documentParserContext, $on);
                 if ($newNode !== null) {
-                    $section->addNode($newNode);
+                    $on->addNode($newNode);
                 }
 
                 break;
@@ -80,11 +97,11 @@ final class SectionRule implements Rule
 
             $documentIterator->next();
         }
+    }
 
-        //Looks like we need some recursive stuff in here.
-        // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
-        // this is done because we are transitioning to a method where a Substate can take the current
-        // cursor as starting point and loop through the cursor
-        return $section;
+    private function createSection(DocumentParserContext $documentParserContext): SectionNode
+    {
+        $title = $this->titleRule->apply($documentParserContext);
+        return new SectionNode($title);
     }
 }

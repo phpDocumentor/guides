@@ -74,6 +74,11 @@ class DocumentParserContext
         return $this->document;
     }
 
+    public function setDocument(DocumentNode $document): void
+    {
+        $this->document = $document;
+    }
+
     public function getDocumentIterator(): LinesIterator
     {
         return $this->documentIterator;
