@@ -26,12 +26,16 @@ final class DocumentRule implements Rule
         $lineDataParser = new LineDataParser($spanParser);
 
         $literalBlockRule = new LiteralBlockRule();
+        $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
 
         // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
         //       to use when consuming this library
-        $this->productions = [
-            new SectionRule(new TitleRule($spanParser), []),
-            new TransitionRule(), // Transition rule must follow Title rule
+        //
+        // TODO, these productions are now used in sections and documentrule,
+        //    however most of them do not apply on documents?
+        //
+        $productions = [
+            $transitionRule,
             new LinkRule($lineDataParser),
             $literalBlockRule,
             new BlockQuoteRule(),
@@ -44,6 +48,10 @@ final class DocumentRule implements Rule
             // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
             new ParagraphRule($spanParser),
         ];
+
+        $this->productions = array_merge([
+            new SectionRule(new TitleRule($spanParser), $productions),
+        ], $productions);
     }
 
     public function applies(DocumentParserContext $documentParser): bool

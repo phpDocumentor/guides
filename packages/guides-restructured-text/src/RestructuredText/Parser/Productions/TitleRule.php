@@ -18,7 +18,6 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
-use function array_search;
 use function in_array;
 use function strlen;
 use function trim;
@@ -81,7 +80,6 @@ class TitleRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
-        $node = null;
         $documentIterator = $documentParserContext->getDocumentIterator();
         $title = '';
         $overlineLetter = $this->currentLineIsAnOverline(
@@ -98,11 +96,12 @@ class TitleRule implements Rule
         if ($underlineLetter !== '') {
             if (($overlineLetter === '' || $overlineLetter === $underlineLetter)) {
                 $title = trim($documentIterator->current()); // Title with over and underlines may be indented
-                $documentIterator->next();
             } else {
                 $underlineLetter = '';
             }
         }
+        $documentIterator->next();
+        $documentIterator->next();
 
         $context = $documentParserContext->getContext();
 
@@ -111,10 +110,6 @@ class TitleRule implements Rule
         $level = $context->getInitialHeaderLevel() + $level - 1;
 
         return new TitleNode($this->spanParser->parse($title, $context), $level);
-
-        //$this->transitionBetweenSections($documentParserContext, $node, $on);
-
-        return $node;
     }
 
     public function isSpecialLine(string $line): ?string
