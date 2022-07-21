@@ -1,0 +1,6 @@
+<div class="section" id="{{ node.title.id }}">
+    {{ renderNode(node.title) }}
+    {% for childNode in node.nodes %}
+        {{ renderNode(childNode) }}
+    {% endfor %}
+</div>

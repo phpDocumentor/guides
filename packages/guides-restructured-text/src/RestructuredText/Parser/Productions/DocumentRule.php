@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SectionEndNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-
-use function array_search;
 
 final class DocumentRule implements Rule
 {
@@ -33,12 +26,16 @@ final class DocumentRule implements Rule
         $lineDataParser = new LineDataParser($spanParser);
 
         $literalBlockRule = new LiteralBlockRule();
+        $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
 
         // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
         //       to use when consuming this library
-        $this->productions = [
-            new TitleRule($spanParser),
-            new TransitionRule(), // Transition rule must follow Title rule
+        //
+        // TODO, these productions are now used in sections and documentrule,
+        //    however most of them do not apply on documents?
+        //
+        $productions = [
+            $transitionRule,
             new LinkRule($lineDataParser),
             $literalBlockRule,
             new BlockQuoteRule(),
@@ -51,6 +48,10 @@ final class DocumentRule implements Rule
             // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
             new ParagraphRule($spanParser),
         ];
+
+        $this->productions = array_merge([
+            new SectionRule(new TitleRule($spanParser), $productions),
+        ], $productions);
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -65,8 +66,7 @@ final class DocumentRule implements Rule
             $documentParserContext->getContext()->getCurrentFileName()
         );
 
-        $documentParserContext->lastTitleNode = null;
-        $documentParserContext->openSectionsAsTitleNodes->exchangeArray([]); // clear it
+        $documentParserContext->setDocument($on);
         $documentIterator = $documentParserContext->getDocumentIterator();
 
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
@@ -89,28 +89,6 @@ final class DocumentRule implements Rule
             $documentIterator->next();
         }
 
-        // TODO: Can we get rid of this here? It would make this parser cleaner and if it is part of the
-        //       Title/SectionRule itself it is neatly encapsulated.
-        foreach ($documentParserContext->openSectionsAsTitleNodes as $titleNode) {
-            $this->endOpenSection($documentParserContext, $on, $titleNode);
-        }
-
         return $on;
-    }
-
-    public function endOpenSection(
-        DocumentParserContext $documentParserContext,
-        DocumentNode $document,
-        TitleNode $titleNode
-    ): void {
-        $document->addNode(new SectionEndNode($titleNode));
-
-        $key = array_search($titleNode, $documentParserContext->openSectionsAsTitleNodes->getArrayCopy(), true);
-
-        if ($key === false) {
-            return;
-        }
-
-        unset($documentParserContext->openSectionsAsTitleNodes[$key]);
     }
 }
