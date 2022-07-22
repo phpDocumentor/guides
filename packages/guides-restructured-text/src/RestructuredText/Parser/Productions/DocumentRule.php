@@ -17,9 +17,9 @@ final class DocumentRule implements Rule
     private array $productions;
 
     /**
-     * @param DirectiveHandler[] $directiveHandlers
+     * @param iterable<DirectiveHandler> $directiveHandlers
      */
-    public function __construct(array $directiveHandlers)
+    public function __construct(iterable $directiveHandlers)
     {
 
         $spanParser = new SpanParser();

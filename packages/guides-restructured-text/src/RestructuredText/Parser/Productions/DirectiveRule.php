@@ -34,20 +34,30 @@ final class DirectiveRule implements Rule
 
     private LiteralBlockRule $literalBlockRule;
 
-    /** @var DirectiveHandler[] */
+    /** @var iterable<DirectiveHandler> */
     private array $directives;
 
     /**
-     * @param DirectiveHandler[] $directives
+     * @param iterable<DirectiveHandler> $directives
      */
     public function __construct(
         LineDataParser        $lineDataParser,
         LiteralBlockRule      $literalBlockRule,
-        array                 $directives = []
+        iterable              $directives = []
     ) {
         $this->lineDataParser = $lineDataParser;
         $this->literalBlockRule = $literalBlockRule;
-        $this->directives = $directives;
+        foreach ($directives as $directive) {
+            $this->registerDirective($directive);
+        }
+    }
+
+    private function registerDirective(DirectiveHandler $directive): void
+    {
+        $this->directives[$directive->getName()] = $directive;
+        foreach ($directive->getAliases() as $alias) {
+            $this->directives[$alias] = $directive;
+        }
     }
 
     public function applies(DocumentParserContext $documentParser): bool
