@@ -167,10 +167,10 @@ class MarkupLanguageParser implements ParserInterface
     {
         $this->environment = $environment;
 
-        $documentContext = new DocumentParserContext($contents, $environment, $this);
+        $this->documentParser = new DocumentParserContext($contents, $environment, $this);
 
-        if ($this->startingRule->applies($documentContext)) {
-            return $this->startingRule->apply($documentContext);
+        if ($this->startingRule->applies($this->documentParser)) {
+            return $this->startingRule->apply($this->documentParser);
         }
 
         throw new InvalidArgumentException('Content is not a valid document content');
