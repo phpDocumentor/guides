@@ -37,15 +37,24 @@ class DocumentParserContext
     private ParserContext $context;
     private MarkupLanguageParser $markupLanguageParser;
 
+    private int $currentTitleLevel;
+
+    /** @var string[] */
+    private array $titleLetters = [];
+
     /**
      * @param DirectiveHandler[] $directives
      */
-    public function __construct(string $content, ParserContext $context, MarkupLanguageParser $markupLanguageParser)
-    {
+    public function __construct(
+        string $content,
+        ParserContext $context,
+        MarkupLanguageParser $markupLanguageParser
+    ) {
         $this->documentIterator = new LinesIterator();
         $this->documentIterator->load($content);
         $this->context = $context;
         $this->markupLanguageParser = $markupLanguageParser;
+        $this->currentTitleLevel = $context->getInitialHeaderLevel() - 1;
     }
 
     public function getContext(): ParserContext
@@ -75,6 +84,20 @@ class DocumentParserContext
     public function getDocumentIterator(): LinesIterator
     {
         return $this->documentIterator;
+    }
+
+    public function getLevel(string $letter): int
+    {
+        foreach ($this->titleLetters as $level => $titleLetter) {
+            if ($letter === $titleLetter) {
+                return $level;
+            }
+        }
+
+        $this->currentTitleLevel++;
+        $this->titleLetters[$this->currentTitleLevel] = $letter;
+
+        return $this->currentTitleLevel;
     }
 
     public function withContents(string $contents): self

@@ -145,8 +145,10 @@ class LineDataParser
 
         $createDefinitionTerm = function (array $definitionListTerm) use ($documentParserContext): ?DefinitionListTerm {
             // parse any markup in the definition (e.g. lists, directives)
-            $definitionNodes = $documentParserContext->getParser()->parseFragment($definitionListTerm['definition'])
-                ->getNodes();
+            $definitionNodes = $documentParserContext->getParser()->parseFragment(
+                $documentParserContext,
+                $definitionListTerm['definition']
+            )->getNodes();
             if (empty($definitionNodes)) {
                 return null;
             } elseif (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {

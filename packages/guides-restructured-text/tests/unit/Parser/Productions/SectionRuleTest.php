@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use Prophecy\PhpUnit\ProphecyTrait;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -23,26 +24,13 @@ final class SectionRuleTest extends TestCase
     use ProphecyTrait;
     public function testFirstTitleOpensSection(): void
     {
-        $documentParser = $this->prophesize(DocumentParserContext::class)->reveal();
-        $documentIterator = new LinesIterator();
-        $documentIterator->load(<<<RST
+        $content = <<<RST
 #########
 Title 1
 #########
-RST
-        );
+RST;
 
-        $parserContext = new ParserContext(
-            'foo',
-            'test',
-            1,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(UrlGeneratorInterface::class)->reveal()
-        );
-
-        $documentParser = $this->prophesize(DocumentParserContext::class);
-        $documentParser->getDocumentIterator()->willReturn($documentIterator);
-        $documentParser->getContext()->willReturn($parserContext);
+        $documentParser = $this->getDocumentParserContext($content);
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
@@ -53,7 +41,7 @@ RST
 
         $document = new DocumentNode('foo', 'index');
 
-        $node = $rule->apply($documentParser->reveal(), $document);
+        $rule->apply($documentParser, $document);
         self::assertEquals(
             [new SectionNode(new TitleNode(new SpanNode('Title 1'), 1))],
             $document->getNodes()
@@ -62,28 +50,16 @@ RST
 
     public function testSecondLevelTitleOpensChildSection(): void
     {
-        $documentIterator = new LinesIterator();
-        $documentIterator->load(<<<RST
+        $content = <<<RST
 #########
 Title 1
 #########
 
 Title 1.1
 =========
-RST
-        );
+RST;
 
-        $parserContext = new ParserContext(
-            'foo',
-            'test',
-            1,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(UrlGeneratorInterface::class)->reveal()
-        );
-
-        $documentParser = $this->prophesize(DocumentParserContext::class);
-        $documentParser->getDocumentIterator()->willReturn($documentIterator);
-        $documentParser->getContext()->willReturn($parserContext);
+        $documentParser = $this->getDocumentParserContext($content);
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
@@ -94,7 +70,7 @@ RST
 
         $document = new DocumentNode('foo', 'index');
 
-        $result = $rule->apply($documentParser->reveal(), $document);
+        $result = $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
         $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
@@ -107,8 +83,7 @@ RST
 
     public function testSameLevelSectionsAreAddedAtTheSameLevel(): void
     {
-        $documentIterator = new LinesIterator();
-        $documentIterator->load(<<<RST
+        $content = <<<RST
 #########
 Title 1
 #########
@@ -118,20 +93,9 @@ Title 1.1
 
 Title 1.2
 =========
-RST
-        );
+RST;
 
-        $parserContext = new ParserContext(
-            'foo',
-            'test',
-            1,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(UrlGeneratorInterface::class)->reveal()
-        );
-
-        $documentParser = $this->prophesize(DocumentParserContext::class);
-        $documentParser->getDocumentIterator()->willReturn($documentIterator);
-        $documentParser->getContext()->willReturn($parserContext);
+        $documentParser = $this->getDocumentParserContext($content);
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
@@ -142,7 +106,7 @@ RST
 
         $document = new DocumentNode('foo', 'index');
 
-        $rule->apply($documentParser->reveal(), $document);
+        $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
         $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
@@ -156,8 +120,7 @@ RST
 
     public function testSameLevelSectionsAreAddedAtTheSameLevel2(): void
     {
-        $documentIterator = new LinesIterator();
-        $documentIterator->load(<<<RST
+        $content = <<<RST
 #########
 Title 1
 #########
@@ -179,20 +142,9 @@ Title 2
 Title 3
 #########
 
-RST
-        );
+RST;
 
-        $parserContext = new ParserContext(
-            'foo',
-            'test',
-            1,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(UrlGeneratorInterface::class)->reveal()
-        );
-
-        $documentParser = $this->prophesize(DocumentParserContext::class);
-        $documentParser->getDocumentIterator()->willReturn($documentIterator);
-        $documentParser->getContext()->willReturn($parserContext);
+        $documentParser = $this->getDocumentParserContext($content);
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
@@ -203,7 +155,7 @@ RST
 
         $document = new DocumentNode('foo', 'index');
 
-        $rule->apply($documentParser->reveal(), $document);
+        $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
         $subSection = new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2));
@@ -227,5 +179,22 @@ RST
             Argument::type(ParserContext::class)
         )->will(fn($args) => new SpanNode($args[0]));
         return $spanParser;
+    }
+
+    private function getDocumentParserContext(string $content): DocumentParserContext
+    {
+        $parserContext = new ParserContext(
+            'foo',
+            'test',
+            1,
+            $this->prophesize(FilesystemInterface::class)->reveal(),
+            $this->prophesize(UrlGeneratorInterface::class)->reveal()
+        );
+
+        return new DocumentParserContext(
+            $content,
+            $parserContext,
+            $this->prophesize(MarkupLanguageParser::class)->reveal()
+        );
     }
 }

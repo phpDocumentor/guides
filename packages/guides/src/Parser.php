@@ -93,8 +93,6 @@ final class Parser
 
         $parser = $this->determineParser($inputFormat);
 
-        $this->parserContext->reset();
-
         $document = $parser->parse($this->parserContext, $text);
         $document->setLinks($this->parserContext->getLinks());
 

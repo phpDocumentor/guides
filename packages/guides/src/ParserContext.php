@@ -18,13 +18,6 @@ class ParserContext
 {
     private UrlGeneratorInterface $urlGenerator;
 
-    private int $initialHeaderLevel;
-
-    private int $currentTitleLevel = 0;
-
-    /** @var string[] */
-    private array $titleLetters = [];
-
     private string $currentFileName;
 
     private FilesystemInterface $origin;
@@ -45,6 +38,8 @@ class ParserContext
 
     private string $currentAbsolutePath = '';
 
+    private int $initialHeaderLevel;
+
     public function __construct(
         string $currentFileName,
         string $currentDirectory,
@@ -57,14 +52,6 @@ class ParserContext
         $this->urlGenerator = $urlGenerator;
         $this->currentFileName = $currentFileName;
         $this->currentDirectory = $currentDirectory;
-
-        $this->reset();
-    }
-
-    public function reset(): void
-    {
-        $this->titleLetters = [];
-        $this->currentTitleLevel = 0;
     }
 
     public function getInitialHeaderLevel(): int
@@ -145,20 +132,6 @@ class ParserContext
     public function getUrl(): string
     {
         return $this->currentFileName;
-    }
-
-    public function getLevel(string $letter): int
-    {
-        foreach ($this->titleLetters as $level => $titleLetter) {
-            if ($letter === $titleLetter) {
-                return $level;
-            }
-        }
-
-        $this->currentTitleLevel++;
-        $this->titleLetters[$this->currentTitleLevel] = $letter;
-
-        return $this->currentTitleLevel;
     }
 
     public function addError(string $message): void
