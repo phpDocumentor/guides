@@ -34,7 +34,7 @@ final class DirectiveRule implements Rule
 
     private LiteralBlockRule $literalBlockRule;
 
-    /** @var iterable<DirectiveHandler> */
+    /** @var array<string, DirectiveHandler> */
     private array $directives;
 
     /**

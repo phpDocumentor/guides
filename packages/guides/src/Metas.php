@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 
 final class Metas
 {
@@ -40,14 +42,14 @@ final class Metas
     }
 
     /**
-     * @param string[][] $titles
+     * @param TitleNode[] $titles
      * @param mixed[][] $tocs
      * @param string[] $depends
      */
     public function set(
         string $file,
         string $url,
-        string $title,
+        ?TitleNode $title,
         array $titles,
         array $tocs,
         int $mtime,
@@ -68,7 +70,7 @@ final class Metas
         $this->entries[$file] = new Entry(
             $file,
             $url,
-            $title,
+            $title ?? new TitleNode(new SpanNode('<unknown>'), 0),
             $titles,
             $tocs,
             $depends,

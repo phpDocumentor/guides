@@ -88,8 +88,8 @@ final class DocumentNode extends Node
     public function getTitle(): ?TitleNode
     {
         foreach ($this->nodes as $node) {
-            if ($node instanceof TitleNode && $node->getLevel() === 1) {
-                return $node;
+            if ($node instanceof SectionNode && $node->getTitle()->getLevel() === 1) {
+                return $node->getTitle();
             }
         }
 
@@ -105,39 +105,20 @@ final class DocumentNode extends Node
     }
 
     /**
-     * @return string[][]
+     * @return TitleNode[]
      */
     public function getTitles(): array
     {
         $titles = [];
-        $levels = [&$titles];
-
         foreach ($this->nodes as $node) {
-            if ($node instanceof TitleNode === false) {
+            if ($node instanceof SectionNode === false) {
                 continue;
             }
 
-            $level = $node->getLevel();
-            $text = $node->getValueString();
-            $redirection = $node->getTarget();
-            $value = $redirection !== '' ? [$text, $redirection] : $text;
-
-            if (!isset($levels[$level - 1])) {
-                continue;
-            }
-
-            $parent = &$levels[$level - 1];
-            $element = [$value, []];
-            $parent[] = $element;
-            $levels[$level] = &$parent[count($parent) - 1][1];
+            $titles = array_merge($titles, $node->getTitles());
         }
 
-        $subDocumentTitles = array_map(
-            static fn(DocumentNode $node): array => $node->getTitles(),
-            $this->getNodes(self::class)
-        );
-
-        return array_merge($titles, ...$subDocumentTitles);
+        return $titles;
     }
 
     /**

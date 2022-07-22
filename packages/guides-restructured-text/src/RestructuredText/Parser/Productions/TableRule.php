@@ -75,7 +75,7 @@ final class TableRule implements Rule
             $node->pushContentLine($documentIterator->current());
         }
 
-        $node->finalize($documentParserContext->getParser(), $this->lineChecker);
+        $node->finalize($documentParserContext, $this->lineChecker);
 
         return $node;
     }

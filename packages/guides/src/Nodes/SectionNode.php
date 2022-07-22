@@ -20,6 +20,21 @@ final class SectionNode extends Node
         return $this->title;
     }
 
+    /** @return TitleNode[] */
+    public function getTitles(): array
+    {
+        $titles = [$this->getTitle()];
+        foreach ($this->nodes as $node) {
+            if ($node instanceof self === false) {
+                continue;
+            }
+
+            $titles = array_merge($titles, $node->getTitles());
+        }
+
+        return $titles;
+    }
+
     public function addNode(Node $node): void
     {
         $this->nodes[] = $node;

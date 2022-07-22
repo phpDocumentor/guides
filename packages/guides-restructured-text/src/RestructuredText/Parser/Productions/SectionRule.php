@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use SplStack;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
@@ -32,6 +33,7 @@ final class SectionRule implements Rule
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();
         $documentIterator = $documentParserContext->getDocumentIterator();
         $section = $this->createSection($documentParserContext);

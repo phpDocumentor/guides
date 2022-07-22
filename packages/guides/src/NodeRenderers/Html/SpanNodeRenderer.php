@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\NodeRenderers\Html;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Span\LiteralToken;
@@ -58,8 +59,9 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
     /**
      * @param string[] $attributes
+     * @param TitleNode|string $title
      */
-    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string
+    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string
     {
         $url = (string) $url;
 

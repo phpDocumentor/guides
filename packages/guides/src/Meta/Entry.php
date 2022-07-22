@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Meta;
 
 use LogicException;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_merge;
@@ -29,9 +30,9 @@ final class Entry
 
     private string $url;
 
-    private string $title;
+    private TitleNode $title;
 
-    /** @var string[][]|string[][][] */
+    /** @var TitleNode[] */
     private array $titles;
 
     /** @var mixed[][] */
@@ -51,14 +52,14 @@ final class Entry
     private ?string $parent = null;
 
     /**
-     * @param string[][]|string[][][] $titles
+     * @param TitleNode[] $titles
      * @param mixed[][] $tocs
      * @param string[] $depends
      */
     public function __construct(
         string $file,
         string $url,
-        string $title,
+        TitleNode $title,
         array $titles,
         array $tocs,
         array $depends,
@@ -83,13 +84,13 @@ final class Entry
         return $this->url;
     }
 
-    public function getTitle(): string
+    public function getTitle(): TitleNode
     {
         return $this->title;
     }
 
     /**
-     * @return string[][]|string[][][]
+     * @return TitleNode[]
      */
     public function getTitles(): array
     {

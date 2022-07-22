@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\NodeRenderers;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
@@ -76,8 +77,9 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     /**
      * @param string[] $attributes
+     * @param string|TitleNode $title
      */
-    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string
+    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string
     {
         $url = (string) $url;
 

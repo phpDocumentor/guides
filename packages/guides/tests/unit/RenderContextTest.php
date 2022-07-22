@@ -8,6 +8,8 @@ use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +40,7 @@ final class RenderContextTest extends TestCase
                 'getting-started/configuration' => new Entry(
                     'getting-started/configuration',
                     'getting-started/configuration',
-                    'Config',
+                    new TitleNode(new SpanNode('Config'), 1),
                     [],
                     [],
                     [],

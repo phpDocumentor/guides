@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
+use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 
 use function time;
@@ -39,8 +41,11 @@ final class EntryTest extends TestCase
 
         $file = 'example.txt';
         $url = '/docs/example.txt';
-        $title = 'Example';
-        $titles = [['title1'], ['title2']];
+        $title = new TitleNode(new SpanNode('Example'), 1);
+        $titles = [
+            new TitleNode(new SpanNode('title1'), 1),
+            new TitleNode(new SpanNode('title2'), 2)
+        ];
         $tocs = [['dunno?']];
         $depends = ['other-file.txt'];
         $links = ['another-file'];
@@ -65,8 +70,11 @@ final class EntryTest extends TestCase
         $entry = new Entry(
             'example.txt',
             '/docs/example.txt',
-            'Example',
-            [['title1'], ['title2']],
+            new TitleNode(new SpanNode('Example'), 1),
+            $titles = [
+                new TitleNode(new SpanNode('title1'), 1),
+                new TitleNode(new SpanNode('title2'), 2)
+            ],
             [['dunno?']],
             ['other-file.txt'],
             time()

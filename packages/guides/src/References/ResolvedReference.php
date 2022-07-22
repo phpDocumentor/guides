@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References;
 
+use phpDocumentor\Guides\Nodes\TitleNode;
 use RuntimeException;
 
 use function is_string;
@@ -23,22 +24,27 @@ class ResolvedReference
 {
     private ?string $file;
 
-    private ?string $title;
+    private ?TitleNode $title;
 
     private ?string $url;
 
-    /** @var string[][]|string[][][] */
+    /** @var TitleNode[] */
     private array $titles;
 
     /** @var string[] */
     private array $attributes;
 
     /**
-     * @param string[][]|string[][][] $titles
+     * @param TitleNode[] $titles
      * @param string[] $attributes
      */
-    public function __construct(?string $file, ?string $title, ?string $url, array $titles = [], array $attributes = [])
-    {
+    public function __construct(
+        ?string $file,
+        ?TitleNode $title,
+        ?string $url,
+        array $titles = [],
+        array $attributes = []
+    ) {
         $this->file = $file;
         $this->title = $title;
         $this->url = $url;
@@ -53,7 +59,7 @@ class ResolvedReference
         return $this->file;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): ?TitleNode
     {
         return $this->title;
     }
@@ -64,7 +70,7 @@ class ResolvedReference
     }
 
     /**
-     * @return string[][]|string[][][]
+     * @return TitleNode[]
      */
     public function getTitles(): array
     {

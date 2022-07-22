@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\TableSeparatorLineConfig;
 
@@ -144,7 +145,7 @@ class TableNode extends Node
         $this->currentLineNumber++;
     }
 
-    public function finalize(MarkupLanguageParser $parser, LineChecker $lineChecker): void
+    public function finalize(DocumentParserContext $documentParserContext, LineChecker $lineChecker): void
     {
         if ($this->isCompiled === false) {
             $this->compile();
@@ -153,8 +154,15 @@ class TableNode extends Node
         $tableAsString = $this->getTableAsString();
 
         if (count($this->errors) > 0) {
-            $parser->getEnvironment()
-                ->addError(sprintf("%s\nin file %s\n\n%s", $this->errors[0], $parser->getFilename(), $tableAsString));
+            $documentParserContext->getContext()
+                ->addError(
+                    sprintf(
+                        "%s\nin file %s\n\n%s",
+                        $this->errors[0],
+                        $documentParserContext->getDocument()->getFilePath(),
+                        $tableAsString
+                    )
+                );
 
             $this->data = [];
             $this->headers = [];
@@ -167,7 +175,10 @@ class TableNode extends Node
                 $lines = explode("\n", $col->getContent());
 
                 if ($lineChecker->isListLine($lines[0], false)) {
-                    $node = $parser->parseFragment($col->getContent())->getNodes()[0];
+                    $node = $documentParserContext->getParser()->parseFragment(
+                        $documentParserContext,
+                        $col->getContent()
+                    )->getNodes()[0];
                 } else {
                     //TODO: fix this, as we need to parse table contents for links
                     $node = new SpanNode($col->getContent()); //SpanNode::create($parser, $col->getContent());

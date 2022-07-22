@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers;
 
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Span\LiteralToken;
@@ -31,8 +32,9 @@ interface SpanRenderer
 
     /**
      * @param string[] $attributes
+     * @param string|TitleNode $title
      */
-    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string;
+    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string;
 
     public function escape(string $span): string;
 

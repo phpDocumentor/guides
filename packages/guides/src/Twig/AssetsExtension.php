@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Twig\TwigTest;
 use Webmozart\Assert\Assert;
 
 use function dirname;
@@ -50,6 +51,14 @@ final class AssetsExtension extends AbstractExtension
         return [
             new TwigFunction('asset', [$this, 'asset'], ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', [$this, 'renderNode'], ['is_safe' => ['html'], 'needs_context' => true]),
+        ];
+    }
+
+    /** @return TwigTest[] */
+    public function getTests(): array
+    {
+        return [
+            new TwigTest('node', fn ($value) => $value instanceof Node )
         ];
     }
 

@@ -157,7 +157,7 @@ final class Parser
         $this->metas->set(
             $document->getFilePath(),
             $this->parserContext->getUrl(),
-            $document->getTitle() instanceof TitleNode ? $document->getTitle()->getValueString() : '',
+            $document->getTitle(),
             $document->getTitles(),
             $this->compileTableOfContents($document, $this->parserContext),
             0, //TODO: remove this? as the md5 hash of documents should be used for caching
