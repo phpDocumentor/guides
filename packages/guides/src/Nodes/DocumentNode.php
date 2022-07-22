@@ -101,7 +101,24 @@ final class DocumentNode extends Node
      */
     public function getTocs(): array
     {
-        return $this->getNodes(TocNode::class);
+        return $this->getRecursiveTocs($this);
+    }
+
+    /** @return TocNode[] */
+    private function getRecursiveTocs(Node $parent): array
+    {
+        $tocs = [];
+        foreach ($parent->getNodes() as $node) {
+            if ($node instanceof TocNode) {
+                $tocs[] = $node;
+            }
+
+            if ($node instanceof SectionNode) {
+                $tocs = array_merge($tocs, $this->getRecursiveTocs($node));
+            }
+        }
+
+        return $tocs;
     }
 
     /**
