@@ -27,6 +27,7 @@ use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\Renderer\OutputFormatRenderer;
 use phpDocumentor\Guides\Renderer\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -63,7 +64,7 @@ final class QuickStart
         );
 
         $twigBuilder = new EnvironmentBuilder();
-        $renderer = new Renderer(
+        $renderer = new TwigRenderer(
             [
                 new OutputFormatRenderer(
                     'html',

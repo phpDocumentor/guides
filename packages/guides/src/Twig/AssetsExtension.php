@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -32,14 +32,14 @@ final class AssetsExtension extends AbstractExtension
 {
     private LoggerInterface $logger;
 
-    /** @var Renderer */
-    private Renderer $renderer;
+    /** @var TwigRenderer */
+    private TwigRenderer $renderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(
         LoggerInterface $logger,
-        Renderer $renderer,
-        UrlGenerator $urlGenerator
+        TwigRenderer    $renderer,
+        UrlGenerator    $urlGenerator
     ) {
         $this->logger = $logger;
         $this->renderer = $renderer;
