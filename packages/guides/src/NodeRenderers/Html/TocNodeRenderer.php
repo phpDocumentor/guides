@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
+use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Webmozart\Assert\Assert;
 
@@ -29,12 +32,17 @@ use function ltrim;
 class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
+    private Metas $metas;
 
-    public function __construct(Renderer $renderer, UrlGenerator $urlGenerator)
-    {
+    public function __construct(
+        Renderer $renderer,
+        UrlGeneratorInterface $urlGenerator,
+        Metas $metas
+    ) {
         $this->renderer = $renderer;
         $this->urlGenerator = $urlGenerator;
+        $this->metas = $metas;
     }
 
     public function render(Node $node, RenderContext $environment): string
@@ -48,14 +56,12 @@ class TocNodeRenderer implements NodeRenderer
         $tocItems = [];
 
         foreach ($node->getFiles() as $file) {
-            $metaEntry = $environment->getMetas()->get(ltrim($file, '/'));
-            if ($metaEntry === null) {
+            $metaEntry = $this->metas->get(ltrim($file, '/'));
+            if ($metaEntry instanceof Entry === false) {
                 continue;
             }
 
-            $url = $environment->relativeDocUrl($metaEntry->getUrl());
-
-            $this->buildLevel($environment, $node, $url, $metaEntry->getTitles(), 1, $tocItems);
+            $this->buildLevel($environment, $node, $metaEntry, 1, $tocItems);
         }
 
         return $this->renderer->render(
@@ -68,86 +74,62 @@ class TocNodeRenderer implements NodeRenderer
     }
 
     /**
-     * @param mixed[][] $titles
+     * @param TitleNode[] $titles
      * @param mixed[][] $tocItems
      */
     private function buildLevel(
         RenderContext $environment,
         TocNode $node,
-        ?string $url,
-        array $titles,
+        Entry $metaEntry,
         int $level,
         array &$tocItems
     ): void {
-        foreach ($titles as $entry) {
-            [$title, $children] = $entry;
+        $url = $environment->relativeDocUrl($metaEntry->getUrl());
+        $title = $metaEntry->getTitle();
 
-            [$title, $target] = $this->generateTarget($url, $title);
+        $tocItem = [
+            'targetId' => $title->getId(),
+            'targetUrl' => $url,
 
-            $tocItem = [
-                'targetId' => $this->generateTargetId($target),
-                'targetUrl' => $this->urlGenerator->generateUrl($target),
-                'title' => $title,
-                'level' => $level,
-                'children' => [],
-            ];
+            //TODO: titles can have alternative names,
+            //       https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+            'title' => $title->getValueString(),
+            'level' => $level,
+            'children' => [],
+        ];
 
-            // render children until we hit the configured maxdepth
-            if ((is_countable($children) ? count($children) : 0) > 0 && $level < $node->getDepth()) {
-                $this->buildLevel($environment, $node, $url, $children, $level + 1, $tocItem['children']);
+        $tocItems[] = $tocItem;
+
+        /*
+         * We are constructing a tree here...
+         */
+
+        /* TODO: allow rendering of child titles, the entry has a title, which is a document.
+                 It may contain files, that we need to lookup in meta's.
+                 Or titles at the same level. Which should also be part of the TOC?
+        */
+        foreach ($metaEntry->getTitles() as $title) {
+            //Headings at the same level are inserted on $level.
+            if ($title->getLevel() === $metaEntry->getTitle()->getLevel()) {
+                $tocItems[] = [
+                    'targetId' => $title->getId(),
+                    'targetUrl' => $environment->relativeDocUrl($metaEntry->getUrl(), $title->getId()),
+
+                    //TODO: titles can have alternative names,
+                    //    https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+                    'title' => $title->getValueString(),
+                    'level' => $level,
+                    'children' => [],
+                ];
+                continue;
             }
 
-            $tocItems[] = $tocItem;
+
+
+            //$this->buildLevel($environment, $node,  $level + 1, $tocItem['children']);
+
+            //TODO: render children until we hit the configured maxdepth
         }
-    }
-
-    private function generateTargetId(string $target): string
-    {
-        return (new AsciiSlugger())->slug($target)->lower()->toString();
-    }
-
-    /**
-     * @param string[]|string $title
-     *
-     * @return array{mixed, string}
-     */
-    private function generateTarget(?string $url, $title): array
-    {
-        $anchor = $this->generateAnchorFromTitle($title);
-
-        $target = $url . '#' . $anchor;
-
-        //TODO figure out when this happens, why would title be an array?
-//        if (is_array($title)) {
-//            [$title, $target] = $title;
-//
-//            $reference = $this->referenceRegistry->resolve(
-//                $environment,
-//                'doc',
-//                $target,
-//                $environment->getMetaEntry()
-//            );
-//
-//            if ($reference === null) {
-//                return [$title, $target];
-//            }
-//
-//            $target = $environment->relativeUrl($reference->getUrl());
-//        }
-
-        return [$title, $target];
-    }
-
-    /**
-     * @param string[]|string $title
-     */
-    private function generateAnchorFromTitle($title): string
-    {
-        $slug = is_array($title)
-            ? $title[1]
-            : $title;
-
-        return (new AsciiSlugger())->slug($slug)->lower()->toString();
     }
 
     public function supports(Node $node): bool

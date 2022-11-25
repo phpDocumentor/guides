@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\NodeTransformer;
+namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -18,9 +18,9 @@ interface NodeTransformer
     /**
      * @template T of Node
      * @param T $node
-     * @return T
+     * @return T|null
      */
-    public function leaveNode(Node $node): Node;
+    public function leaveNode(Node $node): ?Node;
 
     public function supports(Node $node): bool;
 }

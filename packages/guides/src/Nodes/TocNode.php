@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+/**
+ * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+ */
 class TocNode extends Node
 {
     private const DEFAULT_DEPTH = 2;

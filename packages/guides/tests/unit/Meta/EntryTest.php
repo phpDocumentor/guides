@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Meta;
 
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Nodes\TocNode;
 use PHPUnit\Framework\TestCase;
 
 use function time;
@@ -46,7 +47,7 @@ final class EntryTest extends TestCase
             new TitleNode(new SpanNode('title1'), 1),
             new TitleNode(new SpanNode('title2'), 2)
         ];
-        $tocs = [['dunno?']];
+        $tocs = [new TocNode(['file.txt'])];
         $depends = ['other-file.txt'];
         $links = ['another-file'];
 
@@ -71,11 +72,13 @@ final class EntryTest extends TestCase
             'example.txt',
             '/docs/example.txt',
             new TitleNode(new SpanNode('Example'), 1),
-            $titles = [
+            [
                 new TitleNode(new SpanNode('title1'), 1),
                 new TitleNode(new SpanNode('title2'), 2)
             ],
-            [['dunno?']],
+            [
+                new TocNode(['file.txt'])
+            ],
             ['other-file.txt'],
             time()
         );

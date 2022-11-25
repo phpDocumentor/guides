@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Meta;
 
 use LogicException;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Nodes\TocNode;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_merge;
@@ -35,7 +36,7 @@ final class Entry
     /** @var TitleNode[] */
     private array $titles;
 
-    /** @var mixed[][] */
+    /** @var TocNode[] */
     private array $tocs;
 
     private int $mtime;
@@ -53,7 +54,7 @@ final class Entry
 
     /**
      * @param TitleNode[] $titles
-     * @param mixed[][] $tocs
+     * @param TocNode[] $tocs
      * @param string[] $depends
      */
     public function __construct(
@@ -99,7 +100,7 @@ final class Entry
 
     public function hasTitle(string $text): bool
     {
-        $titles = $this->titles;
+        $titles = $this->getTitles();
 
         $slugger = new AsciiSlugger();
         $text = $slugger->slug($text)->lower()->toString();
@@ -114,7 +115,7 @@ final class Entry
     }
 
     /**
-     * @return mixed[][]
+     * @return TocNode[]
      */
     public function getTocs(): array
     {

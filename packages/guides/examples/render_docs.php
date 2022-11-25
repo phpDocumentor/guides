@@ -19,8 +19,8 @@ use phpDocumentor\Guides\UrlGenerator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../../guides-restructured-text/vendor/autoload.php';
+require __DIR__ . '/../../../vendor/autoload.php';
+//require __DIR__ . '/../../guides-restructured-text/vendor/autoload.php';
 
 $metas = new Metas([]);
 $logger = new class extends AbstractLogger {
@@ -53,7 +53,7 @@ $parseDirectoryHandler = new ParseDirectoryHandler(
 );
 
 $sourceFileSystem = new Filesystem(new Local(
-    __DIR__  . '/../docs'
+    __DIR__  . '/docs/bundles'
 ));
 $sourceFileSystem->addPlugin(new Finder());
 

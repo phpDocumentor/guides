@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\NodeTransformer;
+namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-class DocumentNodeTraverser
+final class DocumentNodeTraverser
 {
     /** @var iterable<NodeTransformer> */
     private $transformers;
@@ -29,14 +29,22 @@ class DocumentNodeTraverser
         return $node;
     }
 
-    private function traverseForTransformer(NodeTransformer $transformer, Node $node): Node
+    private function traverseForTransformer(NodeTransformer $transformer, Node $node): ?Node
     {
         if ($supports = $transformer->supports($node)) {
             $node = $transformer->enterNode($node);
         }
 
-        foreach ($node->getChildren() as $childNode) {
-            $node = $this->traverseForTransformer($transformer, $childNode);
+        foreach ($node->getChildren() as $key => $childNode) {
+            $transformed = $this->traverseForTransformer($transformer, $childNode);
+            if ($transformed === null) {
+                $node = $node->removeNode($key);
+                continue;
+            }
+
+            if ($transformed !== $childNode) {
+                $node = $node->replaceNode($key, $transformed);
+            }
         }
 
         if ($supports) {

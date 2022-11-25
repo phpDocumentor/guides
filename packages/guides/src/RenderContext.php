@@ -25,7 +25,7 @@ use function trim;
 
 class RenderContext
 {
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     private string $currentFileName = '';
 
@@ -47,7 +47,7 @@ class RenderContext
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         Metas $metas,
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         string $outputFormat
     ) {
         $this->currentFileName = $currentFileName;
@@ -65,7 +65,7 @@ class RenderContext
         FilesystemInterface $destination,
         string $destinationPath,
         Metas $metas,
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         string $ouputFormat
     ): self {
         $self = new self(

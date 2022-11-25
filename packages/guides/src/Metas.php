@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Nodes\TocNode;
 
 final class Metas
 {
@@ -43,7 +44,7 @@ final class Metas
 
     /**
      * @param TitleNode[] $titles
-     * @param mixed[][] $tocs
+     * @param TocNode[] $tocs
      * @param string[] $depends
      */
     public function set(

@@ -132,6 +132,14 @@ abstract class Node
         return [];
     }
 
+    public function replaceNode(int $key, Node $node): self
+    {
+        $result = clone $this;
+        $result->value = $node;
+
+        return $result;
+    }
+
     /**
      * @param string[] $lines
      */

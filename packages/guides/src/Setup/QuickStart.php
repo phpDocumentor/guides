@@ -15,10 +15,12 @@ namespace phpDocumentor\Guides\Setup;
 
 use ArrayObject;
 use phpDocumentor\Guides\Configuration;
+use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\TocNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
@@ -54,7 +56,7 @@ final class QuickStart
         );
     }
 
-    public static function createRenderer(): Renderer
+    public static function createRenderer(Metas $metas): Renderer
     {
         $logger = new TestLogger();
         $nodeRenderers = new ArrayObject();
@@ -87,6 +89,7 @@ final class QuickStart
         $nodeRenderers[] = new ContainerNodeRenderer($renderer);
         $nodeRenderers[] = new SidebarNodeRenderer($renderer);
         $nodeRenderers[] = new TopicNodeRenderer($renderer);
+        $nodeRenderers[] = new TocNodeRenderer($renderer, new UrlGenerator(), $metas);
 
         $config = new Configuration();
         foreach ($config->htmlNodeTemplates() as $node => $template) {
