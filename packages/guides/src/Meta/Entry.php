@@ -29,8 +29,6 @@ final class Entry
 {
     private string $file;
 
-    private string $url;
-
     private TitleNode $title;
 
     /** @var TitleNode[] */
@@ -59,7 +57,6 @@ final class Entry
      */
     public function __construct(
         string $file,
-        string $url,
         TitleNode $title,
         array $titles,
         array $tocs,
@@ -67,7 +64,6 @@ final class Entry
         int $mtime
     ) {
         $this->file = $file;
-        $this->url = $url;
         $this->title = $title;
         $this->titles = $titles;
         $this->tocs = $tocs;

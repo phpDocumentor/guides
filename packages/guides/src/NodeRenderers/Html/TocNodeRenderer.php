@@ -67,8 +67,7 @@ class TocNodeRenderer implements NodeRenderer
         return $this->renderer->render(
             'toc.html.twig',
             [
-                'tocNode' => $node,
-                'tocItems' => $tocItems,
+                'node' => $node,
             ]
         );
     }
@@ -84,21 +83,21 @@ class TocNodeRenderer implements NodeRenderer
         int $level,
         array &$tocItems
     ): void {
-        $url = $environment->relativeDocUrl($metaEntry->getUrl());
+        $url = $environment->relativeDocUrl($metaEntry->getFile());
         $title = $metaEntry->getTitle();
 
-        $tocItem = [
-            'targetId' => $title->getId(),
-            'targetUrl' => $url,
+//        $tocItem = [
+//            'targetId' => $title->getId(),
+//            'targetUrl' => $url,
+//
+//            //TODO: titles can have alternative names,
+//            //       https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+//            'title' => $title->getValueString(),
+//            'level' => $level,
+//            'children' => [],
+//        ];
 
-            //TODO: titles can have alternative names,
-            //       https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
-            'title' => $title->getValueString(),
-            'level' => $level,
-            'children' => [],
-        ];
-
-        $tocItems[] = $tocItem;
+        //$tocItems[] = $tocItem;
 
         /*
          * We are constructing a tree here...
@@ -113,7 +112,7 @@ class TocNodeRenderer implements NodeRenderer
             if ($title->getLevel() === $metaEntry->getTitle()->getLevel()) {
                 $tocItems[] = [
                     'targetId' => $title->getId(),
-                    'targetUrl' => $environment->relativeDocUrl($metaEntry->getUrl(), $title->getId()),
+                    'targetUrl' => $environment->relativeDocUrl($metaEntry->getFile(), $title->getId()),
 
                     //TODO: titles can have alternative names,
                     //    https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents

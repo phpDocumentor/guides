@@ -30,9 +30,6 @@ final class Parser
 {
     private ?ParserContext $parserContext = null;
 
-    private ?Metas $metas = null;
-
-
     private UrlGenerator $urlGenerator;
 
     /** @var MarkupLanguageParser[] */
@@ -62,7 +59,6 @@ final class Parser
      * @psalm-assert Metas $this->metas
      */
     public function prepare(
-        Metas $metas,
         ?FilesystemInterface $origin,
         string $sourcePath,
         string $fileName,
@@ -72,7 +68,6 @@ final class Parser
             $origin = new Filesystem(new Local(getcwd()));
         }
 
-        $this->metas = $metas;
         $this->parserContext = $this->createParserContext(
             $sourcePath,
             $fileName,
@@ -85,18 +80,16 @@ final class Parser
         string $text,
         string $inputFormat = 'rst'
     ): DocumentNode {
-        if ($this->metas === null || $this->parserContext === null) {
-            // if Metas or Environment is not set; then the prepare method hasn't been called and we consider
+        if ($this->parserContext === null) {
+            // Environment is not set; then the prepare method hasn't been called and we consider
             // this a one-off parse of dynamic RST content.
-            $this->prepare(new Metas(), null, '', 'index');
+            $this->prepare(null, '', 'index');
         }
 
         $parser = $this->determineParser($inputFormat);
 
         $document = $parser->parse($this->parserContext, $text);
         $document->setLinks($this->parserContext->getLinks());
-
-        $this->addDocumentToMetas($document);
 
         $this->metas         = null;
         $this->parserContext = null;
@@ -127,39 +120,6 @@ final class Parser
             $initialHeaderLevel,
             $origin,
             $this->urlGenerator
-        );
-    }
-
-    /**
-     * @return array<array<string|null>>
-     */
-    private function compileTableOfContents(DocumentNode $document, ParserContext $parserContext): array
-    {
-        $result = [];
-        $nodes = $document->getTocs();
-        foreach ($nodes as $toc) {
-            $files = $toc->getFiles();
-
-            foreach ($files as $key => $file) {
-                $files[$key] =  $this->urlGenerator->canonicalUrl($parserContext->getDirName(), $file);
-            }
-
-            $result[] = $files;
-        }
-
-        return $result;
-    }
-
-    private function addDocumentToMetas(DocumentNode $document): void
-    {
-        $this->metas->set(
-            $document->getFilePath(),
-            $this->parserContext->getUrl(),
-            $document->getTitle(),
-            $document->getTitles(),
-            $this->compileTableOfContents($document, $this->parserContext),
-            0, //TODO: remove this? as the md5 hash of documents should be used for caching
-            $document->getDependencies()
         );
     }
 }

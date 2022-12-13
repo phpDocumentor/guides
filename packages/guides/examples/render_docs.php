@@ -33,7 +33,6 @@ $logger = new class extends AbstractLogger {
 $commandbus = QuickStart::create(
     [
         ParseFileCommand::class => new ParseFileHandler(
-            $metas,
             $logger,
             new class implements EventDispatcherInterface
             {
@@ -53,19 +52,30 @@ $parseDirectoryHandler = new ParseDirectoryHandler(
 );
 
 $sourceFileSystem = new Filesystem(new Local(
-    __DIR__  . '/docs/bundles'
+    __DIR__  . '/docs'
 ));
 $sourceFileSystem->addPlugin(new Finder());
 
 $parseDirCommand = new ParseDirectoryCommand(
     $sourceFileSystem,
-    './',
+    '',
     'rst'
 );
 
 $documents = $parseDirectoryHandler->handle($parseDirCommand);
+$compliler = new phpDocumentor\Guides\Compiler\Compiler([
+    new \phpDocumentor\Guides\Compiler\MetasPass($metas),
+    new \phpDocumentor\Guides\Compiler\TransformerPass(
+        new \phpDocumentor\Guides\Compiler\DocumentNodeTraverser(
+            [
+                new \phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer($metas)
+            ]
+        )
+    )
+]);
+$documents = $compliler->run($documents);
 
-$renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer();
+$renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer($metas);
 $renderDocumentHandler = new RenderDocumentHandler($renderer);
 
 foreach ($documents as $document) {

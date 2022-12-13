@@ -30,8 +30,6 @@ use function trim;
 
 final class ParseFileHandler
 {
-    private Metas $metas;
-
     private LoggerInterface $logger;
 
     private Parser $parser;
@@ -39,12 +37,10 @@ final class ParseFileHandler
     private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
-        Metas $metas,
         LoggerInterface $logger,
         EventDispatcherInterface $eventDispatcher,
         Parser $parser
     ) {
-        $this->metas = $metas;
         $this->logger = $logger;
         $this->parser = $parser;
         $this->eventDispatcher = $eventDispatcher;
@@ -89,7 +85,6 @@ final class ParseFileHandler
         $fileContents = $this->getFileContents($origin, $path);
 
         $this->parser->prepare(
-            $this->metas,
             $origin,
             $documentFolder,
             $fileName,

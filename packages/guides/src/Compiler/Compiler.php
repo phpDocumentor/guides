@@ -4,10 +4,28 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
+
 class Compiler
 {
+    private \SplPriorityQueue $passes;
+
+    /** @param CompilerPass[] $passes */
+    public function __construct(array $passes)
+    {
+        $this->passes = new \SplPriorityQueue();
+        foreach ($passes as $pass) {
+            $this->passes->insert($pass, $pass->getPriority());
+        }
+    }
+
+    /** @return DocumentNode[] */
     public function run(array $documents): array
     {
+        foreach ($this->passes as $pass) {
+            $documents = $pass->run($documents);
+        }
+
         return $documents;
     }
 }

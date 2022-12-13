@@ -49,7 +49,6 @@ final class Metas
      */
     public function set(
         string $file,
-        string $url,
         ?TitleNode $title,
         array $titles,
         array $tocs,
@@ -70,7 +69,6 @@ final class Metas
 
         $this->entries[$file] = new Entry(
             $file,
-            $url,
             $title ?? new TitleNode(new SpanNode('<unknown>'), 0),
             $titles,
             $tocs,

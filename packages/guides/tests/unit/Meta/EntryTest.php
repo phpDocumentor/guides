@@ -29,7 +29,6 @@ final class EntryTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getFile
-     * @covers ::getUrl
      * @covers ::getTitle
      * @covers ::getTitles
      * @covers ::getTocs
@@ -51,10 +50,9 @@ final class EntryTest extends TestCase
         $depends = ['other-file.txt'];
         $links = ['another-file'];
 
-        $entry = new Entry($file, $url, $title, $titles, $tocs, $depends, $mtime);
+        $entry = new Entry($file, $title, $titles, $tocs, $depends, $mtime);
 
         self::assertSame($file, $entry->getFile());
-        self::assertSame($url, $entry->getUrl());
         self::assertSame($title, $entry->getTitle());
         self::assertSame($titles, $entry->getTitles());
         self::assertSame($tocs, $entry->getTocs());
@@ -70,7 +68,6 @@ final class EntryTest extends TestCase
     {
         $entry = new Entry(
             'example.txt',
-            '/docs/example.txt',
             new TitleNode(new SpanNode('Example'), 1),
             [
                 new TitleNode(new SpanNode('title1'), 1),

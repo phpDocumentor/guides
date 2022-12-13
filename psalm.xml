@@ -2,6 +2,7 @@
 <psalm
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
+        errorLevel="1"
 >
     <projectFiles>
         <directory name="packages/guides/src"/>

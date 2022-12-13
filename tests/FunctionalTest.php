@@ -69,7 +69,7 @@ class FunctionalTest extends TestCase
         $parser = QuickStart::createRstParser();
         $document = $parser->parse($rst);
 
-        $renderer = QuickStart::createRenderer();
+        $renderer = QuickStart::createRenderer(new Metas());
         $context = RenderContext::forDocument(
             $document,
             new Filesystem(new MemoryAdapter()),
