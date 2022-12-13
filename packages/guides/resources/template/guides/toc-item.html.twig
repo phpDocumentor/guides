@@ -1,5 +1,5 @@
 <li id="{{ tocItem.targetId }}" class="toc-item">
-    <a href="{{ tocItem.targetUrl }}">{{ tocItem.title|raw }}</a>
+    <a href="{{ tocItem.targetUrl }}">{{ renderNode(tocItem.title.value) }}</a>
 
     {% if tocItem.children|length %}
         {% include "guides/toc-level.html.twig" with {

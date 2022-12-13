@@ -1,1 +1,1 @@
-<a href="{{ url|raw }}"{% for key, value in attributes %} {{ key }}="{{ value }}"{% endfor %}>{% if title is node %}{{ renderNode(title) }}{% else %} {{ title | raw }} {% endif %} </a>
+<a href="{{ url|raw }}"{% for key, value in attributes %} {{ key }}="{{ value }}"{% endfor %}>{% if title is node %}{{ renderNode(title.value) }}{% else %} {{ title | raw }} {% endif %} </a>

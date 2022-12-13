@@ -40,6 +40,7 @@ class SpanParser
     /** @param string|string[] $span */
     public function parse($span, ParserContext $environment): SpanNode
     {
+        $this->tokens = [];
         if (is_array($span)) {
             $span = implode("\n", $span);
         }
