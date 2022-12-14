@@ -102,7 +102,7 @@ final class DirectiveRule implements Rule
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
-            $directiveHandler->process(
+            return $directiveHandler->process(
                 $documentParserContext->getParser(),
                 $this->interpretContentBlock($documentParserContext),
                 $directive->getVariable(),

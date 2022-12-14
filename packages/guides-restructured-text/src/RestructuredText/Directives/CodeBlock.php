@@ -37,9 +37,9 @@ class CodeBlock extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         if ($node === null) {
-            return;
+            return null;
         }
 
         if ($node instanceof CodeNode) {
@@ -50,9 +50,10 @@ class CodeBlock extends Directive
         $document = $parser->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $node);
-        } else {
-            $document->addNode($node);
+            return null;
         }
+
+        return $node;
     }
 
     /**

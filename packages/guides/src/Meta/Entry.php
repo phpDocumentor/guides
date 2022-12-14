@@ -99,13 +99,13 @@ final class Entry
 
     public function hasTitle(string $text): bool
     {
-        $titles = $this->getAllTitles();
+        $titles = $this->titles;
 
         $slugger = new AsciiSlugger();
         $text = $slugger->slug($text)->lower()->toString();
 
         foreach ($titles as $title) {
-            if ($text === $slugger->slug($title)->lower()->toString()) {
+            if ($text === $slugger->slug($title->getValueString())->lower()->toString()) {
                 return true;
             }
         }

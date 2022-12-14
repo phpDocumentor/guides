@@ -46,7 +46,7 @@ class ClassDirective extends SubDirective
             $this->setNodesClasses($document->getNodes(), $classes);
         }
 
-        return $document;
+        return null;
     }
 
     /**

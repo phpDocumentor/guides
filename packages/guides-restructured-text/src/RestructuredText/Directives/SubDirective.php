@@ -29,7 +29,7 @@ abstract class SubDirective extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         $subParser = $parser->getSubParser();
 
         if ($node instanceof CodeNode) {
@@ -41,15 +41,16 @@ abstract class SubDirective extends Directive
         $newNode = $this->processSub($parser, $document, $variable, $data, $options);
 
         if ($newNode === null) {
-            return;
+            return null;
         }
 
         $document = $parser->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $newNode);
-        } else {
-            $document->addNode($newNode);
+            return null;
         }
+
+        return $newNode;
     }
 
     /**

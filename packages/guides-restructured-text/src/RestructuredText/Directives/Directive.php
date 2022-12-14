@@ -58,7 +58,7 @@ abstract class Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         $document = $parser->getDocument();
 
         $processNode = $this->processNode($parser, $variable, $data, $options)
@@ -71,11 +71,7 @@ abstract class Directive
             $document->addNode($processNode);
         }
 
-        if ($node === null) {
-            return;
-        }
-
-        $document->addNode($node);
+        return $processNode;
     }
 
     /**

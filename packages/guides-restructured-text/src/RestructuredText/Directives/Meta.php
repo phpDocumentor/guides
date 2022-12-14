@@ -30,7 +30,7 @@ class Meta extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         $document = $parser->getDocument();
 
         foreach ($options as $key => $value) {
@@ -38,7 +38,7 @@ class Meta extends Directive
         }
 
         if ($node === null) {
-            return;
+            return null;
         }
 
         $document->addNode($node);

@@ -32,14 +32,15 @@ class Toctree extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         if ($node === null) {
-            return;
+            return null;
         }
 
         $environment = $parser->getEnvironment();
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles($environment, $node, $options);
-        $parser->getDocument()->addNode((new TocNode($toctreeFiles))->withOptions($options));
+
+        return (new TocNode($toctreeFiles))->withOptions($options);
     }
 }

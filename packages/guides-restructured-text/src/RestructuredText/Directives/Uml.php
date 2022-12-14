@@ -42,7 +42,7 @@ final class Uml extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         $environment = $parser->getEnvironment();
 
         $value = '';
@@ -56,7 +56,7 @@ final class Uml extends Directive
         if ($node instanceof CodeNode === false && $data) {
             $value = $this->loadExternalUmlFile($environment, $data);
             if ($value === null) {
-                return;
+                return null;
             }
         }
 
@@ -67,9 +67,10 @@ final class Uml extends Directive
         $document = $parser->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $node);
-        } else {
-            $document->addNode($node);
+            return null;
         }
+
+        return $node;
     }
 
     private function loadExternalUmlFile(ParserContext $parserContext, string $path): ?string

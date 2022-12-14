@@ -29,9 +29,11 @@ class Title extends Directive
         string $variable,
         string $data,
         array $options
-    ): void {
+    ): ?Node {
         $document = $parser->getDocument();
         $document->addHeaderNode(new DocumentTitleNode($data));
         $document->addNode($node);
+
+        return null;
     }
 }
