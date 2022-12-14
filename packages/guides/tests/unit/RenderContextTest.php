@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace unit;
 
 use League\Flysystem\FilesystemInterface;
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -37,7 +37,7 @@ final class RenderContextTest extends TestCase
             $this->prophesize(FilesystemInterface::class)->reveal(),
             $destinationPath,
             new Metas([
-                'getting-started/configuration' => new Entry(
+                'getting-started/configuration' => new EntryLegacy(
                     'getting-started/configuration',
                     'getting-started/configuration',
                     new TitleNode(new SpanNode('Config'), 1),

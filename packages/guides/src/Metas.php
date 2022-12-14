@@ -13,77 +13,42 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 
 final class Metas
 {
-    /** @var Entry[] */
+    /** @var EntryLegacy[] */
     private array $entries;
 
     /** @var string[] */
     private array $parents = [];
 
     /**
-     * @param Entry[] $entries
+     * @param EntryLegacy[] $entries
      */
     public function __construct(array $entries = [])
     {
         $this->entries = $entries;
     }
 
+    public function addDocument(DocumentEntry $documentEntry)
+    {
+        $this->entries[$documentEntry->getFile()] = $documentEntry;
+    }
+
     /**
-     * @return Entry[]
+     * @return EntryLegacy[]
      */
     public function getAll(): array
     {
         return $this->entries;
     }
 
-    /**
-     * @param TitleNode[] $titles
-     * @param TocNode[] $tocs
-     * @param string[] $depends
-     */
-    public function set(
-        string $file,
-        ?TitleNode $title,
-        array $titles,
-        array $tocs,
-        int $mtime,
-        array $depends
-    ): void {
-        foreach ($tocs as $toc) {
-            foreach ($toc as $child) {
-                $this->parents[$child] = $file;
-
-                if (!isset($this->entries[$child])) {
-                    continue;
-                }
-
-                $this->entries[$child]->setParent($file);
-            }
-        }
-
-        $this->entries[$file] = new Entry(
-            $file,
-            $title ?? new TitleNode(new SpanNode('<unknown>'), 0),
-            $titles,
-            $tocs,
-            $depends,
-            $mtime
-        );
-
-        if (!isset($this->parents[$file])) {
-            return;
-        }
-
-        $this->entries[$file]->setParent($this->parents[$file]);
-    }
-
-    public function get(string $url): ?Entry
+    public function get(string $url): ?EntryLegacy
     {
         if (isset($this->entries[$url])) {
             return $this->entries[$url];
@@ -93,10 +58,15 @@ final class Metas
     }
 
     /**
-     * @param Entry[] $metaEntries
+     * @param EntryLegacy[] $metaEntries
      */
     public function setMetaEntries(array $metaEntries): void
     {
         $this->entries = $metaEntries;
+    }
+
+    public function findDocument(string $filePath)
+    {
+        return $this->entries[$filePath] ?? null;
     }
 }

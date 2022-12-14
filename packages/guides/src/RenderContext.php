@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
 use function dirname;
@@ -163,7 +163,7 @@ class RenderContext
         return $this->metas;
     }
 
-    public function getMetaEntry(): ?Entry
+    public function getMetaEntry(): ?EntryLegacy
     {
         return $this->metas->get($this->currentFileName);
     }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
@@ -57,7 +57,7 @@ class TocNodeRenderer implements NodeRenderer
 
         foreach ($node->getFiles() as $file) {
             $metaEntry = $this->metas->get(ltrim($file, '/'));
-            if ($metaEntry instanceof Entry === false) {
+            if ($metaEntry instanceof EntryLegacy === false) {
                 continue;
             }
 
@@ -78,10 +78,10 @@ class TocNodeRenderer implements NodeRenderer
      */
     private function buildLevel(
         RenderContext $environment,
-        TocNode $node,
-        Entry $metaEntry,
-        int $level,
-        array &$tocItems
+        TocNode       $node,
+        EntryLegacy   $metaEntry,
+        int           $level,
+        array         &$tocItems
     ): void {
         $url = $environment->relativeDocUrl($metaEntry->getFile());
         $title = $metaEntry->getTitle();
@@ -107,7 +107,7 @@ class TocNodeRenderer implements NodeRenderer
                  It may contain files, that we need to lookup in meta's.
                  Or titles at the same level. Which should also be part of the TOC?
         */
-        foreach ($metaEntry->getTitles() as $title) {
+        foreach ($metaEntry->getChildren() as $title) {
             //Headings at the same level are inserted on $level.
             if ($title->getLevel() === $metaEntry->getTitle()->getLevel()) {
                 $tocItems[] = [

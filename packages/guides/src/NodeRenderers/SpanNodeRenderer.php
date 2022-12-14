@@ -224,6 +224,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             $url = $context->getLink($link);
 
             if ($url === '') {
+                //TODO: figure out how to refactor this, currently this seems to be some self document reference. But
+                // Those should not be handled by this class, it's part of te resolving and stuff to do local link resolving
+                // Other sections can be linked
+
                 $metaEntry = $context->getMetaEntry();
 
                 if ($metaEntry !== null && $metaEntry->hasTitle($link)) {

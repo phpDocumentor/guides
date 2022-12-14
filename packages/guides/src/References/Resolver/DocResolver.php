@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References\Resolver;
 
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
@@ -44,17 +44,17 @@ final class DocResolver implements Resolver
      * TODO refactor this... I see too many arguments, Why would you use the titles?
      */
     private function createResolvedReference(
-        string $file,
+        string        $file,
         RenderContext $environment,
-        Entry $entry,
-        array $attributes = [],
-        ?string $anchor = null
+        EntryLegacy   $entry,
+        array         $attributes = [],
+        ?string       $anchor = null
     ): ResolvedReference {
         return new ResolvedReference(
             $file,
             $entry->getTitle(),
             $environment->relativeDocUrl($file, $anchor),
-            $entry->getTitles(),
+            $entry->getChildren(),
             $attributes
         );
     }

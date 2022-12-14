@@ -4,7 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
+use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SectionNode;
+use phpDocumentor\Guides\Nodes\TocNode;
 
 final class MetasPass implements CompilerPass
 {
@@ -18,14 +26,9 @@ final class MetasPass implements CompilerPass
     public function run(array $documents): array
     {
         foreach ($documents as $document) {
-            $this->metas->set(
-                $document->getFilePath(),
-                $document->getTitle(),
-                $document->getTitles(),
-                $document->getTocs(),
-                0,
-                $document->getDependencies()
-            );
+            $entry = new DocumentEntry($document->getFilePath());
+            $this->traverse($document, $entry);
+            $this->metas->addDocument($entry);
         }
 
         return $documents;
@@ -34,5 +37,23 @@ final class MetasPass implements CompilerPass
     public function getPriority(): int
     {
         return 10000;
+    }
+
+    /** @param DocumentNode|SectionNode $node */
+    private function traverse(Node $node, Entry $currentSection): void
+    {
+        foreach ($node->getNodes() as $child) {
+            if ($child instanceof SectionNode) {
+                $entry = new SectionEntry($child->getTitle());
+                $currentSection->addChild($entry);
+                $this->traverse($child, $entry);
+            }
+
+            if ($child instanceof TocNode) {
+                foreach ($child->getFiles() as $file) {
+                    $currentSection->addChild(new DocumentReferenceEntry($file));
+                }
+            }
+        }
     }
 }

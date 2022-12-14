@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use function time;
 
 /**
- * @coversDefaultClass \phpDocumentor\Guides\Meta\Entry
+ * @coversDefaultClass \phpDocumentor\Guides\Meta\EntryLegacy
  * @covers ::<private>
  */
 final class EntryTest extends TestCase
@@ -30,7 +30,7 @@ final class EntryTest extends TestCase
      * @covers ::__construct
      * @covers ::getFile
      * @covers ::getTitle
-     * @covers ::getTitles
+     * @covers ::getChildren
      * @covers ::getTocs
      * @covers ::getDepends
      * @covers ::getMtime
@@ -50,11 +50,11 @@ final class EntryTest extends TestCase
         $depends = ['other-file.txt'];
         $links = ['another-file'];
 
-        $entry = new Entry($file, $title, $titles, $tocs, $depends, $mtime);
+        $entry = new EntryLegacy($file, $title, $titles, $tocs, $depends, $mtime);
 
         self::assertSame($file, $entry->getFile());
         self::assertSame($title, $entry->getTitle());
-        self::assertSame($titles, $entry->getTitles());
+        self::assertSame($titles, $entry->getChildren());
         self::assertSame($tocs, $entry->getTocs());
         self::assertSame($depends, $entry->getDepends());
         self::assertSame($mtime, $entry->getMtime());
@@ -66,7 +66,7 @@ final class EntryTest extends TestCase
      */
     public function testSettingAParentForAMetaEntry(): void
     {
-        $entry = new Entry(
+        $entry = new EntryLegacy(
             'example.txt',
             new TitleNode(new SpanNode('Example'), 1),
             [

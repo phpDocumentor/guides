@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
@@ -75,7 +75,7 @@ final class TocNodeTransformerTest extends TestCase
     {
         $metas = new Metas(
             [
-                'index' => new Entry(
+                'index' => new EntryLegacy(
                     'index',
                     new TitleNode(new SpanNode('Title 1', []), 1),
                     [
@@ -87,7 +87,7 @@ final class TocNodeTransformerTest extends TestCase
                     [],
                     0
                 ),
-                'page2' => new Entry(
+                'page2' => new EntryLegacy(
                     'page2',
                     new TitleNode(new SpanNode('Title 2', []), 1),
                     [],
@@ -95,7 +95,7 @@ final class TocNodeTransformerTest extends TestCase
                     [],
                     0
                 ),
-                'page3' => new Entry(
+                'page3' => new EntryLegacy(
                     'page3',
                     new TitleNode(new SpanNode('Title 3', []), 1),
                     [],

@@ -29,9 +29,9 @@ final class TocNodeTransformer implements NodeTransformer
 
         foreach ($node->getFiles() as $file) {
             $metaEntry = $this->metas->get(ltrim( $file, '/'));
-            if ($metaEntry instanceof \phpDocumentor\Guides\Meta\Entry) {
+            if ($metaEntry instanceof \phpDocumentor\Guides\Meta\EntryLegacy) {
                 $entries[] = $entry = new Entry($file, $metaEntry->getTitle());
-                $this->buildLevel(new \ArrayIterator($metaEntry->getTitles()), $entry, $node, 2);
+                $this->buildLevel(new \ArrayIterator($metaEntry->getChildren()), $entry, $node, 2);
             }
         }
 

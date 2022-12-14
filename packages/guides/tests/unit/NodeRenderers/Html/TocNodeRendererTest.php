@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use League\Flysystem\FilesystemInterface;
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -33,7 +33,7 @@ final class TocNodeRendererTest extends TestCase
 
         $metas = new Metas(
             [
-                'index' => new Entry(
+                'index' => new EntryLegacy(
                     '/index',
                     '/index',
                     new TitleNode(new SpanNode('Title 1'), 1),
