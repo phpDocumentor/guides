@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
-use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -21,12 +20,12 @@ final class MetasPassTest extends TestCase
     public function testDocumentTitlesAreCollectedAsTree(): void
     {
         $section = new SectionNode(new TitleNode(new SpanNode('index-title 1'), 1));
-        $section->addNode(new TocNode(['getting-started']));
+        $section->addChildNode(new TocNode(['getting-started']));
         $section11 = new SectionNode(new TitleNode(new SpanNode('index-title 1.1'), 2));
-        $section->addNode($section11);
+        $section->addChildNode($section11);
 
         $document = new DocumentNode('1', 'index');
-        $document->addNode($section);
+        $document->addChildNode($section);
 
         $metas = new Metas([]);
         $pass = new MetasPass($metas);

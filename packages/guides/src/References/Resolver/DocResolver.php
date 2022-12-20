@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References\Resolver;
 
+use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
@@ -24,7 +25,7 @@ final class DocResolver implements Resolver
             return null;
         }
 
-        $entry = $context->getMetas()->get($filePath);
+        $entry = $context->getMetas()->findDocument($filePath);
         if ($entry === null) {
             return null;
         }
@@ -46,7 +47,7 @@ final class DocResolver implements Resolver
     private function createResolvedReference(
         string        $file,
         RenderContext $environment,
-        EntryLegacy   $entry,
+        DocumentEntry $entry,
         array         $attributes = [],
         ?string       $anchor = null
     ): ResolvedReference {

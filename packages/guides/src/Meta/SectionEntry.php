@@ -11,11 +11,16 @@ class SectionEntry implements ChildEntry
     private TitleNode $title;
 
     /** @var ChildEntry[] */
-    private array $children;
+    private array $children = [];
 
     public function __construct(TitleNode $title)
     {
         $this->title = $title;
+    }
+
+    public function getTitle(): TitleNode
+    {
+        return $this->title;
     }
 
     public function addChild(ChildEntry $child): void

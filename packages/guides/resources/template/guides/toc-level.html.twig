@@ -1,7 +1,7 @@
 {% spaceless %}
     <ul class="phpdocumentor-list">
         {% for tocItem in node.entries %}
-            {% include "guides/toc-item.html.twig" %}
+            {{ renderNode(tocItem) }}
         {% endfor %}
     </ul>
 {% endspaceless %}

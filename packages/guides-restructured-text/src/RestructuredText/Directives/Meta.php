@@ -41,6 +41,6 @@ class Meta extends Directive
             return null;
         }
 
-        $document->addNode($node);
+        $document->addChildNode($node);
     }
 }

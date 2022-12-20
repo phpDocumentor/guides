@@ -29,7 +29,7 @@ use function count;
 use function is_array;
 use function ltrim;
 
-class TocNodeRenderer implements NodeRenderer
+final class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
     private UrlGeneratorInterface $urlGenerator;
@@ -53,82 +53,12 @@ class TocNodeRenderer implements NodeRenderer
             return '';
         }
 
-        $tocItems = [];
-
-        foreach ($node->getFiles() as $file) {
-            $metaEntry = $this->metas->get(ltrim($file, '/'));
-            if ($metaEntry instanceof EntryLegacy === false) {
-                continue;
-            }
-
-            $this->buildLevel($environment, $node, $metaEntry, 1, $tocItems);
-        }
-
         return $this->renderer->render(
             'toc.html.twig',
             [
                 'node' => $node,
             ]
         );
-    }
-
-    /**
-     * @param TitleNode[] $titles
-     * @param mixed[][] $tocItems
-     */
-    private function buildLevel(
-        RenderContext $environment,
-        TocNode       $node,
-        EntryLegacy   $metaEntry,
-        int           $level,
-        array         &$tocItems
-    ): void {
-        $url = $environment->relativeDocUrl($metaEntry->getFile());
-        $title = $metaEntry->getTitle();
-
-//        $tocItem = [
-//            'targetId' => $title->getId(),
-//            'targetUrl' => $url,
-//
-//            //TODO: titles can have alternative names,
-//            //       https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
-//            'title' => $title->getValueString(),
-//            'level' => $level,
-//            'children' => [],
-//        ];
-
-        //$tocItems[] = $tocItem;
-
-        /*
-         * We are constructing a tree here...
-         */
-
-        /* TODO: allow rendering of child titles, the entry has a title, which is a document.
-                 It may contain files, that we need to lookup in meta's.
-                 Or titles at the same level. Which should also be part of the TOC?
-        */
-        foreach ($metaEntry->getChildren() as $title) {
-            //Headings at the same level are inserted on $level.
-            if ($title->getLevel() === $metaEntry->getTitle()->getLevel()) {
-                $tocItems[] = [
-                    'targetId' => $title->getId(),
-                    'targetUrl' => $environment->relativeDocUrl($metaEntry->getFile(), $title->getId()),
-
-                    //TODO: titles can have alternative names,
-                    //    https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
-                    'title' => $title->getValueString(),
-                    'level' => $level,
-                    'children' => [],
-                ];
-                continue;
-            }
-
-
-
-            //$this->buildLevel($environment, $node,  $level + 1, $tocItem['children']);
-
-            //TODO: render children until we hit the configured maxdepth
-        }
     }
 
     public function supports(Node $node): bool

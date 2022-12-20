@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;
+use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
@@ -28,10 +30,9 @@ final class TocNodeTransformer implements NodeTransformer
         $entries = [];
 
         foreach ($node->getFiles() as $file) {
-            $metaEntry = $this->metas->get(ltrim( $file, '/'));
-            if ($metaEntry instanceof \phpDocumentor\Guides\Meta\EntryLegacy) {
-                $entries[] = $entry = new Entry($file, $metaEntry->getTitle());
-                $this->buildLevel(new \ArrayIterator($metaEntry->getChildren()), $entry, $node, 2);
+            $metaEntry = $this->metas->findDocument(ltrim($file, '/'));
+            if ($metaEntry instanceof DocumentEntry) {
+                $entries = array_merge($entries, $this->buildFromDocumentEntry($metaEntry, 1, $node));
             }
         }
 
@@ -51,30 +52,62 @@ final class TocNodeTransformer implements NodeTransformer
         return $node instanceof TocNode;
     }
 
-    /** @param \Iterator<TitleNode> */
-    private function buildLevel(\Iterator $titles, Entry $parent, TocNode $node, int $depth)
+    private function buildFromDocumentEntry(DocumentEntry $document, int $depth, TocNode $node): array
     {
         if ($depth > $node->getDepth()) {
-            return;
+            return [];
         }
+
+        $level = [];
 
         //TocTree's of children are added, unless :titlesonly: is defined. Than only page titles are added, no sections
         //Under the section where they are define.
         //If Toctree is defined at level 2, and max is 3, only titles of the documents are added to the toctree.
 
-        foreach ($titles as $title) {
-            if ($title->getLevel() > $depth) {
-                $childen = $parent->getEntries();
-                end($childen);
-
-                $this->buildLevel($titles, current($childen), $node, ++$depth);
-                continue;
+        foreach ($document->getChildren() as $child) {
+            if ($child instanceof SectionEntry) {
+                $level[] = new Entry(
+                    $document->getFile(),
+                    $child->getTitle(),
+                    $this->buildFromSection($document, $child, ++$depth, $node)
+                );
             }
 
-            $parent->addChild(new Entry(
-                'index',
-                $title
-            ));
+//            if ($title->getLevel() > $depth) {
+//                $childen = $parent->getEntries();
+//                end($childen);
+//
+//                $this->buildLevel($titles, current($childen), $node, ++$depth);
+//                continue;
+//            }
+
+//            $parent->addChild(new Entry(
+//                $entry->,
+//                $title
+//            ));
         }
+
+        return $level;
+    }
+
+    private function buildFromSection(DocumentEntry $document, SectionEntry $entry, int $depth, TocNode $node): array
+    {
+        if ($depth > $node->getDepth()) {
+            return [];
+        }
+
+        $level = [];
+
+        foreach ($entry->getChildren() as $child) {
+            if ($child instanceof SectionEntry) {
+                $level[] = new Entry(
+                    $document->getFile(),
+                    $child->getTitle(),
+                    $this->buildFromSection($document, $child, ++$depth, $node)
+                );
+            }
+        }
+
+        return $level;
     }
 }

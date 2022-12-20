@@ -37,7 +37,7 @@ final class SectionRule implements Rule
         $stack = new SplStack();
         $documentIterator = $documentParserContext->getDocumentIterator();
         $section = $this->createSection($documentParserContext);
-        $on->addNode($section);
+        $on->addChildNode($section);
 
         $stack->push($on);
         while ($documentIterator->valid()) {
@@ -46,13 +46,13 @@ final class SectionRule implements Rule
             if ($documentIterator->getNextLine()) {
                 $new = $this->createSection($documentParserContext);
                 if ($new->getTitle()->getLevel() === $section->getTitle()->getLevel()) {
-                    $stack->top()->addNode($new);
+                    $stack->top()->addChildNode($new);
                     $section = $new;
                     continue;
                 }
 
                 if ($new->getTitle()->getLevel() > $section->getTitle()->getLevel()) {
-                    $section->addNode($new);
+                    $section->addChildNode($new);
                     $stack->push($section);
                     $section = $new;
                     continue;
@@ -64,7 +64,7 @@ final class SectionRule implements Rule
                     }
 
                     $stack->pop();
-                    $stack->top()->addNode($new);
+                    $stack->top()->addChildNode($new);
                     $section = $new;
                 }
             }
@@ -91,7 +91,7 @@ final class SectionRule implements Rule
 
                 $newNode = $production->apply($documentParserContext, $on);
                 if ($newNode !== null) {
-                    $on->addNode($newNode);
+                    $on->addChildNode($newNode);
                 }
 
                 break;

@@ -129,7 +129,7 @@ final class DocumentNode extends Node
     private function getRecursiveTocs(Node $parent): array
     {
         $tocs = [];
-        foreach ($parent->getNodes() as $node) {
+        foreach ($parent->getChildren() as $node) {
             if ($node instanceof TocNode) {
                 $tocs[] = $node;
             }
@@ -162,7 +162,7 @@ final class DocumentNode extends Node
     /**
      * @param string|Node $node
      */
-    public function addNode($node): void
+    public function addChildNode($node): void
     {
         if (is_string($node)) {
             $node = new RawNode($node);

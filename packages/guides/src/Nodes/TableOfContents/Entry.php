@@ -4,47 +4,27 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\TableOfContents;
 
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-final class Entry
+final class Entry extends Node
 {
     /** @var string */
     private $url;
 
-    private TitleNode $title;
-
-    /** @var string|null */
-    private $parent;
-
     /** @var Entry[] */
     private $children;
 
-    public function __construct(string $url, TitleNode $title, ?string $parent = null)
+    public function __construct(string $url, TitleNode $title, array $children = [])
     {
         $this->url = $url;
-        $this->title = $title;
-        $this->parent = $parent;
-        $this->children = [];
+        parent::__construct($title);
+        $this->children = $children;
     }
 
     public function getUrl(): string
     {
         return $this->url;
-    }
-
-    public function getTitle(): TitleNode
-    {
-        return $this->title;
-    }
-
-    public function getParent(): ?string
-    {
-        return $this->parent;
-    }
-
-    public function addChild(Entry $child): void
-    {
-        $this->children[] = $child;
     }
 
     /** @return Entry[] */

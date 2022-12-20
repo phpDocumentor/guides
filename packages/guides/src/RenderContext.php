@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
+use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
@@ -121,7 +122,7 @@ class RenderContext
 
         $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->getDestinationPath(), $this->getDirName()), '/');
 
-        if ($this->metas->get($filename) !== null) {
+        if ($this->metas->findDocument($filename) !== null) {
             return $this->getDestinationPath() . '/' . $this->createFileUrl($filename, $anchor);
         }
 
@@ -163,9 +164,9 @@ class RenderContext
         return $this->metas;
     }
 
-    public function getMetaEntry(): ?EntryLegacy
+    public function getMetaEntry(): ?DocumentEntry
     {
-        return $this->metas->get($this->currentFileName);
+        return $this->metas->findDocument($this->currentFileName);
     }
 
     public function getSourcePath(): string

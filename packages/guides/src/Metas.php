@@ -15,57 +15,42 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\EntryLegacy;
-use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\Nodes\TocNode;
 
 final class Metas
 {
-    /** @var EntryLegacy[] */
+    /** @var DocumentEntry[] */
     private array $entries;
 
-    /** @var string[] */
-    private array $parents = [];
-
     /**
-     * @param EntryLegacy[] $entries
+     * @param DocumentEntry[] $entries
      */
     public function __construct(array $entries = [])
     {
         $this->entries = $entries;
     }
 
-    public function addDocument(DocumentEntry $documentEntry)
+    public function addDocument(DocumentEntry $documentEntry): void
     {
         $this->entries[$documentEntry->getFile()] = $documentEntry;
     }
 
     /**
-     * @return EntryLegacy[]
+     * @return DocumentEntry[]
      */
     public function getAll(): array
     {
         return $this->entries;
     }
 
-    public function get(string $url): ?EntryLegacy
-    {
-        if (isset($this->entries[$url])) {
-            return $this->entries[$url];
-        }
-
-        return null;
-    }
-
     /**
-     * @param EntryLegacy[] $metaEntries
+     * @param DocumentEntry[] $metaEntries
      */
     public function setMetaEntries(array $metaEntries): void
     {
         $this->entries = $metaEntries;
     }
 
-    public function findDocument(string $filePath)
+    public function findDocument(string $filePath): ?DocumentEntry
     {
         return $this->entries[$filePath] ?? null;
     }

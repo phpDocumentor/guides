@@ -14,6 +14,11 @@ class DocumentEntry implements Entry
         $this->file = $file;
     }
 
+    public function getTitle()
+    {
+        return $this->entries[0]->getTitle();
+    }
+
     public function addChild(ChildEntry $entry): void
     {
         $this->entries[] = $entry;

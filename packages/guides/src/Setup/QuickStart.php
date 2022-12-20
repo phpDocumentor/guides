@@ -20,6 +20,7 @@ use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TocNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
@@ -90,6 +91,7 @@ final class QuickStart
         $nodeRenderers[] = new SidebarNodeRenderer($renderer);
         $nodeRenderers[] = new TopicNodeRenderer($renderer);
         $nodeRenderers[] = new TocNodeRenderer($renderer, new UrlGenerator(), $metas);
+        $nodeRenderers[] = new TocEntryRenderer($renderer, new UrlGenerator());
 
         $config = new Configuration();
         foreach ($config->htmlNodeTemplates() as $node => $template) {

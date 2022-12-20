@@ -17,8 +17,8 @@ final class DocumentNodeTraverserTest extends TestCase
     public function testRemoveNodeFromDocument(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
-        $document->addNode(new TocNode(['/readme.rst']));
-        $document->addNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
+        $document->addChildNode(new TocNode(['/readme.rst']));
+        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
 
         $traverser = new DocumentNodeTraverser([new class implements NodeTransformer {
             public function enterNode(Node $node): Node
@@ -48,8 +48,8 @@ final class DocumentNodeTraverserTest extends TestCase
     public function testReplaceNode(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
-        $document->addNode(new TocNode(['/readme.rst']));
-        $document->addNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
+        $document->addChildNode(new TocNode(['/readme.rst']));
+        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
 
         $replacement = new TocNode(['/readme.rst']);
 

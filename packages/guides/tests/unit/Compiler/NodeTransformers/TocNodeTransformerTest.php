@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Meta\EntryLegacy;
+use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
@@ -48,16 +49,17 @@ final class TocNodeTransformerTest extends TestCase
         $entry = new TocEntry(
             'index',
             new TitleNode(new SpanNode('Title 1', []), 1),
+            [
+                new TocEntry(
+                    'index',
+                    new TitleNode(new SpanNode('Title 1.1', []), 2)
+                ),
+                new TocEntry(
+                    'index',
+                    new TitleNode(new SpanNode('Title 1.2', []), 2),
+                )
+            ]
         );
-        $entry->addChild(new TocEntry(
-            'index',
-            new TitleNode(new SpanNode('Title 1.1', []), 2)
-        ));
-
-        $entry->addChild(new TocEntry(
-            'index',
-            new TitleNode(new SpanNode('Title 1.2', []), 2),
-        ));
 
         self::assertEquals(
             [
@@ -73,38 +75,25 @@ final class TocNodeTransformerTest extends TestCase
 
     private function givenMetas(): Metas
     {
-        $metas = new Metas(
+        $indexDoc = new DocumentEntry('index');
+        $section = new SectionEntry(new TitleNode(new SpanNode('Title 1', []), 1));
+        $subSection = new SectionEntry(new TitleNode(new SpanNode('Title 1.1', []), 2));
+        $section->addChild($subSection);
+        $section->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 1.2', []), 2)));
+        $indexDoc->addChild($section);
+
+        $page2 = new DocumentEntry('page2');
+        $page2->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 2', []), 1)));
+
+        $page3 = new DocumentEntry('page3');
+        $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1)));
+
+        return new Metas(
             [
-                'index' => new EntryLegacy(
-                    'index',
-                    new TitleNode(new SpanNode('Title 1', []), 1),
-                    [
-                        new TitleNode(new SpanNode('Title 1.1', []), 2),
-                        new TitleNode(new SpanNode('Title 1.1.1', []), 3),
-                        new TitleNode(new SpanNode('Title 1.2', []), 2),
-                    ],
-                    [],
-                    [],
-                    0
-                ),
-                'page2' => new EntryLegacy(
-                    'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1),
-                    [],
-                    [],
-                    [],
-                    0
-                ),
-                'page3' => new EntryLegacy(
-                    'page3',
-                    new TitleNode(new SpanNode('Title 3', []), 1),
-                    [],
-                    [],
-                    [],
-                    0
-                )
+                'index' => $indexDoc,
+                'page2' => $page2,
+                'page3' => $page3,
             ]
         );
-        return $metas;
     }
 }

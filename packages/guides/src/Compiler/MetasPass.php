@@ -42,7 +42,7 @@ final class MetasPass implements CompilerPass
     /** @param DocumentNode|SectionNode $node */
     private function traverse(Node $node, Entry $currentSection): void
     {
-        foreach ($node->getNodes() as $child) {
+        foreach ($node->getChildren() as $child) {
             if ($child instanceof SectionNode) {
                 $entry = new SectionEntry($child->getTitle());
                 $currentSection->addChild($entry);
@@ -50,6 +50,8 @@ final class MetasPass implements CompilerPass
             }
 
             if ($child instanceof TocNode) {
+                //Using a DocumentReferenceMakes some sense here, however we are losing information of the TocNode,
+                //So maybe we should directly inject the TOC as meta entry?
                 foreach ($child->getFiles() as $file) {
                     $currentSection->addChild(new DocumentReferenceEntry($file));
                 }
