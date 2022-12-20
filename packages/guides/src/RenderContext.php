@@ -17,7 +17,6 @@ use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
 use function dirname;

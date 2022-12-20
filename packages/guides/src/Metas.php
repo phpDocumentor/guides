@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\Meta\EntryLegacy;
 
 final class Metas
 {

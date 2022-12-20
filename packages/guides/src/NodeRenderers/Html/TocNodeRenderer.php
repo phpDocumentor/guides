@@ -13,36 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
-use phpDocumentor\Guides\Meta\EntryLegacy;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\UrlGeneratorInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Webmozart\Assert\Assert;
-
-use function count;
-use function is_array;
-use function ltrim;
 
 final class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
-    private UrlGeneratorInterface $urlGenerator;
-    private Metas $metas;
 
-    public function __construct(
-        Renderer $renderer,
-        UrlGeneratorInterface $urlGenerator,
-        Metas $metas
-    ) {
+    public function __construct(Renderer $renderer) {
         $this->renderer = $renderer;
-        $this->urlGenerator = $urlGenerator;
-        $this->metas = $metas;
     }
 
     public function render(Node $node, RenderContext $environment): string
