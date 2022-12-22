@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
@@ -73,18 +74,12 @@ final class TocNodeTransformer implements NodeTransformer
                 );
             }
 
-//            if ($title->getLevel() > $depth) {
-//                $childen = $parent->getEntries();
-//                end($childen);
-//
-//                $this->buildLevel($titles, current($childen), $node, ++$depth);
-//                continue;
-//            }
-
-//            $parent->addChild(new Entry(
-//                $entry->,
-//                $title
-//            ));
+            if ($child instanceof DocumentReferenceEntry) {
+                $subDocument = $this->metas->findDocument($child->getFile());
+                if ($subDocument instanceof DocumentEntry) {
+                    $level[] = $this->buildFromDocumentEntry($subDocument, ++$depth, $node);
+                }
+            }
         }
 
         return $level;
@@ -105,6 +100,13 @@ final class TocNodeTransformer implements NodeTransformer
                     $child->getTitle(),
                     $this->buildFromSection($document, $child, ++$depth, $node)
                 );
+            }
+
+            if ($child instanceof DocumentReferenceEntry) {
+                $subDocument = $this->metas->findDocument($child->getFile());
+                if ($subDocument instanceof DocumentEntry) {
+                    $level[] = $this->buildFromDocumentEntry($subDocument, ++$depth, $node);
+                }
             }
         }
 
