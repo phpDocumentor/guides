@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -73,6 +74,41 @@ final class TocNodeTransformerTest extends TestCase
         );
     }
 
+    public function testTocWithDocumentReferences(): void
+    {
+        $metas = $this->givenMetas();
+        $node = (new TocNode(['page3']))->withOptions(['maxdepth' => 3]);
+        $transformer = new TocNodeTransformer($metas);
+
+        $transformedNode = $transformer->enterNode($node);
+
+        $entry = new TocEntry(
+            'index',
+            new TitleNode(new SpanNode('Title 1', []), 1),
+            [
+                new TocEntry(
+                    'index',
+                    new TitleNode(new SpanNode('Title 1.1', []), 2)
+                ),
+                new TocEntry(
+                    'index',
+                    new TitleNode(new SpanNode('Title 1.2', []), 2),
+                )
+            ]
+        );
+
+        self::assertEquals(
+            [
+                new TocEntry(
+                    'page3',
+                    new TitleNode(new SpanNode('Title 3', []), 1),
+                ),
+                $entry
+            ],
+            $transformedNode->getEntries()
+        );
+    }
+
     private function givenMetas(): Metas
     {
         $indexDoc = new DocumentEntry('index');
@@ -87,6 +123,7 @@ final class TocNodeTransformerTest extends TestCase
 
         $page3 = new DocumentEntry('page3');
         $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1)));
+        $page3->addChild(new DocumentReferenceEntry('index'));
 
         return new Metas(
             [

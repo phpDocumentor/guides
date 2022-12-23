@@ -26,7 +26,8 @@ final class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
 
-    public function __construct(Renderer $renderer) {
+    public function __construct(Renderer $renderer)
+    {
         $this->renderer = $renderer;
     }
 
