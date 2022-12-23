@@ -13,15 +13,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 use Webmozart\Assert\Assert;
 
+/** @implements NodeRenderer<TocNode> */
 final class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

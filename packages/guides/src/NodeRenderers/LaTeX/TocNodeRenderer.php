@@ -23,6 +23,7 @@ use phpDocumentor\Guides\UrlGenerator;
 
 use function ltrim;
 
+/** @implements  NodeRenderer<TocNode> */
 class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

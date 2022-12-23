@@ -23,7 +23,7 @@ class TocNode extends Node
     private const DEFAULT_DEPTH = 2;
 
     /** @var string[] */
-    protected $files;
+    private array $files;
 
     /** @var Entry[] */
     private array $entries = [];
@@ -59,6 +59,7 @@ class TocNode extends Node
         return self::DEFAULT_DEPTH;
     }
 
+    /** @param Entry[] $entries */
     public function withEntries(array $entries): self
     {
         $that = clone $this;

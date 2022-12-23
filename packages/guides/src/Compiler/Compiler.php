@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 class Compiler
 {
+    /** @var \SplPriorityQueue<int, CompilerPass> */
     private \SplPriorityQueue $passes;
 
     /** @param CompilerPass[] $passes */
@@ -19,7 +20,10 @@ class Compiler
         }
     }
 
-    /** @return DocumentNode[] */
+    /**
+     * @param DocumentNode[] $documents
+     * @return DocumentNode[]
+     */
     public function run(array $documents): array
     {
         foreach ($this->passes as $pass) {

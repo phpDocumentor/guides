@@ -6,17 +6,16 @@ namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Nodes\Node;
 
+/** @template T of Node */
 interface NodeTransformer
 {
     /**
-     * @template T of Node
      * @param T $node
      * @return T
      */
     public function enterNode(Node $node): Node;
 
     /**
-     * @template T of Node
      * @param T $node
      * @return T|null
      */

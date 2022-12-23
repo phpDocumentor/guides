@@ -9,11 +9,11 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
-    /** @var iterable<NodeTransformer> */
-    private $transformers;
+    /** @var iterable<NodeTransformer<Node>> */
+    private iterable $transformers;
 
     /**
-     * @param iterable<NodeTransformer> $transformers
+     * @param iterable<NodeTransformer<Node>> $transformers
      */
     public function __construct(iterable $transformers)
     {

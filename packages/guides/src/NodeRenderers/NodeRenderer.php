@@ -16,9 +16,11 @@ namespace phpDocumentor\Guides\NodeRenderers;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 
+/** @template T of Node */
 interface NodeRenderer
 {
     public function supports(Node $node): bool;
 
+    /** @param T $node */
     public function render(Node $node, RenderContext $environment): string;
 }

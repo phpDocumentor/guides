@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 
+/** @implements NodeRenderer<Entry> */
 final class TocEntryRenderer implements NodeRenderer
 {
     private Renderer $renderer;
-    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(
-        Renderer $renderer,
-        UrlGeneratorInterface $urlGenerator
-    ) {
+    public function __construct(Renderer $renderer)
+    {
         $this->renderer = $renderer;
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function supports(Node $node): bool

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
+use phpDocumentor\Guides\Nodes\TitleNode;
+
 class DocumentEntry implements Entry
 {
     private string $file;
+
+    /** @var ChildEntry[] */
     private array $entries = [];
 
     public function __construct(string $file)
@@ -14,9 +18,9 @@ class DocumentEntry implements Entry
         $this->file = $file;
     }
 
-    public function getTitle()
+    public function getTitle(): TitleNode
     {
-        return $this->entries[0]->getTitle();
+        return isset($this->entries[0]) ? $this->entries[0]->getTitle() : TitleNode::emptyNode();
     }
 
     public function addChild(ChildEntry $entry): void
@@ -24,6 +28,7 @@ class DocumentEntry implements Entry
         $this->entries[] = $entry;
     }
 
+    /** @return ChildEntry[] */
     public function getChildren(): array
     {
         return $this->entries;

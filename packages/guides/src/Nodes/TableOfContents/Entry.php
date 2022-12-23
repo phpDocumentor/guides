@@ -15,6 +15,7 @@ final class Entry extends Node
     /** @var Entry[] */
     private $children;
 
+    /** @param Entry[] $children */
     public function __construct(string $url, TitleNode $title, array $children = [])
     {
         $this->url = $url;

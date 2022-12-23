@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use ArrayIterator;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Meta\ChildEntry;
+use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
@@ -13,7 +14,9 @@ use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use phpDocumentor\Guides\Nodes\TocNode;
+use Traversable;
 
+/** @implements NodeTransformer<TocNode> */
 final class TocNodeTransformer implements NodeTransformer
 {
     private Metas $metas;
@@ -23,9 +26,6 @@ final class TocNodeTransformer implements NodeTransformer
         $this->metas = $metas;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function enterNode(Node $node): Node
     {
         $entries = [];
@@ -52,10 +52,11 @@ final class TocNodeTransformer implements NodeTransformer
         return $node instanceof TocNode;
     }
 
+    /** @return iterable<Entry> */
     private function buildFromDocumentEntry(DocumentEntry $document, int $depth, TocNode $node): iterable
     {
         if ($depth > $node->getDepth()) {
-            return [];
+            return new ArrayIterator([]);
         }
 
         //TocTree's of children are added, unless :titlesonly: is defined. Then only page titles are added, no sections
@@ -67,10 +68,11 @@ final class TocNodeTransformer implements NodeTransformer
         }
     }
 
-    private function buildFromSection(DocumentEntry $document, SectionEntry $entry, int $depth, TocNode $node): iterable
+    /** @return Traversable<Entry> */
+    private function buildFromSection(DocumentEntry $document, SectionEntry $entry, int $depth, TocNode $node): Traversable
     {
         if ($depth > $node->getDepth()) {
-            return [];
+            return new ArrayIterator([]);
         }
 
         foreach ($entry->getChildren() as $child) {
@@ -78,7 +80,8 @@ final class TocNodeTransformer implements NodeTransformer
         }
     }
 
-    private function buildLevel(ChildEntry $child, DocumentEntry $document, $depth, TocNode $node): iterable
+    /** @return Traversable<Entry> */
+    private function buildLevel(MetaEntry $child, DocumentEntry $document, int $depth, TocNode $node): Traversable
     {
         if ($child instanceof SectionEntry) {
             yield new Entry(

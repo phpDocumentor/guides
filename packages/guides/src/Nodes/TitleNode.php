@@ -36,6 +36,11 @@ class TitleNode extends Node
         $this->id = (new AsciiSlugger())->slug($value->getValueString())->lower()->toString();
     }
 
+    public static function emptyNode(): self
+    {
+        return new TitleNode(new SpanNode('<Unknown>'), 0);
+    }
+
     public function getLevel(): int
     {
         return $this->level;
