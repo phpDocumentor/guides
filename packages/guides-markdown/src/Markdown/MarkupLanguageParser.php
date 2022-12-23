@@ -87,7 +87,7 @@ final class MarkupLanguageParser implements ParserInterface
                     continue;
                 }
 
-                $document->addNode($parser->parse($this, $walker));
+                $document->addChildNode($parser->parse($this, $walker));
             }
 
             // ignore all Entering events; these are only used to switch to another context and context switching
@@ -110,37 +110,37 @@ final class MarkupLanguageParser implements ParserInterface
                     new SpanNode($content->getLiteral(), []),
                     $node->getLevel()
                 );
-                $document->addNode($title);
+                $document->addChildNode($title);
                 continue;
             }
 
             if ($node instanceof Text) {
                 $spanNode = new SpanNode($node->getLiteral(), []);
-                $document->addNode($spanNode);
+                $document->addChildNode($spanNode);
                 continue;
             }
 
             if ($node instanceof Code) {
                 $spanNode = new CodeNode([$node->getLiteral()]);
-                $document->addNode($spanNode);
+                $document->addChildNode($spanNode);
                 continue;
             }
 
             if ($node instanceof Link) {
                 $spanNode = new AnchorNode($node->getUrl());
-                $document->addNode($spanNode);
+                $document->addChildNode($spanNode);
                 continue;
             }
 
             if ($node instanceof FencedCode) {
                 $spanNode = new CodeNode([$node->getLiteral()]);
-                $document->addNode($spanNode);
+                $document->addChildNode($spanNode);
                 continue;
             }
 
             if ($node instanceof HtmlBlock) {
                 $spanNode = new RawNode($node->getLiteral());
-                $document->addNode($spanNode);
+                $document->addChildNode($spanNode);
                 continue;
             }
 

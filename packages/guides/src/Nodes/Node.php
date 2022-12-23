@@ -123,6 +123,23 @@ abstract class Node
         return isset($this->options[$name]);
     }
 
+    public function getChildren(): array
+    {
+        if ($this->value instanceof Node && !$this->value instanceof SpanNode) {
+            return [$this->value];
+        }
+
+        return [];
+    }
+
+    public function replaceNode(int $key, Node $node): self
+    {
+        $result = clone $this;
+        $result->value = $node;
+
+        return $result;
+    }
+
     /**
      * @param string[] $lines
      */

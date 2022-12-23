@@ -5,7 +5,7 @@
     <file>packages</file>
     <file>packages</file>
 
-    <exclude-pattern>packages/*/examples/*\.php</exclude-pattern>
+    <exclude-pattern>packages/*/examples/*</exclude-pattern>
 
     <arg value="p"/>
     <rule ref="PSR2">

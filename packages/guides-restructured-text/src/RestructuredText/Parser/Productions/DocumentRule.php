@@ -80,7 +80,7 @@ final class DocumentRule implements Rule
 
                 $newNode = $production->apply($documentParserContext, $on);
                 if ($newNode !== null) {
-                    $on->addNode($newNode);
+                    $on->addChildNode($newNode);
                 }
 
                 break;

@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
-use phpDocumentor\Guides\Meta\Entry;
+use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
 use function dirname;
@@ -25,7 +25,7 @@ use function trim;
 
 class RenderContext
 {
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     private string $currentFileName = '';
 
@@ -47,7 +47,7 @@ class RenderContext
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         Metas $metas,
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         string $outputFormat
     ) {
         $this->currentFileName = $currentFileName;
@@ -65,7 +65,7 @@ class RenderContext
         FilesystemInterface $destination,
         string $destinationPath,
         Metas $metas,
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         string $ouputFormat
     ): self {
         $self = new self(
@@ -121,7 +121,7 @@ class RenderContext
 
         $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->getDestinationPath(), $this->getDirName()), '/');
 
-        if ($this->metas->get($filename) !== null) {
+        if ($this->metas->findDocument($filename) !== null) {
             return $this->getDestinationPath() . '/' . $this->createFileUrl($filename, $anchor);
         }
 
@@ -163,9 +163,9 @@ class RenderContext
         return $this->metas;
     }
 
-    public function getMetaEntry(): ?Entry
+    public function getMetaEntry(): ?DocumentEntry
     {
-        return $this->metas->get($this->currentFileName);
+        return $this->metas->findDocument($this->currentFileName);
     }
 
     public function getSourcePath(): string

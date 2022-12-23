@@ -35,14 +35,22 @@ final class SectionNode extends Node
         return $titles;
     }
 
-    public function addNode(Node $node): void
+    public function addChildNode(Node $node): void
     {
         $this->nodes[] = $node;
     }
 
     /** @return Node[] */
-    public function getNodes(): array
+    public function getChildren(): array
     {
         return $this->nodes;
+    }
+
+    public function replaceNode(int $key, Node $node): Node
+    {
+        $result = clone $this;
+        $result->nodes[$key] = $node;
+
+        return $result;
     }
 }

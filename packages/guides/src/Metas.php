@@ -13,28 +13,28 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\Meta\Entry;
-use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Meta\DocumentEntry;
 
 final class Metas
 {
-    /** @var Entry[] */
+    /** @var DocumentEntry[] */
     private array $entries;
 
-    /** @var string[] */
-    private array $parents = [];
-
     /**
-     * @param Entry[] $entries
+     * @param DocumentEntry[] $entries
      */
     public function __construct(array $entries = [])
     {
         $this->entries = $entries;
     }
 
+    public function addDocument(DocumentEntry $documentEntry): void
+    {
+        $this->entries[$documentEntry->getFile()] = $documentEntry;
+    }
+
     /**
-     * @return Entry[]
+     * @return DocumentEntry[]
      */
     public function getAll(): array
     {
@@ -42,62 +42,15 @@ final class Metas
     }
 
     /**
-     * @param TitleNode[] $titles
-     * @param mixed[][] $tocs
-     * @param string[] $depends
-     */
-    public function set(
-        string $file,
-        string $url,
-        ?TitleNode $title,
-        array $titles,
-        array $tocs,
-        int $mtime,
-        array $depends
-    ): void {
-        foreach ($tocs as $toc) {
-            foreach ($toc as $child) {
-                $this->parents[$child] = $file;
-
-                if (!isset($this->entries[$child])) {
-                    continue;
-                }
-
-                $this->entries[$child]->setParent($file);
-            }
-        }
-
-        $this->entries[$file] = new Entry(
-            $file,
-            $url,
-            $title ?? new TitleNode(new SpanNode('<unknown>'), 0),
-            $titles,
-            $tocs,
-            $depends,
-            $mtime
-        );
-
-        if (!isset($this->parents[$file])) {
-            return;
-        }
-
-        $this->entries[$file]->setParent($this->parents[$file]);
-    }
-
-    public function get(string $url): ?Entry
-    {
-        if (isset($this->entries[$url])) {
-            return $this->entries[$url];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Entry[] $metaEntries
+     * @param DocumentEntry[] $metaEntries
      */
     public function setMetaEntries(array $metaEntries): void
     {
         $this->entries = $metaEntries;
+    }
+
+    public function findDocument(string $filePath): ?DocumentEntry
+    {
+        return $this->entries[$filePath] ?? null;
     }
 }

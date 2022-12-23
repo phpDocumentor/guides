@@ -32,7 +32,7 @@ class Title extends Directive
     ): ?Node {
         $document = $parser->getDocument();
         $document->addHeaderNode(new DocumentTitleNode($data));
-        $document->addNode($node);
+        $document->addChildNode($node);
 
         return null;
     }

@@ -85,6 +85,27 @@ final class DocumentNode extends Node
         return array_filter($this->nodes, static fn($node): bool => $node instanceof $nodeType);
     }
 
+    public function getChildren(): array
+    {
+        return $this->nodes;
+    }
+
+    public function removeNode(int $key): self
+    {
+        $result = clone $this;
+        unset($result->nodes[$key]);
+
+        return $result;
+    }
+
+    public function replaceNode(int $key, Node $node): self
+    {
+        $result = clone $this;
+        $result->nodes[$key] = $node;
+
+        return $result;
+    }
+
     public function getTitle(): ?TitleNode
     {
         foreach ($this->nodes as $node) {
@@ -108,7 +129,7 @@ final class DocumentNode extends Node
     private function getRecursiveTocs(Node $parent): array
     {
         $tocs = [];
-        foreach ($parent->getNodes() as $node) {
+        foreach ($parent->getChildren() as $node) {
             if ($node instanceof TocNode) {
                 $tocs[] = $node;
             }
@@ -141,7 +162,7 @@ final class DocumentNode extends Node
     /**
      * @param string|Node $node
      */
-    public function addNode($node): void
+    public function addChildNode($node): void
     {
         if (is_string($node)) {
             $node = new RawNode($node);

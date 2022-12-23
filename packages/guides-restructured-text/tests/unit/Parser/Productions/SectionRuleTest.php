@@ -73,7 +73,7 @@ RST;
         $result = $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
-        $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
+        $section->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
 
         self::assertEquals(
             [$section],
@@ -109,8 +109,8 @@ RST;
         $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
-        $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
-        $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.2'), 2)));
+        $section->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
+        $section->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.2'), 2)));
 
         self::assertEquals(
             [$section],
@@ -159,9 +159,9 @@ RST;
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
         $subSection = new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2));
-        $section->addNode($subSection);
-        $subSection->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1.1'), 3)));
-        $section->addNode(new SectionNode(new TitleNode(new SpanNode('Title 1.2'), 2)));
+        $section->addChildNode($subSection);
+        $subSection->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1.1'), 3)));
+        $section->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.2'), 2)));
         $section2 = new SectionNode(new TitleNode(new SpanNode('Title 2'), 1));
         $section3 = new SectionNode(new TitleNode(new SpanNode('Title 3'), 1));
 

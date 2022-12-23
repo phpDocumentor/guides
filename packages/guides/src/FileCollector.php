@@ -80,7 +80,7 @@ class FileCollector
         $file = $this->fileInfos[$filename];
 
         $documentFilename = $this->getFilenameFromFile($file);
-        $entry = $this->metas->get($documentFilename);
+        $entry = $this->metas->findDocument($documentFilename);
 
         if ($this->hasFileBeenUpdated($filename)) {
             // File is new or changed and thus need to be parsed
@@ -133,7 +133,7 @@ class FileCollector
         $documentFilename = $this->getFilenameFromFile($file);
 
         /** @var array<string>|null $entry */
-        $entry = $this->metas->get($documentFilename);
+        $entry = $this->metas->findDocument($documentFilename);
 
         // File is new or changed
         return $entry === null || $entry['timestamp'] < $file['timestamp'];

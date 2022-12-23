@@ -13,8 +13,8 @@ final class DocumentNodeTest extends TestCase
         $expected = new TitleNode(new SpanNode('Test'), 1);
 
         $document = new DocumentNode('test', 'file');
-        $document->addNode(new SectionNode($expected));
-        $document->addNode(new SectionNode(new TitleNode(new SpanNode('Test 2'), 1)));
+        $document->addChildNode(new SectionNode($expected));
+        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Test 2'), 1)));
 
         self::assertSame($expected, $document->getTitle());
     }
@@ -27,9 +27,9 @@ final class DocumentNodeTest extends TestCase
 
         $document = new DocumentNode('test', 'file');
         $section = new SectionNode($title1);
-        $section->addNode(new SectionNode($subTitle));
-        $document->addNode($section);
-        $document->addNode(new SectionNode($title2));
+        $section->addChildNode(new SectionNode($subTitle));
+        $document->addChildNode($section);
+        $document->addChildNode(new SectionNode($title2));
 
         self::assertSame(
             [
@@ -49,14 +49,14 @@ final class DocumentNodeTest extends TestCase
 
         $document = new DocumentNode('test', 'file');
         $section = new SectionNode(new TitleNode(new SpanNode('Title'), 1));
-        $section->addNode($toc1);
+        $section->addChildNode($toc1);
         $subSection = new SectionNode(new TitleNode(new SpanNode('Title'), 2));
-        $subSection->addNode($subToc);
-        $section->addNode($subSection);
-        $document->addNode($section);
+        $subSection->addChildNode($subToc);
+        $section->addChildNode($subSection);
+        $document->addChildNode($section);
         $section2 = new SectionNode(new TitleNode(new SpanNode('Title'), 1));
-        $section2->addNode($toc2);
-        $document->addNode($section2);
+        $section2->addChildNode($toc2);
+        $document->addChildNode($section2);
 
         self::assertSame(
             [

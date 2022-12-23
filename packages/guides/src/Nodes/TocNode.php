@@ -13,12 +13,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
+
+/**
+ * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+ */
 class TocNode extends Node
 {
     private const DEFAULT_DEPTH = 2;
 
     /** @var string[] */
-    protected $files;
+    private array $files;
+
+    /** @var Entry[] */
+    private array $entries = [];
 
     /**
      * @param string[] $files
@@ -49,5 +57,20 @@ class TocNode extends Node
         }
 
         return self::DEFAULT_DEPTH;
+    }
+
+    /** @param Entry[] $entries */
+    public function withEntries(array $entries): self
+    {
+        $that = clone $this;
+        $that->entries = $entries;
+
+        return $that;
+    }
+
+    /** @return Entry[] */
+    public function getEntries(): array
+    {
+        return $this->entries;
     }
 }

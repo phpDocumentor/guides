@@ -23,15 +23,14 @@ use phpDocumentor\Guides\UrlGenerator;
 
 use function ltrim;
 
+/** @implements  NodeRenderer<TocNode> */
 class TocNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
-    private UrlGenerator $urlGenerator;
 
-    public function __construct(Renderer $renderer, UrlGenerator $urlGenerator)
+    public function __construct(Renderer $renderer)
     {
         $this->renderer = $renderer;
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function render(Node $node, RenderContext $environment): string
@@ -40,22 +39,10 @@ class TocNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Invalid node presented');
         }
 
-        $tocItems = [];
-
-        foreach ($node->getFiles() as $file) {
-            $metaEntry = $environment->getMetas()->get(ltrim($file, '/'));
-            if ($metaEntry === null) {
-                continue;
-            }
-
-            $tocItems[] = ['url' => $this->urlGenerator->relativeUrl($metaEntry->getUrl())];
-        }
-
         return $this->renderer->render(
             'toc.tex.twig',
             [
                 'tocNode' => $node,
-                'tocItems' => $tocItems,
             ]
         );
     }
