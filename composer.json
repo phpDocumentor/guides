@@ -34,7 +34,7 @@
         "league/tactician": "^1.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
-        "symfony/translation-contracts": "^2.1",
+        "symfony/translation-contracts": "^2.5",
         "league/uri": "^6.5",
         "league/uri-interfaces": "^2.3",
         "psr/log": "^1.1",
