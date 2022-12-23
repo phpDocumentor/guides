@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 
+/** @implements NodeRenderer<DocumentNode> */
 class DocumentNodeRenderer implements NodeRenderer
 {
     private NodeRendererFactory $nodeRendererFactory;

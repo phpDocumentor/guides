@@ -24,6 +24,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use Webmozart\Assert\Assert;
 
+/** @implements NodeRenderer<DocumentNode> */
 class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, NodeRendererFactoryAware
 {
     private ?NodeRendererFactory $nodeRendererFactory = null;

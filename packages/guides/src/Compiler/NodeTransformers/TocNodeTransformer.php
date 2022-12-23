@@ -69,8 +69,12 @@ final class TocNodeTransformer implements NodeTransformer
     }
 
     /** @return Traversable<Entry> */
-    private function buildFromSection(DocumentEntry $document, SectionEntry $entry, int $depth, TocNode $node): Traversable
-    {
+    private function buildFromSection(
+        DocumentEntry $document,
+        SectionEntry $entry,
+        int $depth,
+        TocNode $node
+    ): Traversable {
         if ($depth > $node->getDepth()) {
             return new ArrayIterator([]);
         }

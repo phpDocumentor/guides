@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 
+/** @implements NodeRenderer<ContainerNode> */
 final class ContainerNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

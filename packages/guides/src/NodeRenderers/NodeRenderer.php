@@ -19,6 +19,7 @@ use phpDocumentor\Guides\RenderContext;
 /** @template T of Node */
 interface NodeRenderer
 {
+    /** @phpstan-assert-if-true T $node */
     public function supports(Node $node): bool;
 
     /** @param T $node */

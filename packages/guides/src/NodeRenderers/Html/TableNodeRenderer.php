@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 
 use function sprintf;
 
+/** @implements NodeRenderer<TableNode> */
 class TableNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

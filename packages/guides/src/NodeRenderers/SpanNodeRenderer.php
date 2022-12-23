@@ -34,6 +34,7 @@ use function preg_replace_callback;
 use function sprintf;
 use function str_replace;
 
+/** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
 {
     /** @var Renderer */

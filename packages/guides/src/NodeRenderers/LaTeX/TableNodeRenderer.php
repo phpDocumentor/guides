@@ -26,6 +26,7 @@ use function count;
 use function implode;
 use function max;
 
+/** @implements NodeRenderer<TableNode> */
 class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
     private ?NodeRendererFactory $nodeRendererFactory = null;

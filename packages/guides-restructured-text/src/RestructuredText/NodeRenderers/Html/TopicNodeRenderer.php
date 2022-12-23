@@ -16,10 +16,12 @@ namespace phpDocumentor\Guides\RestructuredText\NodeRenderers\Html;
 use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 
+/** @implements NodeRenderer<TocNode> */
 final class TopicNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

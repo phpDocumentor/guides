@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 
+/** @implements NodeRenderer<DocumentTitleNode> */
 final class DocumentTitleNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

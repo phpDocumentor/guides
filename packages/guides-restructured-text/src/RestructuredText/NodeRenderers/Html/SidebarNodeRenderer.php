@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 
+/** @implements NodeRenderer<SidebarNode> */
 final class SidebarNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

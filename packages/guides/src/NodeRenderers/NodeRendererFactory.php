@@ -17,5 +17,6 @@ use phpDocumentor\Guides\Nodes\Node;
 
 interface NodeRendererFactory
 {
+    /** @return NodeRenderer<Node> */
     public function get(Node $node): NodeRenderer;
 }

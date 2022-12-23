@@ -17,13 +17,15 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class InMemoryNodeRendererFactory implements NodeRendererFactory
 {
-    /** @var iterable<NodeRenderer> */
+    /** @var iterable<NodeRenderer<Node>> */
     private iterable $nodeRenderers;
 
+    /** @var NodeRenderer<Node> */
     private NodeRenderer $defaultNodeRenderer;
 
     /**
-     * @param iterable<NodeRenderer> $nodeRenderers
+     * @param iterable<NodeRenderer<Node>> $nodeRenderers
+     * @param NodeRenderer<Node> $defaultNodeRenderer
      */
     public function __construct(iterable $nodeRenderers, NodeRenderer $defaultNodeRenderer)
     {
@@ -44,6 +46,11 @@ class InMemoryNodeRendererFactory implements NodeRendererFactory
         $defaultNodeRenderer->setNodeRendererFactory($this);
     }
 
+    /**
+     * @template F as Node
+     * @param F $node
+     * @return NodeRenderer<F>
+     */
     public function get(Node $node): NodeRenderer
     {
         foreach ($this->nodeRenderers as $nodeRenderer) {

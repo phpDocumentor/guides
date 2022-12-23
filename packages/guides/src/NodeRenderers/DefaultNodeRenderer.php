@@ -19,6 +19,7 @@ use phpDocumentor\Guides\RenderContext;
 use function is_callable;
 use function is_string;
 
+/** @implements NodeRenderer<Node> */
 class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
     private ?NodeRendererFactory $nodeRendererFactory = null;

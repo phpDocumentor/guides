@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 
+/** @implements NodeRenderer<AdmonitionNode> */
 class AdmonitionNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
