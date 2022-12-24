@@ -5,7 +5,6 @@
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.0/phpunit.xsd"
         bootstrap="vendor/autoload.php"
         colors="true"
-        verbose="true"
         forceCoversAnnotation="false"
         beStrictAboutTodoAnnotatedTests="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
