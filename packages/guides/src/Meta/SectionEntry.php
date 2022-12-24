@@ -18,6 +18,11 @@ class SectionEntry implements ChildEntry
         $this->title = $title;
     }
 
+    public function getId(): string
+    {
+        return $this->title->getId();
+    }
+
     public function getTitle(): TitleNode
     {
         return $this->title;
