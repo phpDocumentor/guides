@@ -56,6 +56,11 @@ class TitleNode extends Node
         return $this->target;
     }
 
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getId(): string
     {
         return $this->id;
