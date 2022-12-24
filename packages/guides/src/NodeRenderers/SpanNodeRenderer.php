@@ -59,6 +59,8 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         $this->urlGenerator = $urlGenerator;
     }
 
+    abstract public function nbsp(): string;
+
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {
         $this->nodeRendererFactory = $nodeRendererFactory;
