@@ -38,7 +38,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
     public function nbsp(): string
     {
-        return 'nbsp;';
+        return '&nbsp;';
 
         // TODO: this is called in DocumentNode's getTitle function during parsing; wtf?
         // return $this->renderer->render('nbsp.html.twig');
