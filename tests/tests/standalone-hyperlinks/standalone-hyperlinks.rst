@@ -22,7 +22,6 @@ Matches the right thing in the following lines:
     rdar://1234
     rdar:/1234
     x-yojimbo-item://6303E4C1-6A6E-45A6-AB9D-3A908F59AE0E
-    message://%3c330e7f840905021726r6a4ba78dkf1fd71420c1bf6ff@mail.gmail.com%3e
     http://➡.ws/䨹
     <tag>http://example.com</tag>
     http://example.com/something?with,commas,in,url, but not at end

@@ -44,7 +44,7 @@ multi-line definition term
     Definition 2 line 2
 
 Definition List in a Directive
-==============================
+------------------------------
 
 .. note::
 
@@ -63,7 +63,7 @@ Definition List in a Directive
         Definition 2
 
 Definition List Surrounded by Paragraphs
-=========================================
+----------------------------------------
 
 Paragraph 1
 
@@ -78,7 +78,7 @@ term 2
     definition 2
 
 Directive in definition list
-============================
+----------------------------
 
 term 1
     .. note::
