@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\RenderContext;
@@ -65,7 +66,7 @@ $parseDirCommand = new ParseDirectoryCommand(
 $documents = $parseDirectoryHandler->handle($parseDirCommand);
 $compliler = new phpDocumentor\Guides\Compiler\Compiler([
     new \phpDocumentor\Guides\Compiler\MetasPass($metas),
-    new \phpDocumentor\Guides\Compiler\TransformerPass(
+    new phpDocumentor\Guides\Compiler\Passes\TransformerPass(
         new \phpDocumentor\Guides\Compiler\DocumentNodeTraverser(
             [
                 new \phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer($metas)
