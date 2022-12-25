@@ -91,7 +91,6 @@ final class Parser
         $document = $parser->parse($this->parserContext, $text);
         $document->setLinks($this->parserContext->getLinks());
 
-        $this->metas         = null;
         $this->parserContext = null;
 
         return $document;

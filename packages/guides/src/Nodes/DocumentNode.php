@@ -39,9 +39,6 @@ final class DocumentNode extends Node
     /** @var Node[] */
     private array $nodes = [];
 
-    /** @var string[] */
-    private array $dependencies = [];
-
     /**
      * Variables are replacements in a document.
      *
@@ -118,48 +115,6 @@ final class DocumentNode extends Node
     }
 
     /**
-     * @return TocNode[]
-     */
-    public function getTocs(): array
-    {
-        return $this->getRecursiveTocs($this);
-    }
-
-    /** @return TocNode[] */
-    private function getRecursiveTocs(Node $parent): array
-    {
-        $tocs = [];
-        foreach ($parent->getChildren() as $node) {
-            if ($node instanceof TocNode) {
-                $tocs[] = $node;
-            }
-
-            if ($node instanceof SectionNode) {
-                $tocs = array_merge($tocs, $this->getRecursiveTocs($node));
-            }
-        }
-
-        return $tocs;
-    }
-
-    /**
-     * @return TitleNode[]
-     */
-    public function getTitles(): array
-    {
-        $titles = [];
-        foreach ($this->nodes as $node) {
-            if ($node instanceof SectionNode === false) {
-                continue;
-            }
-
-            $titles = array_merge($titles, $node->getTitles());
-        }
-
-        return $titles;
-    }
-
-    /**
      * @param string|Node $node
      */
     public function addChildNode($node): void
@@ -185,23 +140,6 @@ final class DocumentNode extends Node
     public function getHash(): string
     {
         return $this->hash;
-    }
-
-    public function addDependency(string $dependencyName): void
-    {
-        if (in_array($dependencyName, $this->dependencies, true)) {
-            return;
-        }
-
-        $this->dependencies[] = $dependencyName;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDependencies(): array
-    {
-        return $this->dependencies;
     }
 
     /**

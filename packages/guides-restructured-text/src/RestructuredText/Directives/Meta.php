@@ -37,10 +37,10 @@ class Meta extends Directive
             $document->addHeaderNode(new MetaNode($key, $value));
         }
 
-        if ($node === null) {
-            return null;
+        if ($node !== null) {
+            $document->addChildNode($node);
         }
 
-        $document->addChildNode($node);
+        return null;
     }
 }
