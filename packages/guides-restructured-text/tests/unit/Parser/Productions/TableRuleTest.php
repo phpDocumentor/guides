@@ -20,7 +20,10 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -40,13 +43,9 @@ final class TableRuleTest extends TestCase
      */
     public function testSimpleTableCreation(string $input, array $rows, $headers): void
     {
-        $parser = $this->prophesize(MarkupLanguageParser::class);
-        $rule = new TableRule($parser->reveal());
-        $lineIterator = new LinesIterator();
-        $lineIterator->load($input);
-
-        /** @var TableNode $table */
-        $table = $rule->apply($lineIterator);
+        $context = $this->givenDocumentParserContext($input);
+        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $table = $rule->apply($context->reveal());
 
         self::assertEquals($rows, $table->getData());
         self::assertEquals(count($rows), $table->getRows());
@@ -331,14 +330,9 @@ RST;
 | keywords                          | string        
 RST;
 
-        $context = $this->getParserContext();
-        $parser = $this->prophesize(MarkupLanguageParser::class);
-        $parser->getEnvironment()->willReturn($context);
-        $rule = new TableRule($parser->reveal());
-        $lineIterator = new LinesIterator();
-        $lineIterator->load($input);
-
-        $rule->apply($lineIterator);
+        $context = $this->givenDocumentParserContext($input);
+        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule->apply($context->reveal());
 
         self::assertContainsError(<<<'ERROR'
 Malformed table: Line
@@ -377,14 +371,9 @@ ERROR
 +-----------------------------------+---------------+
 RST;
 
-        $context = $this->getParserContext();
-        $parser = $this->prophesize(MarkupLanguageParser::class);
-        $parser->getEnvironment()->willReturn($context);
-        $rule = new TableRule($parser->reveal());
-        $lineIterator = new LinesIterator();
-        $lineIterator->load($input);
-
-        $rule->apply($lineIterator);
+        $context = $this->givenDocumentParserContext($input);
+        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule->apply($context->reveal());
 
         self::assertContainsError(<<<'ERROR'
 Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
@@ -421,14 +410,9 @@ ERROR
 SOME more text here
 RST;
 
-        $context = $this->getParserContext();
-        $parser = $this->prophesize(MarkupLanguageParser::class);
-        $parser->getEnvironment()->willReturn($context);
-        $rule = new TableRule($parser->reveal());
-        $lineIterator = new LinesIterator();
-        $lineIterator->load($input);
-
-        $rule->apply($lineIterator);
+        $context = $this->givenDocumentParserContext($input);
+        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule->apply($context->reveal());
 
         self::assertContainsError(<<<'ERROR'
 Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
@@ -459,6 +443,16 @@ ERROR
             $this->prophesize(FilesystemInterface::class)->reveal(),
             $this->prophesize(UrlGenerator::class)->reveal()
         );
+    }
+
+    private function givenDocumentParserContext(string $input)
+    {
+        $iterator = new LinesIterator();
+        $iterator->load($input);
+
+        $context = $this->prophesize(DocumentParserContext::class);
+        $context->getDocumentIterator()->willReturn($iterator);
+        return $context;
     }
 
     private static function assertContainsError(string $error, ParserContext $context): void

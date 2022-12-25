@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -20,7 +21,7 @@ class SimpleTableRuleTest extends TestCase
     /** @dataProvider simpleTableStartProvider */
     public function testApplies(string $input): void
     {
-        $parser = $this->givenDocumentParser($input);
+        $parser = $this->givenDocumentParserContext($input);
 
         $rule = new SimpleTableRule();
         self::assertTrue($rule->applies($parser->reveal()));
@@ -40,20 +41,20 @@ class SimpleTableRuleTest extends TestCase
     /** @dataProvider nonSimpleTableStartProvider */
     public function testDoesNotApply(string $input): void
     {
-        $parser = $this->givenDocumentParser($input);
+        $parser = $this->givenDocumentParserContext($input);
 
         $rule = new SimpleTableRule();
         self::assertFalse($rule->applies($parser->reveal()));
     }
 
-    private function givenDocumentParser(string $input)
+    private function givenDocumentParserContext(string $input)
     {
         $iterator = new LinesIterator();
         $iterator->load($input);
 
-        $parser = $this->prophesize(DocumentParser::class);
-        $parser->getDocumentIterator()->willReturn($iterator);
-        return $parser;
+        $context = $this->prophesize(DocumentParserContext::class);
+        $context->getDocumentIterator()->willReturn($iterator);
+        return $context;
     }
 
     public function nonSimpleTableStartProvider(): array
@@ -91,11 +92,8 @@ RST;
             []
         );
 
-        $iterator = new LinesIterator();
-        $iterator->load($input);
-
         $rule = new SimpleTableRule();
-        $result = $rule->apply($iterator, null);
+        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
 
         self::assertEquals($expected, $result);
     }

@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
+use phpDocumentor\Guides\Nodes\Table\TableColumn;
+use phpDocumentor\Guides\Nodes\Table\TableRow;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 final class SimpleTableRule implements Rule
 {
-    public function applies(DocumentParser $documentParser): bool
+    public function applies(DocumentParserContext $documentParser): bool
     {
         return preg_match('/^(?:[=]{2,}[ ]+)+[=]{2,}$/', trim($documentParser->getDocumentIterator()->current())) > 0;
     }
 
-    public function apply(LinesIterator $documentIterator, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $columnDefinition = $this->getColumnDefinition($documentIterator);
         $documentIterator->next();
 
         $this->tryParseRow($documentIterator, $columnDefinition);
-
     }
 
     private function getColumnDefinition(LinesIterator $documentIterator): array
@@ -68,6 +70,13 @@ final class SimpleTableRule implements Rule
 
     private function tryParseRow(LinesIterator $documentIterator, array $columnDefinitions)
     {
+        /*
+         * A row consists of columns, need to figure out how process cell contents, as it can be body elements
+         * https://docutils.sourceforge.io/docs/ref/doctree.html#body-elements
+         *
+         * This basically means that we have to process the cell as some a fragement, but as we are parsing line by line
+         * it's a bit harder. We need to detect rowspans and col spans, before going into the real parsing?
+         */
         $line = $documentIterator->current();
         $cellContents = [];
         foreach ($columnDefinitions as $column => $columnDefinition) {
