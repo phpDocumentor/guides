@@ -36,8 +36,6 @@ final class TableRule implements Rule
     public const TYPE_PRETTY = 'pretty';
     public const TYPE_SIMPLE = 'simple';
 
-    private MarkupLanguageParser $parser;
-
     private LineChecker $lineChecker;
 
     private TableParser $tableParser;
@@ -98,6 +96,6 @@ final class TableRule implements Rule
             $context->pushContentLine($documentIterator->current());
         }
 
-        return $builder->buildNode($context, $this->parser, $this->lineChecker);
+        return $builder->buildNode($context, $documentParserContext->getParser(), $this->lineChecker);
     }
 }
