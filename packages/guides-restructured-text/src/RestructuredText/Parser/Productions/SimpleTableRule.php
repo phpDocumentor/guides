@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
+use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
@@ -14,7 +16,7 @@ final class SimpleTableRule implements Rule
 {
     public function applies(DocumentParserContext $documentParser): bool
     {
-        return preg_match('/^(?:[=]{2,}[ ]+)+[=]{2,}$/', trim($documentParser->getDocumentIterator()->current())) > 0;
+        return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
@@ -23,7 +25,13 @@ final class SimpleTableRule implements Rule
         $columnDefinition = $this->getColumnDefinition($documentIterator);
         $documentIterator->next();
 
-        $this->tryParseRow($documentIterator, $columnDefinition);
+        $rows = [];
+        while ($documentIterator->getNextLine() !== null && trim($documentIterator->getNextLine()) !== '') {
+            $rows[] = $this->tryParseRow($documentIterator, $columnDefinition);
+            $documentIterator->next();
+        }
+
+        return new TableNode($rows, []);
     }
 
     private function getColumnDefinition(LinesIterator $documentIterator): array
@@ -77,10 +85,35 @@ final class SimpleTableRule implements Rule
          * This basically means that we have to process the cell as some a fragement, but as we are parsing line by line
          * it's a bit harder. We need to detect rowspans and col spans, before going into the real parsing?
          */
-        $line = $documentIterator->current();
         $cellContents = [];
+        $line = $documentIterator->current();
         foreach ($columnDefinitions as $column => $columnDefinition) {
-            $cellContents[] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
+            $cellContents[$column] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
         }
+
+        while ($documentIterator->getNextLine() !== null && $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])) {
+            $documentIterator->next();
+            $line = $documentIterator->current();
+            foreach ($columnDefinitions as $column => $columnDefinition) {
+                $cellContents[$column] .= "\n" . mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
+            }
+        }
+
+        $row = new TableRow();
+        foreach ($cellContents as $content) {
+            $row->addColumn(new TableColumn(trim($content), 1, new SpanNode(trim($content), [])));
+        }
+
+        return $row;
+    }
+
+    private function isColumnDefinitionLine(string $line): bool
+    {
+        return preg_match('/^(?:={2,} +)+={2,}$/', trim($line)) > 0;
+    }
+
+    private function startsWithBlankCell(LinesIterator $documentIterator, $columnDefinitions): bool
+    {
+        return trim(mb_substr($documentIterator->getNextLine(), $columnDefinitions['start'], $columnDefinitions['length'])) === '';
     }
 }

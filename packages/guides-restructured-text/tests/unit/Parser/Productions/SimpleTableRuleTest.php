@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use PHPUnit\Framework\TestCase;
@@ -72,7 +71,7 @@ class SimpleTableRuleTest extends TestCase
         $input = <<<RST
 ===  ===
 AAA  BBB
-CCC  DDD
+C    D
 ===  ===
 RST;
 
@@ -98,5 +97,35 @@ RST;
         self::assertEquals($expected, $result);
     }
 
+    public function testApplyReturns2ColumnTableWithMultiLineCells(): void
+    {
+        $input = <<<RST
+===  ===
+AAA  BBB
+     BBB
+C    D
+===  ===
+RST;
 
+        $row1 = new TableRow();
+        $row1->addColumn(new TableColumn('AAA', 1, new SpanNode('AAA')));
+        $row1->addColumn(new TableColumn("BBB\nBBB" , 1, new SpanNode("BBB\nBBB")));
+
+        $row2 = new TableRow();
+        $row2->addColumn(new TableColumn('C', 1, new SpanNode('C')));
+        $row2->addColumn(new TableColumn('D', 1, new SpanNode('D')));
+
+        $expected = new TableNode(
+            [
+                $row1,
+                $row2
+            ],
+            []
+        );
+
+        $rule = new SimpleTableRule();
+        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+
+        self::assertEquals($expected, $result);
+    }
 }
