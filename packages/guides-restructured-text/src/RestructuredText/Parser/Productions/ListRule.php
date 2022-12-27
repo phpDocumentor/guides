@@ -169,7 +169,7 @@ final class ListRule implements Rule
      */
     private function isIndented(string $line, int $minIndent = 1): bool
     {
-        return strpos($line, (string) str_repeat(' ', $minIndent)) === 0;
+        return strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
     }
 
     /**
