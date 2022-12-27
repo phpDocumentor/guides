@@ -1,28 +1,26 @@
-{% spaceless %}
 <dl{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
     {% for definitionListTerm in node.definitionList.terms %}
         {% if definitionListTerm.classifiers is empty %}
             <dt>{{ renderNode(definitionListTerm.term) }}</dt>
         {% else %}
             <dt>
-                {{ renderNode(definitionListTerm.term) }}
+                {{- renderNode(definitionListTerm.term) -}}
 
-                {% for classifier in definitionListTerm.classifiers %}
+                {%- for classifier in definitionListTerm.classifiers %}
                     <span class="classifier-delimiter">:</span>
                     <span class="classifier">{{ renderNode(classifier) }}</span>
-                {% endfor %}
+                {%- endfor -%}
             </dt>
         {% endif %}
 
         {% if definitionListTerm.definitions|length > 1 %}
             <dd>
-                {% for definition in definitionListTerm.definitions %}
+                {%- for definition in definitionListTerm.definitions -%}
                     {{ renderNode(definition) }}
-                {% endfor %}
+                {%- endfor -%}
             </dd>
         {% elseif definitionListTerm.definitions|length == 1 %}
             <dd>{{ renderNode(definitionListTerm.firstDefinition) }}</dd>
         {% endif %}
     {% endfor %}
 </dl>
-{% endspaceless %}

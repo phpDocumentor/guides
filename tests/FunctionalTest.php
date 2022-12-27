@@ -54,6 +54,10 @@ class FunctionalTest extends TestCase
         $expectedLines = explode("\n", $expected);
         $firstLine     = $expectedLines[0];
 
+        if (strpos($firstLine, 'SKIP') === 0) {
+            $this->markTestIncomplete(substr($firstLine, 5) ?: '');
+        }
+
         if (strpos($firstLine, 'Exception:') === 0) {
             /** @psalm-var class-string<Throwable> */
             $exceptionClass = str_replace('Exception: ', '', $firstLine);
@@ -92,17 +96,17 @@ class FunctionalTest extends TestCase
             );
         }
 
-
-
         if ($format === 'html' && $useIndenter) {
             $indenter = new Indenter();
             $rendered = $indenter->indent($rendered);
         }
 
-        self::assertSame(
-            $this->trimTrailingWhitespace($expected),
-            $this->trimTrailingWhitespace($rendered)
-        );
+        if (!isset($expectedExceptionMessage)) {
+            self::assertSame(
+                $this->trimTrailingWhitespace($expected),
+                $this->trimTrailingWhitespace($rendered)
+            );
+        }
     }
 
     /**

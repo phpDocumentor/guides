@@ -67,8 +67,7 @@ abstract class Directive
 
         if ($variable !== '') {
             $document->addVariable($variable, $processNode);
-        } else {
-            $document->addChildNode($processNode);
+            return null;
         }
 
         return $processNode;

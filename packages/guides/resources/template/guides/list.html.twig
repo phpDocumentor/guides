@@ -7,9 +7,9 @@
 <{{ keyword }}{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
 {% for item in node.items %}
     <li>
-    {% for content in item.contents %}
+    {%- for content in item.contents -%}
         {{ renderNode(content) }}
-    {% endfor %}
+    {%- endfor -%}
     </li>
 {% endfor %}
 </{{ keyword }}>

@@ -1,2 +1,2 @@
-- This is alist
+- This is a list
 - Using dashes

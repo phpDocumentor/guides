@@ -40,4 +40,4 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/continues-integration.yml@v0.1.0"
     needs: "unit-tests"
     with:
-      test-suite: "functional"
+      test-suite: "functional --verbose"
