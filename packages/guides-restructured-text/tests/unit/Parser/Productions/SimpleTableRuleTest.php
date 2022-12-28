@@ -109,7 +109,7 @@ RST;
 
         $row1 = new TableRow();
         $row1->addColumn(new TableColumn('AAA', 1, new SpanNode('AAA')));
-        $row1->addColumn(new TableColumn("BBB\nBBB" , 1, new SpanNode("BBB\nBBB")));
+        $row1->addColumn(new TableColumn("BBB\nBBB", 1, new SpanNode("BBB\nBBB")));
 
         $row2 = new TableRow();
         $row2->addColumn(new TableColumn('C', 1, new SpanNode('C')));
@@ -121,6 +121,105 @@ RST;
                 $row2
             ],
             []
+        );
+
+        $rule = new SimpleTableRule();
+        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+
+        self::assertEquals($expected, $result);
+    }
+
+    public function testApplyReturns3ColumnTableWithHeader(): void
+    {
+        $input = <<<RST
+=========== ========== ========
+First col   Second col Third col
+=========== ========== ========
+Second row  Other col  Last col
+Third row              Last col
+Forth row
+=========== ========== ========
+RST;
+
+        $row1 = new TableRow();
+        $row1->addColumn(new TableColumn('First col', 1, new SpanNode('First col')));
+        $row1->addColumn(new TableColumn('Second col', 1, new SpanNode('Second col')));
+        $row1->addColumn(new TableColumn('Third col', 1, new SpanNode('Third col')));
+
+        $row2 = new TableRow();
+        $row2->addColumn(new TableColumn('Second row', 1, new SpanNode('Second row')));
+        $row2->addColumn(new TableColumn('Other col', 1, new SpanNode('Other col')));
+        $row2->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+
+        $row3 = new TableRow();
+        $row3->addColumn(new TableColumn('Third row', 1, new SpanNode('Third row')));
+        $row3->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row3->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+
+        $row4 = new TableRow();
+        $row4->addColumn(new TableColumn('Forth row', 1, new SpanNode('Forth row')));
+        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+
+        $expected = new TableNode(
+            [
+                $row2,
+                $row3,
+                $row4
+            ],
+            [
+                $row1
+            ]
+        );
+
+        $rule = new SimpleTableRule();
+        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+
+        self::assertEquals($expected, $result);
+    }
+
+    public function testApplyReturns3ColumnTableIgnoringRuler(): void
+    {
+        $input = <<<RST
+=========== ========== ========
+First col   Second col Third col
+=========== ========== ========
+Second row  Other col  Last col
+----------  ---------  --------
+Third row              Last col
+Forth row
+=========== ========== ========
+RST;
+
+        $row1 = new TableRow();
+        $row1->addColumn(new TableColumn('First col', 1, new SpanNode('First col')));
+        $row1->addColumn(new TableColumn('Second col', 1, new SpanNode('Second col')));
+        $row1->addColumn(new TableColumn('Third col', 1, new SpanNode('Third col')));
+
+        $row2 = new TableRow();
+        $row2->addColumn(new TableColumn('Second row', 1, new SpanNode('Second row')));
+        $row2->addColumn(new TableColumn('Other col', 1, new SpanNode('Other col')));
+        $row2->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+
+        $row3 = new TableRow();
+        $row3->addColumn(new TableColumn('Third row', 1, new SpanNode('Third row')));
+        $row3->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row3->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+
+        $row4 = new TableRow();
+        $row4->addColumn(new TableColumn('Forth row', 1, new SpanNode('Forth row')));
+        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+
+        $expected = new TableNode(
+            [
+                $row2,
+                $row3,
+                $row4
+            ],
+            [
+                $row1
+            ]
         );
 
         $rule = new SimpleTableRule();

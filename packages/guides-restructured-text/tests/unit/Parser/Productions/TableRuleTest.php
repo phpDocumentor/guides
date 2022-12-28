@@ -123,7 +123,6 @@ Col U  Col J Col K
 RST;
 
         yield [$input, $expected, []];
-
     }
 
     private function createColumnNode(string $content, int $colSpan = 1): TableColumn
@@ -334,7 +333,8 @@ RST;
         $rule = new TableRule(new LineDataParser(new SpanParser()));
         $rule->apply($context->reveal());
 
-        self::assertContainsError(<<<'ERROR'
+        self::assertContainsError(
+            <<<'ERROR'
 Malformed table: Line
 
 | keywords                          | string
@@ -352,7 +352,7 @@ in file test
 +-----------------------------------+---------------+
 | keywords                          | string
 ERROR
-,
+            ,
             $context
         );
     }
@@ -375,7 +375,8 @@ RST;
         $rule = new TableRule(new LineDataParser(new SpanParser()));
         $rule->apply($context->reveal());
 
-        self::assertContainsError(<<<'ERROR'
+        self::assertContainsError(
+            <<<'ERROR'
 Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
 in file test
 
@@ -414,7 +415,8 @@ RST;
         $rule = new TableRule(new LineDataParser(new SpanParser()));
         $rule->apply($context->reveal());
 
-        self::assertContainsError(<<<'ERROR'
+        self::assertContainsError(
+            <<<'ERROR'
 Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
 in file test
 
