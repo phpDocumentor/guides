@@ -18,10 +18,6 @@ final class DefinitionListRuleTest extends TestCase
 
     public function testAppliesReturnsTrueOnValidInput(): void
     {
-        $lineData = new LineDataParser(
-            $this->prophesize(SpanParser::class)->reveal()
-        );
-
         $documentIterator = new LinesIterator();
         $documentIterator->load(<<<RST
 term 1
@@ -40,7 +36,7 @@ RST
         $documentParser->getDocumentIterator()->willReturn($documentIterator);
 
         $rule = new DefinitionListRule(
-            $lineData
+            $this->prophesize(SpanParser::class)->reveal()
         );
 
         self::assertTrue($rule->applies($documentParser->reveal()));
@@ -48,10 +44,6 @@ RST
 
     public function testAppliesReturnsFalse(): void
     {
-        $lineData = new LineDataParser(
-            $this->prophesize(SpanParser::class)->reveal()
-        );
-
         $documentIterator = new LinesIterator();
         $documentIterator->load(<<<RST
 term 1
@@ -70,7 +62,7 @@ RST
         $documentParser->getDocumentIterator()->willReturn($documentIterator);
 
         $rule = new DefinitionListRule(
-            $lineData
+            $this->prophesize(SpanParser::class)->reveal()
         );
 
         self::assertFalse($rule->applies($documentParser->reveal()));

@@ -15,12 +15,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 final class SectionRule implements Rule
 {
     private TitleRule $titleRule;
+    private RuleContainer $productions;
 
-    /** @var Rule[] */
-    private array $productions;
-
-    /** @param Rule[] $productions */
-    public function __construct(TitleRule $titleRule, array $productions)
+    public function __construct(TitleRule $titleRule, RuleContainer $productions)
     {
         $this->titleRule = $titleRule;
         $this->productions = $productions;
@@ -73,7 +70,7 @@ final class SectionRule implements Rule
         return null;
     }
 
-    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): void
+    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
@@ -81,24 +78,13 @@ final class SectionRule implements Rule
         // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
             if ($this->applies($documentParserContext)) {
-                return;
+                return $on;
             }
 
-            foreach ($this->productions as $production) {
-                if (!$production->applies($documentParserContext)) {
-                    continue;
-                }
-
-                $newNode = $production->apply($documentParserContext, $on);
-                if ($newNode !== null) {
-                    $on->addChildNode($newNode);
-                }
-
-                break;
-            }
-
-            $documentIterator->next();
+            $this->productions->apply($documentParserContext, $on);
         }
+
+        return $on;
     }
 
     private function createSection(DocumentParserContext $documentParserContext): SectionNode
