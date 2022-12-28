@@ -30,15 +30,13 @@ use function trim;
  */
 final class TableRule implements Rule
 {
-    private MarkupLanguageParser $parser;
-
     private LineChecker $lineChecker;
 
     private TableParser $tableParser;
 
-    public function __construct(LineDataParser $lineDataParser)
+    public function __construct()
     {
-        $this->lineChecker = new LineChecker($lineDataParser);
+        $this->lineChecker = new LineChecker();
         $this->tableParser = new TableParser();
     }
 
