@@ -34,7 +34,7 @@ final class TableSeparatorLineConfig
         string $lineCharacter,
         string $rawContent
     ) {
-        if (!in_array($tableType, [Productions\TableRule::TYPE_SIMPLE, Productions\TableRule::TYPE_PRETTY], true)) {
+        if (!in_array($tableType, [Productions\TableRule::TYPE_PRETTY], true)) {
             throw new InvalidArgumentException(sprintf('Invalid table type'));
         }
 
@@ -52,11 +52,6 @@ final class TableSeparatorLineConfig
     public function isHeader(): bool
     {
         return $this->isHeader;
-    }
-
-    public function isSimpleTableType(): bool
-    {
-        return $this->tableType === Productions\TableRule::TYPE_SIMPLE;
     }
 
     /**
