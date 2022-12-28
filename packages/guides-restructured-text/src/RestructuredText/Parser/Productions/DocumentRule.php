@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -13,8 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 final class DocumentRule implements Rule
 {
-    /** @var Rule[] */
-    private array $productions;
+    private RuleContainer $productions;
 
     /**
      * @param iterable<DirectiveHandler> $directiveHandlers
@@ -23,8 +31,6 @@ final class DocumentRule implements Rule
     {
 
         $spanParser = new SpanParser();
-        $lineDataParser = new LineDataParser($spanParser);
-
         $literalBlockRule = new LiteralBlockRule();
         $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
 
@@ -34,24 +40,22 @@ final class DocumentRule implements Rule
         // TODO, these productions are now used in sections and documentrule,
         //    however most of them do not apply on documents?
         //
-        $productions = [
+        $productions = new RuleContainer(
             $transitionRule,
-            new LinkRule($lineDataParser),
+            new LinkRule(),
             $literalBlockRule,
             new BlockQuoteRule(),
             new ListRule(),
-            new DirectiveRule($lineDataParser, $literalBlockRule, $directiveHandlers),
+            new DirectiveRule($literalBlockRule, $directiveHandlers),
             new CommentRule(),
-            new DefinitionListRule($lineDataParser),
-            new TableRule($lineDataParser),
-
+            new DefinitionListRule($spanParser),
+            new TableRule(),
             // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
-            new ParagraphRule($spanParser),
-        ];
+            new ParagraphRule($spanParser)
+        );
 
-        $this->productions = array_merge([
-            new SectionRule(new TitleRule($spanParser), $productions),
-        ], $productions);
+        $this->productions = (new RuleContainer(new SectionRule(new TitleRule($spanParser), $productions)))
+            ->merge($productions);
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -73,20 +77,7 @@ final class DocumentRule implements Rule
         // this is done because we are transitioning to a method where a Substate can take the current
         // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
-            foreach ($this->productions as $production) {
-                if (!$production->applies($documentParserContext)) {
-                    continue;
-                }
-
-                $newNode = $production->apply($documentParserContext, $on);
-                if ($newNode !== null) {
-                    $on->addChildNode($newNode);
-                }
-
-                break;
-            }
-
-            $documentIterator->next();
+            $this->productions->apply($documentParserContext, $on);
         }
 
         return $on;

@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\Nodes\Lists\ListItem;
 use function preg_match;
 
 class LineChecker
 {
-    private LineDataParser $lineParser;
-
-    public function __construct(LineDataParser $lineParser)
-    {
-        $this->lineParser = $lineParser;
-    }
-
     public function isListLine(string $line, bool $isCode): bool
     {
-        $listLine = $this->lineParser->parseListLine($line);
+        $listLine = $this->parseListLine($line);
 
         if ($listLine !== null) {
             return $listLine->getDepth() === 0 || !$isCode;
@@ -26,8 +20,40 @@ class LineChecker
         return false;
     }
 
-    public function isDirective(string $line): bool
+    private function parseListLine(string $line): ?ListItem
     {
-        return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
+        $depth = 0;
+
+        for ($i = 0; $i < strlen($line); $i++) {
+            $char = $line[$i];
+
+            if ($char === ' ') {
+                $depth++;
+            } elseif ($char === "\t") {
+                $depth += 2;
+            } else {
+                break;
+            }
+        }
+
+        if (preg_match('/^((\*|\-)|([\d#]+)\.) (.+)$/', trim($line), $match) > 0) {
+            return new ListItem(
+                $line[$i],
+                $line[$i] !== '*' && $line[$i] !== '-',
+                $depth,
+                [$match[4]]
+            );
+        }
+
+        if (strlen($line) === 1 && $line[0] === '-') {
+            return new ListItem(
+                $line[$i],
+                $line[$i] !== '*' && $line[$i] !== '-',
+                $depth,
+                ['']
+            );
+        }
+
+        return null;
     }
 }

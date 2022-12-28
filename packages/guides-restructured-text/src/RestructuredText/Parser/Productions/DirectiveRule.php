@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
@@ -30,8 +31,6 @@ use function sprintf;
  */
 final class DirectiveRule implements Rule
 {
-    private LineDataParser $lineDataParser;
-
     private LiteralBlockRule $literalBlockRule;
 
     /** @var array<string, DirectiveHandler> */
@@ -41,11 +40,9 @@ final class DirectiveRule implements Rule
      * @param iterable<DirectiveHandler> $directives
      */
     public function __construct(
-        LineDataParser        $lineDataParser,
         LiteralBlockRule      $literalBlockRule,
         iterable              $directives = []
     ) {
-        $this->lineDataParser = $lineDataParser;
         $this->literalBlockRule = $literalBlockRule;
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
@@ -75,7 +72,7 @@ final class DirectiveRule implements Rule
         $documentIterator = $documentParserContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
         $documentIterator->next();
-        $directive = $this->lineDataParser->parseDirective($openingLine);
+        $directive = $this->parseDirective($openingLine);
 
         if ($directive === null) {
             return null;
@@ -126,6 +123,19 @@ final class DirectiveRule implements Rule
         return null;
     }
 
+    private function parseDirective(string $line): ?Directive
+    {
+        if (preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line, $match) > 0) {
+            return new Directive(
+                $match[2],
+                $match[3],
+                trim($match[4])
+            );
+        }
+
+        return null;
+    }
+
     private function getDirectiveHandler(Directive $directive): ?DirectiveHandler
     {
         return $this->directives[$directive->getName()] ?? null;
@@ -134,12 +144,25 @@ final class DirectiveRule implements Rule
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void
     {
         while ($documentIterator->valid()
-            && ($directiveOption = $this->lineDataParser->parseDirectiveOption($documentIterator->current())) !== null
+            && ($directiveOption = $this->parseDirectiveOption($documentIterator->current())) !== null
         ) {
             $directive->setOption($directiveOption->getName(), $directiveOption->getValue());
 
             $documentIterator->next();
         }
+    }
+
+    public function parseDirectiveOption(string $line): ?DirectiveOption
+    {
+        if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {
+            return new DirectiveOption($match[2], trim($match[3]));
+        }
+
+        if (preg_match('/^(\s+):(.+):(\s*)$/mUsi', $line, $match) > 0) {
+            return new DirectiveOption($match[2], true);
+        }
+
+        return null;
     }
 
     private function interpretContentBlock(DocumentParserContext $documentParserContext): ?Node
