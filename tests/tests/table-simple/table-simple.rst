@@ -1,7 +1,9 @@
-=====  ===== =====
-Col A  Col B Col C
-=====  ===== =====
-Col X  Col Y Col Z
------  ----- -----
-Col U  Col J Col K
-=====  ===== =====
+=========== ========== ========
+First col   Second col Third col
+=========== ========== ========
+Second row  Other col  Other col
+Third  row  Other col  Last col
+Forth  row
+Fifth  row             Last col2
+Sixth  row  Mid col
+=========== ========== ========

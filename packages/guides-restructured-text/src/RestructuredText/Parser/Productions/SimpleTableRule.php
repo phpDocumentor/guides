@@ -22,22 +22,29 @@ final class SimpleTableRule implements Rule
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
-        $columnDefinition = $this->getColumnDefinition($documentIterator);
+        $columnDefinition = $this->getColumnDefinition($documentIterator->current());
         $documentIterator->next();
 
+        $headers = [];
         $rows = [];
         while ($documentIterator->getNextLine() !== null && trim($documentIterator->getNextLine()) !== '') {
             $rows[] = $this->tryParseRow($documentIterator, $columnDefinition);
             $documentIterator->next();
+
+            if ($documentIterator->getNextLine() !== null && $this->isColumnDefinitionLine($documentIterator->current()) && trim($documentIterator->getNextLine()) !== '') {
+                $documentIterator->next();
+                $headers = $rows;
+                $rows = [];
+            }
         }
 
-        return new TableNode($rows, []);
+        return new TableNode($rows, $headers);
     }
 
-    private function getColumnDefinition(LinesIterator $documentIterator): array
+    private function getColumnDefinition(string $line): array
     {
         $columnDefinition = [];
-        $definitionLine = trim($documentIterator->current());
+        $definitionLine = trim($line);
 
         $startPosition = 0;
         $lenght = 0;
@@ -94,9 +101,15 @@ final class SimpleTableRule implements Rule
         while ($documentIterator->getNextLine() !== null && $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])) {
             $documentIterator->next();
             $line = $documentIterator->current();
+
             foreach ($columnDefinitions as $column => $columnDefinition) {
                 $cellContents[$column] .= "\n" . mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
             }
+        }
+
+        // We detected a colspan, this means that we will have to redo the splitting according to the new column definition.
+        if ($this->isColspanDefinition($documentIterator->getNextLine())) {
+            $documentIterator->next();
         }
 
         $row = new TableRow();
@@ -112,8 +125,14 @@ final class SimpleTableRule implements Rule
         return preg_match('/^(?:={2,} +)+={2,}$/', trim($line)) > 0;
     }
 
+    private function isColspanDefinition(string $line): bool
+    {
+        return preg_match('/^(?:-{2,} +)+-{2,}$/', trim($line)) > 0;
+    }
+
     private function startsWithBlankCell(LinesIterator $documentIterator, $columnDefinitions): bool
     {
-        return trim(mb_substr($documentIterator->getNextLine(), $columnDefinitions['start'], $columnDefinitions['length'])) === '';
+        $firstCellContent = mb_substr($documentIterator->getNextLine(), $columnDefinitions['start'], $columnDefinitions['length']);
+        return trim($firstCellContent) === '' || trim($firstCellContent) === '\\';
     }
 }

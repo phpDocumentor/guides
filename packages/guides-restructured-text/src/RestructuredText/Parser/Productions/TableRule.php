@@ -48,7 +48,7 @@ final class TableRule implements Rule
         $this->lineChecker = new LineChecker();
         $this->tableParser = new TableParser();
 
-        $this->builders[self::TYPE_SIMPLE] = new SimpleTableBuilder();
+        //$this->builders[self::TYPE_SIMPLE] = new SimpleTableBuilder();
         $this->builders[self::TYPE_PRETTY] = new GridTableBuilder();
     }
 

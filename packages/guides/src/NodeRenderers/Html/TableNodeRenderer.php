@@ -40,26 +40,11 @@ class TableNodeRenderer implements NodeRenderer
         $headers = $node->getHeaders();
         $rows = $node->getData();
 
-        $tableHeaderRows = [];
-
-        foreach ($headers as $k => $isHeader) {
-            if ($isHeader === false) {
-                continue;
-            }
-
-            if (!isset($rows[$k])) {
-                throw new LogicException(sprintf('Row "%d" should be a header, but that row does not exist.', $k));
-            }
-
-            $tableHeaderRows[] = $rows[$k];
-            unset($rows[$k]);
-        }
-
         return $this->renderer->render(
             'table.html.twig',
             [
                 'tableNode' => $node,
-                'tableHeaderRows' => $tableHeaderRows,
+                'tableHeaderRows' => $headers,
                 'tableRows' => $rows,
             ]
         );
