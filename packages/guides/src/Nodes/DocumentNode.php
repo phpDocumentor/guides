@@ -70,15 +70,11 @@ final class DocumentNode extends Node
 
     /**
      * @template F as Node
-     * @param class-string<F>|null $nodeType
-     * @return (F is null?Node[]:F[])
+     * @param class-string<F> $nodeType
+     * @return F[]
      */
-    public function getNodes(?string $nodeType = null): array
+    public function getNodes(string $nodeType = Node::class): array
     {
-        if ($nodeType === null) {
-            return $this->nodes;
-        }
-
         return array_filter($this->nodes, static fn($node): bool => $node instanceof $nodeType);
     }
 
@@ -114,15 +110,8 @@ final class DocumentNode extends Node
         return null;
     }
 
-    /**
-     * @param string|Node $node
-     */
-    public function addChildNode($node): void
+    public function addChildNode(Node $node): void
     {
-        if (is_string($node)) {
-            $node = new RawNode($node);
-        }
-
         $this->nodes[] = $node;
     }
 
@@ -143,9 +132,10 @@ final class DocumentNode extends Node
     }
 
     /**
-     * @param mixed $default
+     * @template TType as mixed
+     * @param TType|null $default
      *
-     * @return string|Node
+     * @return ($default is null ? string|Node|null: TType|string|Node)
      */
     public function getVariable(string $name, $default)
     {

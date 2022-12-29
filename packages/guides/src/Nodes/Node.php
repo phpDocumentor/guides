@@ -91,8 +91,9 @@ abstract class Node
 
     /**
      * @param array<string, mixed> $options
+     * @return static
      */
-    public function withOptions(array $options): self
+    public function withOptions(array $options): Node
     {
         $result = clone $this;
         $result->options = $options;
@@ -109,9 +110,10 @@ abstract class Node
     }
 
     /**
-     * @param mixed|null $default
+     * @template TType as mixed
+     * @param TType|null $default
      *
-     * @return mixed|null
+     * @return ($default is null ? mixed|null: TType|null)
      */
     public function getOption(string $name, $default = null)
     {
@@ -123,6 +125,7 @@ abstract class Node
         return isset($this->options[$name]);
     }
 
+    /** @return Node[] */
     public function getChildren(): array
     {
         if ($this->value instanceof Node && !$this->value instanceof SpanNode) {
@@ -132,6 +135,9 @@ abstract class Node
         return [];
     }
 
+    /**
+     * @return static
+     */
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;

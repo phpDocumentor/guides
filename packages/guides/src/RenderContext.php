@@ -19,6 +19,7 @@ use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
+use phpDocumentor\Guides\Nodes\Node;
 use function dirname;
 use function ltrim;
 use function trim;
@@ -84,9 +85,10 @@ class RenderContext
     }
 
     /**
-     * @param mixed|null $default
+     * @template TType as mixed
+     * @param TType|null $default
      *
-     * @return mixed
+     * @return ($default is null ? mixed|null: TType|string|Node)
      */
     public function getVariable(string $variable, $default = null)
     {

@@ -28,27 +28,21 @@ class ResolvedReference
 
     private ?string $url;
 
-    /** @var TitleNode[] */
-    private array $titles;
-
     /** @var string[] */
     private array $attributes;
 
     /**
-     * @param TitleNode[] $titles
      * @param string[] $attributes
      */
     public function __construct(
         ?string $file,
         ?TitleNode $title,
         ?string $url,
-        array $titles = [],
         array $attributes = []
     ) {
         $this->file = $file;
         $this->title = $title;
         $this->url = $url;
-        $this->titles = $titles;
 
         $this->validateAttributes($attributes);
         $this->attributes = $attributes;
@@ -59,22 +53,14 @@ class ResolvedReference
         return $this->file;
     }
 
-    public function getTitle(): ?TitleNode
+    public function getTitle(): TitleNode
     {
-        return $this->title;
+        return $this->title ?? TitleNode::emptyNode();
     }
 
     public function getUrl(): ?string
     {
         return $this->url;
-    }
-
-    /**
-     * @return TitleNode[]
-     */
-    public function getTitles(): array
-    {
-        return $this->titles;
     }
 
     /**

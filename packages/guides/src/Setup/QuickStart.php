@@ -24,8 +24,10 @@ use phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TocNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
@@ -60,6 +62,7 @@ final class QuickStart
     public static function createRenderer(Metas $metas): Renderer
     {
         $logger = new TestLogger();
+        /** @var ArrayObject<array-key, NodeRenderer<Node>> $nodeRenderers */
         $nodeRenderers = new ArrayObject();
         $nodeFactoryCallback = static fn(): NodeRendererFactory => new InMemoryNodeRendererFactory(
             $nodeRenderers,
@@ -90,8 +93,8 @@ final class QuickStart
         $nodeRenderers[] = new ContainerNodeRenderer($renderer);
         $nodeRenderers[] = new SidebarNodeRenderer($renderer);
         $nodeRenderers[] = new TopicNodeRenderer($renderer);
-        $nodeRenderers[] = new TocNodeRenderer($renderer, new UrlGenerator(), $metas);
-        $nodeRenderers[] = new TocEntryRenderer($renderer, new UrlGenerator());
+        $nodeRenderers[] = new TocNodeRenderer($renderer);
+        $nodeRenderers[] = new TocEntryRenderer($renderer);
 
         $config = new Configuration();
         foreach ($config->htmlNodeTemplates() as $node => $template) {

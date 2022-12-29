@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 
+/** @implements NodeRenderer<TitleNode> */
 class TitleNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

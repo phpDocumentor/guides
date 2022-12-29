@@ -15,6 +15,7 @@ class SpyRenderer implements Renderer
     private array $context;
     private string $template;
 
+    /** @param mixed[] $context */
     public function render(string $template, array $context = []): string
     {
         $this->context = $context;
@@ -23,6 +24,7 @@ class SpyRenderer implements Renderer
         return 'spy';
     }
 
+    /** @return mixed[] */
     public function getContext(): array
     {
         return $this->context;

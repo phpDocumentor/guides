@@ -48,11 +48,11 @@ class TocNode extends Node
 
     public function getDepth(): int
     {
-        if ($this->getOption('depth')) {
+        if (is_int($this->getOption('depth'))) {
             return (int) $this->getOption('depth');
         }
 
-        if ($this->getOption('maxdepth')) {
+        if (is_int($this->getOption('maxdepth'))) {
             return (int) $this->getOption('maxdepth');
         }
 

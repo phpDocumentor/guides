@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use RuntimeException;
 
+use Webmozart\Assert\Assert;
 use function getcwd;
 
 /**
@@ -65,7 +66,9 @@ final class Parser
         int $initialHeaderLevel = 1
     ): void {
         if ($origin === null) {
-            $origin = new Filesystem(new Local(getcwd()));
+            $cwd = getcwd();
+            Assert::string($cwd);
+            $origin = new Filesystem(new Local($cwd));
         }
 
         $this->parserContext = $this->createParserContext(

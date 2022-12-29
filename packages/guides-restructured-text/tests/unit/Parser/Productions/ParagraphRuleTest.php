@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace unit\Parser\Productions;
+namespace phpDocumentor\Guides\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\ParagraphNode;

@@ -16,6 +16,7 @@ final class UrlGeneratorTest extends TestCase
         self::assertSame($result, $urlGenerator->canonicalUrl($basePath, $url));
     }
 
+    /** @return string[][] */
     public function cannicalUrlProvider(): array
     {
         return [
@@ -59,6 +60,7 @@ final class UrlGeneratorTest extends TestCase
         self::assertSame($result, $urlGenerator->absoluteUrl($basePath, $url));
     }
 
+    /** @return string[][] */
     public function abstractUrlProvider(): array
     {
         return [

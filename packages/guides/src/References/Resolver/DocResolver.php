@@ -54,7 +54,6 @@ final class DocResolver implements Resolver
             $file,
             $entry->getTitle(),
             $environment->relativeDocUrl($file, $anchor),
-            $entry->getChildren(),
             $attributes
         );
     }

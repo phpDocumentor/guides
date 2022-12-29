@@ -25,9 +25,6 @@ class ParserContext
     private string $currentDirectory;
 
     /** @var string[] */
-    private array $variables = [];
-
-    /** @var string[] */
     private array $links = [];
 
     /** @var string[] */
@@ -35,8 +32,6 @@ class ParserContext
 
     /** @var string[] */
     private array $errors = [];
-
-    private string $currentAbsolutePath = '';
 
     private int $initialHeaderLevel;
 
