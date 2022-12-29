@@ -31,11 +31,11 @@ use function trim;
  */
 final class ParagraphRule implements Rule
 {
-    private SpanParser $spanParser;
+    private InlineMarkupRule $inlineMarkupRule;
 
-    public function __construct(SpanParser $spanParser)
+    public function __construct(InlineMarkupRule $inlineMarkupRule)
     {
-        $this->spanParser = $spanParser;
+        $this->inlineMarkupRule = $inlineMarkupRule;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -60,34 +60,36 @@ final class ParagraphRule implements Rule
             $buffer->push($documentIterator->current());
         }
 
-        $lines = $buffer->getLines();
-        $lastLine = trim(array_pop($lines) ?? '');
+        $lastLine = trim($buffer->pop() ?? '');
 
         // https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#literal-blocks
         // 2 colons at the end means that the next Indented Block should be a LiteralBlock and we should remove the
         // colons
-        if (substr($lastLine, -2) === '::') {
+        if (str_ends_with($lastLine, '::')) {
             $lastLine = trim(substr($lastLine, 0, -2));
 
             // However, if a line ended in a double colon, we keep one colon
-            if ($lastLine !== '' && substr($lastLine, -1) !== ':') {
+            if ($lastLine !== '' && !str_ends_with($lastLine, ':')) {
                 $lastLine .= ':';
             }
 
             $documentParserContext->nextIndentedBlockShouldBeALiteralBlock = true;
 
             if ($lastLine !== '') {
-                $lines[] = $lastLine;
+                $buffer->push($lastLine);
             }
         } else {
-            $lines[] = $lastLine;
+            $buffer->push($lastLine);
         }
 
-        if (trim(implode('', $lines)) === '') {
+        if (trim($buffer->getLinesString()) === '') {
             return null;
         }
 
-        return new ParagraphNode($this->spanParser->parse($lines, $documentParserContext->getContext()));
+        return $this->inlineMarkupRule->apply(
+            $documentParserContext->withContents($buffer->getLinesString()),
+            new ParagraphNode(null)
+        );
     }
 
     private function isWhiteline(?string $line): bool
