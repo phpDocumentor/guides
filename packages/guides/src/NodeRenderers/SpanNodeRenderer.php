@@ -117,7 +117,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             '/\*\*(.+)\*\*/mUsi',
             fn(array $matches): string => $this->strongEmphasis($matches[1]),
             $span
-        );
+        ) ?? '';
     }
 
     private function renderEmphasis(string $span): string
@@ -126,12 +126,12 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             '/\*(.+)\*/mUsi',
             fn(array $matches): string => $this->emphasis($matches[1]),
             $span
-        );
+        ) ?? '';
     }
 
     private function renderNbsp(string $span): string
     {
-        return preg_replace('/~/', $this->nbsp(), $span);
+        return preg_replace('/~/', $this->nbsp(), $span) ?? '';
     }
 
     private function renderVariables(string $span, RenderContext $context): string
@@ -139,31 +139,23 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return preg_replace_callback(
             '/\|(.+)\|/mUsi',
             function (array $match) use ($context): string {
-                $variable = $context->getVariable($match[1]);
-
-                if ($variable === null) {
-                    return '';
-                }
+                $variable = $context->getVariable($match[1], '');
 
                 if ($variable instanceof Node) {
                     assert($this->nodeRendererFactory !== null);
                     return $this->nodeRendererFactory->get($variable)->render($variable, $context);
                 }
 
-                if (is_string($variable)) {
-                    return $variable;
-                }
-
-                return (string) $variable;
+                return $variable;
             },
             $span
-        );
+        ) ?? '';
     }
 
     private function renderBrs(string $span): string
     {
         // Adding brs when a space is at the end of a line
-        return preg_replace('/ \n/', $this->br(), $span);
+        return preg_replace('/ \n/', $this->br(), $span) ?? '';
     }
 
     private function renderTokens(SpanNode $node, string $span, RenderContext $context): string

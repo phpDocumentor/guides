@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-namespace unit;
+namespace phpDocumentor\Guides;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -46,6 +43,7 @@ final class RenderContextTest extends TestCase
         self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));
     }
 
+    /** @return string[][] */
     public function documentPathProvider(): array
     {
         return [

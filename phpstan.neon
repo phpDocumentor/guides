@@ -5,6 +5,7 @@ parameters:
   ignoreErrors:
     # FlyFinder plugin adds a find method to FlySystem's Filesystem
     - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
+    - '#ArrayObject<\(int\|string\), phpDocumentor\\Guides\\NodeRenderers\\NodeRenderer<phpDocumentor\\Guides\\Nodes\\Node>> does not accept .*#'
 
   paths:
     - packages/guides/src

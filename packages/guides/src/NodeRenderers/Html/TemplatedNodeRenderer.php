@@ -11,6 +11,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
 use Webmozart\Assert\Assert;
 
+/** @implements NodeRenderer<TemplatedNode> */
 final class TemplatedNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;

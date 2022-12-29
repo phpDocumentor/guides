@@ -69,7 +69,7 @@ final class AssetsExtension extends AbstractExtension
      * be relative not to the current file's path; but the root of the Documentation Set. This means that, when
      * rendering paths, you always need to include the canonical path; not that relative to the current file.
      *
-     * @param mixed[] $context
+     * @param array{env: RenderContext} $context
      */
     public function asset(array $context, string $path): string
     {
@@ -80,7 +80,7 @@ final class AssetsExtension extends AbstractExtension
     }
 
     /**
-     * @param mixed[] $context
+     * @param array{env: RenderContext} $context
      */
     public function renderNode(array $context, ?Node $node): string
     {

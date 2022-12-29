@@ -66,7 +66,6 @@ final class MarkupLanguageParser implements ParserInterface
     public function parse(ParserContext $environment, string $contents): DocumentNode
     {
         $this->environment = $environment;
-        $environment->reset();
 
         $ast = $this->markdownParser->parse($contents);
 

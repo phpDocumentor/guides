@@ -27,6 +27,7 @@ use phpDocumentor\Guides\Renderer;
 
 use function count;
 
+/** @implements NodeRenderer<DocumentNode> */
 class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, NodeRendererFactoryAware
 {
     private ?NodeRendererFactory $nodeRendererFactory = null;
