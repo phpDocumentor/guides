@@ -42,9 +42,6 @@ class DocumentParserContext
     /** @var string[] */
     private array $titleLetters = [];
 
-    /**
-     * @param DirectiveHandler[] $directives
-     */
     public function __construct(
         string $content,
         ParserContext $context,
@@ -103,6 +100,7 @@ class DocumentParserContext
     public function withContents(string $contents): self
     {
         $that = clone $this;
+        $that->documentIterator = new LinesIterator();
         $that->documentIterator->load($contents);
 
         return $that;

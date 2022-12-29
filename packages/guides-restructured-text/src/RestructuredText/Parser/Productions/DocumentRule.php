@@ -34,6 +34,7 @@ final class DocumentRule implements Rule
         $literalBlockRule = new LiteralBlockRule();
         $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
 
+        $inlineMarkupRule = new InlineMarkupRule($spanParser);
         // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
         //       to use when consuming this library
         //
@@ -51,7 +52,7 @@ final class DocumentRule implements Rule
             new DefinitionListRule($spanParser),
             new TableRule(),
             // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
-            new ParagraphRule($spanParser)
+            new ParagraphRule($inlineMarkupRule)
         );
 
         $this->productions = (new RuleContainer(new SectionRule(new TitleRule($spanParser), $productions)))

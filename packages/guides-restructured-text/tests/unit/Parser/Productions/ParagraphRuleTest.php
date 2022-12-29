@@ -11,6 +11,7 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGenerator;
@@ -42,17 +43,18 @@ final class ParagraphRuleTest extends TestCase
         $iterator = new LinesIterator();
         $iterator->load($input);
 
-        $documentParser = $this->prophesize(DocumentParserContext::class);
-        $documentParser->getContext()->willReturn(
+        $documentParser = new DocumentParserContext(
+            $input,
             new ParserContext(
                 'test',
                 'test',
                 1,
                 $this->prophesize(FilesystemInterface::class)->reveal(),
                 new UrlGenerator()
-            )
+            ),
+            $this->prophesize(MarkupLanguageParser::class)->reveal()
         );
-        $documentParser->getDocumentIterator()->willReturn($iterator);
+
         $spanParser = $this->prophesize(SpanParser::class);
         $spanParser->parse(
             Argument::any(),
@@ -60,17 +62,17 @@ final class ParagraphRuleTest extends TestCase
         )->will(fn($args) => new SpanNode(implode("\n", $args[0])));
 
         $rule = new ParagraphRule(
-            $spanParser->reveal()
+            new InlineMarkupRule($spanParser->reveal())
         );
 
-        self::assertTrue($rule->applies($documentParser->reveal()));
-        $result = $rule->apply($documentParser->reveal());
+        self::assertTrue($rule->applies($documentParser));
+        $result = $rule->apply($documentParser);
         self::assertEquals(
             $node,
             $result
         );
 
-        self::assertSame($nextLine, $iterator->getNextLine());
+        self::assertSame($nextLine, $documentParser->getDocumentIterator()->getNextLine());
         self::assertSame($nextLiteral, $documentParser->nextIndentedBlockShouldBeALiteralBlock);
     }
 
@@ -218,6 +220,24 @@ RST,
                 ),
                 'remaining' => '',
                 'nextLiteral' => false,
+            ],
+            [
+            'input' => <<<RST
+This is a top-level paragraph.
+
+    This paragraph belongs to a first-level block quote.
+RST
+    ,
+            'output' => new ParagraphNode(
+                new SpanNode(
+                    <<<RST
+This is a top-level paragraph.
+RST,
+                    []
+                )
+            ),
+        'remaining' => '',
+        'nextLiteral' => false,
             ],
         ];
     }
