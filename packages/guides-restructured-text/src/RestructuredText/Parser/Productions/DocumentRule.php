@@ -41,19 +41,19 @@ final class DocumentRule implements Rule
         // TODO, these productions are now used in sections and documentrule,
         //    however most of them do not apply on documents?
         //
-        $productions = new RuleContainer(
-            $transitionRule,
-            new LinkRule(),
-            $literalBlockRule,
-            new BlockQuoteRule(),
-            new ListRule(),
-            new DirectiveRule($literalBlockRule, $directiveHandlers),
-            new CommentRule(),
-            new DefinitionListRule($spanParser),
-            new TableRule(),
-            // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
-            new ParagraphRule($inlineMarkupRule)
-        );
+        $productions = new RuleContainer();
+        $productions->push($transitionRule);
+        $productions->push(new LinkRule());
+        $productions->push($literalBlockRule);
+        $productions->push(new BlockQuoteRule());
+        $productions->push(new ListRule($productions));
+        $productions->push(new DirectiveRule($literalBlockRule, $directiveHandlers));
+        $productions->push(new CommentRule());
+        $productions->push(new DefinitionListRule($spanParser));
+        $productions->push(new TableRule());
+
+        // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
+        $productions->push(new ParagraphRule($inlineMarkupRule));
 
         $this->productions = (new RuleContainer(new SectionRule(new TitleRule($spanParser), $productions)))
             ->merge($productions);

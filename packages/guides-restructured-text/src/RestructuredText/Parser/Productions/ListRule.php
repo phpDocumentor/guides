@@ -47,65 +47,96 @@ final class ListRule implements Rule
      * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists
      * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#enumerated-lists
      */
-    public const LIST_MARKER = '/
+    private const LIST_MARKER = '/
         ^(
-            [-+*\x{2022}\x{2023}\x{2043}]     # match bullet list markers: "*", "+", "-", "•", "‣", or "⁃"
-            |(?:[\d#]+\.|[\d#]+\)|\([\d#]+\))
-             # match arabic (1-9) or auto-enumerated ("#") lists with formats: "1.", "1)", or "(1)"
+            [-+*\x{2022}\x{2023}\x{2043}]     # match bullet list markers: "*", "+", "-", "•", "‣", or "⁃"        
         )
         (?:\s+|$)
          # capture the spaces between marker and text to determine the list item text offset
          # (or eol, if text starts on a new line)
         /ux';
 
+    private RuleContainer $productions;
+
+    public function __construct(RuleContainer $productions)
+    {
+        $this->productions = $productions;
+    }
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         $documentIterator = $documentParser->getDocumentIterator();
-
-        // Lists should/cannot occur as the first line in a document; otherwise it is hard to have the following:
-        // 1. * is an asterisk
-        return $documentIterator->atStart() === false
-            && $this->isListLine($documentIterator->current());
+        return $this->isListLine($documentIterator->current());
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
-        $listOffset = null;
-        $listMarker = null;
         $buffer = new Buffer();
-        $this->isListLine($documentIterator->current(), $listMarker, $listOffset);
+        //First line sets the listmarker of the list, and the indentation of the current item.
+        $listConfig = $this->getItemConfig($documentIterator->current());
         $buffer->push($documentIterator->current());
 
-        while ($documentIterator->getNextLine() !== null
-            && (
-                $this->isListLine($documentIterator->getNextLine(), $listMarker, $listOffset)
-                || $this->isBlockLine($documentIterator->getNextLine(), $listOffset ?? 1)
-            )
+        $items = [];
+
+        while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker'])
+                || $this->isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
         ) {
             $documentIterator->next();
 
+            if ($this->isListItemStart($documentIterator->current())) {
+                $listConfig = $this->getItemConfig($documentIterator->current());
+                $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+                $buffer = new Buffer();
+            }
+
             // the list item offset is determined by the offset of the first text.
             // An offset of 1 or lower indicates that the list line didn't contain any text.
-            if ($listOffset <= 1) {
-                $listOffset = strlen($documentIterator->current()) - strlen(ltrim($documentIterator->current()));
+            if ($listConfig['indenting'] <= 1) {
+                $listConfig['indenting'] = strlen($documentIterator->current()) - strlen(
+                    ltrim($documentIterator->current())
+                );
             }
 
             $buffer->push($documentIterator->current());
         }
 
-        $list = $this->parseList($documentParserContext, $buffer->getLines());
+        $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
 
-        return new ListNode($list, $list[0]->isOrdered());
+        return new ListNode($items, false);
     }
 
-    private function isListLine(
-        ?string $line,
-        ?string &$listMarker = null,
-        ?int &$listOffset = 0,
-        ?string $nextLine = null
-    ): bool {
+    private function isListLine(?string $line): bool
+    {
+        if ($line === null) {
+            return false;
+        }
+
+        $isList = preg_match(self::LIST_MARKER, $line) > 0;
+        if (!$isList) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @return array{marker: string, indenting: int} */
+    public function getItemConfig(string $line): array
+    {
+        $isList = preg_match(self::LIST_MARKER, $line, $m) > 0;
+        if (!$isList) {
+            throw new \InvalidArgumentException('Line is not a valid item line');
+        }
+
+        return [
+            'marker' => $m[1],
+            'indenting' => mb_strlen($m[0])
+        ];
+    }
+
+    private function isListItemStart(?string $line, ?string $listMarker = null): bool
+    {
         if ($line === null) {
             return false;
         }
@@ -115,29 +146,13 @@ final class ListRule implements Rule
             return false;
         }
 
-        $offset = strlen($m[0]);
-        $normalizedMarker = preg_replace('/\d+/', 'd', $m[1]);
-        if (
-            // validate if next line can be considered part of a list for enumerated lists
-            $normalizedMarker !== $m[1]
-            && $nextLine !== null
-            && trim($nextLine) !== ''
-            && !$this->isBlockLine($nextLine, $offset)
-            && !$this->isListLine($nextLine, $normalizedMarker)
-        ) {
-            return false;
-        }
+        $normalizedMarker = $m[1];
 
         if ($listMarker !== null) {
-            $isList = $normalizedMarker === $listMarker;
+            return $normalizedMarker === $listMarker;
         }
 
-        if ($isList) {
-            $listOffset = $offset;
-            $listMarker = $normalizedMarker;
-        }
-
-        return $isList;
+        return true;
     }
 
     /**
@@ -168,64 +183,36 @@ final class ListRule implements Rule
      *
      * @param int $minIndent can be used to require a specific level of indentation (number of spaces)
      */
-    private function isIndented(string $line, int $minIndent = 1): bool
+    private function isIndented(string $line, int $minIndent): bool
     {
-        return strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
+        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
     }
 
-    /**
-     * @param string[] $lines
-     *
-     * @return ListItemNode[]
-     */
-    private function parseList(DocumentParserContext $documentParserContext, array $lines): array
+    /** @param array{marker: string, indenting: int} $listConfig */
+    private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
     {
-        $list = [];
-        $currentItem = null;
-        $currentPrefix = '';
-        $currentOffset = 0;
+        $normalized = new Buffer();
 
-        $createListItem = function (string $item, string $prefix) use ($documentParserContext): ListItemNode {
-            // parse any markup in the list item (e.g. sublists, directives)
-            $nodes = $documentParserContext->getParser()
-                ->getSubParser()->parse($documentParserContext->getContext(), $item)->getNodes();
-            if (count($nodes) === 1 && $nodes[0] instanceof ParagraphNode) {
-                // if there is only one paragraph node, the value is put directly in the <li> element
-                $nodes = [$nodes[0]->getValue()];
-            }
-
-            Assert::allIsInstanceOf($nodes, Node::class);
-
-            return new ListItemNode($prefix, mb_strlen($prefix) > 1, $nodes);
-        };
-
-        foreach ($lines as $line) {
-            if (preg_match(self::LIST_MARKER, $line, $m) > 0) {
-                // a list marker indicates the start of a new list item,
-                // complete the previous one and start a new one
-                if ($currentItem !== null) {
-                    $list[] = $createListItem($currentItem, $currentPrefix);
-                }
-
-                $currentOffset = strlen($m[0]);
-                $currentPrefix = $m[1];
-                $currentItem = substr($line, $currentOffset) . "\n";
-
-                continue;
-            }
-
-            // the list item offset is determined by the offset of the first text
-            if (trim($currentItem ?? '') === '') {
-                $currentOffset = strlen($line) - strlen(ltrim($line));
-            }
-
-            $currentItem .= substr($line, $currentOffset) . "\n";
+        foreach ($buffer->getLines() as $line) {
+            $normalized->push(mb_substr($line, $listConfig['indenting']));
         }
 
-        if ($currentItem !== null) {
-            $list[] = $createListItem($currentItem, $currentPrefix);
+        $listItem = new ListItemNode($listConfig['marker'], false, []);
+        $context = $context->withContents($normalized->getLinesString());
+        while ($context->getDocumentIterator()->valid()) {
+            $this->productions->apply($context, $listItem);
         }
 
-        return $list;
+        $nodes = $listItem->getChildren();
+        if (count($nodes) > 1) {
+            return $listItem;
+        }
+
+        // the list item offset is determined by the offset of the first text
+        if ($nodes[0] instanceof ParagraphNode) {
+            return new ListItemNode($listConfig['marker'], false, $nodes[0]->getChildren());
+        }
+
+        return $listItem;
     }
 }
