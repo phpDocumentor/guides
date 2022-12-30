@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
@@ -39,6 +40,8 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
  *   $inlineRule = new InlineMarkupRule($spanParser);
  *   $node = $inlineRule->apply($documentParser->withContents($buffer->getLinesString()), new MyNode());
  * ```
+ *
+ * @implements Rule<SpanNode>
  */
 final class InlineMarkupRule implements Rule
 {

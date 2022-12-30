@@ -60,8 +60,10 @@ final class Uml extends Directive
             }
         }
 
+        $classes = $options['classes'];
+        Assert::nullOrString($classes);
         $node = new UmlNode($value);
-        $node->setClasses(explode(' ', $options['classes'] ?? ''));
+        $node->setClasses(explode(' ', $classes ?? ''));
         $node->setCaption($caption);
 
         $document = $parser->getDocument();

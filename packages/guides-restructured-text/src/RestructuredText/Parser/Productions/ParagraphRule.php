@@ -28,6 +28,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#paragraphs
+ * @implements Rule<ParagraphNode>
  */
 final class ParagraphRule implements Rule
 {
@@ -86,10 +87,14 @@ final class ParagraphRule implements Rule
             return null;
         }
 
-        return $this->inlineMarkupRule->apply(
+        $node = new ParagraphNode(null);
+
+        $this->inlineMarkupRule->apply(
             $documentParserContext->withContents($buffer->getLinesString()),
-            new ParagraphNode(null)
+            $node
         );
+
+        return $node;
     }
 
     private function isWhiteline(?string $line): bool

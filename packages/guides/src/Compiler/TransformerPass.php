@@ -19,7 +19,7 @@ final class TransformerPass implements CompilerPass
             $documents[$key] = $this->documentNodeTraverser->traverse($document);
         }
 
-        return $documents;
+        return array_filter($documents);
     }
 
     public function getPriority(): int

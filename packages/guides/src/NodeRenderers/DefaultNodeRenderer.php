@@ -34,6 +34,7 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
         $value = $node->getValue();
 
         if ($value instanceof Node) {
+            assert($this->nodeRendererFactory !== null);
             return $this->nodeRendererFactory->get($value)->render($value, $environment);
         }
 

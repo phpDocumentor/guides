@@ -50,6 +50,7 @@ class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, No
             throw new InvalidArgumentException('Invalid node presented');
         }
 
+        assert($this->nodeRendererFactory !== null);
         return (new BaseDocumentRender($this->nodeRendererFactory))->render($node, $environment);
     }
 

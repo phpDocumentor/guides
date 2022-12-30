@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
@@ -23,6 +24,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#comments
+ * @implements Rule<Node>
  */
 final class CommentRule implements Rule
 {

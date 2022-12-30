@@ -44,6 +44,7 @@ class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, No
     public function render(Node $node, RenderContext $environment): string
     {
         Assert::isInstanceOf($node, DocumentNode::class);
+        Assert::isInstanceOf($this->nodeRendererFactory, NodeRendererFactory::class);
 
         return (new BaseDocumentRender($this->nodeRendererFactory))->render($node, $environment);
     }

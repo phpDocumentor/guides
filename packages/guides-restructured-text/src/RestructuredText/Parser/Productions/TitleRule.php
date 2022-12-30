@@ -24,6 +24,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#sections
+ * @implements Rule<TitleNode>
  */
 class TitleRule implements Rule
 {

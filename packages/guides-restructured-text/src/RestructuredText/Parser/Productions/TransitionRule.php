@@ -16,7 +16,6 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function in_array;
 use function strlen;
@@ -24,6 +23,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#transitions
+ * @implements Rule<SeparatorNode>
  */
 final class TransitionRule implements Rule
 {

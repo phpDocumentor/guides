@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Meta;
 use LogicException;
 use phpDocumentor\Guides\Metas;
 
+use Webmozart\Assert\Assert;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
@@ -29,7 +30,10 @@ final class CachedMetasLoader
             throw new LogicException(sprintf('Could not load file "%s"', $metaCachePath));
         }
 
-        $metas->setMetaEntries(unserialize($contents));
+        $documents = unserialize($contents);
+        Assert::allIsInstanceOf($documents, DocumentEntry::class);
+        Assert::isArray($documents);
+        $metas->setMetaEntries($documents);
     }
 
     public function cacheMetaEntries(string $cacheDirectory, Metas $metas): void
