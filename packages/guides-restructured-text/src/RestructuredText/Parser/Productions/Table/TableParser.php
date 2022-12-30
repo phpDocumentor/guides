@@ -23,8 +23,6 @@ class TableParser
     private const SIMPLE_TABLE_LETTER = '=';
     // "-" is valid as a separator in a simple table, except
     // on the first and last lines
-    private const SIMPLE_TABLE_LETTER_ALT = '-';
-
     private const PRETTY_TABLE_LETTER = '-';
 
     private const PRETTY_TABLE_HEADER = '=';
@@ -61,18 +59,12 @@ class TableParser
             return $this->createSeparatorLineConfig($line, [self::PRETTY_TABLE_HEADER, self::PRETTY_TABLE_JOINT], true, true);
         }
 
-        if ($chars[0] === self::SIMPLE_TABLE_LETTER && $chars[1] === ' ') {
-            return $this->createSeparatorLineConfig($line, [self::SIMPLE_TABLE_LETTER, ' '], true, false);
-        }
-
-        if ($chars[0] === self::SIMPLE_TABLE_LETTER_ALT && $chars[1] === ' ') {
-            return $this->createSeparatorLineConfig($line, [self::SIMPLE_TABLE_LETTER_ALT, ' '], false, false);
-        }
+        return null;
     }
 
     public function guessTableType(string $line): string
     {
-        return $line[0] === self::SIMPLE_TABLE_LETTER ? Productions\TableRule::TYPE_SIMPLE : Productions\TableRule::TYPE_PRETTY;
+        return Productions\TableRule::TYPE_PRETTY;
     }
 
     /**
