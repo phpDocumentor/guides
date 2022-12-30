@@ -38,21 +38,7 @@ final class ListItemNodeTest extends TestCase
 
         self::assertSame('*', $node->getPrefix());
         self::assertTrue($node->isOrdered());
-        self::assertSame($contents, $node->getContents());
+        self::assertSame($contents, $node->getChildren());
         self::assertNull($node->getValue());
-    }
-
-    /**
-     * @covers ::getContentsAsString
-     */
-    public function testContentsCanBeMappedToString(): void
-    {
-        $contents = [
-            new RawNode('contents1'),
-            new RawNode('contents2'),
-        ];
-        $node = new ListItemNode('*', true, $contents);
-
-        self::assertSame("contents1\ncontents2", $node->getContentsAsString());
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Parser\Productions;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
@@ -21,7 +21,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 
 use function implode;
 
-final class ParagraphRuleTest extends TestCase
+final class ParagraphRuleTest extends AbstractRuleTest
 {
     use ProphecyTrait;
 
@@ -40,20 +40,7 @@ final class ParagraphRuleTest extends TestCase
         ?string $nextLine,
         bool $nextLiteral = false
     ): void {
-        $iterator = new LinesIterator();
-        $iterator->load($input);
-
-        $documentParser = new DocumentParserContext(
-            $input,
-            new ParserContext(
-                'test',
-                'test',
-                1,
-                $this->prophesize(FilesystemInterface::class)->reveal(),
-                new UrlGenerator()
-            ),
-            $this->prophesize(MarkupLanguageParser::class)->reveal()
-        );
+        $documentParser = $this->createContext($input);
 
         $spanParser = $this->prophesize(SpanParser::class);
         $spanParser->parse(

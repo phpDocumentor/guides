@@ -19,7 +19,7 @@ final class ListItemNode extends Node
     private bool $ordered;
 
     /** @var Node[] */
-    private array $contents;
+    private array $nodes;
 
     /**
      * @param Node[] $contents
@@ -28,7 +28,7 @@ final class ListItemNode extends Node
     {
         $this->prefix   = $prefix;
         $this->ordered  = $ordered;
-        $this->contents = $contents;
+        $this->nodes = $contents;
 
         parent::__construct(null);
     }
@@ -46,19 +46,13 @@ final class ListItemNode extends Node
     /**
      * @return Node[]
      */
-    public function getContents(): array
+    public function getChildren(): array
     {
-        return $this->contents;
+        return $this->nodes;
     }
 
-    public function getContentsAsString(): string
+    public function addChildNode(Node $node): void
     {
-        return trim(
-            array_reduce(
-                $this->contents,
-                static fn(string $contents, Node $node): string => $contents . $node->getValueString() . "\n",
-                ''
-            )
-        );
+        $this->nodes[] = $node;
     }
 }

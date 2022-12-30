@@ -5,11 +5,7 @@
 {% endif %}
 
 <{{ keyword }}{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
-{% for item in node.items %}
-    <li>
-    {%- for content in item.contents -%}
-        {{ renderNode(content) }}
-    {%- endfor -%}
-    </li>
+{% for child in node.children %}
+    {{ renderNode(child) }}
 {% endfor %}
 </{{ keyword }}>
