@@ -170,4 +170,38 @@ REST,
             $result
         );
     }
+
+    public function testListWithOddIndenting(): void
+    {
+        $input = <<<INPUT
+- 
+  first items
+- 
+    second item
+    other line
+  Not included
+INPUT;
+
+        $context = $this->createContext($input);
+
+        $result = $this->rule->apply($context);
+
+        self::assertRemainingEquals(
+            <<<REST
+  Not included
+
+REST,
+            $context->getDocumentIterator()
+        );
+
+        self::assertEquals(
+            new ListNode(
+                [
+                    new ListItemNode('-', false, [new RawNode('first items')]),
+                    new ListItemNode('-', false, [new RawNode("second item\nother line")])
+                ]
+            ),
+            $result
+        );
+    }
 }

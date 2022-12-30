@@ -131,7 +131,7 @@ final class ListRule implements Rule
 
         return [
             'marker' => $m[1],
-            'indenting' => mb_strlen($m[0])
+            'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0])
         ];
     }
 

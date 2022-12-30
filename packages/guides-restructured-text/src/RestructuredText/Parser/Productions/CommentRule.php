@@ -30,7 +30,7 @@ final class CommentRule implements Rule
 {
     public function applies(DocumentParserContext $documentParser): bool
     {
-        return $this->isCommentLine($documentParser->getDocumentIterator()->current());
+        return $this->isComment($documentParser->getDocumentIterator()->current());
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
