@@ -5,15 +5,23 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
+/** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
 {
+    private RuleContainer $productions;
+
+    public function __construct(RuleContainer $productions)
+    {
+        $this->productions = $productions;
+    }
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
@@ -28,7 +36,7 @@ final class SimpleTableRule implements Rule
         $headers = [];
         $rows = [];
         while ($documentIterator->getNextLine() !== null && trim($documentIterator->getNextLine()) !== '') {
-            $rows[] = $this->tryParseRow($documentIterator, $columnDefinition);
+            $rows[] = $this->tryParseRow($documentParserContext, $columnDefinition);
             $documentIterator->next();
 
             if ($documentIterator->getNextLine() !== null &&
@@ -44,6 +52,7 @@ final class SimpleTableRule implements Rule
         return new TableNode($rows, $headers);
     }
 
+    /** @return array<array-key, array{start: int, length:int|null}> */
     private function getColumnDefinition(string $line): array
     {
         $columnDefinition = [];
@@ -55,7 +64,7 @@ final class SimpleTableRule implements Rule
          * In a simple table the first line defines the size of each column, the number of equals signs defines the
          * max column length. Except for the last column which is unbound
          */
-        for ($i = 0; $i < strlen($definitionLine); $i++) {
+        for ($i = 0, $iMax = strlen($definitionLine); $i < $iMax; $i++) {
             if ($definitionLine[$i] === ' ') {
                 if ($lenght > 0) {
                     $columnDefinition[] = [
@@ -86,15 +95,10 @@ final class SimpleTableRule implements Rule
         return $columnDefinition;
     }
 
-    private function tryParseRow(LinesIterator $documentIterator, array $columnDefinitions)
+    /** @param array<array-key, array{start: int, length:int|null}> $columnDefinitions */
+    private function tryParseRow(DocumentParserContext $documentParserContext, array $columnDefinitions): TableRow
     {
-        /*
-         * A row consists of columns, need to figure out how process cell contents, as it can be body elements
-         * https://docutils.sourceforge.io/docs/ref/doctree.html#body-elements
-         *
-         * This basically means that we have to process the cell as some a fragement, but as we are parsing line by line
-         * it's a bit harder. We need to detect rowspans and col spans, before going into the real parsing?
-         */
+        $documentIterator = $documentParserContext->getDocumentIterator();
         $cellContents = [];
         $line = $documentIterator->current();
         foreach ($columnDefinitions as $column => $columnDefinition) {
@@ -123,10 +127,29 @@ final class SimpleTableRule implements Rule
 
         $row = new TableRow();
         foreach ($cellContents as $content) {
-            $row->addColumn(new TableColumn(trim($content), 1, new SpanNode(trim($content), [])));
+            $row->addColumn($this->createColumn($content, $documentParserContext, 1));
         }
 
         return $row;
+    }
+
+    private function createColumn(string $content, DocumentParserContext $documentParserContext, int $colspan): TableColumn
+    {
+        $column = new TableColumn(trim($content), $colspan);
+        $context = $documentParserContext->withContents($content);
+        $this->productions->apply($context, $column);
+
+        $nodes = $column->getChildren();
+        if (count($nodes) > 1) {
+            return $column;
+        }
+
+        // the list item offset is determined by the offset of the first text
+        if ($nodes[0] instanceof ParagraphNode) {
+            return new TableColumn(trim($content), $colspan, $nodes[0]->getChildren());
+        }
+
+        return $column;
     }
 
     private function isColumnDefinitionLine(string $line): bool
@@ -134,17 +157,26 @@ final class SimpleTableRule implements Rule
         return preg_match('/^(?:={2,} +)+={2,}$/', trim($line)) > 0;
     }
 
-    private function isColspanDefinition(string $line): bool
+    private function isColspanDefinition(?string $line): bool
     {
+        if ($line === null) {
+            return false;
+        }
+
         return preg_match('/^(?:-{2,} +)+-{2,}$/', trim($line)) > 0;
     }
 
-    private function startsWithBlankCell(LinesIterator $documentIterator, $columnDefinitions): bool
+    /** @param array{start: int, length:int|null} $columnDefinition */
+    private function startsWithBlankCell(LinesIterator $documentIterator, array $columnDefinition): bool
     {
+        if ($documentIterator->getNextLine() === null) {
+            return false;
+        }
+
         $firstCellContent = mb_substr(
             $documentIterator->getNextLine(),
-            $columnDefinitions['start'],
-            $columnDefinitions['length']
+            $columnDefinition['start'],
+            $columnDefinition['length']
         );
 
         return trim($firstCellContent) === '' || trim($firstCellContent) === '\\';

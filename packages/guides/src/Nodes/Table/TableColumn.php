@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use function strlen;
 use function trim;
 
-final class TableColumn
+final class TableColumn extends Node
 {
     private string $content;
 
@@ -29,11 +29,18 @@ final class TableColumn
 
     private ?Node $node = null;
 
-    public function __construct(string $content, int $colSpan, ?Node $node = null)
+    /** @var Node[] */
+    private array $nodes = [];
+
+    public function __construct(string $content, int $colSpan, $node = null)
     {
         $this->content = trim($content);
         $this->colSpan = $colSpan;
-        $this->node = $node;
+        if (is_array($node)) {
+            $this->nodes = $node;
+        } else {
+            $this->node = $node;
+        }
     }
 
     public function getContent(): string
@@ -87,5 +94,29 @@ final class TableColumn
     public function isCompletelyEmpty(): bool
     {
         return strlen($this->content) === 0;
+    }
+
+    public function addChildNode(Node $node): void
+    {
+        $this->nodes[] = $node;
+    }
+
+    /** @return Node[] */
+    public function getChildren(): array
+    {
+        //TODO remove this, when grid tables are refactored
+        if (empty($this->nodes)) {
+            return [$this->node];
+        }
+
+        return $this->nodes;
+    }
+
+    public function replaceNode(int $key, Node $node): Node
+    {
+        $result = clone $this;
+        $result->nodes[$key] = $node;
+
+        return $result;
     }
 }

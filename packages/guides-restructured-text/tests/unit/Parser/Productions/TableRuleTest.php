@@ -32,99 +32,6 @@ final class TableRuleTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * First 2 simple table cases are broken, headers are not detected correctly?
-     *
-     * @dataProvider simpleTableProvider
-     * @dataProvider prettyTableBasicsProvider
-     * @dataProvider gridTableWithColSpanProvider
-     * @dataProvider gridTableWithRowSpanProvider
-     * @dataProvider gridTableFollowUpTextProvider
-     */
-    public function testSimpleTableCreation(string $input, array $rows, $headers): void
-    {
-        $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule(new LineDataParser(new SpanParser()));
-        $table = $rule->apply($context->reveal());
-
-        self::assertEquals($rows, $table->getData());
-        self::assertEquals(count($rows), $table->getRows());
-        self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
-        self::assertEquals($headers, array_keys($table->getHeaders()));
-    }
-
-    public function simpleTableProvider(): \Generator
-    {
-        $input = <<<RST
-=====  ===== =====
-Col A  Col B Col C
-=====  ===== =====
-Col X  Col Y Col Z
------  ----- -----
-Col U  Col J Col K
-=====  ===== =====
-
-RST;
-
-        $row1 = new TableRow();
-        $row1->addColumn($this->createColumnNode('Col A'));
-        $row1->addColumn($this->createColumnNode('Col B'));
-        $row1->addColumn($this->createColumnNode('Col C'));
-
-        $row2 = new TableRow();
-        $row2->addColumn($this->createColumnNode('Col X'));
-        $row2->addColumn($this->createColumnNode('Col Y'));
-        $row2->addColumn($this->createColumnNode('Col Z'));
-
-        $row3 = new TableRow();
-        $row3->addColumn($this->createColumnNode('Col U'));
-        $row3->addColumn($this->createColumnNode('Col J'));
-        $row3->addColumn($this->createColumnNode('Col K'));
-
-        $expected = [
-            2 => $row1,
-            4 => $row2,
-            6 => $row3,
-        ];
-
-        yield [$input, $expected, [2]];
-
-        $input = <<<RST
-=====  ===== =====
-  1      2     3
-=====  ===== =====
-Col A  Col B Col C
-Col X  Col Y Col Z
-Col U  Col J Col K
-=====  ===== =====
-
-RST;
-        $header1 = new TableRow();
-        $header1->addColumn($this->createColumnNode('1'));
-        $header1->addColumn($this->createColumnNode('2'));
-        $header1->addColumn($this->createColumnNode('3'));
-
-        $expected = [
-            2 => $header1,
-            3 => $row1,
-            4 => $row2,
-            5 => $row3,
-        ];
-
-        yield [$input, $expected, [2]];
-
-        $input = <<<RST
-=====  ===== =====
-  1      2     3
-Col A  Col B Col C
-Col X  Col Y Col Z
-Col U  Col J Col K
-=====  ===== =====
-RST;
-
-        yield [$input, $expected, []];
-    }
-
     private function createColumnNode(string $content, int $colSpan = 1): TableColumn
     {
         return new TableColumn($content, $colSpan, new SpanNode($content));
@@ -330,7 +237,7 @@ RST;
 RST;
 
         $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule = new TableRule();
         $rule->apply($context->reveal());
 
         self::assertContainsError(
@@ -372,7 +279,7 @@ ERROR
 RST;
 
         $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule = new TableRule();
         $rule->apply($context->reveal());
 
         self::assertContainsError(
@@ -412,7 +319,7 @@ SOME more text here
 RST;
 
         $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule(new LineDataParser(new SpanParser()));
+        $rule = new TableRule();
         $rule->apply($context->reveal());
 
         self::assertContainsError(
