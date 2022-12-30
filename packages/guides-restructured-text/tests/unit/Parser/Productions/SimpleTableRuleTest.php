@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
@@ -13,19 +14,27 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class SimpleTableRuleTest extends TestCase
+class SimpleTableRuleTest extends AbstractRuleTest
 {
     use ProphecyTrait;
+
+    private SimpleTableRule $rule;
+
+    protected function setUp(): void
+    {
+        $this->rule = new SimpleTableRule($this->givenCollectAllRuleContainer());
+    }
+
 
     /** @dataProvider simpleTableStartProvider */
     public function testApplies(string $input): void
     {
-        $parser = $this->givenDocumentParserContext($input);
+        $parser = $this->createContext($input);
 
-        $rule = new SimpleTableRule();
-        self::assertTrue($rule->applies($parser->reveal()));
+        self::assertTrue($this->rule->applies($parser));
     }
 
+    /** @return string[][] */
     public function simpleTableStartProvider(): array
     {
         return [
@@ -40,22 +49,12 @@ class SimpleTableRuleTest extends TestCase
     /** @dataProvider nonSimpleTableStartProvider */
     public function testDoesNotApply(string $input): void
     {
-        $parser = $this->givenDocumentParserContext($input);
+        $parser = $this->createContext($input);
 
-        $rule = new SimpleTableRule();
-        self::assertFalse($rule->applies($parser->reveal()));
+        self::assertFalse($this->rule->applies($parser));
     }
 
-    private function givenDocumentParserContext(string $input)
-    {
-        $iterator = new LinesIterator();
-        $iterator->load($input);
-
-        $context = $this->prophesize(DocumentParserContext::class);
-        $context->getDocumentIterator()->willReturn($iterator);
-        return $context;
-    }
-
+    /** @return string[][] */
     public function nonSimpleTableStartProvider(): array
     {
         return [
@@ -76,12 +75,12 @@ C    D
 RST;
 
         $row1 = new TableRow();
-        $row1->addColumn(new TableColumn('AAA', 1, new SpanNode('AAA')));
-        $row1->addColumn(new TableColumn('BBB', 1, new SpanNode('BBB')));
+        $row1->addColumn($this->createColumn('AAA'));
+        $row1->addColumn($this->createColumn('BBB'));
 
         $row2 = new TableRow();
-        $row2->addColumn(new TableColumn('C', 1, new SpanNode('C')));
-        $row2->addColumn(new TableColumn('D', 1, new SpanNode('D')));
+        $row2->addColumn($this->createColumn('C'));
+        $row2->addColumn($this->createColumn('D'));
 
         $expected = new TableNode(
             [
@@ -91,8 +90,7 @@ RST;
             []
         );
 
-        $rule = new SimpleTableRule();
-        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+        $result = $this->rule->apply($this->createContext($input), null);
 
         self::assertEquals($expected, $result);
     }
@@ -108,12 +106,12 @@ C    D
 RST;
 
         $row1 = new TableRow();
-        $row1->addColumn(new TableColumn('AAA', 1, new SpanNode('AAA')));
-        $row1->addColumn(new TableColumn("BBB\nBBB", 1, new SpanNode("BBB\nBBB")));
+        $row1->addColumn($this->createColumn('AAA'));
+        $row1->addColumn($this->createColumn("BBB\nBBB"));
 
         $row2 = new TableRow();
-        $row2->addColumn(new TableColumn('C', 1, new SpanNode('C')));
-        $row2->addColumn(new TableColumn('D', 1, new SpanNode('D')));
+        $row2->addColumn($this->createColumn('C'));
+        $row2->addColumn($this->createColumn('D'));
 
         $expected = new TableNode(
             [
@@ -123,8 +121,7 @@ RST;
             []
         );
 
-        $rule = new SimpleTableRule();
-        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+        $result = $this->rule->apply($this->createContext($input), null);
 
         self::assertEquals($expected, $result);
     }
@@ -142,24 +139,24 @@ Forth row
 RST;
 
         $row1 = new TableRow();
-        $row1->addColumn(new TableColumn('First col', 1, new SpanNode('First col')));
-        $row1->addColumn(new TableColumn('Second col', 1, new SpanNode('Second col')));
-        $row1->addColumn(new TableColumn('Third col', 1, new SpanNode('Third col')));
+        $row1->addColumn($this->createColumn('First col'));
+        $row1->addColumn($this->createColumn('Second col'));
+        $row1->addColumn($this->createColumn('Third col'));
 
         $row2 = new TableRow();
-        $row2->addColumn(new TableColumn('Second row', 1, new SpanNode('Second row')));
-        $row2->addColumn(new TableColumn('Other col', 1, new SpanNode('Other col')));
-        $row2->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+        $row2->addColumn($this->createColumn('Second row'));
+        $row2->addColumn($this->createColumn('Other col'));
+        $row2->addColumn($this->createColumn('Last col'));
 
         $row3 = new TableRow();
-        $row3->addColumn(new TableColumn('Third row', 1, new SpanNode('Third row')));
-        $row3->addColumn(new TableColumn('', 1, new SpanNode('')));
-        $row3->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+        $row3->addColumn($this->createColumn('Third row'));
+        $row3->addColumn($this->createColumn(''));
+        $row3->addColumn($this->createColumn('Last col'));
 
         $row4 = new TableRow();
-        $row4->addColumn(new TableColumn('Forth row', 1, new SpanNode('Forth row')));
-        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
-        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row4->addColumn($this->createColumn('Forth row'));
+        $row4->addColumn($this->createColumn(''));
+        $row4->addColumn($this->createColumn(''));
 
         $expected = new TableNode(
             [
@@ -172,8 +169,7 @@ RST;
             ]
         );
 
-        $rule = new SimpleTableRule();
-        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+        $result = $this->rule->apply($this->createContext($input), null);
 
         self::assertEquals($expected, $result);
     }
@@ -192,24 +188,24 @@ Forth row
 RST;
 
         $row1 = new TableRow();
-        $row1->addColumn(new TableColumn('First col', 1, new SpanNode('First col')));
-        $row1->addColumn(new TableColumn('Second col', 1, new SpanNode('Second col')));
-        $row1->addColumn(new TableColumn('Third col', 1, new SpanNode('Third col')));
+        $row1->addColumn($this->createColumn('First col'));
+        $row1->addColumn($this->createColumn('Second col'));
+        $row1->addColumn($this->createColumn('Third col'));
 
         $row2 = new TableRow();
-        $row2->addColumn(new TableColumn('Second row', 1, new SpanNode('Second row')));
-        $row2->addColumn(new TableColumn('Other col', 1, new SpanNode('Other col')));
-        $row2->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+        $row2->addColumn($this->createColumn('Second row'));
+        $row2->addColumn($this->createColumn('Other col'));
+        $row2->addColumn($this->createColumn('Last col'));
 
         $row3 = new TableRow();
-        $row3->addColumn(new TableColumn('Third row', 1, new SpanNode('Third row')));
-        $row3->addColumn(new TableColumn('', 1, new SpanNode('')));
-        $row3->addColumn(new TableColumn('Last col', 1, new SpanNode('Last col')));
+        $row3->addColumn($this->createColumn('Third row'));
+        $row3->addColumn($this->createColumn(''));
+        $row3->addColumn($this->createColumn('Last col'));
 
         $row4 = new TableRow();
-        $row4->addColumn(new TableColumn('Forth row', 1, new SpanNode('Forth row')));
-        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
-        $row4->addColumn(new TableColumn('', 1, new SpanNode('')));
+        $row4->addColumn($this->createColumn('Forth row'));
+        $row4->addColumn($this->createColumn(''));
+        $row4->addColumn($this->createColumn(''));
 
         $expected = new TableNode(
             [
@@ -222,9 +218,13 @@ RST;
             ]
         );
 
-        $rule = new SimpleTableRule();
-        $result = $rule->apply($this->givenDocumentParserContext($input)->reveal(), null);
+        $result = $this->rule->apply($this->createContext($input), null);
 
         self::assertEquals($expected, $result);
+    }
+
+    private function createColumn(string $content): TableColumn
+    {
+        return new TableColumn($content, 1, [new RawNode($content)]);
     }
 }
