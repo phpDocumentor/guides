@@ -32,19 +32,21 @@ final class BlockQuoteRule implements Rule
 {
     public function applies(DocumentParserContext $documentParser): bool
     {
-        $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->current());
+        $isWhiteSpace = trim($documentParser->getDocumentIterator()->current()) === '';
+        $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->getNextLine());
 
-        return $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
+        return $isWhiteSpace && $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
+        $documentIterator->next();
+        $indent = mb_strlen($documentIterator->current()) - mb_strlen(trim($documentIterator->current()));
         $buffer->push($documentIterator->current());
-        $nextLine = $documentIterator->getNextLine();
 
-        while ($nextLine !== null && $this->isBlockLine($documentIterator->getNextLine())) {
+        while ($this->isBlockLine($documentIterator->getNextLine(), $indent)) {
             $documentIterator->next();
             $buffer->push($documentIterator->current());
         }
@@ -64,17 +66,26 @@ final class BlockQuoteRule implements Rule
         );
     }
 
-    private function isBlockLine(?string $line): bool
+    private function isBlockLine(?string $line, int $minIndent = 1): bool
     {
         if ($line === null) {
             return false;
         }
 
-        if ($line !== '') {
-            return trim($line[0]) === '';
-        }
+        return trim($line) === '' || $this->isIndented($line, $minIndent);
+    }
 
-        return trim($line) === '';
+    /**
+     * Check if line is an indented one.
+     *
+     * This does *not* include blank lines, use {@see isBlockLine()} to check
+     * for blank or indented lines.
+     *
+     * @param int $minIndent can be used to require a specific level of indentation (number of spaces)
+     */
+    private function isIndented(string $line, int $minIndent): bool
+    {
+        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
     }
 
     /**
