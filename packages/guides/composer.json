@@ -20,7 +20,7 @@
         "php": ">=7.2.5||^8.0",
         "league/flysystem": "^1.0",
         "phpdocumentor/flyfinder": "^1.1",
-        "twig/twig": "~2.0",
+        "twig/twig": "~2.15",
         "webmozart/assert": "^1.11",
         "league/tactician": "^1.1",
         "psr/event-dispatcher": "^1.0",
