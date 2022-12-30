@@ -1,1 +1,5 @@
-<li{{ prefix == '-' ? ' class="dash"' : '' }}>{{ text|raw }}</li>
+<li{{- node.prefix == '-' ? ' class="dash"' : '' -}}>
+    {%- for child in node.children -%}
+        {{ renderNode(child) }}
+    {%- endfor -%}
+</li>

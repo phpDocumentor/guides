@@ -27,6 +27,11 @@ final class RuleContainer
         $this->productions = $productions;
     }
 
+    public function push(Rule $production): void
+    {
+        $this->productions[] = $production;
+    }
+
     public function apply(DocumentParserContext $documentParserContext, Node $on): void
     {
         $documentIterator = $documentParserContext->getDocumentIterator();

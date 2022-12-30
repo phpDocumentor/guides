@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Lists;
 
+/** @deprecated Needs to be removed duplicate of {@see ListItemNode} */
 final class ListItem
 {
     private string $prefix;

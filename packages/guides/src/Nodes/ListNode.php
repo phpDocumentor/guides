@@ -23,7 +23,7 @@ final class ListNode extends Node
     /**
      * @param ListItemNode[] $items
      */
-    public function __construct(array $items, bool $ordered)
+    public function __construct(array $items, bool $ordered = false)
     {
         parent::__construct();
 
@@ -34,11 +34,6 @@ final class ListNode extends Node
     /**
      * @return ListItemNode[]
      */
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
     public function getChildren(): array
     {
         return $this->items;
