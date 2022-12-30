@@ -20,6 +20,7 @@ abstract class AbstractRuleTest extends TestCase
     protected static function assertRemainingEquals(string $expected, LinesIterator $actual): void
     {
         $rest = '';
+        $actual->next();
         do {
             $rest .= $actual->current() . "\n";
             $actual->next();
