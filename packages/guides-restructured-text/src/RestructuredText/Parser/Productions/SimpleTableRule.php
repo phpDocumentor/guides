@@ -31,7 +31,10 @@ final class SimpleTableRule implements Rule
             $rows[] = $this->tryParseRow($documentIterator, $columnDefinition);
             $documentIterator->next();
 
-            if ($documentIterator->getNextLine() !== null && $this->isColumnDefinitionLine($documentIterator->current()) && trim($documentIterator->getNextLine()) !== '') {
+            if ($documentIterator->getNextLine() !== null &&
+                trim($documentIterator->getNextLine()) !== '' &&
+                $this->isColumnDefinitionLine($documentIterator->current())
+            ) {
                 $documentIterator->next();
                 $headers = $rows;
                 $rows = [];
@@ -98,16 +101,22 @@ final class SimpleTableRule implements Rule
             $cellContents[$column] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
         }
 
-        while ($documentIterator->getNextLine() !== null && $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])) {
+        while ($documentIterator->getNextLine() !== null &&
+            $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])
+        ) {
             $documentIterator->next();
             $line = $documentIterator->current();
 
             foreach ($columnDefinitions as $column => $columnDefinition) {
-                $cellContents[$column] .= "\n" . mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
+                $cellContents[$column] .= "\n" . mb_substr(
+                    $line,
+                    $columnDefinition['start'],
+                    $columnDefinition['length']
+                );
             }
         }
 
-        // We detected a colspan, this means that we will have to redo the splitting according to the new column definition.
+        // We detected a colspan, we will have to redo the splitting according to the new column definition.
         if ($this->isColspanDefinition($documentIterator->getNextLine())) {
             $documentIterator->next();
         }
@@ -132,7 +141,12 @@ final class SimpleTableRule implements Rule
 
     private function startsWithBlankCell(LinesIterator $documentIterator, $columnDefinitions): bool
     {
-        $firstCellContent = mb_substr($documentIterator->getNextLine(), $columnDefinitions['start'], $columnDefinitions['length']);
+        $firstCellContent = mb_substr(
+            $documentIterator->getNextLine(),
+            $columnDefinitions['start'],
+            $columnDefinitions['length']
+        );
+
         return trim($firstCellContent) === '' || trim($firstCellContent) === '\\';
     }
 }
