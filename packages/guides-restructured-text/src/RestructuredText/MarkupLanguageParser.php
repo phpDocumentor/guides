@@ -45,6 +45,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGenerator;
 use RuntimeException;
 
+use Webmozart\Assert\Assert;
 use function strtolower;
 
 class MarkupLanguageParser implements ParserInterface
@@ -57,10 +58,13 @@ class MarkupLanguageParser implements ParserInterface
     private ?string $filename = null;
 
     private ?DocumentParserContext $documentParser = null;
+
+    /** @var Rule<DocumentNode> */
     private Rule $startingRule;
 
     /**
      * @param iterable<Directive> $directives
+     * @param Rule<DocumentNode> $startingRule
      */
     public function __construct(
         Rule $startingRule,
@@ -170,7 +174,10 @@ class MarkupLanguageParser implements ParserInterface
         $this->documentParser = new DocumentParserContext($contents, $environment, $this);
 
         if ($this->startingRule->applies($this->documentParser)) {
-            return $this->startingRule->apply($this->documentParser);
+            $document = $this->startingRule->apply($this->documentParser);
+            Assert::isInstanceOf($document, DocumentNode::class);
+
+            return $document;
         }
 
         throw new InvalidArgumentException('Content is not a valid document content');
@@ -183,7 +190,10 @@ class MarkupLanguageParser implements ParserInterface
     {
         $documentParserContext = $documentParserContext->withContents($contents);
         if ($this->startingRule->applies($documentParserContext)) {
-            return $this->startingRule->apply($documentParserContext);
+            $document = $this->startingRule->apply($documentParserContext);
+            Assert::isInstanceOf($document, DocumentNode::class);
+
+            return $document;
         }
 
         throw new InvalidArgumentException('Content is not a valid document content');

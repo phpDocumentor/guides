@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
+/** @template-covariant TNode as Node */
 interface Rule
 {
     public function applies(DocumentParserContext $documentParser): bool;
@@ -31,6 +32,11 @@ interface Rule
      * By using a Look Ahead, we prevent the cursor from advancing; and this caused the cursor to 'rest' on the line
      * that is considered that last relevant line. The document parser will advance the line after successfully parsing
      * this and to send the Parser into a line that belongs to another state.
+     *
+     * @template TParent as Node
+     * @param TParent|null $on
+     *
+     * @return ($on is null ? TNode|null : TParent|TNode|null)
      */
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node;
 }

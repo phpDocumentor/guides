@@ -25,6 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-targets
+ * @implements Rule<AnchorNode>
  */
 final class LinkRule implements Rule
 {
@@ -48,6 +49,7 @@ final class LinkRule implements Rule
             $node = new AnchorNode($link->getName());
         }
 
+        //TODO: pass link object to setLink
         $documentParserContext->getContext()->setLink($link->getName(), $link->getUrl());
 
         return $node;

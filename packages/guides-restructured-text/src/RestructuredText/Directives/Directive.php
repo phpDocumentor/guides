@@ -50,7 +50,7 @@ abstract class Directive
      * @param Node|null $node the node that follows the directive
      * @param string $variable the variable name of the directive
      * @param string $data the data of the directive (following ::)
-     * @param string[] $options the array of options for this directive
+     * @param mixed[] $options the array of options for this directive
      */
     public function process(
         MarkupLanguageParser $parser,
@@ -79,7 +79,7 @@ abstract class Directive
      *
      * The arguments are the same that process
      *
-     * @param string[] $options
+     * @param mixed[] $options
      */
     public function processNode(MarkupLanguageParser $parser, string $variable, string $data, array $options): Node
     {
@@ -94,7 +94,7 @@ abstract class Directive
      *
      * The arguments are the same that process
      *
-     * @param string[] $options
+     * @param mixed[] $options
      */
     public function processAction(MarkupLanguageParser $parser, string $variable, string $data, array $options): void
     {

@@ -26,6 +26,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#block-quotes
+ * @implements Rule<QuoteNode>
  */
 final class BlockQuoteRule implements Rule
 {

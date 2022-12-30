@@ -17,9 +17,9 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
+/** @implements Rule<DocumentNode> */
 final class DocumentRule implements Rule
 {
     private RuleContainer $productions;
@@ -64,6 +64,7 @@ final class DocumentRule implements Rule
         return $documentParser->getDocumentIterator()->atStart();
     }
 
+    /** @param DocumentNode|null $on */
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
         $on = $on ?? new DocumentNode(

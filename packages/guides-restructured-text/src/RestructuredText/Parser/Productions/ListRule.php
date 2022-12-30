@@ -37,6 +37,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists
+ * @implements Rule<ListNode>
  */
 final class ListRule implements Rule
 {

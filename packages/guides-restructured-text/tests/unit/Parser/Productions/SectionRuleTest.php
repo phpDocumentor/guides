@@ -27,6 +27,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 final class SectionRuleTest extends TestCase
 {
@@ -43,7 +44,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser->reveal()
+            $spanParser
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -72,14 +73,14 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser->reveal()
+            $spanParser
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
         $document = new DocumentNode('foo', 'index');
 
-        $result = $rule->apply($documentParser, $document);
+        $rule->apply($documentParser, $document);
 
         $section = new SectionNode(new TitleNode(new SpanNode('Title 1'), 1));
         $section->addChildNode(new SectionNode(new TitleNode(new SpanNode('Title 1.1'), 2)));
@@ -108,7 +109,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser->reveal()
+            $spanParser
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -157,7 +158,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser->reveal()
+            $spanParser
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -180,14 +181,14 @@ RST;
         );
     }
 
-    private function getSpanParser()
+    private function getSpanParser(): SpanParser
     {
         $spanParser = $this->prophesize(SpanParser::class);
         $spanParser->parse(
             Argument::any(),
             Argument::type(ParserContext::class)
         )->will(fn($args) => new SpanNode($args[0]));
-        return $spanParser;
+        return $spanParser->reveal();
     }
 
     private function getDocumentParserContext(string $content): DocumentParserContext

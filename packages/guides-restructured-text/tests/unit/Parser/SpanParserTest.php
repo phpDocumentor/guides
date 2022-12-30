@@ -19,10 +19,7 @@ use function current;
 
 final class SpanParserTest extends TestCase
 {
-    /**
-     * @var Generator|mixed
-     */
-    public $faker;
+    public Generator $faker;
     use ProphecyTrait;
 
     /** @var ObjectProphecy<ParserContext> */
@@ -64,6 +61,7 @@ final class SpanParserTest extends TestCase
         self::assertCount(0, $result->getTokens());
     }
 
+    /** @return array<string, string[]> */
     public function invalidNotationsProvider(): array
     {
         return [
@@ -120,7 +118,7 @@ final class SpanParserTest extends TestCase
         $this->parserContext->setLink($text, $url)->shouldHaveBeenCalledOnce();
     }
 
-    /** string[][[] */
+    /** @return string[][] */
     public function namedHyperlinkReferenceProvider(): array
     {
         return [
@@ -180,6 +178,7 @@ TEXT
         $this->parserContext->pushAnonymous($text)->shouldHaveBeenCalled()->hasReturnVoid();
     }
 
+    /** @return string[][] */
     public function AnonymousHyperlinksProvider(): array
     {
         return [
@@ -214,20 +213,20 @@ TEXT
         $result = null;
         $token = null;
         $this->markTestSkipped('Footnotes are not supported yet');
-        $result = $this->spanProcessor->parse('Please RTFM [1]_.', $this->parserContext->reveal());
-        $token = current($result->getTokens());
-
-        self::assertStringNotContainsString('[1]_', $result->getValueString());
-        self::assertInstanceOf(SpanToken::class, $token);
-        self::assertEquals(SpanToken::TYPE_REFERENCE, $token->getType());
-        self::assertEquals(
-            [
-                'type' => SpanToken::TYPE_REFERENCE,
-                'url' => '_`internal ref`',
-                'link' => 'internal ref',
-            ],
-            $token->getTokenData()
-        );
+//        $result = $this->spanProcessor->parse('Please RTFM [1]_.', $this->parserContext->reveal());
+//        $token = current($result->getTokens());
+//
+//        self::assertStringNotContainsString('[1]_', $result->getValueString());
+//        self::assertInstanceOf(SpanToken::class, $token);
+//        self::assertEquals(SpanToken::TYPE_REFERENCE, $token->getType());
+//        self::assertEquals(
+//            [
+//                'type' => SpanToken::TYPE_REFERENCE,
+//                'url' => '_`internal ref`',
+//                'link' => 'internal ref',
+//            ],
+//            $token->getTokenData()
+//        );
     }
 
     public function testEmailAddressesAreReplacedWithToken(): void
@@ -238,6 +237,7 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
+        self::assertInstanceOf(SpanToken::class, $token);
         self::assertStringNotContainsString($email, $result->getValueString());
         self::assertCount(1, $tokens);
         self::assertSame(SpanToken::TYPE_LINK, $token->getType());
@@ -259,6 +259,7 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
+        self::assertInstanceOf(SpanToken::class, $token);
         self::assertStringNotContainsString($url, $result->getValueString());
         self::assertCount(1, $tokens);
         self::assertSame(SpanToken::TYPE_LINK, $token->getType());
@@ -296,6 +297,7 @@ TEXT
         self::assertEquals($text ?? $url, $token->getText());
     }
 
+    /** @return array<string, array<string, string|null>> */
     public function crossReferenceProvider(): array
     {
         return [

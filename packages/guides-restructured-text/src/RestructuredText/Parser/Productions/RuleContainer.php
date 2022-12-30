@@ -18,9 +18,10 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 final class RuleContainer
 {
-    /** @var Rule[] */
+    /** @var Rule<Node>[] */
     private array $productions;
 
+    /** @param Rule<Node> ...$productions */
     public function __construct(Rule ...$productions)
     {
         $this->productions = $productions;

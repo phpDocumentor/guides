@@ -17,7 +17,6 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function array_values;
 use function count;
@@ -25,6 +24,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#indented-literal-blocks
+ * @implements Rule<CodeNode>
  */
 final class LiteralBlockRule implements Rule
 {
@@ -58,6 +58,7 @@ final class LiteralBlockRule implements Rule
             return null;
         }
 
+        //TODO this is a bug, we need LiteralBlockNode here
         return new CodeNode($lines);
     }
 

@@ -15,18 +15,15 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
-use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\TableParser;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#tables
+ * @implements Rule<TableNode>
  */
 final class TableRule implements Rule
 {

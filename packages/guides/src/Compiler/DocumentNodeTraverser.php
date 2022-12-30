@@ -20,7 +20,7 @@ final class DocumentNodeTraverser
         $this->transformers = $transformers;
     }
 
-    public function traverse(DocumentNode $node): Node
+    public function traverse(DocumentNode $node): ?Node
     {
         foreach ($this->transformers as $transformer) {
             $node = $this->traverseForTransformer($transformer, $node);

@@ -15,11 +15,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Throwable;
 
@@ -28,6 +26,7 @@ use function sprintf;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#directives
+ * @implements Rule<Node>
  */
 final class DirectiveRule implements Rule
 {

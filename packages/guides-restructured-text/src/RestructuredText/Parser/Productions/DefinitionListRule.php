@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionList;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListTerm;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
@@ -28,6 +29,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists
+ * @implements Rule<DefinitionListNode>
  */
 final class DefinitionListRule implements Rule
 {

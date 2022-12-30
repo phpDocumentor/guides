@@ -12,6 +12,9 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
+/**
+ * @implements Rule<SectionNode>
+ */
 final class SectionRule implements Rule
 {
     private TitleRule $titleRule;

@@ -49,6 +49,7 @@ class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
             $rowTex = '';
             $cols = max($cols, count($row->getColumns()));
 
+            assert($this->nodeRendererFactory !== null);
             /** @var SpanNode $col */
             foreach ($row->getColumns() as $n => $col) {
                 $rowTex .= $this->nodeRendererFactory->get($col)->render($col, $environment);
