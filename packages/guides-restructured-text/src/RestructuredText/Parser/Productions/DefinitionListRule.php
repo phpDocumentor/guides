@@ -14,16 +14,17 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
-use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionList;
-use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListTerm;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
+use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
+use Webmozart\Assert\Assert;
 use function strpos;
 use function trim;
 
@@ -33,142 +34,119 @@ use function trim;
  */
 final class DefinitionListRule implements Rule
 {
-    private SpanParser $spanParser;
+    private InlineMarkupRule $inlineMarkupRule;
+    private RuleContainer $definitionProducers;
 
-    public function __construct(SpanParser $spanParser)
+    public function __construct(InlineMarkupRule $inlineMarkupRule, RuleContainer $definitionProducers)
     {
-        $this->spanParser = $spanParser;
+        $this->inlineMarkupRule = $inlineMarkupRule;
+        $this->definitionProducers = $definitionProducers;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
     {
-        return $this->isDefinitionList($documentParser->getDocumentIterator()->getNextLine());
+        return $this->isDefinitionTerm(
+            $documentParser->getDocumentIterator()->current(),
+            $documentParser->getDocumentIterator()->getNextLine()
+        );
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
-        $buffer = new Buffer();
-
-        while ($documentIterator->getNextLine() !== null
-            && $this->isDefinitionListEnded($documentIterator->current(), $documentIterator->getNextLine()) === false
-        ) {
-            $buffer->push($documentIterator->current());
-            $documentIterator->next();
+        $iterator = $documentParserContext->getDocumentIterator();
+        $definitionListItems = [];
+        while ($this->isDefinitionTerm($iterator->getNextLine(), $iterator->peek())) {
+            $definitionListItems[] = $this->createListItem($documentParserContext);
+            $iterator->next();
         }
 
         // TODO: This is a workaround because the current Main Loop in {@see DocumentParser::parseLines()} expects
         //       the cursor position to rest at the last unprocessed line, but the logic above needs is always a step
         //       'too late' in detecting whether it should have stopped
-        $documentIterator->prev();
+        $iterator->prev();
 
-        $definitionList = $this->parseDefinitionList($documentParserContext, $buffer->getLines());
+///        $definitionList = $this->parseDefinitionList($documentParserContext, $buffer->getLines());
 
-        return new DefinitionListNode($definitionList);
+        return new DefinitionListNode(... $definitionListItems);
     }
 
-    private function isDefinitionList(?string $line): bool
+    private function createListItem(DocumentParserContext $documentParserContext): DefinitionListItemNode
     {
-        if ($line === null) {
-            return false;
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        $term = $documentIterator->current();
+        $parts = explode(' : ', $term);
+        $term = ltrim(array_shift($parts), '\\');
+        $definitionListItem = new DefinitionListItemNode(
+            $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
+            array_map(
+                function ($classification) use ($documentParserContext) {
+                    return $this->inlineMarkupRule->apply($documentParserContext->withContents($classification));
+                },
+                $parts
+            )
+        );
+
+        Assert::string($documentIterator->getNextLine());
+        $indenting = mb_strlen($documentIterator->getNextLine()) - mb_strlen(trim($documentIterator->getNextLine()));
+
+        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+            $definitionListItem->addChildNode($this->createDefinition($documentParserContext, $indenting));
         }
 
-        return strpos($line, '    ') === 0;
+        return $definitionListItem;
     }
 
-    private function isDefinitionListEnded(string $line, ?string $nextLine): bool
+    private function createDefinition(DocumentParserContext $documentParserContext, int $indenting): DefinitionNode
     {
-        if (trim($line) === '') {
-            return false;
-        }
-
-        if ($this->isDefinitionList($line)) {
-            return false;
-        }
-
-        return !$this->isDefinitionList($nextLine);
-    }
-
-
-    /**
-     * @param string[] $lines
-     */
-    private function parseDefinitionList(DocumentParserContext $documentParserContext, array $lines): DefinitionList
-    {
-        /** @var array{term: SpanNode, classifiers: list<SpanNode>, definition: string}|null $definitionListTerm */
-        $definitionListTerm = null;
-        $definitionList     = [];
-
-        $createDefinitionTerm = function (array $definitionListTerm) use ($documentParserContext): ?DefinitionListTerm {
-            // parse any markup in the definition (e.g. lists, directives)
-            $definitionNodes = $documentParserContext->getParser()->parseFragment(
-                $documentParserContext,
-                $definitionListTerm['definition']
-            )->getNodes();
-            if (empty($definitionNodes)) {
-                return null;
-            } elseif (count($definitionNodes) === 1 && $definitionNodes[0] instanceof ParagraphNode) {
-                // if there is only one paragraph node, the value is put directly in the <dd> element
-                $definitionNodes = [$definitionNodes[0]->getValue()];
-            } else {
-                // otherwise, .first and .last are added to the first and last nodes of the definition
-                $definitionNodes[0]->setClasses($definitionNodes[0]->getClasses() + ['first']);
-                $definitionNodes[count($definitionNodes) - 1]
-                    ->setClasses($definitionNodes[count($definitionNodes) - 1]->getClasses() + ['last']);
-            }
-
-            return new DefinitionListTerm(
-                $definitionListTerm['term'],
-                $definitionListTerm['classifiers'],
-                $definitionNodes
-            );
-        };
-
-        $currentOffset = 0;
-        foreach ($lines as $key => $line) {
-            // indent or empty line = term definition line
-            if ($definitionListTerm !== null && (trim($line) === '') || $line[0] === ' ') {
-                if ($currentOffset === 0) {
-                    // first line of a definition determines the indentation offset
-                    $definition    = ltrim($line);
-                    $currentOffset = strlen($line) - strlen($definition);
-                } else {
-                    $definition = substr($line, $currentOffset);
+        $buffer = new Buffer();
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+            $documentIterator->next();
+            $emptyLinesBelongToDefinition = false;
+            if (LinesIterator::isEmptyLine($documentIterator->current())) {
+                $peek = $documentIterator->peek();
+                while (LinesIterator::isEmptyLine($peek)) {
+                    $peek = $documentIterator->peek();
                 }
 
-                $definitionListTerm['definition'] .= $definition . "\n";
-
-                // non empty string at the start of the line = definition term
-            } elseif (trim($line) !== '') {
-                // we are starting a new term so if we have an existing
-                // term with definitions, add it to the definition list
-                if ($definitionListTerm !== null) {
-                    $definitionList[] = $createDefinitionTerm($definitionListTerm);
-                }
-
-                $parts = explode(':', trim($line));
-
-                $term = $parts[0];
-                unset($parts[0]);
-
-                $classifiers = array_map(function (string $classifier) use ($documentParserContext): SpanNode {
-                    return $this->spanParser->parse($classifier, $documentParserContext->getContext());
-                }, array_map('trim', $parts));
-
-                $currentOffset      = 0;
-                $definitionListTerm = [
-                    'term' => $this->spanParser->parse($term, $documentParserContext->getContext()),
-                    'classifiers' => $classifiers,
-                    'definition' => '',
-                ];
+                $emptyLinesBelongToDefinition = LinesIterator::isBlockLine($peek, $indenting + 1);
             }
+
+            if ($emptyLinesBelongToDefinition === false && LinesIterator::isEmptyLine($documentIterator->current())) {
+                break;
+            }
+
+            $buffer->push(mb_substr($documentIterator->current(), $indenting));
         }
 
-        // append the last definition of the list
-        if ($definitionListTerm !== null) {
-            $definitionList[] = $createDefinitionTerm($definitionListTerm);
+        $node = new DefinitionNode([]);
+        $this->definitionProducers->apply($documentParserContext->withContents($buffer->getLinesString()), $node);
+        if (count($node->getChildren()) > 1) {
+            return $node;
         }
 
-        return new DefinitionList($definitionList);
+        $nodes = $node->getChildren();
+        if ($nodes[0] instanceof ParagraphNode) {
+            return new DefinitionNode($nodes[0]->getChildren());
+        }
+
+        return $node;
+    }
+
+    private function isDefinitionTerm(?string $currentLine, ?string $nextLine): bool
+    {
+        if (LinesIterator::isEmptyLine($currentLine)) {
+            return false;
+        }
+
+        if (LinesIterator::isNullOrEmptyLine($nextLine)) {
+            return false;
+        }
+
+        if (LinesIterator::isBlockLine($nextLine)) {
+            return true;
+        }
+
+        return false;
     }
 }

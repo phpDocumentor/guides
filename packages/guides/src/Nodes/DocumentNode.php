@@ -36,9 +36,6 @@ final class DocumentNode extends Node
      */
     private array $headerNodes = [];
 
-    /** @var Node[] */
-    private array $nodes = [];
-
     /**
      * Variables are replacements in a document.
      *
@@ -57,7 +54,7 @@ final class DocumentNode extends Node
 
     public function __construct(string $value, string $filePath)
     {
-        parent::__construct();
+        parent::__construct([]);
 
         $this->hash = $value;
         $this->filePath = $filePath;
@@ -75,44 +72,18 @@ final class DocumentNode extends Node
      */
     public function getNodes(string $nodeType = Node::class): array
     {
-        return array_filter($this->nodes, static fn($node): bool => $node instanceof $nodeType);
-    }
-
-    public function getChildren(): array
-    {
-        return $this->nodes;
-    }
-
-    public function removeNode(int $key): self
-    {
-        $result = clone $this;
-        unset($result->nodes[$key]);
-
-        return $result;
-    }
-
-    public function replaceNode(int $key, Node $node): self
-    {
-        $result = clone $this;
-        $result->nodes[$key] = $node;
-
-        return $result;
+        return array_filter($this->value, static fn($node): bool => $node instanceof $nodeType);
     }
 
     public function getTitle(): ?TitleNode
     {
-        foreach ($this->nodes as $node) {
+        foreach ($this->value as $node) {
             if ($node instanceof SectionNode && $node->getTitle()->getLevel() === 1) {
                 return $node->getTitle();
             }
         }
 
         return null;
-    }
-
-    public function addChildNode(Node $node): void
-    {
-        $this->nodes[] = $node;
     }
 
     public function addHeaderNode(MetadataNode $node): void

@@ -13,28 +13,26 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use RuntimeException;
 
-final class DefinitionListTerm
+final class DefinitionListItemNode extends Node
 {
     private SpanNode $term;
 
     /** @var SpanNode[] */
     private array $classifiers;
 
-    /** @var SpanNode[] */
-    private array $definitions;
-
     /**
      * @param SpanNode[] $classifiers
-     * @param SpanNode[] $definitions
+     * @param DefinitionNode[] $definitions
      */
-    public function __construct(SpanNode $term, array $classifiers, array $definitions)
+    public function __construct(SpanNode $term, array $classifiers, array $definitions = [])
     {
         $this->term = $term;
         $this->classifiers = $classifiers;
-        $this->definitions = $definitions;
+        parent::__construct($definitions);
     }
 
     public function getTerm(): SpanNode
@@ -48,22 +46,5 @@ final class DefinitionListTerm
     public function getClassifiers(): array
     {
         return $this->classifiers;
-    }
-
-    /**
-     * @return SpanNode[]
-     */
-    public function getDefinitions(): array
-    {
-        return $this->definitions;
-    }
-
-    public function getFirstDefinition(): SpanNode
-    {
-        if (!isset($this->definitions[0])) {
-            throw new RuntimeException('No definitions found.');
-        }
-
-        return $this->definitions[0];
     }
 }

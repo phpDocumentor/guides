@@ -15,12 +15,4 @@ namespace phpDocumentor\Guides\Nodes;
 
 class ParagraphNode extends Node
 {
-    public function getChildren(): array
-    {
-        if (is_string($this->value) || $this->value === null) {
-            return [];
-        }
-
-        return [$this->value];
-    }
 }

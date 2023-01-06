@@ -39,6 +39,5 @@ final class ListItemNodeTest extends TestCase
         self::assertSame('*', $node->getPrefix());
         self::assertTrue($node->isOrdered());
         self::assertSame($contents, $node->getChildren());
-        self::assertNull($node->getValue());
     }
 }
