@@ -49,7 +49,7 @@ final class DocumentRule implements Rule
         $productions->push(new ListRule($productions));
         $productions->push(new DirectiveRule($literalBlockRule, $directiveHandlers));
         $productions->push(new CommentRule());
-        $productions->push(new DefinitionListRule($spanParser));
+        $productions->push(new DefinitionListRule($inlineMarkupRule, $productions));
         $productions->push(new TableRule());
 
         // For now: ParagraphRule must be last as it is the rule that applies if none other applies.

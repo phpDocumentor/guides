@@ -13,21 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionList;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 
 class DefinitionListNode extends Node
 {
-    private DefinitionList $definitionList;
-
-    public function __construct(DefinitionList $definitionList)
+    public function __construct(DefinitionListItemNode ...$definitionListItems)
     {
-        parent::__construct();
-
-        $this->definitionList = $definitionList;
-    }
-
-    public function getDefinitionList(): DefinitionList
-    {
-        return $this->definitionList;
+        parent::__construct($definitionListItems);
     }
 }

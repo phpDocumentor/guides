@@ -12,6 +12,7 @@ final class SectionNode extends Node
 
     public function __construct(TitleNode $title)
     {
+        parent::__construct([]);
         $this->title = $title;
     }
 
@@ -33,24 +34,5 @@ final class SectionNode extends Node
         }
 
         return $titles;
-    }
-
-    public function addChildNode(Node $node): void
-    {
-        $this->nodes[] = $node;
-    }
-
-    /** @return Node[] */
-    public function getChildren(): array
-    {
-        return $this->nodes;
-    }
-
-    public function replaceNode(int $key, Node $node): Node
-    {
-        $result = clone $this;
-        $result->nodes[$key] = $node;
-
-        return $result;
     }
 }

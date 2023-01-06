@@ -20,7 +20,7 @@ class SeparatorNode extends Node
 
     public function __construct(int $level)
     {
-        parent::__construct();
+        parent::__construct([]);
 
         $this->level = $level;
     }

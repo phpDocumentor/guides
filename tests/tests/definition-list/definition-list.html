@@ -1,4 +1,3 @@
-SKIP bug in complex definition list cases
 <div class="section" id="test">
     <h1>
         Test
@@ -16,11 +15,9 @@ SKIP bug in complex definition list cases
         <dt>term 1</dt>
         <dd>Definition 1</dd>
         <dt>term 2</dt>
-        <dd>
-            <p class="first">Definition 1</p>
-            <p>Definition 2</p>
-            <p class="last">Definition 3</p>
-        </dd>
+        <dd>Definition 1</dd>
+        <dd>Definition 2</dd>
+        <dd>Definition 3</dd>
         <dt>term 3 <span class="classifier-delimiter">:</span> <span class="classifier">classifier</span></dt>
         <dd>Definition 1</dd>
         <dt>term 4 <span class="classifier-delimiter">:</span> <span class="classifier">classifier one</span> <span class="classifier-delimiter">:</span> <span class="classifier">classifier two</span></dt>
@@ -28,10 +25,8 @@ SKIP bug in complex definition list cases
         <dt>term with &amp; <span class="classifier-delimiter">:</span> <span class="classifier">classifier with &amp;</span></dt>
         <dd>Definition 1 with &amp;</dd>
         <dt>term with &amp; <span class="classifier-delimiter">:</span> <span class="classifier">classifier with &amp;</span> <span class="classifier-delimiter">:</span> <span class="classifier">classifier with &amp;</span></dt>
-        <dd>
-            <p class="first">Definition 1 with &amp;</p>
-            <p class="last">Definition 2 with &amp;</p>
-        </dd>
+        <dd>Definition 1 with &amp;</dd>
+        <dd>Definition 2 with &amp;</dd>
         <dt>
             <code>term 5</code> <span class="classifier-delimiter">:</span>
             <span class="classifier"><code>classifier</code></span>
@@ -40,63 +35,67 @@ SKIP bug in complex definition list cases
         <dt><strong>Complex:</strong> <code>int</code></dt>
         <dd>Colon must be surrounded by spaces to be a term identifier</dd>
         <dt>multi-line definition term</dt>
-        <dd>
-            <p class="first">Definition 1 line 1
-Definition 1 line 2</p>
-            <p class="last">Definition 2 line 1
-Definition 2 line 2</p>
-        </dd>
+        <dd>Definition 1 line 1
+Definition 1 line 2</dd>
+        <dd>Definition 2 line 1
+Definition 2 line 2</dd>
     </dl>
-</div>
-<div class="section" id="definition-list-in-a-directive">
-    <h1>
-        Definition List in a Directive
-    </h1>
-    <div class="note">
-        <p><strong>Definition list in a directive</strong></p>
+    <div class="section" id="definition-list-in-a-directive">
+        <h2>
+            Definition List in a Directive
+        </h2>
+        <div class="phpdocumentor-admonition -note">
+            <svg class="phpdocumentor-admonition__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+            </svg>
+            <article>
+                <p><strong>Definition list in a directive</strong></p>
+                <dl>
+                    <dt>term 1</dt>
+                    <dd>Definition 1 line 1
+Definition 1 line 2</dd>
+                    <dd>Definition 2</dd>
+                    <dt>term 2</dt>
+                    <dd>Definition 1 line 1
+Definition 1 line 2</dd>
+                    <dd>Definition 2</dd>
+                </dl>
+            </article>
+        </div>
+    </div>
+    <div class="section" id="definition-list-surrounded-by-paragraphs">
+        <h2>
+            Definition List Surrounded by Paragraphs
+        </h2>
+        <p>Paragraph 1</p>
+        <dl>
+            <dt>term 1</dt>
+            <dd>definition 1
+definition 2</dd>
+        </dl>
+        <p>Paragraph 2</p>
+        <dl>
+            <dt>term 2</dt>
+            <dd>definition 1
+definition 2</dd>
+        </dl>
+    </div>
+    <div class="section" id="directive-in-definition-list">
+        <h2>
+            Directive in definition list
+        </h2>
         <dl>
             <dt>term 1</dt>
             <dd>
-                <p class="first">Definition 1 line 1
-Definition 1 line 2</p>
-                <p class="last">Definition 2</p>
-            </dd>
-            <dt>term 2</dt>
-            <dd>
-                <p class="first">Definition 1 line 1
-Definition 1 line 2</p>
-                <p class="last">Definition 2</p>
+                <div class="phpdocumentor-admonition -note">
+                    <svg class="phpdocumentor-admonition__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                    </svg>
+                    <article>
+                        <p>directive in definition list</p>
+                    </article>
+                </div>
             </dd>
         </dl>
     </div>
-</div>
-<div class="section" id="definition-list-surrounded-by-paragraphs">
-    <h1>
-        Definition List Surrounded by Paragraphs
-    </h1>
-    <p>Paragraph 1</p>
-    <dl>
-        <dt>term 1</dt>
-        <dd> definition 1
-definition 2 </dd>
-    </dl>
-    <p>Paragraph 2</p>
-    <dl>
-        <dt>term 2</dt>
-        <dd> definition 1
-definition 2 </dd>
-    </dl>
-</div>
-<div class="section" id="directive-in-definition-list">
-    <h1>
-        Directive in definition list
-    </h1>
-    <dl>
-        <dt>term 1</dt>
-        <dd>
-            <div class="note">
-                <p>directive in definition list</p>
-            </div>
-        </dd>
-    </dl>
 </div>

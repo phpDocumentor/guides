@@ -31,6 +31,6 @@ final class SeparatorNodeTest extends TestCase
         $node = new SeparatorNode(2);
 
         self::assertSame(2, $node->getLevel());
-        self::assertNull($node->getValue());
+        self::assertEmpty($node->getValue());
     }
 }
