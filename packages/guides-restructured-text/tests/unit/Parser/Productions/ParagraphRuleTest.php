@@ -4,22 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-use phpDocumentor\Guides\UrlGenerator;
-use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-
-use function implode;
 
 final class ParagraphRuleTest extends AbstractRuleTest
 {
@@ -42,15 +29,9 @@ final class ParagraphRuleTest extends AbstractRuleTest
     ): void {
         $documentParser = $this->createContext($input);
 
-        $spanParser = $this->prophesize(SpanParser::class);
-        $spanParser->parse(
-            Argument::any(),
-            Argument::any()
-        )->will(fn($args) => new SpanNode(implode("\n", $args[0])));
+        $markupRule = $this->givenInlineMarkupRule();
 
-        $rule = new ParagraphRule(
-            new InlineMarkupRule($spanParser->reveal())
-        );
+        $rule = new ParagraphRule($markupRule);
 
         self::assertTrue($rule->applies($documentParser));
         $result = $rule->apply($documentParser);

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\AnchorNode;
@@ -29,6 +30,7 @@ return [
     ImageNode::class => 'image.html.twig',
     CodeNode::class => 'code.html.twig',
     DefinitionListNode::class => 'definition-list.html.twig',
+    DefinitionNode::class => 'definition.html.twig',
     ListNode::class => 'list.html.twig',
     ListItemNode::class => 'list-item.html.twig',
     LiteralBlockNode::class => 'directives/literal-block.html.twig'

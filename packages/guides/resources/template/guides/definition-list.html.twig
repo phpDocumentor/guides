@@ -1,5 +1,5 @@
 <dl{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
-    {% for definitionListTerm in node.definitionList.terms %}
+    {% for definitionListTerm in node.children %}
         {% if definitionListTerm.classifiers is empty %}
             <dt>{{ renderNode(definitionListTerm.term) }}</dt>
         {% else %}
@@ -13,14 +13,10 @@
             </dt>
         {% endif %}
 
-        {% if definitionListTerm.definitions|length > 1 %}
-            <dd>
-                {%- for definition in definitionListTerm.definitions -%}
-                    {{ renderNode(definition) }}
-                {%- endfor -%}
-            </dd>
-        {% elseif definitionListTerm.definitions|length == 1 %}
-            <dd>{{ renderNode(definitionListTerm.firstDefinition) }}</dd>
+        {% if definitionListTerm.children %}
+            {%- for definition in definitionListTerm.children -%}
+            <dd>{{ renderNode(definition) }}</dd>
+            {%- endfor -%}
         {% endif %}
     {% endfor %}
 </dl>

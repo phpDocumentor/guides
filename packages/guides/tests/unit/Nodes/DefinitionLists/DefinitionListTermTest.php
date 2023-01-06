@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListTerm
+ * @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode
  * @covers ::<private>
  */
 final class DefinitionListTermTest extends TestCase
@@ -33,7 +33,7 @@ final class DefinitionListTermTest extends TestCase
     {
         $term = $this->prophesize(SpanNode::class)->reveal();
 
-        $definitionListTerm = new DefinitionListTerm($term, [], []);
+        $definitionListTerm = new DefinitionListItemNode($term, [], []);
 
         self::assertSame($term, $definitionListTerm->getTerm());
     }
@@ -47,7 +47,7 @@ final class DefinitionListTermTest extends TestCase
         $term = $this->prophesize(SpanNode::class)->reveal();
         $classifier = $this->prophesize(SpanNode::class)->reveal();
 
-        $definitionListTerm = new DefinitionListTerm($term, [$classifier], []);
+        $definitionListTerm = new DefinitionListItemNode($term, [$classifier], []);
 
         self::assertSame([$classifier], $definitionListTerm->getClassifiers());
     }
@@ -60,26 +60,11 @@ final class DefinitionListTermTest extends TestCase
     public function testDefinitionsAreMadeAvailable(): void
     {
         $term = $this->prophesize(SpanNode::class)->reveal();
-        $definition1 = $this->prophesize(SpanNode::class)->reveal();
-        $definition2 = $this->prophesize(SpanNode::class)->reveal();
+        $definition1 = new DefinitionNode([]);
+        $definition2 = new DefinitionNode([]);
 
-        $definitionListTerm = new DefinitionListTerm($term, [], [$definition1, $definition2]);
+        $definitionListTerm = new DefinitionListItemNode($term, [], [$definition1, $definition2]);
 
-        self::assertSame([$definition1, $definition2], $definitionListTerm->getDefinitions());
-        self::assertSame($definition1, $definitionListTerm->getFirstDefinition());
-    }
-
-    /**
-     * @covers ::getFirstDefinition
-     */
-    public function testGettingFirstDefinitionFailsIfNoDefinitionsAreAvailable(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $term = $this->prophesize(SpanNode::class)->reveal();
-
-        $definitionListTerm = new DefinitionListTerm($term, [], []);
-
-        $definitionListTerm->getFirstDefinition();
+        self::assertSame([$definition1, $definition2], $definitionListTerm->getChildren());
     }
 }

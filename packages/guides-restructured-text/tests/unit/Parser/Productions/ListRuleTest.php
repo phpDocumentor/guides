@@ -14,7 +14,7 @@ final class ListRuleTest extends AbstractRuleTest
 
     protected function setUp(): void
     {
-        $ruleContainer = new RuleContainer(new CollectAllRule());
+        $ruleContainer = $this->givenCollectAllRuleContainer();
         $this->rule = new ListRule($ruleContainer);
     }
 

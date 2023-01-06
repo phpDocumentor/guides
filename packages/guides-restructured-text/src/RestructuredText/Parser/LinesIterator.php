@@ -31,6 +31,7 @@ class LinesIterator implements Iterator
     private array $lines = [];
 
     private int $position = 0;
+    private int $peek = 1;
 
     public function load(string $document): void
     {
@@ -44,9 +45,22 @@ class LinesIterator implements Iterator
         return $this->lines[$this->position + 1] ?? null;
     }
 
+    /**
+     * Moves the lookahead token forward.
+     */
+    public function peek(): ?string
+    {
+        if (isset($this->lines[$this->position + $this->peek])) {
+            return $this->lines[$this->position + $this->peek++];
+        }
+
+        return null;
+    }
+
     public function rewind(): void
     {
         $this->position = 0;
+        $this->peek = 1;
     }
 
     public function current(): string
@@ -77,6 +91,7 @@ class LinesIterator implements Iterator
     public function next(): void
     {
         ++$this->position;
+        $this->peek = 1;
     }
 
     public function atStart(): bool
@@ -109,5 +124,56 @@ class LinesIterator implements Iterator
     public function toArray(): array
     {
         return $this->lines;
+    }
+
+    public static function isEmptyLine(?string $line): bool
+    {
+        if ($line === null) {
+            return false;
+        }
+
+        return trim($line) === '';
+    }
+
+    public static function isNullOrEmptyLine(?string $line): bool
+    {
+        if ($line === null) {
+            return true;
+        }
+
+        return self::isEmptyLine($line);
+    }
+
+    /**
+     * Is this line "indented"?
+     *
+     * A blank line also counts as a "block" line, as it
+     * may be the empty line between, for example, a
+     * ".. note::" directive and the indented content on the
+     * next lines.
+     *
+     * @param int $minIndent can be used to require a specific level of
+     *                       indentation for non-blank lines (number of spaces)
+     */
+    public static function isBlockLine(?string $line, int $minIndent = 1): bool
+    {
+        if ($line === null) {
+            return false;
+        }
+
+        return trim($line) === '' || self::isIndented($line, $minIndent);
+    }
+
+    /**
+     * Check if line is an indented one.
+     *
+     * This does *not* include blank lines, use {@see isBlockLine()} to check
+     * for blank or indented lines.
+     *
+     * @param int $minIndent can be used to require a specific level of indentation (number of spaces)
+     */
+    public static function isIndented(string $line, int $minIndent): bool
+    {
+        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
     }
 }

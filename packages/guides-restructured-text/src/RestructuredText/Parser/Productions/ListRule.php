@@ -76,12 +76,14 @@ final class ListRule implements Rule
         $buffer = new Buffer();
         //First line sets the listmarker of the list, and the indentation of the current item.
         $listConfig = $this->getItemConfig($documentIterator->current());
-        $buffer->push($documentIterator->current());
+        if (trim($documentIterator->current()) !== $listConfig['marker']) {
+            $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+        }
 
         $items = [];
 
         while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker'])
-                || $this->isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
+                || LinesIterator::isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
         ) {
             $documentIterator->next();
 
@@ -99,7 +101,9 @@ final class ListRule implements Rule
                 );
             }
 
-            $buffer->push($documentIterator->current());
+            if (trim($documentIterator->current()) !== $listConfig['marker']) {
+                $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+            }
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
@@ -155,50 +159,13 @@ final class ListRule implements Rule
         return true;
     }
 
-    /**
-     * Is this line "indented"?
-     *
-     * A blank line also counts as a "block" line, as it
-     * may be the empty line between, for example, a
-     * ".. note::" directive and the indented content on the
-     * next lines.
-     *
-     * @param int $minIndent can be used to require a specific level of
-     *                       indentation for non-blank lines (number of spaces)
-     */
-    private function isBlockLine(?string $line, int $minIndent = 1): bool
-    {
-        if ($line === null) {
-            return false;
-        }
-
-        return trim($line) === '' || $this->isIndented($line, $minIndent);
-    }
-
-    /**
-     * Check if line is an indented one.
-     *
-     * This does *not* include blank lines, use {@see isBlockLine()} to check
-     * for blank or indented lines.
-     *
-     * @param int $minIndent can be used to require a specific level of indentation (number of spaces)
-     */
-    private function isIndented(string $line, int $minIndent): bool
-    {
-        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
-    }
-
     /** @param array{marker: string, indenting: int} $listConfig */
     private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
     {
-        $normalized = new Buffer();
 
-        foreach ($buffer->getLines() as $line) {
-            $normalized->push(mb_substr($line, $listConfig['indenting']));
-        }
 
         $listItem = new ListItemNode($listConfig['marker'], false, []);
-        $context = $context->withContents($normalized->getLinesString());
+        $context = $context->withContents($buffer->getLinesString());
         while ($context->getDocumentIterator()->valid()) {
             $this->productions->apply($context, $listItem);
         }

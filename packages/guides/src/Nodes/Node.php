@@ -20,9 +20,10 @@ use function strlen;
 use function substr;
 use function trim;
 
+/** @todo split this class into separate node types */
 abstract class Node
 {
-    /** @var Node|string|null */
+    /** @var Node|string|null|Node[] */
     protected $value;
 
     /** @var string[] */
@@ -32,15 +33,15 @@ abstract class Node
     private $options;
 
     /**
-     * @param Node|string|null $value
+     * @param Node|string|null|Node[] $value
      */
     public function __construct($value = null)
     {
-        $this->value = $value;
+        $this->value = $value ?? [];
     }
 
     /**
-     * @return Node|string|null
+     * @return Node|string|null|Node[]
      */
     public function getValue()
     {
@@ -48,7 +49,7 @@ abstract class Node
     }
 
     /**
-     * @param Node|string|null $value
+     * @param Node|string|null|Node[] $value
      */
     public function setValue($value): void
     {
@@ -76,6 +77,7 @@ abstract class Node
         $this->classes = $classes;
     }
 
+    /** @deprecated this should not be used, nodes should always be rendered by a renderer */
     public function getValueString(): string
     {
         if ($this->value === null) {
@@ -128,12 +130,42 @@ abstract class Node
     /** @return Node[] */
     public function getChildren(): array
     {
-        if ($this->value instanceof Node && !$this->value instanceof SpanNode) {
-            return [$this->value];
+        if (is_array($this->value)) {
+            return $this->value;
         }
 
-        return [];
+        if (is_string($this->value) || $this->value === null) {
+            return [];
+        }
+
+        return [$this->value];
     }
+
+    public function addChildNode(Node $node): void
+    {
+        if (is_array($this->value) === false) {
+            throw new \BadMethodCallException(
+                'Cannot call addChildNode on value that\'s not an array for class.' . self::class
+            );
+        }
+
+        $this->value[] = $node;
+    }
+
+    public function removeNode(int $key): self
+    {
+        if (is_array($this->value) === false) {
+            throw new \BadMethodCallException(
+                'Cannot call addChildNode on value that\'s not an array for class.' . self::class
+            );
+        }
+
+        $result = clone $this;
+        unset($result->value[$key]);
+
+        return $result;
+    }
+
 
     /**
      * @return static
@@ -141,8 +173,13 @@ abstract class Node
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;
-        $result->value = $node;
 
+        if (is_array($result->value)) {
+            $result->value[$key] = $node;
+            return $result;
+        }
+
+        $result->value = $node;
         return $result;
     }
 
