@@ -135,6 +135,7 @@ First col   Second col Third col
 Second row  Other col  Last col
 Third row              Last col
 Forth row
+\           Fith row
 =========== ========== ========
 RST;
 
@@ -158,14 +159,20 @@ RST;
         $row4->addColumn($this->createColumn(''));
         $row4->addColumn($this->createColumn(''));
 
+        $row5 = new TableRow();
+        $row5->addColumn($this->createColumn(''));
+        $row5->addColumn($this->createColumn('Fith row'));
+        $row5->addColumn($this->createColumn(''));
+
         $expected = new TableNode(
             [
                 $row2,
                 $row3,
-                $row4
+                $row4,
+                $row5,
             ],
             [
-                $row1
+                $row1,
             ]
         );
 

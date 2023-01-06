@@ -135,6 +135,10 @@ final class SimpleTableRule implements Rule
 
     private function createColumn(string $content, DocumentParserContext $documentParserContext, int $colspan): TableColumn
     {
+        if (trim($content) === '\\') {
+            $content = '';
+        }
+
         $column = new TableColumn(trim($content), $colspan);
         $context = $documentParserContext->withContents($content);
         $this->productions->apply($context, $column);
@@ -179,6 +183,6 @@ final class SimpleTableRule implements Rule
             $columnDefinition['length']
         );
 
-        return trim($firstCellContent) === '' || trim($firstCellContent) === '\\';
+        return trim($firstCellContent) === '';
     }
 }
