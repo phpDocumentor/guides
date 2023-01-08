@@ -88,15 +88,12 @@ Definition 2, paragraph 1.
 
 
     This is a note belongs to definition 2.
+
+Definition 2, paragraph 2.
 RST
                         ),
                         ]
                     ),
-                    new DefinitionNode(
-                        [
-                            new RawNode('Definition 2, paragraph 2.'),
-                        ]
-                    )
                 ]
             ),
             new DefinitionListItemNode(

@@ -109,7 +109,7 @@ final class DefinitionListRule implements Rule
                     $peek = $documentIterator->peek();
                 }
 
-                $emptyLinesBelongToDefinition = LinesIterator::isBlockLine($peek, $indenting + 1);
+                $emptyLinesBelongToDefinition = LinesIterator::isBlockLine($peek, $indenting);
             }
 
             if ($emptyLinesBelongToDefinition === false && LinesIterator::isEmptyLine($documentIterator->current())) {
@@ -120,7 +120,10 @@ final class DefinitionListRule implements Rule
         }
 
         $node = new DefinitionNode([]);
-        $this->definitionProducers->apply($documentParserContext->withContents($buffer->getLinesString()), $node);
+        $nodeContext = $documentParserContext->withContents($buffer->getLinesString());
+        while ($nodeContext->getDocumentIterator()->valid()) {
+            $this->definitionProducers->apply($nodeContext, $node);
+        }
         if (count($node->getChildren()) > 1) {
             return $node;
         }
