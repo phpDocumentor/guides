@@ -141,7 +141,9 @@ final class SimpleTableRule implements Rule
 
         $column = new TableColumn(trim($content), $colspan);
         $context = $documentParserContext->withContents($content);
-        $this->productions->apply($context, $column);
+        while ($context->getDocumentIterator()->valid()) {
+            $this->productions->apply($context, $column);
+        }
 
         $nodes = $column->getChildren();
         if (count($nodes) > 1) {
