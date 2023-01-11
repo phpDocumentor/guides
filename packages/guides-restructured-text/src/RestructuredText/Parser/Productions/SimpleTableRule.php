@@ -35,18 +35,26 @@ final class SimpleTableRule implements Rule
 
         $headers = [];
         $rows = [];
-        while ($documentIterator->getNextLine() !== null && trim($documentIterator->getNextLine()) !== '') {
-            $rows[] = $this->tryParseRow($documentParserContext, $columnDefinition);
-            $documentIterator->next();
+        while ($documentIterator->valid()) {
+            if ($this->isColumnDefinitionLine($documentIterator->current()) &&
+                LinesIterator::isEmptyLine($documentIterator->getNextLine())
+            ) {
+                break;
+            }
 
-            if ($documentIterator->getNextLine() !== null &&
-                trim($documentIterator->getNextLine()) !== '' &&
+            if (LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine()) === false &&
                 $this->isColumnDefinitionLine($documentIterator->current())
             ) {
                 $documentIterator->next();
                 $headers = $rows;
                 $rows = [];
             }
+
+            if ($this->isColumnDefinitionLine($documentIterator->current()) === false) {
+                $rows[] = $this->tryParseRow($documentParserContext, $columnDefinition);
+            }
+
+            $documentIterator->next();
         }
 
         return new TableNode($rows, $headers);
@@ -133,8 +141,11 @@ final class SimpleTableRule implements Rule
         return $row;
     }
 
-    private function createColumn(string $content, DocumentParserContext $documentParserContext, int $colspan): TableColumn
-    {
+    private function createColumn(
+        string $content,
+        DocumentParserContext $documentParserContext,
+        int $colspan
+    ): TableColumn {
         if (trim($content) === '\\') {
             $content = '';
         }
