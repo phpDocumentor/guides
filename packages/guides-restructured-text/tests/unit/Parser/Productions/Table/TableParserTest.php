@@ -21,10 +21,6 @@ final class TableParserTest extends TestCase
     public function tableLineHeaderProvider(): array
     {
         return [
-            'simple table header line' => [
-                '====== ====',
-                TableRule::TYPE_SIMPLE
-            ],
             'pretty table header line' => [
                 '+======+====+',
                 TableRule::TYPE_PRETTY
@@ -45,34 +41,6 @@ final class TableParserTest extends TestCase
 
     public function tableLineProvider()
     {
-        yield 'simple table header line' => [
-            '== ===',
-            new TableSeparatorLineConfig(
-                true,
-                TableRule::TYPE_SIMPLE,
-                [
-                    0 => [0, 2],
-                    1 => [3, 6]
-                ],
-                '=',
-                '== ===',
-            )
-        ];
-
-        yield 'simple table normal line' => [
-            '-- ---',
-            new TableSeparatorLineConfig(
-                false,
-                TableRule::TYPE_SIMPLE,
-                [
-                    0 => [0, 2],
-                    1 => [3, 6]
-                ],
-                '-',
-                '-- ---',
-            )
-        ];
-
         yield 'grid table header line' => [
             '+==+===+',
             new TableSeparatorLineConfig(

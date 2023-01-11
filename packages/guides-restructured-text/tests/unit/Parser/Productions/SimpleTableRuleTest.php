@@ -190,8 +190,11 @@ First col   Second col Third col
 Second row  Other col  Last col
 ----------  ---------  --------
 Third row              Last col
+
 Forth row
 =========== ========== ========
+
+This is not table content
 RST;
 
         $row1 = new TableRow();
@@ -225,9 +228,19 @@ RST;
             ]
         );
 
-        $result = $this->rule->apply($this->createContext($input), null);
+        $content = $this->createContext($input);
+        $result = $this->rule->apply($content, null);
 
         self::assertEquals($expected, $result);
+        self::assertRemainingEquals(
+            <<<RST
+
+This is not table content
+
+RST
+            ,
+            $content->getDocumentIterator()
+        );
     }
 
     private function createColumn(string $content): TableColumn
