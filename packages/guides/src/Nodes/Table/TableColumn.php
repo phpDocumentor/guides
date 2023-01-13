@@ -25,17 +25,19 @@ final class TableColumn extends Node
 
     private int $colSpan;
 
-    private int $rowSpan = 1;
+    private int $rowSpan;
 
     private ?Node $node = null;
 
     /** @var Node[] */
     private array $nodes = [];
 
-    public function __construct(string $content, int $colSpan, $node = null)
+    public function __construct(string $content, int $colSpan, $node = null, int $rowSpan = 1)
     {
         $this->content = trim($content);
         $this->colSpan = $colSpan;
+        $this->rowSpan = $rowSpan;
+
         if (is_array($node)) {
             $this->nodes = $node;
         } else {

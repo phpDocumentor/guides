@@ -17,11 +17,10 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\Exception\UnknownTableType;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableParser;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
 use function trim;
@@ -32,17 +31,13 @@ use function trim;
  */
 final class GridTableRule implements Rule
 {
-    public const TYPE_PRETTY = 'pretty';
+    private GridTableBuilder $builder;
+    private RuleContainer $productions;
 
-    private LineChecker $lineChecker;
-
-    private TableBuilder $builder;
-
-    public function __construct()
+    public function __construct(RuleContainer $productions)
     {
-        $this->lineChecker = new LineChecker();
-
         $this->builder = new GridTableBuilder();
+        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -54,13 +49,9 @@ final class GridTableRule implements Rule
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $line = $documentIterator->current();
-        if (trim($line) === '') {
-            return null;
-        }
 
         $tableSeparatorLineConfig = $this->tableLineConfig($line, '-');
         $context = new ParserContext();
-
         $context->pushSeparatorLine($tableSeparatorLineConfig);
         $context->pushSeparatorLine($tableSeparatorLineConfig);
 
@@ -77,7 +68,7 @@ final class GridTableRule implements Rule
                 $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '-');
                 $context->pushSeparatorLine($separatorLineConfig);
                 // if an empty line follows a separator line, then it is the end of the table
-                if ($documentIterator->getNextLine() === null || trim($documentIterator->getNextLine()) === '') {
+                if (LinesIterator::isEmptyLine($documentIterator->current())) {
                     break;
                 }
 
@@ -87,7 +78,7 @@ final class GridTableRule implements Rule
             $context->pushContentLine($documentIterator->current());
         }
 
-        return $this->builder->buildNode($context, $documentParserContext, $this->lineChecker);
+        return $this->builder->buildNode($context, $documentParserContext, $this->productions);
     }
 
     private function tableLineConfig(string $line, string $char): TableSeparatorLineConfig

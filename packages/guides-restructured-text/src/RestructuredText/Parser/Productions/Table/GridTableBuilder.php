@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
 use Exception;
 use LogicException;
+use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
@@ -13,8 +14,9 @@ use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 
-class GridTableBuilder implements TableBuilder
+class GridTableBuilder
 {
     protected function compile(ParserContext $context): TableNode
     {
@@ -39,10 +41,7 @@ class GridTableBuilder implements TableBuilder
                 $finalHeadersRow = $rowIndex - 1;
             }
 
-            foreach ($separatorLine->getPartRanges() as $columnRange) {
-                $colStart = $columnRange[0];
-                $colEnd = $columnRange[1];
-
+            foreach ($separatorLine->getPartRanges() as [$colStart, $colEnd]) {
                 // we don't have this "start" yet? just add it
                 // in theory, should only happen for the first row
                 if (!isset($columnRanges[$colStart])) {
@@ -231,12 +230,13 @@ class GridTableBuilder implements TableBuilder
 
         $headers = [];
         // one more loop to set headers
-        foreach ($rows as $rowIndex => $_row) {
+        foreach ($rows as $rowIndex => $row) {
             if ($rowIndex > $finalHeadersRow) {
-                continue;
+                break;
             }
 
-            $headers[$rowIndex] = $rows;
+            $headers[] = $row;
+            unset($rows[$rowIndex]);
         }
 
         return new TableNode($rows, $headers);
@@ -269,48 +269,75 @@ class GridTableBuilder implements TableBuilder
         throw new Exception('Could not find column in any previous rows');
     }
 
-    public function buildNode(ParserContext $tableParserContext, DocumentParserContext $documentParserContext, LineChecker $lineChecker): ?TableNode
-    {
+    public function buildNode(
+        ParserContext $tableParserContext,
+        DocumentParserContext $documentParserContext,
+        RuleContainer $productions
+    ): ?TableNode {
         $tableNode = $this->compile($tableParserContext);
 
         if ($tableParserContext->hasErrors()) {
             $tableAsString = $tableParserContext->getTableAsString();
             foreach ($tableParserContext->getErrors() as $error) {
                 $documentParserContext->getContext()
-                    ->addError(sprintf("%s\nin file %s\n\n%s", $error, $documentParserContext->getContext()->getCurrentFileName(), $tableAsString));
+                    ->addError(sprintf(
+                        "%s\nin file %s\n\n%s",
+                        $error,
+                        $documentParserContext->getContext()->getCurrentFileName(),
+                        $tableAsString
+                    ));
             }
 
             return null;
         }
 
-        foreach ($tableNode->getData() as $row) {
-            foreach ($row->getColumns() as $col) {
-                $lines = explode("\n", $col->getContent());
-
-                /*
-                 * This part is broken, we want to parse all elements as fragment.
-                 * - However in a case we get just a single paragraph node we want to have just the internal span.
-                 * - the current enviroment is not passed. This makes it impossible to use links inside a table?
-                 * - just lines are accepted right now, but according to spec all types of elements are allowed. including complex stuff like
-                 *   code and other tables.
-                 *
-                 * This should somehow work, but we need to pass the current environment, which is in the parser instance.
-                 * Maybe we should move the "isStart" for the lists into the environment so we are sure that it works as expected
-                 * not based on the line iterator. As that will be at start once we are in a fragement?
-                 *
-                 * $node = $parser->parseFragment($col->getContent());
-                 */
-                if ($lineChecker->isListLine($lines[0], false)) {
-                    $node = $documentParserContext->parseFragment($col->getContent())->getNodes()[0];
-                } else {
-                    //TODO: fix this, as we need to parse table contents for links
-                    $node = new SpanNode($col->getContent()); //SpanNode::create($parser, $col->getContent());
-                }
-
-                $col->setNode($node);
-            }
+        $headers = [];
+        foreach ($tableNode->getHeaders() as $row) {
+            $headers[] = $this->buildRow($row, $documentParserContext, $productions);
         }
 
-        return $tableNode;
+        $rows = [];
+        foreach ($tableNode->getData() as $row) {
+            $rows[] = $this->buildRow($row, $documentParserContext, $productions);
+        }
+
+        return new TableNode($rows, $headers);
+    }
+
+    private function buildRow(
+        TableRow $row,
+        DocumentParserContext $documentParserContext,
+        RuleContainer $productions
+    ): TableRow {
+        $newRow = new TableRow();
+        foreach ($row->getColumns() as $col) {
+            $newRow->addColumn($this->buildColumn($col, $documentParserContext, $productions));
+        }
+
+        return $newRow;
+    }
+
+    private function buildColumn(
+        TableColumn $col,
+        DocumentParserContext $documentParserContext,
+        RuleContainer $productions
+    ): TableColumn {
+        $content = $col->getContent();
+        $context = $documentParserContext->withContents($content);
+        while ($context->getDocumentIterator()->valid()) {
+            $productions->apply($context, $col);
+        }
+
+        $nodes = $col->getChildren();
+        if (count($nodes) > 1) {
+            return $col;
+        }
+
+        // the list item offset is determined by the offset of the first text
+        if ($nodes[0] instanceof ParagraphNode) {
+            return new TableColumn(trim($content), $col->getColSpan(), $nodes[0]->getChildren(), $col->getRowSpan());
+        }
+
+        return $col;
     }
 }

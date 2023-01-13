@@ -61,25 +61,6 @@ class TableNode extends Node
      */
     public function getHeaders(): array
     {
-        if (is_bool(current($this->headers))) {
-            $tableHeaderRows = [];
-
-            foreach ($this->headers as $k => $isHeader) {
-                if ($isHeader === false) {
-                    continue;
-                }
-
-                if (!isset($this->data[$k])) {
-                    throw new \LogicException(sprintf('Row "%d" should be a header, but that row does not exist.', $k));
-                }
-
-                $tableHeaderRows[] = $this->data[$k];
-                unset($this->data[$k]);
-            }
-
-            $this->headers = $tableHeaderRows;
-        }
-
         return $this->headers;
     }
 }
