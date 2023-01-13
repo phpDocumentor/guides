@@ -15,46 +15,39 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\Exception\UnknownTableType;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\SimpleTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableParser;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
 use function trim;
 
 /**
- * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#tables
+ * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#grid-tables
  * @implements Rule<TableNode>
  */
-final class TableRule implements Rule
+final class GridTableRule implements Rule
 {
     public const TYPE_PRETTY = 'pretty';
-    public const TYPE_SIMPLE = 'simple';
 
     private LineChecker $lineChecker;
 
-    private TableParser $tableParser;
-
-    /** @var TableBuilder[] */
-    private array $builders = [];
+    private TableBuilder $builder;
 
     public function __construct()
     {
         $this->lineChecker = new LineChecker();
-        $this->tableParser = new TableParser();
 
-        //$this->builders[self::TYPE_SIMPLE] = new SimpleTableBuilder();
-        $this->builders[self::TYPE_PRETTY] = new GridTableBuilder();
+        $this->builder = new GridTableBuilder();
     }
 
     public function applies(DocumentParserContext $documentParser): bool
     {
-        return $this->tableParser->parseTableSeparatorLine($documentParser->getDocumentIterator()->current()) !== null;
+        return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
@@ -65,16 +58,7 @@ final class TableRule implements Rule
             return null;
         }
 
-        $type = $this->tableParser->guessTableType($line);
-        if (isset($this->builders[$type]) === false) {
-            throw new UnknownTableType($type);
-        }
-        $builder = $this->builders[$this->tableParser->guessTableType($line)];
-        $tableSeparatorLineConfig = $this->tableParser->parseTableSeparatorLine($line);
-        if ($tableSeparatorLineConfig === null) {
-            return null;
-        }
-
+        $tableSeparatorLineConfig = $this->tableLineConfig($line, '-');
         $context = new ParserContext();
 
         $context->pushSeparatorLine($tableSeparatorLineConfig);
@@ -82,8 +66,15 @@ final class TableRule implements Rule
 
         while ($documentIterator->getNextLine() !== null) {
             $documentIterator->next();
-            $separatorLineConfig = $this->tableParser->parseTableSeparatorLine($documentIterator->current());
-            if ($separatorLineConfig !== null) {
+
+            if ($this->isHeaderDefinitionLine($documentIterator->current())) {
+                $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '=');
+                $context->pushSeparatorLine($separatorLineConfig);
+                continue;
+            }
+
+            if ($this->isColumnDefinitionLine($documentIterator->current())) {
+                $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '-');
                 $context->pushSeparatorLine($separatorLineConfig);
                 // if an empty line follows a separator line, then it is the end of the table
                 if ($documentIterator->getNextLine() === null || trim($documentIterator->getNextLine()) === '') {
@@ -96,6 +87,42 @@ final class TableRule implements Rule
             $context->pushContentLine($documentIterator->current());
         }
 
-        return $builder->buildNode($context, $documentParserContext->getParser(), $this->lineChecker);
+        return $this->builder->buildNode($context, $documentParserContext, $this->lineChecker);
+    }
+
+    private function tableLineConfig(string $line, string $char): TableSeparatorLineConfig
+    {
+        $parts = [];
+        $strlen = strlen($line);
+
+        $currentPartStart = 1;
+        for ($i = 1; $i < $strlen; $i++) {
+            if ($line[$i] === '+') {
+                $parts[] = [$currentPartStart, $i];
+                $currentPartStart = ++$i;
+            }
+        }
+
+        return new TableSeparatorLineConfig(
+            $char === '=',
+            $parts,
+            $char,
+            $line
+        );
+    }
+
+    private function isColumnDefinitionLine(string $line): bool
+    {
+        return $this->isDefintionLine($line, '-');
+    }
+
+    private function isHeaderDefinitionLine(string $line): bool
+    {
+        return $this->isDefintionLine($line, '=');
+    }
+
+    private function isDefintionLine(string $line, string $char): bool
+    {
+        return preg_match("/^(?:\+$char+)+\+$/", trim($line)) > 0;
     }
 }
