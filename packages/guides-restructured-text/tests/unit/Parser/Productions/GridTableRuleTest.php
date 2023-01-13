@@ -19,22 +19,81 @@ use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGenerator;
-use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class TableRuleTest extends TestCase
+final class GridTableRuleTest extends AbstractRuleTest
 {
     use ProphecyTrait;
+
+    private GridTableRule $rule;
+
+    protected function setUp(): void
+    {
+        $this->rule = new GridTableRule($this->givenCollectAllRuleContainer());
+    }
 
     private function createColumnNode(string $content, int $colSpan = 1): TableColumn
     {
         return new TableColumn($content, $colSpan, new SpanNode($content));
+    }
+
+    /** @dataProvider tableStartProvider */
+    public function testApplies(string $input): void
+    {
+        $parser = $this->createContext($input);
+
+        self::assertTrue($this->rule->applies($parser));
+    }
+
+    /** @return string[][] */
+    public function tableStartProvider(): array
+    {
+        return [
+            ['+--+'],
+            ['+------+--+'],
+            ['+---+------+-+'],
+        ];
+    }
+
+    /** @dataProvider nonTableStartProvider */
+    public function testDoesNotApply(string $input): void
+    {
+        $parser = $this->createContext($input);
+
+        self::assertFalse($this->rule->applies($parser));
+    }
+
+    /** @return string[][] */
+    public function nonTableStartProvider(): array
+    {
+        return [
+            ['+==+==+'],
+            ['++----+'],
+            ['+---+---'],
+            ['+---+---++'],
+        ];
+    }
+
+    /**
+     * First 2 simple table cases are broken, headers are not detected correctly?
+     *
+     * @dataProvider prettyTableBasicsProvider
+     * @dataProvider gridTableWithColSpanProvider
+     * @dataProvider gridTableWithRowSpanProvider
+     */
+    public function testSimpleTableCreation(string $input, array $rows, $headers): void
+    {
+        $context = $this->createContext($input);
+
+        /** @var TableNode $table */
+        $table = $this->rule->apply($context);
+
+        self::assertEquals($rows, $table->getData());
+        self::assertEquals(count($rows), $table->getRows());
+        self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
+        self::assertEquals($headers, array_keys($table->getHeaders()));
     }
 
     public function prettyTableBasicsProvider(): \Generator
@@ -236,9 +295,8 @@ RST;
 | keywords                          | string        
 RST;
 
-        $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule();
-        $rule->apply($context->reveal());
+        $context = $this->createContext($input);
+        $this->rule->apply($context);
 
         self::assertContainsError(
             <<<'ERROR'
@@ -278,9 +336,8 @@ ERROR
 +-----------------------------------+---------------+
 RST;
 
-        $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule();
-        $rule->apply($context->reveal());
+        $context = $this->createContext($input);
+        $this->rule->apply($context);
 
         self::assertContainsError(
             <<<'ERROR'
@@ -318,9 +375,8 @@ ERROR
 SOME more text here
 RST;
 
-        $context = $this->givenDocumentParserContext($input);
-        $rule = new TableRule();
-        $rule->apply($context->reveal());
+        $context = $this->createContext($input);
+        $this->rule->apply($context);
 
         self::assertContainsError(
             <<<'ERROR'
@@ -354,18 +410,8 @@ ERROR
         );
     }
 
-    private function givenDocumentParserContext(string $input)
+    private static function assertContainsError(string $error, DocumentParserContext $context): void
     {
-        $iterator = new LinesIterator();
-        $iterator->load($input);
-
-        $context = $this->prophesize(DocumentParserContext::class);
-        $context->getDocumentIterator()->willReturn($iterator);
-        return $context;
-    }
-
-    private static function assertContainsError(string $error, ParserContext $context): void
-    {
-        self::assertContains($error, $context->getErrors());
+        self::assertContains($error, $context->getContext()->getErrors());
     }
 }
