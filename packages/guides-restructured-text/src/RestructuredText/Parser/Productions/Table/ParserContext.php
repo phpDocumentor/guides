@@ -14,6 +14,7 @@ final class ParserContext
     private int $currentLineNumber = 0;
 
     private array $errors = [];
+    private int $headerRows = 0;
 
     public function addError(string $message): void
     {
@@ -67,5 +68,15 @@ final class ParserContext
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function getHeaderRows(): int
+    {
+        return $this->headerRows;
+    }
+
+    public function setHeaderRows(int $rowNumber)
+    {
+        $this->headerRows = $rowNumber;
     }
 }

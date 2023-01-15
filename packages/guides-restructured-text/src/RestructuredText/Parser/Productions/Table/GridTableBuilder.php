@@ -20,58 +20,8 @@ class GridTableBuilder
 {
     protected function compile(ParserContext $context): TableNode
     {
-        // loop over ALL separator lines to find ALL of the column ranges
-        /** @var array<int, int> $columnRanges */
-        $columnRanges = [];
-        $finalHeadersRow = 0;
-        foreach ($context->getLineSeparators() as $rowIndex => $separatorLine) {
-            if ($separatorLine->isHeader()) {
-                if ($finalHeadersRow !== 0) {
-                    $context->addError(
-                        sprintf(
-                            'Malformed table: multiple "header rows" using "===" were found. See table '
-                            . 'lines "%d" and "%d"',
-                            $finalHeadersRow + 1,
-                            $rowIndex
-                        )
-                    );
-                }
-
-                // indicates that "=" was used
-                $finalHeadersRow = $rowIndex - 1;
-            }
-
-            foreach ($separatorLine->getPartRanges() as [$colStart, $colEnd]) {
-                // we don't have this "start" yet? just add it
-                // in theory, should only happen for the first row
-                if (!isset($columnRanges[$colStart])) {
-                    $columnRanges[$colStart] = $colEnd;
-
-                    continue;
-                }
-
-                // an exact column range we've already seen
-                // OR, this new column goes beyond what we currently
-                // have recorded, which means its a colspan, and so
-                // we already have correctly recorded the "smallest"
-                // current column ranges
-                if ($columnRanges[$colStart] <= $colEnd) {
-                    continue;
-                }
-
-                // this is not a new "start", but it is a new "end"
-                // this means that we've found a "shorter" column that
-                // we've seen before. We need to update the "end" of
-                // the existing column, and add a "new" column
-                $previousEnd = $columnRanges[$colStart];
-
-                // A) update the end of this column to the new end
-                $columnRanges[$colStart] = $colEnd;
-                // B) add a new column from this new end, to the previous end
-                $columnRanges[$colEnd + 1] = $previousEnd;
-                ksort($columnRanges);
-            }
-        }
+        $columnRanges = $this->getColumnRanges($context);
+        $finalHeadersRow = $context->getHeaderRows();
 
         /** @var TableRow[] $rows */
         $rows = [];
@@ -83,7 +33,7 @@ class GridTableBuilder
             // is a rowspan situation - e.g.
             // |           +----------------+----------------------------+
             // look for +-----+ pattern
-            if (preg_match('/\+[-]+\+/', $line) === 1) {
+            if ($this->hasRowSpan($line)) {
                 $partialSeparatorRows[$rowIndex] = true;
             }
 
@@ -92,16 +42,6 @@ class GridTableBuilder
             /** @var ?int $previousColumnEnd */
             $previousColumnEnd = null;
             foreach ($columnRanges as $start => $end) {
-                // a content line that ends before it should
-                if ($end >= mb_strlen($line)) {
-                    $context->addError(sprintf(
-                        "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
-                        $line
-                    ));
-
-                    break;
-                }
-
                 if ($currentColumnStart !== null) {
                     if ($previousColumnEnd === null) {
                         throw new LogicException('The previous column end is not set yet');
@@ -339,5 +279,50 @@ class GridTableBuilder
         }
 
         return $col;
+    }
+
+    /** @return array<int, int> */
+    private function getColumnRanges(ParserContext $context): array
+    {
+        $columnRanges = [];
+
+        foreach ($context->getLineSeparators() as $separatorLine) {
+            foreach ($separatorLine->getPartRanges() as [$colStart, $colEnd]) {
+                // we don't have this "start" yet? just add it
+                // in theory, should only happen for the first row
+                if (!isset($columnRanges[$colStart])) {
+                    $columnRanges[$colStart] = $colEnd;
+
+                    continue;
+                }
+
+                // an exact column range we've already seen
+                // OR, this new column goes beyond what we currently
+                // have recorded, which means its a colspan, and so
+                // we already have correctly recorded the "smallest"
+                // current column ranges
+                if ($columnRanges[$colStart] <= $colEnd) {
+                    continue;
+                }
+
+                // this is not a new "start", but it is a new "end"
+                // this means that we've found a "shorter" column that
+                // we've seen before. We need to update the "end" of
+                // the existing column, and add a "new" column
+                $previousEnd = $columnRanges[$colStart];
+
+                // A) update the end of this column to the new end
+                $columnRanges[$colStart] = $colEnd;
+                // B) add a new column from this new end, to the previous end
+                $columnRanges[$colEnd + 1] = $previousEnd;
+                ksort($columnRanges);
+            }
+        }
+        return $columnRanges;
+    }
+
+    private function hasRowSpan(string $line): bool
+    {
+        return preg_match('/\+[-]+\+/', $line) === 1;
     }
 }

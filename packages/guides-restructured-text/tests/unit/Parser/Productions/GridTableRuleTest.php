@@ -273,17 +273,6 @@ Malformed table: Line
 | keywords                          | string
 
 does not appear to be a complete table row
-in file test
-
-+-----------------------------------+---------------+
-+-----------------------------------+---------------+
-| Property                          | Data Type     |
-+===================================+===============+
-| description                       | string        |
-+-----------------------------------+               |
-| author                            |               |
-+-----------------------------------+---------------+
-| keywords                          | string
 ERROR
             ,
             $context

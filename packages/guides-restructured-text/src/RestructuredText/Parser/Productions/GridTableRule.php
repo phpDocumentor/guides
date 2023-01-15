@@ -55,12 +55,36 @@ final class GridTableRule implements Rule
         $context->pushSeparatorLine($tableSeparatorLineConfig);
         $context->pushSeparatorLine($tableSeparatorLineConfig);
 
+        $lineLength = mb_strlen($line);
+        $headerRows = 0;
+        $lineNumber = 1;
+
         while ($documentIterator->getNextLine() !== null) {
+            $lineNumber++;
             $documentIterator->next();
+
+            if ($lineLength !== mb_strlen($documentIterator->current())) {
+                $documentParserContext->getContext()->addError(sprintf(
+                    "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
+                    $documentIterator->current()
+                ));
+            }
 
             if ($this->isHeaderDefinitionLine($documentIterator->current())) {
                 $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '=');
                 $context->pushSeparatorLine($separatorLineConfig);
+                if ($context->getHeaderRows() !== 0) {
+                    $context->addError(
+                        sprintf(
+                            'Malformed table: multiple "header rows" using "===" were found. See table '
+                            . 'lines "%d" and "%d"',
+                            $context->getHeaderRows() + 1,
+                            $lineNumber
+                        )
+                    );
+                }
+
+                $context->setHeaderRows($lineNumber-1);
                 continue;
             }
 
