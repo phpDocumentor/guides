@@ -21,12 +21,16 @@ use function max;
 class TableNode extends Node
 {
     /** @var TableRow[] */
-    protected $data = [];
+    protected array $data = [];
 
-    /** @var bool[] */
-    protected $headers = [];
+    /** @var TableRow[] */
+    protected array $headers = [];
 
-    public function __construct($rows, $headers)
+    /**
+     * @param TableRow[] $rows
+     * @param TableRow[] $headers
+     */
+    public function __construct(array $rows, array $headers)
     {
         parent::__construct();
         $this->data = $rows;
