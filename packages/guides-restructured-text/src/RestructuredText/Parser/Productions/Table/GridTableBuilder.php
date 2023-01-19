@@ -20,51 +20,40 @@ class GridTableBuilder
 {
     protected function compile(ParserContext $context): TableNode
     {
-        $columnRanges = $this->getColumnRanges($context);
+        $columnRanges = $context->getColumnRanges();
         $finalHeadersRow = $context->getHeaderRows();
 
         /** @var TableRow[] $rows */
         $rows = [];
-        $partialSeparatorRows = [];
+        $partialSeparatorRows = $this->findRowSpans($context);
+        $currentSpan = 1;
+
         foreach ($context->getDataLines() as $rowIndex => $line) {
             $row = new TableRow();
-
-            // if the row is part separator row, part content, this
-            // is a rowspan situation - e.g.
-            // |           +----------------+----------------------------+
-            // look for +-----+ pattern
-            if ($this->hasRowSpan($line)) {
-                $partialSeparatorRows[$rowIndex] = true;
-            }
-
             $currentColumnStart = null;
-            $currentSpan = 1;
-            /** @var ?int $previousColumnEnd */
             $previousColumnEnd = null;
             foreach ($columnRanges as $start => $end) {
-                if ($currentColumnStart !== null) {
-                    if ($previousColumnEnd === null) {
-                        throw new LogicException('The previous column end is not set yet');
-                    }
+                $this->assertColumnEnded($currentColumnStart, $previousColumnEnd);
 
-                    $gapText = mb_substr($line, $previousColumnEnd, $start - $previousColumnEnd);
-                    if (mb_strpos($gapText, '|') === false && mb_strpos($gapText, '+') === false) {
+                if ($currentColumnStart !== null) {
+                    $cellText = mb_substr($line, $previousColumnEnd, $start - $previousColumnEnd);
+                    if (mb_strpos($cellText, '|') === false && mb_strpos($cellText, '+') === false) {
                         // text continued through the "gap". This is a colspan
                         // "+" is an odd character - it's usually "|", but "+" can
                         // happen in row-span situations
                         $currentSpan++;
-                    } else {
-                        // we just hit a proper "gap" record the line up until now
-                        $row->addColumn(
-                            new TableColumn(
-                                mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
-                                $currentSpan
-                            )
-                        );
-                        $currentSpan = 1;
-                        $currentColumnStart = null;
+                        $previousColumnEnd = $end;
+                        continue;
                     }
+
+                    // we just hit a proper "gap" record the line up until now
+                    $row->addColumn(
+                        $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan)
+                    );
+                    $currentSpan = 1;
+                    $currentColumnStart = null;
                 }
+
 
                 // if the current column start is null, then set it
                 // other wise, leave it - this is a colspan, and eventually
@@ -77,16 +66,11 @@ class GridTableBuilder
             }
 
             // record the last column
-            if ($currentColumnStart !== null) {
-                if ($previousColumnEnd === null) {
-                    throw new LogicException('The previous column end is not set yet');
-                }
+            $this->assertColumnEnded($currentColumnStart, $previousColumnEnd);
 
+            if ($currentColumnStart !== null) {
                 $row->addColumn(
-                    new TableColumn(
-                        mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
-                        $currentSpan
-                    )
+                    $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan)
                 );
             }
 
@@ -281,44 +265,39 @@ class GridTableBuilder
         return $col;
     }
 
-    /** @return array<int, int> */
-    private function getColumnRanges(ParserContext $context): array
+    private function createColumn(
+        string $line,
+        int $currentColumnStart,
+        ?int $previousColumnEnd,
+        int $currentSpan
+    ): TableColumn {
+        return new TableColumn(
+            mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
+            $currentSpan
+        );
+    }
+
+    private function assertColumnEnded(?int $currentColumnStart, ?int $previousColumnEnd): void
     {
-        $columnRanges = [];
+        if (($currentColumnStart !== null) && $previousColumnEnd === null) {
+            throw new LogicException('The previous column end is not set yet');
+        }
+    }
 
-        foreach ($context->getLineSeparators() as $separatorLine) {
-            foreach ($separatorLine->getPartRanges() as [$colStart, $colEnd]) {
-                // we don't have this "start" yet? just add it
-                // in theory, should only happen for the first row
-                if (!isset($columnRanges[$colStart])) {
-                    $columnRanges[$colStart] = $colEnd;
+    private function findRowSpans(ParserContext $context): array
+    {
+        $partialSeparatorRows = [];
 
-                    continue;
-                }
-
-                // an exact column range we've already seen
-                // OR, this new column goes beyond what we currently
-                // have recorded, which means its a colspan, and so
-                // we already have correctly recorded the "smallest"
-                // current column ranges
-                if ($columnRanges[$colStart] <= $colEnd) {
-                    continue;
-                }
-
-                // this is not a new "start", but it is a new "end"
-                // this means that we've found a "shorter" column that
-                // we've seen before. We need to update the "end" of
-                // the existing column, and add a "new" column
-                $previousEnd = $columnRanges[$colStart];
-
-                // A) update the end of this column to the new end
-                $columnRanges[$colStart] = $colEnd;
-                // B) add a new column from this new end, to the previous end
-                $columnRanges[$colEnd + 1] = $previousEnd;
-                ksort($columnRanges);
+        foreach ($context->getDataLines() as $rowIndex => $line) {
+            // if the row is part separator row, part content, this
+            // is a rowspan situation - e.g.
+            // |           +----------------+----------------------------+
+            // look for +-----+ pattern
+            if ($this->hasRowSpan($line)) {
+                $partialSeparatorRows[$rowIndex] = true;
             }
         }
-        return $columnRanges;
+        return $partialSeparatorRows;
     }
 
     private function hasRowSpan(string $line): bool
