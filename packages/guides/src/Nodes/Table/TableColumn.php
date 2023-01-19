@@ -19,20 +19,24 @@ use phpDocumentor\Guides\Nodes\Node;
 use function strlen;
 use function trim;
 
-final class TableColumn
+final class TableColumn extends Node
 {
     private string $content;
 
     private int $colSpan;
 
-    private int $rowSpan = 1;
+    private int $rowSpan;
 
-    private ?Node $node = null;
+    /** @var Node[] */
+    private array $nodes = [];
 
-    public function __construct(string $content, int $colSpan)
+    /** @param Node[] $node */
+    public function __construct(string $content, int $colSpan, array $node = [], int $rowSpan = 1)
     {
         $this->content = trim($content);
         $this->colSpan = $colSpan;
+        $this->rowSpan = $rowSpan;
+        $this->nodes = $node;
     }
 
     public function getContent(): string
@@ -66,25 +70,30 @@ final class TableColumn
         $this->rowSpan++;
     }
 
-    public function getNode(): Node
-    {
-        if ($this->node === null) {
-            throw new LogicException('The node is not yet set.');
-        }
-
-        return $this->node;
-    }
-
-    public function setNode(Node $node): void
-    {
-        $this->node = $node;
-    }
-
     /**
      * Indicates that a column is empty, and could be skipped entirely.
      */
     public function isCompletelyEmpty(): bool
     {
-        return strlen($this->content) === 0;
+        return $this->content === '';
+    }
+
+    public function addChildNode(Node $node): void
+    {
+        $this->nodes[] = $node;
+    }
+
+    /** @return Node[] */
+    public function getChildren(): array
+    {
+        return $this->nodes;
+    }
+
+    public function replaceNode(int $key, Node $node): Node
+    {
+        $result = clone $this;
+        $result->nodes[$key] = $node;
+
+        return $result;
     }
 }

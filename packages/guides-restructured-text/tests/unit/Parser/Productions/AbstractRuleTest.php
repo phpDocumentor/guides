@@ -24,10 +24,11 @@ abstract class AbstractRuleTest extends TestCase
     {
         $rest = '';
         $actual->next();
-        do {
+
+        while ($actual->valid()) {
             $rest .= $actual->current() . "\n";
             $actual->next();
-        } while ($actual->valid());
+        }
 
         self::assertEquals($expected, $rest);
     }
