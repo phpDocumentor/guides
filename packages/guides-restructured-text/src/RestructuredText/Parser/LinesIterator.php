@@ -126,6 +126,9 @@ class LinesIterator implements Iterator
         return $this->lines;
     }
 
+    /**
+     * @psalm-assert-if-false non-empty-string $line
+     */
     public static function isEmptyLine(?string $line): bool
     {
         if ($line === null) {
@@ -135,6 +138,9 @@ class LinesIterator implements Iterator
         return trim($line) === '';
     }
 
+    /**
+     * @psalm-assert-if-true null $line
+     */
     public static function isNullOrEmptyLine(?string $line): bool
     {
         if ($line === null) {
