@@ -88,8 +88,8 @@ INPUT;
     public function testSimpleListCreation(): void
     {
         $input = <<<INPUT
-1 first items
-2 second item
+1. first items
+2. second item
 
 Not included
 INPUT;
@@ -121,8 +121,8 @@ REST,
     public function testListWithoutNewLineInParagraphResultsInWarning(): void
     {
         $input = <<<INPUT
-1 first items
-2 second item
+1. first items
+2. second item
 Not included
 INPUT;
 
@@ -177,8 +177,8 @@ REST,
         self::assertEquals(
             new ListNode(
                 [
-                    new ListItemNode('(#)', false, [new RawNode('first items')]),
-                    new ListItemNode('(#)', false, [new RawNode("second item\nother line")])
+                    new ListItemNode('#', false, [new RawNode('first items')]),
+                    new ListItemNode('#', false, [new RawNode("second item\nother line")])
                 ],
                 true
             ),
@@ -189,9 +189,9 @@ REST,
     public function testListWithOddIndenting(): void
     {
         $input = <<<INPUT
-1 
+1. 
   first items
-2 
+2. 
     second item
     other line
   Not included

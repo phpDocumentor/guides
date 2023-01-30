@@ -168,7 +168,8 @@ final class EnumeratedListRule implements Rule
     /** @param array{marker: string, indenting: int} $listConfig */
     private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
     {
-        $listItem = new ListItemNode($listConfig['marker'], false, []);
+        $marker = trim($listConfig['marker'], '.()');
+        $listItem = new ListItemNode($marker, false, []);
         $context = $context->withContents($buffer->getLinesString());
         while ($context->getDocumentIterator()->valid()) {
             $this->productions->apply($context, $listItem);
@@ -181,7 +182,7 @@ final class EnumeratedListRule implements Rule
 
         // the list item offset is determined by the offset of the first text
         if ($nodes[0] instanceof ParagraphNode) {
-            return new ListItemNode($listConfig['marker'], false, $nodes[0]->getChildren());
+            return new ListItemNode($marker, false, $nodes[0]->getChildren());
         }
 
         return $listItem;
