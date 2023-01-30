@@ -58,8 +58,9 @@ class SpanParser
 
         $result = $this->parseTokens($parserContext);
         $result = $this->replaceStandaloneHyperlinks($result);
+        $result = $this->replaceStandaloneEmailAddresses($result);
 
-        return $this->replaceStandaloneEmailAddresses($result);
+        return stripslashes($result);
     }
 
     /**
