@@ -23,26 +23,23 @@ abstract class AbstractAdmonitionDirective extends SubDirective
     private string $name;
 
     private string $text;
-    private SpanParser $spanParser;
 
-    public function __construct(string $name, string $text, SpanParser $spanParser)
+    public function __construct(string $name, string $text)
     {
         $this->name = $name;
         $this->text = $text;
-        $this->spanParser = $spanParser;
     }
 
     final public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         return (new AdmonitionNode(
             $this->name,
             $this->text,
-            $document ?? $this->spanParser->parse($data, $parser->getEnvironment())
+            $document
         ))->withOptions($options);
     }
 

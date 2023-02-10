@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\Metadata\DocumentTitleNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Add a meta title to the document
@@ -21,20 +22,17 @@ class Title extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        $document = $parser->getDocument();
+        $document = $documentParserContext->getDocument();
         $document->addHeaderNode(new DocumentTitleNode($data));
-        if ($node instanceof Node) {
-            $document->addChildNode($node);
-        }
 
         return null;
     }

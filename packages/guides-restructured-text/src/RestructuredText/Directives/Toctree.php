@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
 /**
@@ -34,22 +35,22 @@ class Toctree extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        if ($node === null) {
-            return null;
-        }
+        $environment = $documentParserContext->getParser()->getEnvironment();
 
-        $environment = $parser->getEnvironment();
-
-        $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles($environment, $node, $options);
+        $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
+            $environment,
+            $documentParserContext->getDocumentIterator(),
+            $options
+        );
 
         return (new TocNode($toctreeFiles))->withOptions($options);
     }

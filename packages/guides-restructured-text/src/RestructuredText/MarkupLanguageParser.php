@@ -81,27 +81,27 @@ class MarkupLanguageParser implements ParserInterface
         $spanParser = new SpanParser();
 
         $directives = [
-            new AdmonitionDirective($spanParser),
-            new BestPracticeDirective($spanParser),
-            new CautionDirective($spanParser),
+            new AdmonitionDirective(),
+            new BestPracticeDirective(),
+            new CautionDirective(),
             new ClassDirective(),
             new Code(),
             new CodeBlock(),
             new ContainerDirective(),
             new Figure(new UrlGenerator()),
-            new HintDirective($spanParser),
+            new HintDirective(),
             new Image(new UrlGenerator()),
-            new ImportantDirective($spanParser),
+            new ImportantDirective(),
             new IncludeDirective(),
             new IndexDirective(),
             new Meta(),
-            new NoteDirective($spanParser),
+            new NoteDirective(),
             new RawDirective(),
             new Replace($spanParser),
             new RoleDirective(),
-            new SeeAlsoDirective($spanParser),
+            new SeeAlsoDirective(),
             new SidebarDirective(),
-            new TipDirective($spanParser),
+            new TipDirective(),
             new Title(),
             new Toctree(
                 new ToctreeBuilder(
@@ -111,7 +111,7 @@ class MarkupLanguageParser implements ParserInterface
             ),
             new TopicDirective(),
             new Uml(),
-            new WarningDirective($spanParser),
+            new WarningDirective(),
             new Wrap(),
         ];
 

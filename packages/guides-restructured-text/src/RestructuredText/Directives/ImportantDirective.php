@@ -17,8 +17,8 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 class ImportantDirective extends AbstractAdmonitionDirective
 {
-    public function __construct(SpanParser $spanParser)
+    public function __construct()
     {
-        parent::__construct('important', 'Important', $spanParser);
+        parent::__construct('important', 'Important');
     }
 }

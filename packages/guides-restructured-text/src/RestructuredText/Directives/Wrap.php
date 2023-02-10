@@ -21,11 +21,10 @@ class Wrap extends SubDirective
      * @param string[] $options
      */
     public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         return $document;
     }

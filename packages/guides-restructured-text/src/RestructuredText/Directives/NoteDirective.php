@@ -17,8 +17,8 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 class NoteDirective extends AbstractAdmonitionDirective
 {
-    public function __construct(SpanParser $spanParser)
+    public function __construct()
     {
-        parent::__construct('note', 'Note', $spanParser);
+        parent::__construct('note', 'Note');
     }
 }

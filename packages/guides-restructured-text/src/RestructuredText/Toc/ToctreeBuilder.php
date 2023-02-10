@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\UrlGenerator;
 
 use function array_filter;
@@ -33,12 +34,12 @@ class ToctreeBuilder
      */
     public function buildToctreeFiles(
         ParserContext $environment,
-        Node $node,
+        LinesIterator $lines,
         array $options
     ): array {
         $toctreeFiles = [];
 
-        foreach ($this->parseToctreeFiles($node) as $file) {
+        foreach ($this->parseToctreeFiles($lines) as $file) {
             if ($this->isGlob($options, $file)) {
                 $globPattern = $file;
 
@@ -70,10 +71,10 @@ class ToctreeBuilder
     /**
      * @return string[]
      */
-    private function parseToctreeFiles(Node $node): array
+    private function parseToctreeFiles(LinesIterator $lines): array
     {
         return array_filter(
-            array_map('trim', explode("\n", $node->getValueString())),
+            array_map('trim', $lines->toArray()),
             static fn(string $file) => $file !== ''
         );
     }

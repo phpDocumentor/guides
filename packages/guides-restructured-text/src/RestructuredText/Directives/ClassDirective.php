@@ -23,16 +23,11 @@ class ClassDirective extends SubDirective
      * @param string[] $options
      */
     public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
-        if ($document === null) {
-            return null;
-        }
-
         $classes = explode(' ', $data);
 
         $normalizedClasses = array_map(

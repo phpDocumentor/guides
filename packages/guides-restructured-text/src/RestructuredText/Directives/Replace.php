@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 /**
@@ -28,14 +29,15 @@ class Replace extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function processNode(
-        MarkupLanguageParser $parser,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): Node {
-        return $this->spanParser->parse($data, $parser->getEnvironment());
+        return $this->spanParser->parse($data, $documentParserContext->getParser()->getEnvironment());
     }
 }

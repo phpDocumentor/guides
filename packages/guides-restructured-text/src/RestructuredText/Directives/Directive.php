@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * A directive is like a function you can call or apply to a block
@@ -46,22 +46,21 @@ abstract class Directive
      *
      * The node that directly follows the directive is also passed to it
      *
-     * @param MarkupLanguageParser $parser the calling parser
-     * @param Node|null $node the node that follows the directive
+     * @param DocumentParserContext $documentParserContext the current document context with the content
+     *    of the directive
      * @param string $variable the variable name of the directive
      * @param string $data the data of the directive (following ::)
      * @param mixed[] $options the array of options for this directive
      */
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        $document = $parser->getDocument();
+        $document = $documentParserContext->getDocument();
 
-        $processNode = $this->processNode($parser, $variable, $data, $options)
+        $processNode = $this->processNode($documentParserContext, $variable, $data, $options)
             // Ensure options are always available
             ->withOptions($options);
 
@@ -79,11 +78,16 @@ abstract class Directive
      *
      * The arguments are the same that process
      *
+     * @param DocumentParserContext $documentParserContext
      * @param mixed[] $options
      */
-    public function processNode(MarkupLanguageParser $parser, string $variable, string $data, array $options): Node
-    {
-        $this->processAction($parser, $variable, $data, $options);
+    public function processNode(
+        DocumentParserContext $documentParserContext,
+        string $variable,
+        string $data,
+        array $options
+    ): Node {
+        $this->processAction($documentParserContext, $variable, $data, $options);
 
         return new GenericNode($variable, $data);
     }
@@ -96,7 +100,11 @@ abstract class Directive
      *
      * @param mixed[] $options
      */
-    public function processAction(MarkupLanguageParser $parser, string $variable, string $data, array $options): void
-    {
+    public function processAction(
+        DocumentParserContext $documentParserContext,
+        string $variable,
+        string $data,
+        array $options
+    ): void {
     }
 }
