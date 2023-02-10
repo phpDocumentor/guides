@@ -30,11 +30,10 @@ class SidebarDirective extends SubDirective
     }
 
     public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         return (new SidebarNode(
             $data,

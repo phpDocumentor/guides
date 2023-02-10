@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\UrlGenerator;
 
 /**
@@ -31,13 +32,14 @@ class Image extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function processNode(
-        MarkupLanguageParser $parser,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): Node {
         return new ImageNode($this->urlGenerator->relativeUrl($data));
     }

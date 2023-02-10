@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-
 class WarningDirective extends AbstractAdmonitionDirective
 {
-    public function __construct(SpanParser $spanParser)
+    public function __construct()
     {
-        parent::__construct('warning', 'Warning', $spanParser);
+        parent::__construct('warning', 'Warning');
     }
 }

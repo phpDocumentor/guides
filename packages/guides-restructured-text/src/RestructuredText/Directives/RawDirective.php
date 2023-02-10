@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Renders a raw block, example:
@@ -24,20 +26,19 @@ class RawDirective extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        if ($node === null) {
-            return null;
-        }
 
-        $document = $parser->getDocument();
+        $node = new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
+
+        $document = $documentParserContext->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $node);
             return null;

@@ -20,11 +20,10 @@ use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 class TopicDirective extends SubDirective
 {
     final public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         return new TopicNode(
             $data,
