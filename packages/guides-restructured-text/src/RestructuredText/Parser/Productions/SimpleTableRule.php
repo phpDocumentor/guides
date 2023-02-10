@@ -162,7 +162,7 @@ final class SimpleTableRule implements Rule
         }
 
         // the list item offset is determined by the offset of the first text
-        if ($nodes[0] instanceof ParagraphNode) {
+        if (($nodes[0] ?? null) instanceof ParagraphNode) {
             return new TableColumn(trim($content), $colspan, $nodes[0]->getChildren());
         }
 
