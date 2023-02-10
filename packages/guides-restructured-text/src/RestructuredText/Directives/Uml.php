@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Webmozart\Assert\Assert;
 use function dirname;
 use function explode;
@@ -37,23 +38,18 @@ final class Uml extends Directive
     }
 
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
+        $parser = $documentParserContext->getParser();
         $environment = $parser->getEnvironment();
 
-        $value = '';
-        $caption = '';
+        $caption = $data;
+        $value = implode("\n", $documentParserContext->getDocumentIterator()->toArray());
 
-        if ($node instanceof CodeNode) {
-            $caption = $data;
-            $value = $node->getValue();
-        }
-
-        if ($node instanceof CodeNode === false && $data) {
+        if (empty($value)) {
             $value = $this->loadExternalUmlFile($environment, $data);
             if ($value === null) {
                 return null;

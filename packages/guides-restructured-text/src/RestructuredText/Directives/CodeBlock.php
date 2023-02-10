@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use function trim;
 
 /**
@@ -29,25 +30,24 @@ class CodeBlock extends Directive
     }
 
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        if ($node === null) {
-            return null;
-        }
 
-        if ($node instanceof CodeNode) {
-            $node->setLanguage(trim($data));
-            $this->setStartingLineNumberBasedOnOptions($options, $node);
-        }
+        $node = new CodeNode(
+            $documentParserContext->getDocumentIterator()->toArray()
+        );
 
-        $document = $parser->getDocument();
+        $node->setLanguage(trim($data));
+        $this->setStartingLineNumberBasedOnOptions($options, $node);
+
+        $document = $documentParserContext->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $node);
             return null;

@@ -47,7 +47,7 @@ final class DocumentRule implements Rule
         $productions->push(new BlockQuoteRule());
         $productions->push(new ListRule($productions));
         $productions->push(new EnumeratedListRule($productions));
-        $productions->push(new DirectiveRule($literalBlockRule, $directiveHandlers));
+        $productions->push(new DirectiveRule($directiveHandlers));
         $productions->push(new CommentRule());
         $productions->push(new GridTableRule($productions));
         $productions->push(new SimpleTableRule($productions));

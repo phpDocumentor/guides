@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
@@ -30,19 +31,14 @@ use function sprintf;
  */
 final class DirectiveRule implements Rule
 {
-    private LiteralBlockRule $literalBlockRule;
-
     /** @var array<string, DirectiveHandler> */
     private array $directives;
 
     /**
      * @param iterable<DirectiveHandler> $directives
      */
-    public function __construct(
-        LiteralBlockRule      $literalBlockRule,
-        iterable              $directives = []
-    ) {
-        $this->literalBlockRule = $literalBlockRule;
+    public function __construct(iterable $directives = [])
+    {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
@@ -70,7 +66,6 @@ final class DirectiveRule implements Rule
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
-        $documentIterator->next();
         $directive = $this->parseDirective($openingLine);
 
         if ($directive === null) {
@@ -95,12 +90,12 @@ final class DirectiveRule implements Rule
         }
 
         $this->interpretDirectiveOptions($documentIterator, $directive);
+        $buffer = $this->collectDirectiveContents($documentIterator);
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             return $directiveHandler->process(
-                $documentParserContext->getParser(),
-                $this->interpretContentBlock($documentParserContext),
+                $documentParserContext->withContents($buffer->getLinesString()),
                 $directive->getVariable(),
                 $directive->getData(),
                 $directive->getOptions()
@@ -142,16 +137,36 @@ final class DirectiveRule implements Rule
 
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void
     {
-        while ($documentIterator->valid()
-            && ($directiveOption = $this->parseDirectiveOption($documentIterator->current())) !== null
+        while ($documentIterator->getNextLine() !== null && $this->isDirectiveOption($documentIterator->getNextLine())
         ) {
+            $documentIterator->next();
+            $directiveOption = $this->parseDirectiveOption($documentIterator->current());
             $directive->setOption($directiveOption->getName(), $directiveOption->getValue());
+        }
 
+        if ($this->isDirectiveOption($documentIterator->current())) {
             $documentIterator->next();
         }
     }
 
-    public function parseDirectiveOption(string $line): ?DirectiveOption
+    private function isDirectiveOption(?string $line): bool
+    {
+        if ($line === null) {
+            return false;
+        }
+
+        if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {
+            return true;
+        }
+
+        if (preg_match('/^(\s+):(.+):(\s*)$/mUsi', $line, $match) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function parseDirectiveOption(string $line): DirectiveOption
     {
         if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {
             return new DirectiveOption($match[2], trim($match[3]));
@@ -161,18 +176,26 @@ final class DirectiveRule implements Rule
             return new DirectiveOption($match[2], true);
         }
 
-        return null;
+        throw new \InvalidArgumentException('Not a valid directive option');
     }
 
-    private function interpretContentBlock(DocumentParserContext $documentParserContext): ?Node
+    private function collectDirectiveContents(LinesIterator $documentIterator): Buffer
     {
-        $contentBlock = null;
-        $documentIterator = $documentParserContext->getDocumentIterator();
-        $documentParserContext->nextIndentedBlockShouldBeALiteralBlock = true;
-        if ($documentIterator->valid() && $this->literalBlockRule->applies($documentParserContext)) {
-            $contentBlock = $this->literalBlockRule->apply($documentParserContext);
-        }
+        $buffer = new Buffer();
+        $indenting = 1;
+        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+            $documentIterator->next();
+            $line = $documentIterator->current();
+            if ($indenting === 1 && LinesIterator::isEmptyLine($line) === false) {
+                $indenting = mb_strlen($line) - mb_strlen(ltrim($line));
+            }
 
-        return $contentBlock;
+            if ($line !== '') {
+                $line = substr($documentIterator->current(), $indenting);
+            }
+
+            $buffer->push($line);
+        }
+        return $buffer;
     }
 }

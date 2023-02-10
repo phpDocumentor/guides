@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use RuntimeException;
 
 use function array_key_exists;
@@ -31,8 +32,13 @@ final class IncludeDirective extends Directive
         return 'include';
     }
 
-    public function processNode(MarkupLanguageParser $parser, string $variable, string $data, array $options): Node
-    {
+    public function processNode(
+        DocumentParserContext $documentParserContext,
+        string $variable,
+        string $data,
+        array $options
+    ): Node {
+        $parser = $documentParserContext->getParser();
         $subParser = $parser->getSubParser();
         $parserContext = $parser->getEnvironment();
         $path = $parserContext->absoluteRelativePath($data);

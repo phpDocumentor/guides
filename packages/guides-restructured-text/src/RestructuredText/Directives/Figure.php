@@ -39,11 +39,10 @@ class Figure extends SubDirective
      * @param string[] $options
      */
     public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         $image = new ImageNode($this->urlGenerator->relativeUrl($data));
         $image = $image->withOptions([

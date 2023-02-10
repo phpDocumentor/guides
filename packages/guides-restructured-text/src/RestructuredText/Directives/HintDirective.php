@@ -17,8 +17,8 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 class HintDirective extends AbstractAdmonitionDirective
 {
-    public function __construct(SpanParser $spanParser)
+    public function __construct()
     {
-        parent::__construct('hint', 'Hint', $spanParser);
+        parent::__construct('hint', 'Hint');
     }
 }

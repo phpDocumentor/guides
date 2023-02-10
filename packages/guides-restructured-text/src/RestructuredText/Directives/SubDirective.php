@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * A directive that parses the sub block and call the processSub that can
@@ -21,30 +22,28 @@ use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 abstract class SubDirective extends Directive
 {
     /**
+     * @param DocumentParserContext $documentParserContext
      * @param string[] $options
      */
     final public function process(
-        MarkupLanguageParser $parser,
-        ?Node $node,
+        DocumentParserContext $documentParserContext,
         string $variable,
-        string $data,
-        array $options
+        string                $data,
+        array                 $options
     ): ?Node {
-        $subParser = $parser->getSubParser();
+        $subParser = $documentParserContext->getParser()->getSubParser();
+        $document = $subParser->parse(
+            $documentParserContext->getContext(),
+            implode("\n", $documentParserContext->getDocumentIterator()->toArray())
+        );
 
-        if ($node instanceof CodeNode) {
-            $document = $subParser->parse($parser->getEnvironment(), $node->getValueString());
-        } else {
-            $document = $node;
-        }
-
-        $newNode = $this->processSub($parser, $document, $variable, $data, $options);
+        $newNode = $this->processSub($document, $variable, $data, $options);
 
         if ($newNode === null) {
             return null;
         }
 
-        $document = $parser->getDocument();
+        $document = $documentParserContext->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $newNode);
             return null;
@@ -57,11 +56,10 @@ abstract class SubDirective extends Directive
      * @param string[] $options
      */
     public function processSub(
-        MarkupLanguageParser $parser,
-        ?Node $document,
+        Node   $document,
         string $variable,
         string $data,
-        array $options
+        array  $options
     ): ?Node {
         return null;
     }
