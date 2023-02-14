@@ -20,7 +20,7 @@ final class TitleNodeTest extends TestCase
     public function test_it_can_be_created_with_a_title_slug_and_depth(): void
     {
         $titleNode = new SpanNode('Raw String');
-        $node = new TitleNode($titleNode, 1);
+        $node = new TitleNode($titleNode, 1, 'raw-string');
         $node->setTarget('target');
 
         self::assertSame('raw-string', $node->getId());
