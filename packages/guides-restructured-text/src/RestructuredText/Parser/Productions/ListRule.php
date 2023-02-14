@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -130,7 +131,7 @@ final class ListRule implements Rule
     {
         $isList = preg_match(self::LIST_MARKER, $line, $m) > 0;
         if (!$isList) {
-            throw new \InvalidArgumentException('Line is not a valid item line');
+            throw new InvalidArgumentException('Line is not a valid item line');
         }
 
         return [

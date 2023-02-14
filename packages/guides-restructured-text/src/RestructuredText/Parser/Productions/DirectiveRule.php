@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
@@ -176,7 +177,7 @@ final class DirectiveRule implements Rule
             return new DirectiveOption($match[2], true);
         }
 
-        throw new \InvalidArgumentException('Not a valid directive option');
+        throw new InvalidArgumentException('Not a valid directive option');
     }
 
     private function collectDirectiveContents(LinesIterator $documentIterator): Buffer

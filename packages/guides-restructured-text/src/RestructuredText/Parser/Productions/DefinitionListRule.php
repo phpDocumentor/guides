@@ -79,9 +79,9 @@ final class DefinitionListRule implements Rule
         $definitionListItem = new DefinitionListItemNode(
             $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
             array_map(
-                function ($classification) use ($documentParserContext) {
-                    return $this->inlineMarkupRule->apply($documentParserContext->withContents($classification));
-                },
+                fn($classification): SpanNode => $this->inlineMarkupRule->apply(
+                    $documentParserContext->withContents($classification)
+                ),
                 $parts
             )
         );

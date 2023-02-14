@@ -38,7 +38,7 @@ class TitleNode extends Node
 
     public static function emptyNode(): self
     {
-        return new TitleNode(new SpanNode('<Unknown>'), 0);
+        return new TitleNode(new SpanNode('<Unknown>'), 0, '');
     }
 
     public function getLevel(): int
