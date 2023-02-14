@@ -72,7 +72,7 @@ final class DocumentRule implements Rule
     /** @param DocumentNode|null $on */
     public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
     {
-        $on = $on ?? new DocumentNode(
+        $on ??= new DocumentNode(
             md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),
             $documentParserContext->getContext()->getCurrentFileName()
         );

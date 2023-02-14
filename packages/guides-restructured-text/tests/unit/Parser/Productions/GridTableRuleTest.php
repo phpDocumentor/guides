@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Generator;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
@@ -95,7 +96,7 @@ final class GridTableRuleTest extends AbstractRuleTest
         self::assertEquals($headers, $table->getHeaders());
     }
 
-    public function prettyTableBasicsProvider(): \Generator
+    public function prettyTableBasicsProvider(): Generator
     {
         $input = <<<RST
 +-----------------------------------+---------------+
@@ -142,7 +143,7 @@ RST;
         yield [$input, [$headerRow, $row1, $row2, $row3], []];
     }
 
-    public function gridTableWithColSpanProvider(): \Generator
+    public function gridTableWithColSpanProvider(): Generator
     {
         $input = <<<RST
 +------------------------+------------+----------+----------+
@@ -191,7 +192,7 @@ RST;
         yield [$input, [$row1, $row2], [$headerRow]];
     }
 
-    public function gridTableWithRowSpanProvider(): \Generator
+    public function gridTableWithRowSpanProvider(): Generator
     {
         $input = <<<RST
 +-----------------------------------+---------------+
@@ -225,7 +226,7 @@ RST;
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
     }
 
-    public function gridTableFollowUpTextProvider(): \Generator
+    public function gridTableFollowUpTextProvider(): Generator
     {
         $input = <<<RST
 +-----------------------------------+---------------+

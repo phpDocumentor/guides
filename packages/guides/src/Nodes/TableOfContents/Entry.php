@@ -9,11 +9,10 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 
 final class Entry extends Node
 {
-    /** @var string */
-    private $url;
+    private string $url;
 
     /** @var Entry[] */
-    private $children;
+    private array $children;
 
     /** @param Entry[] $children */
     public function __construct(string $url, TitleNode $title, array $children = [])

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use BadMethodCallException;
 use function implode;
 use function is_callable;
 use function is_string;
@@ -30,7 +31,7 @@ abstract class Node
     protected $classes = [];
 
     /** @var mixed[] */
-    private $options;
+    private ?array $options = null;
 
     /**
      * @param Node|string|null|Node[] $value
@@ -144,7 +145,7 @@ abstract class Node
     public function addChildNode(Node $node): void
     {
         if (is_array($this->value) === false) {
-            throw new \BadMethodCallException(
+            throw new BadMethodCallException(
                 'Cannot call addChildNode on value that\'s not an array for class.' . self::class
             );
         }
@@ -155,7 +156,7 @@ abstract class Node
     public function removeNode(int $key): self
     {
         if (is_array($this->value) === false) {
-            throw new \BadMethodCallException(
+            throw new BadMethodCallException(
                 'Cannot call addChildNode on value that\'s not an array for class.' . self::class
             );
         }
