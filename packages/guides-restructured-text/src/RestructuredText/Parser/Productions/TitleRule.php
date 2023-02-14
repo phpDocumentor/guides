@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use function in_array;
 use function strlen;
 use function trim;
@@ -109,7 +110,11 @@ class TitleRule implements Rule
         $letter = $overlineLetter ?: $underlineLetter;
         $level = $documentParserContext->getLevel($letter);
 
-        return new TitleNode($this->spanParser->parse($title, $context), $level);
+        return new TitleNode(
+            $this->spanParser->parse($title, $context),
+            $level,
+            (new AsciiSlugger())->slug($title)->lower()->toString()
+        );
     }
 
     public function isSpecialLine(string $line): ?string

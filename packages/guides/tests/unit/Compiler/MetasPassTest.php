@@ -19,9 +19,9 @@ final class MetasPassTest extends TestCase
 {
     public function testDocumentTitlesAreCollectedAsTree(): void
     {
-        $section = new SectionNode(new TitleNode(new SpanNode('index-title 1'), 1));
+        $section = new SectionNode(new TitleNode(new SpanNode('index-title 1'), 1, 'index-title-1'));
         $section->addChildNode(new TocNode(['getting-started']));
-        $section11 = new SectionNode(new TitleNode(new SpanNode('index-title 1.1'), 2));
+        $section11 = new SectionNode(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1'));
         $section->addChildNode($section11);
 
         $document = new DocumentNode('1', 'index');
@@ -34,9 +34,9 @@ final class MetasPassTest extends TestCase
         $entries = $metas->getAll();
 
         $exprected = new DocumentEntry('index');
-        $s1 = new SectionEntry(new TitleNode(new SpanNode('index-title 1'), 1));
+        $s1 = new SectionEntry(new TitleNode(new SpanNode('index-title 1'), 1, 'index-title-1'));
         $s1->addChild(new DocumentReferenceEntry('getting-started'));
-        $s1->addChild(new SectionEntry(new TitleNode(new SpanNode('index-title 1.1'), 2)));
+        $s1->addChild(new SectionEntry(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1')));
         $exprected->addChild($s1);
 
         self::assertEquals(

@@ -28,11 +28,11 @@ final class TocNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1', []), 1),
+                    new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
                 ),
                 new TocEntry(
                     'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1),
+                    new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
                 ),
             ],
             $transformedNode->getEntries()
@@ -49,15 +49,15 @@ final class TocNodeTransformerTest extends TestCase
 
         $entry = new TocEntry(
             'index',
-            new TitleNode(new SpanNode('Title 1', []), 1),
+            new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2)
+                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
                 ),
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.2', []), 2),
+                    new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 )
             ]
         );
@@ -67,7 +67,7 @@ final class TocNodeTransformerTest extends TestCase
                 $entry,
                 new TocEntry(
                     'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1),
+                    new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
                 ),
             ],
             $transformedNode->getEntries()
@@ -84,15 +84,15 @@ final class TocNodeTransformerTest extends TestCase
 
         $entry = new TocEntry(
             'index',
-            new TitleNode(new SpanNode('Title 1', []), 1),
+            new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2)
+                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
                 ),
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.2', []), 2),
+                    new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 )
             ]
         );
@@ -101,7 +101,7 @@ final class TocNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'page3',
-                    new TitleNode(new SpanNode('Title 3', []), 1),
+                    new TitleNode(new SpanNode('Title 3', []), 1, 'title-3'),
                 ),
                 $entry
             ],
@@ -112,17 +112,17 @@ final class TocNodeTransformerTest extends TestCase
     private function givenMetas(): Metas
     {
         $indexDoc = new DocumentEntry('index');
-        $section = new SectionEntry(new TitleNode(new SpanNode('Title 1', []), 1));
-        $subSection = new SectionEntry(new TitleNode(new SpanNode('Title 1.1', []), 2));
+        $section = new SectionEntry(new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'));
+        $subSection = new SectionEntry(new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'));
         $section->addChild($subSection);
-        $section->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 1.2', []), 2)));
+        $section->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2')));
         $indexDoc->addChild($section);
 
         $page2 = new DocumentEntry('page2');
-        $page2->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 2', []), 1)));
+        $page2->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 2', []), 1, 'title-2')));
 
         $page3 = new DocumentEntry('page3');
-        $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1)));
+        $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 
         return new Metas(

@@ -27,13 +27,13 @@ class TitleNode extends Node
     /** @var string */
     protected $target = '';
 
-    public function __construct(Node $value, int $level)
+    public function __construct(Node $value, int $level, string $id)
     {
         parent::__construct($value);
         Assert::isInstanceOf($value, SpanNode::class);
 
         $this->level = $level;
-        $this->id = (new AsciiSlugger())->slug($value->getValueString())->lower()->toString();
+        $this->id = $id;
     }
 
     public static function emptyNode(): self

@@ -18,7 +18,7 @@ final class DocumentNodeTraverserTest extends TestCase
     {
         $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
-        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
+        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
         $traverser = new DocumentNodeTraverser([new class implements NodeTransformer {
             public function enterNode(Node $node): Node
@@ -40,7 +40,7 @@ final class DocumentNodeTraverserTest extends TestCase
         $actual = $traverser->traverse($document);
 
         self::assertEquals(
-            [1 => new SectionNode(new TitleNode(new SpanNode('Foo'), 1))],
+            [1 => new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo'))],
             $actual->getChildren()
         );
     }
@@ -49,7 +49,7 @@ final class DocumentNodeTraverserTest extends TestCase
     {
         $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
-        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1)));
+        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
         $replacement = new TocNode(['/readme.rst']);
 
@@ -83,7 +83,7 @@ final class DocumentNodeTraverserTest extends TestCase
         self::assertEquals(
             [
                 $replacement,
-                new SectionNode(new TitleNode(new SpanNode('Foo'), 1))
+                new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo'))
             ],
             $actual->getChildren()
         );
