@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
@@ -71,7 +72,7 @@ final class EnumeratedListRule implements Rule
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 

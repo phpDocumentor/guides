@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Graphs\Nodes;
 
-use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TextNode;
 
-class UmlNode extends Node
+class UmlNode extends TextNode
 {
     private string $caption = '';
 

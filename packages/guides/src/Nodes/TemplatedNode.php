@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /**
+ * @extends AbstractNode<string>
  * @deprecated Tie-ing nodes to templates should be done differently; as this creates coupling between the parsing and
  *   rendering phase.
  */
-final class TemplatedNode extends Node
+final class TemplatedNode extends AbstractNode
 {
     /** @var array<string, mixed> */
     private array $data;
@@ -18,8 +19,7 @@ final class TemplatedNode extends Node
      */
     public function __construct(string $value, array $data)
     {
-        parent::__construct($value);
-
+        $this->value = $value;
         $this->data = $data;
     }
 

@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use function count;
 use function max;
 
-class TableNode extends Node
+class TableNode extends CompoundNode
 {
     /** @var TableRow[] */
     protected array $data = [];

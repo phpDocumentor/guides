@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-final class SidebarNode extends Node
+final class SidebarNode extends CompoundNode
 {
     private string $title;
 
     public function __construct(string $title, ?Node $value = null)
     {
-        parent::__construct($value);
+        parent::__construct(array_filter([$value]));
         $this->title = $title;
     }
 

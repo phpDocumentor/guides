@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {

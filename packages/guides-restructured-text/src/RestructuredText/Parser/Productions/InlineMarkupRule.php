@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
@@ -62,7 +63,7 @@ final class InlineMarkupRule implements Rule
      * @param TParent|null $on
      * @return ($on is null ? SpanNode: TParent|SpanNode|null)
      */
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = $this->collectContent($documentIterator);
@@ -72,7 +73,7 @@ final class InlineMarkupRule implements Rule
         $node = $this->spanParser->parse($buffer->getLines(), $documentParserContext->getContext());
 
         if ($on !== null) {
-            $on->setValue($node);
+            $on->setValue([$node]);
             return $on;
         }
 

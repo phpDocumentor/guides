@@ -39,6 +39,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $actual = $traverser->traverse($document);
 
+        self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
             [1 => new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo'))],
             $actual->getChildren()

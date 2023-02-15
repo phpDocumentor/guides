@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown;
 
+use League\CommonMark\Normalizer\SlugNormalizer;
 use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
 use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
 use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
@@ -31,6 +32,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use RuntimeException;
 
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use function get_class;
 use function md5;
 use function strtolower;
@@ -45,12 +47,14 @@ final class MarkupLanguageParser implements ParserInterface
     private array $parsers;
 
     private ?DocumentNode $document = null;
+    private AsciiSlugger $idGenerator;
 
     public function __construct()
     {
         $cmEnvironment = new CommonMarkEnvironment(['html_input' => 'strip']);
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
+        $this->idGenerator = new AsciiSlugger();
         $this->parsers = [
             new Paragraph(),
             new ListBlock(),
@@ -107,7 +111,8 @@ final class MarkupLanguageParser implements ParserInterface
 
                 $title = new TitleNode(
                     new SpanNode($content->getLiteral(), []),
-                    $node->getLevel()
+                    $node->getLevel(),
+                    $this->idGenerator->slug($content->getLiteral())->lower()->toString()
                 );
                 $document->addChildNode($title);
                 continue;

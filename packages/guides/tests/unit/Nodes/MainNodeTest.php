@@ -22,6 +22,5 @@ final class MainNodeTest extends TestCase
         $node = new MainNode('id');
 
         self::assertSame('id', $node->getValue());
-        self::assertSame('id', $node->getValueString());
     }
 }

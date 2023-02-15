@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Span\SpanToken;
 
-class SpanNode extends Node
+class SpanNode extends TextNode
 {
     /** @var SpanToken[] */
     protected $tokens;

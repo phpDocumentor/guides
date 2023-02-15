@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class SeparatorNode extends Node
+class SeparatorNode extends CompoundNode
 {
     /** @var int */
     protected $level;

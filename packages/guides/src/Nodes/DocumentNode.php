@@ -24,7 +24,7 @@ use function is_string;
 use function strtolower;
 use function trim;
 
-final class DocumentNode extends Node
+final class DocumentNode extends CompoundNode
 {
     private string $hash;
 
@@ -42,7 +42,7 @@ final class DocumentNode extends Node
      * They easiest example is the replace directive that allows textual replacements in the document. But
      * also other directives may be prefixed with a name to replace a certain value in the text.
      *
-     * @var array<string|Node>
+     * @var array<(string | Node)>
      */
     private array $variables = [];
 
@@ -106,7 +106,7 @@ final class DocumentNode extends Node
      * @template TType as mixed
      * @param TType|null $default
      *
-     * @return ($default is null ? string|Node|null: TType|string|Node)
+     * @return ($default is null ? (string | Node | null) : (TType | string | Node))
      */
     public function getVariable(string $name, $default)
     {

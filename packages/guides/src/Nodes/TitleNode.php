@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Webmozart\Assert\Assert;
 
-class TitleNode extends Node
+class TitleNode extends CompoundNode
 {
     /** @var int */
     protected $level;
@@ -27,10 +27,9 @@ class TitleNode extends Node
     /** @var string */
     protected $target = '';
 
-    public function __construct(Node $value, int $level, string $id)
+    public function __construct(SpanNode $value, int $level, string $id)
     {
-        parent::__construct($value);
-        Assert::isInstanceOf($value, SpanNode::class);
+        parent::__construct([$value]);
 
         $this->level = $level;
         $this->id = $id;

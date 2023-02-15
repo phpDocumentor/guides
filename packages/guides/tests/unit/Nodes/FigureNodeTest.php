@@ -19,7 +19,7 @@ final class FigureNodeTest extends TestCase
 {
     public function test_it_can_be_created_with_an_image_and_caption(): void
     {
-        $image = new ImageNode();
+        $image = new ImageNode('test');
         $document = new RawNode('raw');
 
         $node = new FigureNode($image, $document);

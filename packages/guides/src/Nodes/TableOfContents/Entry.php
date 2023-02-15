@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\TableOfContents;
 
-use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-final class Entry extends Node
+/** @extends AbstractNode<TitleNode> */
+final class Entry extends AbstractNode
 {
     private string $url;
 
@@ -18,7 +19,7 @@ final class Entry extends Node
     public function __construct(string $url, TitleNode $title, array $children = [])
     {
         $this->url = $url;
-        parent::__construct($title);
+        $this->value = $title;
         $this->children = $children;
     }
 

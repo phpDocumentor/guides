@@ -13,6 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class QuoteNode extends Node
+class QuoteNode extends CompoundNode
 {
 }

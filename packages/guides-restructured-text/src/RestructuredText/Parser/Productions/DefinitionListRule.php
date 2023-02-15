@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
@@ -51,7 +52,7 @@ final class DefinitionListRule implements Rule
         );
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $iterator = $documentParserContext->getDocumentIterator();
         $definitionListItems = [];
@@ -64,8 +65,6 @@ final class DefinitionListRule implements Rule
         //       the cursor position to rest at the last unprocessed line, but the logic above needs is always a step
         //       'too late' in detecting whether it should have stopped
         $iterator->prev();
-
-///        $definitionList = $this->parseDefinitionList($documentParserContext, $buffer->getLines());
 
         return new DefinitionListNode(... $definitionListItems);
     }

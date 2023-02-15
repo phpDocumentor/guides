@@ -34,6 +34,6 @@ class ContainerDirective extends SubDirective
         string $data,
         array  $options
     ): ?Node {
-        return (new ContainerNode($document))->withOptions(['class' => $data]);
+        return (new ContainerNode([$document]))->withOptions(['class' => $data]);
     }
 }

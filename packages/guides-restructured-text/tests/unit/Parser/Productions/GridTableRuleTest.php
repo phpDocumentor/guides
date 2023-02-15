@@ -96,6 +96,7 @@ final class GridTableRuleTest extends AbstractRuleTest
         self::assertEquals($headers, $table->getHeaders());
     }
 
+    /** @return Generator<mixed[]> */
     public function prettyTableBasicsProvider(): Generator
     {
         $input = <<<RST

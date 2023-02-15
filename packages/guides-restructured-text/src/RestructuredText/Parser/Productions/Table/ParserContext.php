@@ -13,6 +13,7 @@ final class ParserContext
     /** @var int */
     private int $currentLineNumber = 0;
 
+    /** @var string[] */
     private array $errors = [];
     private int $headerRows = 0;
 
@@ -27,6 +28,7 @@ final class ParserContext
         $this->currentLineNumber++;
     }
 
+    /** @return string[] */
     public function getDataLines(): array
     {
         return $this->rawDataLines;
@@ -60,6 +62,7 @@ final class ParserContext
         return count($this->errors) > 0;
     }
 
+    /** @return string[] */
     public function getErrors(): array
     {
         return $this->errors;
@@ -70,7 +73,7 @@ final class ParserContext
         return $this->headerRows;
     }
 
-    public function setHeaderRows(int $rowNumber)
+    public function setHeaderRows(int $rowNumber): void
     {
         $this->headerRows = $rowNumber;
     }
