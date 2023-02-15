@@ -31,7 +31,7 @@ final class ImageNodeTest extends TestCase
         $width = '10';
         $height = '20';
 
-        $node = new ImageNode();
+        $node = new ImageNode('test');
         $nodeWithOptions = $node->withOptions(['width' => $width, 'height' => $height]);
 
         // also test immutability to be sure
@@ -45,7 +45,7 @@ final class ImageNodeTest extends TestCase
     {
         $alt = 'alt text';
 
-        $node = new ImageNode();
+        $node = new ImageNode('test');
         $nodeWithOptions = $node->withOptions(['alt' => $alt]);
 
         // also test immutability to be sure
@@ -57,7 +57,7 @@ final class ImageNodeTest extends TestCase
     {
         $align = 'left';
 
-        $node = new ImageNode();
+        $node = new ImageNode('test');
         $nodeWithOptions = $node->withOptions(['align' => $align]);
 
         // also test immutability to be sure
@@ -69,7 +69,7 @@ final class ImageNodeTest extends TestCase
     {
         $classes = ['image', 'node'];
 
-        $node = new ImageNode();
+        $node = new ImageNode('test');
         $node->setClasses($classes);
 
         self::assertSame($classes, $node->getClasses());

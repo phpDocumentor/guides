@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -33,7 +34,7 @@ final class RuleContainer
         $this->productions[] = $production;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, Node $on): void
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode $on): void
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 

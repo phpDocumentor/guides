@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -29,21 +30,24 @@ final class DocumentNodeTraverser
         return $node;
     }
 
+    /** @param NodeTransformer<Node> $transformer */
     private function traverseForTransformer(NodeTransformer $transformer, Node $node): ?Node
     {
         if ($supports = $transformer->supports($node)) {
             $node = $transformer->enterNode($node);
         }
 
-        foreach ($node->getChildren() as $key => $childNode) {
-            $transformed = $this->traverseForTransformer($transformer, $childNode);
-            if ($transformed === null) {
-                $node = $node->removeNode($key);
-                continue;
-            }
+        if ($node instanceof CompoundNode) {
+            foreach ($node->getChildren() as $key => $childNode) {
+                $transformed = $this->traverseForTransformer($transformer, $childNode);
+                if ($transformed === null) {
+                    $node = $node->removeNode($key);
+                    continue;
+                }
 
-            if ($transformed !== $childNode) {
-                $node = $node->replaceNode($key, $transformed);
+                if ($transformed !== $childNode) {
+                    $node = $node->replaceNode($key, $transformed);
+                }
             }
         }
 

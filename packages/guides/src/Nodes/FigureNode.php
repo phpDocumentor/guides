@@ -13,25 +13,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class FigureNode extends Node
+/** @extends AbstractNode<ImageNode> */
+class FigureNode extends AbstractNode
 {
-    /** @var ImageNode */
-    protected $image;
-
-    /** @var Node|null */
-    protected $document;
+    protected ?Node $document;
 
     public function __construct(ImageNode $image, ?Node $document = null)
     {
-        parent::__construct();
-
-        $this->image = $image;
+        $this->value = $image;
         $this->document = $document;
     }
 
     public function getImage(): ImageNode
     {
-        return $this->image;
+        return $this->value;
     }
 
     public function getDocument(): ?Node

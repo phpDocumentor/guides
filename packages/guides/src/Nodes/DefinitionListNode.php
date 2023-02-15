@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 
-class DefinitionListNode extends Node
+class DefinitionListNode extends CompoundNode
 {
     public function __construct(DefinitionListItemNode ...$definitionListItems)
     {

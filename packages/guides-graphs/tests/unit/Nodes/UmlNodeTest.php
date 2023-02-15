@@ -13,7 +13,6 @@ final class UmlNodeTest extends TestCase
         $node = new UmlNode('value');
 
         $this->assertSame('value', $node->getValue());
-        $this->assertSame('value', $node->getValueString());
     }
 
     public function test_you_can_set_a_caption_for_underneath_diagrams(): void

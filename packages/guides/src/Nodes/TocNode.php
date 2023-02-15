@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 /**
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  */
-class TocNode extends Node
+class TocNode extends CompoundNode
 {
     private const DEFAULT_DEPTH = 2;
 

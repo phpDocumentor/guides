@@ -24,7 +24,7 @@ final class TitleNodeTest extends TestCase
         $node->setTarget('target');
 
         self::assertSame('raw-string', $node->getId());
-        self::assertSame($titleNode, $node->getValue());
+        self::assertSame([$titleNode], $node->getValue());
         self::assertSame(1, $node->getLevel());
         self::assertSame('target', $node->getTarget());
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Toc;
 
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\UrlGenerator;

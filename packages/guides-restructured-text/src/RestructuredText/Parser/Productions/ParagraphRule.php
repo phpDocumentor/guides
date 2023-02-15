@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -47,7 +48,7 @@ final class ParagraphRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -87,7 +88,7 @@ final class ParagraphRule implements Rule
             return null;
         }
 
-        $node = new ParagraphNode(null);
+        $node = new ParagraphNode();
 
         $this->inlineMarkupRule->apply(
             $documentParserContext->withContents($buffer->getLinesString()),

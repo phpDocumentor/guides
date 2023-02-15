@@ -284,6 +284,9 @@ class GridTableBuilder
         }
     }
 
+    /**
+     * @return array<int, bool>
+     */
     private function findRowSpans(ParserContext $context): array
     {
         $partialSeparatorRows = [];

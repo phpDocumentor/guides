@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
@@ -63,7 +64,7 @@ final class DirectiveRule implements Rule
         return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $openingLine = $documentIterator->current();

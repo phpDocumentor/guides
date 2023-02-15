@@ -25,7 +25,7 @@ final class TemplatedNodeRenderer implements NodeRenderer
     {
         Assert::isInstanceOf($node, TemplatedNode::class);
 
-        return $this->renderer->render($node->getValueString(), $node->getData());
+        return $this->renderer->render($node->getValue(), $node->getData());
     }
 
     public function supports(Node $node): bool

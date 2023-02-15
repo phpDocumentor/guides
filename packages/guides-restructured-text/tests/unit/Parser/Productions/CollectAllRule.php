@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
@@ -21,7 +22,7 @@ class CollectAllRule implements Rule
     /**
      * @inheritDoc
      */
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $buffer = new Buffer();
         while ($documentParserContext->getDocumentIterator()->valid()) {

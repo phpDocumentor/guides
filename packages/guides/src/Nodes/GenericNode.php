@@ -26,8 +26,10 @@ namespace phpDocumentor\Guides\Nodes;
  *
  *     .. name:: value of this directive
  *        :option: optionValue
+ *
+ * @extends AbstractNode<Node|string|null>
  */
-final class GenericNode extends Node
+final class GenericNode extends AbstractNode
 {
     private string $name;
 
@@ -37,8 +39,7 @@ final class GenericNode extends Node
     public function __construct(string $name, $value = null)
     {
         $this->name = $name;
-
-        parent::__construct($value);
+        $this->value = $value;
     }
 
     public function getName(): string

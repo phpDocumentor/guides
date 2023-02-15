@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use SplStack;
 use phpDocumentor\Guides\Nodes\Node;
+use SplStack;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use Webmozart\Assert\Assert;
 
 /**
  * @implements Rule<SectionNode>
@@ -31,12 +33,13 @@ final class SectionRule implements Rule
         return $this->titleRule->applies($documentParser);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode $on = null): ?Node
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();
         $documentIterator = $documentParserContext->getDocumentIterator();
         $section = $this->createSection($documentParserContext);
+        Assert::isInstanceOf($on, CompoundNode::class);
         $on->addChildNode($section);
 
         $stack->push($on);
@@ -73,7 +76,7 @@ final class SectionRule implements Rule
         return null;
     }
 
-    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): Node
+    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): CompoundNode
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator

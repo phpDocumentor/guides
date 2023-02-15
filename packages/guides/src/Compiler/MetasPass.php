@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 
@@ -40,7 +40,7 @@ final class MetasPass implements CompilerPass
     }
 
     /** @param DocumentNode|SectionNode $node */
-    private function traverse(Node $node, Entry $currentSection): void
+    private function traverse(CompoundNode $node, Entry $currentSection): void
     {
         foreach ($node->getChildren() as $child) {
             if ($child instanceof SectionNode) {
