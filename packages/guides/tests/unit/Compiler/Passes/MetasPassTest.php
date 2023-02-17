@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Compiler;
+namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
@@ -33,15 +33,15 @@ final class MetasPassTest extends TestCase
 
         $entries = $metas->getAll();
 
-        $exprected = new DocumentEntry('index');
+        $expected = new DocumentEntry('index');
         $s1 = new SectionEntry(new TitleNode(new SpanNode('index-title 1'), 1, 'index-title-1'));
         $s1->addChild(new DocumentReferenceEntry('getting-started'));
         $s1->addChild(new SectionEntry(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1')));
-        $exprected->addChild($s1);
+        $expected->addChild($s1);
 
         self::assertEquals(
             [
-                'index' => $exprected
+                'index' => $expected
             ],
             $entries
         );

@@ -52,11 +52,11 @@ final class TocNodeTransformerTest extends TestCase
             new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
             [
                 new TocEntry(
-                    'index',
+                    'index#title-1-1',
                     new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
                 ),
                 new TocEntry(
-                    'index',
+                    'index#title-1-2',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 )
             ]
@@ -87,11 +87,11 @@ final class TocNodeTransformerTest extends TestCase
             new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
             [
                 new TocEntry(
-                    'index',
+                    'index#title-1-1',
                     new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
                 ),
                 new TocEntry(
-                    'index',
+                    'index#title-1-2',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 )
             ]

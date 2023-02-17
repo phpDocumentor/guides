@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Compiler;
+namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;

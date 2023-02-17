@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Compiler;
+namespace phpDocumentor\Guides\Compiler\Passes;
+
+use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
+use phpDocumentor\Guides\Compiler\CompilerPass;
 
 final class TransformerPass implements CompilerPass
 {

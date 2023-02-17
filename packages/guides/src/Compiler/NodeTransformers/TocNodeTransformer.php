@@ -64,7 +64,7 @@ final class TocNodeTransformer implements NodeTransformer
         //If Toctree is defined at level 2, and max is 3, only titles of the documents are added to the toctree.
 
         foreach ($document->getChildren() as $child) {
-            yield from $this->buildLevel($child, $document, $depth, $node);
+            yield from $this->buildLevel($child, $document, $depth, $node, true);
         }
     }
 
@@ -80,16 +80,16 @@ final class TocNodeTransformer implements NodeTransformer
         }
 
         foreach ($entry->getChildren() as $child) {
-            yield from $this->buildLevel($child, $document, $depth, $node);
+            yield from $this->buildLevel($child, $document, $depth, $node, false);
         }
     }
 
     /** @return Traversable<Entry> */
-    private function buildLevel(MetaEntry $child, DocumentEntry $document, int $depth, TocNode $node): Traversable
+    private function buildLevel(MetaEntry $child, DocumentEntry $document, int $depth, TocNode $node, bool $isDocumentRoot): Traversable
     {
         if ($child instanceof SectionEntry) {
             yield new Entry(
-                $document->getFile(),
+                $document->getFile().($isDocumentRoot ? '' : '#'.$child->getId()),
                 $child->getTitle(),
                 iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false)
             );

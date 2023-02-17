@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 use phpDocumentor\Guides\Compiler\Compiler;
-use phpDocumentor\Guides\Compiler\MetasPass;
-use phpDocumentor\Guides\Compiler\TransformerPass;
+use phpDocumentor\Guides\Compiler\Passes\MetasPass;
+use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
