@@ -77,7 +77,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
     public function escape(string $span): string
     {
-        return htmlspecialchars($span);
+        return htmlspecialchars($span, ENT_QUOTES);
     }
 
     /**
