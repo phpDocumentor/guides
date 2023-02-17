@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Table;
 
-use LogicException;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-use function strlen;
 use function trim;
 
-final class TableColumn extends Node
+final class TableColumn extends CompoundNode
 {
     private string $content;
 
@@ -27,16 +26,13 @@ final class TableColumn extends Node
 
     private int $rowSpan;
 
-    /** @var Node[] */
-    private array $nodes = [];
-
-    /** @param Node[] $node */
-    public function __construct(string $content, int $colSpan, array $node = [], int $rowSpan = 1)
+    /** @param Node[] $nodes */
+    public function __construct(string $content, int $colSpan, array $nodes = [], int $rowSpan = 1)
     {
         $this->content = trim($content);
         $this->colSpan = $colSpan;
         $this->rowSpan = $rowSpan;
-        $this->nodes = $node;
+        parent::__construct($nodes);
     }
 
     public function getContent(): string
@@ -76,24 +72,5 @@ final class TableColumn extends Node
     public function isCompletelyEmpty(): bool
     {
         return $this->content === '';
-    }
-
-    public function addChildNode(Node $node): void
-    {
-        $this->nodes[] = $node;
-    }
-
-    /** @return Node[] */
-    public function getChildren(): array
-    {
-        return $this->nodes;
-    }
-
-    public function replaceNode(int $key, Node $node): Node
-    {
-        $result = clone $this;
-        $result->nodes[$key] = $node;
-
-        return $result;
     }
 }

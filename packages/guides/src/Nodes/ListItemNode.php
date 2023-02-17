@@ -10,16 +10,13 @@ use function trim;
 /**
  * Represents a single item of a bullet or enumerated list.
  */
-final class ListItemNode extends Node
+final class ListItemNode extends CompoundNode
 {
     /** @var string the list marker used for this item */
     private string $prefix;
 
     /** @var bool whether the list marker represents an enumerated list */
     private bool $ordered;
-
-    /** @var Node[] */
-    private array $nodes;
 
     /**
      * @param Node[] $contents
@@ -28,9 +25,7 @@ final class ListItemNode extends Node
     {
         $this->prefix   = $prefix;
         $this->ordered  = $ordered;
-        $this->nodes = $contents;
-
-        parent::__construct(null);
+        parent::__construct($contents);
     }
 
     public function getPrefix(): string
@@ -41,18 +36,5 @@ final class ListItemNode extends Node
     public function isOrdered(): bool
     {
         return $this->ordered;
-    }
-
-    /**
-     * @return Node[]
-     */
-    public function getChildren(): array
-    {
-        return $this->nodes;
-    }
-
-    public function addChildNode(Node $node): void
-    {
-        $this->nodes[] = $node;
     }
 }

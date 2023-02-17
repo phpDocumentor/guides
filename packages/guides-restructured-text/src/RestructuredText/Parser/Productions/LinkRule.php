@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
-use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\Links\Link;
 use phpDocumentor\Guides\Nodes\Links\Link as LinkParser;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineDataParser;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-targets
@@ -36,7 +34,7 @@ final class LinkRule implements Rule
         return $link !== null;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $link = $this->parseLink($documentIterator->current());

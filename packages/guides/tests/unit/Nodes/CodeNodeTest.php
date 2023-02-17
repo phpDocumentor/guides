@@ -22,7 +22,6 @@ final class CodeNodeTest extends TestCase
         $node = new CodeNode(['line1', 'line2']);
 
         self::assertSame("line1\nline2", $node->getValue());
-        self::assertSame("line1\nline2", $node->getValueString());
     }
 
     public function test_a_language_can_be_provided(): void
@@ -53,7 +52,6 @@ final class CodeNodeTest extends TestCase
         ]);
 
         self::assertSame("line1\n  line2\n    line3\n\tline4", $node->getValue());
-        self::assertSame("line1\n  line2\n    line3\n\tline4", $node->getValueString());
     }
 
     public function test_that_normalizing_keeps_spaces_intact_when_the_first_line_has_no_spaces(): void
@@ -66,6 +64,5 @@ final class CodeNodeTest extends TestCase
         ]);
 
         self::assertSame("line1\n  line2\n    line3\n\t\t\tline4", $node->getValue());
-        self::assertSame("line1\n  line2\n    line3\n\t\t\tline4", $node->getValueString());
     }
 }

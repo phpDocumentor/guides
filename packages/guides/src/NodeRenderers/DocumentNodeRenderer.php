@@ -36,7 +36,7 @@ class DocumentNodeRenderer implements NodeRenderer
 
         $document = '';
 
-        foreach ($node->getNodes() as $childNode) {
+        foreach ($node->getChildren() as $childNode) {
             $renderedNode = $this->nodeRendererFactory->get($childNode)->render($childNode, $environment);
             $document .= $renderedNode . "\n";
         }

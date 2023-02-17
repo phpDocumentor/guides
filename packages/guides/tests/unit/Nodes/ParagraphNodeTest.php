@@ -19,10 +19,10 @@ final class ParagraphNodeTest extends TestCase
 {
     public function test_it_can_be_created_with_a_value_even_another_node(): void
     {
-        $imageNode = new ImageNode();
+        $imageNode = new ImageNode('test');
 
-        $node = new ParagraphNode($imageNode);
+        $node = new ParagraphNode([$imageNode]);
 
-        self::assertSame($imageNode, $node->getValue());
+        self::assertSame([$imageNode], $node->getValue());
     }
 }

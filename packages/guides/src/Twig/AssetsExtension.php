@@ -15,7 +15,6 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -81,8 +80,9 @@ final class AssetsExtension extends AbstractExtension
 
     /**
      * @param array{env: RenderContext} $context
+     * @param Node|Node[]|null $node
      */
-    public function renderNode(array $context, ?Node $node): string
+    public function renderNode(array $context, $node): string
     {
         if ($node === null) {
             return '';
@@ -93,7 +93,16 @@ final class AssetsExtension extends AbstractExtension
             throw new RuntimeException('Environment must be set in the twig global state to render nodes');
         }
 
-        return $this->renderer->renderNode($node, $environment);
+        if ($node instanceof Node) {
+            return $this->renderer->renderNode($node, $environment);
+        }
+
+        $text = '';
+        foreach ($node as $child) {
+            $text .= $this->renderer->renderNode($child, $environment);
+        }
+
+        return $text;
     }
 
     private function copyAsset(

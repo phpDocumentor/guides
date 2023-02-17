@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class CodeNode extends Node
+class CodeNode extends TextNode
 {
     /** @var string|null */
     protected $language;
@@ -26,7 +26,7 @@ class CodeNode extends Node
      */
     public function __construct(array $lines)
     {
-        parent::__construct($this->normalizeLines($lines));
+        parent::__construct(self::normalizeLines($lines));
     }
 
     public function setLanguage(?string $language = null): void

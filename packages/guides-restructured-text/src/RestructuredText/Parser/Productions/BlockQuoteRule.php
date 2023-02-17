@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\BlockNode;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -38,7 +37,7 @@ final class BlockQuoteRule implements Rule
         return $isWhiteSpace && $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?Node $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
@@ -51,18 +50,16 @@ final class BlockQuoteRule implements Rule
             $buffer->push($documentIterator->current());
         }
 
-        $lines = $this->removeLeadingWhitelines($buffer->getLines());
+        $lines = $this->normalizeLines($this->removeLeadingWhitelines($buffer->getLines()));
         if (count($lines) === 0) {
             return null;
         }
 
-        $blockNode = new BlockNode($lines);
-
         return new QuoteNode(
             $documentParserContext->getParser()->getSubParser()->parse(
                 $documentParserContext->getContext(),
-                $blockNode->getValueString()
-            )
+                (new Buffer($lines))->getLinesString()
+            )->getChildren()
         );
     }
 
@@ -104,5 +101,29 @@ final class BlockQuoteRule implements Rule
         }
 
         return array_values($lines);
+    }
+
+    /**
+     * @param string[] $lines
+     * @return string[]
+     */
+    protected function normalizeLines(array $lines): array
+    {
+        if ($lines !== []) {
+            $firstLine = $lines[0];
+
+            $length = strlen($firstLine);
+            for ($k = 0; $k < $length; $k++) {
+                if (trim($firstLine[$k]) !== '') {
+                    break;
+                }
+            }
+
+            foreach ($lines as &$line) {
+                $line = substr($line, $k);
+            }
+        }
+
+        return $lines;
     }
 }

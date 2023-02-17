@@ -89,7 +89,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
      */
     public function reference(RenderContext $environment, ResolvedReference $reference, array $value): string
     {
-        $text = $value['text'] ?: $reference->getTitle()->getValueString();
+        $text = $value['text'] ?: $reference->getTitle()->getValue();
         $url = $reference->getUrl();
 
         if ($value['anchor'] !== '') {

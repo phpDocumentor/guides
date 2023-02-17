@@ -19,10 +19,10 @@ final class QuoteNodeTest extends TestCase
 {
     public function test_it_can_be_created_with_a_value_even_another_node(): void
     {
-        $imageNode = new ImageNode();
+        $imageNode = new ImageNode('test');
 
-        $node = new QuoteNode($imageNode);
+        $node = new QuoteNode([$imageNode]);
 
-        self::assertSame($imageNode, $node->getValue());
+        self::assertSame([$imageNode], $node->getValue());
     }
 }

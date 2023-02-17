@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 
-final class TopicNode extends Node
+final class TopicNode extends CompoundNode
 {
     private string $name;
 
     public function __construct(string $name, ?Node $value = null)
     {
-        parent::__construct($value);
+        parent::__construct(array_filter([$value]));
         $this->name = $name;
     }
 

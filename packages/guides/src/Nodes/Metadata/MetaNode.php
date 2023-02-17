@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Metadata;
 
-class MetaNode extends MetadataNode
+use phpDocumentor\Guides\Nodes\TextNode;
+
+class MetaNode extends TextNode
 {
     /** @var string */
     protected $key;

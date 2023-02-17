@@ -18,7 +18,6 @@ use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-
 use phpDocumentor\Guides\Nodes\Node;
 use function dirname;
 use function ltrim;

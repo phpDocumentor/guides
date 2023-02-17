@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
-use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 
-class ContainerNode extends Node
+class ContainerNode extends CompoundNode
 {
 }

@@ -22,6 +22,5 @@ final class AnchorNodeTest extends TestCase
         $node = new AnchorNode('id');
 
         self::assertSame('id', $node->getValue());
-        self::assertSame('id', $node->getValueString());
     }
 }

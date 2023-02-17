@@ -49,7 +49,7 @@ final class ParagraphRuleTest extends AbstractRuleTest
         return [
             [
                 'input' => 'some text.',
-                'output' => new ParagraphNode(new SpanNode('some text.', [])),
+                'output' => new ParagraphNode([new SpanNode('some text.', [])]),
                 'remaining' => null,
             ],
             [
@@ -59,6 +59,7 @@ paragraph
 RST
 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline
@@ -66,6 +67,7 @@ paragraph
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => null,
             ],
@@ -78,6 +80,7 @@ This is a new paragraph
 RST
                 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline
@@ -85,6 +88,7 @@ paragraph
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
             ],
@@ -97,6 +101,7 @@ This is a new paragraph
 RST
                 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline
@@ -104,6 +109,7 @@ paragraph
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
             ],
@@ -116,6 +122,7 @@ paragraph::
 RST
                 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline next paragraph is a literal block
@@ -123,6 +130,7 @@ paragraph:
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
@@ -136,6 +144,7 @@ paragraph::
 RST
                 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline next paragraph is a literal block
@@ -143,6 +152,7 @@ paragraph:
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
@@ -156,6 +166,7 @@ paragraph: ::
 RST
                 ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline next paragraph is a literal block
@@ -163,6 +174,7 @@ paragraph:
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
@@ -178,6 +190,7 @@ paragraph:
 RST
             ,
                 'output' => new ParagraphNode(
+                    [
                     new SpanNode(
                         <<<RST
 some multiline next paragraph is a literal block
@@ -185,6 +198,7 @@ paragraph:
 RST,
                         []
                     )
+                    ]
                 ),
                 'remaining' => '',
                 'nextLiteral' => false,
@@ -197,12 +211,14 @@ This is a top-level paragraph.
 RST
     ,
             'output' => new ParagraphNode(
+                [
                 new SpanNode(
                     <<<RST
 This is a top-level paragraph.
 RST,
                     []
                 )
+                ]
             ),
         'remaining' => '',
         'nextLiteral' => false,

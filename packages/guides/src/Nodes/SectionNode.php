@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-final class SectionNode extends Node
+final class SectionNode extends CompoundNode
 {
     private TitleNode $title;
-    /** @var Node[] */
+    /** @var \phpDocumentor\Guides\Nodes\CompoundNode[] */
     private array $nodes = [];
 
     public function __construct(TitleNode $title)
     {
-        parent::__construct([]);
+        parent::__construct();
         $this->title = $title;
     }
 

@@ -72,7 +72,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             throw new InvalidArgumentException('Invalid node presented');
         }
 
-        $value = $node->getValueString();
+        $value = $node->getValue();
 
         $span = $this->renderSyntaxes($value, $environment);
         return $this->renderTokens($node, $span, $environment);
