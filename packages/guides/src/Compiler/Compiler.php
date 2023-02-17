@@ -12,8 +12,8 @@ class Compiler
     /** @var SplPriorityQueue<int, CompilerPass> */
     private SplPriorityQueue $passes;
 
-    /** @param CompilerPass[] $passes */
-    public function __construct(array $passes)
+    /** @param iterable<CompilerPass> $passes */
+    public function __construct(iterable $passes)
     {
         $this->passes = new SplPriorityQueue();
         foreach ($passes as $pass) {

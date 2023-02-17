@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\AnchorNode;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
@@ -73,8 +74,10 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
         }
 
         $anchors = [];
-        foreach ($node->getChildren() as $child) {
-            $anchors[] = $this->fetchExplicitReferences($child);
+        if ($node instanceof CompoundNode) {
+            foreach ($node->getChildren() as $child) {
+                $anchors[] = $this->fetchExplicitReferences($child);
+            }
         }
 
         return array_merge(...$anchors);
