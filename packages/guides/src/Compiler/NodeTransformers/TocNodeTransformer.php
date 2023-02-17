@@ -85,8 +85,13 @@ final class TocNodeTransformer implements NodeTransformer
     }
 
     /** @return Traversable<Entry> */
-    private function buildLevel(MetaEntry $child, DocumentEntry $document, int $depth, TocNode $node, bool $isDocumentRoot): Traversable
-    {
+    private function buildLevel(
+        MetaEntry $child,
+        DocumentEntry $document,
+        int $depth,
+        TocNode $node,
+        bool $isDocumentRoot
+    ): Traversable {
         if ($child instanceof SectionEntry) {
             yield new Entry(
                 $document->getFile().($isDocumentRoot ? '' : '#'.$child->getId()),
