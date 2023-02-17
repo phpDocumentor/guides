@@ -14,13 +14,18 @@ final class Entry extends AbstractNode
 
     /** @var Entry[] */
     private array $children;
+    /**
+     * @var false
+     */
+    private bool $isDocumentRoot;
 
     /** @param Entry[] $children */
-    public function __construct(string $url, TitleNode $title, array $children = [])
+    public function __construct(string $url, TitleNode $title, array $children = [], $isDocumentRoot = false)
     {
         $this->url = $url;
         $this->value = $title;
         $this->children = $children;
+        $this->isDocumentRoot = $isDocumentRoot;
     }
 
     public function getUrl(): string
@@ -32,5 +37,10 @@ final class Entry extends AbstractNode
     public function getEntries(): array
     {
         return $this->children;
+    }
+
+    public function isDocumentRoot(): bool
+    {
+        return $this->isDocumentRoot;
     }
 }

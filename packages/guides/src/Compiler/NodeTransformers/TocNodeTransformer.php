@@ -89,12 +89,11 @@ final class TocNodeTransformer implements NodeTransformer
         MetaEntry $child,
         DocumentEntry $document,
         int $depth,
-        TocNode $node,
-        bool $isDocumentRoot
+        TocNode $node
     ): Traversable {
         if ($child instanceof SectionEntry) {
             yield new Entry(
-                $document->getFile().($isDocumentRoot ? '' : '#'.$child->getId()),
+                $document->getFile(),
                 $child->getTitle(),
                 iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false)
             );
