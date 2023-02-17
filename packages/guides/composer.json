@@ -26,7 +26,7 @@
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
         "symfony/translation-contracts": "^2.1",
-        "league/uri": "^6.8"
+        "league/uri": "^6.5"
     },
     "require-dev": {
         "psr/log": "^1.0"
