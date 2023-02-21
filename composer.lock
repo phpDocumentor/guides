@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2001a1e73b661232f84edec1e4aeca4",
+    "content-hash": "5dfadfc35e16a97aedfecbd19f4a2c4b",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -3690,16 +3690,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.17",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2"
+                "reference": "71b28a67f01ac231f9a8f1ce242270bf4ec1f99c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/204e459e7822f2c586463029f5ecec31bb45a1f2",
-                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/71b28a67f01ac231f9a8f1ce242270bf4ec1f99c",
+                "reference": "71b28a67f01ac231f9a8f1ce242270bf4ec1f99c",
                 "shasum": ""
             },
             "require": {
@@ -3729,7 +3729,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.17"
+                "source": "https://github.com/phpstan/phpstan/tree/1.10.0"
             },
             "funding": [
                 {
@@ -3745,7 +3745,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-08T12:25:00+00:00"
+            "time": "2023-02-21T13:50:49+00:00"
         },
         {
             "name": "phpstan/phpstan-webmozart-assert",
