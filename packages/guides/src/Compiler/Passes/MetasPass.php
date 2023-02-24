@@ -13,6 +13,7 @@ use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 
 final class MetasPass implements CompilerPass
@@ -27,9 +28,11 @@ final class MetasPass implements CompilerPass
     public function run(array $documents): array
     {
         foreach ($documents as $document) {
-            $entry = new DocumentEntry($document->getFilePath());
-            $this->traverse($document, $entry);
-            $this->metas->addDocument($entry);
+            if ($document->getTitle() !== null) {
+                $entry = new DocumentEntry($document->getFilePath(), $document->getTitle());
+                $this->traverse($document, $entry);
+                $this->metas->addDocument($entry);
+            }
         }
 
         return $documents;

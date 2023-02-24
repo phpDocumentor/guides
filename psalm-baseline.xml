@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.7.6@ae4ec68e00e4880e3f00b1edd2da891236d749ab">
+  <file src="packages/guides-markdown/src/Markdown/MarkupLanguageParser.php">
+    <InvalidPropertyAssignmentValue>
+      <code>[
+            new Paragraph(),
+            new ListBlock(),
+            new ThematicBreak(),
+        ]</code>
+    </InvalidPropertyAssignmentValue>
+  </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/DocumentRule.php">
+    <MoreSpecificImplementedParamType>
+      <code>$on</code>
+    </MoreSpecificImplementedParamType>
+  </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
+    <InvalidArgument>
+      <code>$listConfig</code>
+      <code>$listConfig</code>
+    </InvalidArgument>
+  </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[($on is null ? SpanNode: TParent<Node>|SpanNode|null)]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ParagraphRule.php">
+    <InvalidArgument>
+      <code>$node</code>
+    </InvalidArgument>
+  </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/SectionRule.php">
+    <MoreSpecificImplementedParamType>
+      <code>$on</code>
+    </MoreSpecificImplementedParamType>
+  </file>
+  <file src="packages/guides/src/FileCollector.php">
+    <UndefinedMethod>
+      <code>getDepends</code>
+      <code>getParent</code>
+      <code>getParent</code>
+    </UndefinedMethod>
+  </file>
+  <file src="packages/guides/src/Nodes/CompoundNode.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$result->value]]></code>
+    </InvalidPropertyAssignmentValue>
+  </file>
+  <file src="packages/guides/tests/unit/Compiler/DocumentNodeTraverserTest.php">
+    <InvalidArgument>
+      <code><![CDATA[[
+            new
+            /** @implements NodeTransformer<TocNode> */
+            class implements NodeTransformer {
+                public function enterNode(Node $node): Node
+                {
+                    return $node;
+                }
+
+                public function leaveNode(Node $node): ?Node
+                {
+                    return null;
+                }
+
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof TocNode;
+                }
+            }
+        ]]]></code>
+      <code><![CDATA[[
+            new
+            /** @implements NodeTransformer<TocNode> */
+            class($replacement) implements NodeTransformer {
+                private Node $replacement;
+
+                public function __construct(Node $replacement)
+                {
+                    $this->replacement = $replacement;
+                }
+
+                public function enterNode(Node $node): Node
+                {
+                    return $this->replacement;
+                }
+
+                public function leaveNode(Node $node): ?Node
+                {
+                    return $node;
+                }
+
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof TocNode;
+                }
+        }]]]></code>
+    </InvalidArgument>
+  </file>
+</files>

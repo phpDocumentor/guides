@@ -12,11 +12,11 @@ class Directive
 
     private string $data;
 
-    /** @var mixed[] */
+    /** @var DirectiveOption[] */
     private array $options;
 
     /**
-     * @param mixed[] $options
+     * @param DirectiveOption[] $options
      */
     public function __construct(string $variable, string $name, string $data, array $options = [])
     {
@@ -42,7 +42,7 @@ class Directive
     }
 
     /**
-     * @return mixed[]
+     * @return DirectiveOption[]
      */
     public function getOptions(): array
     {
@@ -50,10 +50,10 @@ class Directive
     }
 
     /**
-     * @param mixed $value
+     * @param DirectiveOption $value
      */
-    public function setOption(string $key, $value): void
+    public function addOption(DirectiveOption $value): void
     {
-        $this->options[$key] = $value;
+        $this->options[$value->getName()] = $value;
     }
 }

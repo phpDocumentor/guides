@@ -17,6 +17,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector::class);
     $rectorConfig->rule(Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector::class);
     $rectorConfig->importNames();
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
+        'phpDocumentor\Guides\Nodes\Node' => 'phpDocumentor\Guides\Nodes\CompoundNode'
+    ]);
 
     // define sets of rules
     $rectorConfig->sets([

@@ -41,7 +41,7 @@ INPUT;
         self::assertTrue($this->rule->applies($context));
     }
 
-    /** @return string[][] */
+    /** @return iterable<string, non-empty-list<string>> */
     public function startChars(): iterable
     {
         $chars = [

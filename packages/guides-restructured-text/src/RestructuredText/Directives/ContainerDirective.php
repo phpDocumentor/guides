@@ -25,14 +25,11 @@ class ContainerDirective extends SubDirective
         return ['div'];
     }
 
-    /**
-     * @param string[] $options
-     */
     public function processSub(
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         return (new ContainerNode([$document]))->withOptions(['class' => $data]);
     }

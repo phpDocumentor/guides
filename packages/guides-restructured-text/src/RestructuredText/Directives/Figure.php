@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\UrlGenerator;
 
 use function assert;
@@ -35,26 +36,23 @@ class Figure extends SubDirective
         return 'figure';
     }
 
-    /**
-     * @param string[] $options
-     */
     public function processSub(
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         $image = new ImageNode($this->urlGenerator->relativeUrl($data));
+        $scalarOptions = $this->optionsToArray($options);
         $image = $image->withOptions([
-            'width' => $options['width'] ?? null,
-            'height' => $options['height'] ?? null,
-            'alt' => $options['alt'] ?? null,
-            'scale' => $options['scale'] ?? null,
-            'target' => $options['target'] ?? null,
-            'class' => $options['class'] ?? null,
-            'name' => $options['name'] ?? null,
+            'width' => $scalarOptions['width'] ?? null,
+            'height' => $scalarOptions['height'] ?? null,
+            'alt' => $scalarOptions['alt'] ?? null,
+            'scale' => $scalarOptions['scale'] ?? null,
+            'target' => $scalarOptions['target'] ?? null,
+            'class' => $scalarOptions['class'] ?? null,
+            'name' => $scalarOptions['name'] ?? null,
         ]);
-        assert($image instanceof ImageNode);
 
         return new FigureNode($image, $document);
     }

@@ -34,6 +34,7 @@ final class RuleContainer
         $this->productions[] = $production;
     }
 
+    /** @param CompoundNode<Node> $on */
     public function apply(DocumentParserContext $documentParserContext, CompoundNode $on): void
     {
         $documentIterator = $documentParserContext->getDocumentIterator();

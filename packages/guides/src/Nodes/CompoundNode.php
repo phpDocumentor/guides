@@ -14,34 +14,38 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use function implode;
+use function PHPStan\dumpType;
 use function strlen;
 use function substr;
 use function trim;
 
 /**
- * @extends AbstractNode<Node[]>
+ * @template TValue as Node
+ * @extends AbstractNode<TValue[]>
  */
 abstract class CompoundNode extends AbstractNode
 {
     /**
-     * @param Node[] $value
+     * @param list<TValue> $value
      */
     public function __construct(array $value = [])
     {
         $this->value = $value;
     }
 
-    /** @return Node[] */
+    /** @return TValue[] */
     public function getChildren(): array
     {
         return $this->value;
     }
 
+    /** @param TValue $node */
     public function addChildNode(Node $node): void
     {
         $this->value[] = $node;
     }
 
+    /** @return $this<TValue> */
     public function removeNode(int $key): self
     {
         $result = clone $this;
@@ -50,6 +54,10 @@ abstract class CompoundNode extends AbstractNode
         return $result;
     }
 
+    /**
+     * @param TValue $node
+     * @return $this<TValue>
+     */
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;

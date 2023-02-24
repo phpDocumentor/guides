@@ -13,6 +13,7 @@ use phpDocumentor\Guides\Nodes\ListNode;
 
 use function get_class;
 
+/** @extends AbstractBlock<ListNode> */
 final class ListBlock extends AbstractBlock
 {
     /**

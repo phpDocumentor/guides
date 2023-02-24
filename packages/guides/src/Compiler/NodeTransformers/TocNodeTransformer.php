@@ -64,7 +64,7 @@ final class TocNodeTransformer implements NodeTransformer
         //If Toctree is defined at level 2, and max is 3, only titles of the documents are added to the toctree.
 
         foreach ($document->getChildren() as $child) {
-            yield from $this->buildLevel($child, $document, $depth, $node, true);
+            yield from $this->buildLevel($child, $document, $depth, $node);
         }
     }
 
@@ -80,7 +80,7 @@ final class TocNodeTransformer implements NodeTransformer
         }
 
         foreach ($entry->getChildren() as $child) {
-            yield from $this->buildLevel($child, $document, $depth, $node, false);
+            yield from $this->buildLevel($child, $document, $depth, $node);
         }
     }
 

@@ -19,16 +19,12 @@ class LaTeXMain extends Directive
         return 'latex-main';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $variable,
         string                $data,
         array                 $options
     ): Node {
-        return new MainNode();
+        return new MainNode($data);
     }
 }

@@ -24,6 +24,9 @@ use function is_string;
 use function strtolower;
 use function trim;
 
+/**
+ * @extends CompoundNode<Node>
+ */
 final class DocumentNode extends CompoundNode
 {
     private string $hash;
@@ -68,7 +71,7 @@ final class DocumentNode extends CompoundNode
     /**
      * @template F as Node
      * @param class-string<F> $nodeType
-     * @return F[]
+     * @return array<int, F>
      */
     public function getNodes(string $nodeType = Node::class): array
     {

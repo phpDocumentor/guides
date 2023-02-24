@@ -44,6 +44,7 @@ final class ParagraphRuleTest extends AbstractRuleTest
         self::assertSame($nextLiteral, $documentParser->nextIndentedBlockShouldBeALiteralBlock);
     }
 
+    /** @return mixed[][] */
     public function paragraphProvider(): array
     {
         return [

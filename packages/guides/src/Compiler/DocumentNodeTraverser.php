@@ -14,7 +14,7 @@ final class DocumentNodeTraverser
     private iterable $transformers;
 
     /**
-     * @param iterable<NodeTransformer<Node>> $transformers
+     * @param list<NodeTransformer<Node>> $transformers
      */
     public function __construct(iterable $transformers)
     {
@@ -25,12 +25,20 @@ final class DocumentNodeTraverser
     {
         foreach ($this->transformers as $transformer) {
             $node = $this->traverseForTransformer($transformer, $node);
+            if ($node === null) {
+                return null;
+            }
         }
 
         return $node;
     }
 
-    /** @param NodeTransformer<Node> $transformer */
+    /**
+     * @template TNode as Node
+     * @param NodeTransformer<Node> $transformer
+     * @param TNode $node
+     * return TNode|null
+     */
     private function traverseForTransformer(NodeTransformer $transformer, Node $node): ?Node
     {
         if ($supports = $transformer->supports($node)) {

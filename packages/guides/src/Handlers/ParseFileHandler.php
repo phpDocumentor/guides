@@ -91,6 +91,7 @@ final class ParseFileHandler
             $initialHeaderLevel
         );
 
+        /** @var PreParseDocument $preParseDocumentEvent */
         $preParseDocumentEvent = $this->eventDispatcher->dispatch(
             new PreParseDocument($this->parser, $path, $fileContents)
         );
@@ -104,9 +105,10 @@ final class ParseFileHandler
             );
         }
 
-        $this->eventDispatcher->dispatch(new PostParseDocument($fileName, $document));
+        /** @var PostParseDocument $event */
+        $event = $this->eventDispatcher->dispatch(new PostParseDocument($fileName, $document));
 
-        return $document;
+        return $event->getDocumentNode();
     }
 
     private function buildPathOnFileSystem(string $file, string $currentDirectory, string $extension): string

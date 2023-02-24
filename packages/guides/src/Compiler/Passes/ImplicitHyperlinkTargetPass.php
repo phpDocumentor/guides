@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
+use function PHPStan\dumpType;
 
 /**
  * Resolves the hyperlink target for each section in the document.
@@ -28,7 +29,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
     {
         return array_map(function (DocumentNode $document) {
             // implicit references must not conflict with explicit ones
-            $knownReferences = $explicitReferences = $this->fetchExplicitReferences($document);
+            $knownReferences = $this->fetchExplicitReferences($document);
 
             $nodes = $document->getNodes();
             $node = current($nodes);
@@ -43,8 +44,9 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
                     }
 
                     $section->getTitle()->setId($node->getValue());
-
-                    $document = $document->removeNode($key);
+                    if ($key !== null) {
+                        $document = $document->removeNode($key);
+                    }
 
                     continue;
                 }
@@ -67,6 +69,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
         }, $documents);
     }
 
+    /** @return string[] */
     private function fetchExplicitReferences(Node $node): array
     {
         if ($node instanceof AnchorNode) {

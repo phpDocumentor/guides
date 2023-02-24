@@ -33,11 +33,11 @@ class SidebarDirective extends SubDirective
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         return (new SidebarNode(
             $data,
             $document
-        ))->withOptions($options);
+        ))->withOptions($this->optionsToArray($options));
     }
 }

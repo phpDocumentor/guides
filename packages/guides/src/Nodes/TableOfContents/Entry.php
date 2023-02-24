@@ -14,13 +14,11 @@ final class Entry extends AbstractNode
 
     /** @var Entry[] */
     private array $children;
-    /**
-     * @var false
-     */
+
     private bool $isDocumentRoot;
 
     /** @param Entry[] $children */
-    public function __construct(string $url, TitleNode $title, array $children = [], $isDocumentRoot = false)
+    public function __construct(string $url, TitleNode $title, array $children = [], bool $isDocumentRoot = false)
     {
         $this->url = $url;
         $this->value = $title;

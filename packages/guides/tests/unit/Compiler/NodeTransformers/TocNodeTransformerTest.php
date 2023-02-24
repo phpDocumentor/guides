@@ -111,17 +111,17 @@ final class TocNodeTransformerTest extends TestCase
 
     private function givenMetas(): Metas
     {
-        $indexDoc = new DocumentEntry('index');
+        $indexDoc = new DocumentEntry('index', TitleNode::emptyNode());
         $section = new SectionEntry(new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'));
         $subSection = new SectionEntry(new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'));
         $section->addChild($subSection);
         $section->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2')));
         $indexDoc->addChild($section);
 
-        $page2 = new DocumentEntry('page2');
+        $page2 = new DocumentEntry('page2', TitleNode::emptyNode());
         $page2->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 2', []), 1, 'title-2')));
 
-        $page3 = new DocumentEntry('page3');
+        $page3 = new DocumentEntry('page3', TitleNode::emptyNode());
         $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 

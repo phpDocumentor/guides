@@ -32,13 +32,13 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         return (new AdmonitionNode(
             $this->name,
             $this->text,
             $document
-        ))->withOptions($options);
+        ))->withOptions($this->optionsToArray($options));
     }
 
     final public function getName(): string

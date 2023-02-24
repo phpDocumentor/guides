@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown;
 
-use League\CommonMark\Normalizer\SlugNormalizer;
 use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
 use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
 use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
@@ -19,12 +18,12 @@ use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Parser\MarkdownParser;
-use phpDocumentor\Guides\Markdown\Parsers\AbstractBlock;
-use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
+use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ListNode;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -37,13 +36,13 @@ use function get_class;
 use function md5;
 use function strtolower;
 
-final class MarkupLanguageParser implements ParserInterface
+final class MarkupLanguageParser implements MarkupLanguageParserInterface
 {
     private MarkdownParser $markdownParser;
 
     private ?ParserContext $environment = null;
 
-    /** @var array<AbstractBlock> */
+    /** @var ParserInterface<Node>[] */
     private array $parsers;
 
     private ?DocumentNode $document = null;
@@ -84,7 +83,6 @@ final class MarkupLanguageParser implements ParserInterface
         while ($event = $walker->next()) {
             $node = $event->getNode();
 
-            /** @var \phpDocumentor\Guides\Markdown\ParserInterface $parser */
             foreach ($this->parsers as $parser) {
                 if (!$parser->supports($event)) {
                     continue;

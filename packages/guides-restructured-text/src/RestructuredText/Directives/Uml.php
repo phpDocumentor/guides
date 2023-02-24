@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Webmozart\Assert\Assert;
 use function dirname;
@@ -56,10 +57,9 @@ final class Uml extends Directive
             }
         }
 
-        $classes = $options['classes'];
-        Assert::nullOrString($classes);
+        $classes = $options['classes'] ?? new DirectiveOption('classes', '');
         $node = new UmlNode($value);
-        $node->setClasses(explode(' ', $classes ?? ''));
+        $node->setClasses(explode(' ', (string) $classes->getValue()));
         $node->setCaption($caption);
 
         $document = $parser->getDocument();

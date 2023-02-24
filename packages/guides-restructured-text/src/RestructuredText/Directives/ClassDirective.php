@@ -19,14 +19,11 @@ class ClassDirective extends SubDirective
         return 'class';
     }
 
-    /**
-     * @param string[] $options
-     */
     public function processSub(
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         $classes = explode(' ', $data);
 

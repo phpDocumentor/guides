@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\CompilerPass;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class TransformerPass implements CompilerPass
 {
@@ -19,10 +20,12 @@ final class TransformerPass implements CompilerPass
     public function run(array $documents): array
     {
         foreach ($documents as $key => $document) {
-            $documents[$key] = $this->documentNodeTraverser->traverse($document);
+            if ($document instanceof DocumentNode) {
+                $documents[$key] = $this->documentNodeTraverser->traverse($document);
+            }
         }
 
-        return array_filter($documents);
+        return array_filter($documents, fn ($document) => $document instanceof DocumentNode);
     }
 
     public function getPriority(): int

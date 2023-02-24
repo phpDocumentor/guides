@@ -34,4 +34,9 @@ abstract class TextNode extends AbstractNode
 
         return implode("\n", $lines);
     }
+
+    public function toString(): string
+    {
+        return $this->value;
+    }
 }

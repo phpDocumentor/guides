@@ -16,6 +16,9 @@ namespace phpDocumentor\Guides\RestructuredText\Nodes;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 
+/**
+ * @extends CompoundNode<Node>
+ */
 final class TopicNode extends CompoundNode
 {
     private string $name;

@@ -34,7 +34,7 @@ interface Rule
      * that is considered that last relevant line. The document parser will advance the line after successfully parsing
      * this and to send the Parser into a line that belongs to another state.
      *
-     * @template TParent as Node
+     * @template TParent as CompoundNode
      * @param TParent|null $on
      *
      * @return Node|($on is null ? TNode|null : TParent|TNode|null)

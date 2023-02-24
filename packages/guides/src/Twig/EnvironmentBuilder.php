@@ -11,6 +11,7 @@ class EnvironmentBuilder
 {
     private Environment $environment;
 
+    /** @param callable(): Environment $factory */
     public function setEnvironmentFactory(callable $factory): void
     {
         $this->environment = $factory();

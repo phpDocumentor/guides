@@ -57,7 +57,11 @@ final class AssetsExtension extends AbstractExtension
     public function getTests(): array
     {
         return [
-            new TwigTest('node', fn ($value) => $value instanceof Node)
+            new TwigTest(
+                'node',
+                /** @param mixed $value */
+                fn ($value):bool => $value instanceof Node
+            )
         ];
     }
 
