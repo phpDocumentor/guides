@@ -28,7 +28,7 @@ class ClassDirective extends SubDirective
         $classes = explode(' ', $data);
 
         $normalizedClasses = array_map(
-            static fn(string $class) => (new AsciiSlugger())->slug($class)->lower()->toString(),
+            static fn(string $class): string => (new AsciiSlugger())->slug($class)->lower()->toString(),
             $classes
         );
 

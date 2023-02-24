@@ -35,7 +35,7 @@ final class SpanLexer extends AbstractLexer
      *
      * @var array<int, int>
      */
-    protected $tokenPositions;
+    private ?array $tokenPositions = null;
 
     /** @return string[] */
     protected function getCatchablePatterns()

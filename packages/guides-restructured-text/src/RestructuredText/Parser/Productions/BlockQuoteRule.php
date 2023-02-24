@@ -107,7 +107,7 @@ final class BlockQuoteRule implements Rule
      * @param string[] $lines
      * @return string[]
      */
-    protected function normalizeLines(array $lines): array
+    private function normalizeLines(array $lines): array
     {
         if ($lines !== []) {
             $firstLine = $lines[0];

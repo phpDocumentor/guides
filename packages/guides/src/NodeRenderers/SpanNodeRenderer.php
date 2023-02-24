@@ -37,8 +37,7 @@ use function str_replace;
 /** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
 {
-    /** @var Renderer */
-    protected $renderer;
+    protected Renderer $renderer;
 
     private ?NodeRendererFactory $nodeRendererFactory = null;
 

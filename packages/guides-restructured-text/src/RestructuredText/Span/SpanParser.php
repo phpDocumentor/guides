@@ -45,7 +45,7 @@ class SpanParser
             $span = implode("\n", $span);
         }
 
-        return new SpanNode($this->process($environment, $span), $this->getTokens());
+        return new SpanNode($this->process($environment, $span), $this->tokens);
     }
 
     private function process(ParserContext $parserContext, string $span): string
@@ -64,15 +64,7 @@ class SpanParser
     }
 
     /**
-     * @return SpanToken[]
-     */
-    private function getTokens(): array
-    {
-        return $this->tokens;
-    }
-
-    /**
-     * @param mixed[] $tokenData
+     * @param string[] $tokenData
      */
     private function addToken(string $type, string $id, array $tokenData): void
     {
@@ -93,7 +85,7 @@ class SpanParser
                 return $id;
             },
             $span
-        );
+        ) ?? '';
     }
 
     private function createNamedReference(ParserContext $parserContext, string $link, ?string $url = null): string
@@ -101,7 +93,7 @@ class SpanParser
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
         $link = str_replace("\n", ' ', $link);
-        $link = trim(preg_replace('/\s+/', ' ', $link));
+        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         $id = $this->generateId();
         $this->addToken(
@@ -130,12 +122,12 @@ class SpanParser
         return $id;
     }
 
-    private function createCrossReference(ParserContext $parserContext, string $link, ?string $url = null): string
+    private function createCrossReference(string $link): string
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
         $link = str_replace("\n", ' ', $link);
-        $link = trim(preg_replace('/\s+/', ' ', $link));
+        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         $id = $this->generateId();
         $this->tokens[$id] = new CrossReferenceNode(
@@ -176,7 +168,7 @@ class SpanParser
             $absoluteUriPattern,
             $standaloneHyperlinkCallback,
             $span
-        );
+        ) ?? '';
     }
 
     private function replaceStandaloneEmailAddresses(string $span): string
@@ -211,7 +203,7 @@ class SpanParser
             $emailAddressPattern,
             $standaloneEmailAddressCallback,
             $span
-        );
+        ) ?? '';
     }
 
     private function generateId(): string
@@ -382,7 +374,7 @@ class SpanParser
                         return '`';
                     }
 
-                    return $this->createCrossReference($parserContext, $text, $url);
+                    return $this->createCrossReference($text);
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);
@@ -443,10 +435,6 @@ class SpanParser
 
             $this->lexer->moveNext();
         }
-
-        $this->rollback($startPosition);
-
-        return null;
     }
 
     private function rollback(int $position): void

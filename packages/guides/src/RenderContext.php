@@ -117,13 +117,13 @@ class RenderContext
     public function relativeDocUrl(string $filename, ?string $anchor = null): string
     {
         if (UriInfo::isAbsolutePath(Uri::createFromString($filename))) {
-            return $this->getDestinationPath() . $this->createFileUrl($filename, $anchor);
+            return $this->destinationPath . $this->createFileUrl($filename, $anchor);
         }
 
-        $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->getDestinationPath(), $this->getDirName()), '/');
+        $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->destinationPath, $this->getDirName()), '/');
 
         if ($this->metas->findDocument($filename) !== null) {
-            return $this->getDestinationPath() . '/' . $this->createFileUrl($filename, $anchor);
+            return $this->destinationPath . '/' . $this->createFileUrl($filename, $anchor);
         }
 
         return $this->urlGenerator->canonicalUrl(
@@ -196,6 +196,6 @@ class RenderContext
 
     public function getCurrentFileDestination(): string
     {
-        return $this->getDestinationPath() . '/' . $this->currentFileName . '.' . $this->outputFormat;
+        return $this->destinationPath . '/' . $this->currentFileName . '.' . $this->outputFormat;
     }
 }

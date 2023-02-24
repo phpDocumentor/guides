@@ -25,7 +25,7 @@ final class SectionNode extends CompoundNode
     /** @return TitleNode[] */
     public function getTitles(): array
     {
-        $titles = [$this->getTitle()];
+        $titles = [$this->title];
         foreach ($this->value as $node) {
             if ($node instanceof self === false) {
                 continue;

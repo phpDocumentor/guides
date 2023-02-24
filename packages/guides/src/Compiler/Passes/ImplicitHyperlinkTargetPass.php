@@ -27,7 +27,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
 
     public function run(array $documents): array
     {
-        return array_map(function (DocumentNode $document) {
+        return array_map(function (DocumentNode $document): DocumentNode {
             // implicit references must not conflict with explicit ones
             $knownReferences = $this->fetchExplicitReferences($document);
 

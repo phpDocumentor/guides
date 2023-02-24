@@ -54,7 +54,7 @@ abstract class AbstractRuleTest extends TestCase
         $spanParser->parse(
             Argument::any(),
             Argument::any()
-        )->will(fn($args) => new SpanNode(implode("\n", $args[0])));
+        )->will(fn($args): SpanNode => new SpanNode(implode("\n", $args[0])));
         return new InlineMarkupRule($spanParser->reveal());
     }
 

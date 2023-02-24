@@ -74,7 +74,7 @@ class ToctreeBuilder
     {
         return array_filter(
             array_map('trim', $lines->toArray()),
-            static fn(string $file) => $file !== ''
+            static fn(string $file): bool => $file !== ''
         );
     }
 

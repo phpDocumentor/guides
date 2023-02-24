@@ -67,7 +67,7 @@ final class TableRow
     public function absorbRowContent(TableRow $targetRow): void
     {
         // iterate over each column and combine the content
-        foreach ($this->getColumns() as $columnIndex => $column) {
+        foreach ($this->columns as $columnIndex => $column) {
             $targetColumn = $targetRow->getColumn($columnIndex);
             if ($targetColumn === null) {
                 throw new InvalidTableStructure(
@@ -89,7 +89,7 @@ final class TableRow
         return implode(
             ' | ',
             array_map(
-                static fn(TableColumn $column) => $column->getContent(),
+                static fn(TableColumn $column): string => $column->getContent(),
                 $this->columns
             )
         );

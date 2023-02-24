@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Span\SpanToken;
 class SpanNode extends TextNode
 {
     /** @var SpanToken[] */
-    protected $tokens;
+    protected array $tokens;
 
     /** @param SpanToken[] $tokens */
     public function __construct(string $content, array $tokens = [])

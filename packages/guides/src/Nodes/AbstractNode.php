@@ -11,7 +11,8 @@ abstract class AbstractNode implements Node
 {
     /** @var string[] */
     protected $classes = [];
-    /** @var mixed[] */
+
+    /** @var array<string, scalar|null> */
     protected array $options = [];
 
     /** @var TValue */

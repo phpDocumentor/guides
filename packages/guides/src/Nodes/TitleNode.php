@@ -19,14 +19,11 @@ use Webmozart\Assert\Assert;
 /** @extends CompoundNode<TextNode> */
 class TitleNode extends CompoundNode
 {
-    /** @var int */
-    protected $level;
+    protected int $level;
 
-    /** @var string */
-    protected $id;
+    protected string $id;
 
-    /** @var string */
-    protected $target = '';
+    protected string $target = '';
 
     public function __construct(SpanNode $value, int $level, string $id)
     {

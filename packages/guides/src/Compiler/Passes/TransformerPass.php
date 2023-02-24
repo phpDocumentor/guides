@@ -25,7 +25,7 @@ final class TransformerPass implements CompilerPass
             }
         }
 
-        return array_filter($documents, fn ($document) => $document instanceof DocumentNode);
+        return array_filter($documents, fn ($document): bool => $document instanceof DocumentNode);
     }
 
     public function getPriority(): int

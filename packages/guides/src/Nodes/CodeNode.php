@@ -15,8 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 class CodeNode extends TextNode
 {
-    /** @var string|null */
-    protected $language;
+    protected ?string $language = null;
 
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private ?int $startingLineNumber = null;

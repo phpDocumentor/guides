@@ -187,7 +187,7 @@ RST;
         $spanParser->parse(
             Argument::any(),
             Argument::type(ParserContext::class)
-        )->will(fn($args) => new SpanNode($args[0]));
+        )->will(fn($args): SpanNode => new SpanNode($args[0]));
         return $spanParser->reveal();
     }
 
