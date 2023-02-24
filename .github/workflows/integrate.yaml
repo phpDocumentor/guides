@@ -15,7 +15,7 @@ jobs:
 
   coding-standards:
     name: "Coding Standards"
-    uses: "phpDocumentor/.github/.github/workflows/coding-standards.yml@v0.1.0"
+    uses: "phpDocumentor/.github/.github/workflows/coding-standards.yml@v0.2.0"
 
   dependency-analysis:
     name: "Dependency analysis"
@@ -34,10 +34,13 @@ jobs:
   unit-tests:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continues-integration.yml@v0.2.0"
+    with:
+      php-versions: "['7.4', '8.0', '8.1', '8.2']"
 
   funtional-tests:
     name: "Functional test"
     uses: "phpDocumentor/.github/.github/workflows/continues-integration.yml@v0.2.0"
     needs: "unit-tests"
     with:
+      php-versions: "['7.4', '8.0', '8.1', '8.2']"
       test-suite: "functional --verbose"
