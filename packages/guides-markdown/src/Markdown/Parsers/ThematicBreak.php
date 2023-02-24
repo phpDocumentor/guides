@@ -11,6 +11,7 @@ use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 
+/** @extends AbstractBlock<SeparatorNode> */
 final class ThematicBreak extends AbstractBlock
 {
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode

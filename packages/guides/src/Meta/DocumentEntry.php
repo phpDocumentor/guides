@@ -12,15 +12,17 @@ class DocumentEntry implements Entry
 
     /** @var ChildEntry[] */
     private array $entries = [];
+    private TitleNode $titleNode;
 
-    public function __construct(string $file)
+    public function __construct(string $file, TitleNode $titleNode)
     {
         $this->file = $file;
+        $this->titleNode = $titleNode;
     }
 
     public function getTitle(): TitleNode
     {
-        return isset($this->entries[0]) ? $this->entries[0]->getTitle() : TitleNode::emptyNode();
+        return $this->titleNode;
     }
 
     public function addChild(ChildEntry $entry): void

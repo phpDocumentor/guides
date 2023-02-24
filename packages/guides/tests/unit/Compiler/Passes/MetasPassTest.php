@@ -33,7 +33,7 @@ final class MetasPassTest extends TestCase
 
         $entries = $metas->getAll();
 
-        $expected = new DocumentEntry('index');
+        $expected = new DocumentEntry('index', new TitleNode(new SpanNode('index-title 1'), 1, 'index-title-1'));
         $s1 = new SectionEntry(new TitleNode(new SpanNode('index-title 1'), 1, 'index-title-1'));
         $s1->addChild(new DocumentReferenceEntry('getting-started'));
         $s1->addChild(new SectionEntry(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1')));

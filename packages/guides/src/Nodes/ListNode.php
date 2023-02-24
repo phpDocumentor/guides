@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+/**
+ * @extends CompoundNode<ListItemNode>
+ */
 final class ListNode extends CompoundNode
 {
     private bool $ordered;

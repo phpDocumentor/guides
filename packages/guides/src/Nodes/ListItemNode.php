@@ -9,6 +9,8 @@ use function trim;
 
 /**
  * Represents a single item of a bullet or enumerated list.
+ *
+ * @extends CompoundNode<Node>
  */
 final class ListItemNode extends CompoundNode
 {

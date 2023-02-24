@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Nodes;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Webmozart\Assert\Assert;
 
+/** @extends CompoundNode<TextNode> */
 class TitleNode extends CompoundNode
 {
     /** @var int */
@@ -63,5 +64,15 @@ class TitleNode extends CompoundNode
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function toString(): string
+    {
+        $result = '';
+        foreach ($this->value as $child) {
+            $result .= $child->toString();
+        }
+
+        return $result;
     }
 }

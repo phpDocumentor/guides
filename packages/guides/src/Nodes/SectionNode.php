@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+/**
+ * @extends CompoundNode<Node>
+ */
 final class SectionNode extends CompoundNode
 {
     private TitleNode $title;
-    /** @var \phpDocumentor\Guides\Nodes\CompoundNode[] */
-    private array $nodes = [];
 
     public function __construct(TitleNode $title)
     {
@@ -25,7 +26,7 @@ final class SectionNode extends CompoundNode
     public function getTitles(): array
     {
         $titles = [$this->getTitle()];
-        foreach ($this->nodes as $node) {
+        foreach ($this->value as $node) {
             if ($node instanceof self === false) {
                 continue;
             }

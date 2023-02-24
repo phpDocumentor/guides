@@ -19,29 +19,32 @@ use function substr;
 use function trim;
 
 /**
- * @extends AbstractNode<Node[]>
+ * @template TValue as Node
+ * @extends AbstractNode<TValue[]>
  */
 abstract class CompoundNode extends AbstractNode
 {
     /**
-     * @param Node[] $value
+     * @param TValue[] $value
      */
     public function __construct(array $value = [])
     {
         $this->value = $value;
     }
 
-    /** @return Node[] */
+    /** @return TValue[] */
     public function getChildren(): array
     {
         return $this->value;
     }
 
+    /** @param TValue $node */
     public function addChildNode(Node $node): void
     {
         $this->value[] = $node;
     }
 
+    /** @return self<TValue> */
     public function removeNode(int $key): self
     {
         $result = clone $this;
@@ -50,6 +53,10 @@ abstract class CompoundNode extends AbstractNode
         return $result;
     }
 
+    /**
+     * @param TValue $node
+     * @return self<TValue>
+     */
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;

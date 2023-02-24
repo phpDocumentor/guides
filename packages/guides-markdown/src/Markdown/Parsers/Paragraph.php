@@ -9,20 +9,20 @@ use League\CommonMark\Node\Block\Paragraph as CommonMarkParagraph;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 
 use function get_class;
 
+/** @extends AbstractBlock<ParagraphNode> */
 final class Paragraph extends AbstractBlock
 {
     /**
-     * @return Nodes\ParagraphNode
+     * @return ParagraphNode
      */
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
     {
-        $context = new ParagraphNode(new SpanNode('', []));
+        $context = new ParagraphNode([new SpanNode('', [])]);
 
         while ($event = $walker->next()) {
             $node = $event->getNode();

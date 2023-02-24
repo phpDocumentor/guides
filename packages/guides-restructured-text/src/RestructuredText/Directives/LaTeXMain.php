@@ -29,6 +29,6 @@ class LaTeXMain extends Directive
         string                $data,
         array                 $options
     ): Node {
-        return new MainNode();
+        return new MainNode($data);
     }
 }

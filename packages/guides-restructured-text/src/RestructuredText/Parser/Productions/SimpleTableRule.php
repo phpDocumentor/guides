@@ -28,6 +28,7 @@ final class SimpleTableRule implements Rule
         return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
     }
 
+    /** {@inheritDoc} */
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();

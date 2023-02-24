@@ -33,13 +33,14 @@ final class SectionRule implements Rule
         return $this->titleRule->applies($documentParser);
     }
 
+    /** @param DocumentNode|SectionNode $on */
     public function apply(DocumentParserContext $documentParserContext, CompoundNode $on = null): ?Node
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();
         $documentIterator = $documentParserContext->getDocumentIterator();
         $section = $this->createSection($documentParserContext);
-        Assert::isInstanceOf($on, CompoundNode::class);
+        Assert::isInstanceOfAny($on, [DocumentNode::class, SectionNode::class]);
         $on->addChildNode($section);
 
         $stack->push($on);
@@ -62,7 +63,10 @@ final class SectionRule implements Rule
                 }
 
                 if ($new->getTitle()->getLevel() < $section->getTitle()->getLevel()) {
-                    while ($new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()) {
+                    while (
+                        $stack->top()->getTitle() !== null &&
+                        $new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()
+                    ) {
                         $stack->pop();
                     }
 
@@ -76,7 +80,7 @@ final class SectionRule implements Rule
         return null;
     }
 
-    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): CompoundNode
+    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): SectionNode
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
@@ -96,6 +100,7 @@ final class SectionRule implements Rule
     private function createSection(DocumentParserContext $documentParserContext): SectionNode
     {
         $title = $this->titleRule->apply($documentParserContext);
+        Assert::isInstanceOf($title, TitleNode::class, 'Cannot create section without title');
         return new SectionNode($title);
     }
 }

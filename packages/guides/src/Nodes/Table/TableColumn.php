@@ -18,6 +18,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function trim;
 
+/**
+ * @extends CompoundNode<Node>
+ */
 final class TableColumn extends CompoundNode
 {
     private string $content;

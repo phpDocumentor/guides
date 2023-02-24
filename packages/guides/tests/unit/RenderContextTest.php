@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -33,7 +34,8 @@ final class RenderContextTest extends TestCase
             $destinationPath,
             new Metas([
                 'getting-started/configuration' => new DocumentEntry(
-                    'getting-started/configuration'
+                    'getting-started/configuration',
+                    TitleNode::emptyNode()
                 ),
             ]),
             new UrlGenerator(),

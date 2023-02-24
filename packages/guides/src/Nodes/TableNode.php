@@ -18,6 +18,9 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use function count;
 use function max;
 
+/**
+ * @extends CompoundNode<Node>
+ */
 class TableNode extends CompoundNode
 {
     /** @var TableRow[] */

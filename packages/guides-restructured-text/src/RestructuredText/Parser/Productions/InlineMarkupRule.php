@@ -59,9 +59,9 @@ final class InlineMarkupRule implements Rule
     }
 
     /**
-     * @template TParent as Node
+     * @template TParent as CompoundNode
      * @param TParent|null $on
-     * @return ($on is null ? SpanNode: TParent|SpanNode|null)
+     * @return ($on is null ? SpanNode: TParent<Node>|SpanNode|null)
      */
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
