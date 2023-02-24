@@ -42,7 +42,7 @@
         "league/uri-interfaces": "^2.3",
         "psr/log": "^1.1",
         "doctrine/event-manager": "^1.1",
-        "doctrine/lexer": "^1.2",
+        "doctrine/lexer": "^2.1",
         "league/commonmark": "^2.3",
         "symfony/process": "^5.4"
     },
