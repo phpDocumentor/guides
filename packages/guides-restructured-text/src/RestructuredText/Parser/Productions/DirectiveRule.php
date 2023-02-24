@@ -143,7 +143,7 @@ final class DirectiveRule implements Rule
         ) {
             $documentIterator->next();
             $directiveOption = $this->parseDirectiveOption($documentIterator->current());
-            $directive->setOption($directiveOption->getName(), $directiveOption->getValue());
+            $directive->addOption($directiveOption);
         }
 
         if ($this->isDirectiveOption($documentIterator->current())) {

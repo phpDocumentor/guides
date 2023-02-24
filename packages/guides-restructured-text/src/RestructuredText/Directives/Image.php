@@ -31,10 +31,6 @@ class Image extends Directive
         return 'image';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $variable,

@@ -25,9 +25,9 @@ class DocumentEntry implements Entry
         return $this->titleNode;
     }
 
-    public function addChild(ChildEntry $entry): void
+    public function addChild(ChildEntry $child): void
     {
-        $this->entries[] = $entry;
+        $this->entries[] = $child;
     }
 
     /** @return ChildEntry[] */

@@ -8,11 +8,11 @@ class DirectiveOption
 {
     private string $name;
 
-    /** @var mixed */
+    /** @var scalar|null */
     private $value;
 
     /**
-     * @param mixed $value
+     * @param scalar|null $value
      */
     public function __construct(string $name, $value)
     {
@@ -26,7 +26,7 @@ class DirectiveOption
     }
 
     /**
-     * @return mixed
+     * @return scalar|null
      */
     public function getValue()
     {

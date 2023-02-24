@@ -28,10 +28,6 @@ class Replace extends Directive
         return 'replace';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $variable,

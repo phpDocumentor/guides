@@ -258,8 +258,9 @@ class GridTableBuilder
         }
 
         // the list item offset is determined by the offset of the first text
-        if (($nodes[0] ?? null) instanceof ParagraphNode) {
-            return new TableColumn(trim($content), $col->getColSpan(), $nodes[0]->getChildren(), $col->getRowSpan());
+        $firstNode = $nodes[0] ?? null;
+        if ($firstNode instanceof ParagraphNode) {
+            return new TableColumn(trim($content), $col->getColSpan(), $firstNode->getChildren(), $col->getRowSpan());
         }
 
         return $col;
@@ -277,6 +278,9 @@ class GridTableBuilder
         );
     }
 
+    /**
+     * @phpstan-assert int $previousColumnEnd
+     */
     private function assertColumnEnded(?int $currentColumnStart, ?int $previousColumnEnd): void
     {
         if (($currentColumnStart !== null) && $previousColumnEnd === null) {

@@ -29,10 +29,6 @@ class CodeBlock extends Directive
         return 'code-block';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
@@ -57,7 +53,7 @@ class CodeBlock extends Directive
     }
 
     /**
-     * @param string[] $options
+     * @param mixed[] $options
      */
     private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
     {

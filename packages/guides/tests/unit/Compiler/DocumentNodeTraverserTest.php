@@ -20,22 +20,26 @@ final class DocumentNodeTraverserTest extends TestCase
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
-        $traverser = new DocumentNodeTraverser([new class implements NodeTransformer {
-            public function enterNode(Node $node): Node
-            {
-                return $node;
-            }
+        $traverser = new DocumentNodeTraverser([
+            new
+            /** @implements NodeTransformer<TocNode> */
+            class implements NodeTransformer {
+                public function enterNode(Node $node): Node
+                {
+                    return $node;
+                }
 
-            public function leaveNode(Node $node): ?Node
-            {
-                return null;
-            }
+                public function leaveNode(Node $node): ?Node
+                {
+                    return null;
+                }
 
-            public function supports(Node $node): bool
-            {
-                return $node instanceof TocNode;
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof TocNode;
+                }
             }
-        }]);
+        ]);
 
         $actual = $traverser->traverse($document);
 
@@ -54,29 +58,32 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $replacement = new TocNode(['/readme.rst']);
 
-        $traverser = new DocumentNodeTraverser([new class($replacement) implements NodeTransformer {
-            private Node $replacement;
+        $traverser = new DocumentNodeTraverser([
+            new
+            /** @implements NodeTransformer<TocNode> */
+            class($replacement) implements NodeTransformer {
+                private Node $replacement;
 
-            public function __construct(Node $replacement)
-            {
-                $this->replacement = $replacement;
-            }
+                public function __construct(Node $replacement)
+                {
+                    $this->replacement = $replacement;
+                }
 
-            public function enterNode(Node $node): Node
-            {
-                return $this->replacement;
-            }
+                public function enterNode(Node $node): Node
+                {
+                    return $this->replacement;
+                }
 
-            public function leaveNode(Node $node): ?Node
-            {
-                return $node;
-            }
+                public function leaveNode(Node $node): ?Node
+                {
+                    return $node;
+                }
 
-            public function supports(Node $node): bool
-            {
-                return $node instanceof TocNode;
-            }
-        }]);
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof TocNode;
+                }
+            }]);
 
         $actual = $traverser->traverse($document);
 

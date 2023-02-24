@@ -44,8 +44,9 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
                     }
 
                     $section->getTitle()->setId($node->getValue());
-
-                    $document = $document->removeNode($key);
+                    if ($key !== null) {
+                        $document = $document->removeNode($key);
+                    }
 
                     continue;
                 }
@@ -68,7 +69,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
         }, $documents);
     }
 
-    /** @return AnchorNode[] */
+    /** @return string[] */
     private function fetchExplicitReferences(Node $node): array
     {
         if ($node instanceof AnchorNode) {

@@ -63,8 +63,7 @@ final class SectionRule implements Rule
                 }
 
                 if ($new->getTitle()->getLevel() < $section->getTitle()->getLevel()) {
-                    while (
-                        $stack->top()->getTitle() !== null &&
+                    while ($stack->top()->getTitle() !== null &&
                         $new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()
                     ) {
                         $stack->pop();

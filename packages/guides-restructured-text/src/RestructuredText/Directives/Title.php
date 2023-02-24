@@ -21,10 +21,6 @@ class Title extends Directive
         return 'title';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,

@@ -18,7 +18,7 @@ class DocumentReferenceEntry implements ChildEntry
         return $this->file;
     }
 
-    public function addChild(ChildEntry $entry): void
+    public function addChild(ChildEntry $child): void
     {
         //This does not have entries
     }

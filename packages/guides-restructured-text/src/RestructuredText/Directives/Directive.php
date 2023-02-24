@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -50,7 +51,7 @@ abstract class Directive
      *    of the directive
      * @param string $variable the variable name of the directive
      * @param string $data the data of the directive (following ::)
-     * @param mixed[] $options the array of options for this directive
+     * @param DirectiveOption[] $options the array of options for this directive
      */
     public function process(
         DocumentParserContext $documentParserContext,
@@ -62,7 +63,7 @@ abstract class Directive
 
         $processNode = $this->processNode($documentParserContext, $variable, $data, $options)
             // Ensure options are always available
-            ->withOptions($options);
+            ->withOptions($this->optionsToArray($options));
 
         if ($variable !== '') {
             $document->addVariable($variable, $processNode);
@@ -106,5 +107,14 @@ abstract class Directive
         string $data,
         array $options
     ): void {
+    }
+
+    /**
+     * @param DirectiveOption[] $options
+     * @return array<string, scalar|null>
+     */
+    protected function optionsToArray(array $options): array
+    {
+        return array_map(fn(DirectiveOption $option) => $option->getValue(), $options);
     }
 }

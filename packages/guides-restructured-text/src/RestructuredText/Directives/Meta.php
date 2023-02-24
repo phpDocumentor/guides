@@ -22,10 +22,6 @@ class Meta extends Directive
         return 'meta';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
@@ -34,8 +30,8 @@ class Meta extends Directive
     ): ?Node {
         $document = $documentParserContext->getDocument();
 
-        foreach ($options as $key => $value) {
-            $document->addHeaderNode(new MetaNode($key, $value));
+        foreach ($options as $option) {
+            $document->addHeaderNode(new MetaNode($option->getName(), (string) $option->getValue()));
         }
 
         return null;

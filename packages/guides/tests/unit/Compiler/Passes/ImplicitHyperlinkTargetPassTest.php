@@ -58,7 +58,9 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $pass = new ImplicitHyperlinkTargetPass();
         $resultDocuments = $pass->run([$document]);
 
-        $expected->getNodes()[2]->getTitle()->setId('section-a-1');
+        $section = $expected->getNodes()[2];
+        self::assertInstanceOf(SectionNode::class, $section);
+        $section->getTitle()->setId('section-a-1');
 
         self::assertEquals([$expected], $resultDocuments);
     }

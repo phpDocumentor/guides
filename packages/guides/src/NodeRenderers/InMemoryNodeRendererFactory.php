@@ -46,11 +46,6 @@ class InMemoryNodeRendererFactory implements NodeRendererFactory
         $defaultNodeRenderer->setNodeRendererFactory($this);
     }
 
-    /**
-     * @template F as Node
-     * @param F $node
-     * @return NodeRenderer<F>
-     */
     public function get(Node $node): NodeRenderer
     {
         foreach ($this->nodeRenderers as $nodeRenderer) {

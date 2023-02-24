@@ -16,12 +16,12 @@ namespace phpDocumentor\Guides\Nodes;
 interface Node
 {
     /**
-     * @return array<string, mixed>
+     * @return array<string, scalar|null>
      */
     public function getOptions(): array;
 
     /**
-     * @param array<string, mixed> $options
+     * @param array<string, scalar|null> $options
      * @return Node
      */
     public function withOptions(array $options): Node;

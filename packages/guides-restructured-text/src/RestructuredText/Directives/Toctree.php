@@ -34,10 +34,6 @@ class Toctree extends Directive
         return 'toctree';
     }
 
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
@@ -52,6 +48,6 @@ class Toctree extends Directive
             $options
         );
 
-        return (new TocNode($toctreeFiles))->withOptions($options);
+        return (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
     }
 }

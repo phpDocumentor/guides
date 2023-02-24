@@ -27,7 +27,6 @@ class RawDirective extends Directive
 
     /**
      * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
      */
     public function process(
         DocumentParserContext $documentParserContext,

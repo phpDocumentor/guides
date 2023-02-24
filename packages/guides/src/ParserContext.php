@@ -24,7 +24,7 @@ class ParserContext
 
     private string $currentDirectory;
 
-    /** @var string[] */
+    /** @var array<string, string> */
     private array $links = [];
 
     /** @var string[] */
@@ -76,7 +76,7 @@ class ParserContext
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getLinks(): array
     {

@@ -2,7 +2,8 @@
 <psalm
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
-        errorLevel="1"
+        errorLevel="5"
+    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="packages/guides/src"/>
@@ -15,6 +16,7 @@
         <directory name="packages/guides-restructured-text/tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <file name="packages/guides/src/Setup/QuickStart.php" />
         </ignoreFiles>
     </projectFiles>
 

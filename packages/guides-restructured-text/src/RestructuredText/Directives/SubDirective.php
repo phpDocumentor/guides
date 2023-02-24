@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -21,10 +22,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  */
 abstract class SubDirective extends Directive
 {
-    /**
-     * @param DocumentParserContext $documentParserContext
-     * @param string[] $options
-     */
     final public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
@@ -53,13 +50,13 @@ abstract class SubDirective extends Directive
     }
 
     /**
-     * @param string[] $options
+     * @param DirectiveOption[] $options
      */
     public function processSub(
         Node   $document,
         string $variable,
         string $data,
-        array  $options
+        array $options
     ): ?Node {
         return null;
     }

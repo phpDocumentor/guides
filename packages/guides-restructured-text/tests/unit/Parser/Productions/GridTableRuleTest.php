@@ -80,6 +80,9 @@ final class GridTableRuleTest extends AbstractRuleTest
     /**
      * First 2 simple table cases are broken, headers are not detected correctly?
      *
+     * @param non-empty-list<TableRow> $rows
+     * @param non-empty-list<TableRow> $headers
+     *
      * @dataProvider prettyTableBasicsProvider
      * @dataProvider gridTableWithColSpanProvider
      * @dataProvider gridTableWithRowSpanProvider
