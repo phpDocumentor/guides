@@ -19,7 +19,7 @@
     "require": {
         "php": ">=7.2.5||^8.0",
         "doctrine/event-manager": "^1.1",
-        "doctrine/lexer": "^1.2",
+        "doctrine/lexer": "^2.1",
         "webmozart/assert": "^1.11"
     }
 }
