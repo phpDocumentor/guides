@@ -42,14 +42,14 @@ final class SpanLexer extends AbstractLexer
     {
         return [
             '[a-z0-9-]+_{2}', //Inline href.
-            '[a-z0-9-]+_{1}(?=[\s\.+])', //Inline href.
+            '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
+            '`__',
             '`_',
             '<',
             '>',
             '\\\\_', // Escaping hell... needs escaped slash in regex, but also in php.
             '_`',
             '`',
-            '`__',
             '_{2}',
             ':',
             '#',
@@ -86,11 +86,11 @@ final class SpanLexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        if (preg_match('/[a-z0-9-]+_{2}/', $value)) {
+        if (preg_match('/[a-z0-9-]+_{2}/i', $value)) {
             return self::ANONYMOUSE_REFERENCE;
         }
 
-        if (preg_match('/[a-z0-9-]+_{1}/', $value)) {
+        if (preg_match('/[a-z0-9-]+_{1}/i', $value)) {
             return self::NAMED_REFERENCE;
         }
 

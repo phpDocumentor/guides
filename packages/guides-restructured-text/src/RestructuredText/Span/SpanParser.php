@@ -95,16 +95,7 @@ class SpanParser
         $link = str_replace("\n", ' ', $link);
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
-        $id = $this->generateId();
-        $this->addToken(
-            SpanToken::TYPE_LINK,
-            $id,
-            [
-                'type' => SpanToken::TYPE_LINK,
-                'link' => $link,
-                'url' => $url ?? '',
-            ]
-        );
+        $id = $this->createOneOffLink($link, $url);
 
         if ($url !== null) {
             $parserContext->setLink($link, $url);
@@ -378,7 +369,8 @@ class SpanParser
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);
-
+                case SpanLexer::PHRASE_ANONYMOUS_END:
+                    return $this->createOneOffLink($text, $url);
                 case SpanLexer::EMBEDED_URL_START:
                     $url = $this->parseEmbeddedUrl();
                     if ($url === null) {
@@ -435,6 +427,10 @@ class SpanParser
 
             $this->lexer->moveNext();
         }
+
+        $this->rollback($startPosition);
+
+        return null;
     }
 
     private function rollback(int $position): void
@@ -467,5 +463,26 @@ class SpanParser
         }
 
         return $anchor;
+    }
+
+    private function createOneOffLink(string $link, ?string $url): string
+    {
+        // the link may have a new line in it, so we need to strip it
+        // before setting the link and adding a token to be replaced
+        $link = str_replace("\n", ' ', $link);
+        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
+
+        $id = $this->generateId();
+        $this->addToken(
+            SpanToken::TYPE_LINK,
+            $id,
+            [
+                'type' => SpanToken::TYPE_LINK,
+                'link' => $link,
+                'url' => $url ?? '',
+            ]
+        );
+
+        return $id;
     }
 }

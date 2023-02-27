@@ -94,7 +94,8 @@ final class SpanParserTest extends TestCase
         string $input,
         string $referenceId,
         string $text,
-        string $url = ''
+        string $url = '',
+        bool $anonymous = false
     ): void {
         $result = $this->spanProcessor->parse($input, $this->parserContext->reveal());
         $token = current($result->getTokens());
@@ -115,6 +116,10 @@ final class SpanParserTest extends TestCase
             return;
         }
 
+        if ($anonymous === true) {
+            return;
+        }
+
         $this->parserContext->setLink($text, $url)->shouldHaveBeenCalledOnce();
     }
 
@@ -125,6 +130,11 @@ final class SpanParserTest extends TestCase
             [
                 'This text is an example of link_.',
                 '#This text is an example of [a-z0-9]{40}\\.#',
+                'link',
+            ],
+            [
+                'This text is an example of link_',
+                '#This text is an example of [a-z0-9]{40}#',
                 'link',
             ],
             [
@@ -164,6 +174,13 @@ TEXT
                 '__call()',
                 'https://www.php.net/language.oop5.overloading#object.call',
             ],
+            [
+                '(`RFC-7807 <https://tools.ietf.org/html/rfc7807>`__).',
+                '#\\([a-z0-9]{40}\\)\\.#',
+                'RFC-7807',
+                'https://tools.ietf.org/html/rfc7807',
+                true
+            ]
         ];
     }
 
