@@ -11,6 +11,7 @@ use function array_column;
 use function array_flip;
 use function preg_match;
 
+/** @extends AbstractLexer<int, string> */
 final class SpanLexer extends AbstractLexer
 {
     public const WORD = 1;
@@ -35,21 +36,21 @@ final class SpanLexer extends AbstractLexer
      *
      * @var array<int, int>
      */
-    private ?array $tokenPositions = null;
+    private array $tokenPositions = [];
 
     /** @return string[] */
     protected function getCatchablePatterns()
     {
         return [
             '[a-z0-9-]+_{2}', //Inline href.
-            '[a-z0-9-]+_{1}(?=[\s\.+])', //Inline href.
+            '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
+            '`__',
             '`_',
             '<',
             '>',
             '\\\\_', // Escaping hell... needs escaped slash in regex, but also in php.
             '_`',
             '`',
-            '`__',
             '_{2}',
             ':',
             '#',
@@ -70,6 +71,7 @@ final class SpanLexer extends AbstractLexer
         $class = new ReflectionClass(AbstractLexer::class);
         $property = $class->getProperty('tokens');
         $property->setAccessible(true);
+        /** @var array<int, string> $tokens */
         $tokens = $property->getValue($this);
 
         $this->tokenPositions = array_flip(array_column($tokens, 'position'));
@@ -86,11 +88,11 @@ final class SpanLexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        if (preg_match('/[a-z0-9-]+_{2}/', $value)) {
+        if (preg_match('/[a-z0-9-]+_{2}/i', $value)) {
             return self::ANONYMOUSE_REFERENCE;
         }
 
-        if (preg_match('/[a-z0-9-]+_{1}/', $value)) {
+        if (preg_match('/[a-z0-9-]+_{1}/i', $value)) {
             return self::NAMED_REFERENCE;
         }
 

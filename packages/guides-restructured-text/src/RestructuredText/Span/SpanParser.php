@@ -95,16 +95,7 @@ class SpanParser
         $link = str_replace("\n", ' ', $link);
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
-        $id = $this->generateId();
-        $this->addToken(
-            SpanToken::TYPE_LINK,
-            $id,
-            [
-                'type' => SpanToken::TYPE_LINK,
-                'link' => $link,
-                'url' => $url ?? '',
-            ]
-        );
+        $id = $this->createOneOffLink($link, $url);
 
         if ($url !== null) {
             $parserContext->setLink($link, $url);
@@ -217,17 +208,17 @@ class SpanParser
     {
         $result = '';
         while ($this->lexer->token !== null) {
-            switch ($this->lexer->token['type'] ?? '') {
+            switch ($this->lexer->token->type ?? '') {
                 case SpanLexer::NAMED_REFERENCE:
                     $result .= $this->createNamedReference(
                         $parserContext,
-                        trim((string)$this->lexer->token['value'], '_')
+                        trim((string)$this->lexer->token->value, '_')
                     );
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
                     $result .= $this->createAnonymousReference(
                         $parserContext,
-                        trim((string)$this->lexer->token['value'], '_')
+                        trim((string)$this->lexer->token->value, '_')
                     );
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
@@ -245,7 +236,7 @@ class SpanParser
                     $result .= $this->createNamedReference($parserContext, $result);
                     break;
                 default:
-                    $result .= $this->lexer->token['value'];
+                    $result .= $this->lexer->token->value;
                     break;
             }
 
@@ -261,12 +252,12 @@ class SpanParser
         $this->lexer->moveNext();
         while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
-            switch ($token['type']) {
+            switch ($token->type) {
                 case SpanLexer::BACKTICK:
                     return $this->createNamedReference($parserContext, $text);
 
                 default:
-                    $text .= $token['value'];
+                    $text .= $token->value;
             }
 
             $this->lexer->moveNext();
@@ -281,7 +272,7 @@ class SpanParser
             return ':';
         }
 
-        $startPosition = $this->lexer->token['position'];
+        $startPosition = $this->lexer->token->position;
         $domain = null;
         $role = null;
         $anchor = null;
@@ -293,8 +284,8 @@ class SpanParser
 
         while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
-            switch ($token['type']) {
-                case $token['type'] === SpanLexer::COLON && $inText === false:
+            switch ($token->type) {
+                case $token->type === SpanLexer::COLON && $inText === false:
                     if ($role !== null) {
                         $domain = $role;
                         $role = $part;
@@ -338,7 +329,7 @@ class SpanParser
                     $inText = true;
                     break;
                 default:
-                    $part .= $token['value'];
+                    $part .= $token->value;
             }
 
             if ($this->lexer->moveNext() === false && $this->lexer->token === null) {
@@ -357,14 +348,14 @@ class SpanParser
             return '`';
         }
 
-        $startPosition = $this->lexer->token['position'];
+        $startPosition = $this->lexer->token->position;
         $text = '';
         $url = null;
         $this->lexer->moveNext();
 
         while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
-            switch ($token['type']) {
+            switch ($token->type) {
                 case SpanLexer::BACKTICK:
                     if (trim($text) === '') {
                         $this->lexer->resetPosition($startPosition);
@@ -378,7 +369,8 @@ class SpanParser
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);
-
+                case SpanLexer::PHRASE_ANONYMOUS_END:
+                    return $this->createOneOffLink($text, $url);
                 case SpanLexer::EMBEDED_URL_START:
                     $url = $this->parseEmbeddedUrl();
                     if ($url === null) {
@@ -387,7 +379,7 @@ class SpanParser
 
                     break;
                 default:
-                    $text .= $token['value'];
+                    $text .= $token->value;
                     break;
             }
 
@@ -409,17 +401,12 @@ class SpanParser
             return null;
         }
 
-        $startPosition = $this->lexer->token['position'];
+        $startPosition = $this->lexer->token->position;
         $text = '';
-        $this->lexer->moveNext();
 
-        while (true) {
+        while ($this->lexer->moveNext()) {
             $token = $this->lexer->token;
-            if ($token === null) {
-                break;
-            }
-
-            switch ($token['type']) {
+            switch ($token->type) {
                 case SpanLexer::NAMED_REFERENCE_END:
                     //We did not find the expected SpanLexer::EMBEDED_URL_END
                     $this->rollback($startPosition);
@@ -430,11 +417,13 @@ class SpanParser
                     return $text;
 
                 default:
-                    $text .= $token['value'];
+                    $text .= $token->value;
             }
-
-            $this->lexer->moveNext();
         }
+
+        $this->rollback($startPosition);
+
+        return null;
     }
 
     private function rollback(int $position): void
@@ -453,19 +442,40 @@ class SpanParser
                 break;
             }
 
-            switch ($token['type']) {
+            switch ($token->type) {
                 case SpanLexer::BACKTICK:
                 case SpanLexer::EMBEDED_URL_END:
-                    $this->lexer->resetPosition($token['position']);
+                    $this->lexer->resetPosition($token->position);
 
                     return $anchor;
 
                 default:
-                    $anchor .= $token['value'];
+                    $anchor .= $token->value;
                     break;
             }
         }
 
         return $anchor;
+    }
+
+    private function createOneOffLink(string $link, ?string $url): string
+    {
+        // the link may have a new line in it, so we need to strip it
+        // before setting the link and adding a token to be replaced
+        $link = str_replace("\n", ' ', $link);
+        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
+
+        $id = $this->generateId();
+        $this->addToken(
+            SpanToken::TYPE_LINK,
+            $id,
+            [
+                'type' => SpanToken::TYPE_LINK,
+                'link' => $link,
+                'url' => $url ?? '',
+            ]
+        );
+
+        return $id;
     }
 }
