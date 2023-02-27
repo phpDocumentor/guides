@@ -11,6 +11,7 @@ use function array_column;
 use function array_flip;
 use function preg_match;
 
+/** @extends AbstractLexer<int, string> */
 final class SpanLexer extends AbstractLexer
 {
     public const WORD = 1;
@@ -35,7 +36,7 @@ final class SpanLexer extends AbstractLexer
      *
      * @var array<int, int>
      */
-    private ?array $tokenPositions = null;
+    private array $tokenPositions = [];
 
     /** @return string[] */
     protected function getCatchablePatterns()
@@ -70,6 +71,7 @@ final class SpanLexer extends AbstractLexer
         $class = new ReflectionClass(AbstractLexer::class);
         $property = $class->getProperty('tokens');
         $property->setAccessible(true);
+        /** @var array<int, string> $tokens */
         $tokens = $property->getValue($this);
 
         $this->tokenPositions = array_flip(array_column($tokens, 'position'));

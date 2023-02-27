@@ -123,7 +123,7 @@ final class SpanParserTest extends TestCase
         $this->parserContext->setLink($text, $url)->shouldHaveBeenCalledOnce();
     }
 
-    /** @return string[][] */
+    /** @return array<int, array<int, bool|string>> */
     public function namedHyperlinkReferenceProvider(): array
     {
         return [
