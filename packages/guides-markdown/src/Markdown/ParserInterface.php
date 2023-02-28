@@ -10,7 +10,7 @@ use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser as GuidesParser;
 use phpDocumentor\Guides\Nodes\Node;
 
-/** @template TValue as Node */
+/** @template-covariant TValue as Node */
 interface ParserInterface
 {
     /** @return TValue */

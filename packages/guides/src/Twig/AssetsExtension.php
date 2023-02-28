@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
+use League\Flysystem\Exception;
 use League\Flysystem\FilesystemException;
 use LogicException;
 use phpDocumentor\Guides\Nodes\Node;
@@ -146,9 +147,7 @@ final class AssetsExtension extends AbstractExtension
             if ($result === false) {
                 $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
             }
-        } catch (LogicException $e) {
-            $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
-        } catch (FilesystemException $e) {
+        } catch (LogicException|Exception $e) {
             $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
         }
 

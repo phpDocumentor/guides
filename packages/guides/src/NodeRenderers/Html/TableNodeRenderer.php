@@ -35,8 +35,6 @@ class TableNodeRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $environment): string
     {
-        Assert::isInstanceOf($node, TableNode::class);
-
         $headers = $node->getHeaders();
         $rows = $node->getData();
 

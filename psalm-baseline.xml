@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.7.6@ae4ec68e00e4880e3f00b1edd2da891236d749ab">
-  <file src="packages/guides-markdown/src/Markdown/MarkupLanguageParser.php">
-    <InvalidPropertyAssignmentValue>
-      <code>[
-            new Paragraph(),
-            new ListBlock(),
-            new ThematicBreak(),
-        ]</code>
-    </InvalidPropertyAssignmentValue>
-  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/DocumentRule.php">
     <MoreSpecificImplementedParamType>
       <code>$on</code>
@@ -35,13 +26,6 @@
       <code>$on</code>
     </MoreSpecificImplementedParamType>
   </file>
-  <file src="packages/guides/src/FileCollector.php">
-    <UndefinedMethod>
-      <code>getDepends</code>
-      <code>getParent</code>
-      <code>getParent</code>
-    </UndefinedMethod>
-  </file>
   <file src="packages/guides/src/Nodes/CompoundNode.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$result->value]]></code>
@@ -52,30 +36,10 @@
       <code><![CDATA[[
             new
             /** @implements NodeTransformer<TocNode> */
-            class implements NodeTransformer {
-                public function enterNode(Node $node): Node
-                {
-                    return $node;
-                }
-
-                public function leaveNode(Node $node): ?Node
-                {
-                    return null;
-                }
-
-                public function supports(Node $node): bool
-                {
-                    return $node instanceof TocNode;
-                }
-            }
-        ]]]></code>
-      <code><![CDATA[[
-            new
-            /** @implements NodeTransformer<TocNode> */
             class($replacement) implements NodeTransformer {
-                private Node $replacement;
+                private TocNode $replacement;
 
-                public function __construct(Node $replacement)
+                public function __construct(TocNode $replacement)
                 {
                     $this->replacement = $replacement;
                 }
@@ -94,7 +58,7 @@
                 {
                     return $node instanceof TocNode;
                 }
-        }]]]></code>
+            }]]]></code>
     </InvalidArgument>
   </file>
 </files>

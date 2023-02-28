@@ -22,7 +22,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $traverser = new DocumentNodeTraverser([
             new
-            /** @implements NodeTransformer<TocNode> */
+            /** @implements NodeTransformer<Node> */
             class implements NodeTransformer {
                 public function enterNode(Node $node): Node
                 {
@@ -62,9 +62,9 @@ final class DocumentNodeTraverserTest extends TestCase
             new
             /** @implements NodeTransformer<TocNode> */
             class($replacement) implements NodeTransformer {
-                private Node $replacement;
+                private TocNode $replacement;
 
-                public function __construct(Node $replacement)
+                public function __construct(TocNode $replacement)
                 {
                     $this->replacement = $replacement;
                 }

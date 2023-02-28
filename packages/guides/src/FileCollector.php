@@ -87,39 +87,39 @@ class FileCollector
             return true;
         }
 
-        // Look to the file's dependencies to know if you need to parse it or not
-        $dependencies = $entry !== null ? $entry->getDepends() : [];
-
-        if ($entry !== null && $entry->getParent() !== null) {
-            $dependencies[] = $entry->getParent();
-        }
-
-        foreach ($dependencies as $dependency) {
-            /*
-             * The dependency check is NOT recursive on purpose.
-             * If fileA has a link to fileB that uses its "headline",
-             * for example, then fileA is "dependent" on fileB. If
-             * fileB changes, it means that its MetaEntry needs to
-             * be updated. And because fileA gets the headline from
-             * the MetaEntry, it means that fileA must also be re-parsed.
-             * However, if fileB depends on fileC and file C only is
-             * updated, fileB *does* need to be re-parsed, but fileA
-             * does not, because the MetaEntry for fileB IS still
-             * "fresh" - fileB did not actually change, so any metadata
-             * about headlines, etc, is still fresh. Therefore, fileA
-             * does not need to be parsed.
-             */
-
-            // dependency no longer exists? We should re-parse this file
-            if (!isset($this->fileInfos[$dependency])) {
-                return true;
-            }
-
-            // finally, we need to recursively ask if this file needs parsing
-            if ($this->hasFileBeenUpdated($dependency)) {
-                return true;
-            }
-        }
+//        // Look to the file's dependencies to know if you need to parse it or not
+//        $dependencies = $entry !== null ? $entry->getDepends() : [];
+//
+//        if ($entry !== null && $entry->getParent() !== null) {
+//            $dependencies[] = $entry->getParent();
+//        }
+//
+//        foreach ($dependencies as $dependency) {
+//            /*
+//             * The dependency check is NOT recursive on purpose.
+//             * If fileA has a link to fileB that uses its "headline",
+//             * for example, then fileA is "dependent" on fileB. If
+//             * fileB changes, it means that its MetaEntry needs to
+//             * be updated. And because fileA gets the headline from
+//             * the MetaEntry, it means that fileA must also be re-parsed.
+//             * However, if fileB depends on fileC and file C only is
+//             * updated, fileB *does* need to be re-parsed, but fileA
+//             * does not, because the MetaEntry for fileB IS still
+//             * "fresh" - fileB did not actually change, so any metadata
+//             * about headlines, etc, is still fresh. Therefore, fileA
+//             * does not need to be parsed.
+//             */
+//
+//            // dependency no longer exists? We should re-parse this file
+//            if (!isset($this->fileInfos[$dependency])) {
+//                return true;
+//            }
+//
+//            // finally, we need to recursively ask if this file needs parsing
+//            if ($this->hasFileBeenUpdated($dependency)) {
+//                return true;
+//            }
+//        }
 
         // Meta is fresh and no dependencies need parsing
         return false;
