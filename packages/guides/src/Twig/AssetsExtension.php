@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
+use League\Flysystem\FilesystemException;
+use LogicException;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
@@ -125,22 +127,29 @@ final class AssetsExtension extends AbstractExtension
             $canonicalUrl
         );
 
-        if ($environment->getOrigin()->has($sourcePath) === false) {
-            $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
+        try {
+            if ($environment->getOrigin()->has($sourcePath) === false) {
+                $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
 
-            return $outputPath;
-        }
+                return $outputPath;
+            }
 
-        $fileContents = $environment->getOrigin()->read($sourcePath);
-        if ($fileContents === false) {
-            $this->logger->error(sprintf('Could not read image file "%s"', $sourcePath));
 
-            return $outputPath;
-        }
+            $fileContents = $environment->getOrigin()->read($sourcePath);
+            if ($fileContents === false) {
+                $this->logger->error(sprintf('Could not read image file "%s"', $sourcePath));
 
-        $result = $environment->getDestination()->put($outputPath, $fileContents);
-        if ($result === false) {
-            $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
+                return $outputPath;
+            }
+
+            $result = $environment->getDestination()->put($outputPath, $fileContents);
+            if ($result === false) {
+                $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
+            }
+        } catch (LogicException $e) {
+            $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
+        } catch (FilesystemException $e) {
+            $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
         }
 
         return $outputPath;
