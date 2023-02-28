@@ -86,4 +86,10 @@ final class UrlGeneratorTest extends TestCase
             ],
         ];
     }
+
+    public function testUrlGenerationOfInvalidUrlReturnsInput(): void
+    {
+        $urlGenerator = new UrlGenerator();
+        self::assertSame('tcp://hostname:port', $urlGenerator->generateUrl('tcp://hostname:port'));
+    }
 }
