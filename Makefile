@@ -1,3 +1,5 @@
+PHP_BIN = docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4
+
 .PHONY: help
 help: ## Displays this list of targets with descriptions
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
@@ -11,25 +13,31 @@ fix-code-style:
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest phpcbf
 
 .PHONY: static-code-analysis
-static-code-analysis: vendor ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpstan --configuration=phpstan.neon
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/psalm
+static-code-analysis: vendor phpstan psalm ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
+
+.PHONY: phpstan
+phpstan:
+	$(PHP_BIN) -d memory_limit=1024M vendor/bin/phpstan --configuration=phpstan.neon
+
+.PHONY: psalm
+psalm:
+	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
 test: test-unit test-functional ## Runs all test suites with phpunit/phpunit
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit
+	$(PHP_BIN) vendor/bin/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=unit
+	$(PHP_BIN) vendor/bin/phpunit --testsuite=unit
 
 .PHONY: test-functional
 test-functional: ## Runs unit tests with phpunit/phpunit
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/phpunit --testsuite=functional
+	$(PHP_BIN) vendor/bin/phpunit --testsuite=functional
 
 .PHONY: dependency-analysis
 dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json
+	$(PHP_BIN) .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json
 
 vendor: composer.json composer.lock
 	composer validate --no-check-publish
@@ -37,7 +45,7 @@ vendor: composer.json composer.lock
 
 .PHONY: rector
 rector: ## Refactor code using rector
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4 vendor/bin/rector process packages
+	$(PHP_BIN) vendor/bin/rector process packages
 
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style static-code-analysis
