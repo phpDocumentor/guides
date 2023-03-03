@@ -89,7 +89,7 @@ final class TransitionRule implements Rule
 
     public function isSpecialLine(string $line): ?string
     {
-        if (strlen($line) < 2) {
+        if (strlen($line) < 4) {
             return null;
         }
 

@@ -57,6 +57,7 @@ final class ParagraphRule implements Rule
 
         while ($documentIterator->getNextLine() !== null
             && $this->isWhiteline($documentIterator->getNextLine()) === false
+            && trim($documentIterator->getNextLine() ?? '') !== '::'
         ) {
             $documentIterator->next();
             $buffer->push($documentIterator->current());

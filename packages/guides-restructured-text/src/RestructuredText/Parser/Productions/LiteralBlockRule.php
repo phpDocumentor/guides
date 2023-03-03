@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
+use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
@@ -31,20 +32,19 @@ final class LiteralBlockRule implements Rule
 {
     public function applies(DocumentParserContext $documentParser): bool
     {
-        $nextIndentedBlockShouldBeALiteralBlock = $documentParser->nextIndentedBlockShouldBeALiteralBlock;
+        $iterator = $documentParser->getDocumentIterator();
+        if ($iterator->current() !== '::') {
+            return false;
+        }
 
-        // always reset the `nextIndentedBlockShouldBeALiteralBlock` state; because if this isn't a block line, you
-        // do not want the indented block somewhere else in the document to suddenly become a code block
-        $documentParser->nextIndentedBlockShouldBeALiteralBlock = false;
-
-        $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->current());
-
-        return $isBlockLine && $nextIndentedBlockShouldBeALiteralBlock;
+        return $this->isBlockLine($iterator->peek());
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
+        //Skip the opening '::'
+        $documentIterator->next();
 
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
@@ -60,7 +60,7 @@ final class LiteralBlockRule implements Rule
         }
 
         //TODO this is a bug, we need LiteralBlockNode here
-        return new CodeNode($lines);
+        return new LiteralBlockNode($lines);
     }
 
     private function isBlockLine(?string $line): bool
