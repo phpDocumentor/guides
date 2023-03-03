@@ -25,7 +25,6 @@ psalm:
 
 .PHONY: test
 test: test-unit test-functional ## Runs all test suites with phpunit/phpunit
-	$(PHP_BIN) vendor/bin/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
