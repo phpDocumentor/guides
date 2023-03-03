@@ -1,0 +1,54 @@
+{
+   "std:doc": {
+      "Index": [
+         "<project>",
+         "<version>",
+         "Index.html",
+         "<project>"
+      ],
+      "Sitemap": [
+         "<project>",
+         "<version>",
+         "Sitemap.html",
+         "-"
+      ],
+      "genindex": [
+         "<project>",
+         "<version>",
+         "genindex.html",
+         "Index"
+      ]
+   },
+   "std:label": {
+      "modindex": [
+         "<project>",
+         "<version>",
+         "py-modindex.html",
+         "Module Index"
+      ],
+      "php-modindex": [
+         "<project>",
+         "<version>",
+         "php-modindex.html",
+         "PHP Namespace Index"
+      ],
+      "php-objectsindex": [
+         "<project>",
+         "<version>",
+         "php-objectsindex.html",
+         "PHP Objects Index"
+      ],
+      "py-modindex": [
+         "<project>",
+         "<version>",
+         "py-modindex.html",
+         "Python Module Index"
+      ],
+      "search": [
+         "<project>",
+         "<version>",
+         "search.html",
+         "Search Page"
+      ]
+   }
+}
