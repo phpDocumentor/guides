@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Intersphinx;
 use JsonException;
 use RuntimeException;
 
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use function file_get_contents;
 use function is_array;
 use function json_decode;
@@ -15,14 +16,21 @@ use const JSON_THROW_ON_ERROR;
 
 class JsonLoader
 {
+    private HttpClientInterface $client;
+
+    public function __construct(HttpClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
     /** @return array<mixed> */
     public function loadJsonFromUrl(string $url): array
     {
-        $jsonString = file_get_contents($url);
-        if ($jsonString === false) {
-            throw new RuntimeException('URL ' . $url . ' not found. ', 1671398986);
-        }
-
+        $response = $this->client->request(
+            'GET',
+            $url
+        );
+        $jsonString = implode("\n", $response->toArray());
         return $this->loadJsonFromString($jsonString, $url);
     }
 

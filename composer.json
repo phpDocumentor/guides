@@ -46,7 +46,8 @@
         "doctrine/lexer": "^2.1",
         "league/commonmark": "^2.3",
         "symfony/process": "^5.4",
-        "symfony/http-client": "^5.4.21"
+        "symfony/http-client": "^5.4.21",
+        "symfony/contracts": "^2.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6",

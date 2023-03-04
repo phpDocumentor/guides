@@ -11,12 +11,12 @@ final class InventoryLoader
     private string $pathToJson;
 
     public function __construct(
-        ?InventoryRepository $inventoryRepository = null,
-        ?JsonLoader $jsonLoader = null,
+        InventoryRepository $inventoryRepository,
+        JsonLoader $jsonLoader,
         string $pathToJson = 'objects.inv.json'
     ) {
-        $this->inventoryRepository = $inventoryRepository ?? (new InventoryRepository([]));
-        $this->jsonLoader          = $jsonLoader ?? (new JsonLoader());
+        $this->inventoryRepository = $inventoryRepository;
+        $this->jsonLoader          = $jsonLoader;
         $this->pathToJson          = $pathToJson;
     }
 

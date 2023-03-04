@@ -19,14 +19,17 @@ final class InventoryLoaderTest extends TestCase
     private InventoryLoader $inventoryLoader;
     /** @var JsonLoader&MockObject */
     private $jsonLoader;
+    /** @var InventoryRepository */
+    private $inventoryRepository;
     /** @var array<string, mixed> */
     private array $json;
 
     protected function setUp(): void
     {
-        $this->jsonLoader      = $this->createMock(JsonLoader::class);
-        $this->inventoryLoader = new InventoryLoader();
-        $jsonString            = file_get_contents(__DIR__ . '/input/objects.inv.json');
+        $this->jsonLoader = $this->createMock(JsonLoader::class);
+        $this->inventoryRepository = new InventoryRepository([]);
+        $this->inventoryLoader = new InventoryLoader($this->inventoryRepository, $this->jsonLoader);
+        $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array)json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $this->inventoryLoader->loadInventoryFromJson('somekey', 'https://example.com/', $this->json);
@@ -40,10 +43,9 @@ final class InventoryLoaderTest extends TestCase
 
     public function testLoadInventoryFromUrl(): void
     {
-        $inventoryLoader = new InventoryLoader(null, $this->jsonLoader);
         $this->jsonLoader->expects(self::atLeastOnce())->method('loadJsonFromUrl')->willReturn($this->json);
-        $inventoryLoader->loadInventoryFromUrl('somekey', 'https://example.com/');
-        $inventory = $inventoryLoader->getInventoryRepository()->getInventory('somekey');
+        $this->inventoryLoader->loadInventoryFromUrl('somekey', 'https://example.com/');
+        $inventory = $this->inventoryLoader->getInventoryRepository()->getInventory('somekey');
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
@@ -55,7 +57,7 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryKeyIsCaseInsensitive(): void
     {
-        $inventoryLoaderWithCamelCaseKey = new InventoryLoader();
+        $inventoryLoaderWithCamelCaseKey = new InventoryLoader($this->inventoryRepository, $this->jsonLoader);
         $inventoryLoaderWithCamelCaseKey->loadInventoryFromJson('CamelCaseKey', 'https://example.com/', $this->json);
         $inventory = $inventoryLoaderWithCamelCaseKey->getInventoryRepository()->getInventory('camelcasekey');
         self::assertGreaterThan(1, count($inventory->getGroups()));
