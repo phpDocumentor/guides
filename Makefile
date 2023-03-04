@@ -40,7 +40,7 @@ dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-
 
 vendor: composer.json composer.lock
 	composer validate --no-check-publish
-	composer install --no-interaction --no-progress
+	composer install --no-interaction --no-progress  --ignore-platform-reqs
 
 .PHONY: rector
 rector: ## Refactor code using rector
