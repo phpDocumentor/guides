@@ -87,9 +87,9 @@ final class TransitionRule implements Rule
         return new SeparatorNode(1);
     }
 
-    public function isSpecialLine(string $line): ?string
+    public function isSpecialLine(string $line, int $minimumLength = 2): ?string
     {
-        if (strlen($line) < 2) {
+        if (strlen($line) < $minimumLength) {
             return null;
         }
 
@@ -110,7 +110,8 @@ final class TransitionRule implements Rule
 
     private function currentLineIsASeparator(string $line, ?string $nextLine): ?string
     {
-        $letter = $this->isSpecialLine($line);
+        // Separators must have a minimum length of 3, so they don't apply to `::` (code block) or `..` comment
+        $letter = $this->isSpecialLine($line, 3);
         if ($nextLine !== null && $letter && $this->isWhiteLine($nextLine)) {
             return $letter;
         }
