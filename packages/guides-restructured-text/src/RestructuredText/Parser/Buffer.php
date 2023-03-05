@@ -84,4 +84,13 @@ class Buffer
     {
         $this->lines = [];
     }
+
+    public function unIndent(int $indentation): void
+    {
+        array_walk($this->lines, function (&$value) use ($indentation) {
+            if (strlen($value) >= $indentation) {
+                $value = substr($value, $indentation);
+            }
+        });
+    }
 }

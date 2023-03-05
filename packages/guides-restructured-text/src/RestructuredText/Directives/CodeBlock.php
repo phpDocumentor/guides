@@ -43,8 +43,8 @@ class CodeBlock extends Directive
         $node->setLanguage(trim($data));
         $this->setStartingLineNumberBasedOnOptions($options, $node);
 
-        $document = $documentParserContext->getDocument();
         if ($variable !== '') {
+            $document = $documentParserContext->getDocument();
             $document->addVariable($variable, $node);
             return null;
         }

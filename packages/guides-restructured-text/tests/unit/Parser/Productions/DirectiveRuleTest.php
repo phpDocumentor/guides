@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CodeNode;
+use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
@@ -87,6 +89,42 @@ NOWDOC
             'some very long option in multiple, very long, lines',
             array_values($node->getDirectiveOptions())[0]->getValue()
         );
+    }
+
+    /** @dataProvider codeBlockValueProvider */
+    public function testCodeBlockValue(string $input, string $expectedValue): void
+    {
+        $this->rule = new DirectiveRule([$this->directiveHandler, new CodeBlock()]);
+        $context = $this->createContext($input);
+        $node = $this->rule->apply($context);
+        self::assertInstanceOf(CodeNode::class, $node);
+        self::assertEquals($expectedValue, $node->getValue());
+    }
+
+
+    /** @return array<int, array<int, string>> */
+    public function codeBlockValueProvider(): array
+    {
+        return [
+            [
+                <<<'INPUT'
+.. code-block::
+
+    Whitespace, newlines, blank lines, and all kinds of markup
+      (like *this* or \this) is preserved by literal blocks.
+  Lookie here, I've dropped an indentation level
+  (but not far enough)
+
+This is outside the code-block
+INPUT,
+                <<<'EXPECTED'
+  Whitespace, newlines, blank lines, and all kinds of markup
+    (like *this* or \this) is preserved by literal blocks.
+Lookie here, I've dropped an indentation level
+(but not far enough)
+EXPECTED
+                ],
+        ];
     }
 
 
