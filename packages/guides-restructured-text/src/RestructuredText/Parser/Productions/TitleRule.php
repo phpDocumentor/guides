@@ -142,7 +142,8 @@ class TitleRule implements Rule
     private function currentLineIsAnOverline(string $line, ?string $nextLine): string
     {
         $letter = $this->isSpecialLine($line);
-        if ($nextLine !== null && $letter && $this->isTextLine($nextLine)) {
+        if ($nextLine !== null && $letter && $this->isTextLine($nextLine) &&
+            (strlen($line) > 2 || strlen($line) >= strlen($nextLine))) {
             return $letter;
         }
 
