@@ -48,4 +48,3 @@ rector: ## Refactor code using rector
 
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style static-code-analysis
-
