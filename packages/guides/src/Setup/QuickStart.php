@@ -33,6 +33,7 @@ use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\References\Resolver\RefResolver;
 use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
 use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\Renderer\OutputFormatRenderer;
 use phpDocumentor\Guides\Renderer\TemplateRenderer;
@@ -92,6 +93,7 @@ final class QuickStart
         $nodeRenderers[] = new TableNodeRenderer($renderer);
         $nodeRenderers[] = new AdmonitionNodeRenderer($renderer);
         $nodeRenderers[] = new ContainerNodeRenderer($renderer);
+        $nodeRenderers[] = new CollectionNodeRenderer($renderer);
         $nodeRenderers[] = new SidebarNodeRenderer($renderer);
         $nodeRenderers[] = new TopicNodeRenderer($renderer);
         $nodeRenderers[] = new TocNodeRenderer($renderer);

@@ -7,6 +7,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_map;
@@ -34,11 +36,12 @@ class ClassDirective extends SubDirective
 
         $document->setClasses($normalizedClasses);
 
-        if ($document instanceof DocumentNode) {
-            $this->setNodesClasses($document->getNodes(), $classes);
+        if (!$document instanceof DocumentNode) {
+            // do not handle empty class directives for now
+            return null;
         }
-
-        return null;
+        $this->setNodesClasses($document->getNodes(), $classes);
+        return new CollectionNode($document->getNodes());
     }
 
     /**
