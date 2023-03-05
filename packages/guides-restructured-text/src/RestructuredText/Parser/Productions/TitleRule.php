@@ -109,7 +109,7 @@ class TitleRule implements Rule
         $context = $documentParserContext->getContext();
 
         $letter = $overlineLetter ?: $underlineLetter;
-        $level = $documentParserContext->getLevel($letter);
+        $level = $documentParserContext->getLevel($overlineLetter, $underlineLetter);
 
         return new TitleNode(
             $this->spanParser->parse($title, $context),
