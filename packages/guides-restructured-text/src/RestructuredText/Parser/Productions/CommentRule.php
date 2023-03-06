@@ -58,6 +58,6 @@ final class CommentRule implements Rule
 
     private function isComment(string $line): bool
     {
-        return preg_match('/^\.\. (.*)$/mUsi', $line) > 0;
+        return preg_match('/^\.\.( (.*))?$/mUsi', $line) > 0;
     }
 }
