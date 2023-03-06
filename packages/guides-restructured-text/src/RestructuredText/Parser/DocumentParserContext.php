@@ -83,8 +83,9 @@ class DocumentParserContext
         return $this->documentIterator;
     }
 
-    public function getLevel(string $letter): int
+    public function getLevel(string $overlineLetter, string $underlineLetter): int
     {
+        $letter = $overlineLetter.':'.$underlineLetter;
         foreach ($this->titleLetters as $level => $titleLetter) {
             if ($letter === $titleLetter) {
                 return $level;
