@@ -17,11 +17,12 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use function in_array;
-use function strlen;
 use function trim;
 
 /**
@@ -30,41 +31,7 @@ use function trim;
  */
 class TitleRule implements Rule
 {
-    private const HEADER_LETTERS = [
-        '!',
-        '"',
-        '#',
-        '$',
-        '%',
-        '&',
-        '\'',
-        '(',
-        ')',
-        '*',
-        '+',
-        ',',
-        '-',
-        '.',
-        '/',
-        ':',
-        ';',
-        '<',
-        '=',
-        '>',
-        '?',
-        '@',
-        '[',
-        '\\',
-        ']',
-        '^',
-        '_',
-        '`',
-        '{',
-        '|',
-        '}',
-        '~',
-    ];
-
+    private const TITLE_LENGTH_MIN = 2;
     private SpanParser $spanParser;
 
     public function __construct(SpanParser $spanParser)
@@ -118,51 +85,26 @@ class TitleRule implements Rule
         );
     }
 
-    public function isSpecialLine(string $line): ?string
-    {
-        if (strlen($line) < 2) {
-            return null;
-        }
-
-        $letter = $line[0];
-
-        if (!in_array($letter, self::HEADER_LETTERS, true)) {
-            return null;
-        }
-
-        for ($i = 1; $i < strlen($line); $i++) {
-            if ($line[$i] !== $letter) {
-                return null;
-            }
-        }
-
-        return $letter;
-    }
-
     private function currentLineIsAnOverline(string $line, ?string $nextLine): string
     {
-        $letter = $this->isSpecialLine($line);
-        if ($nextLine !== null && $letter && $this->isTextLine($nextLine) &&
-            (strlen($line) > 2 || strlen($line) >= strlen($nextLine))) {
-            return $letter;
+        $letter = LineChecker::isSpecialLine($line, self::TITLE_LENGTH_MIN);
+        if (LinesIterator::isNullOrEmptyLine($nextLine)) {
+            return '';
+        }
+        if (mb_strlen($line) < min(mb_strlen($nextLine), 4)) {
+            return '';
         }
 
-        return '';
+        return $letter ?? '';
     }
 
     private function nextLineIsAnUnderline(string $line, ?string $nextLine): string
     {
-        $letter = $nextLine !== null ? $this->isSpecialLine($nextLine) : '';
+        $letter = LineChecker::isSpecialLine($nextLine??'', self::TITLE_LENGTH_MIN);
 
-        if ($letter && $this->isTextLine($line)) {
-            return $letter;
+        if (LinesIterator::isEmptyLine($line)) {
+            return '';
         }
-
-        return '';
-    }
-
-    private function isTextLine(string $line): bool
-    {
-        return trim($line) !== '';
+        return $letter ?? '';
     }
 }
