@@ -143,11 +143,34 @@ final class DirectiveRule implements Rule
         ) {
             $documentIterator->next();
             $directiveOption = $this->parseDirectiveOption($documentIterator->current());
+            $this->collectDirectiveOptionContent($documentIterator, $directiveOption);
             $directive->addOption($directiveOption);
         }
 
         if ($this->isDirectiveOption($documentIterator->current())) {
             $documentIterator->next();
+        }
+    }
+
+    /**
+     * Collects the content of multiline directive options:
+     *
+     * .. figure:: foo.jpg
+     *     :width: 100
+     *     :alt: Field options might use
+     *       more than one line
+     *
+     *     This is a foo!
+     */
+    private function collectDirectiveOptionContent(
+        LinesIterator $documentIterator,
+        DirectiveOption $directiveOption
+    ): void {
+        while (!LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine())
+            && !$this->isDirectiveOption($documentIterator->getNextLine())
+        ) {
+            $documentIterator->next();
+            $directiveOption->appendValue(' ' . trim($documentIterator->current()));
         }
     }
 
@@ -157,17 +180,25 @@ final class DirectiveRule implements Rule
             return false;
         }
 
-        if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {
+        try {
+            $this->parseDirectiveOption($line);
             return true;
+        } catch (InvalidArgumentException $e) {
+            return false;
         }
-
-        if (preg_match('/^(\s+):(.+):(\s*)$/mUsi', $line, $match) > 0) {
-            return true;
-        }
-
-        return false;
     }
 
+    /**
+     * Directive options are stored in the field-list syntax:
+     *
+     * .. figure:: foo.jpg
+     *     :width: 100
+     *     :alt: Field options might use
+     *       more than one line
+     *     :yet another option: abc
+     *     :empty option:
+     * @throws InvalidArgumentException
+     */
     private function parseDirectiveOption(string $line): DirectiveOption
     {
         if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {

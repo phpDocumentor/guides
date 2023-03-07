@@ -11,7 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * A directive is like a function you can call or apply to a block
- * Il looks like:
+ * It looks like:
  *
  * .. function:: main
  *     :arg1: value
