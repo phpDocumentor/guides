@@ -185,7 +185,7 @@ final class DirectiveRule implements Rule
     {
         $buffer = new Buffer();
         $indenting = 1;
-        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+        while ($documentIterator->isBlockLine($documentIterator->getNextLine(), $indenting)) {
             $documentIterator->next();
             $line = $documentIterator->current();
             if ($indenting === 1 && LinesIterator::isEmptyLine($line) === false) {

@@ -161,13 +161,23 @@ class LinesIterator implements Iterator
      * @param int $minIndent can be used to require a specific level of
      *                       indentation for non-blank lines (number of spaces)
      */
-    public static function isBlockLine(?string $line, int $minIndent = 1): bool
+    public function isBlockLine(?string $line, int $minIndent = 1): bool
     {
         if ($line === null) {
             return false;
         }
 
-        return trim($line) === '' || self::isIndented($line, $minIndent);
+        if (self::isEmptyLine($line) === false) {
+            return self::isIndented($line, $minIndent);
+        }
+
+        $peekPosition = $this->peek;
+
+        while (self::isEmptyLine($peek = $this->peek())) {}
+
+        $this->peek = $peekPosition;
+
+        return self::isIndented($peek, $minIndent);
     }
 
     /**

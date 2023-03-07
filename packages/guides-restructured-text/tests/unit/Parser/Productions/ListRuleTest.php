@@ -88,6 +88,7 @@ INPUT;
 
         self::assertRemainingEquals(
             <<<REST
+
 Not included
 
 REST,
@@ -141,6 +142,7 @@ REST,
         $input = <<<INPUT
 - 
   first items
+
 - 
   second item
   other line
@@ -154,6 +156,7 @@ INPUT;
 
         self::assertRemainingEquals(
             <<<REST
+
 Not included
 
 REST,

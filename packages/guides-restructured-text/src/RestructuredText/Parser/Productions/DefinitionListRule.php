@@ -56,15 +56,10 @@ final class DefinitionListRule implements Rule
     {
         $iterator = $documentParserContext->getDocumentIterator();
         $definitionListItems = [];
-        while ($this->isDefinitionTerm($iterator->getNextLine(), $iterator->peek())) {
+        do {
             $definitionListItems[] = $this->createListItem($documentParserContext);
             $iterator->next();
-        }
-
-        // TODO: This is a workaround because the current Main Loop in {@see DocumentParser::parseLines()} expects
-        //       the cursor position to rest at the last unprocessed line, but the logic above needs is always a step
-        //       'too late' in detecting whether it should have stopped
-        $iterator->prev();
+        } while ($this->scanForDefinitionTerm($iterator));
 
         return new DefinitionListNode(... $definitionListItems);
     }
@@ -88,7 +83,7 @@ final class DefinitionListRule implements Rule
         Assert::string($documentIterator->getNextLine());
         $indenting = mb_strlen($documentIterator->getNextLine()) - mb_strlen(trim($documentIterator->getNextLine()));
 
-        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+        while ($documentIterator->isBlockLine($documentIterator->getNextLine(), $indenting)) {
             $definitionListItem->addChildNode($this->createDefinition($documentParserContext, $indenting));
         }
 
@@ -99,22 +94,8 @@ final class DefinitionListRule implements Rule
     {
         $buffer = new Buffer();
         $documentIterator = $documentParserContext->getDocumentIterator();
-        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+        while ($documentIterator->isBlockLine($documentIterator->getNextLine(), $indenting)) {
             $documentIterator->next();
-            $emptyLinesBelongToDefinition = false;
-            if (LinesIterator::isEmptyLine($documentIterator->current())) {
-                $peek = $documentIterator->peek();
-                while (LinesIterator::isEmptyLine($peek)) {
-                    $peek = $documentIterator->peek();
-                }
-
-                $emptyLinesBelongToDefinition = LinesIterator::isBlockLine($peek, $indenting);
-            }
-
-            if ($emptyLinesBelongToDefinition === false && LinesIterator::isEmptyLine($documentIterator->current())) {
-                break;
-            }
-
             $buffer->push(mb_substr($documentIterator->current(), $indenting));
         }
 
@@ -137,7 +118,7 @@ final class DefinitionListRule implements Rule
 
     private function isDefinitionTerm(?string $currentLine, ?string $nextLine): bool
     {
-        if (LinesIterator::isEmptyLine($currentLine)) {
+        if (LinesIterator::isNullOrEmptyLine($currentLine)) {
             return false;
         }
 
@@ -145,7 +126,20 @@ final class DefinitionListRule implements Rule
             return false;
         }
 
-        if (LinesIterator::isBlockLine($nextLine)) {
+        if (LinesIterator::isIndented($nextLine, 1)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function scanForDefinitionTerm(LinesIterator $iterator): bool
+    {
+        $term = $iterator->peek();
+        $definition = $iterator->peek();
+
+        if ($this->isDefinitionTerm($term, $definition)) {
+            $iterator->next();
             return true;
         }
 

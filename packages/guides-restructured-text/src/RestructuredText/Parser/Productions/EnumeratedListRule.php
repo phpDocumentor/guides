@@ -68,7 +68,7 @@ final class EnumeratedListRule implements Rule
 
 
         return LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine()) ||
-            LinesIterator::isBlockLine($documentIterator->getNextLine()) ||
+            $documentIterator->isBlockLine($documentIterator->getNextLine()) ||
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
     }
 
@@ -85,29 +85,33 @@ final class EnumeratedListRule implements Rule
 
         $items = [];
 
-        while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type'])
-                || LinesIterator::isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
-        ) {
-            $documentIterator->next();
+        while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type'])) {
 
-            if ($this->isListItemStart($documentIterator->current())) {
-                $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
-                $listConfig = $this->getItemConfig($documentIterator->current());
-                $buffer = new Buffer();
-            }
 
-            // the list item offset is determined by the offset of the first text.
-            // An offset of 1 or lower indicates that the list line didn't contain any text.
-            if ($listConfig['indenting'] <= 1) {
-                $listConfig['indenting'] = strlen($documentIterator->current()) - strlen(
-                    ltrim($documentIterator->current())
-                );
-            }
+            do {
+                $documentIterator->next();
 
-            if (trim($documentIterator->current()) !== $listConfig['marker']) {
-                $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
-            }
+                if ($this->isListItemStart($documentIterator->current())) {
+                    $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+                    $listConfig = $this->getItemConfig($documentIterator->current());
+                    $buffer = new Buffer();
+                }
+
+                // the list item offset is determined by the offset of the first text.
+                // An offset of 1 or lower indicates that the list line didn't contain any text.
+                if ($listConfig['indenting'] <= 1) {
+                    $listConfig['indenting'] = strlen($documentIterator->current()) - strlen(
+                            ltrim($documentIterator->current())
+                        );
+                }
+
+                if (trim($documentIterator->current()) !== $listConfig['marker']) {
+                    $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+                }
+            } while ($documentIterator->isBlockLine($documentIterator->getNextLine()));
         }
+
+
 
         $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
 

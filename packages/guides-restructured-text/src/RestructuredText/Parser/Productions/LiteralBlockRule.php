@@ -60,7 +60,7 @@ final class LiteralBlockRule implements Rule
         }
 
         //TODO this is a bug, we need LiteralBlockNode here
-        return new LiteralBlockNode($lines);
+        return new LiteralBlockNode(implode("\n", $lines));
     }
 
     private function isBlockLine(?string $line): bool

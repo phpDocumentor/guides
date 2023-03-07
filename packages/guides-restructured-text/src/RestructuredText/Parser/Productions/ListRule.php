@@ -85,7 +85,7 @@ final class ListRule implements Rule
         $items = [];
 
         while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker'])
-                || LinesIterator::isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
+                || $documentIterator->isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
         ) {
             $documentIterator->next();
 
