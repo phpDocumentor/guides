@@ -31,6 +31,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
+use phpDocumentor\Guides\References\Resolver\RefResolver;
 use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\Renderer\OutputFormatRenderer;
@@ -84,7 +85,7 @@ final class QuickStart
         $nodeRenderers[] = new DocumentNodeRenderer($renderer);
         $nodeRenderers[] = new SpanNodeRenderer(
             $renderer,
-            new ReferenceResolver([new DocResolver()]),
+            new ReferenceResolver([new DocResolver(), new RefResolver()]),
             $logger,
             new UrlGenerator()
         );

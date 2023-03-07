@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 use phpDocumentor\Guides\Compiler\Compiler;
+use phpDocumentor\Guides\Compiler\NodeTransformers\CollectLinkTargetsTransformer;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
@@ -58,7 +59,8 @@ $commandbus = QuickStart::create(
                 new TransformerPass(
                     new DocumentNodeTraverser(
                         [
-                            new TocNodeTransformer($metas)
+                            new TocNodeTransformer($metas),
+                            new CollectLinkTargetsTransformer($metas),
                         ]
                     )
                 )

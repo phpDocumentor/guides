@@ -59,9 +59,8 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
     /**
      * @param string[] $attributes
-     * @param TitleNode|string $title
      */
-    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string
+    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
 
@@ -69,7 +68,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
             'link.html.twig',
             [
                 'url' => $this->urlGenerator->generateUrl($url),
-                'title' => $title ?: $url,
+                'text' => $title ?: $url,
                 'attributes' => $attributes,
             ]
         );
@@ -85,7 +84,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
      */
     public function reference(RenderContext $environment, ResolvedReference $reference, array $value): string
     {
-        $text = $value['text'] ?: $reference->getTitle()->toString();
+        $text = $value['text'] ?: $reference->getText();
         $text = trim($text);
 
         // reference to another document

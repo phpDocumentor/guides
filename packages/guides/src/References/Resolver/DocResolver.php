@@ -52,7 +52,7 @@ final class DocResolver implements Resolver
     ): ResolvedReference {
         return new ResolvedReference(
             $file,
-            $entry->getTitle(),
+            $entry->getTitle()->toString(),
             $environment->relativeDocUrl($file, $anchor),
             $attributes
         );
