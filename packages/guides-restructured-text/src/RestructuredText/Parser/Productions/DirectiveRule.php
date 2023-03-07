@@ -48,9 +48,9 @@ final class DirectiveRule implements Rule
 
     private function registerDirective(DirectiveHandler $directive): void
     {
-        $this->directives[$directive->getName()] = $directive;
+        $this->directives[strtolower($directive->getName())] = $directive;
         foreach ($directive->getAliases() as $alias) {
-            $this->directives[$alias] = $directive;
+            $this->directives[strtolower($alias)] = $directive;
         }
     }
 
@@ -134,7 +134,7 @@ final class DirectiveRule implements Rule
 
     private function getDirectiveHandler(Directive $directive): ?DirectiveHandler
     {
-        return $this->directives[$directive->getName()] ?? null;
+        return $this->directives[strtolower($directive->getName())] ?? null;
     }
 
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void
