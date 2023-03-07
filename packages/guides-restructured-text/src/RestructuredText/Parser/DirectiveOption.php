@@ -32,4 +32,9 @@ class DirectiveOption
     {
         return $this->value;
     }
+
+    public function appendValue(string $append): void
+    {
+        $this->value = ((string) $this->value) . $append;
+    }
 }

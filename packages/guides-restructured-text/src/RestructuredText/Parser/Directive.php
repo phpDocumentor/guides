@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+/**
+ * Represents the data contained in an arbitrary directive
+ *
+ * .. name:: data
+ *    :option: value
+ *    :option2: value 2
+ *
+ * A directive can be saved into a variable, the data can be empty:
+ *
+ * .. |variable| name::
+ */
 class Directive
 {
     private string $variable;

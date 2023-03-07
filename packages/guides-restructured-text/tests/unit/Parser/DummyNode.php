@@ -1,0 +1,82 @@
+<?php
+
+declare(strict_types=1);
+
+namespace phpDocumentor\Guides\RestructuredText\Parser;
+
+use phpDocumentor\Guides\Nodes\Node;
+
+class DummyNode implements Node
+{
+    private string $name;
+    private string $data;
+
+    /**
+     * @var DirectiveOption[] $directiveOptions the array of options for this directive
+     */
+    private array $directiveOptions;
+
+    /**
+     * @param DirectiveOption[] $directiveOptions
+     */
+    public function __construct(string $name, string $data, array $directiveOptions)
+    {
+        $this->name = $name;
+        $this->data = $data;
+        $this->directiveOptions = $directiveOptions;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return DirectiveOption[]
+     */
+    public function getDirectiveOptions(): array
+    {
+        return $this->directiveOptions;
+    }
+
+    /**
+     * @return array<string, scalar|null>
+     */
+    public function getOptions(): array
+    {
+        return [];
+    }
+
+    public function withOptions(array $options): Node
+    {
+        return $this;
+    }
+
+    public function hasOption(string $name): bool
+    {
+        return false;
+    }
+
+    public function setValue($value): void
+    {
+    }
+
+    public function getValue()
+    {
+        return $this->data;
+    }
+
+    public function getClasses(): array
+    {
+        return [];
+    }
+
+    public function setClasses(array $classes): void
+    {
+    }
+
+    public function getClassesString(): string
+    {
+        return '';
+    }
+}
