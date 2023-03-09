@@ -114,17 +114,16 @@ final class AssetsExtension extends AbstractExtension
 
     private function copyAsset(
         ?RenderContext $environment,
-        string $path
+        string $sourcePath
     ): string {
         if (!$environment instanceof RenderContext) {
-            return $path;
+            return $sourcePath;
         }
 
-        $canonicalUrl = $environment->canonicalUrl($path);
+        $canonicalUrl = $environment->canonicalUrl($sourcePath);
         Assert::string($canonicalUrl);
-        $sourcePath = $environment->getSourcePath() . '/' . $path;
         $outputPath = $this->urlGenerator->absoluteUrl(
-            dirname($environment->getDestinationPath()),
+            $environment->getDestinationPath(),
             $canonicalUrl
         );
 
