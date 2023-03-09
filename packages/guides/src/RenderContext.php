@@ -35,8 +35,6 @@ class RenderContext
 
     private string $destinationPath;
 
-    private string $currentAbsolutePath = '';
-
     private string $outputFormat;
     private DocumentNode $document;
     private FilesystemInterface $destination;
@@ -167,11 +165,6 @@ class RenderContext
     public function getMetaEntry(): ?DocumentEntry
     {
         return $this->metas->findDocument($this->currentFileName);
-    }
-
-    public function getSourcePath(): string
-    {
-        return $this->currentAbsolutePath;
     }
 
     public function getOutputFormat(): string

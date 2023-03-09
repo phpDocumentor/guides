@@ -37,6 +37,11 @@ class Image extends Directive
         string                $data,
         array                 $options
     ): Node {
-        return new ImageNode($this->urlGenerator->relativeUrl($data));
+        return new ImageNode(
+            $this->urlGenerator->absoluteUrl(
+                dirname($documentParserContext->getContext()->getCurrentAbsolutePath()),
+                $data
+            )
+        );
     }
 }
