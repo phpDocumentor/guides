@@ -1,5 +1,6 @@
 imports:
   - { resource: 'guides.yml' }
+  - { resource: 'guides-restructured-text.yml' }
 
 services:
   _defaults:
@@ -19,6 +20,9 @@ services:
       $name: 'app'
 
   Psr\Log\LoggerInterface: '@Monolog\Logger'
+  Psr\EventDispatcher\EventDispatcherInterface: '@Symfony\Component\EventDispatcher\EventDispatcher'
+  Symfony\Component\EventDispatcher\EventDispatcher: ~
+
 
   phpDocumentor\Guides\Console\Application:
     public: true

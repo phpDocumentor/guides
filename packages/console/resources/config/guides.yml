@@ -34,6 +34,8 @@ services:
       - '%vendor_dir%/phpdocumentor/guides/src/Span/*Token.php'
     resource: '%vendor_dir%/phpdocumentor/guides/src'
 
+  phpDocumentor\Guides\Handlers\ParseFileHandler: ~
+
   phpDocumentor\Guides\NodeRenderers\NodeRendererFactory: '@phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory'
 
   phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory:

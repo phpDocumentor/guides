@@ -1,0 +1,27 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+  _instanceof:
+    phpDocumentor\Guides\RestructuredText\Directives\Directive:
+      tags: ['phpdoc.guides.directive']
+
+  phpdoc.guides.restructuredtext.directives:
+    namespace: phpDocumentor\Guides\RestructuredText\Directives\
+    exclude:
+    resource: '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Directives'
+
+  phpDocumentor\Guides\RestructuredText\MarkupLanguageParser:
+    arguments:
+      $startingRule: '@phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule'
+      $directives: !tagged_iterator phpdoc.guides.directive
+    tags: ['phpdoc.guides.parser.markupLanguageParser']
+
+  phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule:
+    arguments:
+      $directiveHandlers: !tagged_iterator phpdoc.guides.directive
+
+  phpDocumentor\Guides\RestructuredText\Span\SpanParser: ~
+  phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher: ~
+  phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder: ~

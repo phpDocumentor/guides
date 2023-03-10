@@ -21,7 +21,9 @@
         "symfony/config": "^6.2",
         "symfony/yaml": "^6.2",
         "phpdocumentor/guides": "dev-main@dev",
-        "monolog/monolog": "^3.3"
+        "monolog/monolog": "^3.3",
+        "phpdocumentor/guides-restructured-text": "dev-main@dev",
+        "symfony/event-dispatcher": "^6.2"
     },
     "config": {
         "bin-dir": "./bin",

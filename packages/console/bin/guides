@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Console\Application;
+use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -21,6 +22,8 @@ return function (array $context) {
     // Load container configuration
     $loader = new YamlFileLoader($container, new FileLocator());
     $loader->load(__DIR__.'/../resources/config/services.yml');
+    $container->registerExtension(new ApplicationExtension());
+    $container->loadFromExtension('application');
 
     // Compile container
     $container->compile();
