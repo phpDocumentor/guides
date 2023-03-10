@@ -106,4 +106,17 @@ class DocumentParserContext
 
         return $that;
     }
+
+    /**
+     * can be used to set the content to the document iterator while preserving space
+     * code-block directives have to preserve space
+    */
+    public function withContentsPreserveSpace(string $contents): self
+    {
+        $that = clone $this;
+        $that->documentIterator = new LinesIterator();
+        $that->documentIterator->load($contents, true);
+
+        return $that;
+    }
 }

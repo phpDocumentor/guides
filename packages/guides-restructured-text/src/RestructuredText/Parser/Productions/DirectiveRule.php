@@ -97,7 +97,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             return $directiveHandler->process(
-                $documentParserContext->withContents($buffer->getLinesString()),
+                $documentParserContext->withContentsPreserveSpace($buffer->getLinesString()),
                 $directive->getVariable(),
                 $directive->getData(),
                 $directive->getOptions()
@@ -215,20 +215,17 @@ final class DirectiveRule implements Rule
     private function collectDirectiveContents(LinesIterator $documentIterator): Buffer
     {
         $buffer = new Buffer();
-        $indenting = 1;
-        while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+        $minIndenting = PHP_INT_MAX;
+        while (LinesIterator::isBlockLine($documentIterator->getNextLine())) {
             $documentIterator->next();
             $line = $documentIterator->current();
-            if ($indenting === 1 && LinesIterator::isEmptyLine($line) === false) {
+            if (LinesIterator::isEmptyLine($line) === false) {
                 $indenting = mb_strlen($line) - mb_strlen(ltrim($line));
+                $minIndenting = min($minIndenting, $indenting);
             }
-
-            if ($line !== '') {
-                $line = substr($documentIterator->current(), $indenting);
-            }
-
             $buffer->push($line);
         }
+        $buffer->unIndent($minIndenting);
         return $buffer;
     }
 }

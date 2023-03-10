@@ -51,7 +51,7 @@ final class CodeNodeTest extends TestCase
             "\t\t\tline4",
         ]);
 
-        self::assertSame("line1\n  line2\n    line3\n\tline4", $node->getValue());
+        self::assertSame("  line1\n    line2\n      line3\n\t\t\tline4", $node->getValue());
     }
 
     public function test_that_normalizing_keeps_spaces_intact_when_the_first_line_has_no_spaces(): void

@@ -25,7 +25,7 @@ class CodeNode extends TextNode
      */
     public function __construct(array $lines)
     {
-        parent::__construct(self::normalizeLines($lines));
+        parent::__construct(implode("\n", $lines));
     }
 
     public function setLanguage(?string $language = null): void

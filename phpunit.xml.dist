@@ -27,12 +27,4 @@
             <directory suffix=".php">packages/**/src</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-html"
-             target="build/coverage"
-             lowUpperBound="35"
-             highLowerBound="70" />
-        <log type="coverage-clover" target=".build/logs/clover.xml"/>
-        <log type="junit" target=".build/logs/junit.xml" />
-    </logging>
 </phpunit>

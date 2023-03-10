@@ -18,6 +18,7 @@ use OutOfBoundsException;
 
 use function chr;
 use function explode;
+use function PHPUnit\Framework\assertInstanceOf;
 use function sprintf;
 use function str_replace;
 use function trim;
@@ -33,10 +34,16 @@ class LinesIterator implements Iterator
     private int $position = 0;
     private int $peek = 1;
 
-    public function load(string $document): void
+    public function load(string $document, bool $preserveSpace = false): void
     {
-        $document = trim($this->prepareDocument($document));
-        $this->lines = explode("\n", $document);
+        if (!$preserveSpace) {
+            $document = trim($this->prepareDocument($document));
+        } else {
+            // only remove empty lines at start and end
+            $document = preg_replace('/^\n+/', '', $document);
+            $document = preg_replace('/\n+$/', '', (string) $document);
+        }
+        $this->lines = explode("\n", (string) $document);
         $this->rewind();
     }
 
