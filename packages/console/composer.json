@@ -1,0 +1,32 @@
+{
+    "name": "phpdocumentor/guides-console",
+    "description": "Small console application allowing you to run phpDocumentor guides as a stand alone application",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\Console\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jaapio",
+            "email": "jaap@phpdoc.org"
+        }
+    ],
+    "require": {
+        "symfony/console": "^6.2",
+        "symfony/runtime": "^6.2",
+        "symfony/dependency-injection": "^6.2",
+        "symfony/config": "^6.2",
+        "symfony/yaml": "^6.2",
+        "phpdocumentor/guides": "dev-main@dev",
+        "monolog/monolog": "^3.3"
+    },
+    "config": {
+        "bin-dir": "./bin",
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    }
+}

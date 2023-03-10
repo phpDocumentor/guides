@@ -1,0 +1,27 @@
+imports:
+  - { resource: 'guides.yml' }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  phpDocumentor\Guides\Console\:
+    resource: '../../src'
+
+  _instanceof:
+    Symfony\Component\Console\Command\Command:
+      tags: ['phpdoc.guides.command']
+
+  Monolog\Logger:
+    arguments:
+      $name: 'app'
+
+  Psr\Log\LoggerInterface: '@Monolog\Logger'
+
+  phpDocumentor\Guides\Console\Application:
+    public: true
+    arguments:
+      - !tagged phpdoc.guides.command
+

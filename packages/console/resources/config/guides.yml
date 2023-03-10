@@ -1,0 +1,61 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  _instanceof:
+    phpDocumentor\Guides\MarkupLanguageParser:
+      tags: ['phpdoc.guides.parser.markupLanguageParser']
+    phpDocumentor\Guides\Formats\OutputFormat:
+      tags: ['phpdoc.guides.format']
+    phpDocumentor\Guides\References\Resolver\Resolver:
+      tags: ['phpdoc.guides.reference.resolver']
+    phpDocumentor\Guides\Compiler\NodeTransformer:
+      tags: ['phpdoc.guides.compiler.nodeTransformers']
+    phpDocumentor\Guides\Compiler\CompilerPass:
+      tags: ['phpdoc.guides.compiler.passes']
+
+  phpdoc.guides:
+    namespace: phpDocumentor\Guides\
+    exclude:
+      - '%vendor_dir%/phpdocumentor/guides/src/Event/*'
+      - '%vendor_dir%/phpdocumentor/guides/src/Nodes/*'
+      - '%vendor_dir%/phpdocumentor/guides/src/Handlers/*'
+      - '%vendor_dir%/phpdocumentor/guides/src/Intersphinx/*'
+      - '%vendor_dir%/phpdocumentor/guides/src/Meta/*Entry.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/Meta/*Entry.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/*Context.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers/LazyNodeRendererFactory.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers/TemplateNodeRenderer.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/References/ResolvedReference.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/Renderer/OutputFormatRenderer.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/Span/CrossReferenceNode.php'
+      - '%vendor_dir%/phpdocumentor/guides/src/Span/*Token.php'
+    resource: '%vendor_dir%/phpdocumentor/guides/src'
+
+  phpDocumentor\Guides\NodeRenderers\NodeRendererFactory: '@phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory'
+
+  phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory:
+    $nodeRenderers: !tagged_iterator phpdoc.guides.noderenderer.html
+    $defaultNodeRenderer: '@phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer'
+
+  phpDocumentor\Guides\Parser:
+    arguments:
+      $parserStrategies: !tagged_iterator phpdoc.guides.parser.markupLanguageParser
+
+  phpDocumentor\Guides\Compiler\Compiler:
+    arguments:
+      $passes: !tagged_iterator phpdoc.guides.compiler.passes
+
+  phpDocumentor\Guides\Compiler\DocumentNodeTraverser:
+    arguments:
+      $transformers: !tagged_iterator phpdoc.guides.compiler.nodeTransformers
+
+  phpDocumentor\Guides\References\ReferenceResolver:
+    arguments:
+      $resolvers: !tagged_iterator phpdoc.guides.reference.resolver
+
+  phpDocumentor\Guides\Twig\TwigRenderer:
+    arguments:
+      $outputFormatRenderers: !tagged_iterator phpdoc.guides.renderer
