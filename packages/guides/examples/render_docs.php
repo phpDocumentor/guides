@@ -57,7 +57,7 @@ $parseDirectoryHandler = new ParseDirectoryHandler(
 );
 
 $sourceFileSystem = new Filesystem(new Local(
-    __DIR__  . '/docs'
+    __DIR__  . '/../docs'
 ));
 $sourceFileSystem->addPlugin(new Finder());
 
