@@ -89,6 +89,11 @@ final class DefinitionListRule implements Rule
         $indenting = mb_strlen($documentIterator->getNextLine()) - mb_strlen(trim($documentIterator->getNextLine()));
 
         while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+            if (LinesIterator::isEmptyLine($documentIterator->current())) {
+                $documentIterator->next();
+                continue;
+            }
+
             $definitionListItem->addChildNode($this->createDefinition($documentParserContext, $indenting));
         }
 
