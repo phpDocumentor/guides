@@ -16,7 +16,7 @@
             <directory>packages/**/tests/unit/</directory>
         </testsuite>
         <testsuite name="functional">
-            <directory>tests/</directory>
+            <directory>tests/Functional/</directory>
         </testsuite>
         <testsuite name="integration">
             <directory>./tests/Integration/</directory>
