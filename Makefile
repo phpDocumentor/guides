@@ -24,15 +24,19 @@ psalm:
 	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
-test: test-unit test-functional ## Runs all test suites with phpunit/phpunit
+test: test-unit test-functional test-integration## Runs all test suites with phpunit/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=unit
 
 .PHONY: test-functional
-test-functional: ## Runs unit tests with phpunit/phpunit
+test-functional: ## Runs functional tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=functional
+
+.PHONY: test-integration
+test-integration: ## Runs integration tests with phpunit/phpunit
+	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
 
 .PHONY: dependency-analysis
 dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
