@@ -16,6 +16,8 @@ final class ParseDirectoryHandler
 {
     private FileCollector $fileCollector;
     private CommandBus $commandBus;
+    /** @var string[]  */
+    private array $indexFileNames = ['index', 'Index'];
 
     public function __construct(FileCollector $scanner, CommandBus $commandBus)
     {
@@ -29,12 +31,10 @@ final class ParseDirectoryHandler
         $origin = $command->getOrigin();
         $currentDirectory = $command->getDirectory();
         $extension = $command->getInputFormat();
-        $nameOfIndexFile = 'index';
 
         $this->guardThatAnIndexFileExists(
             $origin,
             $currentDirectory,
-            $nameOfIndexFile,
             $extension
         );
 
@@ -52,13 +52,19 @@ final class ParseDirectoryHandler
     private function guardThatAnIndexFileExists(
         FilesystemInterface $filesystem,
         string $directory,
-        string $nameOfIndexFile,
         string $sourceFormat
     ): void {
-        $indexName = $nameOfIndexFile;
         $extension = $sourceFormat;
-        $indexFilename = sprintf('%s.%s', $indexName, $extension);
-        if (!$filesystem->has($directory . '/' . $indexFilename)) {
+        $hasIndexFile = false;
+        foreach ($this->indexFileNames as $indexName) {
+            $indexFilename = sprintf('%s.%s', $indexName, $extension);
+            if (!$filesystem->has($directory . '/' . $indexFilename)) {
+                $hasIndexFile = true;
+                break;
+            }
+        }
+        if (!$hasIndexFile) {
+            $indexFilename = sprintf('%s.%s', $this->indexFileNames[0], $extension);
             throw new InvalidArgumentException(
                 sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory)
             );
