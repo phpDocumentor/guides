@@ -17,8 +17,8 @@ use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use function dirname;
 use function ltrim;
 use function trim;
@@ -115,25 +115,20 @@ class RenderContext
     public function relativeDocUrl(string $filename, ?string $anchor = null): string
     {
         if (UriInfo::isAbsolutePath(Uri::createFromString($filename))) {
-            return $this->destinationPath . $this->createFileUrl($filename, $anchor);
+            return $this->destinationPath . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
         }
 
         $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->destinationPath, $this->getDirName()), '/');
 
         if ($this->metas->findDocument($filename) !== null) {
-            return $this->destinationPath . '/' . $this->createFileUrl($filename, $anchor);
+            return $this->destinationPath . '/'
+                . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
         }
 
         return $this->urlGenerator->canonicalUrl(
             $baseUrl,
-            $this->createFileUrl($filename, $anchor)
+            $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor)
         );
-    }
-
-    private function createFileUrl(string $filename, ?string $anchor): string
-    {
-        return $filename . '.' . $this->outputFormat .
-            ($anchor !== null ? '#' . $anchor : '');
     }
 
     private function getDirName(): string

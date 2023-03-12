@@ -32,4 +32,9 @@ interface UrlGeneratorInterface
      * @todo simplify this method into the other methods or vice versa
      */
     public function canonicalUrl(string $basePath, string $url): string;
+
+    /**
+     * Create a url with a file ending derived from the output format
+     */
+    public function createFileUrl(string $filename, string $outputFormat = 'html', ?string $anchor = null): string;
 }

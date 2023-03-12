@@ -33,6 +33,7 @@ use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\References\Resolver\RefResolver;
 use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\Renderer\InventoryRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
 use phpDocumentor\Guides\Twig\TwigRenderer;
 use phpDocumentor\Guides\Renderer\OutputFormatRenderer;

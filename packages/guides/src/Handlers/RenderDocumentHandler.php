@@ -18,7 +18,7 @@ final class RenderDocumentHandler
     public function handle(RenderDocumentCommand $command): void
     {
         $command->getContext()->getDestination()->put(
-            $command->getContext()->getCurrentFileDestination(),
+            $command->getFileDestination(),
             $this->renderer->renderDocument(
                 $command->getDocument(),
                 $command->getContext()
