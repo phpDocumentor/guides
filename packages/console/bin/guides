@@ -3,30 +3,31 @@
 
 declare(strict_types=1);
 
+namespace phpDocumentor\Guides;
+
 use phpDocumentor\Guides\Console\Application;
 use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
+require_once dirname(__DIR__) . '/../../vendor/autoload.php';
 
-return function (array $context) {
-    $container = new ContainerBuilder();
+$container = new ContainerBuilder();
 
-    // Load manual parameters
-    $container->setParameter('vendor_dir', __DIR__ . '/../vendor');
-    $container->setParameter('application_directory', __DIR__);
-    $container->setParameter('working_directory', rtrim(getcwd(), '/'));
+// Load manual parameters
+$container->setParameter('vendor_dir', dirname(__DIR__, 3) . '/vendor');
+$container->setParameter('application_directory', __DIR__);
+$container->setParameter('working_directory', rtrim(getcwd(), '/'));
 
-    // Load container configuration
-    $loader = new YamlFileLoader($container, new FileLocator());
-    $loader->load(__DIR__.'/../resources/config/services.yml');
-    $container->registerExtension(new ApplicationExtension());
-    $container->loadFromExtension('application');
+// Load container configuration
+foreach (Application::getDefaultExtensions() as $extension) {
+    $container->registerExtension($extension);
+    $container->loadFromExtension($extension->getAlias());
+}
 
-    // Compile container
-    $container->compile();
+// Compile container
+$container->compile();
 
-    return $container->get(Application::class);
-};
+exit($container->get(Application::class)->run());
+

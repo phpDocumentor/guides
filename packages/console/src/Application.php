@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Console;
 
+use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
+use phpDocumentor\Guides\Console\DependencyInjection\GuidesExtension;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 
 final class Application extends BaseApplication
 {
@@ -18,5 +21,14 @@ final class Application extends BaseApplication
         }
 
         $this->setDefaultCommand($defaultCommand, true);
+    }
+
+    /** @return Extension[] */
+    public static function getDefaultExtensions(): array
+    {
+        return [
+            new ApplicationExtension(),
+            new GuidesExtension()
+        ];
     }
 }

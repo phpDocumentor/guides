@@ -15,18 +15,20 @@
         }
     ],
     "require": {
-        "symfony/console": "^6.2",
-        "symfony/runtime": "^6.2",
-        "symfony/dependency-injection": "^6.2",
-        "symfony/config": "^6.2",
-        "symfony/yaml": "^6.2",
+        "symfony/console": "^5.4",
+        "symfony/runtime": "^5.4",
+        "symfony/dependency-injection": "^5.4",
+        "symfony/config": "^5.4",
+        "symfony/yaml": "^5.4",
         "phpdocumentor/guides": "dev-main@dev",
-        "monolog/monolog": "^3.3",
+        "monolog/monolog": "^2.9",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
-        "symfony/event-dispatcher": "^6.2"
+        "symfony/event-dispatcher": "^5.4"
     },
+    "bin": [
+        "bin/guides"
+    ],
     "config": {
-        "bin-dir": "./bin",
         "allow-plugins": {
             "symfony/runtime": true
         }

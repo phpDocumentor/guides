@@ -13,7 +13,7 @@ services:
 
   _instanceof:
     Symfony\Component\Console\Command\Command:
-      tags: ['phpdoc.guides.command']
+      tags: ['phpdoc.guides.cli.command']
 
   Monolog\Logger:
     arguments:
@@ -27,5 +27,5 @@ services:
   phpDocumentor\Guides\Console\Application:
     public: true
     arguments:
-      - !tagged phpdoc.guides.command
+      - !tagged phpdoc.guides.cli.command
 
