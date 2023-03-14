@@ -27,7 +27,7 @@ jobs:
           authentication: "phpdoc-bot:${{ secrets.BOT_TOKEN }}"
       - name: "Cache splitsh-lite"
         id: "splitsh-cache"
-        uses: "actions/cache@v3.3.0"
+        uses: "actions/cache@v3.3.1"
         with:
           path: "./.splitsh"
           key: "${{ runner.os }}-splitsh-d-101"
