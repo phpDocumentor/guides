@@ -79,9 +79,8 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     /**
      * @param string[] $attributes
-     * @param string|TitleNode $title
      */
-    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string
+    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
 
@@ -172,7 +171,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 $span = str_replace(
                     $token->getId(),
-                    $this->link($context, $reference->getUrl(), $reference->getTitle(), $reference->getAttributes()),
+                    $this->link($context, $reference->getUrl(), $reference->getText(), $reference->getAttributes()),
                     $span
                 );
 

@@ -24,7 +24,7 @@ class ResolvedReference
 {
     private ?string $file;
 
-    private ?TitleNode $title;
+    private string $text;
 
     private ?string $url;
 
@@ -36,12 +36,12 @@ class ResolvedReference
      */
     public function __construct(
         ?string $file,
-        ?TitleNode $title,
+        string $text,
         ?string $url,
         array $attributes = []
     ) {
         $this->file = $file;
-        $this->title = $title;
+        $this->text = $text;
         $this->url = $url;
 
         $this->validateAttributes($attributes);
@@ -53,9 +53,9 @@ class ResolvedReference
         return $this->file;
     }
 
-    public function getTitle(): TitleNode
+    public function getText(): string
     {
-        return $this->title ?? TitleNode::emptyNode();
+        return $this->text;
     }
 
     public function getUrl(): ?string

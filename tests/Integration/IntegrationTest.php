@@ -8,10 +8,13 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
+use phpDocumentor\Guides\Compiler\NodeTransformers\CollectLinkTargetsTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\FileCollector;
+use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
+use phpDocumentor\Guides\Handlers\CompileDocumentsHandler;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
@@ -19,6 +22,7 @@ use phpDocumentor\Guides\Handlers\ParseFileHandler;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\RenderContext;
 use League\Tactician\Setup\QuickStart;
 use phpDocumentor\Guides\UrlGenerator;
@@ -83,7 +87,20 @@ class IntegrationTest extends TestCase
                         }
                     },
                     \phpDocumentor\Guides\Setup\QuickStart::createRstParser()
-                )
+                ),
+                CompileDocumentsCommand::class => new CompileDocumentsHandler(
+                    new Compiler([
+                        new MetasPass($metas),
+                        new TransformerPass(
+                            new DocumentNodeTraverser(
+                                [
+                                    new TocNodeTransformer($metas),
+                                    new CollectLinkTargetsTransformer($metas),
+                                ]
+                            )
+                        )
+                    ])
+                ),
             ]
         );
 
@@ -103,17 +120,10 @@ class IntegrationTest extends TestCase
         );
 
         $documents = $parseDirectoryHandler->handle($parseDirCommand);
-        $compliler = new Compiler([
-            new MetasPass($metas),
-            new TransformerPass(
-                new DocumentNodeTraverser(
-                    [
-                        new TocNodeTransformer($metas)
-                    ]
-                )
-            )
-        ]);
-        $documents = $compliler->run($documents);
+        $compileDocumentsCommand = new CompileDocumentsCommand($documents);
+
+        /** @var DocumentNode[] $documents */
+        $documents = $commandbus->handle($compileDocumentsCommand);
 
         $renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer($metas);
         $renderDocumentHandler = new RenderDocumentHandler($renderer);

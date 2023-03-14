@@ -126,6 +126,7 @@ class MarkupLanguageParser implements ParserInterface
         return strtolower($inputFormat) === 'rst';
     }
 
+    /** @deprecated one should use injected rules in a rule. Not subparsers */
     public function getSubParser(): MarkupLanguageParser
     {
         return new MarkupLanguageParser(

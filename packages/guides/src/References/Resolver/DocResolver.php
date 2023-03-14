@@ -13,7 +13,7 @@ final class DocResolver implements Resolver
 {
     public function supports(CrossReferenceNode $node, RenderContext $context): bool
     {
-        return $node->getRole() === 'doc' || $node->getRole() === 'ref';
+        return $node->getRole() === 'doc';
     }
 
     public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference
@@ -32,7 +32,7 @@ final class DocResolver implements Resolver
         return $this->createResolvedReference(
             $node->getUrl(),
             $context,
-            $entry,
+            $node->getText($entry->getTitle()->toString()),
             [],
             $node->getAnchor()
         );
@@ -46,13 +46,13 @@ final class DocResolver implements Resolver
     private function createResolvedReference(
         string        $file,
         RenderContext $environment,
-        DocumentEntry $entry,
+        string $text,
         array         $attributes = [],
         ?string       $anchor = null
     ): ResolvedReference {
         return new ResolvedReference(
             $file,
-            $entry->getTitle(),
+            $text,
             $environment->relativeDocUrl($file, $anchor),
             $attributes
         );

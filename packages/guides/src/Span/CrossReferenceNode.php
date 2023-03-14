@@ -75,8 +75,8 @@ class CrossReferenceNode extends SpanToken
         return $this->anchor;
     }
 
-    public function getText(): string
+    public function getText(?string $default = null): string
     {
-        return $this->text ?? $this->literal;
+        return $this->text ?? $default ?? $this->literal;
     }
 }
