@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\References\InternalTarget;
+use phpDocumentor\Guides\Meta\InternalTarget;
 
 final class Metas
 {

@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\References\InternalTarget;
+use phpDocumentor\Guides\Meta\InternalTarget;
 
 /** @implements NodeTransformer<DocumentNode|AnchorNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
