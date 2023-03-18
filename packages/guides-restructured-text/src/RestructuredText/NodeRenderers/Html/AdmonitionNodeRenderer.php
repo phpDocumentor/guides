@@ -41,12 +41,17 @@ class AdmonitionNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . AdmonitionNode::class);
         }
 
+        $classes = $node->getClasses();
+        if ($node->getOption('class') !== null) {
+            $classes[] = $node->getOption('class');
+        }
+
         return $this->renderer->render(
             'directives/admonition.html.twig',
             [
                 'name' => $node->getName(),
                 'text' => $node->getText(),
-                'class' => $node->getOption('class'),
+                'class' => implode(' ', $classes),
                 'node' => $node->getValue(),
             ]
         );

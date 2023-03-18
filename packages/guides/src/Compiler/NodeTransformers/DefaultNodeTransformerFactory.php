@@ -22,6 +22,7 @@ class DefaultNodeTransformerFactory implements NodeTransformerFactory
         return [
             new TocNodeTransformer($this->metas),
             new CollectLinkTargetsTransformer($this->metas),
+            new ClassNodeTransformer(),
         ];
     }
 }

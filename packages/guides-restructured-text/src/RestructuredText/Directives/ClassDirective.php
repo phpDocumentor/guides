@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -36,9 +37,10 @@ class ClassDirective extends SubDirective
 
         $document->setClasses($normalizedClasses);
 
-        if (!$document instanceof DocumentNode) {
-            // do not handle empty class directives for now
-            return null;
+        if (!$document instanceof DocumentNode || $document->getNodes() === []) {
+            $classNode = new ClassNode($data);
+            $classNode->setClasses($classes);
+            return $classNode;
         }
         $this->setNodesClasses($document->getNodes(), $classes);
         return new CollectionNode($document->getNodes());
@@ -51,7 +53,7 @@ class ClassDirective extends SubDirective
     private function setNodesClasses(array $nodes, array $classes): void
     {
         foreach ($nodes as $node) {
-            $node->setClasses($classes);
+            $node->setClasses(array_merge($node->getClasses(), $classes));
 
             if (!($node instanceof DocumentNode)) {
                 continue;
