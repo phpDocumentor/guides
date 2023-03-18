@@ -9,6 +9,7 @@ use League\Flysystem\Filesystem;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CollectLinkTargetsTransformer;
+use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
@@ -92,12 +93,7 @@ class IntegrationTest extends TestCase
                     new Compiler([
                         new MetasPass($metas),
                         new TransformerPass(
-                            new DocumentNodeTraverser(
-                                [
-                                    new TocNodeTransformer($metas),
-                                    new CollectLinkTargetsTransformer($metas),
-                                ]
-                            )
+                            new DocumentNodeTraverser(new DefaultNodeTransformerFactory($metas))
                         )
                     ])
                 ),

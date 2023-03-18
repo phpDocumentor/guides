@@ -31,34 +31,4 @@
       <code><![CDATA[$result->value]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
-  <file src="packages/guides/tests/unit/Compiler/DocumentNodeTraverserTest.php">
-    <InvalidArgument>
-      <code><![CDATA[[
-            new
-            /** @implements NodeTransformer<TocNode> */
-            class($replacement) implements NodeTransformer {
-                private TocNode $replacement;
-
-                public function __construct(TocNode $replacement)
-                {
-                    $this->replacement = $replacement;
-                }
-
-                public function enterNode(Node $node): Node
-                {
-                    return $this->replacement;
-                }
-
-                public function leaveNode(Node $node): ?Node
-                {
-                    return $node;
-                }
-
-                public function supports(Node $node): bool
-                {
-                    return $node instanceof TocNode;
-                }
-            }]]]></code>
-    </InvalidArgument>
-  </file>
 </files>

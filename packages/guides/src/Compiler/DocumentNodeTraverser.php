@@ -4,26 +4,23 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
-    /** @var iterable<NodeTransformer<Node>> */
-    private iterable $transformers;
+    private NodeTransformerFactory $nodeTransformerFactory;
 
-    /**
-     * @param list<NodeTransformer<Node>> $transformers
-     */
-    public function __construct(iterable $transformers)
+    public function __construct(NodeTransformerFactory $nodeTransformerFactory)
     {
-        $this->transformers = $transformers;
+        $this->nodeTransformerFactory = $nodeTransformerFactory;
     }
 
     public function traverse(DocumentNode $node): ?Node
     {
-        foreach ($this->transformers as $transformer) {
+        foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
             $node = $this->traverseForTransformer($transformer, $node);
             if ($node === null) {
                 return null;
