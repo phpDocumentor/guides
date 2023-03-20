@@ -43,7 +43,7 @@ final class TopicNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->render(
-            'directives/topic.html.twig',
+            'body/topic.html.twig',
             [
                 'name' => $node->getName(),
                 'node' => $node->getValue(),

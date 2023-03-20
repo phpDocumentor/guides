@@ -112,7 +112,7 @@ final class QuickStart
             $twig = new Environment(
                 new FilesystemLoader(
                     [
-                        __DIR__  . '/../../resources/template'
+                        __DIR__  . '/../../resources/template/html'
                     ]
                 )
             );

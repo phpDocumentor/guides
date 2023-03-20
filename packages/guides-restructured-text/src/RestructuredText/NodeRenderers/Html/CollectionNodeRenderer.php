@@ -43,7 +43,7 @@ final class CollectionNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->render(
-            'directives/collection.html.twig',
+            'body/collection.html.twig',
             [
                 'node' => $node->getValue(),
             ]
