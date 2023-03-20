@@ -18,10 +18,11 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer;
-use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 
-/** @implements NodeRenderer<AdmonitionNode> */
-class AdmonitionNodeRenderer implements NodeRenderer
+/** @implements NodeRenderer<CollectionNode> */
+final class CollectionNodeRenderer implements NodeRenderer
 {
     private Renderer $renderer;
 
@@ -32,26 +33,18 @@ class AdmonitionNodeRenderer implements NodeRenderer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof AdmonitionNode;
+        return $node instanceof CollectionNode;
     }
 
     public function render(Node $node, RenderContext $environment): string
     {
-        if ($node instanceof AdmonitionNode === false) {
-            throw new InvalidArgumentException('Node must be an instance of ' . AdmonitionNode::class);
-        }
-
-        $classes = $node->getClasses();
-        if ($node->getOption('class') !== null) {
-            $classes[] = $node->getOption('class');
+        if ($node instanceof CollectionNode === false) {
+            throw new InvalidArgumentException('Node must be an instance of ' . CollectionNode::class);
         }
 
         return $this->renderer->render(
-            'directives/admonition.html.twig',
+            'directives/collection.html.twig',
             [
-                'name' => $node->getName(),
-                'text' => $node->getText(),
-                'class' => implode(' ', $classes),
                 'node' => $node->getValue(),
             ]
         );

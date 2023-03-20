@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_map;
@@ -34,11 +37,13 @@ class ClassDirective extends SubDirective
 
         $document->setClasses($normalizedClasses);
 
-        if ($document instanceof DocumentNode) {
-            $this->setNodesClasses($document->getNodes(), $classes);
+        if (!$document instanceof DocumentNode || $document->getNodes() === []) {
+            $classNode = new ClassNode($data);
+            $classNode->setClasses($classes);
+            return $classNode;
         }
-
-        return null;
+        $this->setNodesClasses($document->getNodes(), $classes);
+        return new CollectionNode($document->getNodes());
     }
 
     /**
@@ -48,7 +53,7 @@ class ClassDirective extends SubDirective
     private function setNodesClasses(array $nodes, array $classes): void
     {
         foreach ($nodes as $node) {
-            $node->setClasses($classes);
+            $node->setClasses(array_merge($node->getClasses(), $classes));
 
             if (!($node instanceof DocumentNode)) {
                 continue;
