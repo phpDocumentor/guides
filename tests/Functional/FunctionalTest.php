@@ -34,7 +34,7 @@ use const LC_ALL;
 class FunctionalTest extends TestCase
 {
     private const RENDER_DOCUMENT_FILES = ['main-directive'];
-    private const SKIP_INDENTER_FILES   = ['code-block-diff'];
+    private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
     protected function setUp(): void
     {
@@ -85,7 +85,7 @@ class FunctionalTest extends TestCase
         );
 
         //Ugly hack to make te tests work.
-        $renderer->renderDocument($document, $context);
+        $renderer->renderNode($document, $context);
 
         $rendered = '';
 
@@ -123,11 +123,11 @@ class FunctionalTest extends TestCase
 
         foreach ($finder as $dir) {
             $rstFilename = $dir->getPathname() . '/' . $dir->getFilename() . '.rst';
-            if (! file_exists($rstFilename)) {
+            if (!file_exists($rstFilename)) {
                 throw new Exception(sprintf('Could not find functional test file "%s"', $rstFilename));
             }
 
-            $rst      = file_get_contents($rstFilename);
+            $rst = file_get_contents($rstFilename);
             $basename = $dir->getFilename();
 
             $formats = ['html'];
@@ -139,7 +139,7 @@ class FunctionalTest extends TestCase
                 ->notName('*.rst');
             foreach ($fileFinder as $file) {
                 $format = $file->getExtension();
-                if (! in_array($format, $formats, true)) {
+                if (!in_array($format, $formats, true)) {
                     continue;
                     throw new Exception(sprintf('Unexpected file extension in "%s"', $file->getPathname()));
                 }
@@ -150,7 +150,7 @@ class FunctionalTest extends TestCase
 
                 $expected = $file->getContents();
 
-                $useIndenter = ! in_array($basename, self::SKIP_INDENTER_FILES, true);
+                $useIndenter = !in_array($basename, self::SKIP_INDENTER_FILES, true);
 
                 $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $useIndenter];
             }

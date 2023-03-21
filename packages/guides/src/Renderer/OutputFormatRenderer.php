@@ -48,14 +48,4 @@ class OutputFormatRenderer
     {
         return $this->nodeRendererFactory->get($node)->render($node, $environment);
     }
-
-    public function renderDocument(DocumentNode $node, RenderContext $environment): string
-    {
-        $renderer = $this->nodeRendererFactory->get($node);
-        if ($renderer instanceof FullDocumentNodeRenderer === false) {
-            throw new InvalidArgumentException('Expected FullDocumentNodeRenderer not found');
-        }
-
-        return $renderer->renderDocument($node, $environment);
-    }
 }

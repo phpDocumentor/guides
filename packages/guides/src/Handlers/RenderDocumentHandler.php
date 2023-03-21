@@ -19,7 +19,7 @@ final class RenderDocumentHandler
     {
         $command->getContext()->getDestination()->put(
             $command->getFileDestination(),
-            $this->renderer->renderDocument(
+            $this->renderer->renderNode(
                 $command->getDocument(),
                 $command->getContext()
             )

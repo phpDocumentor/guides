@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\UrlGenerator;
 
@@ -37,10 +39,10 @@ class Figure extends SubDirective
     }
 
     public function processSub(
-        Node   $document,
-        string $variable,
-        string $data,
-        array $options
+        DocumentNode $document,
+        string       $variable,
+        string       $data,
+        array        $options
     ): ?Node {
         $image = new ImageNode($this->urlGenerator->relativeUrl($data));
         $scalarOptions = $this->optionsToArray($options);
@@ -54,6 +56,6 @@ class Figure extends SubDirective
             'name' => $scalarOptions['name'] ?? null,
         ]);
 
-        return new FigureNode($image, $document);
+        return new FigureNode($image, new CollectionNode($document->getChildren()));
     }
 }

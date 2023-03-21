@@ -39,9 +39,4 @@ class SpyRenderer implements Renderer
     {
         return '';
     }
-
-    public function renderDocument(DocumentNode $node, RenderContext $environment): string
-    {
-        return '';
-    }
 }

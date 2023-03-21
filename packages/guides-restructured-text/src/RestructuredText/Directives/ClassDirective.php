@@ -23,10 +23,10 @@ class ClassDirective extends SubDirective
     }
 
     public function processSub(
-        Node   $document,
-        string $variable,
-        string $data,
-        array $options
+        DocumentNode $document,
+        string       $variable,
+        string       $data,
+        array        $options
     ): ?Node {
         $classes = explode(' ', $data);
 

@@ -84,7 +84,6 @@ final class QuickStart
             $twigBuilder
         );
 
-        $nodeRenderers[] = new DocumentNodeRenderer($renderer);
         $nodeRenderers[] = new SpanNodeRenderer(
             $renderer,
             new ReferenceResolver([new DocResolver(), new RefResolver()]),

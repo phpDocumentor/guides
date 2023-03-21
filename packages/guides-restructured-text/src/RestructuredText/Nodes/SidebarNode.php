@@ -23,9 +23,9 @@ final class SidebarNode extends CompoundNode
 {
     private string $title;
 
-    public function __construct(string $title, ?Node $value = null)
+    public function __construct(string $title, array $value)
     {
-        parent::__construct(array_filter([$value]));
+        parent::__construct($value);
         $this->title = $title;
     }
 

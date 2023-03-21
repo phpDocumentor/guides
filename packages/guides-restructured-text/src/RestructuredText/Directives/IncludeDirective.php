@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use RuntimeException;
 
@@ -34,9 +35,9 @@ final class IncludeDirective extends Directive
 
     public function processNode(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options
+        string                $variable,
+        string                $data,
+        array                 $options
     ): Node {
         $parser = $documentParserContext->getParser();
         $subParser = $parser->getSubParser();
@@ -72,6 +73,6 @@ final class IncludeDirective extends Directive
             return $codeNode;
         }
 
-        return $subParser->parse($parser->getEnvironment(), $contents);
+        return new CollectionNode($subParser->parse($parser->getEnvironment(), $contents)->getChildren());
     }
 }

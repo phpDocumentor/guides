@@ -24,7 +24,7 @@ use RuntimeException;
 
 use function sprintf;
 
-final class TwigRenderer implements FullDocumentNodeRenderer, Renderer
+final class TwigRenderer implements Renderer
 {
     /** @var iterable<OutputFormatRenderer> */
     private iterable $outputFormatRenderers;
@@ -54,16 +54,11 @@ final class TwigRenderer implements FullDocumentNodeRenderer, Renderer
     public function renderNode(Node $node, RenderContext $environment): string
     {
         $this->setOutputRenderer($environment);
+        if ($node instanceof DocumentNode) {
+            $this->environmentBuilder->setContext($environment);
+        }
 
         return $this->outputRenderer->render($node, $environment);
-    }
-
-    public function renderDocument(DocumentNode $node, RenderContext $environment): string
-    {
-        $this->setOutputRenderer($environment);
-        $this->environmentBuilder->setContext($environment);
-
-        return $this->outputRenderer->renderDocument($node, $environment);
     }
 
     /** @psalm-assert OutputFormatRenderer $this->outputRenderer */
