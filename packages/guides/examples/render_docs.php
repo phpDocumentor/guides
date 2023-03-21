@@ -1,8 +1,10 @@
 <?php
 
 declare(strict_types=1);
+
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CollectLinkTargetsTransformer;
+use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
@@ -43,8 +45,7 @@ $commandbus = QuickStart::create(
     [
         ParseFileCommand::class => new ParseFileHandler(
             $logger,
-            new class implements EventDispatcherInterface
-            {
+            new class implements EventDispatcherInterface {
                 public function dispatch(object $event)
                 {
                     return $event;
@@ -58,10 +59,7 @@ $commandbus = QuickStart::create(
                 new MetasPass($metas),
                 new TransformerPass(
                     new DocumentNodeTraverser(
-                        [
-                            new TocNodeTransformer($metas),
-                            new CollectLinkTargetsTransformer($metas),
-                        ]
+                        new DefaultNodeTransformerFactory($metas)
                     )
                 )
             ])
@@ -79,7 +77,7 @@ $parseDirectoryHandler = new ParseDirectoryHandler(
 );
 
 $sourceFileSystem = new Filesystem(new Local(
-    __DIR__  . '/../docs'
+    __DIR__ . '/../docs'
 ));
 $sourceFileSystem->addPlugin(new Finder());
 
