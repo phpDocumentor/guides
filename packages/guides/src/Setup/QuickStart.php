@@ -38,13 +38,10 @@ use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRende
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\ContainerNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\SidebarNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\TopicNodeRenderer;
-use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\Test\TestLogger;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 final class QuickStart
 {
@@ -71,6 +68,7 @@ final class QuickStart
         $renderer->setNodeRendererFactory(new LazyNodeRendererFactory($nodeFactoryCallback));
 
         $twigBuilder = new EnvironmentBuilder();
+
         $templateRenderer = new TwigTemplateRenderer(
             $twigBuilder
         );
@@ -98,24 +96,6 @@ final class QuickStart
                 $node
             );
         }
-
-        $twigBuilder->setEnvironmentFactory(static function () use ($logger, $renderer): Environment {
-            $twig = new Environment(
-                new FilesystemLoader(
-                    [
-                        __DIR__ . '/../../resources/template/html/guides',
-                    ]
-                )
-            );
-            $twig->addExtension(new AssetsExtension(
-                $logger,
-                /** @var NodeRenderer<Node> $renderer */
-                $renderer,
-                new UrlGenerator(),
-            ));
-
-            return $twig;
-        });
 
         return $renderer;
     }

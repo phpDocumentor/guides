@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Console\Application;
 use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
+use phpDocumentor\Guides\Console\DependencyInjection\Compiler\NodeRendererPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -17,7 +18,6 @@ $container = new ContainerBuilder();
 
 // Load manual parameters
 $container->setParameter('vendor_dir', dirname(__DIR__, 3) . '/vendor');
-$container->setParameter('application_directory', __DIR__);
 $container->setParameter('working_directory', rtrim(getcwd(), '/'));
 
 // Load container configuration
@@ -26,8 +26,10 @@ foreach (Application::getDefaultExtensions() as $extension) {
     $container->loadFromExtension($extension->getAlias());
 }
 
+$container->addCompilerPass(new NodeRendererPass());
+
 // Compile container
-$container->compile();
+$container->compile(true);
 
 exit($container->get(Application::class)->run());
 

@@ -1,35 +1,27 @@
 <?php
 
-declare(strict_types=1);
+    declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
-use Exception;
-
-use function sprintf;
+use phpDocumentor\Guides\Setup\QuickStart;
+use phpDocumentor\Guides\UrlGenerator;
 
 class DefaultTypeRendererFactory implements TypeRendererFactory
 {
-    /** @var TypeRenderer[] */
-    private array $renderSets = [];
+    private InMemoryRendererFactory $factory;
 
     public function __construct()
     {
-        $this->renderSets = [
-            new HtmlRenderer(),
+        $this->factory = new InMemoryRendererFactory([
+            new HtmlRenderer(QuickStart::createRenderer()),
             new LatexRenderer(),
-            new IntersphinxRenderer(),
-        ];
+            new IntersphinxRenderer(new UrlGenerator()),
+        ]);
     }
 
     public function getRenderSet(string $outputFormat): TypeRenderer
     {
-        foreach ($this->renderSets as $renderSet) {
-            if ($renderSet->supports($outputFormat)) {
-                return $renderSet;
-            }
-        }
-
-        throw new Exception(sprintf('No render set found for output format "%s"', $outputFormat));
+        return $this->factory->getRenderSet($outputFormat);
     }
 }

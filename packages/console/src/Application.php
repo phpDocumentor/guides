@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 
 final class Application extends BaseApplication
 {
+    /** @param iterable<Command> $commands */
     public function __construct(iterable $commands, string $defaultCommand = 'run')
     {
         parent::__construct('phpDocumentor guides', '1.0.0');
@@ -27,8 +28,8 @@ final class Application extends BaseApplication
     public static function getDefaultExtensions(): array
     {
         return [
+            new GuidesExtension(),
             new ApplicationExtension(),
-            new GuidesExtension()
         ];
     }
 }

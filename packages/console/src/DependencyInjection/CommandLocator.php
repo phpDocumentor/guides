@@ -9,6 +9,8 @@ use League\Tactician\Handler\Locator\HandlerLocator;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+use function sprintf;
+
 class CommandLocator implements HandlerLocator
 {
     private ContainerInterface $commands;
@@ -18,6 +20,7 @@ class CommandLocator implements HandlerLocator
         $this->commands = $commands;
     }
 
+    /** {@inheritDoc} */
     public function getHandlerForCommand($commandName): object
     {
         try {
