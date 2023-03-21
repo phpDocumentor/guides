@@ -35,7 +35,7 @@ class AdmonitionNodeRenderer implements NodeRenderer
         return $node instanceof AdmonitionNode;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof AdmonitionNode === false) {
             throw new InvalidArgumentException('Node must be an instance of ' . AdmonitionNode::class);

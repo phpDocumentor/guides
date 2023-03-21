@@ -56,7 +56,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
      * @param string[] $attributes
      * @param TitleNode|string $title
      */
-    public function link(RenderContext $environment, ?string $url, $title, array $attributes = []): string
+    public function link(RenderContext $context, ?string $url, $title, array $attributes = []): string
     {
         $type = 'href';
 
@@ -65,7 +65,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
             $url = substr($url, 1);
             $url = $url !== '' ? '#' . $url : '';
-            $url = $environment->getCurrentFileName() . $url;
+            $url = $context->getCurrentFileName() . $url;
         }
 
         return $this->renderer->render(

@@ -36,7 +36,7 @@ final class CollectionNodeRenderer implements NodeRenderer
         return $node instanceof CollectionNode;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof CollectionNode === false) {
             throw new InvalidArgumentException('Node must be an instance of ' . CollectionNode::class);

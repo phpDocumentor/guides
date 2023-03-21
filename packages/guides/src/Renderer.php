@@ -23,5 +23,5 @@ interface Renderer
      */
     public function render(string $template, array $context = []): string;
 
-    public function renderNode(Node $node, RenderContext $environment): string;
+    public function renderNode(Node $node, RenderContext $context): string;
 }

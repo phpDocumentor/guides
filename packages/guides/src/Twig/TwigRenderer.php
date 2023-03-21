@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Twig;
 
 use InvalidArgumentException;
-use phpDocumentor\Guides\NodeRenderers\FullDocumentNodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -51,21 +50,21 @@ final class TwigRenderer implements Renderer
         return $this->outputRenderer->renderTemplate($template, $context);
     }
 
-    public function renderNode(Node $node, RenderContext $environment): string
+    public function renderNode(Node $node, RenderContext $context): string
     {
-        $this->setOutputRenderer($environment);
+        $this->setOutputRenderer($context);
         if ($node instanceof DocumentNode) {
-            $this->environmentBuilder->setContext($environment);
+            $this->environmentBuilder->setContext($context);
         }
 
-        return $this->outputRenderer->render($node, $environment);
+        return $this->outputRenderer->render($node, $context);
     }
 
     /** @psalm-assert OutputFormatRenderer $this->outputRenderer */
-    private function setOutputRenderer(RenderContext $environment): void
+    private function setOutputRenderer(RenderContext $context): void
     {
         foreach ($this->outputFormatRenderers as $outputFormatRenderer) {
-            if (!$outputFormatRenderer->supports($environment->getOutputFormat())) {
+            if (!$outputFormatRenderer->supports($context->getOutputFormat())) {
                 continue;
             }
 
@@ -74,7 +73,7 @@ final class TwigRenderer implements Renderer
 
         if ($this->outputRenderer === null) {
             throw new InvalidArgumentException(
-                sprintf('Output format "%s" is not supported', $environment->getOutputFormat())
+                sprintf('Output format "%s" is not supported', $context->getOutputFormat())
             );
         }
     }

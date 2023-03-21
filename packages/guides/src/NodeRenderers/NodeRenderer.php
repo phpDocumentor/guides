@@ -22,5 +22,5 @@ interface NodeRenderer
     public function supports(Node $node): bool;
 
     /** @param T $node */
-    public function render(Node $node, RenderContext $environment): string;
+    public function render(Node $node, RenderContext $renderContext): string;
 }

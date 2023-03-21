@@ -33,7 +33,7 @@ interface SpanRenderer
     /**
      * @param string[] $attributes
      */
-    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string;
+    public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string;
 
     public function escape(string $span): string;
 
