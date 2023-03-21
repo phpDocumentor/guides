@@ -8,9 +8,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
-use phpDocumentor\Guides\Compiler\NodeTransformers\CollectLinkTargetsTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
-use phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
 use phpDocumentor\Guides\FileCollector;
@@ -20,13 +18,15 @@ use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\ParseFileHandler;
-use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
+use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Handlers\RenderHandler;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\RenderContext;
 use League\Tactician\Setup\QuickStart;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\Renderer\DefaultTypeRendererFactory;
+use phpDocumentor\Guides\Renderer\HtmlTypeRenderer;
+use phpDocumentor\Guides\Renderer\IntersphinxTypeRenderer;
+use phpDocumentor\Guides\Renderer\TypeRenderer;
 use PHPUnit\Framework\TestCase;
 use Flyfinder\Finder;
 
@@ -121,25 +121,21 @@ class IntegrationTest extends TestCase
         /** @var DocumentNode[] $documents */
         $documents = $commandbus->handle($compileDocumentsCommand);
 
-        $renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer($metas);
-        $renderDocumentHandler = new RenderDocumentHandler($renderer);
-
-        foreach ($documents as $document) {
-            $renderDocumentHandler->handle(
-                new RenderDocumentCommand(
-                    $document,
-                    RenderContext::forDocument(
-                        $document,
-                        $sourceFileSystem,
-                        new Filesystem(new Local($outputPath)),
-                        '/',
-                        $metas,
-                        new UrlGenerator(),
-                        'html'
-                    )
-                )
-            );
-        }
+        $renderHandler = new RenderHandler(new DefaultTypeRendererFactory());
+        $renderHandler->handle(new RenderCommand(
+            HtmlTypeRenderer::TYPE,
+            $documents,
+            $metas,
+            $sourceFileSystem,
+            new Filesystem(new Local($outputPath)),
+        ));
+        $renderHandler->handle(new RenderCommand(
+            IntersphinxTypeRenderer::TYPE,
+            $documents,
+            $metas,
+            $sourceFileSystem,
+            new Filesystem(new Local($outputPath)),
+        ));
 
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);

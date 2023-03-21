@@ -1,0 +1,40 @@
+{
+    "std:doc": {
+        "index": [
+            "",
+            "",
+            "index.html",
+            "Document Title"
+        ],
+        "page1": [
+            "",
+            "",
+            "page1.html",
+            "Page 1"
+        ],
+        "page2": [
+            "",
+            "",
+            "page2.html",
+            "Page 2"
+        ],
+        "subfolder\/index": [
+            "",
+            "",
+            "subfolder\/index.html",
+            "Subfolder Index"
+        ],
+        "subfolder\/subpage1": [
+            "",
+            "",
+            "subfolder\/subpage1.html",
+            "Subpage 1"
+        ],
+        "subfolder\/subpage2": [
+            "",
+            "",
+            "subfolder\/subpage2.html",
+            "Subpage 2"
+        ]
+    }
+}
