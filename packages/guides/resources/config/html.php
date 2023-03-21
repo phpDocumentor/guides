@@ -19,19 +19,19 @@ use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 
 return [
-    AnchorNode::class => 'anchor.html.twig',
-    FigureNode::class => 'figure.html.twig',
-    MetaNode::class => 'meta.html.twig',
-    ParagraphNode::class => 'paragraph.html.twig',
-    QuoteNode::class => 'quote.html.twig',
-    SeparatorNode::class => 'separator.html.twig',
-    TitleNode::class => 'header-title.html.twig',
-    SectionNode::class => 'section.html.twig',
-    ImageNode::class => 'image.html.twig',
-    CodeNode::class => 'code.html.twig',
-    DefinitionListNode::class => 'definition-list.html.twig',
-    DefinitionNode::class => 'definition.html.twig',
-    ListNode::class => 'list.html.twig',
-    ListItemNode::class => 'list-item.html.twig',
-    LiteralBlockNode::class => 'directives/literal-block.html.twig'
+    AnchorNode::class => 'inline/anchor.html.twig',
+    FigureNode::class => 'body/figure.html.twig',
+    MetaNode::class => 'structure/header/meta.html.twig',
+    ParagraphNode::class => 'body/paragraph.html.twig',
+    QuoteNode::class => 'body/quote.html.twig',
+    SeparatorNode::class => 'body/separator.html.twig',
+    TitleNode::class => 'structure/header-title.html.twig',
+    SectionNode::class => 'structure/section.html.twig',
+    ImageNode::class => 'body/image.html.twig',
+    CodeNode::class => 'body/code.html.twig',
+    DefinitionListNode::class => 'body/definition-list.html.twig',
+    DefinitionNode::class => 'body/definition.html.twig',
+    ListNode::class => 'body/list/list.html.twig',
+    ListItemNode::class => 'body/list/list-item.html.twig',
+    LiteralBlockNode::class => 'body/literal-block.html.twig'
 ];

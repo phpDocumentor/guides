@@ -52,7 +52,7 @@ class DocumentNodeRenderer implements NodeRenderer, FullDocumentNodeRenderer, No
     public function renderDocument(DocumentNode $node, RenderContext $environment): string
     {
         return $this->renderer->render(
-            'document.html.twig',
+            'structure/document.html.twig',
             ['node' => $node]
         );
     }

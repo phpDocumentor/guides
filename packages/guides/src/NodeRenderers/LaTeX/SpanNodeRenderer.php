@@ -29,27 +29,27 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 {
     public function emphasis(string $text): string
     {
-        return $this->renderer->render('emphasis.tex.twig', ['text' => $text]);
+        return $this->renderer->render('roles/emphasis.tex.twig', ['text' => $text]);
     }
 
     public function strongEmphasis(string $text): string
     {
-        return $this->renderer->render('strong-emphasis.tex.twig', ['text' => $text]);
+        return $this->renderer->render('roles/strong-emphasis.tex.twig', ['text' => $text]);
     }
 
     public function nbsp(): string
     {
-        return $this->renderer->render('nbsp.tex.twig');
+        return $this->renderer->render('roles/nbsp.tex.twig');
     }
 
     public function br(): string
     {
-        return $this->renderer->render('br.tex.twig');
+        return $this->renderer->render('roles/br.tex.twig');
     }
 
     public function literal(LiteralToken $token): string
     {
-        return $this->renderer->render('literal.tex.twig', ['node' => $token]);
+        return $this->renderer->render('roles/literal.tex.twig', ['node' => $token]);
     }
 
     /**
@@ -69,7 +69,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         }
 
         return $this->renderer->render(
-            'link.tex.twig',
+            'roles/link.tex.twig',
             [
                 'type' => $type,
                 'url' => $url,

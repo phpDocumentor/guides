@@ -42,7 +42,7 @@ final class SidebarNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->render(
-            'directives/sidebar.html.twig',
+            'structure/sidebar.html.twig',
             [
                 'title' => $node->getTitle(),
                 'node' => $node->getValue(),

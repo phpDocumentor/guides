@@ -42,7 +42,7 @@ final class ContainerNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->render(
-            'directives/container.html.twig',
+            'body/container.html.twig',
             [
                 'class' => $node->getOption('class'),
                 'id' => $node->getOption('name'),
