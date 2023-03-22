@@ -39,7 +39,7 @@ final class TocNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->render(
-            'directives/toc/toc.html.twig',
+            'body/toc/toc.html.twig',
             [
                 'node' => $node,
             ]

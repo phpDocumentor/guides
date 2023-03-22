@@ -28,7 +28,7 @@ final class TocEntryRenderer implements NodeRenderer
     public function render(Node $node, RenderContext $environment): string
     {
         return $this->renderer->render(
-            'toc-item.html.twig',
+            'body/toc/toc-item.html.twig',
             [
                 'url' => $environment->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),
                 'node' => $node
