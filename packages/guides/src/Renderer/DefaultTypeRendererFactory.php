@@ -13,6 +13,7 @@ class DefaultTypeRendererFactory implements TypeRendererFactory
     {
         $this->renderSets = [
             new HtmlTypeRenderer(),
+            new LatexTypeRenderer(),
             new IntersphinxTypeRenderer(),
         ];
     }
