@@ -93,7 +93,7 @@ final class GridTableRule implements Rule
                 $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '-');
                 $context->pushSeparatorLine($separatorLineConfig);
                 // if an empty line follows a separator line, then it is the end of the table
-                if (LinesIterator::isEmptyLine($documentIterator->current())) {
+                if (LinesIterator::isEmptyLine($documentIterator->peek())) {
                     break;
                 }
 
