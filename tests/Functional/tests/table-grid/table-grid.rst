@@ -7,3 +7,5 @@
 +--------+--------+
 | Cell 5 | item 3 |
 +--------+--------+
+
+Paragraph after the table.
