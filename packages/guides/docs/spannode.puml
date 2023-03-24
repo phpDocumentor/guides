@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class SpanNode
+class SpanToken
+
+class LiteralToken
+class CrossReferenceToken
+class EmphasisToken
+
+EmphasisToken -up-|> SpanToken
+CrossReferenceToken -up-|> SpanToken
+LiteralToken -up-|> SpanToken
+
+SpanNode --* SpanToken
+
+@enduml
