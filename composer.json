@@ -44,7 +44,7 @@
         "psr/log": "^1.1",
         "doctrine/event-manager": "^1.1",
         "doctrine/lexer": "^2.1",
-        "league/commonmark": "^2.3",
+        "league/commonmark": "^2.4",
         "symfony/process": "^5.4",
         "symfony/http-client": "^5.4.21",
         "symfony/contracts": "^2.5"
