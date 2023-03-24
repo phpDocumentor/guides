@@ -35,12 +35,7 @@ class SpyRenderer implements Renderer
         return $this->template;
     }
 
-    public function renderNode(Node $node, RenderContext $environment): string
-    {
-        return '';
-    }
-
-    public function renderDocument(DocumentNode $node, RenderContext $environment): string
+    public function renderNode(Node $node, RenderContext $context): string
     {
         return '';
     }

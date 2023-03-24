@@ -33,7 +33,7 @@ class TocNodeRenderer implements NodeRenderer
         $this->renderer = $renderer;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof TocNode === false) {
             throw new InvalidArgumentException('Invalid node presented');

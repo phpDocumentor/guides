@@ -30,7 +30,7 @@ final class TocNodeRenderer implements NodeRenderer
         $this->renderer = $renderer;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         Assert::isInstanceOf($node, TocNode::class);
 

@@ -33,7 +33,7 @@ class TableNodeRenderer implements NodeRenderer
         $this->renderer = $renderer;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         $headers = $node->getHeaders();
         $rows = $node->getData();

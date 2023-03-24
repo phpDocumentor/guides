@@ -65,7 +65,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         $this->nodeRendererFactory = $nodeRendererFactory;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof SpanNode === false) {
             throw new InvalidArgumentException('Invalid node presented');
@@ -73,16 +73,16 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
         $value = $node->getValue();
 
-        $span = $this->renderSyntaxes($value, $environment);
-        return $this->renderTokens($node, $span, $environment);
+        $span = $this->renderSyntaxes($value, $renderContext);
+        return $this->renderTokens($node, $span, $renderContext);
     }
 
     /**
      * @param string[] $attributes
      */
-    public function link(RenderContext $environment, ?string $url, string $title, array $attributes = []): string
+    public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
     {
-        $url = (string) $url;
+        $url = (string)$url;
 
         return $this->renderer->render(
             'link.html.twig',

@@ -35,7 +35,7 @@ final class TemplateNodeRenderer implements NodeRenderer
     }
 
     /** @param T $node */
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         return $this->renderer->render(
             $this->template,

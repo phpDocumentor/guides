@@ -29,13 +29,13 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
         $this->nodeRendererFactory = $nodeRendererFactory;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         $value = $node->getValue();
 
         if ($value instanceof Node) {
             assert($this->nodeRendererFactory !== null);
-            return $this->nodeRendererFactory->get($value)->render($value, $environment);
+            return $this->nodeRendererFactory->get($value)->render($value, $renderContext);
         }
 
         if (is_string($value)) {

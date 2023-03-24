@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
@@ -30,14 +31,14 @@ class SidebarDirective extends SubDirective
     }
 
     public function processSub(
-        Node   $document,
-        string $variable,
-        string $data,
-        array $options
+        DocumentNode $document,
+        string       $variable,
+        string       $data,
+        array        $options
     ): ?Node {
         return (new SidebarNode(
             $data,
-            $document
+            $document->getChildren()
         ))->withOptions($this->optionsToArray($options));
     }
 }

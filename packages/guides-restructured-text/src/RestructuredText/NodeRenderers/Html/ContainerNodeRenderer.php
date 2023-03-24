@@ -35,7 +35,7 @@ final class ContainerNodeRenderer implements NodeRenderer
         return $node instanceof ContainerNode;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof ContainerNode === false) {
             throw new InvalidArgumentException('Node must be an instance of ' . ContainerNode::class);

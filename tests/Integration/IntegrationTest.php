@@ -140,7 +140,7 @@ class IntegrationTest extends TestCase
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
             self::assertFileExists($outputFile);
-            self::assertFileEquals($compareFile, $outputFile);
+            self::assertFileEquals($compareFile, $outputFile, 'output file does not match ' . $compareFile);
         }
     }
 

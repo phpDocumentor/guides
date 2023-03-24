@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
-use InvalidArgumentException;
-use phpDocumentor\Guides\NodeRenderers\FullDocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 
@@ -44,18 +41,8 @@ class OutputFormatRenderer
         return $this->templateRenderer->render($template, $context);
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $context): string
     {
-        return $this->nodeRendererFactory->get($node)->render($node, $environment);
-    }
-
-    public function renderDocument(DocumentNode $node, RenderContext $environment): string
-    {
-        $renderer = $this->nodeRendererFactory->get($node);
-        if ($renderer instanceof FullDocumentNodeRenderer === false) {
-            throw new InvalidArgumentException('Expected FullDocumentNodeRenderer not found');
-        }
-
-        return $renderer->renderDocument($node, $environment);
+        return $this->nodeRendererFactory->get($node)->render($node, $context);
     }
 }

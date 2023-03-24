@@ -35,7 +35,7 @@ final class SidebarNodeRenderer implements NodeRenderer
         return $node instanceof SidebarNode;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof SidebarNode === false) {
             throw new InvalidArgumentException('Node must be an instance of ' . SidebarNode::class);

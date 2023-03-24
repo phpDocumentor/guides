@@ -25,7 +25,7 @@ final class DocumentTitleNodeRenderer implements NodeRenderer
         return $node instanceof DocumentTitleNode;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         return $this->renderer->render('page/header/title.html.twig', ['title' => $node->getValue()]);
     }

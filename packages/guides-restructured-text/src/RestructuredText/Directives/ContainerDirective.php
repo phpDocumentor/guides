@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
@@ -26,11 +27,11 @@ class ContainerDirective extends SubDirective
     }
 
     public function processSub(
-        Node   $document,
-        string $variable,
-        string $data,
-        array $options
+        DocumentNode $document,
+        string       $variable,
+        string       $data,
+        array        $options
     ): ?Node {
-        return (new ContainerNode([$document]))->withOptions(['class' => $data]);
+        return (new ContainerNode($document->getChildren()))->withOptions(['class' => $data]);
     }
 }

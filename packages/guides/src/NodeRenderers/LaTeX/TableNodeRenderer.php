@@ -36,7 +36,7 @@ class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
         $this->nodeRendererFactory = $nodeRendererFactory;
     }
 
-    public function render(Node $node, RenderContext $environment): string
+    public function render(Node $node, RenderContext $renderContext): string
     {
         if ($node instanceof TableNode === false) {
             throw new InvalidArgumentException('Invalid node presented');
@@ -52,9 +52,9 @@ class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
             assert($this->nodeRendererFactory !== null);
             /** @var SpanNode $col */
             foreach ($row->getColumns() as $n => $col) {
-                $rowTex .= $this->nodeRendererFactory->get($col)->render($col, $environment);
+                $rowTex .= $this->nodeRendererFactory->get($col)->render($col, $renderContext);
 
-                if ((int) $n + 1 >= count($row->getColumns())) {
+                if ((int)$n + 1 >= count($row->getColumns())) {
                     continue;
                 }
 

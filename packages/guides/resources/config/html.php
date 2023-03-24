@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\AnchorNode;
@@ -27,6 +28,7 @@ return [
     SeparatorNode::class => 'body/separator.html.twig',
     TitleNode::class => 'structure/header-title.html.twig',
     SectionNode::class => 'structure/section.html.twig',
+    DocumentNode::class => 'structure/document.html.twig',
     ImageNode::class => 'body/image.html.twig',
     CodeNode::class => 'body/code.html.twig',
     DefinitionListNode::class => 'body/definition-list.html.twig',
