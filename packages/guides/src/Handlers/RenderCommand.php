@@ -14,26 +14,25 @@ final class RenderCommand
     private Metas $metas;
     private FilesystemInterface $origin;
     private FilesystemInterface $destination;
+    private string $destinationPath;
 
     /**
-     * @param string $outputFormat
      * @param DocumentNode[] $documents
-     * @param Metas $metas
-     * @param FilesystemInterface $origin
-     * @param FilesystemInterface $destination
      */
     public function __construct(
         string $outputFormat,
         array $documents,
         Metas $metas,
         FilesystemInterface $origin,
-        FilesystemInterface $destination
+        FilesystemInterface $destination,
+        string $destinationPath = '/'
     ) {
         $this->outputFormat = $outputFormat;
         $this->documents = $documents;
         $this->metas = $metas;
         $this->origin = $origin;
         $this->destination = $destination;
+        $this->destinationPath = $destinationPath;
     }
 
     /**
@@ -74,5 +73,10 @@ final class RenderCommand
     public function getDestination(): FilesystemInterface
     {
         return $this->destination;
+    }
+
+    public function getDestinationPath(): string
+    {
+        return $this->destinationPath;
     }
 }

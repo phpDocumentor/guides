@@ -30,7 +30,7 @@ class HtmlTypeRenderer implements TypeRenderer
                         $document,
                         $renderCommand->getOrigin(),
                         $renderCommand->getDestination(),
-                        '/',
+                        $renderCommand->getDestinationPath(),
                         $renderCommand->getMetas(),
                         new UrlGenerator(),
                         HtmlTypeRenderer::TYPE
