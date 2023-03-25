@@ -19,14 +19,21 @@ use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\ParseFileHandler;
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
+use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
 use phpDocumentor\Guides\Handlers\RenderHandler;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use League\Tactician\Setup\QuickStart;
+use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\DefaultTypeRendererFactory;
 use phpDocumentor\Guides\Renderer\HtmlTypeRenderer;
 use phpDocumentor\Guides\Renderer\IntersphinxTypeRenderer;
+use phpDocumentor\Guides\Renderer\LatexTypeRenderer;
 use phpDocumentor\Guides\Renderer\TypeRenderer;
+use phpDocumentor\Guides\UrlGenerator;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Flyfinder\Finder;
 
@@ -39,8 +46,6 @@ use const LC_ALL;
 
 class IntegrationTest extends TestCase
 {
-    private const RENDER_DOCUMENT_FILES = ['main-directive'];
-    private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
     protected function setUp(): void
     {
@@ -49,18 +54,85 @@ class IntegrationTest extends TestCase
 
     /**
      * @param String[] $compareFiles
-     * @dataProvider getIntegrationTests
+     * @dataProvider getTestsForDirectoryTest
      */
-    public function testIntegration(
+    public function testHtmlIntegration(
         string $inputPath,
         string $expectedPath,
         string $outputPath,
         array $compareFiles
     ): void {
         system("rm -rf " . escapeshellarg($outputPath));
+        self::assertDirectoryExists($inputPath);
+        self::assertDirectoryExists($expectedPath);
+        self::assertNotEmpty($compareFiles);
         system("mkdir " . escapeshellarg($outputPath));
 
         $metas = new Metas([]);
+        $sourceFileSystem = new Filesystem(new Local(
+            $inputPath
+        ));
+
+        $documents = $this->compile($metas, $sourceFileSystem, $outputPath);
+
+        $renderHandler = new RenderHandler(new DefaultTypeRendererFactory());
+        $renderHandler->handle(new RenderCommand(
+            HtmlTypeRenderer::TYPE,
+            $documents,
+            $metas,
+            $sourceFileSystem,
+            new Filesystem(new Local($outputPath)),
+        ));
+        $renderHandler->handle(new RenderCommand(
+            IntersphinxTypeRenderer::TYPE,
+            $documents,
+            $metas,
+            $sourceFileSystem,
+            new Filesystem(new Local($outputPath)),
+        ));
+
+        foreach ($compareFiles as $compareFile) {
+            $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
+            self::assertFileEqualsTrimmed($compareFile, $outputFile);
+        }
+    }
+
+    /**
+     * Asserts that the contents of one file is equal to the contents of another
+     * file. It ignores empty lines and whitespace at the start and end of each line
+     *
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExpectationFailedException
+     */
+    public static function assertFileEqualsTrimmed(string $expected, string $actual, string $message = ''): void
+    {
+        static::assertFileExists($expected, $message);
+        static::assertFileExists($actual, $message);
+
+        $constraint = new IsEqual(self::getTrimmedFileContent($expected));
+
+        static::assertThat(self::getTrimmedFileContent($actual), $constraint, $message);
+    }
+
+    public static function getTrimmedFileContent(string $file): string
+    {
+        $contentArray = explode("\n", file_get_contents($file));
+        array_walk($contentArray, function (&$value) {
+            $value = trim($value);
+        });
+        $contentArray = array_filter($contentArray, function ($value) {
+            return $value !== '';
+        });
+        return implode("\n", $contentArray);
+    }
+
+    /**
+     * @return DocumentNode[]
+     */
+    private function compile(
+        Metas $metas,
+        Filesystem $sourceFileSystem,
+        string $outputPath) : array {
         $logger = new class($outputPath) extends AbstractLogger {
 
             private $outputPath;
@@ -104,9 +176,6 @@ class IntegrationTest extends TestCase
             new FileCollector($metas),
             $commandbus,
         );
-        $sourceFileSystem = new Filesystem(new Local(
-            $inputPath
-        ));
         $sourceFileSystem->addPlugin(new Finder());
 
         $parseDirCommand = new ParseDirectoryCommand(
@@ -119,45 +188,39 @@ class IntegrationTest extends TestCase
         $compileDocumentsCommand = new CompileDocumentsCommand($documents);
 
         /** @var DocumentNode[] $documents */
-        $documents = $commandbus->handle($compileDocumentsCommand);
-
-        $renderHandler = new RenderHandler(new DefaultTypeRendererFactory());
-        $renderHandler->handle(new RenderCommand(
-            HtmlTypeRenderer::TYPE,
-            $documents,
-            $metas,
-            $sourceFileSystem,
-            new Filesystem(new Local($outputPath)),
-        ));
-        $renderHandler->handle(new RenderCommand(
-            IntersphinxTypeRenderer::TYPE,
-            $documents,
-            $metas,
-            $sourceFileSystem,
-            new Filesystem(new Local($outputPath)),
-        ));
-
-        foreach ($compareFiles as $compareFile) {
-            $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
-            self::assertFileExists($outputFile);
-            self::assertFileEquals($compareFile, $outputFile, 'output file does not match ' . $compareFile);
-        }
+        return $commandbus->handle($compileDocumentsCommand);
     }
 
     /**
      * @return mixed[]
      */
-    public function getIntegrationTests(): array
+    public function getTestsForDirectoryTest(): array
+    {
+        return $this->getTestsForDirectory();
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getTestsForLatex(): array
+    {
+        return $this->getTestsForDirectory('/tests-latex');
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function getTestsForDirectory(string $directory = '/tests'): array
     {
         $finder = new SymfonyFinder();
         $finder
             ->directories()
-            ->in(__DIR__ . '/tests');
+            ->in(__DIR__ . $directory)
+            ->depth('== 0');
 
         $tests = [];
 
         foreach ($finder as $dir) {
-
             if (file_exists($dir->getPathname() . '/input')) {
                 $compareFiles = [];
                 $fileFinder = new \Symfony\Component\Finder\Finder();
@@ -167,7 +230,7 @@ class IntegrationTest extends TestCase
                 foreach ($fileFinder as $file) {
                     $compareFiles[] = $file->getPathname();
                 }
-                $tests[] = [
+                $tests[$dir->getPathname()] = [
                     $dir->getPathname() . '/input',
                     $dir->getPathname() . '/expected',
                     $dir->getPathname() . '/temp',

@@ -76,7 +76,12 @@ final class QuickStart
         $renderer = new TwigRenderer(
             [
                 new OutputFormatRenderer(
-                    'html',
+                    Renderer\HtmlTypeRenderer::TYPE,
+                    new LazyNodeRendererFactory($nodeFactoryCallback),
+                    new TemplateRenderer($twigBuilder)
+                ),
+                new OutputFormatRenderer(
+                    Renderer\LatexTypeRenderer::TYPE,
                     new LazyNodeRendererFactory($nodeFactoryCallback),
                     new TemplateRenderer($twigBuilder)
                 ),

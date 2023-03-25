@@ -24,7 +24,7 @@ psalm:
 	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
-test: test-unit test-functional test-integration## Runs all test suites with phpunit/phpunit
+test: test-unit test-functional test-integration cleanup-tests## Runs all test suites with phpunit/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
@@ -37,6 +37,10 @@ test-functional: ## Runs functional tests with phpunit/phpunit
 .PHONY: test-integration
 test-integration: ## Runs integration tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
+
+.PHONY: cleanup-tests
+cleanup-tests: ## Cleans up temp directories created by test-integration
+	$(PHP_BIN) find ./tests -type d -name 'temp' -exec rm -rf {} \;
 
 .PHONY: dependency-analysis
 dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
