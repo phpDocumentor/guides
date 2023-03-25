@@ -45,6 +45,10 @@ final class LiteralRoleRuleTest extends TestCase
             [
                 '``literal with spaces``',
                 'literal with spaces'
+            ],
+            [
+                '``literal with `single backticks` inside``',
+                'literal with `single backticks` inside'
             ]
         ];
     }
