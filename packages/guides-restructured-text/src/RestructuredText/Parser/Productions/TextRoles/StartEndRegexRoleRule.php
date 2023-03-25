@@ -2,14 +2,16 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
-use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\ValueToken;
 
 abstract class StartEndRegexRoleRule implements TextRoleRule
 {
     abstract public function getEndRegex(): string;
 
     abstract public function getStartRegex(): string;
+
+    abstract protected function createToken(string $content): ValueToken;
 
     public function applies(TokenIterator $tokens): bool
     {
@@ -49,12 +51,5 @@ abstract class StartEndRegexRoleRule implements TextRoleRule
     private function isEndToken(string $content): bool
     {
         return (bool) preg_match($this->getEndRegex(), $content);
-    }
-
-    private function createToken(string $content): LiteralToken
-    {
-        $content = (string) preg_replace($this->getStartRegex(), '', $content);
-        $content = (string) preg_replace($this->getEndRegex(), '', $content);
-        return new LiteralToken('??', $content);
     }
 }

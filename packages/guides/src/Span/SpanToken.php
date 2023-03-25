@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Span;
 
 class SpanToken
 {
-    public const TYPE_LITERAL = 'literal';
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';
 

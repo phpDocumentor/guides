@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
+use phpDocumentor\Guides\Span\EmphasisToken;
+use phpDocumentor\Guides\Span\ValueToken;
+
 final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
 {
     private EmphasisRoleRule $rule;
@@ -36,18 +39,19 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     }
 
     /**
-     * @return array<int, array<int, string>>
+     * @return array<int, array<int, string | ValueToken>>
      */
     public function expectedLiteralContentProvider() : array
     {
         return [
             [
                 '*literal*',
-                'literal',
+                new EmphasisToken('??', 'literal'),
             ],
             [
                 '*literal with spaces*',
-                'literal with spaces'
+                new EmphasisToken('??', 'literal with spaces'),
+
             ]
         ];
     }

@@ -188,7 +188,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     private function renderToken(SpanToken $spanToken, string $span, RenderContext $context): string
     {
         switch ($spanToken->getType()) {
-            case SpanToken::TYPE_LITERAL:
+            case LiteralToken::TYPE:
                 assert($spanToken instanceof LiteralToken);
 
                 return trim($this->renderLiteral($spanToken, $span, $context));

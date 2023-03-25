@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
+use phpDocumentor\Guides\Span\LiteralToken;
+use phpDocumentor\Guides\Span\ValueToken;
+
 final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
 {
     private DefaultRoleRule $rule;
@@ -36,19 +39,19 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     }
 
     /**
-     * @return array<int, array<int, string>>
+     * @return array<int, array<int, string | ValueToken>>
      */
     public function expectedLiteralContentProvider() : array
     {
         return [
             [
                 '`literal`',
-                'literal',
+                new LiteralToken('??', 'literal'),
             ],
             [
                 '`literal with spaces`',
-                'literal with spaces'
-            ]
+                new LiteralToken('??', 'literal with spaces'),
+            ],
         ];
     }
 

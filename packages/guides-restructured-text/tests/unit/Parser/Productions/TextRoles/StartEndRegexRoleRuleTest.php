@@ -3,6 +3,7 @@
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
 use phpDocumentor\Guides\Span\LiteralToken;
+use phpDocumentor\Guides\Span\ValueToken;
 use PHPUnit\Framework\TestCase;
 
 abstract class StartEndRegexRoleRuleTest extends TestCase
@@ -27,13 +28,12 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
     }
 
     /** @dataProvider expectedLiteralContentProvider  */
-    public function testApply(string $input, string $literal): void
+    public function testApply(string $input, ValueToken $expectedToken): void
     {
         $tokens = new TokenIterator(explode(' ', $input));
-        $expected = new LiteralToken('??', $literal);
 
         self::assertTrue($this->getRule()->applies($tokens));
-        self::assertEquals($expected, $this->getRule()->apply($tokens));
+        self::assertEquals($expectedToken, $this->getRule()->apply($tokens));
     }
 
     /** @dataProvider notEndingProvider  */
@@ -53,7 +53,7 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
 
 
     /**
-     * @return array<int, array<int, string>>
+     * @return array<int, array<int, string | ValueToken>>
      */
     abstract public function expectedLiteralContentProvider(): array;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Span;
 
-final class LiteralToken extends ValueToken
+final class EmphasisToken extends ValueToken
 {
-    public const TYPE = 'literal';
+    public const TYPE = 'emphasis';
 
     public function __construct(string $id, string $value)
     {

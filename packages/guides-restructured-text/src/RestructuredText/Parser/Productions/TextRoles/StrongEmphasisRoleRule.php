@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
+use phpDocumentor\Guides\Span\StrongEmphasisToken;
+use phpDocumentor\Guides\Span\ValueToken;
+
 class StrongEmphasisRoleRule extends StartEndRegexRoleRule
 {
     private const START ='/^\*{2}(?!\*)/';
@@ -17,5 +20,12 @@ class StrongEmphasisRoleRule extends StartEndRegexRoleRule
     public function getEndRegex(): string
     {
         return self::END;
+    }
+
+    protected function createToken(string $content): ValueToken
+    {
+        $content = (string) preg_replace($this->getStartRegex(), '', $content);
+        $content = (string) preg_replace($this->getEndRegex(), '', $content);
+        return new StrongEmphasisToken('??', $content);
     }
 }

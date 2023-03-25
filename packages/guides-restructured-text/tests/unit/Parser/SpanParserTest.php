@@ -45,7 +45,7 @@ final class SpanParserTest extends TestCase
 
         self::assertStringNotContainsString('``inline literals``', $result->getValue());
         self::assertInstanceOf(LiteralToken::class, $token);
-        self::assertEquals(SpanToken::TYPE_LITERAL, $token->getType());
+        self::assertEquals(LiteralToken::TYPE, $token->getType());
         self::assertEquals(
             ['type' => 'literal'],
             $token->getTokenData()
