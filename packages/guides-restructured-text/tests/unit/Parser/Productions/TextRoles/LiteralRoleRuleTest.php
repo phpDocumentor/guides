@@ -55,7 +55,11 @@ final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
             [
                 '``literal with `single backticks` inside``',
                 new LiteralToken('??', 'literal with `single backticks` inside'),
-            ]
+            ],
+            [
+            '``literal with \`` escaped backticks``',
+                new LiteralToken('??', 'literal with \`` escaped backticks'),
+            ],
         ];
     }
 
@@ -67,6 +71,10 @@ final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
         return [
             [
                 '``literal not ending',
+                '``literal',
+            ],
+            [
+                '``literal not ending, char is escaped\\``',
                 '``literal',
             ],
         ];

@@ -45,14 +45,17 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '*literal*',
-                new EmphasisToken('??', 'literal'),
+                '*text*',
+                new EmphasisToken('??', 'text'),
             ],
             [
-                '*literal with spaces*',
-                new EmphasisToken('??', 'literal with spaces'),
-
-            ]
+                '*text with spaces*',
+                new EmphasisToken('??', 'text with spaces'),
+            ],
+            [
+            '*text with escaped \\* star*',
+                new EmphasisToken('??', 'text with escaped \\* star'),
+            ],
         ];
     }
 
@@ -63,8 +66,12 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '*literal not ending',
-                '*literal',
+                '*text not ending',
+                '*text',
+            ],
+            [
+                '*text not ending, char is escaped\\*',
+                '*text',
             ],
         ];
     }

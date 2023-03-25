@@ -35,6 +35,10 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
                 ['``text'],
                 false,
             ],
+            [
+                ['\\`text'], // char is escaped
+                false,
+            ],
         ];
     }
 
@@ -45,12 +49,12 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '`literal`',
-                new LiteralToken('??', 'literal'),
+                '`text`',
+                new LiteralToken('??', 'text'),
             ],
             [
-                '`literal with spaces`',
-                new LiteralToken('??', 'literal with spaces'),
+                '`text with spaces`',
+                new LiteralToken('??', 'text with spaces'),
             ],
         ];
     }
@@ -62,8 +66,12 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '`literal not ending',
-                '`literal',
+                '`text not ending',
+                '`text',
+            ],
+            [
+                '`text not ending, char is escaped\\`',
+                '`text',
             ],
         ];
     }

@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Span\ValueToken;
 final class LiteralRoleRule extends StartEndRegexRoleRule
 {
     private const START ='/^`{2}(?!`)/';
-    private const END = '/(?<!`)`{2}$/';
+    private const END = '/(?<![`\\\\])`{2}$/';
 
     public function getStartRegex(): string
     {

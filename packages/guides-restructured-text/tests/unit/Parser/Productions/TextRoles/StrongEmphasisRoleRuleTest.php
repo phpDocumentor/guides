@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
+use phpDocumentor\Guides\Span\EmphasisToken;
 use phpDocumentor\Guides\Span\StrongEmphasisToken;
 use phpDocumentor\Guides\Span\ValueToken;
 
@@ -35,6 +36,10 @@ final class StrongEmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
                 ['*text'],
                 false,
             ],
+            [
+                ['\**text'],
+                false,
+            ],
         ];
     }
 
@@ -52,7 +57,11 @@ final class StrongEmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
             [
                 '**literal with spaces**',
                 new StrongEmphasisToken('??', 'literal with spaces'),
-            ]
+            ],
+            [
+                '**text with escaped \\** stars**',
+                new StrongEmphasisToken('??', 'text with escaped \\** stars'),
+            ],
         ];
     }
 
@@ -65,6 +74,10 @@ final class StrongEmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
             [
                 '**literal not ending',
                 '**literal',
+            ],
+            [
+                '**text not ending, char is escaped\\**',
+                '**text',
             ],
         ];
     }
