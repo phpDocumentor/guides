@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
-use phpDocumentor\Guides\Span\LiteralToken;
-use PHPUnit\Framework\TestCase;
-
-final class EmphasisRoleRuleTest extends TestCase
+final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
 {
     private EmphasisRoleRule $rule;
 
@@ -16,26 +13,32 @@ final class EmphasisRoleRuleTest extends TestCase
         $this->rule = new EmphasisRoleRule();
     }
 
-    public function testApplies(): void
+    public function getRule(): StartEndRegexRoleRule
     {
-        $tokens = new TokenIterator([
-            '*text'
-        ]);
-
-        self::assertTrue($this->rule->applies($tokens));
+        return $this->rule;
     }
 
-    /** @dataProvider inputProvider */
-    public function testApply(string $input, string $literal): void
+    /**
+     * @return array<int, array<int, array<int, string> | bool>>
+     */
+    public function ruleAppliesProvider(): array
     {
-        $tokens = new TokenIterator(explode(' ', $input));
-        $expected = new LiteralToken('??', $literal);
-
-        self::assertTrue($this->rule->applies($tokens));
-        self::assertEquals($expected, $this->rule->apply($tokens));
+        return [
+            [
+                ['*text'],
+                true,
+            ],
+            [
+                ['**text'],
+                false,
+            ],
+        ];
     }
 
-    public function inputProvider()
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public function expectedLiteralContentProvider() : array
     {
         return [
             [
@@ -49,12 +52,16 @@ final class EmphasisRoleRuleTest extends TestCase
         ];
     }
 
-    public function testNotEnding(): void
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public function notEndingProvider(): array
     {
-        $input = '*literal not ending';
-        $tokens = new TokenIterator(explode(' ', $input));
-
-        self::assertNull($this->rule->apply($tokens));
-        self::assertEquals('*literal', $tokens->current());
+        return [
+            [
+                '*literal not ending',
+                '*literal',
+            ],
+        ];
     }
 }

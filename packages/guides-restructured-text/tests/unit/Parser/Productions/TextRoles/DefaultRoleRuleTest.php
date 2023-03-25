@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
-final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
+final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
 {
-    private LiteralRoleRule $rule;
+    private DefaultRoleRule $rule;
 
     protected function setUp(): void
     {
-        $this->rule = new LiteralRoleRule();
+        $this->rule = new DefaultRoleRule();
     }
 
     public function getRule(): StartEndRegexRoleRule
@@ -25,11 +25,11 @@ final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                ['``text'],
+                ['`text'],
                 true,
             ],
             [
-                ['`text'],
+                ['``text'],
                 false,
             ],
         ];
@@ -42,16 +42,12 @@ final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '``literal``',
+                '`literal`',
                 'literal',
             ],
             [
-                '``literal with spaces``',
+                '`literal with spaces`',
                 'literal with spaces'
-            ],
-            [
-                '``literal with `single backticks` inside``',
-                'literal with `single backticks` inside'
             ]
         ];
     }
@@ -63,8 +59,8 @@ final class LiteralRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '``literal not ending',
-                '``literal',
+                '`literal not ending',
+                '`literal',
             ],
         ];
     }

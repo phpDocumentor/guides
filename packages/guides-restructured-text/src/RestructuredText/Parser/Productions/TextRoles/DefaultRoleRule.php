@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
-final class LiteralRoleRule extends StartEndRegexRoleRule
+final class DefaultRoleRule extends StartEndRegexRoleRule
 {
-    private const START ='/^`{2}(?!`)/';
-    private const END = '/(?<!`)`{2}$/';
+    private const START = '/^`{1}(?!`)/';
+    private const END ='/(?<!`)`{1}$/';
 
     public function getStartRegex(): string
     {

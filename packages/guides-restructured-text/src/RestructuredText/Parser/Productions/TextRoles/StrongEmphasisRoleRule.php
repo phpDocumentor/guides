@@ -4,50 +4,18 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
-
-class StrongEmphasisRoleRule implements TextRoleRule
+class StrongEmphasisRoleRule extends StartEndRegexRoleRule
 {
-    private string $endToken = '**';
-    private string $startToken = '**';
+    private const START ='/^\*{2}(?!\*)/';
+    private const END = '/(?<!\*)\*{2}$/';
 
-    public function applies(TokenIterator $tokens): bool
+    public function getStartRegex(): string
     {
-        return str_starts_with($tokens->current(), $this->startToken);
+        return self::START;
     }
 
-    public function apply(TokenIterator $tokens): ?SpanToken
+    public function getEndRegex(): string
     {
-        $tokens->snapShot();
-        $content = substr($tokens->current(), 1);
-        if ($this->isEndToken($content)) {
-            return $this->createToken($content);
-        }
-
-        while ($tokens->getNext() !== null && $this->isEndToken($tokens->getNext()) === false) {
-            $tokens->next();
-            $content .= ' ' . $tokens->current();
-        }
-
-        if ($tokens->getNext() === null) {
-            $tokens->restore();
-            return null;
-        }
-
-        $tokens->next();
-        $content .= ' ' . $tokens->current();
-
-        return $this->createToken($content);
-    }
-
-    private function isEndToken($content): bool
-    {
-        return str_ends_with($content, $this->endToken);
-    }
-
-    private function createToken(string $content): LiteralToken
-    {
-        return new LiteralToken('??', substr($content, 1, -2));
+        return self::END;
     }
 }

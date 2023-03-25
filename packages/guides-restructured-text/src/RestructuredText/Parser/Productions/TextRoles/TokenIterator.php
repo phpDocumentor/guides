@@ -6,12 +6,18 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
 
 use OutOfBoundsException;
 
+/**
+ * @implements \Iterator<int,string>
+ */
 class TokenIterator implements \Iterator
 {
+    /** @var int[] */
     private array $snapShot = [];
     private int $position = 0;
+    /** @var string[]  */
     private array $tokens;
 
+    /** @param string[] $tokens */
     public function __construct(array $tokens)
     {
         $this->tokens = $tokens;
