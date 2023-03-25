@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\LiteralToken;
+use phpDocumentor\Guides\Span\EmphasisToken;
 use phpDocumentor\Guides\Span\ValueToken;
 
-final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
+final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
 {
-    private DefaultRoleRule $rule;
+    private EmphasisRoleRule $rule;
 
     protected function setUp(): void
     {
-        $this->rule = new DefaultRoleRule();
+        $this->rule = new EmphasisRoleRule();
     }
 
     public function getRule(): StartEndRegexRoleRule
@@ -28,15 +28,11 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                ['`text'],
+                ['*text'],
                 true,
             ],
             [
-                ['``text'],
-                false,
-            ],
-            [
-                ['\\`text'], // char is escaped
+                ['**text'],
                 false,
             ],
         ];
@@ -49,12 +45,16 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '`text`',
-                new LiteralToken('??', 'text'),
+                '*text*',
+                new EmphasisToken('??', 'text'),
             ],
             [
-                '`text with spaces`',
-                new LiteralToken('??', 'text with spaces'),
+                '*text with spaces*',
+                new EmphasisToken('??', 'text with spaces'),
+            ],
+            [
+            '*text with escaped \\* star*',
+                new EmphasisToken('??', 'text with escaped \\* star'),
             ],
         ];
     }
@@ -66,12 +66,12 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     {
         return [
             [
-                '`text not ending',
-                '`text',
+                '*text not ending',
+                '*text',
             ],
             [
-                '`text not ending, char is escaped\\`',
-                '`text',
+                '*text not ending, char is escaped\\*',
+                '*text',
             ],
         ];
     }

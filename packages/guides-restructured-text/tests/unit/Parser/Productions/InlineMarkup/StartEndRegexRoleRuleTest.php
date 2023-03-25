@@ -1,6 +1,6 @@
 <?php
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\ValueToken;

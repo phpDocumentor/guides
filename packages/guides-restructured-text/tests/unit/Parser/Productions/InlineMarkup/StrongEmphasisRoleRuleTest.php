@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\EmphasisToken;
 use phpDocumentor\Guides\Span\StrongEmphasisToken;

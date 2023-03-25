@@ -1,11 +1,11 @@
 <?php
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\SpanToken;
 use phpDocumentor\Guides\Span\ValueToken;
 
-abstract class StartEndRegexRoleRule implements TextRoleRule
+abstract class StartEndRegexRoleRule implements InlineMarkupRule
 {
     abstract public function getEndRegex(): string;
 

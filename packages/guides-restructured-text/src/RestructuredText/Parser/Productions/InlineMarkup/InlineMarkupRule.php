@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\SpanToken;
 
-interface TextRoleRule
+interface InlineMarkupRule
 {
     public function applies(TokenIterator $tokens): bool;
 

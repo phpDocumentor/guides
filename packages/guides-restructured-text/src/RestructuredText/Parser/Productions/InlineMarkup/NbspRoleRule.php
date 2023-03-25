@@ -1,11 +1,11 @@
 <?php
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\NbspToken;
 use phpDocumentor\Guides\Span\SpanToken;
 
-class NbspRoleRule implements TextRoleRule
+class NbspRoleRule implements InlineMarkupRule
 {
     public function applies(TokenIterator $tokens): bool
     {

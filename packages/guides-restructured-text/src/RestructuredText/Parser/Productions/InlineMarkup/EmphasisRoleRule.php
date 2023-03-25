@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\TextRoles;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\StrongEmphasisToken;
+use phpDocumentor\Guides\Span\EmphasisToken;
 use phpDocumentor\Guides\Span\ValueToken;
 
-class StrongEmphasisRoleRule extends StartEndRegexRoleRule
+class EmphasisRoleRule extends StartEndRegexRoleRule
 {
-    private const START ='/^\*{2}(?!\*)/';
-    private const END = '/(?<![\*\\\\])\*{2}$/';
+    private const START ='/^\*{1}(?!\*)/';
+    private const END = '/(?<![\*\\\\])\*{1}$/';
 
     public function getStartRegex(): string
     {
@@ -26,6 +26,6 @@ class StrongEmphasisRoleRule extends StartEndRegexRoleRule
     {
         $content = (string) preg_replace($this->getStartRegex(), '', $content);
         $content = (string) preg_replace($this->getEndRegex(), '', $content);
-        return new StrongEmphasisToken('??', $content);
+        return new EmphasisToken('??', $content);
     }
 }
