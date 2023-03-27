@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\SpanToken;
@@ -37,7 +37,7 @@ use function str_replace;
 /** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
 {
-    protected Renderer $renderer;
+    protected TemplateRenderer $renderer;
 
     private ?NodeRendererFactory $nodeRendererFactory = null;
 
@@ -47,10 +47,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Renderer $renderer,
+        TemplateRenderer  $renderer,
         ReferenceResolver $referenceResolver,
-        LoggerInterface $logger,
-        UrlGenerator $urlGenerator
+        LoggerInterface   $logger,
+        UrlGenerator      $urlGenerator
     ) {
         $this->renderer = $renderer;
         $this->referenceResolver = $referenceResolver;
@@ -84,7 +84,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         $url = (string)$url;
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'link.html.twig',
             [
                 'url' => $this->urlGenerator->generateUrl($url),

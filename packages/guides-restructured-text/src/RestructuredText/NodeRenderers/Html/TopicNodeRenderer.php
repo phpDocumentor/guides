@@ -18,15 +18,15 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 
 /** @implements NodeRenderer<TocNode> */
 final class TopicNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -42,7 +42,7 @@ final class TopicNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . TopicNode::class);
         }
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'body/topic.html.twig',
             [
                 'name' => $node->getName(),

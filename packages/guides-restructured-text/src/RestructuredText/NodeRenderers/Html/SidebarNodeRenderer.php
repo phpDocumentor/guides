@@ -17,15 +17,15 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 
 /** @implements NodeRenderer<SidebarNode> */
 final class SidebarNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -41,7 +41,7 @@ final class SidebarNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . SidebarNode::class);
         }
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'structure/sidebar.html.twig',
             [
                 'title' => $node->getTitle(),

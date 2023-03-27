@@ -9,14 +9,14 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Setup\QuickStart;
 use phpDocumentor\Guides\UrlGenerator;
 
-class IntersphinxTypeRenderer implements TypeRenderer
+class IntersphinxRenderer implements TypeRenderer
 {
 
     public const TYPE = 'intersphinx';
 
     public function supports(string $outputFormat): bool
     {
-        return $outputFormat === IntersphinxTypeRenderer::TYPE;
+        return $outputFormat === IntersphinxRenderer::TYPE;
     }
 
     public function render(RenderCommand $renderCommand): void

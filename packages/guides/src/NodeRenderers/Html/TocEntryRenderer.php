@@ -8,14 +8,14 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 
 /** @implements NodeRenderer<Entry> */
 final class TocEntryRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -27,7 +27,7 @@ final class TocEntryRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $renderContext): string
     {
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'body/toc/toc-item.html.twig',
             [
                 'url' => $renderContext->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),

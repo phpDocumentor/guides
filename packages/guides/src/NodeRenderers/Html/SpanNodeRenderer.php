@@ -28,12 +28,12 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 {
     public function emphasis(string $text): string
     {
-        return $this->renderer->render('inline/emphasis.html.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate('inline/emphasis.html.twig', ['text' => $text]);
     }
 
     public function strongEmphasis(string $text): string
     {
-        return $this->renderer->render('inline/strong-emphasis.html.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate('inline/strong-emphasis.html.twig', ['text' => $text]);
     }
 
     public function nbsp(): string
@@ -54,7 +54,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
 
     public function literal(LiteralToken $token): string
     {
-        return $this->renderer->render('inline/literal.html.twig', ['node' => $token]);
+        return $this->renderer->renderTemplate('inline/literal.html.twig', ['node' => $token]);
     }
 
     /**
@@ -64,7 +64,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     {
         $url = (string)$url;
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'inline/link.html.twig',
             [
                 'url' => $this->urlGenerator->generateUrl($url),

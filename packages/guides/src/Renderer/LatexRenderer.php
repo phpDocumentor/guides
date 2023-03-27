@@ -9,18 +9,18 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Setup\QuickStart;
 use phpDocumentor\Guides\UrlGenerator;
 
-class HtmlTypeRenderer implements TypeRenderer
+class LatexRenderer implements TypeRenderer
 {
-    public const TYPE = 'html';
+    public const TYPE = 'tex';
 
     public function supports(string $outputFormat): bool
     {
-        return $outputFormat === HtmlTypeRenderer::TYPE;
+        return $outputFormat === self::TYPE;
     }
 
     public function render(RenderCommand $renderCommand): void
     {
-        $renderer = QuickStart::createRenderer($renderCommand->getMetas());
+        $renderer = QuickStart::createRenderer();
         $renderDocumentHandler = new RenderDocumentHandler($renderer);
         foreach ($renderCommand->getDocuments() as $document) {
             $renderDocumentHandler->handle(
@@ -30,10 +30,10 @@ class HtmlTypeRenderer implements TypeRenderer
                         $document,
                         $renderCommand->getOrigin(),
                         $renderCommand->getDestination(),
-                        $renderCommand->getDestinationPath(),
+                        '/',
                         $renderCommand->getMetas(),
                         new UrlGenerator(),
-                        HtmlTypeRenderer::TYPE
+                        $renderCommand->getOutputFormat()
                     )
                 )
             );

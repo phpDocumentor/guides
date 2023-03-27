@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Twig;
 use League\Flysystem\Exception;
 use League\Flysystem\FilesystemException;
 use LogicException;
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
@@ -33,18 +34,16 @@ use function trim;
 final class AssetsExtension extends AbstractExtension
 {
     private LoggerInterface $logger;
-
-    /** @var TwigRenderer */
-    private TwigRenderer $renderer;
+    private NodeRenderer $nodeRenderer;
     private UrlGenerator $urlGenerator;
 
     public function __construct(
         LoggerInterface $logger,
-        TwigRenderer    $renderer,
+        NodeRenderer $nodeRenderer,
         UrlGenerator    $urlGenerator
     ) {
         $this->logger = $logger;
-        $this->renderer = $renderer;
+        $this->nodeRenderer = $nodeRenderer;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -101,12 +100,12 @@ final class AssetsExtension extends AbstractExtension
         }
 
         if ($node instanceof Node) {
-            return $this->renderer->renderNode($node, $environment);
+            return $this->nodeRenderer->render($node, $environment);
         }
 
         $text = '';
         foreach ($node as $child) {
-            $text .= $this->renderer->renderNode($child, $environment);
+            $text .= $this->nodeRenderer->render($child, $environment);
         }
 
         return $text;

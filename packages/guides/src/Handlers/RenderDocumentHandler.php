@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Handlers;
 
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\TemplateRenderer;
 
 final class RenderDocumentHandler
 {
-    private Renderer $renderer;
+    private NodeRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(NodeRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -19,7 +20,7 @@ final class RenderDocumentHandler
     {
         $command->getContext()->getDestination()->put(
             $command->getFileDestination(),
-            $this->renderer->renderNode(
+            $this->renderer->render(
                 $command->getDocument(),
                 $command->getContext()
             )

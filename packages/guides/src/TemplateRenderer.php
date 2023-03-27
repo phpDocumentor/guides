@@ -16,12 +16,10 @@ namespace phpDocumentor\Guides;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-interface Renderer
+interface TemplateRenderer
 {
     /**
-     * @param array<string, mixed> $context
+     * @param array<string, mixed> $params
      */
-    public function render(string $template, array $context = []): string;
-
-    public function renderNode(Node $node, RenderContext $context): string;
+    public function renderTemplate(string $template, array $params = []): string;
 }

@@ -18,14 +18,14 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 
 /** @implements NodeRenderer<TitleNode> */
 class TitleNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -46,7 +46,7 @@ class TitleNodeRenderer implements NodeRenderer
             }
         }
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'page/header/title.tex.twig',
             [
                 'type' => $type,

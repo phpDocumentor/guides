@@ -18,7 +18,7 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 
 use function ltrim;
@@ -26,9 +26,9 @@ use function ltrim;
 /** @implements  NodeRenderer<TocNode> */
 class TocNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -39,7 +39,7 @@ class TocNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Invalid node presented');
         }
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'toc.tex.twig',
             [
                 'tocNode' => $node,

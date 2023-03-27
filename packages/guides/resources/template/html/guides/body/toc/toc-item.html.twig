@@ -2,7 +2,7 @@
     <a href="{{ url }}">{{ renderNode(node.value.value) }}</a>
 
     {% if node.children|length %}
-        {% include "guides/body/toc/toc-level.html.twig" with {
+        {% include "body/toc/toc-level.html.twig" with {
             tocItems:tocItem.children
         } %}
     {% endif %}

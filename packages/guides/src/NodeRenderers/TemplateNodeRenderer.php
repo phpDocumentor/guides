@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\NodeRenderers;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TemplatedNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 
 /**
  * @template T as Node
@@ -15,14 +15,14 @@ use phpDocumentor\Guides\Renderer;
  */
 final class TemplateNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
     private string $template;
 
     private string $nodeClass;
 
     /** @param class-string<T> $nodeClass */
-    public function __construct(Renderer $renderer, string $template, string $nodeClass)
+    public function __construct(TemplateRenderer $renderer, string $template, string $nodeClass)
     {
         $this->renderer = $renderer;
         $this->template = $template;
@@ -37,7 +37,7 @@ final class TemplateNodeRenderer implements NodeRenderer
     /** @param T $node */
     public function render(Node $node, RenderContext $renderContext): string
     {
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             $this->template,
             ['node' => $node]
         );

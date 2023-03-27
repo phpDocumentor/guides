@@ -17,15 +17,15 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
 /** @implements NodeRenderer<TocNode> */
 final class TocNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -38,7 +38,7 @@ final class TocNodeRenderer implements NodeRenderer
             return '';
         }
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'body/toc/toc.html.twig',
             [
                 'node' => $node,

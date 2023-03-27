@@ -8,15 +8,15 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TemplatedNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
 /** @implements NodeRenderer<TemplatedNode> */
 final class TemplatedNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -25,7 +25,7 @@ final class TemplatedNodeRenderer implements NodeRenderer
     {
         Assert::isInstanceOf($node, TemplatedNode::class);
 
-        return $this->renderer->render($node->getValue(), $node->getData());
+        return $this->renderer->renderTemplate($node->getValue(), $node->getData());
     }
 
     public function supports(Node $node): bool

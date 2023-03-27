@@ -17,7 +17,6 @@ use ArrayObject;
 use phpDocumentor\Guides\Configuration;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer;
@@ -32,12 +31,9 @@ use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\References\Resolver\RefResolver;
-use phpDocumentor\Guides\Renderer;
-use phpDocumentor\Guides\Renderer\InventoryRenderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
-use phpDocumentor\Guides\Twig\TwigRenderer;
-use phpDocumentor\Guides\Renderer\OutputFormatRenderer;
-use phpDocumentor\Guides\Renderer\TemplateRenderer;
+use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\AdmonitionNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\ContainerNodeRenderer;
@@ -62,7 +58,7 @@ final class QuickStart
         );
     }
 
-    public static function createRenderer(Metas $metas): Renderer
+    public static function createRenderer(): NodeRenderer
     {
         $logger = new TestLogger();
         /** @var ArrayObject<array-key, NodeRenderer<Node>> $nodeRenderers */
@@ -73,20 +69,9 @@ final class QuickStart
         );
 
         $twigBuilder = new EnvironmentBuilder();
-        $renderer = new TwigRenderer(
-            [
-                new OutputFormatRenderer(
-                    Renderer\HtmlTypeRenderer::TYPE,
-                    new LazyNodeRendererFactory($nodeFactoryCallback),
-                    new TemplateRenderer($twigBuilder)
-                ),
-                new OutputFormatRenderer(
-                    Renderer\LatexTypeRenderer::TYPE,
-                    new LazyNodeRendererFactory($nodeFactoryCallback),
-                    new TemplateRenderer($twigBuilder)
-                ),
-            ],
-            $twigBuilder
+        $renderer = new TwigTemplateRenderer(
+            $twigBuilder,
+            new LazyNodeRendererFactory($nodeFactoryCallback)
         );
 
         $nodeRenderers[] = new SpanNodeRenderer(
@@ -117,7 +102,7 @@ final class QuickStart
             $twig = new Environment(
                 new FilesystemLoader(
                     [
-                        __DIR__  . '/../../resources/template/html'
+                        __DIR__  . '/../../resources/template/html/guides',
                     ]
                 )
             );

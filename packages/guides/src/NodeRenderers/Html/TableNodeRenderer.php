@@ -18,7 +18,7 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
 use function sprintf;
@@ -26,9 +26,9 @@ use function sprintf;
 /** @implements NodeRenderer<TableNode> */
 class TableNodeRenderer implements NodeRenderer
 {
-    private Renderer $renderer;
+    private TemplateRenderer $renderer;
 
-    public function __construct(Renderer $renderer)
+    public function __construct(TemplateRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -38,7 +38,7 @@ class TableNodeRenderer implements NodeRenderer
         $headers = $node->getHeaders();
         $rows = $node->getData();
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
             'body/table.html.twig',
             [
                 'tableNode' => $node,

@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-class SpyRenderer implements Renderer
+class SpyTemplateRenderer implements TemplateRenderer
 {
     /**
      * @var mixed[]
@@ -15,10 +15,10 @@ class SpyRenderer implements Renderer
     private array $context;
     private string $template;
 
-    /** @param mixed[] $context */
-    public function render(string $template, array $context = []): string
+    /** @param mixed[] $params */
+    public function renderTemplate(string $template, array $params = []): string
     {
-        $this->context = $context;
+        $this->context = $params;
         $this->template = $template;
 
         return 'spy';
