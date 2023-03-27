@@ -2,7 +2,7 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 use phpDocumentor\Guides\Span\ValueToken;
 
 abstract class StartEndRegexRoleRule implements InlineMarkupRule
@@ -21,7 +21,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
         return preg_match($this->getStartRegex(), $tokens->current()) === 1;
     }
 
-    public function apply(TokenIterator $tokens): ?SpanToken
+    public function apply(TokenIterator $tokens): ?InlineMarkupToken
     {
         $tokens->snapShot();
         $content = $tokens->current();

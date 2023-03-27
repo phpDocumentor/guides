@@ -20,7 +20,7 @@ namespace phpDocumentor\Guides\Span;
  *
  * Cross references are resolved during rendering? -> Should be compiler.
  */
-class CrossReferenceNode extends SpanToken
+class CrossReferenceNode extends InlineMarkupToken
 {
     private string $id;
 

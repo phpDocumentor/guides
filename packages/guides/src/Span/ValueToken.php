@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Span;
 
-class ValueToken extends SpanToken
+class ValueToken extends InlineMarkupToken
 {
     private string $value;
 

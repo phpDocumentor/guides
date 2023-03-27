@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Span;
 
-final class NbspToken extends SpanToken
+final class NbspToken extends InlineMarkupToken
 {
     public const TYPE = 'nbsp';
 

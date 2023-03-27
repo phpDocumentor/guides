@@ -22,7 +22,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
 use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -185,7 +185,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return $span;
     }
 
-    private function renderToken(SpanToken $spanToken, string $span, RenderContext $context): string
+    private function renderToken(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
     {
         switch ($spanToken->getType()) {
             case LiteralToken::TYPE:
@@ -193,7 +193,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 return trim($this->renderLiteral($spanToken, $span, $context));
 
-            case SpanToken::TYPE_LINK:
+            case InlineMarkupToken::TYPE_LINK:
                 return trim($this->renderLink($spanToken, $span, $context));
         }
 
@@ -209,7 +209,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         );
     }
 
-    private function renderLink(SpanToken $spanToken, string $span, RenderContext $context): string
+    private function renderLink(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
     {
         $url = $spanToken->get('url');
         $link = $spanToken->get('link');

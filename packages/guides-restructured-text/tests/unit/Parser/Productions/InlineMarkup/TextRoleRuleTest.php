@@ -4,7 +4,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\NbspToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 use phpDocumentor\Guides\Span\StrongEmphasisToken;
 use phpDocumentor\Guides\Span\TextRoleToken;
 use phpDocumentor\Guides\Span\ValueToken;

@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
 use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 
 use function implode;
 use function is_array;
@@ -26,7 +26,7 @@ class SpanParser
 
     private string $prefix;
 
-    /** @var SpanToken[] */
+    /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
     private SpanLexer $lexer;
@@ -68,7 +68,7 @@ class SpanParser
      */
     private function addToken(string $type, string $id, array $tokenData): void
     {
-        $this->tokens[$id] = new SpanToken($type, $id, $tokenData);
+        $this->tokens[$id] = new InlineMarkupToken($type, $id, $tokenData);
     }
 
     private function replaceLiterals(string $span): string
@@ -144,7 +144,7 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                SpanToken::TYPE_LINK,
+                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -179,7 +179,7 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                SpanToken::TYPE_LINK,
+                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -467,10 +467,10 @@ class SpanParser
 
         $id = $this->generateId();
         $this->addToken(
-            SpanToken::TYPE_LINK,
+            InlineMarkupToken::TYPE_LINK,
             $id,
             [
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
                 'link' => $link,
                 'url' => $url ?? '',
             ]

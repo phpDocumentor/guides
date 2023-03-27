@@ -4,7 +4,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\NbspToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 use PHPUnit\Framework\TestCase;
 
 abstract class NbspRoleRuleTest extends TestCase
@@ -35,7 +35,7 @@ abstract class NbspRoleRuleTest extends TestCase
     }
 
     /** @dataProvider expectedTokenProvider */
-    public function testApply(string $input, SpanToken $expected): void
+    public function testApply(string $input, InlineMarkupToken $expected): void
     {
         $tokens = new TokenIterator(explode(' ', $input));
 
@@ -66,7 +66,7 @@ abstract class NbspRoleRuleTest extends TestCase
 
 
     /**
-     * @return array<int, array<int, string | SpanToken>>
+     * @return array<int, array<int, string | InlineMarkupToken>>
      */
     public function expectedTokenProvider() : array
     {

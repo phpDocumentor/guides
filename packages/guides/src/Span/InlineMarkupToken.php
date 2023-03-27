@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Span;
 
-class SpanToken
+class InlineMarkupToken
 {
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';

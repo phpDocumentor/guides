@@ -10,7 +10,7 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
 use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -100,11 +100,11 @@ final class SpanParserTest extends TestCase
         $result = $this->spanProcessor->parse($input, $this->parserContext->reveal());
         $token = current($result->getTokens());
 
-        self::assertInstanceOf(SpanToken::class, $token);
-        self::assertEquals(SpanToken::TYPE_LINK, $token->getType());
+        self::assertInstanceOf(InlineMarkupToken::class, $token);
+        self::assertEquals(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertEquals(
             [
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
                 'url' => $url,
                 'link' => $text,
             ],
@@ -213,11 +213,11 @@ TEXT
         $token = current($result->getTokens());
 
         self::assertStringNotContainsString('_`internal ref`', $result->getValue());
-        self::assertInstanceOf(SpanToken::class, $token);
-        self::assertEquals(SpanToken::TYPE_LINK, $token->getType());
+        self::assertInstanceOf(InlineMarkupToken::class, $token);
+        self::assertEquals(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertEquals(
             [
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
                 'url' => '',
                 'link' => 'internal ref',
             ],
@@ -254,15 +254,15 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertInstanceOf(SpanToken::class, $token);
+        self::assertInstanceOf(InlineMarkupToken::class, $token);
         self::assertStringNotContainsString($email, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(SpanToken::TYPE_LINK, $token->getType());
+        self::assertSame(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertSame(
             [
                 'link' => $email,
                 'url' => 'mailto:' . $email,
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
             ],
             $token->getTokenData()
         );
@@ -276,15 +276,15 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertInstanceOf(SpanToken::class, $token);
+        self::assertInstanceOf(InlineMarkupToken::class, $token);
         self::assertStringNotContainsString($url, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(SpanToken::TYPE_LINK, $token->getType());
+        self::assertSame(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertSame(
             [
                 'link' => $url,
                 'url' => $url,
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
             ],
             $token->getTokenData()
         );

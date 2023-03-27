@@ -3,7 +3,7 @@
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Span\NbspToken;
-use phpDocumentor\Guides\Span\SpanToken;
+use phpDocumentor\Guides\Span\InlineMarkupToken;
 
 class NbspRoleRule implements InlineMarkupRule
 {
@@ -15,7 +15,7 @@ class NbspRoleRule implements InlineMarkupRule
         return $tokens->current() === '~';
     }
 
-    public function apply(TokenIterator $tokens): ?SpanToken
+    public function apply(TokenIterator $tokens): ?InlineMarkupToken
     {
         $tokens->snapShot();
         return new NbspToken('??');
