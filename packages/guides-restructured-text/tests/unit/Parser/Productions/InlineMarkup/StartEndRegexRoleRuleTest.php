@@ -2,8 +2,7 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\ValueToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 use PHPUnit\Framework\TestCase;
 
 abstract class StartEndRegexRoleRuleTest extends TestCase

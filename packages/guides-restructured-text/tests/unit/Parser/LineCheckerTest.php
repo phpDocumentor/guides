@@ -4,18 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use Faker\Generator;
-use Faker\Factory;
-use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-
-use function current;
 
 final class LineCheckerTest extends TestCase
 {

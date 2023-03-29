@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\ValueToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
 final class DefaultRoleRule extends StartEndRegexRoleRule
 {

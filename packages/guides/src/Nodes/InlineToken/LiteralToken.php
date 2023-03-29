@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Span;
+namespace phpDocumentor\Guides\Nodes\InlineToken;
 
-final class StrongEmphasisToken extends ValueToken
+final class LiteralToken extends ValueToken
 {
-    public const TYPE = 'strong';
+    public const TYPE = 'literal';
 
     public function __construct(string $id, string $value)
     {

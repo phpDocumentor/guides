@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\EmphasisToken;
-use phpDocumentor\Guides\Span\ValueToken;
+use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
 class EmphasisRoleRule extends StartEndRegexRoleRule
 {

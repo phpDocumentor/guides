@@ -14,21 +14,19 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers;
 
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\TemplateRenderer;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-
 use function assert;
-use function is_string;
 use function preg_replace;
 use function preg_replace_callback;
 use function sprintf;

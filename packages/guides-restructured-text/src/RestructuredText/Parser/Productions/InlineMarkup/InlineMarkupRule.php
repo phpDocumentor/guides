@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 interface InlineMarkupRule
 {

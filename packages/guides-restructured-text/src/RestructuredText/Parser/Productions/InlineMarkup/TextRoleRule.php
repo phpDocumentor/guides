@@ -2,11 +2,10 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleNotFoundException;
-use phpDocumentor\Guides\Span\GenericTextRoleToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
-use phpDocumentor\Guides\Span\ValueToken;
 
 class TextRoleRule extends StartEndRegexRoleRule
 {

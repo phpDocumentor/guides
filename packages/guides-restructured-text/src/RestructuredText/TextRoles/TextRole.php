@@ -2,7 +2,7 @@
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Span\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 interface TextRole
 {

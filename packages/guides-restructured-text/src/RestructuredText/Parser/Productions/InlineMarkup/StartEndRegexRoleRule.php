@@ -2,8 +2,7 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\InlineMarkupToken;
-use phpDocumentor\Guides\Span\ValueToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 abstract class StartEndRegexRoleRule implements InlineMarkupRule
 {

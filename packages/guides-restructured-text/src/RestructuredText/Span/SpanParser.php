@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
-
 use function implode;
 use function is_array;
-use function mt_rand;
 use function preg_replace;
 use function preg_replace_callback;
 use function sha1;

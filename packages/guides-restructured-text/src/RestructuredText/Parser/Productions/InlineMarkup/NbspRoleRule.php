@@ -2,8 +2,8 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
-use phpDocumentor\Guides\Span\NbspToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
 
 class NbspRoleRule implements InlineMarkupRule
 {

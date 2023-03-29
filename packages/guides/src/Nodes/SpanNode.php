@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Span\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 class SpanNode extends TextNode
 {

@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers;
 
-use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Span\LiteralToken;
 
 interface SpanRenderer
 {

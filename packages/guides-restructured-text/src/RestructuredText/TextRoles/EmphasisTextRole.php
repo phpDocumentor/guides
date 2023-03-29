@@ -2,8 +2,8 @@
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Span\EmphasisToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 class EmphasisTextRole implements TextRole
 {

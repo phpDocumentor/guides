@@ -2,15 +2,10 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
+use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
-use phpDocumentor\Guides\Span\EmphasisToken;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\NbspToken;
-use phpDocumentor\Guides\Span\InlineMarkupToken;
-use phpDocumentor\Guides\Span\StrongEmphasisToken;
-use phpDocumentor\Guides\Span\GenericTextRoleToken;
-use phpDocumentor\Guides\Span\ValueToken;
-use PHPUnit\Framework\TestCase;
 
 class TextRoleRuleTest extends StartEndRegexRoleRuleTest
 {
