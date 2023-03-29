@@ -21,7 +21,7 @@ interface MarkupLanguageParser
 
     public function getParserContext(): ParserContext;
 
-    public function parse(ParserContext $environment, string $contents): DocumentNode;
+    public function parse(ParserContext $parserContext, string $contents): DocumentNode;
 
     public function getDocument(): DocumentNode;
 }

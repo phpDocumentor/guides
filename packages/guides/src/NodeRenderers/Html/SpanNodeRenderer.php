@@ -83,7 +83,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     /**
      * @param array<string|null> $value
      */
-    public function reference(RenderContext $environment, ResolvedReference $reference, array $value): string
+    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
     {
         $text = $value['text'] ?: $reference->getText();
         $text = trim($text);
@@ -96,15 +96,15 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
                 $url .= '#' . $value['anchor'];
             }
 
-            $link = $this->link($environment, $url, $text, $reference->getAttributes());
+            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
 
             // reference to anchor in existing document
         } elseif ($value['url'] !== null) {
-            $url = $environment->getLink($value['url']);
+            $url = $renderContext->getLink($value['url']);
 
-            $link = $this->link($environment, $url, $text, $reference->getAttributes());
+            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
         } else {
-            $link = $this->link($environment, '#', $text . ' (unresolved reference)', $reference->getAttributes());
+            $link = $this->link($renderContext, '#', $text . ' (unresolved reference)', $reference->getAttributes());
         }
 
         return $link;

@@ -50,7 +50,7 @@ use function strtolower;
 
 class MarkupLanguageParser implements ParserInterface
 {
-    private ?ParserContext $environment = null;
+    private ?ParserContext $parserContext = null;
 
     /** @var Directive[] */
     private array $directives = [];
@@ -137,13 +137,13 @@ class MarkupLanguageParser implements ParserInterface
 
     public function getParserContext(): ParserContext
     {
-        if ($this->environment === null) {
+        if ($this->parserContext === null) {
             throw new RuntimeException(
                 'A parser\'s Environment should not be consulted before parsing has started'
             );
         }
 
-        return $this->environment;
+        return $this->parserContext;
     }
 
     private function registerDirective(Directive $directive): void
@@ -168,11 +168,11 @@ class MarkupLanguageParser implements ParserInterface
         return $this->filename ?: '(unknown)';
     }
 
-    public function parse(ParserContext $environment, string $contents): DocumentNode
+    public function parse(ParserContext $parserContext, string $contents): DocumentNode
     {
-        $this->environment = $environment;
+        $this->parserContext = $parserContext;
 
-        $this->documentParser = new DocumentParserContext($contents, $environment, $this);
+        $this->documentParser = new DocumentParserContext($contents, $parserContext, $this);
 
         if ($this->startingRule->applies($this->documentParser)) {
             $document = $this->startingRule->apply($this->documentParser);
