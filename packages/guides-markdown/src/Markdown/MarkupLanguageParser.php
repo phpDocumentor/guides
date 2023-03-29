@@ -77,7 +77,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->getEnvironment()->getCurrentAbsolutePath());
+        $document = new DocumentNode($hash, $this->getParserContext()->getCurrentAbsolutePath());
         $this->document = $document;
 
         while ($event = $walker->next()) {
@@ -167,7 +167,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         return (new ListBlock())->parse($this, $walker);
     }
 
-    public function getEnvironment(): ParserContext
+    public function getParserContext(): ParserContext
     {
         if ($this->environment === null) {
             throw new RuntimeException(

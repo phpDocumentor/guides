@@ -41,7 +41,7 @@ final class IncludeDirective extends Directive
     ): Node {
         $parser = $documentParserContext->getParser();
         $subParser = $parser->getSubParser();
-        $parserContext = $parser->getEnvironment();
+        $parserContext = $parser->getParserContext();
         $path = $parserContext->absoluteRelativePath($data);
 
         $origin = $parserContext->getOrigin();
@@ -73,6 +73,6 @@ final class IncludeDirective extends Directive
             return $codeNode;
         }
 
-        return new CollectionNode($subParser->parse($parser->getEnvironment(), $contents)->getChildren());
+        return new CollectionNode($subParser->parse($parser->getParserContext(), $contents)->getChildren());
     }
 }

@@ -45,7 +45,7 @@ final class Uml extends Directive
         array                 $options
     ): ?Node {
         $parser = $documentParserContext->getParser();
-        $environment = $parser->getEnvironment();
+        $environment = $parser->getParserContext();
 
         $caption = $data;
         $value = implode("\n", $documentParserContext->getDocumentIterator()->toArray());

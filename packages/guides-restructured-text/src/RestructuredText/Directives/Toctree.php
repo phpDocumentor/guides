@@ -40,7 +40,7 @@ class Toctree extends Directive
         string                $data,
         array                 $options
     ): ?Node {
-        $environment = $documentParserContext->getParser()->getEnvironment();
+        $environment = $documentParserContext->getParser()->getParserContext();
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
             $environment,

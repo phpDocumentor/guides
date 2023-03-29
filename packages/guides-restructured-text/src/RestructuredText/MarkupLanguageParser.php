@@ -135,7 +135,7 @@ class MarkupLanguageParser implements ParserInterface
         );
     }
 
-    public function getEnvironment(): ParserContext
+    public function getParserContext(): ParserContext
     {
         if ($this->environment === null) {
             throw new RuntimeException(
