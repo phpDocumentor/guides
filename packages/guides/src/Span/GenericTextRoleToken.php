@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Span;
 
-final class TextRoleToken extends ValueToken
+final class GenericTextRoleToken extends ValueToken
 {
     public const TYPE = 'role';
 

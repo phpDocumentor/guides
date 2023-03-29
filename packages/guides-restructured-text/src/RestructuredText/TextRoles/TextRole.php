@@ -1,0 +1,15 @@
+<?php
+
+namespace phpDocumentor\Guides\RestructuredText\TextRoles;
+
+use phpDocumentor\Guides\Span\InlineMarkupToken;
+
+interface TextRole
+{
+    public function getName(): string;
+    /**
+     * @return string[]
+     */
+    public function getAliases(): array;
+    public function processNode(string $content): InlineMarkupToken;
+}

@@ -2,11 +2,13 @@
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\Span\EmphasisToken;
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\NbspToken;
 use phpDocumentor\Guides\Span\InlineMarkupToken;
 use phpDocumentor\Guides\Span\StrongEmphasisToken;
-use phpDocumentor\Guides\Span\TextRoleToken;
+use phpDocumentor\Guides\Span\GenericTextRoleToken;
 use phpDocumentor\Guides\Span\ValueToken;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +18,7 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
 
     protected function setUp(): void
     {
-        $this->rule = new TextRoleRule();
+        $this->rule = new TextRoleRule(new DefaultTextRoleFactory());
     }
 
     public function getRule(): StartEndRegexRoleRule
@@ -62,11 +64,15 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
         return [
             [
                 ':role:`something`',
-                new TextRoleToken('??', 'role', 'something'),
+                new GenericTextRoleToken('??', 'role', 'something'),
+            ],
+            [
+                ':emphasis:`something`',
+                new EmphasisToken('??', 'something'),
             ],
             [
                 ':role:`something with spaces`',
-                new TextRoleToken('??', 'role', 'something with spaces'),
+                new GenericTextRoleToken('??', 'role', 'something with spaces'),
             ],
         ];
     }

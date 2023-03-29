@@ -11,7 +11,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
 
     abstract public function getStartRegex(): string;
 
-    abstract protected function createToken(string $content): ValueToken;
+    abstract protected function createToken(string $content): InlineMarkupToken;
 
     public function applies(TokenIterator $tokens): bool
     {
