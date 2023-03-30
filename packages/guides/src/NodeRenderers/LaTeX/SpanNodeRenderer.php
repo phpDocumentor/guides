@@ -27,29 +27,29 @@ use function trim;
 
 class SpanNodeRenderer extends BaseSpanNodeRenderer
 {
-    public function emphasis(string $text): string
+    public function emphasis(string $text, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('roles/emphasis.tex.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate($renderContext, 'roles/emphasis.tex.twig', ['text' => $text]);
     }
 
-    public function strongEmphasis(string $text): string
+    public function strongEmphasis(string $text, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('roles/strong-emphasis.tex.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate($renderContext, 'roles/strong-emphasis.tex.twig', ['text' => $text]);
     }
 
-    public function nbsp(): string
+    public function nbsp(RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('roles/nbsp.tex.twig');
+        return $this->renderer->renderTemplate($renderContext, 'roles/nbsp.tex.twig');
     }
 
-    public function br(): string
+    public function br(RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('roles/br.tex.twig');
+        return $this->renderer->renderTemplate($renderContext, 'roles/br.tex.twig');
     }
 
-    public function literal(LiteralToken $token): string
+    public function literal(LiteralToken $token, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('roles/literal.tex.twig', ['node' => $token]);
+        return $this->renderer->renderTemplate($renderContext, 'roles/literal.tex.twig', ['node' => $token]);
     }
 
     /**
@@ -69,6 +69,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         }
 
         return $this->renderer->renderTemplate(
+            $context,
             'roles/link.tex.twig',
             [
                 'type' => $type,
@@ -79,7 +80,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         );
     }
 
-    public function escape(string $span): string
+    public function escape(string $span, RenderContext $renderContext): string
     {
         return $span;
     }

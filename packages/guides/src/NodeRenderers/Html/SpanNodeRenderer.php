@@ -26,17 +26,17 @@ use function trim;
 
 class SpanNodeRenderer extends BaseSpanNodeRenderer
 {
-    public function emphasis(string $text): string
+    public function emphasis(string $text, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('inline/emphasis.html.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate($renderContext, 'inline/emphasis.html.twig', ['text' => $text]);
     }
 
-    public function strongEmphasis(string $text): string
+    public function strongEmphasis(string $text, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('inline/strong-emphasis.html.twig', ['text' => $text]);
+        return $this->renderer->renderTemplate($renderContext, 'inline/strong-emphasis.html.twig', ['text' => $text]);
     }
 
-    public function nbsp(): string
+    public function nbsp(RenderContext $renderContext): string
     {
         return '&nbsp;';
 
@@ -44,7 +44,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         // return $this->renderer->render('nbsp.html.twig');
     }
 
-    public function br(): string
+    public function br(RenderContext $renderContext): string
     {
         return '<br>';
 
@@ -52,9 +52,9 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         // return $this->renderer->render('br.html.twig');
     }
 
-    public function literal(LiteralToken $token): string
+    public function literal(LiteralToken $token, RenderContext $renderContext): string
     {
-        return $this->renderer->renderTemplate('inline/literal.html.twig', ['node' => $token]);
+        return $this->renderer->renderTemplate($renderContext, 'inline/literal.html.twig', ['node' => $token]);
     }
 
     /**
@@ -65,6 +65,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         $url = (string)$url;
 
         return $this->renderer->renderTemplate(
+            $context,
             'inline/link.html.twig',
             [
                 'url' => $this->urlGenerator->generateUrl($url),
@@ -74,7 +75,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         );
     }
 
-    public function escape(string $span): string
+    public function escape(string $span, RenderContext $renderContext): string
     {
         return htmlspecialchars($span, ENT_QUOTES);
     }

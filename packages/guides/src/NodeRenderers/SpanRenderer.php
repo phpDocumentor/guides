@@ -20,22 +20,22 @@ use phpDocumentor\Guides\Span\LiteralToken;
 
 interface SpanRenderer
 {
-    public function emphasis(string $text): string;
+    public function emphasis(string $text, RenderContext $renderContext): string;
 
-    public function strongEmphasis(string $text): string;
+    public function strongEmphasis(string $text, RenderContext $renderContext): string;
 
-    public function nbsp(): string;
+    public function nbsp(RenderContext $renderContext): string;
 
-    public function br(): string;
+    public function br(RenderContext $renderContext): string;
 
-    public function literal(LiteralToken $token): string;
+    public function literal(LiteralToken $token, RenderContext $renderContext): string;
 
     /**
      * @param string[] $attributes
      */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string;
 
-    public function escape(string $span): string;
+    public function escape(string $span, RenderContext $renderContext): string;
 
     /**
      * @param string[] $value

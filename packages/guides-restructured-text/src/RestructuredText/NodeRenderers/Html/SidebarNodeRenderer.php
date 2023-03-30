@@ -42,6 +42,7 @@ final class SidebarNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->renderTemplate(
+            $renderContext,
             'structure/sidebar.html.twig',
             [
                 'title' => $node->getTitle(),

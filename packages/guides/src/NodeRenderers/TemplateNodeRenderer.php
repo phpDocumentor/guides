@@ -38,6 +38,7 @@ final class TemplateNodeRenderer implements NodeRenderer
     public function render(Node $node, RenderContext $renderContext): string
     {
         return $this->renderer->renderTemplate(
+            $renderContext,
             $this->template,
             ['node' => $node]
         );

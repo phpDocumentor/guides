@@ -19,7 +19,8 @@ use phpDocumentor\Guides\Nodes\Node;
 interface TemplateRenderer
 {
     /**
+     * @param RenderContext $context
      * @param array<string, mixed> $params
      */
-    public function renderTemplate(string $template, array $params = []): string;
+    public function renderTemplate(RenderContext $context, string $template, array $params = []): string;
 }

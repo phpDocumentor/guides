@@ -47,6 +47,7 @@ class AdmonitionNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->renderTemplate(
+            $renderContext,
             'body/admonition.html.twig',
             [
                 'name' => $node->getName(),

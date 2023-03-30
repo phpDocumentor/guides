@@ -47,6 +47,7 @@ class TitleNodeRenderer implements NodeRenderer
         }
 
         return $this->renderer->renderTemplate(
+            $renderContext,
             'page/header/title.tex.twig',
             [
                 'type' => $type,

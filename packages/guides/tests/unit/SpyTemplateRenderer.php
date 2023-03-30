@@ -15,8 +15,10 @@ class SpyTemplateRenderer implements TemplateRenderer
     private array $context;
     private string $template;
 
-    /** @param mixed[] $params */
-    public function renderTemplate(string $template, array $params = []): string
+    /** @param mixed[] $params
+     * @param RenderContext $context
+     */
+    public function renderTemplate(RenderContext $context, string $template, array $params = []): string
     {
         $this->context = $params;
         $this->template = $template;

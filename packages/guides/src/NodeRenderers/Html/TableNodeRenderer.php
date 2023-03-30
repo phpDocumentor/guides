@@ -39,6 +39,7 @@ class TableNodeRenderer implements NodeRenderer
         $rows = $node->getData();
 
         return $this->renderer->renderTemplate(
+            $renderContext,
             'body/table.html.twig',
             [
                 'tableNode' => $node,
