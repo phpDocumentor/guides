@@ -84,9 +84,6 @@ class FunctionalTest extends TestCase
             $format
         );
 
-        //Ugly hack to make te tests work.
-        $renderer->render($document, $context);
-
         $rendered = '';
 
         foreach ($document->getNodes() as $node) {

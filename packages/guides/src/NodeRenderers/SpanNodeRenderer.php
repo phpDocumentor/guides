@@ -114,7 +114,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
-            fn(array $matches): string => $this->strongEmphasis($matches[1], $renderContext),
+            fn(array $matches): string => trim($this->strongEmphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
@@ -123,7 +123,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
-            fn(array $matches): string => $this->emphasis($matches[1], $renderContext),
+            fn(array $matches): string => trim($this->emphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
@@ -191,10 +191,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             case SpanToken::TYPE_LITERAL:
                 assert($spanToken instanceof LiteralToken);
 
-                return $this->renderLiteral($spanToken, $span, $context);
+                return trim($this->renderLiteral($spanToken, $span, $context));
 
             case SpanToken::TYPE_LINK:
-                return $this->renderLink($spanToken, $span, $context);
+                return trim($this->renderLink($spanToken, $span, $context));
         }
 
         throw new InvalidArgumentException(sprintf('Unknown token type %s', $spanToken->getType()));
