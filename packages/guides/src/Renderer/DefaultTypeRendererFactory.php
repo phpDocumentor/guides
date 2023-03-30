@@ -12,9 +12,9 @@ class DefaultTypeRendererFactory implements TypeRendererFactory
     public function __construct()
     {
         $this->renderSets = [
-            new HtmlTypeRenderer(),
-            new LatexTypeRenderer(),
-            new IntersphinxTypeRenderer(),
+            new HtmlRenderer(),
+            new LatexRenderer(),
+            new IntersphinxRenderer(),
         ];
     }
 

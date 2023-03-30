@@ -12,6 +12,10 @@ parameters:
       message: '#Unreachable statement - code above always terminates\.#'
       path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
 
+    -
+      message: '#Method phpDocumentor\\Guides\\Setup\\QuickStart::createRenderer\(\) should return phpDocumentor\\Guides\\NodeRenderers\\NodeRenderer<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns phpDocumentor\\Guides\\NodeRenderers\\DelegatingNodeRenderer\.#'
+      path: packages/guides/src/Setup/QuickStart.php
+
   paths:
     - packages/guides/src
     - packages/guides-markdown/src

@@ -27,7 +27,7 @@ class RenderContext
 {
     private UrlGeneratorInterface $urlGenerator;
 
-    private string $currentFileName = '';
+    private string $currentFileName;
 
     private FilesystemInterface $origin;
 
@@ -160,11 +160,6 @@ class RenderContext
     public function getMetaEntry(): ?DocumentEntry
     {
         return $this->metas->findDocument($this->currentFileName);
-    }
-
-    public function getOutputFormat(): string
-    {
-        return $this->outputFormat;
     }
 
     public function getDestinationPath(): string

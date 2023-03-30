@@ -73,7 +73,7 @@ class FunctionalTest extends TestCase
         $parser = QuickStart::createRstParser();
         $document = $parser->parse($rst);
 
-        $renderer = QuickStart::createRenderer(new Metas());
+        $renderer = QuickStart::createRenderer();
         $context = RenderContext::forDocument(
             $document,
             new Filesystem(new MemoryAdapter()),
@@ -84,13 +84,10 @@ class FunctionalTest extends TestCase
             $format
         );
 
-        //Ugly hack to make te tests work.
-        $renderer->renderNode($document, $context);
-
         $rendered = '';
 
         foreach ($document->getNodes() as $node) {
-            $rendered .= $renderer->renderNode(
+            $rendered .= $renderer->render(
                 $node,
                 $context
             );

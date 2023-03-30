@@ -27,9 +27,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use League\Tactician\Setup\QuickStart;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\DefaultTypeRendererFactory;
-use phpDocumentor\Guides\Renderer\HtmlTypeRenderer;
-use phpDocumentor\Guides\Renderer\IntersphinxTypeRenderer;
-use phpDocumentor\Guides\Renderer\LatexTypeRenderer;
+use phpDocumentor\Guides\Renderer\HtmlRenderer;
+use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
 use phpDocumentor\Guides\Renderer\TypeRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Constraint\IsEqual;
@@ -77,14 +76,14 @@ class IntegrationTest extends TestCase
 
         $renderHandler = new RenderHandler(new DefaultTypeRendererFactory());
         $renderHandler->handle(new RenderCommand(
-            HtmlTypeRenderer::TYPE,
+            HtmlRenderer::TYPE,
             $documents,
             $metas,
             $sourceFileSystem,
             new Filesystem(new Local($outputPath)),
         ));
         $renderHandler->handle(new RenderCommand(
-            IntersphinxTypeRenderer::TYPE,
+            IntersphinxRenderer::TYPE,
             $documents,
             $metas,
             $sourceFileSystem,

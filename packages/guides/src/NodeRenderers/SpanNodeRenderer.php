@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
+use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Span\CrossReferenceNode;
 use phpDocumentor\Guides\Span\LiteralToken;
 use phpDocumentor\Guides\Span\SpanToken;
@@ -37,7 +37,7 @@ use function str_replace;
 /** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
 {
-    protected Renderer $renderer;
+    protected TemplateRenderer $renderer;
 
     private ?NodeRendererFactory $nodeRendererFactory = null;
 
@@ -47,10 +47,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Renderer $renderer,
+        TemplateRenderer  $renderer,
         ReferenceResolver $referenceResolver,
-        LoggerInterface $logger,
-        UrlGenerator $urlGenerator
+        LoggerInterface   $logger,
+        UrlGenerator      $urlGenerator
     ) {
         $this->renderer = $renderer;
         $this->referenceResolver = $referenceResolver;
@@ -58,7 +58,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         $this->urlGenerator = $urlGenerator;
     }
 
-    abstract public function nbsp(): string;
+    abstract public function nbsp(RenderContext $renderContext): string;
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {
@@ -84,7 +84,8 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         $url = (string)$url;
 
-        return $this->renderer->render(
+        return $this->renderer->renderTemplate(
+            $context,
             'link.html.twig',
             [
                 'url' => $this->urlGenerator->generateUrl($url),
@@ -94,42 +95,42 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         );
     }
 
-    private function renderSyntaxes(string $span, RenderContext $environment): string
+    private function renderSyntaxes(string $span, RenderContext $renderContext): string
     {
-        $span = $this->escape($span);
+        $span = $this->escape($span, $renderContext);
 
-        $span = $this->renderStrongEmphasis($span);
+        $span = $this->renderStrongEmphasis($span, $renderContext);
 
-        $span = $this->renderEmphasis($span);
+        $span = $this->renderEmphasis($span, $renderContext);
 
-        $span = $this->renderNbsp($span);
+        $span = $this->renderNbsp($span, $renderContext);
 
-        $span = $this->renderVariables($span, $environment);
+        $span = $this->renderVariables($span, $renderContext);
 
-        return $this->renderBrs($span);
+        return $this->renderBrs($span, $renderContext);
     }
 
-    private function renderStrongEmphasis(string $span): string
+    private function renderStrongEmphasis(string $span, RenderContext $renderContext): string
     {
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
-            fn(array $matches): string => $this->strongEmphasis($matches[1]),
+            fn(array $matches): string => trim($this->strongEmphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
 
-    private function renderEmphasis(string $span): string
+    private function renderEmphasis(string $span, RenderContext $renderContext): string
     {
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
-            fn(array $matches): string => $this->emphasis($matches[1]),
+            fn(array $matches): string => trim($this->emphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
 
-    private function renderNbsp(string $span): string
+    private function renderNbsp(string $span, RenderContext $renderContext): string
     {
-        return preg_replace('/~/', $this->nbsp(), $span) ?? '';
+        return preg_replace('/~/', $this->nbsp($renderContext), $span) ?? '';
     }
 
     private function renderVariables(string $span, RenderContext $context): string
@@ -150,10 +151,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         ) ?? '';
     }
 
-    private function renderBrs(string $span): string
+    private function renderBrs(string $span, RenderContext $renderContext): string
     {
         // Adding brs when a space is at the end of a line
-        return preg_replace('/ \n/', $this->br(), $span) ?? '';
+        return preg_replace('/ \n/', $this->br($renderContext), $span) ?? '';
     }
 
     private function renderTokens(SpanNode $node, string $span, RenderContext $context): string
@@ -190,20 +191,20 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             case SpanToken::TYPE_LITERAL:
                 assert($spanToken instanceof LiteralToken);
 
-                return $this->renderLiteral($spanToken, $span);
+                return trim($this->renderLiteral($spanToken, $span, $context));
 
             case SpanToken::TYPE_LINK:
-                return $this->renderLink($spanToken, $span, $context);
+                return trim($this->renderLink($spanToken, $span, $context));
         }
 
         throw new InvalidArgumentException(sprintf('Unknown token type %s', $spanToken->getType()));
     }
 
-    private function renderLiteral(LiteralToken $token, string $span): string
+    private function renderLiteral(LiteralToken $token, string $span, RenderContext $context): string
     {
         return str_replace(
             $token->getId(),
-            $this->literal($token),
+            $this->literal($token, $context),
             $span
         );
     }
