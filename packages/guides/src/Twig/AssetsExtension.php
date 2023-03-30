@@ -34,9 +34,11 @@ use function trim;
 final class AssetsExtension extends AbstractExtension
 {
     private LoggerInterface $logger;
+    /** @var NodeRenderer<Node> */
     private NodeRenderer $nodeRenderer;
     private UrlGenerator $urlGenerator;
 
+    /** @param NodeRenderer<Node> $nodeRenderer */
     public function __construct(
         LoggerInterface $logger,
         NodeRenderer $nodeRenderer,

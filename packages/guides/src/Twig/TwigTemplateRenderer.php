@@ -13,21 +13,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
-use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
-final class TwigTemplateRenderer implements TemplateRenderer, NodeRenderer
+final class TwigTemplateRenderer implements TemplateRenderer
 {
     private EnvironmentBuilder $environmentBuilder;
-    private NodeRendererFactory $nodeRendererFactory;
 
-    public function __construct(EnvironmentBuilder $environmentBuilder, NodeRendererFactory $nodeRendererFactory)
+    public function __construct(EnvironmentBuilder $environmentBuilder)
     {
         $this->environmentBuilder = $environmentBuilder;
-        $this->nodeRendererFactory = $nodeRendererFactory;
     }
 
     /**
@@ -38,15 +33,5 @@ final class TwigTemplateRenderer implements TemplateRenderer, NodeRenderer
         $twig = $this->environmentBuilder->getTwigEnvironment();
         $twig->addGlobal('env', $context);
         return $twig->render($template, $params);
-    }
-
-    public function supports(Node $node): bool
-    {
-        return true;
-    }
-
-    public function render(Node $node, RenderContext $renderContext): string
-    {
-        return $this->nodeRendererFactory->get($node)->render($node, $renderContext);
     }
 }

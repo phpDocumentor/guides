@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\TemplateRenderer;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class RenderDocumentHandler
 {
+    /** @var NodeRenderer<DocumentNode> */
     private NodeRenderer $renderer;
 
+    /** @param NodeRenderer<DocumentNode> $renderer */
     public function __construct(NodeRenderer $renderer)
     {
         $this->renderer = $renderer;

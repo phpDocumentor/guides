@@ -17,6 +17,7 @@ use ArrayObject;
 use phpDocumentor\Guides\Configuration;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer;
@@ -26,12 +27,12 @@ use phpDocumentor\Guides\NodeRenderers\LazyNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\References\Resolver\RefResolver;
-use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -58,6 +59,7 @@ final class QuickStart
         );
     }
 
+    /** @return NodeRenderer<DocumentNode> */
     public static function createRenderer(): NodeRenderer
     {
         $logger = new TestLogger();
@@ -68,31 +70,33 @@ final class QuickStart
             new DefaultNodeRenderer()
         );
 
+        $renderer = new DelegatingNodeRenderer();
+        $renderer->setNodeRendererFactory(new LazyNodeRendererFactory($nodeFactoryCallback));
+
         $twigBuilder = new EnvironmentBuilder();
-        $renderer = new TwigTemplateRenderer(
-            $twigBuilder,
-            new LazyNodeRendererFactory($nodeFactoryCallback)
+        $templateRenderer = new TwigTemplateRenderer(
+            $twigBuilder
         );
 
         $nodeRenderers[] = new SpanNodeRenderer(
-            $renderer,
+            $templateRenderer,
             new ReferenceResolver([new DocResolver(), new RefResolver()]),
             $logger,
             new UrlGenerator()
         );
-        $nodeRenderers[] = new TableNodeRenderer($renderer);
-        $nodeRenderers[] = new AdmonitionNodeRenderer($renderer);
-        $nodeRenderers[] = new ContainerNodeRenderer($renderer);
-        $nodeRenderers[] = new CollectionNodeRenderer($renderer);
-        $nodeRenderers[] = new SidebarNodeRenderer($renderer);
-        $nodeRenderers[] = new TopicNodeRenderer($renderer);
-        $nodeRenderers[] = new TocNodeRenderer($renderer);
-        $nodeRenderers[] = new TocEntryRenderer($renderer);
+        $nodeRenderers[] = new TableNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new AdmonitionNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new ContainerNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new CollectionNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new SidebarNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new TopicNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new TocNodeRenderer($templateRenderer);
+        $nodeRenderers[] = new TocEntryRenderer($templateRenderer);
 
         $config = new Configuration();
         foreach ($config->htmlNodeTemplates() as $node => $template) {
             $nodeRenderers[] = new TemplateNodeRenderer(
-                $renderer,
+                $templateRenderer,
                 $template,
                 $node
             );
@@ -108,6 +112,7 @@ final class QuickStart
             );
             $twig->addExtension(new AssetsExtension(
                 $logger,
+                /** @var NodeRenderer<Node> $renderer */
                 $renderer,
                 new UrlGenerator(),
             ));
