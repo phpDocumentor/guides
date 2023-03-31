@@ -44,7 +44,7 @@ final class DocResolver implements Resolver
      */
     private function createResolvedReference(
         string        $file,
-        RenderContext $environment,
+        RenderContext $renderContext,
         string $text,
         array         $attributes = [],
         ?string       $anchor = null
@@ -52,7 +52,7 @@ final class DocResolver implements Resolver
         return new ResolvedReference(
             $file,
             $text,
-            $environment->relativeDocUrl($file, $anchor),
+            $renderContext->relativeDocUrl($file, $anchor),
             $attributes
         );
     }

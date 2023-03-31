@@ -34,6 +34,6 @@ class Replace extends Directive
         string                $data,
         array                 $options
     ): Node {
-        return $this->spanParser->parse($data, $documentParserContext->getParser()->getEnvironment());
+        return $this->spanParser->parse($data, $documentParserContext->getParser()->getParserContext());
     }
 }

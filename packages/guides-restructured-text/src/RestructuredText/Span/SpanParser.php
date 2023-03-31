@@ -36,14 +36,14 @@ class SpanParser
     }
 
     /** @param string|string[] $span */
-    public function parse($span, ParserContext $environment): SpanNode
+    public function parse($span, ParserContext $parserContext): SpanNode
     {
         $this->tokens = [];
         if (is_array($span)) {
             $span = implode("\n", $span);
         }
 
-        return new SpanNode($this->process($environment, $span), $this->tokens);
+        return new SpanNode($this->process($parserContext, $span), $this->tokens);
     }
 
     private function process(ParserContext $parserContext, string $span): string

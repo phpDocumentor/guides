@@ -43,7 +43,7 @@ abstract class Directive
 
     /**
      * This is the function called by the parser to process the directive, it can be overloaded
-     * to do anything with the document, like tweaking nodes or change the environment
+     * to do anything with the document, like tweaking nodes or change the parser context
      *
      * The node that directly follows the directive is also passed to it
      *

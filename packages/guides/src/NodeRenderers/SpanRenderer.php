@@ -39,5 +39,5 @@ interface SpanRenderer
     /**
      * @param string[] $value
      */
-    public function reference(RenderContext $environment, ResolvedReference $reference, array $value): string;
+    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string;
 }

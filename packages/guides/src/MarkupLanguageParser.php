@@ -19,9 +19,9 @@ interface MarkupLanguageParser
 {
     public function supports(string $inputFormat): bool;
 
-    public function getEnvironment(): ParserContext;
+    public function getParserContext(): ParserContext;
 
-    public function parse(ParserContext $environment, string $contents): DocumentNode;
+    public function parse(ParserContext $parserContext, string $contents): DocumentNode;
 
     public function getDocument(): DocumentNode;
 }

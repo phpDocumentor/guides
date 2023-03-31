@@ -45,13 +45,13 @@ final class Uml extends Directive
         array                 $options
     ): ?Node {
         $parser = $documentParserContext->getParser();
-        $environment = $parser->getEnvironment();
+        $parserContext = $parser->getParserContext();
 
         $caption = $data;
         $value = implode("\n", $documentParserContext->getDocumentIterator()->toArray());
 
         if (empty($value)) {
-            $value = $this->loadExternalUmlFile($environment, $data);
+            $value = $this->loadExternalUmlFile($parserContext, $data);
             if ($value === null) {
                 return null;
             }

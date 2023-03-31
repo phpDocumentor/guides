@@ -40,7 +40,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 {
     private MarkdownParser $markdownParser;
 
-    private ?ParserContext $environment = null;
+    private ?ParserContext $parserContext = null;
 
     /** @var ParserInterface<Node>[] */
     private array $parsers;
@@ -66,9 +66,9 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         return strtolower($inputFormat) === 'md';
     }
 
-    public function parse(ParserContext $environment, string $contents): DocumentNode
+    public function parse(ParserContext $parserContext, string $contents): DocumentNode
     {
-        $this->environment = $environment;
+        $this->parserContext = $parserContext;
 
         $ast = $this->markdownParser->parse($contents);
 
@@ -77,7 +77,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->getEnvironment()->getCurrentAbsolutePath());
+        $document = new DocumentNode($hash, $this->getParserContext()->getCurrentAbsolutePath());
         $this->document = $document;
 
         while ($event = $walker->next()) {
@@ -167,15 +167,15 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         return (new ListBlock())->parse($this, $walker);
     }
 
-    public function getEnvironment(): ParserContext
+    public function getParserContext(): ParserContext
     {
-        if ($this->environment === null) {
+        if ($this->parserContext === null) {
             throw new RuntimeException(
                 'A parser\'s Environment should not be consulted before parsing has started'
             );
         }
 
-        return $this->environment;
+        return $this->parserContext;
     }
 
     public function getDocument(): DocumentNode

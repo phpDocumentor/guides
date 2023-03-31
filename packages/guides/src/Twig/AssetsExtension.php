@@ -96,54 +96,54 @@ final class AssetsExtension extends AbstractExtension
             return '';
         }
 
-        $environment = $context['env'] ?? null;
-        if (!$environment instanceof RenderContext) {
-            throw new RuntimeException('Environment must be set in the twig global state to render nodes');
+        $renderContext = $context['env'] ?? null;
+        if (!$renderContext instanceof RenderContext) {
+            throw new RuntimeException('Render context must be set in the twig global state to render nodes');
         }
 
         if ($node instanceof Node) {
-            return $this->nodeRenderer->render($node, $environment);
+            return $this->nodeRenderer->render($node, $renderContext);
         }
 
         $text = '';
         foreach ($node as $child) {
-            $text .= $this->nodeRenderer->render($child, $environment);
+            $text .= $this->nodeRenderer->render($child, $renderContext);
         }
 
         return $text;
     }
 
     private function copyAsset(
-        ?RenderContext $environment,
+        ?RenderContext $renderContext,
         string $sourcePath
     ): string {
-        if (!$environment instanceof RenderContext) {
+        if (!$renderContext instanceof RenderContext) {
             return $sourcePath;
         }
 
-        $canonicalUrl = $environment->canonicalUrl($sourcePath);
+        $canonicalUrl = $renderContext->canonicalUrl($sourcePath);
         Assert::string($canonicalUrl);
         $outputPath = $this->urlGenerator->absoluteUrl(
-            $environment->getDestinationPath(),
+            $renderContext->getDestinationPath(),
             $canonicalUrl
         );
 
         try {
-            if ($environment->getOrigin()->has($sourcePath) === false) {
+            if ($renderContext->getOrigin()->has($sourcePath) === false) {
                 $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
 
                 return $outputPath;
             }
 
 
-            $fileContents = $environment->getOrigin()->read($sourcePath);
+            $fileContents = $renderContext->getOrigin()->read($sourcePath);
             if ($fileContents === false) {
                 $this->logger->error(sprintf('Could not read image file "%s"', $sourcePath));
 
                 return $outputPath;
             }
 
-            $result = $environment->getDestination()->put($outputPath, $fileContents);
+            $result = $renderContext->getDestination()->put($outputPath, $fileContents);
             if ($result === false) {
                 $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
             }

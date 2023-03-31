@@ -32,7 +32,7 @@ class ToctreeBuilder
      * @return string[]
      */
     public function buildToctreeFiles(
-        ParserContext $environment,
+        ParserContext $parserContext,
         LinesIterator $lines,
         array $options
     ): array {
@@ -43,7 +43,7 @@ class ToctreeBuilder
                 $globPattern = $file;
 
                 $globFiles = $this->globSearcher
-                    ->globSearch($environment, $globPattern);
+                    ->globSearch($parserContext, $globPattern);
 
                 foreach ($globFiles as $globFile) {
                     // if glob finds a file already explicitly defined
@@ -56,7 +56,7 @@ class ToctreeBuilder
                 }
             } else {
                 $absoluteUrl = $this->urlGenerator->absoluteUrl(
-                    $environment->getDirName(),
+                    $parserContext->getDirName(),
                     $file
                 );
 

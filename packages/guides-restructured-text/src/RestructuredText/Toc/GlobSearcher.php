@@ -22,15 +22,15 @@ class GlobSearcher
     /**
      * @return string[]
      */
-    public function globSearch(ParserContext $environment, string $globPattern): array
+    public function globSearch(ParserContext $parserContext, string $globPattern): array
     {
-        $fileSystem = $environment->getOrigin();
+        $fileSystem = $parserContext->getOrigin();
         $files = $fileSystem->find(
-            new Glob(rtrim($environment->absoluteRelativePath(''), '/') . '/' . $globPattern)
+            new Glob(rtrim($parserContext->absoluteRelativePath(''), '/') . '/' . $globPattern)
         );
         $allFiles = [];
         foreach ($files as $file) {
-            $allFiles[] = $this->urlGenerator->absoluteUrl($environment->getDirName(), $file['filename']);
+            $allFiles[] = $this->urlGenerator->absoluteUrl($parserContext->getDirName(), $file['filename']);
         }
 
         return $allFiles;
