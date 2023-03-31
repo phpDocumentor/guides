@@ -32,7 +32,7 @@ final class TocEntryRenderer implements NodeRenderer
             'body/toc/toc-item.html.twig',
             [
                 'url' => $renderContext->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),
-                'node' => $node
+                'node' => $node,
             ]
         );
     }

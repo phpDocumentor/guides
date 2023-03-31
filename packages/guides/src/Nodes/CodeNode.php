@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function implode;
+
 class CodeNode extends TextNode
 {
     protected ?string $language = null;

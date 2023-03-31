@@ -44,8 +44,8 @@ use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGenerator;
 use RuntimeException;
-
 use Webmozart\Assert\Assert;
+
 use function strtolower;
 
 class MarkupLanguageParser implements ParserInterface
@@ -73,6 +73,7 @@ class MarkupLanguageParser implements ParserInterface
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
+
         $this->startingRule = $startingRule;
     }
 
@@ -116,7 +117,6 @@ class MarkupLanguageParser implements ParserInterface
         ];
 
         $documentRule = new DocumentRule($directives);
-
 
         return new self($documentRule, $directives);
     }

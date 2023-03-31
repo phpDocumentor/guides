@@ -58,7 +58,7 @@ final class TocNodeTransformerTest extends TestCase
                 new TocEntry(
                     'index',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
-                )
+                ),
             ]
         );
 
@@ -93,7 +93,7 @@ final class TocNodeTransformerTest extends TestCase
                 new TocEntry(
                     'index',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
-                )
+                ),
             ]
         );
 
@@ -103,7 +103,7 @@ final class TocNodeTransformerTest extends TestCase
                     'page3',
                     new TitleNode(new SpanNode('Title 3', []), 1, 'title-3'),
                 ),
-                $entry
+                $entry,
             ],
             $transformedNode->getEntries()
         );

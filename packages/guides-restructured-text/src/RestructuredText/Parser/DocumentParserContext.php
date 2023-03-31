@@ -13,15 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use phpDocumentor\Guides\ParserContext;
-use RuntimeException;
-use ArrayObject;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
+use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-
-use function md5;
+use RuntimeException;
 
 /**
  * Our document parser contains
@@ -29,7 +24,7 @@ use function md5;
 class DocumentParserContext
 {
     /** @var bool public is temporary */
-    public $nextIndentedBlockShouldBeALiteralBlock = false;
+    public bool $nextIndentedBlockShouldBeALiteralBlock = false;
 
     public ?DocumentNode $document = null;
 
@@ -85,7 +80,7 @@ class DocumentParserContext
 
     public function getLevel(string $overlineLetter, string $underlineLetter): int
     {
-        $letter = $overlineLetter.':'.$underlineLetter;
+        $letter = $overlineLetter . ':' . $underlineLetter;
         foreach ($this->titleLetters as $level => $titleLetter) {
             if ($letter === $titleLetter) {
                 return $level;
@@ -110,7 +105,7 @@ class DocumentParserContext
     /**
      * can be used to set the content to the document iterator while preserving space
      * code-block directives have to preserve space
-    */
+     */
     public function withContentsPreserveSpace(string $contents): self
     {
         $that = clone $this;

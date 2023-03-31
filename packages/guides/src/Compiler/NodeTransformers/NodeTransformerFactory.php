@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;

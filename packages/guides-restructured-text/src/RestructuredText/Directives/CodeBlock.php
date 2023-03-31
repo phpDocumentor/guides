@@ -6,9 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+
 use function trim;
 
 /**
@@ -29,13 +28,13 @@ class CodeBlock extends Directive
         return 'code-block';
     }
 
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
-
         $node = new CodeNode(
             $documentParserContext->getDocumentIterator()->toArray()
         );
@@ -46,6 +45,7 @@ class CodeBlock extends Directive
         if ($variable !== '') {
             $document = $documentParserContext->getDocument();
             $document->addVariable($variable, $node);
+
             return null;
         }
 

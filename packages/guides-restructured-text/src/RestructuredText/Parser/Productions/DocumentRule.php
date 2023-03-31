@@ -20,6 +20,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandl
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
+use function implode;
+use function md5;
+
 /** @implements Rule<DocumentNode> */
 final class DocumentRule implements Rule
 {
@@ -30,7 +33,6 @@ final class DocumentRule implements Rule
      */
     public function __construct(iterable $directiveHandlers)
     {
-
         $spanParser = new SpanParser();
         $literalBlockRule = new LiteralBlockRule();
         $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
@@ -41,7 +43,6 @@ final class DocumentRule implements Rule
         //
         // TODO, these productions are now used in sections and documentrule,
         //    however most of them do not apply on documents?
-        //
         $productions = new RuleContainer();
         $productions->push(new LinkRule());
         $productions->push($literalBlockRule);

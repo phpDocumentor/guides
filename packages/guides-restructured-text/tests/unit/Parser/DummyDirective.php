@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Node;
@@ -19,9 +21,9 @@ class DummyDirective extends DirectiveHandler
      */
     public function process(
         DocumentParserContext $documentParserContext,
-        string                $variable,
-        string                $data,
-        array                 $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         return new DummyNode($variable, $data, $options);
     }

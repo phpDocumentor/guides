@@ -61,13 +61,13 @@ RST
 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline
 paragraph
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => null,
@@ -82,13 +82,13 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline
 paragraph
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
@@ -103,13 +103,13 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline
 paragraph
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
@@ -124,13 +124,13 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
@@ -146,13 +146,13 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
@@ -168,13 +168,13 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
@@ -192,37 +192,37 @@ RST
             ,
                 'output' => new ParagraphNode(
                     [
-                    new SpanNode(
-                        <<<RST
+                        new SpanNode(
+                            <<<RST
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                        []
-                    )
+                            []
+                        ),
                     ]
                 ),
                 'remaining' => '',
                 'nextLiteral' => false,
             ],
             [
-            'input' => <<<RST
+                'input' => <<<RST
 This is a top-level paragraph.
 
     This paragraph belongs to a first-level block quote.
 RST
     ,
-            'output' => new ParagraphNode(
-                [
-                new SpanNode(
-                    <<<RST
+                'output' => new ParagraphNode(
+                    [
+                        new SpanNode(
+                            <<<RST
 This is a top-level paragraph.
 RST,
-                    []
-                )
-                ]
-            ),
-        'remaining' => '',
-        'nextLiteral' => false,
+                            []
+                        ),
+                    ]
+                ),
+                'remaining' => '',
+                'nextLiteral' => false,
             ],
         ];
     }

@@ -21,6 +21,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
+use function trim;
+
 /**
  * The Inline markup produces inline nodes
  *
@@ -59,9 +61,11 @@ final class InlineMarkupRule implements Rule
     }
 
     /**
-     * @template TParent as CompoundNode
      * @param TParent|null $on
+     *
      * @return ($on is null ? SpanNode: TParent<Node>|SpanNode|null)
+     *
+     * @template TParent as CompoundNode
      */
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
@@ -74,6 +78,7 @@ final class InlineMarkupRule implements Rule
 
         if ($on !== null) {
             $on->setValue([$node]);
+
             return $on;
         }
 
@@ -88,6 +93,7 @@ final class InlineMarkupRule implements Rule
             $documentIterator->next();
             $buffer->push($documentIterator->current());
         }
+
         return $buffer;
     }
 

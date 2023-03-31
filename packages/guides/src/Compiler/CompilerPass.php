@@ -10,6 +10,7 @@ interface CompilerPass
 {
     /**
      * @param DocumentNode[] $documents
+     *
      * @return DocumentNode[]
      */
     public function run(array $documents): array;

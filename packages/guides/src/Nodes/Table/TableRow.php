@@ -89,7 +89,7 @@ final class TableRow
         return implode(
             ' | ',
             array_map(
-                static fn(TableColumn $column): string => $column->getContent(),
+                static fn (TableColumn $column): string => $column->getContent(),
                 $this->columns
             )
         );

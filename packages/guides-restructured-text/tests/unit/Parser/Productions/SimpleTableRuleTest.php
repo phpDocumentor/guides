@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\RawNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class SimpleTableRuleTest extends AbstractRuleTest
@@ -24,7 +20,6 @@ class SimpleTableRuleTest extends AbstractRuleTest
     {
         $this->rule = new SimpleTableRule($this->givenCollectAllRuleContainer());
     }
-
 
     /** @dataProvider simpleTableStartProvider */
     public function testApplies(string $input): void
@@ -64,7 +59,6 @@ class SimpleTableRuleTest extends AbstractRuleTest
         ];
     }
 
-
     public function testApplyReturns2ColumnTableWithoutHeader(): void
     {
         $input = <<<RST
@@ -85,7 +79,7 @@ RST;
         $expected = new TableNode(
             [
                 $row1,
-                $row2
+                $row2,
             ],
             []
         );
@@ -116,7 +110,7 @@ RST;
         $expected = new TableNode(
             [
                 $row1,
-                $row2
+                $row2,
             ],
             []
         );
@@ -171,9 +165,7 @@ RST;
                 $row4,
                 $row5,
             ],
-            [
-                $row1,
-            ]
+            [$row1]
         );
 
         $result = $this->rule->apply($this->createContext($input), null);
@@ -221,11 +213,9 @@ RST;
             [
                 $row2,
                 $row3,
-                $row4
+                $row4,
             ],
-            [
-                $row1
-            ]
+            [$row1]
         );
 
         $content = $this->createContext($input);

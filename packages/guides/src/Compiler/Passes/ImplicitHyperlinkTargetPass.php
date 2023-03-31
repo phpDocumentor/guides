@@ -10,7 +10,14 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
-use function PHPStan\dumpType;
+
+use function array_map;
+use function array_merge;
+use function current;
+use function in_array;
+use function key;
+use function next;
+use function prev;
 
 /**
  * Resolves the hyperlink target for each section in the document.
@@ -25,6 +32,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
         return 20000; // must be run *before* MetasPass
     }
 
+    /** {@inheritDoc} */
     public function run(array $documents): array
     {
         return array_map(function (DocumentNode $document): DocumentNode {
@@ -51,18 +59,21 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
                     continue;
                 }
 
-                if ($node instanceof SectionNode) {
-                    $realId = $sectionId = $node->getTitle()->getId();
-
-                    // resolve conflicting references by appending an increasing number
-                    $i = 1;
-                    while (\in_array($realId, $knownReferences, true)) {
-                        $realId = $sectionId . '-' . ($i++);
-                    }
-
-                    $node->getTitle()->setId($realId);
-                    $knownReferences[] = $realId;
+                if (!($node instanceof SectionNode)) {
+                    continue;
                 }
+
+                $realId = $sectionId = $node->getTitle()->getId();
+
+                // resolve conflicting references by appending an increasing number
+                $i = 1;
+                while (in_array($realId, $knownReferences, true)) {
+                    $realId = $sectionId . '-' . ($i++);
+                }
+
+                $node->getTitle()->setId($realId);
+                $knownReferences[] = $realId;
+            //phpcs:ignore SlevomatCodingStandard.ControlStructures.AssignmentInCondition.AssignmentInCondition
             } while ($node = next($nodes));
 
             return $document;

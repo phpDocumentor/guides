@@ -10,6 +10,8 @@ use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandl
 use phpDocumentor\Guides\RestructuredText\Parser\DummyDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
 
+use function array_values;
+
 final class DirectiveRuleTest extends AbstractRuleTest
 {
     private DirectiveRule $rule;
@@ -28,7 +30,6 @@ final class DirectiveRuleTest extends AbstractRuleTest
         self::assertTrue($this->rule->applies($context));
     }
 
-
     /** @dataProvider simpleNonDirectiveProvider */
     public function testNotApplies(string $input): void
     {
@@ -41,7 +42,6 @@ final class DirectiveRuleTest extends AbstractRuleTest
         $context = $this->createContext('.. dummy:: data');
         self::assertInstanceOf(DummyNode::class, $this->rule->apply($context));
     }
-
 
     public function testApplySetsEmptyOptionTrue(): void
     {
@@ -70,7 +70,6 @@ NOWDOC
         self::assertEquals('option', array_values($node->getDirectiveOptions())[0]->getName());
         self::assertEquals('value', array_values($node->getDirectiveOptions())[0]->getValue());
     }
-
 
     public function testApplySetsOptionValueMultipleLines(): void
     {
@@ -101,7 +100,6 @@ NOWDOC
         self::assertEquals($expectedValue, $node->getValue());
     }
 
-
     /** @return array<int, array<int, string>> */
     public function codeBlockValueProvider(): array
     {
@@ -122,11 +120,10 @@ INPUT,
     (like *this* or \this) is preserved by literal blocks.
 Lookie here, I've dropped an indentation level
 (but not far enough)
-EXPECTED
-                ],
+EXPECTED,
+            ],
         ];
     }
-
 
     /** @return array<array<string>> */
     public function simpleDirectiveProvider(): array

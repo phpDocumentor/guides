@@ -6,5 +6,4 @@ namespace phpDocumentor\Guides\Meta;
 
 interface ChildEntry extends Entry
 {
-
 }

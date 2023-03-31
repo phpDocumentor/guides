@@ -22,7 +22,6 @@ interface Node
 
     /**
      * @param array<string, scalar|null> $options
-     * @return Node
      */
     public function withOptions(array $options): Node;
 

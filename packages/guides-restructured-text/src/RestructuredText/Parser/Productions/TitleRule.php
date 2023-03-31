@@ -20,13 +20,15 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use function in_array;
+
+use function mb_strlen;
+use function min;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#sections
+ *
  * @implements Rule<TitleNode>
  */
 class TitleRule implements Rule
@@ -70,6 +72,7 @@ class TitleRule implements Rule
                 $underlineLetter = '';
             }
         }
+
         $documentIterator->next();
         $documentIterator->next();
 
@@ -91,6 +94,7 @@ class TitleRule implements Rule
         if (LinesIterator::isNullOrEmptyLine($nextLine)) {
             return '';
         }
+
         if (mb_strlen($line) < min(mb_strlen($nextLine), 4)) {
             return '';
         }
@@ -100,11 +104,12 @@ class TitleRule implements Rule
 
     private function nextLineIsAnUnderline(string $line, ?string $nextLine): string
     {
-        $letter = LineChecker::isSpecialLine($nextLine??'', self::TITLE_LENGTH_MIN);
+        $letter = LineChecker::isSpecialLine($nextLine ?? '', self::TITLE_LENGTH_MIN);
 
         if (LinesIterator::isEmptyLine($line)) {
             return '';
         }
+
         return $letter ?? '';
     }
 }

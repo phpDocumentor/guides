@@ -60,9 +60,6 @@ class Directive
         return $this->options;
     }
 
-    /**
-     * @param DirectiveOption $value
-     */
     public function addOption(DirectiveOption $value): void
     {
         $this->options[$value->getName()] = $value;

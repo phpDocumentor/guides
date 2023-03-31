@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Intersphinx;
 
-use function htmlspecialchars;
 use function preg_match;
 
 final class InventoryLink

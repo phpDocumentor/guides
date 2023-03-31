@@ -7,12 +7,11 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
-use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_map;
+use function array_merge;
 use function explode;
 
 class ClassDirective extends SubDirective
@@ -22,16 +21,17 @@ class ClassDirective extends SubDirective
         return 'class';
     }
 
+    /** {@inheritDoc} */
     public function processSub(
         DocumentNode $document,
-        string       $variable,
-        string       $data,
-        array        $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         $classes = explode(' ', $data);
 
         $normalizedClasses = array_map(
-            static fn(string $class): string => (new AsciiSlugger())->slug($class)->lower()->toString(),
+            static fn (string $class): string => (new AsciiSlugger())->slug($class)->lower()->toString(),
             $classes
         );
 
@@ -40,9 +40,12 @@ class ClassDirective extends SubDirective
         if (!$document instanceof DocumentNode || $document->getNodes() === []) {
             $classNode = new ClassNode($data);
             $classNode->setClasses($classes);
+
             return $classNode;
         }
+
         $this->setNodesClasses($document->getNodes(), $classes);
+
         return new CollectionNode($document->getNodes());
     }
 

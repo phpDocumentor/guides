@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CodeNode;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Webmozart\Assert\Assert;
+
 use function dirname;
 use function explode;
+use function implode;
 use function sprintf;
 use function str_replace;
 
@@ -38,11 +38,12 @@ final class Uml extends Directive
         return 'uml';
     }
 
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
         $parser = $documentParserContext->getParser();
         $parserContext = $parser->getParserContext();
@@ -65,6 +66,7 @@ final class Uml extends Directive
         $document = $parser->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $node);
+
             return null;
         }
 

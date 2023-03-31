@@ -21,10 +21,17 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function array_values;
 use function count;
+use function max;
+use function mb_strlen;
+use function mb_strpos;
+use function str_repeat;
+use function strlen;
+use function substr;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#block-quotes
+ *
  * @implements Rule<QuoteNode>
  */
 final class BlockQuoteRule implements Rule
@@ -105,6 +112,7 @@ final class BlockQuoteRule implements Rule
 
     /**
      * @param string[] $lines
+     *
      * @return string[]
      */
     private function normalizeLines(array $lines): array

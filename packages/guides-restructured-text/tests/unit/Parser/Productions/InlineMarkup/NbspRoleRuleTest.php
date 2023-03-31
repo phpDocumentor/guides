@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
 use PHPUnit\Framework\TestCase;
+
+use function explode;
+use function sprintf;
+use function var_export;
 
 abstract class NbspRoleRuleTest extends TestCase
 {
@@ -14,8 +20,10 @@ abstract class NbspRoleRuleTest extends TestCase
     {
         $this->rule = new NbspRoleRule();
     }
+
     /**
      * @param string[] $tokenStrings
+     *
      * @dataProvider ruleAppliesProvider
      */
     public function testApplies(array $tokenStrings, bool $expected): void
@@ -63,17 +71,16 @@ abstract class NbspRoleRuleTest extends TestCase
         ];
     }
 
-
     /**
      * @return array<int, array<int, string | InlineMarkupToken>>
      */
-    public function expectedTokenProvider() : array
+    public function expectedTokenProvider(): array
     {
         return [
             [
                 '~',
                 new NbspToken('??'),
-            ]
+            ],
         ];
     }
 }

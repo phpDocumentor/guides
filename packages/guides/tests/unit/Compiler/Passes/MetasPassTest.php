@@ -40,9 +40,7 @@ final class MetasPassTest extends TestCase
         $expected->addChild($s1);
 
         self::assertEquals(
-            [
-                'index' => $expected
-            ],
+            ['index' => $expected],
             $entries
         );
     }

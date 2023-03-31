@@ -25,6 +25,7 @@ class AdmonitionNode extends CompoundNode
 
     private string $text;
 
+    /** {@inheritDoc} */
     public function __construct(string $name, string $text, array $value)
     {
         parent::__construct($value);

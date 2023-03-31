@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function array_merge;
+
 /**
  * @extends CompoundNode<Node>
  */

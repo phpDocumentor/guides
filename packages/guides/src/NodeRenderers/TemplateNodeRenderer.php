@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TemplatedNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 

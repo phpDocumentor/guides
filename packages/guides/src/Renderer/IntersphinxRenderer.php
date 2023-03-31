@@ -1,28 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
-use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Setup\QuickStart;
 use phpDocumentor\Guides\UrlGenerator;
+
+use function json_encode;
+
+use const JSON_PRETTY_PRINT;
 
 class IntersphinxRenderer implements TypeRenderer
 {
-
     public const TYPE = 'intersphinx';
 
     public function supports(string $outputFormat): bool
     {
-        return $outputFormat === IntersphinxRenderer::TYPE;
+        return $outputFormat === self::TYPE;
     }
 
     public function render(RenderCommand $renderCommand): void
     {
         $inventory = [
-            'std:doc' => []
+            'std:doc' => [],
         ];
         $urlGenerator = new UrlGenerator();
         foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
@@ -34,9 +35,10 @@ class IntersphinxRenderer implements TypeRenderer
                 '',
                 '',
                 $url,
-                $documentEntry->getTitle()->toString()
+                $documentEntry->getTitle()->toString(),
             ];
         }
+
         $json = (string) json_encode($inventory, JSON_PRETTY_PRINT);
         $renderCommand->getDestination()->put(
             'objects.inv.json',

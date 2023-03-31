@@ -13,12 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use function implode;
-use function PHPStan\dumpType;
-use function strlen;
-use function substr;
-use function trim;
-
 /**
  * @template TValue as Node
  * @extends AbstractNode<TValue[]>
@@ -56,12 +50,14 @@ abstract class CompoundNode extends AbstractNode
 
     /**
      * @param TValue $node
+     *
      * @return $this<TValue>
      */
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;
         $result->value[$key] = $node;
+
         return $result;
     }
 }

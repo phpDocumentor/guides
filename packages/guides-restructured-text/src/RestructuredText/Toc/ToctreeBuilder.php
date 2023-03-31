@@ -10,7 +10,6 @@ use phpDocumentor\Guides\UrlGenerator;
 
 use function array_filter;
 use function array_map;
-use function explode;
 use function in_array;
 use function strpos;
 
@@ -74,7 +73,7 @@ class ToctreeBuilder
     {
         return array_filter(
             array_map('trim', $lines->toArray()),
-            static fn(string $file): bool => $file !== ''
+            static fn (string $file): bool => $file !== ''
         );
     }
 

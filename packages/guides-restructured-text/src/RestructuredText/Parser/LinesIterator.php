@@ -18,8 +18,11 @@ use OutOfBoundsException;
 
 use function chr;
 use function explode;
-use function PHPUnit\Framework\assertInstanceOf;
+use function max;
+use function mb_strpos;
+use function preg_replace;
 use function sprintf;
+use function str_repeat;
 use function str_replace;
 use function trim;
 
@@ -43,6 +46,7 @@ class LinesIterator implements Iterator
             $document = preg_replace('/^\n+/', '', $document);
             $document = preg_replace('/\n+$/', '', (string) $document);
         }
+
         $this->lines = explode("\n", (string) $document);
         $this->rewind();
     }

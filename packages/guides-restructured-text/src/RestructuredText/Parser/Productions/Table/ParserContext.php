@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
+use function count;
+use function implode;
+use function ksort;
+
 final class ParserContext
 {
     /** @var string[] */
     private array $rawDataLines = [];
     /** @var array<int, TableSeparatorLineConfig> */
     private array $separatorLineConfigs = [];
-    /** @var int */
     private int $currentLineNumber = 0;
 
     /** @var string[] */
@@ -117,6 +120,7 @@ final class ParserContext
                 ksort($columnRanges);
             }
         }
+
         return $columnRanges;
     }
 }

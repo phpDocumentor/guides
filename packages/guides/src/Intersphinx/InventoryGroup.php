@@ -30,7 +30,7 @@ final class InventoryGroup
     public function getLink(string $key): InventoryLink
     {
         $lowerCaseKey = strtolower($key);
-        if (! array_key_exists($lowerCaseKey, $this->links)) {
+        if (!array_key_exists($lowerCaseKey, $this->links)) {
             throw new RuntimeException('Inventory link with key ' . $lowerCaseKey . ' not found. ', 1671398986);
         }
 

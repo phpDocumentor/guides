@@ -63,8 +63,10 @@ final class ParseDirectoryHandler
                 break;
             }
         }
+
         if (!$hasIndexFile) {
             $indexFilename = sprintf('%s.%s', $this->indexFileNames[0], $extension);
+
             throw new InvalidArgumentException(
                 sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory)
             );

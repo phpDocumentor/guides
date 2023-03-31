@@ -45,7 +45,7 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    public function expectedLiteralContentProvider() : array
+    public function expectedLiteralContentProvider(): array
     {
         return [
             [

@@ -41,7 +41,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    public function expectedLiteralContentProvider() : array
+    public function expectedLiteralContentProvider(): array
     {
         return [
             [
@@ -53,7 +53,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
                 new EmphasisToken('??', 'text with spaces'),
             ],
             [
-            '*text with escaped \\* star*',
+                '*text with escaped \\* star*',
                 new EmphasisToken('??', 'text with escaped \\* star'),
             ],
         ];

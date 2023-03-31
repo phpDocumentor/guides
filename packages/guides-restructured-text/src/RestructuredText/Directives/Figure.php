@@ -8,12 +8,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\UrlGenerator;
-
-use function assert;
 
 /**
  * Renders an image, example :
@@ -38,11 +34,12 @@ class Figure extends SubDirective
         return 'figure';
     }
 
+    /** {@inheritDoc} */
     public function processSub(
         DocumentNode $document,
-        string       $variable,
-        string       $data,
-        array        $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         $image = new ImageNode($this->urlGenerator->relativeUrl($data));
         $scalarOptions = $this->optionsToArray($options);

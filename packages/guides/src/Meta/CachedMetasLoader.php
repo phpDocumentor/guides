@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\Meta;
 
 use LogicException;
 use phpDocumentor\Guides\Metas;
-
 use Webmozart\Assert\Assert;
+
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;

@@ -1,14 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 use PHPUnit\Framework\TestCase;
 
+use function explode;
+use function sprintf;
+use function var_export;
+
 abstract class StartEndRegexRoleRuleTest extends TestCase
 {
     /**
      * @param string[] $tokenStrings
+     *
      * @dataProvider ruleAppliesProvider
      */
     public function testApplies(array $tokenStrings, bool $expected): void
@@ -43,13 +50,13 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
         self::assertNull($this->getRule()->apply($tokens));
         self::assertEquals($expected, $tokens->current());
     }
+
     abstract public function getRule(): StartEndRegexRoleRule;
 
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
     abstract public function ruleAppliesProvider(): array;
-
 
     /**
      * @return array<int, array<int, string | ValueToken>>

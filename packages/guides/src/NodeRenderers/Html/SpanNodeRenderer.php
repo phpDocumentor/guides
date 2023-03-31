@@ -19,8 +19,11 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
+
 use function htmlspecialchars;
 use function trim;
+
+use const ENT_QUOTES;
 
 class SpanNodeRenderer extends BaseSpanNodeRenderer
 {
@@ -60,7 +63,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
      */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         return $this->renderer->renderTemplate(
             $context,

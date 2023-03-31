@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown;
 
-use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
-use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
-use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
@@ -18,6 +15,9 @@ use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Parser\MarkdownParser;
+use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
+use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
+use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
 use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
@@ -30,8 +30,8 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use RuntimeException;
-
 use Symfony\Component\String\Slugger\AsciiSlugger;
+
 use function get_class;
 use function md5;
 use function strtolower;

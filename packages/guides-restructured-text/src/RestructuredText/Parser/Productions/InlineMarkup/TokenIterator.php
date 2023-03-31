@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
+use Iterator;
 use OutOfBoundsException;
 
+use function array_pop;
+
 /**
- * @implements \Iterator<int,string>
+ * @implements Iterator<int, string>
  */
-class TokenIterator implements \Iterator
+class TokenIterator implements Iterator
 {
     /** @var int[] */
     private array $snapShot = [];
@@ -23,7 +26,7 @@ class TokenIterator implements \Iterator
         $this->tokens = $tokens;
     }
 
-    public function current()
+    public function current(): string
     {
         if ($this->valid() === false) {
             throw new OutOfBoundsException('Attempted to token that does not exist');
@@ -52,7 +55,7 @@ class TokenIterator implements \Iterator
         return $this->tokens[$this->position + 1] ?? null;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }

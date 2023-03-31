@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\NodeRenderers;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 
-use function is_callable;
+use function assert;
 use function is_string;
 
 /** @implements NodeRenderer<Node> */
@@ -35,6 +35,7 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 
         if ($value instanceof Node) {
             assert($this->nodeRendererFactory !== null);
+
             return $this->nodeRendererFactory->get($value)->render($value, $renderContext);
         }
 

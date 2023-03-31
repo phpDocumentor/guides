@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+
+use function array_merge;
 
 /**
  * @implements NodeTransformer<Node>
@@ -16,10 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
  */
 class ClassNodeTransformer implements NodeTransformer
 {
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $classes = [];
 
     public function enterNode(Node $node): Node
@@ -28,6 +28,7 @@ class ClassNodeTransformer implements NodeTransformer
             // unset classes when entering the next document
             $this->classes = [];
         }
+
         if ($node instanceof ClassNode) {
             $this->classes = $node->getClasses();
         }
@@ -37,6 +38,7 @@ class ClassNodeTransformer implements NodeTransformer
             // Unset the classes after applied to the first direct successor
             $this->classes = [];
         }
+
         return $node;
     }
 
@@ -46,6 +48,7 @@ class ClassNodeTransformer implements NodeTransformer
             //Remove the class node from the tree.
             return null;
         }
+
         return $node;
     }
 

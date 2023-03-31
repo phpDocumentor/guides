@@ -43,11 +43,11 @@ final class DocResolver implements Resolver
      * TODO refactor this... I see too many arguments, Why would you use the titles?
      */
     private function createResolvedReference(
-        string        $file,
+        string $file,
         RenderContext $renderContext,
         string $text,
-        array         $attributes = [],
-        ?string       $anchor = null
+        array $attributes = [],
+        ?string $anchor = null
     ): ResolvedReference {
         return new ResolvedReference(
             $file,

@@ -13,15 +13,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 /** @implements Rule<RawNode> */
 class CollectAllRule implements Rule
 {
-
     public function applies(DocumentParserContext $documentParser): bool
     {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         $buffer = new Buffer();

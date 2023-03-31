@@ -11,7 +11,9 @@ use function array_column;
 use function array_flip;
 use function preg_match;
 
-/** @extends AbstractLexer<int, string> */
+/**
+ * @extends AbstractLexer<int, string>
+ */
 final class SpanLexer extends AbstractLexer
 {
     public const WORD = 1;
@@ -39,7 +41,7 @@ final class SpanLexer extends AbstractLexer
     private array $tokenPositions = [];
 
     /** @return string[] */
-    protected function getCatchablePatterns()
+    protected function getCatchablePatterns(): array
     {
         return [
             '[a-z0-9-]+_{2}', //Inline href.
@@ -58,13 +60,15 @@ final class SpanLexer extends AbstractLexer
     }
 
     /** @param int $position */
-    public function resetPosition($position = 0)
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+    public function resetPosition($position = 0): void
     {
         parent::resetPosition($this->tokenPositions[$position]);
     }
 
     /** @param string $input */
-    protected function scan($input)
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+    protected function scan($input): void
     {
         parent::scan($input);
 
@@ -78,7 +82,7 @@ final class SpanLexer extends AbstractLexer
     }
 
     /** @return string[] */
-    protected function getNonCatchablePatterns()
+    protected function getNonCatchablePatterns(): array
     {
         return [];
     }

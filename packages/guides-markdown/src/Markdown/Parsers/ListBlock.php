@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown\Parsers;
 
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock as CommonMarkListBlock;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 
 use function get_class;

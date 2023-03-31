@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\Passes;
 
-use PHPUnit\Framework\TestCase;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class ImplicitHyperlinkTargetPassTest extends TestCase

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Twig;
 
 use League\Flysystem\Exception;
-use League\Flysystem\FilesystemException;
 use LogicException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
@@ -27,7 +26,6 @@ use Twig\TwigFunction;
 use Twig\TwigTest;
 use Webmozart\Assert\Assert;
 
-use function dirname;
 use function sprintf;
 use function trim;
 
@@ -42,13 +40,14 @@ final class AssetsExtension extends AbstractExtension
     public function __construct(
         LoggerInterface $logger,
         NodeRenderer $nodeRenderer,
-        UrlGenerator    $urlGenerator
+        UrlGenerator $urlGenerator
     ) {
         $this->logger = $logger;
         $this->nodeRenderer = $nodeRenderer;
         $this->urlGenerator = $urlGenerator;
     }
 
+    /** @return TwigFunction[] */
     public function getFunctions(): array
     {
         return [
@@ -64,8 +63,8 @@ final class AssetsExtension extends AbstractExtension
             new TwigTest(
                 'node',
                 /** @param mixed $value */
-                fn ($value):bool => $value instanceof Node
-            )
+                static fn ($value): bool => $value instanceof Node
+),
         ];
     }
 
@@ -135,7 +134,6 @@ final class AssetsExtension extends AbstractExtension
                 return $outputPath;
             }
 
-
             $fileContents = $renderContext->getOrigin()->read($sourcePath);
             if ($fileContents === false) {
                 $this->logger->error(sprintf('Could not read image file "%s"', $sourcePath));
@@ -147,7 +145,7 @@ final class AssetsExtension extends AbstractExtension
             if ($result === false) {
                 $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
             }
-        } catch (LogicException|Exception $e) {
+        } catch (LogicException | Exception $e) {
             $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
         }
 

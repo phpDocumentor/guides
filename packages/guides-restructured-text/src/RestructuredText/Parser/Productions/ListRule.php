@@ -13,32 +13,27 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use Webmozart\Assert\Assert;
 
 use function count;
 use function ltrim;
-use function max;
 use function mb_strlen;
+use function mb_substr;
 use function preg_match;
-use function preg_replace;
-use function str_repeat;
 use function strlen;
-use function strpos;
-use function substr;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists
+ *
  * @implements Rule<ListNode>
  */
 final class ListRule implements Rule
@@ -68,6 +63,7 @@ final class ListRule implements Rule
     public function applies(DocumentParserContext $documentParser): bool
     {
         $documentIterator = $documentParser->getDocumentIterator();
+
         return $this->isListLine($documentIterator->current());
     }
 
@@ -84,7 +80,8 @@ final class ListRule implements Rule
 
         $items = [];
 
-        while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker'])
+        while (
+            $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker'])
                 || LinesIterator::isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
         ) {
             $documentIterator->next();
@@ -103,9 +100,11 @@ final class ListRule implements Rule
                 );
             }
 
-            if (trim($documentIterator->current()) !== $listConfig['marker']) {
-                $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+            if (trim($documentIterator->current()) === $listConfig['marker']) {
+                continue;
             }
+
+            $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
@@ -119,12 +118,7 @@ final class ListRule implements Rule
             return false;
         }
 
-        $isList = preg_match(self::LIST_MARKER, $line) > 0;
-        if (!$isList) {
-            return false;
-        }
-
-        return true;
+        return preg_match(self::LIST_MARKER, $line) > 0;
     }
 
     /** @return array{marker: string, indenting: int} */
@@ -137,7 +131,7 @@ final class ListRule implements Rule
 
         return [
             'marker' => $m[1],
-            'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0])
+            'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0]),
         ];
     }
 
@@ -164,8 +158,6 @@ final class ListRule implements Rule
     /** @param array{marker: string, indenting: int} $listConfig */
     private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
     {
-
-
         $listItem = new ListItemNode($listConfig['marker'], false, []);
         $context = $context->withContents($buffer->getLinesString());
         while ($context->getDocumentIterator()->valid()) {

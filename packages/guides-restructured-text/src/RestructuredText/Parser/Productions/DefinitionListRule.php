@@ -17,20 +17,26 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
-use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-
 use Webmozart\Assert\Assert;
-use function strpos;
+
+use function array_map;
+use function array_shift;
+use function count;
+use function explode;
+use function ltrim;
+use function mb_strlen;
+use function mb_substr;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists
+ *
  * @implements Rule<DefinitionListNode>
  */
 final class DefinitionListRule implements Rule
@@ -66,7 +72,7 @@ final class DefinitionListRule implements Rule
         //       'too late' in detecting whether it should have stopped
         $iterator->prev();
 
-        return new DefinitionListNode(... $definitionListItems);
+        return new DefinitionListNode(...$definitionListItems);
     }
 
     private function createListItem(DocumentParserContext $documentParserContext): DefinitionListItemNode
@@ -78,7 +84,7 @@ final class DefinitionListRule implements Rule
         $definitionListItem = new DefinitionListItemNode(
             $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
             array_map(
-                fn($classification): SpanNode => $this->inlineMarkupRule->apply(
+                fn ($classification): SpanNode => $this->inlineMarkupRule->apply(
                     $documentParserContext->withContents($classification)
                 ),
                 $parts
@@ -128,6 +134,7 @@ final class DefinitionListRule implements Rule
         while ($nodeContext->getDocumentIterator()->valid()) {
             $this->definitionProducers->apply($nodeContext, $node);
         }
+
         if (count($node->getChildren()) > 1) {
             return $node;
         }
@@ -150,10 +157,6 @@ final class DefinitionListRule implements Rule
             return false;
         }
 
-        if (LinesIterator::isBlockLine($nextLine)) {
-            return true;
-        }
-
-        return false;
+        return LinesIterator::isBlockLine($nextLine);
     }
 }

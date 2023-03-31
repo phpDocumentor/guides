@@ -33,6 +33,7 @@ class SectionEntry implements ChildEntry
         $this->children[] = $child;
     }
 
+    /** {@inheritDoc} */
     public function getChildren(): array
     {
         return $this->children;

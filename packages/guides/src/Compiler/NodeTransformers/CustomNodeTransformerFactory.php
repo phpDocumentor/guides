@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;
@@ -7,7 +9,6 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class CustomNodeTransformerFactory implements NodeTransformerFactory
 {
-
     /** @var iterable<NodeTransformer<Node>> */
     private iterable $transformers;
 

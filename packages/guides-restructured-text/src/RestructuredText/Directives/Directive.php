@@ -9,6 +9,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
+use function array_map;
+
 /**
  * A directive is like a function you can call or apply to a block
  * It looks like:
@@ -56,8 +58,8 @@ abstract class Directive
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
         $document = $documentParserContext->getDocument();
 
@@ -67,6 +69,7 @@ abstract class Directive
 
         if ($variable !== '') {
             $document->addVariable($variable, $processNode);
+
             return null;
         }
 
@@ -79,7 +82,6 @@ abstract class Directive
      *
      * The arguments are the same that process
      *
-     * @param DocumentParserContext $documentParserContext
      * @param mixed[] $options
      */
     public function processNode(
@@ -111,10 +113,11 @@ abstract class Directive
 
     /**
      * @param DirectiveOption[] $options
+     *
      * @return array<string, scalar|null>
      */
     protected function optionsToArray(array $options): array
     {
-        return array_map(fn(DirectiveOption $option) => $option->getValue(), $options);
+        return array_map(static fn (DirectiveOption $option) => $option->getValue(), $options);
     }
 }

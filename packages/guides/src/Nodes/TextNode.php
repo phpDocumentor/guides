@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function implode;
+use function strlen;
+use function substr;
+use function trim;
+
 /** @extends AbstractNode<string> */
 abstract class TextNode extends AbstractNode
 {

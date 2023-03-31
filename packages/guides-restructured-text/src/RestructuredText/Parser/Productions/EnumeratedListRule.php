@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -26,13 +26,16 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use function count;
 use function ltrim;
 use function mb_strlen;
+use function mb_substr;
 use function preg_match;
+use function sprintf;
 use function strlen;
 use function strpos;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#enumerated-lists
+ *
  * @implements Rule<ListNode>
  */
 final class EnumeratedListRule implements Rule
@@ -66,7 +69,6 @@ final class EnumeratedListRule implements Rule
 
         $listConfig = $this->getItemConfig($documentIterator->current());
 
-
         return LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine()) ||
             LinesIterator::isBlockLine($documentIterator->getNextLine()) ||
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
@@ -85,7 +87,8 @@ final class EnumeratedListRule implements Rule
 
         $items = [];
 
-        while ($this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type'])
+        while (
+            $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type'])
                 || LinesIterator::isBlockLine($documentIterator->getNextLine(), $listConfig['indenting'])
         ) {
             $documentIterator->next();
@@ -104,9 +107,11 @@ final class EnumeratedListRule implements Rule
                 );
             }
 
-            if (trim($documentIterator->current()) !== $listConfig['marker']) {
-                $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+            if (trim($documentIterator->current()) === $listConfig['marker']) {
+                continue;
             }
+
+            $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
@@ -120,12 +125,7 @@ final class EnumeratedListRule implements Rule
             return false;
         }
 
-        $isList = preg_match($this->expression, $line) > 0;
-        if (!$isList) {
-            return false;
-        }
-
-        return true;
+        return preg_match($this->expression, $line) > 0;
     }
 
     /** @return array{marker: string, indenting: int, marker_type: string} */
@@ -139,7 +139,7 @@ final class EnumeratedListRule implements Rule
         return [
             'marker' => trim($m[1]),
             'marker_type' => $this->getMarkerType($m[1]),
-            'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0])
+            'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0]),
         ];
     }
 
@@ -203,11 +203,11 @@ final class EnumeratedListRule implements Rule
                 return 'auto_number' . $this->markerSuffix($marker);
             }
 
-            return 'number'  . $this->markerSuffix($marker);
+            return 'number' . $this->markerSuffix($marker);
         }
 
         if (preg_match('/' . sprintf(self::LIST_MARKER, self::ROMAN_NUMBER, self::ROMAN_NUMBER) . '/', $marker)) {
-            return 'roman'  . $this->markerSuffix($marker);
+            return 'roman' . $this->markerSuffix($marker);
         }
 
         return 'unknown';

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
@@ -24,11 +24,19 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Throwable;
 
+use function ltrim;
+use function mb_strlen;
+use function min;
 use function preg_match;
 use function sprintf;
+use function strtolower;
+use function trim;
+
+use const PHP_INT_MAX;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#directives
+ *
  * @implements Rule<Node>
  */
 final class DirectiveRule implements Rule
@@ -139,7 +147,8 @@ final class DirectiveRule implements Rule
 
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void
     {
-        while ($documentIterator->getNextLine() !== null && $this->isDirectiveOption($documentIterator->getNextLine())
+        while (
+            $documentIterator->getNextLine() !== null && $this->isDirectiveOption($documentIterator->getNextLine())
         ) {
             $documentIterator->next();
             $directiveOption = $this->parseDirectiveOption($documentIterator->current());
@@ -147,9 +156,11 @@ final class DirectiveRule implements Rule
             $directive->addOption($directiveOption);
         }
 
-        if ($this->isDirectiveOption($documentIterator->current())) {
-            $documentIterator->next();
+        if (!$this->isDirectiveOption($documentIterator->current())) {
+            return;
         }
+
+        $documentIterator->next();
     }
 
     /**
@@ -166,7 +177,8 @@ final class DirectiveRule implements Rule
         LinesIterator $documentIterator,
         DirectiveOption $directiveOption
     ): void {
-        while (!LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine())
+        while (
+            !LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine())
             && !$this->isDirectiveOption($documentIterator->getNextLine())
         ) {
             $documentIterator->next();
@@ -182,6 +194,7 @@ final class DirectiveRule implements Rule
 
         try {
             $this->parseDirectiveOption($line);
+
             return true;
         } catch (InvalidArgumentException $e) {
             return false;
@@ -197,6 +210,7 @@ final class DirectiveRule implements Rule
      *       more than one line
      *     :yet another option: abc
      *     :empty option:
+     *
      * @throws InvalidArgumentException
      */
     private function parseDirectiveOption(string $line): DirectiveOption
@@ -223,9 +237,12 @@ final class DirectiveRule implements Rule
                 $indenting = mb_strlen($line) - mb_strlen(ltrim($line));
                 $minIndenting = min($minIndenting, $indenting);
             }
+
             $buffer->push($line);
         }
+
         $buffer->unIndent($minIndenting);
+
         return $buffer;
     }
 }

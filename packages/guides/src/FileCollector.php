@@ -77,16 +77,12 @@ class FileCollector
             );
         }
 
-        $file = $this->fileInfos[$filename];
+        return $this->hasFileBeenUpdated($filename);
 
-        $documentFilename = $this->getFilenameFromFile($file);
-        $entry = $this->metas->findDocument($documentFilename);
-
-        if ($this->hasFileBeenUpdated($filename)) {
-            // File is new or changed and thus need to be parsed
-            return true;
-        }
-
+//        $file = $this->fileInfos[$filename];
+//        $documentFilename = $this->getFilenameFromFile($file);
+//        $entry = $this->metas->findDocument($documentFilename);
+//
 //        // Look to the file's dependencies to know if you need to parse it or not
 //        $dependencies = $entry !== null ? $entry->getDepends() : [];
 //
@@ -122,7 +118,7 @@ class FileCollector
 //        }
 
         // Meta is fresh and no dependencies need parsing
-        return false;
+        //return false;
     }
 
     private function hasFileBeenUpdated(string $filename): bool

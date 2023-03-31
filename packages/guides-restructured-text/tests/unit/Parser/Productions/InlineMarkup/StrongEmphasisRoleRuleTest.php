@@ -42,7 +42,6 @@ final class StrongEmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
         ];
     }
 
-
     /**
      * @return array<int, array<int, string | ValueToken>>
      */

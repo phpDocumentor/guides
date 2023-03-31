@@ -19,8 +19,7 @@ final class InventoryLoaderTest extends TestCase
     private InventoryLoader $inventoryLoader;
     /** @var JsonLoader&MockObject */
     private $jsonLoader;
-    /** @var InventoryRepository */
-    private $inventoryRepository;
+    private InventoryRepository $inventoryRepository;
     /** @var array<string, mixed> */
     private array $json;
 
@@ -31,7 +30,7 @@ final class InventoryLoaderTest extends TestCase
         $this->inventoryLoader = new InventoryLoader($this->inventoryRepository, $this->jsonLoader);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
-        $this->json = (array)json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
+        $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $this->inventoryLoader->loadInventoryFromJson('somekey', 'https://example.com/', $this->json);
     }
 

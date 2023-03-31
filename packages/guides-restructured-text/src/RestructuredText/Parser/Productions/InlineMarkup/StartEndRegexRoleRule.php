@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+
+use function is_string;
+use function preg_match;
 
 abstract class StartEndRegexRoleRule implements InlineMarkupRule
 {
@@ -17,6 +22,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
         if (!is_string($tokens->current())) {
             return false;
         }
+
         return preg_match($this->getStartRegex(), $tokens->current()) === 1;
     }
 
@@ -27,6 +33,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
         if (!is_string($content)) {
             return null;
         }
+
         if ($this->isEndToken($content)) {
             return $this->createToken($content);
         }
@@ -38,6 +45,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
 
         if ($tokens->getNext() === null) {
             $tokens->restore();
+
             return null;
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Handlers;
 
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
