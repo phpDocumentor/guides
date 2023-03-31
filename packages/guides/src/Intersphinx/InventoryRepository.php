@@ -30,7 +30,7 @@ class InventoryRepository
     public function getInventory(string $key): Inventory
     {
         $lowerCaseKey = strtolower($key);
-        if (! $this->hasInventory($lowerCaseKey)) {
+        if (!$this->hasInventory($lowerCaseKey)) {
             throw new RuntimeException('Inventory with key ' . $lowerCaseKey . ' not found. ', 1671398986);
         }
 

@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RenderContext;
 
+use function assert;
 use function count;
 use function implode;
 use function max;
@@ -50,11 +51,11 @@ class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
             $cols = max($cols, count($row->getColumns()));
 
             assert($this->nodeRendererFactory !== null);
-            /** @var SpanNode $col */
             foreach ($row->getColumns() as $n => $col) {
+                assert($col instanceof SpanNode);
                 $rowTex .= $this->nodeRendererFactory->get($col)->render($col, $renderContext);
 
-                if ((int)$n + 1 >= count($row->getColumns())) {
+                if ((int) $n + 1 >= count($row->getColumns())) {
                     continue;
                 }
 

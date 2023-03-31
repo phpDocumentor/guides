@@ -17,17 +17,20 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableBuilder;
-
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
+
+use function mb_strlen;
+use function preg_match;
+use function sprintf;
+use function strlen;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#grid-tables
+ *
  * @implements Rule<TableNode>
  */
 final class GridTableRule implements Rule
@@ -85,7 +88,7 @@ final class GridTableRule implements Rule
                     );
                 }
 
-                $context->setHeaderRows($lineNumber-1);
+                $context->setHeaderRows($lineNumber - 1);
                 continue;
             }
 
@@ -113,10 +116,12 @@ final class GridTableRule implements Rule
 
         $currentPartStart = 1;
         for ($i = 1; $i < $strlen; $i++) {
-            if ($line[$i] === '+') {
-                $parts[] = [$currentPartStart, $i];
-                $currentPartStart = ++$i;
+            if ($line[$i] !== '+') {
+                continue;
             }
+
+            $parts[] = [$currentPartStart, $i];
+            $currentPartStart = ++$i;
         }
 
         return new TableSeparatorLineConfig(
@@ -139,6 +144,6 @@ final class GridTableRule implements Rule
 
     private function isDefintionLine(string $line, string $char): bool
     {
-        return preg_match("/^(?:\+$char+)+\+$/", trim($line)) > 0;
+        return preg_match('/^(?:\+' . $char . '+)+\+$/', trim($line)) > 0;
     }
 }

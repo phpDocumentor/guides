@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
@@ -7,17 +9,21 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleNotFoundException;
 
+use function assert;
+use function is_string;
+use function preg_replace;
+use function preg_replace_callback;
+
 class TextRoleRule extends StartEndRegexRoleRule
 {
     private TextRoleFactory $textRoleFactory;
-    private const START ='/^:([a-z0-9]+):`/';
-    private const END ='/(?<![`\\\\])`{1}$/';
+    private const START = '/^:([a-z0-9]+):`/';
+    private const END = '/(?<![`\\\\])`{1}$/';
 
     public function __construct(TextRoleFactory $textRoleFactory)
     {
         $this->textRoleFactory = $textRoleFactory;
     }
-
 
     public function getStartRegex(): string
     {
@@ -31,14 +37,15 @@ class TextRoleRule extends StartEndRegexRoleRule
 
     protected function createToken(string $content): InlineMarkupToken
     {
-        $role = (string)preg_replace_callback('/:([a-z0-9]+):`(.+)`/mUsi', function ($match): string {
+        $role = (string) preg_replace_callback('/:([a-z0-9]+):`(.+)`/mUsi', static function ($match): string {
             return $match[1];
         }, $content);
-        /** @var string $content */
         $content = (string) preg_replace($this->getStartRegex(), '', $content);
+        assert(is_string($content));
         $content = (string) preg_replace($this->getEndRegex(), '', $content);
         try {
             $textRole = $this->textRoleFactory->getTextRole($role);
+
             return $textRole->processNode($content);
         } catch (TextRoleNotFoundException $exception) {
             return new GenericTextRoleToken('??', (string) $role, $content);

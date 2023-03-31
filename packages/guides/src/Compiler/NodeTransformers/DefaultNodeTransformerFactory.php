@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\NodeTransformer;
@@ -18,11 +20,13 @@ class DefaultNodeTransformerFactory implements NodeTransformerFactory
     /** @return iterable<NodeTransformer<Node>> */
     public function getTransformers(): iterable
     {
-        /** @var iterable<NodeTransformer<Node>> */
-        return [
+        /** @var iterable<NodeTransformer<Node>> $transformers */
+        $transformers = [
             new TocNodeTransformer($this->metas),
             new CollectLinkTargetsTransformer($this->metas),
             new ClassNodeTransformer(),
         ];
+
+        return $transformers;
     }
 }

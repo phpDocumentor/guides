@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
-use Prophecy\PhpUnit\ProphecyTrait;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode
@@ -25,6 +24,7 @@ use RuntimeException;
 final class DefinitionListTermTest extends TestCase
 {
     use ProphecyTrait;
+
     /**
      * @covers ::__construct
      * @covers ::getTerm

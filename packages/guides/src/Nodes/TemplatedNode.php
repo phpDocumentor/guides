@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /**
- * @extends AbstractNode<string>
  * @deprecated Tie-ing nodes to templates should be done differently; as this creates coupling between the parsing and
  *   rendering phase.
+ *
+ * @extends AbstractNode<string>
  */
 final class TemplatedNode extends AbstractNode
 {

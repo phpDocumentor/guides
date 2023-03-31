@@ -31,14 +31,17 @@ final class DocumentNodeTraverser
     }
 
     /**
-     * @template TNode as Node
      * @param NodeTransformer<Node> $transformer
      * @param TNode $node
      * return TNode|null
+     *
+     * @template TNode as Node
      */
     private function traverseForTransformer(NodeTransformer $transformer, Node $node): ?Node
     {
-        if ($supports = $transformer->supports($node)) {
+        $supports = $transformer->supports($node);
+
+        if ($supports) {
             $node = $transformer->enterNode($node);
         }
 
@@ -50,9 +53,11 @@ final class DocumentNodeTraverser
                     continue;
                 }
 
-                if ($transformed !== $childNode) {
-                    $node = $node->replaceNode($key, $transformed);
+                if ($transformed === $childNode) {
+                    continue;
                 }
+
+                $node = $node->replaceNode($key, $transformed);
             }
         }
 

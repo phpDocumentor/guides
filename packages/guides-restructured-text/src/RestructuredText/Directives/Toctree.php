@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
@@ -34,11 +32,12 @@ class Toctree extends Directive
         return 'toctree';
     }
 
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
         $parserContext = $documentParserContext->getParser()->getParserContext();
 

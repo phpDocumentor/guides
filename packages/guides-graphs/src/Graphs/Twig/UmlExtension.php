@@ -26,6 +26,7 @@ final class UmlExtension extends AbstractExtension
         $this->diagramRenderer = $diagramRenderer;
     }
 
+    /** @return TwigFunction[] */
     public function getFunctions(): array
     {
         return [

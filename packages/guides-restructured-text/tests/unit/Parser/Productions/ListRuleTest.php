@@ -32,12 +32,12 @@ final class ListRuleTest extends AbstractRuleTest
     public function startChars(): array
     {
         return [
-            ["*"],
-            ["+"],
-            ["-"],
-            ["•"],
-            ["‣"],
-            ["⁃"],
+            ['*'],
+            ['+'],
+            ['-'],
+            ['•'],
+            ['‣'],
+            ['⁃'],
         ];
     }
 
@@ -98,7 +98,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('-', false, [new RawNode('first items')]),
-                    new ListItemNode('-', false, [new RawNode('second item')])
+                    new ListItemNode('-', false, [new RawNode('second item')]),
                 ]
             ),
             $result
@@ -129,7 +129,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('-', false, [new RawNode('first items')]),
-                    new ListItemNode('-', false, [new RawNode('second item')])
+                    new ListItemNode('-', false, [new RawNode('second item')]),
                 ]
             ),
             $result
@@ -164,7 +164,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('-', false, [new RawNode('first items')]),
-                    new ListItemNode('-', false, [new RawNode("second item\nother line")])
+                    new ListItemNode('-', false, [new RawNode("second item\nother line")]),
                 ]
             ),
             $result
@@ -198,7 +198,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('-', false, [new RawNode('first items')]),
-                    new ListItemNode('-', false, [new RawNode("second item\nother line")])
+                    new ListItemNode('-', false, [new RawNode("second item\nother line")]),
                 ]
             ),
             $result

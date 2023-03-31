@@ -7,10 +7,12 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
+use function preg_replace;
+
 final class DefaultRoleRule extends StartEndRegexRoleRule
 {
     private const START = '/^`{1}(?!`)/';
-    private const END ='/(?<![`\\\\])`{1}$/';
+    private const END = '/(?<![`\\\\])`{1}$/';
 
     public function getStartRegex(): string
     {
@@ -26,6 +28,7 @@ final class DefaultRoleRule extends StartEndRegexRoleRule
     {
         $content = (string) preg_replace($this->getStartRegex(), '', $content);
         $content = (string) preg_replace($this->getEndRegex(), '', $content);
+
         return new LiteralToken('??', $content);
     }
 }

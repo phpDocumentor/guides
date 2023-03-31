@@ -17,8 +17,8 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
+use phpDocumentor\Guides\TemplateRenderer;
 
 /** @implements NodeRenderer<SidebarNode> */
 final class SidebarNodeRenderer implements NodeRenderer

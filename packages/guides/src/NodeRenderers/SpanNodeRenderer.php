@@ -21,16 +21,17 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+
 use function assert;
 use function preg_replace;
 use function preg_replace_callback;
 use function sprintf;
 use function str_replace;
+use function trim;
 
 /** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
@@ -45,10 +46,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        TemplateRenderer  $renderer,
+        TemplateRenderer $renderer,
         ReferenceResolver $referenceResolver,
-        LoggerInterface   $logger,
-        UrlGenerator      $urlGenerator
+        LoggerInterface $logger,
+        UrlGenerator $urlGenerator
     ) {
         $this->renderer = $renderer;
         $this->referenceResolver = $referenceResolver;
@@ -72,6 +73,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         $value = $node->getValue();
 
         $span = $this->renderSyntaxes($value, $renderContext);
+
         return $this->renderTokens($node, $span, $renderContext);
     }
 
@@ -80,7 +82,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
      */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         return $this->renderer->renderTemplate(
             $context,
@@ -112,7 +114,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
-            fn(array $matches): string => trim($this->strongEmphasis($matches[1], $renderContext)),
+            fn (array $matches): string => trim($this->strongEmphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
@@ -121,7 +123,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     {
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
-            fn(array $matches): string => trim($this->emphasis($matches[1], $renderContext)),
+            fn (array $matches): string => trim($this->emphasis($matches[1], $renderContext)),
             $span
         ) ?? '';
     }
@@ -140,6 +142,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 if ($variable instanceof Node) {
                     assert($this->nodeRendererFactory !== null);
+
                     return $this->nodeRendererFactory->get($variable)->render($variable, $context);
                 }
 

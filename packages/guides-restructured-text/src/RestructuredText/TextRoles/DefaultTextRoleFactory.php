@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
+
+use function in_array;
 
 class DefaultTextRoleFactory implements TextRoleFactory
 {
@@ -13,7 +17,6 @@ class DefaultTextRoleFactory implements TextRoleFactory
             new EmphasisTextRole(),
         ];
     }
-
 
     /**
      * @throws TextRoleNotFoundException
@@ -32,6 +35,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
                 return $textRole;
             }
         }
+
         throw new TextRoleNotFoundException('No text role for "' . $name . '" found.');
     }
 }

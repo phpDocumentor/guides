@@ -15,7 +15,6 @@ namespace phpDocumentor\Guides\Setup;
 
 use ArrayObject;
 use phpDocumentor\Guides\Configuration;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
@@ -33,15 +32,15 @@ use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\References\Resolver\DocResolver;
 use phpDocumentor\Guides\References\Resolver\RefResolver;
-use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
-use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\AdmonitionNodeRenderer;
+use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\ContainerNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\SidebarNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\TopicNodeRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
+use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\Test\TestLogger;
 use Twig\Environment;
@@ -53,9 +52,7 @@ final class QuickStart
     {
         return new Parser(
             new UrlGenerator(),
-            [
-                MarkupLanguageParser::createInstance()
-            ]
+            [MarkupLanguageParser::createInstance()]
         );
     }
 
@@ -65,7 +62,7 @@ final class QuickStart
         $logger = new TestLogger();
         /** @var ArrayObject<array-key, NodeRenderer<Node>> $nodeRenderers */
         $nodeRenderers = new ArrayObject();
-        $nodeFactoryCallback = static fn(): NodeRendererFactory => new InMemoryNodeRendererFactory(
+        $nodeFactoryCallback = static fn (): NodeRendererFactory => new InMemoryNodeRendererFactory(
             $nodeRenderers,
             new DefaultNodeRenderer()
         );
@@ -102,11 +99,11 @@ final class QuickStart
             );
         }
 
-        $twigBuilder->setEnvironmentFactory(function () use ($logger, $renderer): Environment {
+        $twigBuilder->setEnvironmentFactory(static function () use ($logger, $renderer): Environment {
             $twig = new Environment(
                 new FilesystemLoader(
                     [
-                        __DIR__  . '/../../resources/template/html/guides',
+                        __DIR__ . '/../../resources/template/html/guides',
                     ]
                 )
             );

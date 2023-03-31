@@ -9,12 +9,16 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
+
 use function implode;
 use function is_array;
+use function mt_getrandmax;
 use function preg_replace;
 use function preg_replace_callback;
+use function random_int;
 use function sha1;
 use function str_replace;
+use function stripslashes;
 use function time;
 use function trim;
 
@@ -210,13 +214,13 @@ class SpanParser
                 case SpanLexer::NAMED_REFERENCE:
                     $result .= $this->createNamedReference(
                         $parserContext,
-                        trim((string)$this->lexer->token->value, '_')
+                        trim((string) $this->lexer->token->value, '_')
                     );
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
                     $result .= $this->createAnonymousReference(
                         $parserContext,
-                        trim((string)$this->lexer->token->value, '_')
+                        trim((string) $this->lexer->token->value, '_')
                     );
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
@@ -367,8 +371,10 @@ class SpanParser
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);
+
                 case SpanLexer::PHRASE_ANONYMOUS_END:
                     return $this->createOneOffLink($text, $url);
+
                 case SpanLexer::EMBEDED_URL_START:
                     $url = $this->parseEmbeddedUrl();
                     if ($url === null) {

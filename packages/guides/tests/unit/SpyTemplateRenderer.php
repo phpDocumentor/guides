@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 class SpyTemplateRenderer implements TemplateRenderer
 {
-    /**
-     * @var mixed[]
-     */
+    /** @var mixed[] */
     private array $context;
     private string $template;
 
     /** @param mixed[] $params
-     * @param RenderContext $context
      */
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string
     {

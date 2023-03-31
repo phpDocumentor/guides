@@ -6,15 +6,18 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use ArrayIterator;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
+use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use phpDocumentor\Guides\Nodes\TocNode;
 use Traversable;
+
+use function iterator_to_array;
+use function ltrim;
 
 /** @implements NodeTransformer<TocNode> */
 final class TocNodeTransformer implements NodeTransformer
@@ -32,10 +35,12 @@ final class TocNodeTransformer implements NodeTransformer
 
         foreach ($node->getFiles() as $file) {
             $metaEntry = $this->metas->findDocument(ltrim($file, '/'));
-            if ($metaEntry instanceof DocumentEntry) {
-                foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node) as $entry) {
-                    $entries[] = $entry;
-                }
+            if (!($metaEntry instanceof DocumentEntry)) {
+                continue;
+            }
+
+            foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node) as $entry) {
+                $entries[] = $entry;
             }
         }
 
@@ -99,11 +104,15 @@ final class TocNodeTransformer implements NodeTransformer
             );
         }
 
-        if ($child instanceof DocumentReferenceEntry) {
-            $subDocument = $this->metas->findDocument($child->getFile());
-            if ($subDocument instanceof DocumentEntry) {
-                yield from $this->buildFromDocumentEntry($subDocument, ++$depth, $node);
-            }
+        if (!($child instanceof DocumentReferenceEntry)) {
+            return;
         }
+
+        $subDocument = $this->metas->findDocument($child->getFile());
+        if (!($subDocument instanceof DocumentEntry)) {
+            return;
+        }
+
+        yield from $this->buildFromDocumentEntry($subDocument, ++$depth, $node);
     }
 }

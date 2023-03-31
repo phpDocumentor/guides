@@ -30,7 +30,7 @@ class DocumentEntry implements Entry
         $this->entries[] = $child;
     }
 
-    /** @return ChildEntry[] */
+    /** {@inheritDoc} */
     public function getChildren(): array
     {
         return $this->entries;

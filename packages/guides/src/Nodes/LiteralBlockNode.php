@@ -6,5 +6,4 @@ namespace phpDocumentor\Guides\Nodes;
 
 final class LiteralBlockNode extends TextNode
 {
-
 }

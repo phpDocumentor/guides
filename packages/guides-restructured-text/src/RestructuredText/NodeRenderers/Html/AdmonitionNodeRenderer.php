@@ -17,8 +17,10 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
+use phpDocumentor\Guides\TemplateRenderer;
+
+use function implode;
 
 /** @implements NodeRenderer<AdmonitionNode> */
 class AdmonitionNodeRenderer implements NodeRenderer

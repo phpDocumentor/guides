@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use Generator;
-use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\UrlGenerator;
 use Prophecy\PhpUnit\ProphecyTrait;
+
+use function assert;
+use function count;
+use function current;
 
 final class GridTableRuleTest extends AbstractRuleTest
 {
@@ -91,8 +92,8 @@ final class GridTableRuleTest extends AbstractRuleTest
     {
         $context = $this->createContext($input);
 
-        /** @var TableNode $table */
         $table = $this->rule->apply($context);
+        assert($table instanceof TableNode);
 
         self::assertEquals($rows, $table->getData());
         self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
@@ -252,8 +253,6 @@ RST;
 
         yield [$input, [$row3], [$headerRow]];
     }
-
-    //Add error cases with invalid table formats
 
     public function testTableNotClosed(): void
     {

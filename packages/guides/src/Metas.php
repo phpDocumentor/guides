@@ -22,7 +22,7 @@ final class Metas
     private array $entries;
 
     /** @var array<string, InternalTarget> */
-    private $internalLinkTargets = [];
+    private array $internalLinkTargets = [];
 
     /**
      * @param DocumentEntry[] $entries

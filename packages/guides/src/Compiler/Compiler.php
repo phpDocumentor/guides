@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
-use SplPriorityQueue;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use SplPriorityQueue;
 
 class Compiler
 {
@@ -23,6 +23,7 @@ class Compiler
 
     /**
      * @param DocumentNode[] $documents
+     *
      * @return DocumentNode[]
      */
     public function run(array $documents): array

@@ -45,12 +45,12 @@ INPUT;
     public function startChars(): iterable
     {
         $chars = [
-            "#",
-            "1",
-            "I",
-            "i",
+            '#',
+            '1',
+            'I',
+            'i',
             'a',
-            'A'
+            'A',
         ];
 
         foreach (['.', ')'] as $next) {
@@ -66,7 +66,7 @@ INPUT;
 
     public function testListDoesNotExceptEnumerated(): void
     {
-        $input = 'A. Einstein was a really' . "\n".
+        $input = 'A. Einstein was a really' . "\n" .
         'smart dude.';
         $context = $this->createContext($input);
 
@@ -110,7 +110,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode('second item')])
+                    new ListItemNode('2', false, [new RawNode('second item')]),
                 ],
                 true
             ),
@@ -142,7 +142,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode('second item')])
+                    new ListItemNode('2', false, [new RawNode('second item')]),
                 ],
                 true
             ),
@@ -178,7 +178,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('#', false, [new RawNode('first items')]),
-                    new ListItemNode('#', false, [new RawNode("second item\nother line")])
+                    new ListItemNode('#', false, [new RawNode("second item\nother line")]),
                 ],
                 true
             ),
@@ -213,7 +213,7 @@ REST,
             new ListNode(
                 [
                     new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode("second item\nother line")])
+                    new ListItemNode('2', false, [new RawNode("second item\nother line")]),
                 ],
                 true
             ),

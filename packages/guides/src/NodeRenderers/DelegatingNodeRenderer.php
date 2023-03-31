@@ -22,9 +22,6 @@ final class DelegatingNodeRenderer implements NodeRenderer, NodeRendererFactoryA
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function render(Node $node, RenderContext $renderContext): string
     {
         return $this->nodeRendererFactory->get($node)->render($node, $renderContext);

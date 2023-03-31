@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use function array_reduce;
-use function trim;
-
 /**
  * Represents a single item of a bullet or enumerated list.
  *

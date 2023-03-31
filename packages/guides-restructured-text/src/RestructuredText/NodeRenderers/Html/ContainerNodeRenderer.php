@@ -17,8 +17,8 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
+use phpDocumentor\Guides\TemplateRenderer;
 
 /** @implements NodeRenderer<ContainerNode> */
 final class ContainerNodeRenderer implements NodeRenderer

@@ -7,9 +7,11 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
+use function preg_replace;
+
 class EmphasisRoleRule extends StartEndRegexRoleRule
 {
-    private const START ='/^\*{1}(?!\*)/';
+    private const START = '/^\*{1}(?!\*)/';
     private const END = '/(?<![\*\\\\])\*{1}$/';
 
     public function getStartRegex(): string
@@ -26,6 +28,7 @@ class EmphasisRoleRule extends StartEndRegexRoleRule
     {
         $content = (string) preg_replace($this->getStartRegex(), '', $content);
         $content = (string) preg_replace($this->getEndRegex(), '', $content);
+
         return new EmphasisToken('??', $content);
     }
 }

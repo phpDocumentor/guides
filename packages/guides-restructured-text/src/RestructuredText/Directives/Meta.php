@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Metadata\MetaNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -22,11 +21,12 @@ class Meta extends Directive
         return 'meta';
     }
 
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
         $document = $documentParserContext->getDocument();
 

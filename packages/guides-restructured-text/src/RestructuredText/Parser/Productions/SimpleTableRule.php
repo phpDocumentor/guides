@@ -13,6 +13,12 @@ use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
+use function count;
+use function mb_substr;
+use function preg_match;
+use function strlen;
+use function trim;
+
 /** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
 {
@@ -38,13 +44,15 @@ final class SimpleTableRule implements Rule
         $headers = [];
         $rows = [];
         while ($documentIterator->valid()) {
-            if ($this->isColumnDefinitionLine($documentIterator->current()) &&
+            if (
+                $this->isColumnDefinitionLine($documentIterator->current()) &&
                 LinesIterator::isEmptyLine($documentIterator->getNextLine())
             ) {
                 break;
             }
 
-            if (LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine()) === false &&
+            if (
+                LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine()) === false &&
                 $this->isColumnDefinitionLine($documentIterator->current())
             ) {
                 $documentIterator->next();
@@ -115,7 +123,8 @@ final class SimpleTableRule implements Rule
             $cellContents[$column] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
         }
 
-        while ($documentIterator->getNextLine() !== null &&
+        while (
+            $documentIterator->getNextLine() !== null &&
             $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])
         ) {
             $documentIterator->next();

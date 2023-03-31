@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use function array_pop;
+use function array_walk;
 use function count;
 use function implode;
+use function strlen;
+use function substr;
 
 class Buffer
 {
@@ -87,10 +90,12 @@ class Buffer
 
     public function unIndent(int $indentation): void
     {
-        array_walk($this->lines, function (&$value) use ($indentation) {
-            if (strlen($value) >= $indentation) {
-                $value = substr($value, $indentation);
+        array_walk($this->lines, static function (&$value) use ($indentation): void {
+            if (strlen($value) < $indentation) {
+                return;
             }
+
+            $value = substr($value, $indentation);
         });
     }
 }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
-use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
-use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
@@ -24,8 +22,7 @@ final class DocumentNodeTraverserTest extends TestCase
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
-            new
-            /** @implements NodeTransformer<Node> */
+            new /** @implements NodeTransformer<Node> */
             class implements NodeTransformer {
                 public function enterNode(Node $node): Node
                 {
@@ -41,7 +38,7 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                     return $node instanceof TocNode;
                 }
-            }
+            },
         ]));
 
         $actual = $traverser->traverse($document);
@@ -64,9 +61,8 @@ final class DocumentNodeTraverserTest extends TestCase
 
         /** @var iterable<NodeTransformer<Node>> $transformers */
         $transformers = [
-            new
-            /** @implements NodeTransformer<TocNode> */
-            class($replacement) implements NodeTransformer {
+            new /** @implements NodeTransformer<TocNode> */
+            class ($replacement) implements NodeTransformer {
                 private TocNode $replacement;
 
                 public function __construct(TocNode $replacement)
@@ -88,7 +84,8 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                     return $node instanceof TocNode;
                 }
-            }];
+            },
+        ];
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers));
 
@@ -98,7 +95,7 @@ final class DocumentNodeTraverserTest extends TestCase
         self::assertEquals(
             [
                 $replacement,
-                new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo'))
+                new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')),
             ],
             $actual->getChildren()
         );

@@ -13,25 +13,24 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use Prophecy\PhpUnit\ProphecyTrait;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 final class SectionRuleTest extends TestCase
 {
     use ProphecyTrait;
+
     public function testFirstTitleOpensSection(): void
     {
         $content = <<<RST
@@ -187,7 +186,8 @@ RST;
         $spanParser->parse(
             Argument::any(),
             Argument::type(ParserContext::class)
-        )->will(fn($args): SpanNode => new SpanNode($args[0]));
+        )->will(static fn ($args): SpanNode => new SpanNode($args[0]));
+
         return $spanParser->reveal();
     }
 

@@ -13,16 +13,19 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\AnchorNode;
-use phpDocumentor\Guides\Nodes\Links\Link;
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Links\Link as LinkParser;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
+use function preg_match;
+use function trim;
+
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-targets
+ *
  * @implements Rule<AnchorNode>
  */
 final class LinkRule implements Rule
@@ -53,43 +56,43 @@ final class LinkRule implements Rule
         return $node;
     }
 
-    private function parseLink(string $line): ?Link
+    private function parseLink(string $line): ?LinkParser
     {
         // Links
         if (preg_match('/^\.\. _`(.+)`: (.+)$/mUsi', $line, $match) > 0) {
-            return $this->createLink($match[1], $match[2], Link::TYPE_LINK);
+            return $this->createLink($match[1], $match[2], LinkParser::TYPE_LINK);
         }
 
         // anonymous links
         if (preg_match('/^\.\. _(.+): (.+)$/mUsi', $line, $match) > 0) {
-            return $this->createLink($match[1], $match[2], Link::TYPE_LINK);
+            return $this->createLink($match[1], $match[2], LinkParser::TYPE_LINK);
         }
 
         // Short anonymous links
         if (preg_match('/^__ (.+)$/mUsi', trim($line), $match) > 0) {
             $url = $match[1];
 
-            return $this->createLink('_', $url, Link::TYPE_LINK);
+            return $this->createLink('_', $url, LinkParser::TYPE_LINK);
         }
 
         // Anchor links - ".. _`anchor-link`:"
         if (preg_match('/^\.\. _`(.+)`:$/mUsi', trim($line), $match) > 0) {
             $anchor = $match[1];
 
-            return new Link($anchor, '#' . $anchor, Link::TYPE_ANCHOR);
+            return new LinkParser($anchor, '#' . $anchor, LinkParser::TYPE_ANCHOR);
         }
 
         if (preg_match('/^\.\. _(.+):$/mUsi', trim($line), $match) > 0) {
             $anchor = $match[1];
 
-            return $this->createLink($anchor, '#' . $anchor, Link::TYPE_ANCHOR);
+            return $this->createLink($anchor, '#' . $anchor, LinkParser::TYPE_ANCHOR);
         }
 
         return null;
     }
 
-    private function createLink(string $name, string $url, string $type): Link
+    private function createLink(string $name, string $url, string $type): LinkParser
     {
-        return new Link($name, $url, $type);
+        return new LinkParser($name, $url, $type);
     }
 }

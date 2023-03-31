@@ -12,5 +12,4 @@ use phpDocumentor\Guides\Nodes\Node;
  */
 final class DefinitionNode extends CompoundNode
 {
-
 }

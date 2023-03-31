@@ -17,13 +17,13 @@ use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Event\PreParseDocument;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Parser;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+use function assert;
 use function ltrim;
 use function sprintf;
 use function trim;
@@ -91,10 +91,10 @@ final class ParseFileHandler
             $initialHeaderLevel
         );
 
-        /** @var PreParseDocument $preParseDocumentEvent */
         $preParseDocumentEvent = $this->eventDispatcher->dispatch(
             new PreParseDocument($this->parser, $path, $fileContents)
         );
+        assert($preParseDocumentEvent instanceof PreParseDocument);
 
         $document = null;
         try {
@@ -105,8 +105,8 @@ final class ParseFileHandler
             );
         }
 
-        /** @var PostParseDocument $event */
         $event = $this->eventDispatcher->dispatch(new PostParseDocument($fileName, $document));
+        assert($event instanceof PostParseDocument);
 
         return $event->getDocumentNode();
     }

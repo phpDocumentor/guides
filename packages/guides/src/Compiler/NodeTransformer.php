@@ -11,12 +11,14 @@ interface NodeTransformer
 {
     /**
      * @param T $node
+     *
      * @return T
      */
     public function enterNode(Node $node): Node;
 
     /**
      * @param T $node
+     *
      * @return T|null
      */
     public function leaveNode(Node $node): ?Node;

@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Lists\ListItem;
+
+use function in_array;
+use function mb_strlen;
 use function preg_match;
+use function strlen;
+use function trim;
 
 class LineChecker
 {

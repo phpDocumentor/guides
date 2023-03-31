@@ -7,14 +7,22 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 use Exception;
 use LogicException;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
+
+use function array_reverse;
+use function count;
+use function mb_strlen;
+use function mb_strpos;
+use function mb_substr;
+use function preg_match;
+use function sprintf;
+use function str_repeat;
+use function trim;
 
 class GridTableBuilder
 {
@@ -54,7 +62,6 @@ class GridTableBuilder
                     $currentColumnStart = null;
                 }
 
-
                 // if the current column start is null, then set it
                 // other wise, leave it - this is a colspan, and eventually
                 // we want to get all the text starting here
@@ -86,7 +93,8 @@ class GridTableBuilder
                 // that this column in the next row should also be
                 // included in that previous row's content
                 foreach ($row->getColumns() as $columnIndex => $column) {
-                    if (!$column->isCompletelyEmpty()
+                    if (
+                        !$column->isCompletelyEmpty()
                         && str_repeat(
                             '-',
                             mb_strlen($column->getContent())
@@ -165,8 +173,6 @@ class GridTableBuilder
 
         return new TableNode($rows, $headers);
     }
-
-
 
     /**
      * @param TableRow[] $rows
@@ -300,10 +306,13 @@ class GridTableBuilder
             // is a rowspan situation - e.g.
             // |           +----------------+----------------------------+
             // look for +-----+ pattern
-            if ($this->hasRowSpan($line)) {
-                $partialSeparatorRows[$rowIndex] = true;
+            if (!$this->hasRowSpan($line)) {
+                continue;
             }
+
+            $partialSeparatorRows[$rowIndex] = true;
         }
+
         return $partialSeparatorRows;
     }
 

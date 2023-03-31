@@ -11,9 +11,7 @@ class DummyNode implements Node
     private string $name;
     private string $data;
 
-    /**
-     * @var DirectiveOption[] $directiveOptions the array of options for this directive
-     */
+    /** @var DirectiveOption[] $directiveOptions the array of options for this directive */
     private array $directiveOptions;
 
     /**
@@ -47,6 +45,7 @@ class DummyNode implements Node
         return [];
     }
 
+    /** {@inheritDoc} */
     public function withOptions(array $options): Node
     {
         return $this;
@@ -57,20 +56,24 @@ class DummyNode implements Node
         return false;
     }
 
+    /** {@inheritDoc} */
     public function setValue($value): void
     {
     }
 
+    /** {@inheritDoc} */
     public function getValue()
     {
         return $this->data;
     }
 
+    /** {@inheritDoc} */
     public function getClasses(): array
     {
         return [];
     }
 
+    /** {@inheritDoc} */
     public function setClasses(array $classes): void
     {
     }

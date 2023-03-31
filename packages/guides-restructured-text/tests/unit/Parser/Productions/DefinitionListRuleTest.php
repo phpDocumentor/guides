@@ -73,7 +73,7 @@ RST;
                         [
                             new RawNode('Definition 1.'),
                         ]
-                    )
+                    ),
                 ]
             ),
             new DefinitionListItemNode(
@@ -98,9 +98,7 @@ RST
             ),
             new DefinitionListItemNode(
                 new SpanNode('term 3'),
-                [
-                    new SpanNode('classifier')
-                ],
+                [new SpanNode('classifier')],
                 [
                     new DefinitionNode(
                         [
@@ -113,7 +111,7 @@ RST
                 new SpanNode('term 4'),
                 [
                     new SpanNode('classifier one'),
-                    new SpanNode('classifier two')
+                    new SpanNode('classifier two'),
                 ],
                 [
                     new DefinitionNode(
@@ -147,15 +145,19 @@ RST
             'line ending with colon and space' => ["Test:\n  Definition"],
             'line ending with newline' => ["Test\n  Definition"],
             'line ending with two spaces' => ["Test  \n  Definition"],
-            'term with classifiers' => [<<<EOT
+            'term with classifiers' => [
+                <<<EOT
 Term 1: classifier 1: classifier 2
   Definition
-EOT],
-            'multiple definitions' => [<<<EOT
+EOT,
+            ],
+            'multiple definitions' => [
+                <<<EOT
 Term 2: classifier 1
   Definition 1
   Definition 2
-EOT],
+EOT,
+            ],
         ];
     }
 
@@ -163,7 +165,7 @@ EOT],
     public function isDefinitionListFalseProvider(): array
     {
         return [
-            'empty lines' => [""],
+            'empty lines' => [''],
             'line ending with newline' => ["Test\n\n  Definition"],
             'Next line is not a block line' => ["Test\nDefinition"],
         ];

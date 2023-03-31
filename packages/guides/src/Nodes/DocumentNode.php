@@ -16,11 +16,6 @@ namespace phpDocumentor\Guides\Nodes;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 
 use function array_filter;
-use function array_map;
-use function array_merge;
-use function count;
-use function in_array;
-use function is_string;
 use function strtolower;
 use function trim;
 
@@ -69,13 +64,15 @@ final class DocumentNode extends CompoundNode
     }
 
     /**
-     * @template F as Node
      * @param class-string<F> $nodeType
+     *
      * @return array<int, F>
+     *
+     * @template F as Node
      */
     public function getNodes(string $nodeType = Node::class): array
     {
-        return array_filter($this->value, static fn($node): bool => $node instanceof $nodeType);
+        return array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType);
     }
 
     public function getTitle(): ?TitleNode
@@ -106,10 +103,12 @@ final class DocumentNode extends CompoundNode
     }
 
     /**
-     * @template TType as mixed
      * @param TType|null $default
      *
-     * @return ($default is null ? (string | Node | null) : (TType | string | Node))
+     * @return string|Node|null
+     * @phpstan-return ($default is null ? (string | Node | null) : (TType | string | Node))
+     *
+     * @template TType as mixed
      */
     public function getVariable(string $name, $default)
     {

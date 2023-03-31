@@ -17,8 +17,9 @@ use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\Node; // phpcs:ignore
+
 use function dirname;
 use function ltrim;
 use function trim;
@@ -82,10 +83,12 @@ class RenderContext
     }
 
     /**
-     * @template TType as mixed
      * @param TType|null $default
      *
-     * @return ($default is null ? mixed|null: TType|string|Node)
+     * @return mixed|null
+     * @phpstan-return ($default is null ? mixed|null: TType|string|Node)
+     *
+     * @template TType as mixed
      */
     public function getVariable(string $variable, $default = null)
     {

@@ -7,11 +7,10 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use SplStack;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use SplStack;
 use Webmozart\Assert\Assert;
 
 /**
@@ -34,7 +33,7 @@ final class SectionRule implements Rule
     }
 
     /** @param DocumentNode|SectionNode $on */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();
@@ -47,33 +46,38 @@ final class SectionRule implements Rule
         while ($documentIterator->valid()) {
             $this->fillSection($documentParserContext, $section);
 
-            if ($documentIterator->getNextLine()) {
-                $new = $this->createSection($documentParserContext);
-                if ($new->getTitle()->getLevel() === $section->getTitle()->getLevel()) {
-                    $stack->top()->addChildNode($new);
-                    $section = $new;
-                    continue;
-                }
-
-                if ($new->getTitle()->getLevel() > $section->getTitle()->getLevel()) {
-                    $section->addChildNode($new);
-                    $stack->push($section);
-                    $section = $new;
-                    continue;
-                }
-
-                if ($new->getTitle()->getLevel() < $section->getTitle()->getLevel()) {
-                    while ($stack->top()->getTitle() !== null &&
-                        $new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()
-                    ) {
-                        $stack->pop();
-                    }
-
-                    $stack->pop();
-                    $stack->top()->addChildNode($new);
-                    $section = $new;
-                }
+            if (!$documentIterator->getNextLine()) {
+                continue;
             }
+
+            $new = $this->createSection($documentParserContext);
+            if ($new->getTitle()->getLevel() === $section->getTitle()->getLevel()) {
+                $stack->top()->addChildNode($new);
+                $section = $new;
+                continue;
+            }
+
+            if ($new->getTitle()->getLevel() > $section->getTitle()->getLevel()) {
+                $section->addChildNode($new);
+                $stack->push($section);
+                $section = $new;
+                continue;
+            }
+
+            if ($new->getTitle()->getLevel() >= $section->getTitle()->getLevel()) {
+                continue;
+            }
+
+            while (
+                $stack->top()->getTitle() !== null &&
+                $new->getTitle()->getLevel() < $stack->top()->getTitle()->getLevel()
+            ) {
+                $stack->pop();
+            }
+
+            $stack->pop();
+            $stack->top()->addChildNode($new);
+            $section = $new;
         }
 
         return null;
@@ -100,6 +104,7 @@ final class SectionRule implements Rule
     {
         $title = $this->titleRule->apply($documentParserContext);
         Assert::isInstanceOf($title, TitleNode::class, 'Cannot create section without title');
+
         return new SectionNode($title);
     }
 }

@@ -19,9 +19,6 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
-use phpDocumentor\Guides\UrlGenerator;
-
-use function ltrim;
 
 /** @implements  NodeRenderer<TocNode> */
 class TocNodeRenderer implements NodeRenderer
@@ -42,9 +39,7 @@ class TocNodeRenderer implements NodeRenderer
         return $this->renderer->renderTemplate(
             $renderContext,
             'toc.tex.twig',
-            [
-                'tocNode' => $node,
-            ]
+            ['tocNode' => $node]
         );
     }
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+
+use function implode;
 
 /**
  * A directive that parses the sub block and call the processSub that can
@@ -23,11 +23,12 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  */
 abstract class SubDirective extends Directive
 {
+    /** {@inheritDoc} */
     final public function process(
         DocumentParserContext $documentParserContext,
-        string                $variable,
-        string                $data,
-        array                 $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
@@ -44,6 +45,7 @@ abstract class SubDirective extends Directive
         $document = $documentParserContext->getDocument();
         if ($variable !== '') {
             $document->addVariable($variable, $newNode);
+
             return null;
         }
 
@@ -55,9 +57,9 @@ abstract class SubDirective extends Directive
      */
     public function processSub(
         DocumentNode $document,
-        string       $variable,
-        string       $data,
-        array        $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         return null;
     }

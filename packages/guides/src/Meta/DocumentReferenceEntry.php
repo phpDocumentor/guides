@@ -23,6 +23,7 @@ class DocumentReferenceEntry implements ChildEntry
         //This does not have entries
     }
 
+    /** {@inheritDoc} */
     public function getChildren(): array
     {
         return [];

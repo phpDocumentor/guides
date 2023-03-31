@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Intersphinx;
 
+use function is_array;
+
 final class InventoryLoader
 {
     private InventoryRepository $inventoryRepository;
@@ -33,10 +35,12 @@ final class InventoryLoader
             $group = new InventoryGroup();
             if (is_array($groupArray)) {
                 foreach ($groupArray as $linkKey => $linkArray) {
-                    if (is_array($linkArray)) {
-                        $link = new InventoryLink($linkArray[0], $linkArray[1], $linkArray[2], $linkArray[3]);
-                        $group->addLink($linkKey, $link);
+                    if (!is_array($linkArray)) {
+                        continue;
                     }
+
+                    $link = new InventoryLink($linkArray[0], $linkArray[1], $linkArray[2], $linkArray[3]);
+                    $group->addLink($linkKey, $link);
                 }
             }
 

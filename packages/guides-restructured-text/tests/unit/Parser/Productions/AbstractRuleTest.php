@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
+use function implode;
+
 abstract class AbstractRuleTest extends TestCase
 {
     use ProphecyTrait;
@@ -54,7 +56,8 @@ abstract class AbstractRuleTest extends TestCase
         $spanParser->parse(
             Argument::any(),
             Argument::any()
-        )->will(fn($args): SpanNode => new SpanNode(implode("\n", $args[0])));
+        )->will(static fn ($args): SpanNode => new SpanNode(implode("\n", $args[0])));
+
         return new InlineMarkupRule($spanParser->reveal());
     }
 

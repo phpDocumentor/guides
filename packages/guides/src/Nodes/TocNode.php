@@ -15,6 +15,8 @@ namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 
+use function is_int;
+
 /**
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  *

@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Metadata\DocumentTitleNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -21,11 +20,12 @@ class Title extends Directive
         return 'title';
     }
 
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,
-        string                $data,
-        array                 $options
+        string $data,
+        array $options
     ): ?Node {
         $document = $documentParserContext->getDocument();
         $document->addHeaderNode(new DocumentTitleNode($data));

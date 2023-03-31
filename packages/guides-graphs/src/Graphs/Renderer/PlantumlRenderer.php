@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Graphs\Renderer;
 
-use Phar;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 

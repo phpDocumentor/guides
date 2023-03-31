@@ -23,6 +23,7 @@ use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#comments
+ *
  * @implements Rule<Node>
  */
 final class CommentRule implements Rule

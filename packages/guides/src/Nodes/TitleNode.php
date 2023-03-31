@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Webmozart\Assert\Assert;
-
 /** @extends CompoundNode<TextNode> */
 class TitleNode extends CompoundNode
 {

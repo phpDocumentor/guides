@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
@@ -49,7 +51,6 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
             ],
         ];
     }
-
 
     /**
      * @return array<int, array<int, string | ValueToken>>

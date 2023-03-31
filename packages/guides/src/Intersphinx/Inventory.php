@@ -41,7 +41,7 @@ final class Inventory
     public function getInventory(string $key): InventoryGroup
     {
         $lowerCaseKey = strtolower($key);
-        if (! $this->hasInventoryGroup($lowerCaseKey)) {
+        if (!$this->hasInventoryGroup($lowerCaseKey)) {
             throw new RuntimeException(
                 'Inventory group with key ' . $lowerCaseKey . ' not found. ',
                 1671398986

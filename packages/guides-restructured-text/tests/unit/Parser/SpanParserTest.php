@@ -14,6 +14,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+
 use function current;
 
 final class SpanParserTest extends TestCase
@@ -178,8 +179,8 @@ TEXT
                 '#\\([a-z0-9]{40}\\)\\.#',
                 'RFC-7807',
                 'https://tools.ietf.org/html/rfc7807',
-                true
-            ]
+                true,
+            ],
         ];
     }
 

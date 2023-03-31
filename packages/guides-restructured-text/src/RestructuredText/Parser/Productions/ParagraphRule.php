@@ -16,19 +16,15 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
-use function array_pop;
-use function implode;
 use function substr;
 use function trim;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#paragraphs
+ *
  * @implements Rule<ParagraphNode>
  */
 final class ParagraphRule implements Rule
@@ -55,7 +51,8 @@ final class ParagraphRule implements Rule
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
 
-        while ($documentIterator->getNextLine() !== null
+        while (
+            $documentIterator->getNextLine() !== null
             && $this->isWhiteline($documentIterator->getNextLine()) === false
         ) {
             $documentIterator->next();

@@ -29,11 +29,12 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         $this->text = $text;
     }
 
+    /** {@inheritDoc} */
     final public function processSub(
         DocumentNode $document,
-        string       $variable,
-        string       $data,
-        array        $options
+        string $variable,
+        string $data,
+        array $options
     ): ?Node {
         return (new AdmonitionNode(
             $this->name,

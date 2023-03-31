@@ -23,6 +23,7 @@ final class SidebarNode extends CompoundNode
 {
     private string $title;
 
+    /** {@inheritDoc} */
     public function __construct(string $title, array $value)
     {
         parent::__construct($value);

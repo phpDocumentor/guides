@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
@@ -35,9 +37,6 @@ final class RenderCommand
         $this->destinationPath = $destinationPath;
     }
 
-    /**
-     * @return string
-     */
     public function getOutputFormat(): string
     {
         return $this->outputFormat;
@@ -51,25 +50,16 @@ final class RenderCommand
         return $this->documents;
     }
 
-    /**
-     * @return Metas
-     */
     public function getMetas(): Metas
     {
         return $this->metas;
     }
 
-    /**
-     * @return FilesystemInterface
-     */
     public function getOrigin(): FilesystemInterface
     {
         return $this->origin;
     }
 
-    /**
-     * @return FilesystemInterface
-     */
     public function getDestination(): FilesystemInterface
     {
         return $this->destination;

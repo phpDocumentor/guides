@@ -17,17 +17,16 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#transitions
+ *
  * @implements Rule<SeparatorNode>
  */
 final class TransitionRule implements Rule
 {
-
     public const SEPERATOR_LENGTH_MIN = 4;
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -60,6 +59,7 @@ final class TransitionRule implements Rule
         if (!LinesIterator::isNullOrEmptyLine($nextLine)) {
             return null;
         }
+
         return $letter;
     }
 }
