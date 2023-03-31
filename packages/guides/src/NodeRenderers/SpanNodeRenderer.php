@@ -14,21 +14,19 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers;
 
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer;
 use phpDocumentor\Guides\TemplateRenderer;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-
 use function assert;
-use function is_string;
 use function preg_replace;
 use function preg_replace_callback;
 use function sprintf;
@@ -185,15 +183,15 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return $span;
     }
 
-    private function renderToken(SpanToken $spanToken, string $span, RenderContext $context): string
+    private function renderToken(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
     {
         switch ($spanToken->getType()) {
-            case SpanToken::TYPE_LITERAL:
+            case LiteralToken::TYPE:
                 assert($spanToken instanceof LiteralToken);
 
                 return trim($this->renderLiteral($spanToken, $span, $context));
 
-            case SpanToken::TYPE_LINK:
+            case InlineMarkupToken::TYPE_LINK:
                 return trim($this->renderLink($spanToken, $span, $context));
         }
 
@@ -209,7 +207,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         );
     }
 
-    private function renderLink(SpanToken $spanToken, string $span, RenderContext $context): string
+    private function renderLink(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
     {
         $url = $spanToken->get('url');
         $link = $spanToken->get('link');

@@ -14,13 +14,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Span\LiteralToken;
-
 use function htmlspecialchars;
 use function trim;
 

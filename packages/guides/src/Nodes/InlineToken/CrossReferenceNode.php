@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Span;
+namespace phpDocumentor\Guides\Nodes\InlineToken;
 
 /**
  * This class should be moved into Nodes, but right now the span parser is producing this.
@@ -20,7 +20,7 @@ namespace phpDocumentor\Guides\Span;
  *
  * Cross references are resolved during rendering? -> Should be compiler.
  */
-class CrossReferenceNode extends SpanToken
+class CrossReferenceNode extends InlineMarkupToken
 {
     private string $id;
 

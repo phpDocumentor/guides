@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
-use phpDocumentor\Guides\Span\LiteralToken;
-use phpDocumentor\Guides\Span\SpanToken;
-
 use function implode;
 use function is_array;
-use function mt_rand;
 use function preg_replace;
 use function preg_replace_callback;
 use function sha1;
@@ -26,7 +24,7 @@ class SpanParser
 
     private string $prefix;
 
-    /** @var SpanToken[] */
+    /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
     private SpanLexer $lexer;
@@ -68,7 +66,7 @@ class SpanParser
      */
     private function addToken(string $type, string $id, array $tokenData): void
     {
-        $this->tokens[$id] = new SpanToken($type, $id, $tokenData);
+        $this->tokens[$id] = new InlineMarkupToken($type, $id, $tokenData);
     }
 
     private function replaceLiterals(string $span): string
@@ -144,7 +142,7 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                SpanToken::TYPE_LINK,
+                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -179,7 +177,7 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                SpanToken::TYPE_LINK,
+                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -467,10 +465,10 @@ class SpanParser
 
         $id = $this->generateId();
         $this->addToken(
-            SpanToken::TYPE_LINK,
+            InlineMarkupToken::TYPE_LINK,
             $id,
             [
-                'type' => SpanToken::TYPE_LINK,
+                'type' => InlineMarkupToken::TYPE_LINK,
                 'link' => $link,
                 'url' => $url ?? '',
             ]

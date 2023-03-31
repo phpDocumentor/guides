@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References\Resolver;
 
-use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
 
 final class DocResolver implements Resolver
 {

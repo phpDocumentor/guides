@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References;
 
+use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\References\Resolver\Resolver;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Span\CrossReferenceNode;
 use PHPUnit\Framework\TestCase;
 
 final class ReferenceResolverTest extends TestCase

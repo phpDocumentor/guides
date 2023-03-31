@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Span;
+namespace phpDocumentor\Guides\Nodes\InlineToken;
 
-class SpanToken
+class InlineMarkupToken
 {
-    public const TYPE_LITERAL = 'literal';
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';
 
