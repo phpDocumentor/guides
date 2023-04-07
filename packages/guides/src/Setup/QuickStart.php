@@ -38,6 +38,7 @@ use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\CollectionNodeRende
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\ContainerNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\SidebarNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\TopicNodeRenderer;
+use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
@@ -67,7 +68,15 @@ final class QuickStart
         $renderer = new DelegatingNodeRenderer();
         $renderer->setNodeRendererFactory(new LazyNodeRendererFactory($nodeFactoryCallback));
 
-        $twigBuilder = new EnvironmentBuilder();
+        $twigBuilder = new EnvironmentBuilder(
+            [
+                new AssetsExtension(
+                    $logger,
+                    $renderer,
+                    new UrlGenerator()
+                )
+            ]
+        );
 
         $templateRenderer = new TwigTemplateRenderer(
             $twigBuilder
