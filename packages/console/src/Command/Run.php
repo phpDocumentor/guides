@@ -50,9 +50,9 @@ final class Run extends Command
         $this->addOption(
             'output-format',
             null,
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
             'Format of the input can be html',
-            'html'
+            ['html']
         );
 
         $this->commandBus = $commandBus;
@@ -76,15 +76,17 @@ final class Run extends Command
 
         $destinationFileSystem = new Filesystem(new Local($input->getArgument('output')));
 
-        $this->commandBus->handle(
-            new RenderCommand(
-                $input->getOption('output-format'),
-                $documents,
-                $this->metas,
-                $sourceFileSystem,
-                $destinationFileSystem
-            )
-        );
+        foreach ($input->getOption('output-format') as $format) {
+            $this->commandBus->handle(
+                new RenderCommand(
+                    $format,
+                    $documents,
+                    $this->metas,
+                    $sourceFileSystem,
+                    $destinationFileSystem
+                )
+            );
+        }
 
         return 0;
     }

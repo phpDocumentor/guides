@@ -6,11 +6,19 @@ services:
   _instanceof:
     phpDocumentor\Guides\RestructuredText\Directives\Directive:
       tags: ['phpdoc.guides.directive']
+    phpDocumentor\Guides\NodeRenderers\NodeRenderer:
+      tags: [ 'phpdoc.guides.noderenderer.html' ]
 
   phpdoc.guides.restructuredtext.directives:
     namespace: phpDocumentor\Guides\RestructuredText\Directives\
     exclude:
     resource: '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Directives'
+
+  phpdoc.guides.restructuredtext.noderenderers:
+    namespace: phpDocumentor\Guides\RestructuredText\NodeRenderers\Html\
+    exclude:
+    resource: '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html'
+
 
   phpDocumentor\Guides\RestructuredText\MarkupLanguageParser:
     arguments:

@@ -74,7 +74,7 @@ final class QuickStart
                     $logger,
                     $renderer,
                     new UrlGenerator()
-                )
+                ),
             ]
         );
 

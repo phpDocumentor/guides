@@ -6,12 +6,14 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
+use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
@@ -63,6 +65,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(Metas::class)
         ->set(UrlGeneratorInterface::class, UrlGenerator::class)
         ->set(ReferenceResolver::class)
+        ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference.resolver'))
 
         ->set(phpDocumentor\Guides\Parser::class)
         ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))
@@ -81,10 +84,16 @@ return static function (ContainerConfigurator $container): void {
             ['$renderer' => service(DelegatingNodeRenderer::class)]
         )
 
+        ->set(IntersphinxRenderer::class)
+        ->tag('phpdoc.renderer.typerenderer')
+
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+
         ->set(phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory::class)
         ->args([
             '$nodeRenderers' => tagged_iterator('phpdoc.guides.noderenderer.html'),
-            '$defaultNodeRenderer' => new Reference('phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer'),
+            '$defaultNodeRenderer' => new Reference(DefaultNodeRenderer::class),
         ])
         ->alias(NodeRendererFactory::class, InMemoryNodeRendererFactory::class)
 

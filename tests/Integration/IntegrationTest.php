@@ -93,16 +93,21 @@ class IntegrationTest extends TestCase
         /** @var Run $command */
         $command = $container->get(Run::class);
 
-        $command->run(
-            new ArrayInput(
-                [
-                    'input' => $inputPath,
-                    'output' => $outputPath
-                ]
-            ),
-            new BufferedOutput()
+        $input = new ArrayInput(
+            [
+                'input' => $inputPath,
+                'output' => $outputPath,
+                '--output-format' => ['html', 'intersphinx']
+            ],
+            $command->getDefinition()
         );
 
+        $outputBuffer = new BufferedOutput();
+
+        $command->run(
+            $input,
+            $outputBuffer
+        );
 
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
