@@ -17,6 +17,7 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()->autowire()
 
         ->set(Run::class)
+        ->public()
         ->tag('phpdoc.guides.cli.command')
 
         ->set(Logger::class)

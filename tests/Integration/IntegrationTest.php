@@ -11,6 +11,9 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\Passes\MetasPass;
 use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
+use phpDocumentor\Guides\Console\Application;
+use phpDocumentor\Guides\Console\Command\Run;
+use phpDocumentor\Guides\Console\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\FileCollector;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\CompileDocumentsHandler;
@@ -38,6 +41,9 @@ use Flyfinder\Finder;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 use function setlocale;
 
@@ -67,28 +73,36 @@ class IntegrationTest extends TestCase
         self::assertNotEmpty($compareFiles);
         system("mkdir " . escapeshellarg($outputPath));
 
-        $metas = new Metas([]);
-        $sourceFileSystem = new Filesystem(new Local(
-            $inputPath
-        ));
+        $container = new ContainerBuilder();
 
-        $documents = $this->compile($metas, $sourceFileSystem, $outputPath);
+        // Load manual parameters
+        $container->setParameter('vendor_dir', dirname(__DIR__, 2) . '/vendor');
+        $container->setParameter('working_directory', rtrim(getcwd(), '/'));
 
-        $renderHandler = new RenderHandler(new DefaultTypeRendererFactory());
-        $renderHandler->handle(new RenderCommand(
-            HtmlRenderer::TYPE,
-            $documents,
-            $metas,
-            $sourceFileSystem,
-            new Filesystem(new Local($outputPath)),
-        ));
-        $renderHandler->handle(new RenderCommand(
-            IntersphinxRenderer::TYPE,
-            $documents,
-            $metas,
-            $sourceFileSystem,
-            new Filesystem(new Local($outputPath)),
-        ));
+        // Load container configuration
+        foreach (Application::getDefaultExtensions() as $extension) {
+            $container->registerExtension($extension);
+            $container->loadFromExtension($extension->getAlias());
+        }
+
+        $container->addCompilerPass(new NodeRendererPass());
+
+        // Compile container
+        $container->compile(true);
+
+        /** @var Run $command */
+        $command = $container->get(Run::class);
+
+        $command->run(
+            new ArrayInput(
+                [
+                    'input' => $inputPath,
+                    'output' => $outputPath
+                ]
+            ),
+            new BufferedOutput()
+        );
+
 
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
@@ -125,71 +139,6 @@ class IntegrationTest extends TestCase
         return implode("\n", $contentArray);
     }
 
-    /**
-     * @return DocumentNode[]
-     */
-    private function compile(
-        Metas $metas,
-        Filesystem $sourceFileSystem,
-        string $outputPath) : array {
-        $logger = new class($outputPath) extends AbstractLogger {
-
-            private $outputPath;
-
-            public function __construct($outputPath)
-            {
-                $this->outputPath = $outputPath;
-            }
-
-            public function log($level, $message, array $context = []): void
-            {
-                $message = $level . ':' . $message . PHP_EOL;
-                file_put_contents($this->outputPath . '/log' . $level . '.txt', $message, FILE_APPEND);
-            }
-        };
-
-        $commandbus = QuickStart::create(
-            [
-                ParseFileCommand::class => new ParseFileHandler(
-                    $logger,
-                    new class implements EventDispatcherInterface {
-                        public function dispatch(object $event)
-                        {
-                            return $event;
-                        }
-                    },
-                    \phpDocumentor\Guides\Setup\QuickStart::createRstParser()
-                ),
-                CompileDocumentsCommand::class => new CompileDocumentsHandler(
-                    new Compiler([
-                        new MetasPass($metas),
-                        new TransformerPass(
-                            new DocumentNodeTraverser(new DefaultNodeTransformerFactory($metas))
-                        )
-                    ])
-                ),
-            ]
-        );
-
-        $parseDirectoryHandler = new ParseDirectoryHandler(
-            new FileCollector(),
-            $commandbus,
-        );
-        $sourceFileSystem->addPlugin(new Finder());
-
-        $parseDirCommand = new ParseDirectoryCommand(
-            $sourceFileSystem,
-            '',
-            'rst',
-            $metas
-        );
-
-        $documents = $parseDirectoryHandler->handle($parseDirCommand);
-        $compileDocumentsCommand = new CompileDocumentsCommand($documents);
-
-        /** @var DocumentNode[] $documents */
-        return $commandbus->handle($compileDocumentsCommand);
-    }
 
     /**
      * @return mixed[]
