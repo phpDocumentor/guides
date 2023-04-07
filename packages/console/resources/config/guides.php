@@ -89,6 +89,12 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\TocNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
 
         ->set(phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory::class)
         ->args([
