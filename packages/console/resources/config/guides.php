@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
+use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
+use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
@@ -13,6 +17,8 @@ use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
+use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -21,10 +27,31 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure()
         ->instanceof(phpDocumentor\Guides\References\Resolver\Resolver::class)
         ->tag('phpdoc.guides.reference.resolver')
+
         ->instanceof(phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware::class)
         ->tag('phpdoc.guides.noderendererfactoryaware')
+
+        ->instanceof(phpDocumentor\Guides\Compiler\CompilerPass::class)
+        ->tag('phpdoc.guides.compiler.passes')
+
+        ->instanceof(phpDocumentor\Guides\Compiler\NodeTransformer::class)
+        ->tag('phpdoc.guides.compiler.nodeTransformers')
+
+        ->load(
+            'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\',
+            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php'
+        )
+
+        ->load(
+            'phpDocumentor\\Guides\\Compiler\\Passes\\',
+            '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php'
+        )
+
         ->load(
             'phpDocumentor\\Guides\\References\\Resolver\\',
             '%vendor_dir%/phpdocumentor/guides/src/References/Resolver'
@@ -33,9 +60,20 @@ return static function (ContainerConfigurator $container): void {
             '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers'
         )
 
-
-
+        ->set(Metas::class)
+        ->set(UrlGeneratorInterface::class, UrlGenerator::class)
         ->set(ReferenceResolver::class)
+
+        ->set(phpDocumentor\Guides\Parser::class)
+        ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))
+
+        ->set(phpDocumentor\Guides\Compiler\Compiler::class)
+        ->arg('$passes', tagged_iterator('phpdoc.guides.compiler.passes'))
+
+        ->set(NodeTransformerFactory::class, CustomNodeTransformerFactory::class)
+        ->arg('$transformers', tagged_iterator('phpdoc.guides.compiler.nodeTransformers'))
+
+        ->set(DocumentNodeTraverser::class)
 
         ->set(HtmlRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')

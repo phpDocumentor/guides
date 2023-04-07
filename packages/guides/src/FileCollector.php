@@ -18,15 +18,8 @@ use function trim;
 
 class FileCollector
 {
-    private Metas $metas;
-
     /** @var string[][] */
     private array $fileInfos = [];
-
-    public function __construct(Metas $metas)
-    {
-        $this->metas = $metas;
-    }
 
     /**
      * Scans a directory recursively looking for all files to parse.
@@ -35,7 +28,7 @@ class FileCollector
      * objects, and avoids adding files to the parse queue that have
      * not changed and whose direct dependencies have not changed.
      */
-    public function collect(FilesystemInterface $filesystem, string $directory, string $extension): Files
+    public function collect(FilesystemInterface $filesystem, string $directory, string $extension, Metas $metas): Files
     {
         $directory = trim($directory, '/');
         /** @var array<array<string>> $files */
@@ -59,7 +52,7 @@ class FileCollector
 
         $parseQueue = new Files();
         foreach ($this->fileInfos as $filename => $_fileInfo) {
-            if (!$this->doesFileRequireParsing($filename)) {
+            if (!$this->doesFileRequireParsing($metas, $filename)) {
                 continue;
             }
 
@@ -69,7 +62,7 @@ class FileCollector
         return $parseQueue;
     }
 
-    private function doesFileRequireParsing(string $filename): bool
+    private function doesFileRequireParsing(Metas $metas, string $filename): bool
     {
         if (!isset($this->fileInfos[$filename])) {
             throw new InvalidArgumentException(
@@ -77,7 +70,7 @@ class FileCollector
             );
         }
 
-        return $this->hasFileBeenUpdated($filename);
+        return $this->hasFileBeenUpdated($metas, $filename);
 
 //        $file = $this->fileInfos[$filename];
 //        $documentFilename = $this->getFilenameFromFile($file);
@@ -121,7 +114,7 @@ class FileCollector
         //return false;
     }
 
-    private function hasFileBeenUpdated(string $filename): bool
+    private function hasFileBeenUpdated(Metas $metas, string $filename): bool
     {
         /** @var array<string> $file */
         $file = $this->fileInfos[$filename];
@@ -129,7 +122,7 @@ class FileCollector
         $documentFilename = $this->getFilenameFromFile($file);
 
         /** @var array<string>|null $entry */
-        $entry = $this->metas->findDocument($documentFilename);
+        $entry = $metas->findDocument($documentFilename);
 
         // File is new or changed
         return $entry === null || $entry['timestamp'] < $file['timestamp'];

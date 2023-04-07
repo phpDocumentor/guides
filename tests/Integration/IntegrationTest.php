@@ -172,7 +172,7 @@ class IntegrationTest extends TestCase
         );
 
         $parseDirectoryHandler = new ParseDirectoryHandler(
-            new FileCollector($metas),
+            new FileCollector(),
             $commandbus,
         );
         $sourceFileSystem->addPlugin(new Finder());
@@ -180,7 +180,8 @@ class IntegrationTest extends TestCase
         $parseDirCommand = new ParseDirectoryCommand(
             $sourceFileSystem,
             '',
-            'rst'
+            'rst',
+            $metas
         );
 
         $documents = $parseDirectoryHandler->handle($parseDirCommand);

@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function dirname;
 
@@ -20,9 +20,9 @@ use function dirname;
  */
 class Image extends Directive
 {
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGenerator $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }

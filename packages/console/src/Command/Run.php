@@ -21,8 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class Run extends Command
 {
     private CommandBus $commandBus;
+    private Metas $metas;
 
-    public function __construct(CommandBus $commandBus)
+    public function __construct(CommandBus $commandBus, Metas $metas)
     {
         parent::__construct('run');
 
@@ -55,11 +56,11 @@ final class Run extends Command
         );
 
         $this->commandBus = $commandBus;
+        $this->metas = $metas;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $metas = new Metas([]);
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
 
@@ -67,7 +68,7 @@ final class Run extends Command
             new ParseDirectoryCommand(
                 $sourceFileSystem,
                 '',
-                $input->getOption('input-format')
+                $input->getOption('input-format'),
             )
         );
 
@@ -79,7 +80,7 @@ final class Run extends Command
             new RenderCommand(
                 $input->getOption('output-format'),
                 $documents,
-                $metas,
+                $this->metas,
                 $sourceFileSystem,
                 $destinationFileSystem
             )

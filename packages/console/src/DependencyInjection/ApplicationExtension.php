@@ -21,7 +21,6 @@ class ApplicationExtension extends Extension
         $container->setAlias(ContainerInterface::class, 'service_container');
 
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/resources/config'));
-        $loader->load('guides.yml');
         $loader->load('guides-restructured-text.yml');
 
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/resources/config'));

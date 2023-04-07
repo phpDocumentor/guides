@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function array_filter;
 use function array_map;
@@ -17,9 +17,9 @@ class ToctreeBuilder
 {
     private GlobSearcher $globSearcher;
 
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(GlobSearcher $globSearcher, UrlGenerator $urlGenerator)
+    public function __construct(GlobSearcher $globSearcher, UrlGeneratorInterface $urlGenerator)
     {
         $this->globSearcher = $globSearcher;
         $this->urlGenerator = $urlGenerator;

@@ -84,7 +84,8 @@ $sourceFileSystem->addPlugin(new Finder());
 $parseDirCommand = new ParseDirectoryCommand(
     $sourceFileSystem,
     '',
-    'rst'
+    'rst',
+    $metas
 );
 
 $documents = $parseDirectoryHandler->handle($parseDirCommand);
