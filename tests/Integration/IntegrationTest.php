@@ -2,56 +2,34 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\RST\Integration;
+namespace phpDocumentor\Guides\Integration;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use phpDocumentor\Guides\Compiler\Compiler;
-use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
-use phpDocumentor\Guides\Compiler\NodeTransformers\DefaultNodeTransformerFactory;
-use phpDocumentor\Guides\Compiler\Passes\MetasPass;
-use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
-use phpDocumentor\Guides\Console\Application;
+use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Console\Command\Run;
-use phpDocumentor\Guides\Console\DependencyInjection\Compiler\NodeRendererPass;
-use phpDocumentor\Guides\FileCollector;
-use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
-use phpDocumentor\Guides\Handlers\CompileDocumentsHandler;
-use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
-use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
-use phpDocumentor\Guides\Handlers\ParseFileCommand;
-use phpDocumentor\Guides\Handlers\ParseFileHandler;
-use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
-use phpDocumentor\Guides\Handlers\RenderHandler;
-use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Nodes\DocumentNode;
-use League\Tactician\Setup\QuickStart;
-use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer\DefaultTypeRendererFactory;
-use phpDocumentor\Guides\Renderer\HtmlRenderer;
-use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
-use phpDocumentor\Guides\Renderer\TypeRenderer;
-use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
-use Flyfinder\Finder;
-
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\AbstractLogger;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
+
+use function array_filter;
+use function array_walk;
+use function assert;
+use function escapeshellarg;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function implode;
 use function setlocale;
+use function str_replace;
+use function system;
+use function trim;
 
 use const LC_ALL;
 
-class IntegrationTest extends TestCase
+class IntegrationTest extends ApplicationTestCase
 {
-
     protected function setUp(): void
     {
         setlocale(LC_ALL, 'en_US.utf8');
@@ -59,6 +37,7 @@ class IntegrationTest extends TestCase
 
     /**
      * @param String[] $compareFiles
+     *
      * @dataProvider getTestsForDirectoryTest
      */
     public function testHtmlIntegration(
@@ -67,37 +46,20 @@ class IntegrationTest extends TestCase
         string $outputPath,
         array $compareFiles
     ): void {
-        system("rm -rf " . escapeshellarg($outputPath));
+        system('rm -rf ' . escapeshellarg($outputPath));
         self::assertDirectoryExists($inputPath);
         self::assertDirectoryExists($expectedPath);
         self::assertNotEmpty($compareFiles);
-        system("mkdir " . escapeshellarg($outputPath));
+        system('mkdir ' . escapeshellarg($outputPath));
 
-        $container = new ContainerBuilder();
-
-        // Load manual parameters
-        $container->setParameter('vendor_dir', dirname(__DIR__, 2) . '/vendor');
-        $container->setParameter('working_directory', rtrim(getcwd(), '/'));
-
-        // Load container configuration
-        foreach (Application::getDefaultExtensions() as $extension) {
-            $container->registerExtension($extension);
-            $container->loadFromExtension($extension->getAlias());
-        }
-
-        $container->addCompilerPass(new NodeRendererPass());
-
-        // Compile container
-        $container->compile(true);
-
-        /** @var Run $command */
-        $command = $container->get(Run::class);
+        $command = $this->getContainer()->get(Run::class);
+        assert($command instanceof Run);
 
         $input = new ArrayInput(
             [
                 'input' => $inputPath,
                 'output' => $outputPath,
-                '--output-format' => ['html', 'intersphinx']
+                '--output-format' => ['html', 'intersphinx'],
             ],
             $command->getDefinition()
         );
@@ -119,7 +81,7 @@ class IntegrationTest extends TestCase
      * Asserts that the contents of one file is equal to the contents of another
      * file. It ignores empty lines and whitespace at the start and end of each line
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws ExpectationFailedException
      */
     public static function assertFileEqualsTrimmed(string $expected, string $actual, string $message = ''): void
@@ -135,15 +97,15 @@ class IntegrationTest extends TestCase
     public static function getTrimmedFileContent(string $file): string
     {
         $contentArray = explode("\n", file_get_contents($file));
-        array_walk($contentArray, function (&$value) {
+        array_walk($contentArray, static function (&$value): void {
             $value = trim($value);
         });
-        $contentArray = array_filter($contentArray, function ($value) {
+        $contentArray = array_filter($contentArray, static function ($value) {
             return $value !== '';
         });
+
         return implode("\n", $contentArray);
     }
-
 
     /**
      * @return mixed[]
@@ -175,22 +137,25 @@ class IntegrationTest extends TestCase
         $tests = [];
 
         foreach ($finder as $dir) {
-            if (file_exists($dir->getPathname() . '/input')) {
-                $compareFiles = [];
-                $fileFinder = new \Symfony\Component\Finder\Finder();
-                $fileFinder
-                    ->files()
-                    ->in($dir->getPathname() . '/expected');
-                foreach ($fileFinder as $file) {
-                    $compareFiles[] = $file->getPathname();
-                }
-                $tests[$dir->getPathname()] = [
-                    $dir->getPathname() . '/input',
-                    $dir->getPathname() . '/expected',
-                    $dir->getPathname() . '/temp',
-                    $compareFiles
-                ];
+            if (!file_exists($dir->getPathname() . '/input')) {
+                continue;
             }
+
+            $compareFiles = [];
+            $fileFinder = new SymfonyFinder();
+            $fileFinder
+                ->files()
+                ->in($dir->getPathname() . '/expected');
+            foreach ($fileFinder as $file) {
+                $compareFiles[] = $file->getPathname();
+            }
+
+            $tests[$dir->getPathname()] = [
+                $dir->getPathname() . '/input',
+                $dir->getPathname() . '/expected',
+                $dir->getPathname() . '/temp',
+                $compareFiles,
+            ];
         }
 
         return $tests;

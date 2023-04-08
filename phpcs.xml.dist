@@ -4,6 +4,7 @@
 
     <file>packages</file>
     <file>packages</file>
+    <file>tests</file>
 
     <config name="php_version" value="70400"/>
     <exclude-pattern>packages/*/examples/*</exclude-pattern>

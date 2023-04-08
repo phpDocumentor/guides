@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\RST\Functional;
+namespace phpDocumentor\Guides\Functional;
 
 use Exception;
 use Gajus\Dindent\Indenter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
+use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Setup\QuickStart;
 use phpDocumentor\Guides\UrlGenerator;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
@@ -27,11 +28,12 @@ use function setlocale;
 use function sprintf;
 use function str_replace;
 use function strpos;
+use function substr;
 use function trim;
 
 use const LC_ALL;
 
-class FunctionalTest extends TestCase
+class FunctionalTest extends ApplicationTestCase
 {
     private const RENDER_DOCUMENT_FILES = ['main-directive'];
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
@@ -70,10 +72,10 @@ class FunctionalTest extends TestCase
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        $parser = QuickStart::createRstParser();
+        $parser = $this->getContainer()->get(Parser::class);
         $document = $parser->parse($rst);
 
-        $renderer = QuickStart::createRenderer();
+        $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
         $context = RenderContext::forDocument(
             $document,
             new Filesystem(new MemoryAdapter()),
@@ -98,12 +100,14 @@ class FunctionalTest extends TestCase
             $rendered = $indenter->indent($rendered);
         }
 
-        if (!isset($expectedExceptionMessage)) {
-            self::assertSame(
-                $this->trimTrailingWhitespace($expected),
-                $this->trimTrailingWhitespace($rendered)
-            );
+        if (isset($expectedExceptionMessage)) {
+            return;
         }
+
+        self::assertSame(
+            $this->trimTrailingWhitespace($expected),
+            $this->trimTrailingWhitespace($rendered)
+        );
     }
 
     /**
@@ -138,11 +142,12 @@ class FunctionalTest extends TestCase
                 $format = $file->getExtension();
                 if (!in_array($format, $formats, true)) {
                     continue;
-                    throw new Exception(sprintf('Unexpected file extension in "%s"', $file->getPathname()));
                 }
 
                 if (strpos($file->getFilename(), $dir->getFilename()) !== 0) {
-                    throw new Exception(sprintf('Test filename "%s" does not match directory name', $file->getPathname()));
+                    throw new Exception(
+                        sprintf('Test filename "%s" does not match directory name', $file->getPathname())
+                    );
                 }
 
                 $expected = $file->getContents();
