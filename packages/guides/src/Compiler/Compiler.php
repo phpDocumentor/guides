@@ -28,7 +28,8 @@ class Compiler
      */
     public function run(array $documents): array
     {
-        foreach ($this->passes as $pass) {
+        $clonedPasses = clone$this->passes;
+        foreach ($clonedPasses as $pass) {
             $documents = $pass->run($documents);
         }
 

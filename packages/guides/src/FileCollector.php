@@ -125,7 +125,8 @@ class FileCollector
         $entry = $metas->findDocument($documentFilename);
 
         // File is new or changed
-        return $entry === null || $entry['timestamp'] < $file['timestamp'];
+        // TODO:: Fix this check, was broken by 457dfcc8112c965cfe645ade3442a563d1c7c0ac
+        return true; //$entry === null; || $entry['timestamp'] < $file['timestamp'];
     }
 
     /**

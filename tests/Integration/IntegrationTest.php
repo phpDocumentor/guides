@@ -50,6 +50,10 @@ class IntegrationTest extends ApplicationTestCase
         self::assertDirectoryExists($inputPath);
         self::assertDirectoryExists($expectedPath);
         self::assertNotEmpty($compareFiles);
+        if (file_exists($inputPath . '/skip')) {
+            $this->markTestIncomplete($inputPath);
+        }
+
         system('mkdir ' . escapeshellarg($outputPath));
 
         $command = $this->getContainer()->get(Run::class);
