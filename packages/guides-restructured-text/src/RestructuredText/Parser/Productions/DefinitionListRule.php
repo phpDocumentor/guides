@@ -62,7 +62,7 @@ final class DefinitionListRule implements Rule
     {
         $iterator = $documentParserContext->getDocumentIterator();
         $definitionListItems = [];
-        while ($this->isDefinitionTerm($iterator->getNextLine(), $iterator->peek())) {
+        while ($iterator->valid() && $this->isDefinitionTerm($iterator->current(), $iterator->peek())) {
             $definitionListItems[] = $this->createListItem($documentParserContext);
             $iterator->next();
         }
@@ -149,7 +149,12 @@ final class DefinitionListRule implements Rule
 
     private function isDefinitionTerm(?string $currentLine, ?string $nextLine): bool
     {
-        if (LinesIterator::isEmptyLine($currentLine)) {
+        if ($currentLine === null || LinesIterator::isEmptyLine($currentLine)) {
+            return false;
+        }
+
+        // This is either a directive or a comment or an anchor. None of which are starting a definition term.
+        if (str_starts_with(trim($currentLine), '.. ')) {
             return false;
         }
 

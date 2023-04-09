@@ -57,6 +57,9 @@ term 4 : classifier one : classifier two
 \- term 5
     Without escaping, this would be an option list item.
 
+... another definition:
+    With two dots this would be a directive.
+
 This is normal text again.
 RST;
 
@@ -131,11 +134,58 @@ RST
                         ]
                     ),
                 ]
-            )
+            ),
+            new DefinitionListItemNode(
+                new SpanNode('... another definition:'),
+                [],
+                [
+                    new DefinitionNode(
+                        [
+                            new RawNode('With two dots this would be a directive.'),
+                        ]
+                    ),
+                ]
+            ),
         );
 
         self::assertEquals($expected, $result);
         self::assertRemainingEquals('This is normal text again.' . "\n", $context->getDocumentIterator());
+    }
+
+    public function testDefinitionListFollowedByDirective(): void
+    {
+        $input = <<<RST
+term 1
+    Definition 1.
+    
+.. some:: directive
+    :argument: whatever 
+RST;
+
+        $context = $this->createContext($input);
+
+
+        $result = $this->rule->apply($context);
+        $expected = new DefinitionListNode(
+            new DefinitionListItemNode(
+                new SpanNode('term 1'),
+                [],
+                [
+                    new DefinitionNode(
+                        [
+                            new RawNode('Definition 1.'),
+                        ]
+                    ),
+                ]
+            ),
+        );
+
+        self::assertEquals($expected, $result);
+        self::assertRemainingEquals(<<<RST
+.. some:: directive
+    :argument: whatever
+
+RST, $context->getDocumentIterator());
     }
 
     /** @return array<string, string[]> */
