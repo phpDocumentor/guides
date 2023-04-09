@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    <meta name="docsearch:modified" content="2022-11-18T10:26:52+00:00" />
+    <link rel="schema.dc" href="http://purl.org/dc/elements/1.1/" />
+    <meta name="dc.modified" content="2022-11-18T10:26:52+00:00" />
+    <meta property="article:modified_time" content="2022-11-18T10:26:52+00:00" />
+
+    <title>Developer corner &mdash; &lt;project&gt; &lt;release&gt; documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/fontawesome.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/webfonts.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/codeblock.css" />
+<!-- linktags -->
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="&lt;project&gt; &lt;release&gt; documentation" href="#" />
+    <link rel="next" title="Known problems" href="../KnownProblems/Index.html" />
+    <link rel="prev" title="Templating examples" href="../Templates/Examples.html" />
+<!-- /linktags -->
+<!-- extrahead --><!-- /extrahead -->
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="page-header">
+            <div class="page-header-inner">
+<!--block pageheader-->
+<div class="row">
+    <div class="col-sm-6 col-lg-7">
+
+        <div class="logo">
+        <a href="https://docs.typo3.org/" title="TYPO3 Documentation" >
+
+            <img src="../_static/img/typo3-logo.svg" width="484" height="130" alt="TYPO3 Logo" class="logo-image" />
+        </a>
+        </div>
+    </div><!--/.col-x-->
+    <div class="col-sm-6 col-lg-5">
+        <div role="search">
+            
+            <!--form global search-->
+        </div>
+    </div><!--/.col-x-->
+</div><!--/.row-->
+<!--/block pageheader-->
+            </div><!--/.page-header-inner-->
+        </div><!--/.page-header-->
+
+        
+
+        <div class="page-main">
+            <div class="page-main-inner">
+                <div class="page-main-navigation">
+                    <nav>
+                        <input type="checkbox" id="toggleToc" class="toc-checkbox">
+                        <div class="toc-header"><div class="toc-title">
+                                    <a class="toc-title-project" href="../Index.html">&lt;project&gt;</a></div><div class="toc-actions">
+                                <label for="toggleToc" class="toc-toggle">
+                                    Menu
+                                </label>
+                            </div>
+                        </div>
+                        <div class="toc-collapse">
+<!-- searchbox.html -->
+<div id="searchbox" class="toc-search" role="search">
+    <form id="search-form" action="../search.html" autocomplete="off" method="get">
+        <input class="form-control" type="text" name="q" placeholder="Search this project" aria-label="Search this project" id="searchinput" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<!-- /searchbox.html -->
+                            <div class="toc" role="navigation" aria-label="main navigation">
+<!-- menu -->
+                                        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/Index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation/Index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Configuration/Index.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Configuration/General.html">General configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Configuration/TypoScriptReference/Index.html">TypoScript reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Configuration/TypoScriptReference/Constants.html">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Configuration/TypoScriptReference/Setup.html">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Configuration/TSconfig.html">TSconfig reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Configuration/TSconfig.html#user-tsconfig">User TSconfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Configuration/TSconfig.html#page-tsconfig">Page TSconfig</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Editor/Index.html">For Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Templates/Index.html">Templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Templates/Override.html">Overriding templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Templates/ViewHelpers.html">Custom ViewHelpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Templates/Examples.html">Templating examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer corner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../KnownProblems/Index.html">Known problems</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Sitemap.html">Sitemap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+
+                                    <p class="caption"><span class="caption-text">PAGE CONTENTS</span></p>
+                                    <ul>
+<li><a class="reference internal" href="#">Developer corner</a><ul>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#interfaces">Interfaces</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /menu -->
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="page-main-content">
+                    <div class="rst-content">
+<!-- pager-hidden.html -->
+
+        <a class="no-focus" accesskey="p" href="../Templates/Examples.html" tabindex="-1"></a>
+        <a class="no-focus" accesskey="n" href="../KnownProblems/Index.html" tabindex="-1"></a>
+<!-- /pager-hidden.html -->
+<!-- breadcrumbs.html -->
+<div class="breadcrumb-bar" role="navigation" aria-label="breadcrumbs navigation">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../Index.html">Start</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Developer corner</li>
+    </ol>
+    <div class="breadcrumb-additions">
+        <a class="btn btn-sm btn-light" href="../_sources/Developer/Index.rst.txt" rel="nofollow">
+            <span class="btn-icon"><span class="fas fa-code"></span></span>
+            <span class="btn-text">View source</span>
+        </a>
+        <a class="btn btn-sm btn-light" id="btnHowToEdit"
+           href="https://docs.typo3.org/m/typo3/docs-how-to-document/master/en-us/WritingDocsOfficial/GithubMethod.html"
+           rel="nofollow noopener" target="_blank">
+            <span class="btn-icon"><span class="fas fa-info-circle"></span></span>
+            <span class="btn-text">How to edit</span>
+        </a>
+        <a class="btn btn-sm btn-primary" id="btnEditOnGitHub" href="https://github.com/TYPO3-Documentation/TYPO3CMS-Example-ExtensionManual/edit/main/Documentation/Developer/Index.rst">
+            <span class="btn-icon"><span class="fab fa-github"></span></span>
+            <span class="btn-text">Edit on GitHub</span>
+        </a>
+    </div>
+</div>
+<!-- /breadcrumbs.html -->
+<!-- displaysettingsui.html -->
+<div id="displaysettingsui" class="displaysettingsui">
+<div class="dsDivCogwheel"><i id="dsCogwheel" class="fas fa-cog" title="Display settings"></i></div>
+<div id="dsPanel" class="dsPanel" ><p><b>Display settings</b></p>
+<input type="checkbox" id="cbFullWidth"><label for="cbFullWidth">Use full width</label><br>
+<input type="checkbox" id="cbPermanent"><label for="cbPermanent">Make settings permanent</label><br>
+</div><!--/.dsPanel-->
+</div><!--/.displaysettingsui-->
+<!-- /displaysettingsui.html -->
+<!-- versionhints.html -->
+<div class="version-hints">
+
+    <div class="version-hints-inner" data-run-ajax="no">
+<!--filled from _static/ajax-version-hints.html-->
+</div><!--/.version-hints-inner-->
+</div><!--/.version-hints-->
+<!-- /versionhints.html -->
+                        <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                            <div itemprop="articleBody">
+<!-- body -->
+    <div class="section" id="developer-corner">
+<span id="developer"></span><h1>Developer corner<a class="headerlink" href="#developer-corner" title="Permalink to this headline">¶</a></h1>
+<p>Use this section to provide examples of code or detail any information that would be deemed relevant to a developer.</p>
+<p>For example explain how a certain feature was implemented.</p>
+<div class="section" id="api">
+<span id="developer-api"></span><h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<p>How to use the API...</p>
+<div class="section" id="interfaces">
+<h3>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h3>
+<p>The following list provides information for all necessary interfaces that are
+used inside of this documentation. For up to date information, please check
+the source code.</p>
+<span class="target" id="namespace-Vendor\MyExtension\Interfaces"></span><dl class="php class">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\ExampleInterface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">Vendor\MyExtension\Interfaces\</span></span><span class="sig-name descname"><span class="pre">ExampleInterface</span></span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\ExampleInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Has to be implemented by all ...</p>
+<dl class="php method">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\ExampleInterface::methodOne">
+<span class="sig-name descname"><span class="pre">methodOne</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\ExampleInterface::methodOne" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><span><code class="xref php php-obj docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Something important</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="php class">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\AnotherImportantInterface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">Vendor\MyExtension\Interfaces\</span></span><span class="sig-name descname"><span class="pre">AnotherImportantInterface</span></span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\AnotherImportantInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for ...</p>
+<dl class="php class">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\RequireJsModuleInterface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RequireJsModuleInterface</span></span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\RequireJsModuleInterface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Widgets implementing this interface will add the provided RequireJS modules.
+Those modules will be loaded in dashboard view if the widget is added at least once.</p>
+<dl class="php method">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\RequireJsModuleInterface::getRequireJsModules">
+<span class="sig-prename descclassname"><span class="pre">Vendor\MyExtension\Interfaces\RequireJsModuleInterface::</span></span><span class="sig-name descname"><span class="pre">getRequireJsModules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\RequireJsModuleInterface::getRequireJsModules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of RequireJS modules that should be loaded, e.g.:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="p">[</span>
+    <span class="s1">&#39;TYPO3/CMS/MyExtension/ModuleName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TYPO3/CMS/MyExtension/Module2Name&#39;</span><span class="p">,</span>
+<span class="p">];</span>
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Backend/JavaScript/RequireJS/Index.html#requirejs" title="(in TYPO3 Explained vmain (development))"><span>RequireJS (Deprecated)</span></a> for further information regarding RequireJS
+in TYPO3 Backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><span><code class="xref php php-obj docutils literal notranslate"><span class="pre">array</span></code></span></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of modules to require.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="php method">
+<dt class="sig sig-object php" id="Vendor\MyExtension\Interfaces\RequireJsModuleInterface::setDate">
+<span class="sig-prename descclassname"><span class="pre">Vendor\MyExtension\Interfaces\RequireJsModuleInterface::</span></span><span class="sig-name descname"><span class="pre">setDate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">$year</span></em>, <em class="sig-param"><span class="pre">$month</span></em>, <em class="sig-param"><span class="pre">$day</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Vendor\MyExtension\Interfaces\RequireJsModuleInterface::setDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>$year</strong> (<span><code class="xref php php-obj docutils literal notranslate"><span class="pre">int</span></code></span>) -- The year.</p></li>
+<li><p><strong>$month</strong> (<span><code class="xref php php-obj docutils literal notranslate"><span class="pre">int</span></code></span>) -- The month.</p></li>
+<li><p><strong>$day</strong> (<span><code class="xref php php-obj docutils literal notranslate"><span class="pre">int</span></code></span>) -- The day.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Either false on failure, or the datetime object for method chaining.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>A php example:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="c1">// use \TYPO3\CMS\Core\Utility\GeneralUtility;</span>
+<span class="nv">$stuff</span> <span class="o">=</span> <span class="nx">GeneralUtility</span><span class="o">::</span><span class="na">makeInstance</span><span class="p">(</span>
+    <span class="s1">&#39;\\Foo\\Bar\\Utility\\Stuff&#39;</span>
+<span class="p">);</span>
+<span class="nv">$stuff</span><span class="o">-&gt;</span><span class="na">do</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Example in another language:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="w"></span>
+<span class="hll"><span class="linenos">2</span><span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">3</span><span class="w">        </span><span class="nx">doStuff</span><span class="p">();</span><span class="w"></span>
+</span><span class="hll"><span class="linenos">4</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+</span><span class="linenos">5</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>A YAML example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">Vendor\Extension\EventListener\YourListener</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">event.listener</span><span class="w"></span>
+<span class="w">        </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;your-self-choosen-identifier&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;methodToConnectToEvent&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">event</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vendor\MyExtension\Event\MyActionEvent</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- /body -->
+                            </div>
+                        </div>
+<!-- pager.html -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="../Templates/Examples.html" title="Accesskey Alt(+Shift)+p">
+                Previous
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="../KnownProblems/Index.html" title="Accesskey Alt(+Shift)+n">
+                Next
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+<!-- /pager.html -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="page-footer">
+<!-- footer.html -->
+<footer>
+    <div class="frame frame-ruler-before frame-background-dark">
+        <div class="frame-container">
+            <div class="frame-inner">
+                <ul class="footer-simplemenu">
+                    <li><a href="&lt;project-home&gt;" title="Home"><span>Home</span></a></li><li><a href="&lt;project-contact&gt;" title="Contact"><span>Contact</span></a></li>
+                    <li><a href="&lt;project-discussions&gt;" title="Discussions"><span>Discussions</span></a></li>
+                    <li><a href="&lt;project-issues&gt;" title="Issues"><span>Issues</span></a></li>
+                    <li><a href="&lt;project-repository&gt;" title="Repository"><span>Repository</span></a></li>
+                </ul>
+                <div class="footer-additional">
+                    <p class="text-center">Last updated: Nov 18, 2022 10:26</p>
+                    <p class="text-center">Last rendered: Apr 09, 2023 09:42</p>
+                    <ul class="footer-simplemenu">
+                        <li><a href="https://github.com/TYPO3-Documentation/sphinx_typo3_theme" title="sphinx_typo3_theme" target="_blank">
+                        <span>TYPO3 Theme 4.7.7</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-meta">
+                    <div class="footer-meta-copyright">
+                        &copy; Copyright <copyright>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- /footer.html -->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT: '../',
+            VERSION: '&lt;release&gt;',
+            COLLAPSE_INDEX: false,
+            FILE_SUFFIX: '.html',
+            HAS_SOURCE: true
+        };
+    </script>
+    <script type="text/javascript" src="../_static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../_static/js/underscore.min.js"></script>
+    <script type="text/javascript" src="../_static/js/doctools.min.js"></script>
+    <script type="text/javascript" src="../_static/js/popper.min.js"></script>
+    <script type="text/javascript" src="../_static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.min.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/searchtools.min.js"></script>
+    <script type="text/javascript" src="../_static/js/autocomplete.min.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script type="text/javascript">
+        jQuery(function() { Search.loadIndex("../searchindex.js"); });
+    </script>
+    <script type="text/javascript" id="searchindexloader"></script>
+<!-- scripts2 --><!-- /scripts2 -->
+<!-- footer2 --><!-- /footer2 -->
+
+</body>
+</html>

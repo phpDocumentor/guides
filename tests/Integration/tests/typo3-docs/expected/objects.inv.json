@@ -1,0 +1,374 @@
+{
+   "php:class": {
+      "Vendor\\MyExtension\\Interfaces\\AnotherImportantInterface": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\AnotherImportantInterface",
+         "-"
+      ],
+      "Vendor\\MyExtension\\Interfaces\\ExampleInterface": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\ExampleInterface",
+         "-"
+      ],
+      "Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface",
+         "-"
+      ]
+   },
+   "php:method": {
+      "Vendor\\MyExtension\\Interfaces\\ExampleInterface::methodOne": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\ExampleInterface::methodOne",
+         "-"
+      ],
+      "Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface::getRequireJsModules": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface::getRequireJsModules",
+         "-"
+      ],
+      "Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface::setDate": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#Vendor\\MyExtension\\Interfaces\\RequireJsModuleInterface::setDate",
+         "-"
+      ]
+   },
+   "php:namespace": {
+      "Vendor\\MyExtension\\Interfaces": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#namespace-Vendor\\MyExtension\\Interfaces",
+         "-"
+      ]
+   },
+   "std:confval": {
+      "enableSomething": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#confval-enableSomething",
+         "-"
+      ],
+      "enableThat": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Setup.html#confval-enableThat",
+         "-"
+      ],
+      "enableThis": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Constants.html#confval-enableThis",
+         "-"
+      ],
+      "limitSomething": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#confval-limitSomething",
+         "-"
+      ],
+      "someImportantPages": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#confval-someImportantPages",
+         "-"
+      ],
+      "storageId": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Constants.html#confval-storageId",
+         "-"
+      ]
+   },
+   "std:doc": {
+      "Configuration/General": [
+         "<project>",
+         "<version>",
+         "Configuration/General.html",
+         "General configuration"
+      ],
+      "Configuration/Index": [
+         "<project>",
+         "<version>",
+         "Configuration/Index.html",
+         "Configuration"
+      ],
+      "Configuration/TSconfig": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html",
+         "TSconfig reference"
+      ],
+      "Configuration/TypoScriptReference/Constants": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Constants.html",
+         "Constants"
+      ],
+      "Configuration/TypoScriptReference/Index": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Index.html",
+         "TypoScript reference"
+      ],
+      "Configuration/TypoScriptReference/Setup": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Setup.html",
+         "Setup"
+      ],
+      "Developer/Index": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html",
+         "Developer corner"
+      ],
+      "Editor/Index": [
+         "<project>",
+         "<version>",
+         "Editor/Index.html",
+         "For Editors"
+      ],
+      "Index": [
+         "<project>",
+         "<version>",
+         "Index.html",
+         "<project>"
+      ],
+      "Installation/Index": [
+         "<project>",
+         "<version>",
+         "Installation/Index.html",
+         "Installation"
+      ],
+      "Introduction/Index": [
+         "<project>",
+         "<version>",
+         "Introduction/Index.html",
+         "Introduction"
+      ],
+      "KnownProblems/Index": [
+         "<project>",
+         "<version>",
+         "KnownProblems/Index.html",
+         "Known problems"
+      ],
+      "Sitemap": [
+         "<project>",
+         "<version>",
+         "Sitemap.html",
+         "-"
+      ],
+      "Templates/Examples": [
+         "<project>",
+         "<version>",
+         "Templates/Examples.html",
+         "Templating examples"
+      ],
+      "Templates/Index": [
+         "<project>",
+         "<version>",
+         "Templates/Index.html",
+         "Templates"
+      ],
+      "Templates/Override": [
+         "<project>",
+         "<version>",
+         "Templates/Override.html",
+         "Overriding templates"
+      ],
+      "Templates/ViewHelpers": [
+         "<project>",
+         "<version>",
+         "Templates/ViewHelpers.html",
+         "Custom ViewHelpers"
+      ],
+      "genindex": [
+         "<project>",
+         "<version>",
+         "genindex.html",
+         "Index"
+      ]
+   },
+   "std:label": {
+      "configuration": [
+         "<project>",
+         "<version>",
+         "Configuration/Index.html#configuration",
+         "Configuration"
+      ],
+      "configuration-general": [
+         "<project>",
+         "<version>",
+         "Configuration/General.html#configuration-general",
+         "General configuration"
+      ],
+      "configuration-tsconfig": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#configuration-tsconfig",
+         "TSconfig reference"
+      ],
+      "configuration-tsconfig_page": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#configuration-tsconfig-page",
+         "User TSconfig"
+      ],
+      "configuration-tsconfig_user": [
+         "<project>",
+         "<version>",
+         "Configuration/TSconfig.html#configuration-tsconfig-user",
+         "Page TSconfig"
+      ],
+      "configuration-typoscript": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Index.html#configuration-typoscript",
+         "TypoScript reference"
+      ],
+      "configuration-typoscript-constants": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Constants.html#configuration-typoscript-constants",
+         "Constants"
+      ],
+      "configuration-typoscript-setup": [
+         "<project>",
+         "<version>",
+         "Configuration/TypoScriptReference/Setup.html#configuration-typoscript-setup",
+         "Setup"
+      ],
+      "configuration_example": [
+         "<project>",
+         "<version>",
+         "Configuration/General.html#configuration-example",
+         "Typical example"
+      ],
+      "configuration_typical": [
+         "<project>",
+         "<version>",
+         "Configuration/General.html#configuration-typical",
+         "Typical example"
+      ],
+      "developer": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#developer",
+         "Developer corner"
+      ],
+      "developer-api": [
+         "<project>",
+         "<version>",
+         "Developer/Index.html#developer-api",
+         "API"
+      ],
+      "editor-faq": [
+         "<project>",
+         "<version>",
+         "Editor/Index.html#editor-faq",
+         "FAQ"
+      ],
+      "for-editors": [
+         "<project>",
+         "<version>",
+         "Editor/Index.html#for-editors",
+         "For Editors"
+      ],
+      "installation": [
+         "<project>",
+         "<version>",
+         "Installation/Index.html#installation",
+         "Installation"
+      ],
+      "introduction": [
+         "<project>",
+         "<version>",
+         "Introduction/Index.html#introduction",
+         "Introduction"
+      ],
+      "known-problems": [
+         "<project>",
+         "<version>",
+         "KnownProblems/Index.html#known-problems",
+         "Known problems"
+      ],
+      "modindex": [
+         "<project>",
+         "<version>",
+         "py-modindex.html",
+         "Module Index"
+      ],
+      "php-modindex": [
+         "<project>",
+         "<version>",
+         "php-modindex.html",
+         "PHP Namespace Index"
+      ],
+      "php-objectsindex": [
+         "<project>",
+         "<version>",
+         "php-objectsindex.html",
+         "PHP Objects Index"
+      ],
+      "py-modindex": [
+         "<project>",
+         "<version>",
+         "py-modindex.html",
+         "Python Module Index"
+      ],
+      "screenshots": [
+         "<project>",
+         "<version>",
+         "Introduction/Index.html#screenshots",
+         "Screenshots"
+      ],
+      "search": [
+         "<project>",
+         "<version>",
+         "search.html",
+         "Search Page"
+      ],
+      "start": [
+         "<project>",
+         "<version>",
+         "Index.html#start",
+         "<project>"
+      ],
+      "templates": [
+         "<project>",
+         "<version>",
+         "Templates/Index.html#templates",
+         "Templates"
+      ],
+      "templates-examples": [
+         "<project>",
+         "<version>",
+         "Templates/Examples.html#templates-examples",
+         "Templating examples"
+      ],
+      "templates-override": [
+         "<project>",
+         "<version>",
+         "Templates/Override.html#templates-override",
+         "Overriding templates"
+      ],
+      "templates-viewhelpers": [
+         "<project>",
+         "<version>",
+         "Templates/ViewHelpers.html#templates-viewhelpers",
+         "Custom ViewHelpers"
+      ],
+      "what-it-does": [
+         "<project>",
+         "<version>",
+         "Introduction/Index.html#what-it-does",
+         "What does it do?"
+      ]
+   }
+}
