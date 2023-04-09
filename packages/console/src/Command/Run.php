@@ -61,6 +61,7 @@ final class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->metas->reset();
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
 
@@ -75,6 +76,7 @@ final class Run extends Command
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
 
         $destinationFileSystem = new Filesystem(new Local($input->getArgument('output')));
+
 
         foreach ($input->getOption('output-format') as $format) {
             $this->commandBus->handle(
