@@ -18,6 +18,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function getcwd;
+use function is_dir;
+use function sprintf;
+
 final class Run extends Command
 {
     private CommandBus $commandBus;
@@ -62,6 +66,13 @@ final class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->metas->reset();
+        $inputDir = $this->getAbsolutePath((string) ($input->getArgument('input') ?? ''));
+        if (!is_dir($inputDir)) {
+            throw new \RuntimeException(sprintf('Input directory "%s" was not found! '."\n".
+                'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
+        }
+
+        $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
 
@@ -75,7 +86,7 @@ final class Run extends Command
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
 
-        $destinationFileSystem = new Filesystem(new Local($input->getArgument('output')));
+        $destinationFileSystem = new Filesystem(new Local($outputDir));
 
 
         foreach ($input->getOption('output-format') as $format) {
@@ -91,5 +102,18 @@ final class Run extends Command
         }
 
         return 0;
+    }
+
+    private function getAbsolutePath(string $path): string
+    {
+        if (!str_starts_with($path, '/')) {
+            if (getcwd() === false) {
+                throw new RuntimeException('Cannot find current working directory, use absolute paths.');
+            }
+
+            $path = getcwd() . '/' . $path;
+        }
+
+        return $path;
     }
 }
