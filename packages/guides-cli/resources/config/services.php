@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Monolog\Logger;
-use phpDocumentor\Guides\Console\Application;
-use phpDocumentor\Guides\Console\Command\Run;
+use phpDocumentor\Guides\Cli\Application;
+use phpDocumentor\Guides\Cli\Command\Run;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

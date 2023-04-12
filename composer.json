@@ -43,8 +43,9 @@
         "symfony/contracts": "^2.5",
         "phpdocumentor/guides": "dev-main@dev",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
-        "phpdocumentor/guides-console": "dev-main@dev",
-        "phpdocumentor/guides-graphs": "dev-main@dev"
+        "phpdocumentor/guides-graphs": "dev-main@dev",
+        "phpdocumentor/guides-cli": "dev-main@dev",
+        "phpdocumentor/guides-symfony": "dev-main@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6",
@@ -67,6 +68,10 @@
             "type": "path"
         },
         {
+            "url": "./packages/guides-cli",
+            "type": "path"
+        },
+        {
             "url": "./packages/guides-restructured-text",
             "type": "path"
         },
@@ -79,7 +84,7 @@
           "type": "path"
         },
         {
-            "url": "./packages/console",
+            "url": "./packages/guides-symfony",
             "type": "path"
         }
     ]

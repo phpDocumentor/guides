@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Console\Command;
+namespace phpDocumentor\Guides\Cli\Command;
 
 use Flyfinder\Finder;
 use League\Flysystem\Adapter\Local;

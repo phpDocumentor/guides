@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Console\DependencyInjection\Compiler;
+namespace phpDocumentor\Guides\DependencyInjection\Compiler;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f400a4541d52ff7c212480294e8e983e",
+    "content-hash": "529ea3127c485228e75bace0fd1c3bdb",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1204,12 +1204,12 @@
             }
         },
         {
-            "name": "phpdocumentor/guides-console",
+            "name": "phpdocumentor/guides-cli",
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "./packages/console",
-                "reference": "20e2dcf5ac384b4b38085814b5fb2fb48f37fcab"
+                "url": "./packages/guides-cli",
+                "reference": "ca4c2f740b2c4b5a1bef717727ea7d1c1dc5e438"
             },
             "require": {
                 "monolog/monolog": "^2.9",
@@ -1218,9 +1218,7 @@
                 "symfony/config": "^5.4",
                 "symfony/console": "^5.4",
                 "symfony/dependency-injection": "^5.4",
-                "symfony/event-dispatcher": "^5.4",
-                "symfony/runtime": "^5.4",
-                "symfony/yaml": "^5.4"
+                "symfony/event-dispatcher": "^5.4"
             },
             "bin": [
                 "bin/guides"
@@ -1228,7 +1226,7 @@
             "type": "project",
             "autoload": {
                 "psr-4": {
-                    "phpDocumentor\\Guides\\Console\\": "src/"
+                    "phpDocumentor\\Guides\\Cli\\": "src/"
                 }
             },
             "license": [
@@ -1310,6 +1308,40 @@
                 "MIT"
             ],
             "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-symfony",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-symfony",
+                "reference": "875568ac4f842fbee7ad852d2c0b9be23d1685f7"
+            },
+            "require": {
+                "phpdocumentor/guides": "dev-main@dev",
+                "phpdocumentor/guides-restructured-text": "dev-main@dev",
+                "symfony/config": "^5.4",
+                "symfony/dependency-injection": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jaapio",
+                    "email": "jaap@phpdoc.org"
+                }
+            ],
+            "description": "Integration package for symfony applications to use guides",
             "transport-options": {
                 "relative": true
             }
@@ -2878,86 +2910,6 @@
             "time": "2023-02-21T19:46:44+00:00"
         },
         {
-            "name": "symfony/runtime",
-            "version": "v5.4.22",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/runtime.git",
-                "reference": "4a78e519d40a3845437e29dc514959631badfed4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/runtime/zipball/4a78e519d40a3845437e29dc514959631badfed4",
-                "reference": "4a78e519d40a3845437e29dc514959631badfed4",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0|^2.0",
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.15"
-            },
-            "conflict": {
-                "symfony/dotenv": "<5.1"
-            },
-            "require-dev": {
-                "composer/composer": "^1.0.2|^2.0",
-                "symfony/console": "^4.4.30|^5.3.7|^6.0",
-                "symfony/dotenv": "^5.1|^6.0",
-                "symfony/http-foundation": "^4.4.30|^5.3.7|^6.0",
-                "symfony/http-kernel": "^4.4.30|^5.3.7|^6.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Symfony\\Component\\Runtime\\Internal\\ComposerPlugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Runtime\\": "",
-                    "Symfony\\Runtime\\Symfony\\Component\\": "Internal/"
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Enables decoupling PHP applications from global state",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "runtime"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/runtime/tree/v5.4.22"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-03-14T15:48:23+00:00"
-        },
-        {
             "name": "symfony/string",
             "version": "v5.4.21",
             "source": {
@@ -3042,81 +2994,6 @@
                 }
             ],
             "time": "2023-02-22T08:00:55+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v5.4.21",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "3713e20d93e46e681e51605d213027e48dab3469"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/3713e20d93e46e681e51605d213027e48dab3469",
-                "reference": "3713e20d93e46e681e51605d213027e48dab3469",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "symfony/console": "<5.3"
-            },
-            "require-dev": {
-                "symfony/console": "^5.3|^6.0"
-            },
-            "suggest": {
-                "symfony/console": "For validating YAML files using the lint command"
-            },
-            "bin": [
-                "Resources/bin/yaml-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Loads and dumps YAML files",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.21"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-02-21T19:46:44+00:00"
         },
         {
             "name": "twig/twig",
@@ -6782,8 +6659,9 @@
     "stability-flags": {
         "phpdocumentor/guides": 20,
         "phpdocumentor/guides-restructured-text": 20,
-        "phpdocumentor/guides-console": 20,
-        "phpdocumentor/guides-graphs": 20
+        "phpdocumentor/guides-graphs": 20,
+        "phpdocumentor/guides-cli": 20,
+        "phpdocumentor/guides-symfony": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

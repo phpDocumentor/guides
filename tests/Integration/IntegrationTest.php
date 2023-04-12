@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Integration;
 
 use phpDocumentor\Guides\ApplicationTestCase;
-use phpDocumentor\Guides\Console\Command\Run;
+use phpDocumentor\Guides\Cli\Command\Run;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;

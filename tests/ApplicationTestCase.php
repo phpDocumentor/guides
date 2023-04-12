@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\Console\Application;
-use phpDocumentor\Guides\Console\DependencyInjection\Compiler\NodeRendererPass;
+use phpDocumentor\Guides\Cli\Application;
+use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

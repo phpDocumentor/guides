@@ -7,7 +7,7 @@ use League\Tactician\Handler\CommandHandlerMiddleware;
 use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\Handler\MethodNameInflector\HandleInflector;
 use League\Tactician\Plugins\LockingMiddleware;
-use phpDocumentor\Guides\Console\DependencyInjection\CommandLocator;
+use phpDocumentor\Guides\DependencyInjection\CommandLocator;
 use phpDocumentor\Guides\FileCollector;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\CompileDocumentsHandler;

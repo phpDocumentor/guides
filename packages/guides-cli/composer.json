@@ -1,11 +1,11 @@
 {
-    "name": "phpdocumentor/guides-console",
+    "name": "phpdocumentor/guides-cli",
     "description": "Small console application allowing you to run phpDocumentor guides as a stand alone application",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "phpDocumentor\\Guides\\Console\\": "src/"
+            "phpDocumentor\\Guides\\Cli\\": "src/"
         }
     },
     "authors": [
@@ -19,8 +19,9 @@
         "symfony/dependency-injection": "^5.4",
         "symfony/config": "^5.4",
         "phpdocumentor/guides": "dev-main@dev",
-        "monolog/monolog": "^2.9",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
+        "phpdocumentor/guides-symfony": "dev-main@dev",
+        "monolog/monolog": "^2.9",
         "symfony/event-dispatcher": "^5.4"
     },
     "bin": [

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Console;
+namespace phpDocumentor\Guides\Cli;
 
-use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
-use phpDocumentor\Guides\Console\DependencyInjection\GuidesExtension;
-use phpDocumentor\Guides\Console\DependencyInjection\ReStructuredTextExtension;
+use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
+use phpDocumentor\Guides\DependencyInjection\GuidesExtension;
+use phpDocumentor\Guides\DependencyInjection\ReStructuredTextExtension;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Extension\Extension;
