@@ -19,6 +19,11 @@
       "name": "guides-graphs",
       "directory": "packages/guides-graphs",
       "target": "git@github.com:phpDocumentor/guides-graphs.git"
+    },
+    {
+      "name": "guides-console",
+      "directory": "packages/console",
+      "target": "git@github.com:phpDocumentor/guides-console.git"
     }
   ]
 }
