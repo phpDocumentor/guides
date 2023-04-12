@@ -21,9 +21,14 @@
       "target": "git@github.com:phpDocumentor/guides-graphs.git"
     },
     {
-      "name": "guides-console",
-      "directory": "packages/console",
-      "target": "git@github.com:phpDocumentor/guides-console.git"
+      "name": "guides-cli",
+      "directory": "packages/guides-cli",
+      "target": "git@github.com:phpDocumentor/guides-cli.git"
+    },
+    {
+      "name": "guides-symfony",
+      "directory": "packages/guides-symfony",
+      "target": "git@github.com:phpDocumentor/guides-symfony.git"
     }
   ]
 }
