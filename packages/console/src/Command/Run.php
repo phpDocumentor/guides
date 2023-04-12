@@ -12,6 +12,7 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -68,7 +69,7 @@ final class Run extends Command
         $this->metas->reset();
         $inputDir = $this->getAbsolutePath((string) ($input->getArgument('input') ?? ''));
         if (!is_dir($inputDir)) {
-            throw new \RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
+            throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
         }
 

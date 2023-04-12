@@ -9,7 +9,7 @@
         },
         "allow-plugins": {
             "phpstan/extension-installer": true,
-            "symfony/runtime": true
+            "symfony/runtime": false
         }
     },
     "autoload-dev": {

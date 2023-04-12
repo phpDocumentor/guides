@@ -16,10 +16,8 @@
     ],
     "require": {
         "symfony/console": "^5.4",
-        "symfony/runtime": "^5.4",
         "symfony/dependency-injection": "^5.4",
         "symfony/config": "^5.4",
-        "symfony/yaml": "^5.4",
         "phpdocumentor/guides": "dev-main@dev",
         "monolog/monolog": "^2.9",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
@@ -27,10 +25,5 @@
     },
     "bin": [
         "bin/guides"
-    ],
-    "config": {
-        "allow-plugins": {
-            "symfony/runtime": true
-        }
-    }
+    ]
 }
