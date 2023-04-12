@@ -68,7 +68,7 @@ final class Run extends Command
         $this->metas->reset();
         $inputDir = $this->getAbsolutePath((string) ($input->getArgument('input') ?? ''));
         if (!is_dir($inputDir)) {
-            throw new \RuntimeException(sprintf('Input directory "%s" was not found! '."\n".
+            throw new \RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
         }
 

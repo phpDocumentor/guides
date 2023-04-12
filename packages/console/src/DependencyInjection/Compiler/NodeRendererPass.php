@@ -53,7 +53,10 @@ final class NodeRendererPass implements CompilerPassInterface
     {
         foreach ($container->findTaggedServiceIds('phpdoc.guides.noderendererfactoryaware') as $id => $tags) {
             $definition = $container->getDefinition($id);
-            $definition->addMethodCall('setNodeRendererFactory', [new Reference(NodeRendererFactory::class)]);
+            $definition->addMethodCall(
+                'setNodeRendererFactory',
+                [new Reference(NodeRendererFactory::class)]
+            );
             $definition->clearTag('phpdoc.guides.noderendererfactoryaware');
         }
 

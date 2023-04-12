@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Console;
 
 use phpDocumentor\Guides\Console\DependencyInjection\ApplicationExtension;
 use phpDocumentor\Guides\Console\DependencyInjection\GuidesExtension;
+use phpDocumentor\Guides\Console\DependencyInjection\ReStructuredTextExtension;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -29,6 +30,7 @@ final class Application extends BaseApplication
     {
         return [
             new GuidesExtension(),
+            new ReStructuredTextExtension(),
             new ApplicationExtension(),
         ];
     }

@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function dirname;
 
-class GuidesExtension extends Extension
+class ReStructuredTextExtension extends Extension
 {
     /** @param string[] $configs */
     public function load(array $configs, ContainerBuilder $container): void
@@ -21,6 +21,6 @@ class GuidesExtension extends Extension
             new FileLocator(dirname(__DIR__, 2) . '/resources/config')
         );
 
-        $loader->load('guides.php');
+        $loader->load('guides-restructured-text.php');
     }
 }
