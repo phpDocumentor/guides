@@ -43,8 +43,6 @@ use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\Test\TestLogger;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 final class QuickStart
 {
@@ -70,7 +68,16 @@ final class QuickStart
         $renderer = new DelegatingNodeRenderer();
         $renderer->setNodeRendererFactory(new LazyNodeRendererFactory($nodeFactoryCallback));
 
-        $twigBuilder = new EnvironmentBuilder();
+        $twigBuilder = new EnvironmentBuilder(
+            [
+                new AssetsExtension(
+                    $logger,
+                    $renderer,
+                    new UrlGenerator()
+                ),
+            ]
+        );
+
         $templateRenderer = new TwigTemplateRenderer(
             $twigBuilder
         );
@@ -98,24 +105,6 @@ final class QuickStart
                 $node
             );
         }
-
-        $twigBuilder->setEnvironmentFactory(static function () use ($logger, $renderer): Environment {
-            $twig = new Environment(
-                new FilesystemLoader(
-                    [
-                        __DIR__ . '/../../resources/template/html/guides',
-                    ]
-                )
-            );
-            $twig->addExtension(new AssetsExtension(
-                $logger,
-                /** @var NodeRenderer<Node> $renderer */
-                $renderer,
-                new UrlGenerator(),
-            ));
-
-            return $twig;
-        });
 
         return $renderer;
     }

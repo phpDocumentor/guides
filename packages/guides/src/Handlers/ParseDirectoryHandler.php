@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Tactician\CommandBus;
 use phpDocumentor\Guides\FileCollector;
+use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
 use function sprintf;
@@ -18,11 +19,13 @@ final class ParseDirectoryHandler
     private CommandBus $commandBus;
     /** @var string[]  */
     private array $indexFileNames = ['index', 'Index'];
+    private Metas $metas;
 
-    public function __construct(FileCollector $scanner, CommandBus $commandBus)
+    public function __construct(FileCollector $scanner, CommandBus $commandBus, Metas $metas)
     {
         $this->fileCollector = $scanner;
         $this->commandBus = $commandBus;
+        $this->metas = $metas;
     }
 
     /** @return DocumentNode[] */
@@ -38,7 +41,7 @@ final class ParseDirectoryHandler
             $extension
         );
 
-        $files = $this->fileCollector->collect($origin, $currentDirectory, $extension);
+        $files = $this->fileCollector->collect($origin, $currentDirectory, $extension, $this->metas);
         $documents = [];
         foreach ($files as $file) {
             $documents[] = $this->commandBus->handle(

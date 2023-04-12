@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -43,13 +43,13 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     private ReferenceResolver $referenceResolver;
 
     private LoggerInterface $logger;
-    protected UrlGenerator $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
         TemplateRenderer $renderer,
         ReferenceResolver $referenceResolver,
         LoggerInterface $logger,
-        UrlGenerator $urlGenerator
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->renderer = $renderer;
         $this->referenceResolver = $referenceResolver;

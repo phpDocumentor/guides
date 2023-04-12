@@ -18,7 +18,7 @@ use LogicException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Twig\Extension\AbstractExtension;
@@ -34,13 +34,13 @@ final class AssetsExtension extends AbstractExtension
     private LoggerInterface $logger;
     /** @var NodeRenderer<Node> */
     private NodeRenderer $nodeRenderer;
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /** @param NodeRenderer<Node> $nodeRenderer */
     public function __construct(
         LoggerInterface $logger,
         NodeRenderer $nodeRenderer,
-        UrlGenerator $urlGenerator
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->logger = $logger;
         $this->nodeRenderer = $nodeRenderer;

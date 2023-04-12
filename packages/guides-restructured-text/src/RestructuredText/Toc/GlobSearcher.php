@@ -6,15 +6,15 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 
 use Flyfinder\Specification\Glob;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\UrlGenerator;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function rtrim;
 
 class GlobSearcher
 {
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGenerator $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }

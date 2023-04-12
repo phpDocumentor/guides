@@ -17,10 +17,6 @@ jobs:
     name: "Coding Standards"
     uses: "phpDocumentor/.github/.github/workflows/coding-standards.yml@v0.3.0"
 
-  dependency-analysis:
-    name: "Dependency analysis"
-    uses: "phpDocumentor/.github/.github/workflows/dependency-analysis.yml@v0.3.0"
-
   lint-root:
     name: "Lint root"
     uses: "phpDocumentor/.github/.github/workflows/lint.yml@main"

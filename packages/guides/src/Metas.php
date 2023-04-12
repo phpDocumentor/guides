@@ -67,4 +67,10 @@ final class Metas
     {
         return $this->internalLinkTargets[$anchorName] ?? null;
     }
+
+    public function reset(): void
+    {
+        $this->internalLinkTargets = [];
+        $this->entries = [];
+    }
 }

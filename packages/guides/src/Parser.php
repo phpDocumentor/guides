@@ -30,7 +30,7 @@ final class Parser
 {
     private ?ParserContext $parserContext = null;
 
-    private UrlGenerator $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /** @var MarkupLanguageParser[] */
     private array $parserStrategies = [];
@@ -39,7 +39,7 @@ final class Parser
      * @param iterable<MarkupLanguageParser> $parserStrategies
      */
     public function __construct(
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         iterable $parserStrategies
     ) {
         $this->urlGenerator = $urlGenerator;
