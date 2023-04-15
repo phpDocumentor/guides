@@ -9,7 +9,24 @@ use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-require_once dirname(__DIR__) . '/../../vendor/autoload.php';
+$autoloadDirectory = dirname(__DIR__) . '/../../vendor/autoload.php';
+if (file_exists($autoloadDirectory)){
+    require_once dirname(__DIR__) . '/../../vendor/autoload.php';
+} else {
+    // Search for autoload.php
+    if (($rootPath = getcwd()) === false) {
+        throw new \RuntimeException("Error while determining the current directory.", 1636451407);
+    }
+
+    $dir = __DIR__ . '/vendor';
+    while (!file_exists($dir . '/autoload.php')) {
+        if ($dir === $rootPath) {
+            throw new \RuntimeException("Could not find autoload.php", 1636451408);
+        }
+        $dir = \dirname($dir);
+    }
+    require $dir . '/autoload.php';
+}
 
 $container = new ContainerBuilder();
 
@@ -29,4 +46,3 @@ $container->addCompilerPass(new NodeRendererPass());
 $container->compile(true);
 
 exit($container->get(Application::class)->run());
-
