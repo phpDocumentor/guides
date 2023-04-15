@@ -130,6 +130,7 @@ EXPECTED,
     {
         return [
             ['.. name::'],
+            ['..  name::'],
             ['.. name:: data'],
             ['.. multi:part:name:: data'],
             ['.. abc123-b_c+d:e.f:: data'],
@@ -142,6 +143,7 @@ EXPECTED,
     {
         return [
             [''],
+            ['..name::'],
             [':field-option:'],
             ['... name:: data'],
             ['.. name: data'],
