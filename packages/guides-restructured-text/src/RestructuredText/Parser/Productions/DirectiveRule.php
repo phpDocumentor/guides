@@ -69,7 +69,7 @@ final class DirectiveRule implements Rule
 
     private function isDirective(string $line): bool
     {
-        return preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
+        return preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
     }
 
     public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
@@ -129,7 +129,7 @@ final class DirectiveRule implements Rule
 
     private function parseDirective(string $line): ?Directive
     {
-        if (preg_match('/^\.\. (\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line, $match) > 0) {
+        if (preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line, $match) > 0) {
             return new Directive(
                 $match[2],
                 $match[3],
