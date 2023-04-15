@@ -154,6 +154,11 @@ final class DefinitionListRule implements Rule
             return false;
         }
 
+        // This a field list
+        if (str_starts_with(trim($currentLine), ':')) {
+            return false;
+        }
+
         if (LinesIterator::isNullOrEmptyLine($nextLine)) {
             return false;
         }

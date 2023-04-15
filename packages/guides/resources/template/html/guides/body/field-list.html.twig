@@ -1,0 +1,17 @@
+<table{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
+    {% for definitionListTerm in node.children %}
+        <tr>
+            <th>{{ definitionListTerm.term }}</th>
+
+            <td>
+                {% if definitionListTerm.children %}
+                    {%- for definition in definitionListTerm.children -%}
+                        <p>{{ renderNode(definition) }}</p>
+                    {%- endfor -%}
+                {% else %}
+                    &nbsp;
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
