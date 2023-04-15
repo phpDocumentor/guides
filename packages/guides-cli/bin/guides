@@ -9,29 +9,30 @@ use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-$autoloadDirectory = dirname(__DIR__) . '/../../vendor/autoload.php';
+$vendorDir = dirname(__DIR__) . '/../../vendor';
+$autoloadDirectory = $vendorDir . '/autoload.php';
 if (file_exists($autoloadDirectory)){
-    require_once dirname(__DIR__) . '/../../vendor/autoload.php';
+    require_once $autoloadDirectory;
 } else {
     // Search for autoload.php
     if (($rootPath = getcwd()) === false) {
         throw new \RuntimeException("Error while determining the current directory.", 1636451407);
     }
 
-    $dir = __DIR__ . '/vendor';
-    while (!file_exists($dir . '/autoload.php')) {
-        if ($dir === $rootPath) {
+    $vendorDir = __DIR__ . '/vendor';
+    while (!file_exists($vendorDir . '/autoload.php')) {
+        if ($vendorDir === $rootPath) {
             throw new \RuntimeException("Could not find autoload.php", 1636451408);
         }
-        $dir = \dirname($dir);
+        $vendorDir = \dirname($vendorDir);
     }
-    require $dir . '/autoload.php';
+    require $vendorDir . '/autoload.php';
 }
 
 $container = new ContainerBuilder();
 
 // Load manual parameters
-$container->setParameter('vendor_dir', dirname(__DIR__, 3) . '/vendor');
+$container->setParameter('vendor_dir', $vendorDir);
 $container->setParameter('working_directory', rtrim(getcwd(), '/'));
 
 // Load container configuration
