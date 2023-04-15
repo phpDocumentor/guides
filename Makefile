@@ -24,7 +24,7 @@ psalm:
 	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
-test: test-unit test-functional test-integration cleanup-tests## Runs all test suites with phpunit/phpunit
+test: test-unit test-functional test-integration## Runs all test suites with phpunit/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
