@@ -16,13 +16,14 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-use phpDocumentor\Guides\Nodes\FieldLists\FieldNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\RawNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use RuntimeException;
 
+use function mb_strlen;
+use function mb_substr;
 use function preg_match;
 use function trim;
 
@@ -33,6 +34,13 @@ use function trim;
  */
 final class FieldListRule implements Rule
 {
+    private RuleContainer $productions;
+
+    public function __construct(RuleContainer $productions)
+    {
+        $this->productions = $productions;
+    }
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         return $this->isFieldLine($documentParser->getDocumentIterator()->current());
@@ -73,11 +81,54 @@ final class FieldListRule implements Rule
             $term
         );
 
-        if ($content !== '') {
-            $fieldListItemNode->addChildNode(new FieldNode([new RawNode(trim($content))]));
-        }
+        $this->createDefinition($documentParserContext, $content, $fieldListItemNode);
 
         return $fieldListItemNode;
+    }
+
+    private function createDefinition(
+        DocumentParserContext $documentParserContext,
+        string $firstLine,
+        FieldListItemNode $fieldListItemNode
+    ): void {
+        $buffer = new Buffer();
+        $documentIterator = $documentParserContext->getDocumentIterator();
+        $nextLine = $documentIterator->getNextLine();
+        if ($nextLine !== null && !$this->isFieldLine($nextLine)) {
+            $indenting = mb_strlen($nextLine) - mb_strlen(trim($nextLine));
+            if ($indenting > 0) {
+                while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
+                    $documentIterator->next();
+                    $emptyLinesBelongToDefinition = false;
+                    if (LinesIterator::isEmptyLine($documentIterator->current())) {
+                        $peek = $documentIterator->peek();
+                        while (LinesIterator::isEmptyLine($peek)) {
+                            $peek = $documentIterator->peek();
+                        }
+
+                        $emptyLinesBelongToDefinition = LinesIterator::isBlockLine($peek, $indenting);
+                    }
+
+                    if (
+                        $emptyLinesBelongToDefinition === false
+                        && LinesIterator::isEmptyLine($documentIterator->current())
+                    ) {
+                        break;
+                    }
+
+                    $buffer->push(mb_substr($documentIterator->current(), $indenting));
+                }
+            }
+        }
+
+        if ($firstLine === '' && $buffer->count() === 0) {
+            return;
+        }
+
+        $nodeContext = $documentParserContext->withContents($firstLine . "\n" . $buffer->getLinesString());
+        while ($nodeContext->getDocumentIterator()->valid()) {
+            $this->productions->apply($nodeContext, $fieldListItemNode);
+        }
     }
 
     private function isFieldLine(string $currentLine): bool

@@ -6,7 +6,7 @@
             <td>
                 {% if definitionListTerm.children %}
                     {%- for definition in definitionListTerm.children -%}
-                        <p>{{ renderNode(definition) }}</p>
+                        {{ renderNode(definition) }}
                     {%- endfor -%}
                 {% else %}
                     &nbsp;

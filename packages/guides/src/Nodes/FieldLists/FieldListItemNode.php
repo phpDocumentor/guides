@@ -14,21 +14,22 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\FieldLists;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
 
 /**
- * @extends CompoundNode<FieldNode>
+ * @extends CompoundNode<Node>
  */
 final class FieldListItemNode extends CompoundNode
 {
     private string $term;
 
     /**
-     * @param FieldNode[] $definitions
+     * @param Node[] $children
      */
-    public function __construct(string $term, array $definitions = [])
+    public function __construct(string $term, array $children = [])
     {
         $this->term = $term;
-        parent::__construct($definitions);
+        parent::__construct($children);
     }
 
     public function getTerm(): string

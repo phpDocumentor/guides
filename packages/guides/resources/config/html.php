@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
-use phpDocumentor\Guides\Nodes\FieldLists\FieldNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
@@ -36,7 +35,6 @@ return [
     DefinitionListNode::class => 'body/definition-list.html.twig',
     DefinitionNode::class => 'body/definition.html.twig',
     FieldListNode::class => 'body/field-list.html.twig',
-    FieldNode::class => 'body/field.html.twig',
     ListNode::class => 'body/list/list.html.twig',
     ListItemNode::class => 'body/list/list-item.html.twig',
     LiteralBlockNode::class => 'body/literal-block.html.twig',

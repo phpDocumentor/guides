@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-use phpDocumentor\Guides\Nodes\FieldLists\FieldNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 
 final class FieldListRuleTest extends AbstractRuleTest
@@ -15,7 +14,7 @@ final class FieldListRuleTest extends AbstractRuleTest
 
     protected function setUp(): void
     {
-        $this->rule = new FieldListRule();
+        $this->rule = new FieldListRule($this->givenCollectAllRuleContainer());
     }
 
     /** @dataProvider definitionListProvider */
@@ -99,11 +98,7 @@ RST,
                     new FieldListItemNode(
                         'term 1',
                         [
-                            new FieldNode(
-                                [
-                                    new RawNode('content 1'),
-                                ]
-                            ),
+                            new RawNode('content 1'),
                         ]
                     ),
                 ),
