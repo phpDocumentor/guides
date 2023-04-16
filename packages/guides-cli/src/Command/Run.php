@@ -25,6 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_pop;
 use function count;
+use function dirname;
 use function getcwd;
 use function implode;
 use function is_countable;
@@ -116,11 +117,11 @@ final class Run extends Command
         );
         $this->themeManager->registerTheme(
             'bootstrap',
-            [$this->getAbsolutePath('vendor/phpdocumentor/guides-theme-bootstrap/resources/template/')],
+            [dirname(__FILE__) . '/../../../guides-theme-bootstrap/resources/template/'],
         );
         $this->themeManager->registerTheme(
             'phpdocumentor',
-            [$this->getAbsolutePath('vendor/phpdocumentor/guides-theme-phpdocumentor/resources/template/')],
+            [dirname(__FILE__) . '/../../../guides-theme-phpdocumentor/resources/template/'],
         );
 
         if ($input->hasOption('theme')) {
