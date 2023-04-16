@@ -1,0 +1,3 @@
+.. admonition:: Screencast
+
+    Enjoy a screencast better? Watch this video: ...

@@ -1,6 +1,3 @@
-.. admonition:: Custom title
-    Lorem Ipsum Dolor
-
 .. attention::
     Lorem Ipsum Dolor
 
