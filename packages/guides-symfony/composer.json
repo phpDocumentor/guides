@@ -15,6 +15,7 @@
         }
     ],
     "require": {
+        "php": "^7.4||^8.0",
         "symfony/dependency-injection": "^5.4",
         "symfony/config": "^5.4",
         "phpdocumentor/guides": "dev-main@dev",

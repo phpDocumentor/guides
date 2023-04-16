@@ -1,5 +1,6 @@
 {
     "name": "phpdocumentor/guides-graphs",
+    "description": "Provides Plantuml support for restructured text rendered by the phpDocumentor's Guides library.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
@@ -19,6 +20,7 @@
     "require": {
         "php": "^7.4.0||^8.0",
         "symfony/process": "^5.4",
-        "twig/twig": "~2.0"
+        "twig/twig": "~2.0",
+        "phpdocumentor/guides": "dev-main@dev"
     }
 }

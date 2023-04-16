@@ -1,5 +1,6 @@
 {
     "name": "phpdocumentor/guides",
+    "description": "Contains the core functionality from the phpDocumentor Guides.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",

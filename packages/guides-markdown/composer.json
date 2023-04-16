@@ -1,5 +1,6 @@
 {
     "name": "phpdocumentor/guides-markdown",
+    "description": "Adds Markdown support to the phpDocumentor's Guides library.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
@@ -17,7 +18,8 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.4.0||^8.0",
-        "league/commonmark": "^2.4"
+        "php": "^7.4||^8.0",
+        "league/commonmark": "^2.4",
+        "phpdocumentor/guides": "dev-main@dev"
     }
 }
