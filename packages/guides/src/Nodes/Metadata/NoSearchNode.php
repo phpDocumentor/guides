@@ -11,11 +11,13 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Metadata;
 
-use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-
-/** @extends CompoundNode<FieldListItemNode> */
-class FieldListNode extends CompoundNode
+/**
+ * If set, full text search for this file is disabled.
+ *
+ * If the file is rendered to HTML the meta tag "noindex" will also be set.
+ */
+class NoSearchNode extends MetadataNode
 {
 }

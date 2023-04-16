@@ -4,35 +4,71 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
+use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\Nodes\Metadata\OrganizationNode;
+use phpDocumentor\Guides\Nodes\Metadata\TopicNode;
 use phpDocumentor\Guides\Nodes\RawNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ContactFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\CopyrightFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-final class FieldListRuleTest extends AbstractRuleTest
+final class FieldListRuleTest extends RuleTestCase
 {
     private FieldListRule $rule;
 
     protected function setUp(): void
     {
-        $this->rule = new FieldListRule($this->givenCollectAllRuleContainer());
+        $fieldListItemRules = [];
+        $fieldListItemRules[] = new AbstractFieldListItemRule();
+        $fieldListItemRules[] = new AddressFieldListItemRule();
+        $fieldListItemRules[] = new AuthorFieldListItemRule();
+        $fieldListItemRules[] = new AuthorsFieldListItemRule();
+        $fieldListItemRules[] = new ContactFieldListItemRule();
+        $fieldListItemRules[] = new CopyrightFieldListItemRule();
+        $fieldListItemRules[] = new DateFieldListItemRule();
+        $fieldListItemRules[] = new DedicationFieldListItemRule();
+        $fieldListItemRules[] = new NocommentsFieldListItemRule();
+        $fieldListItemRules[] = new NosearchFieldListItemRule();
+        $fieldListItemRules[] = new OrganizationFieldListItemRule();
+        $fieldListItemRules[] = new OrphanFieldListItemRule();
+        $fieldListItemRules[] = new RevisionFieldListItemRule();
+        $fieldListItemRules[] = new TocDepthFieldListItemRule();
+        $fieldListItemRules[] = new VersionFieldListItemRule();
+        $this->rule = new FieldListRule($this->givenCollectAllRuleContainer(), $fieldListItemRules);
     }
 
-    /** @dataProvider definitionListProvider */
+    #[DataProvider('definitionListProvider')]
     public function testAppliesReturnsTrueOnValidInput(string $input): void
     {
         $context = $this->createContext($input);
         self::assertTrue($this->rule->applies($context));
     }
 
-    /** @dataProvider isDefinitionListFalseProvider */
+    #[DataProvider('isDefinitionListFalseProvider')]
     public function testAppliesReturnsFalseOnInvalidInput(string $input): void
     {
         $context = $this->createContext($input);
         self::assertFalse($this->rule->applies($context));
     }
 
-    /** @dataProvider fieldListApplicationProvider */
-    public function testApply(string $input, ?FieldListNode $expected, ?string $nextLine): void
+    #[DataProvider('fieldListApplicationProvider')]
+    public function testApply(string $input, FieldListNode|null $expected, string|null $nextLine): void
     {
         $context = $this->createContext($input);
 
@@ -43,27 +79,80 @@ final class FieldListRuleTest extends AbstractRuleTest
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
 
+    /** @param MetadataNode[] $expectedArray */
+    #[DataProvider('metadataProvider')]
+    public function testApplyAsMetadata(string $input, array $expectedArray, string|null $nextLine): void
+    {
+        $context = $this->createContext($input);
+
+        $documentNode = new DocumentNode('', '');
+        $documentNode->setTitleFound(false);
+
+        $result = $this->rule->apply($context, $documentNode);
+
+        self::assertNull($result);
+        self::assertEquals($expectedArray, $documentNode->getHeaderNodes());
+        self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
+    }
+
     /** @return array<string, mixed[]> */
-    public function fieldListApplicationProvider(): array
+    public static function metadataProvider(): array
+    {
+        return [
+            'testAbstract' => [
+
+                <<<'RST'
+:abstract: This is the Abstract!
+
+This is normal text again.
+
+RST,
+                [new TopicNode('Abstract', 'This is the Abstract!')],
+                'This is normal text again.' . "\n",
+            ],
+            'testOrganization' => [
+
+                <<<'RST'
+:organization: phpDocumentor
+
+This is normal text again.
+
+RST,
+                [
+                    new OrganizationNode(
+                        'phpDocumentor',
+                        [new RawNode('phpDocumentor')],
+                    ),
+                ],
+                'This is normal text again.' . "\n",
+            ],
+        ];
+    }
+
+    /** @return array<string, mixed[]> */
+    public static function fieldListApplicationProvider(): array
     {
         return [
             'testEmptyFieldList' => [
-                <<<RST
+                <<<'RST'
 :term 1:
 
 This is normal text again.
 
 RST,
                 new FieldListNode(
-                    new FieldListItemNode(
-                        'term 1',
-                        []
-                    ),
+                    [
+                        new FieldListItemNode(
+                            'term 1',
+                            '',
+                            [],
+                        ),
+                    ],
                 ),
                 'This is normal text again.' . "\n",
             ],
             'test3EmptyFieldList' => [
-                <<<RST
+                <<<'RST'
 :term 1:
 :term 2:
 :term 3:
@@ -72,35 +161,43 @@ This is normal text again.
 
 RST,
                 new FieldListNode(
-                    new FieldListItemNode(
-                        'term 1',
-                        []
-                    ),
-                    new FieldListItemNode(
-                        'term 2',
-                        []
-                    ),
-                    new FieldListItemNode(
-                        'term 3',
-                        []
-                    ),
+                    [
+                        new FieldListItemNode(
+                            'term 1',
+                            '',
+                            [],
+                        ),
+                        new FieldListItemNode(
+                            'term 2',
+                            '',
+                            [],
+                        ),
+                        new FieldListItemNode(
+                            'term 3',
+                            '',
+                            [],
+                        ),
+                    ],
                 ),
                 'This is normal text again.' . "\n",
             ],
             'testFieldWithDirectContent' => [
-                <<<RST
+                <<<'RST'
 :term 1: content 1
 
 This is normal text again.
 
 RST,
                 new FieldListNode(
-                    new FieldListItemNode(
-                        'term 1',
-                        [
-                            new RawNode('content 1'),
-                        ]
-                    ),
+                    [
+                        new FieldListItemNode(
+                            'term 1',
+                            'content 1',
+                            [
+                                new RawNode('content 1'),
+                            ],
+                        ),
+                    ],
                 ),
                 'This is normal text again.' . "\n",
             ],
@@ -108,7 +205,7 @@ RST,
     }
 
     /** @return array<string, string[]> */
-    public function definitionListProvider(): array
+    public static function definitionListProvider(): array
     {
         return [
             'Empty field' => [':empty:'],
@@ -118,7 +215,7 @@ RST,
     }
 
     /** @return array<string, string[]> */
-    public function isDefinitionListFalseProvider(): array
+    public static function isDefinitionListFalseProvider(): array
     {
         return [
             'empty lines' => [''],

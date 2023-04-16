@@ -11,11 +11,12 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Metadata;
 
-use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-
-/** @extends CompoundNode<FieldListItemNode> */
-class FieldListNode extends CompoundNode
+/**
+ * The revision element contains the revision number of the document. It can be
+ * used alone or in conjunction with version.
+ */
+class RevisionNode extends MetadataNode
 {
 }

@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
 use RuntimeException;
 
 use function mb_strlen;
@@ -34,11 +36,9 @@ use function trim;
  */
 final class FieldListRule implements Rule
 {
-    private RuleContainer $productions;
-
-    public function __construct(RuleContainer $productions)
+    /** @param FieldListItemRule[] $fieldListItemRules */
+    public function __construct(private RuleContainer $productions, private array $fieldListItemRules)
     {
-        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -46,21 +46,44 @@ final class FieldListRule implements Rule
         return $this->isFieldLine($documentParser->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $iterator = $documentParserContext->getDocumentIterator();
-        $definitionListItems = [];
+        $fieldListItemNodes = [];
         while ($iterator->valid() && $this->isFieldLine($iterator->current())) {
-            $definitionListItems[] = $this->createListItem($documentParserContext);
+            $fieldListItemNodes[] = $this->createListItem($documentParserContext);
             $iterator->next();
         }
 
-        return new FieldListNode(...$definitionListItems);
+        if ($on instanceof DocumentNode && !$on->isTitleFound()) {
+            // A field list found before the first title node is considered file wide meta data:
+            // https://www.sphinx-doc.org/en/master/usage/restructuredtext/field-lists.html#file-wide-metadata
+            // It is not output
+            $this->addMetadata($on, $fieldListItemNodes);
+
+            return null;
+        }
+
+        return new FieldListNode($fieldListItemNodes);
     }
 
-    /**
-     * @return string[]
-     */
+    /** @param FieldListItemNode[] $fieldListItemNodes */
+    private function addMetadata(DocumentNode $documentNode, array $fieldListItemNodes): void
+    {
+        foreach ($fieldListItemNodes as $fieldListItemNode) {
+            foreach ($this->fieldListItemRules as $fieldListItemRule) {
+                if (!$fieldListItemRule->applies($fieldListItemNode)) {
+                    continue;
+                }
+
+                $documentNode->addHeaderNode(
+                    $fieldListItemRule->apply($fieldListItemNode),
+                );
+            }
+        }
+    }
+
+    /** @return string[] */
     private function parseField(string $line): array
     {
         if (preg_match('/^:([^:]+):( (.*)|)$/mUsi', $line, $match) > 0) {
@@ -78,7 +101,8 @@ final class FieldListRule implements Rule
         $documentIterator = $documentParserContext->getDocumentIterator();
         [$term, $content] = $this->parseField($documentIterator->current());
         $fieldListItemNode = new FieldListItemNode(
-            $term
+            $term,
+            trim($content),
         );
 
         $this->createDefinition($documentParserContext, $content, $fieldListItemNode);
@@ -89,7 +113,7 @@ final class FieldListRule implements Rule
     private function createDefinition(
         DocumentParserContext $documentParserContext,
         string $firstLine,
-        FieldListItemNode $fieldListItemNode
+        FieldListItemNode $fieldListItemNode,
     ): void {
         $buffer = new Buffer();
         $documentIterator = $documentParserContext->getDocumentIterator();

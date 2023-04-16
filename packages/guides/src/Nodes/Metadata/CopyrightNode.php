@@ -11,11 +11,11 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Metadata;
 
-use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-
-/** @extends CompoundNode<FieldListItemNode> */
-class FieldListNode extends CompoundNode
+/**
+ * The copyright element contains the document's copyright statement.
+ */
+class CopyrightNode extends MetadataNode
 {
 }

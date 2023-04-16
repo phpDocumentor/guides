@@ -11,11 +11,11 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Metadata;
 
-use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
-
-/** @extends CompoundNode<FieldListItemNode> */
-class FieldListNode extends CompoundNode
+/**
+ * If set, the web application won’t display a comment form for a page generated from this source file
+ */
+class NoCommentsNode extends MetadataNode
 {
 }

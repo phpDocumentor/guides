@@ -16,24 +16,27 @@ namespace phpDocumentor\Guides\Nodes\FieldLists;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 final class FieldListItemNode extends CompoundNode
 {
-    private string $term;
-
-    /**
-     * @param Node[] $children
-     */
-    public function __construct(string $term, array $children = [])
+    /** @param Node[] $children */
+    public function __construct(private string $term, private string $plaintextContent = '', array $children = [])
     {
-        $this->term = $term;
         parent::__construct($children);
     }
 
     public function getTerm(): string
     {
         return $this->term;
+    }
+
+    public function getPlaintextContent(): string
+    {
+        return $this->plaintextContent;
+    }
+
+    public function setPlaintextContent(string $plaintextContent): void
+    {
+        $this->plaintextContent = $plaintextContent;
     }
 }
