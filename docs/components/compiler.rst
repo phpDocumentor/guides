@@ -1,3 +1,7 @@
+========
+Compiler
+========
+
 This library uses a simplified compiler design. This basically means that our pipeline contains less steps
 than a regular compiler. But its following the same semantics.
 

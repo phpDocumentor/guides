@@ -1,5 +1,6 @@
 {
     "name": "phpdocumentor/guides-restructured-text",
+    "description": "Adds reStructuredText Markup support to the phpDocumentor's Guides library.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
@@ -20,6 +21,7 @@
         "php": "^7.4||^8.0",
         "doctrine/event-manager": "^1.2",
         "doctrine/lexer": "^2.1",
+        "phpdocumentor/guides": "dev-main@dev",
         "webmozart/assert": "^1.11"
     }
 }

@@ -2,3 +2,4 @@
 /.build
 .phpunit.result.cache
 /**/temp
+/output/
