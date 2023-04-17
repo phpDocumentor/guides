@@ -13,7 +13,7 @@ fix-code-style:
 	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest phpcbf
 
 .PHONY: static-code-analysis
-static-code-analysis: vendor phpstan psalm ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
+static-code-analysis: vendor phpstan psalm test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
 
 .PHONY: phpstan
 phpstan:
@@ -42,9 +42,9 @@ test-integration: ## Runs integration tests with phpunit/phpunit
 cleanup-tests: ## Cleans up temp directories created by test-integration
 	$(PHP_BIN) find ./tests -type d -name 'temp' -exec rm -rf {} \;
 
-.PHONY: dependency-analysis
-dependency-analysis: vendor ## Runs a dependency analysis with maglnet/composer-require-checker
-	$(PHP_BIN) .phive/composer-require-checker check --config-file=/opt/project/composer-require-checker.json
+.PHONY: test-architecture
+test-architecture: vendor ## Runs deptrac to enfore architecural rules
+	$(PHP_BIN) ./vendor/bin/deptrac --config-file deptrac.packages.yaml
 
 vendor: composer.json composer.lock
 	composer validate --no-check-publish

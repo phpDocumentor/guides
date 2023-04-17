@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "529ea3127c485228e75bace0fd1c3bdb",
+    "content-hash": "83a0c0a660db66ac33dccb20a7e726b1",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1209,12 +1209,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "ca4c2f740b2c4b5a1bef717727ea7d1c1dc5e438"
+                "reference": "6a64db1a0ee275e15f6177e4b573282b3472ab79"
             },
             "require": {
                 "monolog/monolog": "^2.9",
                 "phpdocumentor/guides": "dev-main@dev",
                 "phpdocumentor/guides-restructured-text": "dev-main@dev",
+                "phpdocumentor/guides-symfony": "dev-main@dev",
                 "symfony/config": "^5.4",
                 "symfony/console": "^5.4",
                 "symfony/dependency-injection": "^5.4",
@@ -5344,6 +5345,59 @@
                 "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/0.18.4"
             },
             "time": "2022-12-03T07:47:07+00:00"
+        },
+        {
+            "name": "qossmic/deptrac-shim",
+            "version": "0.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qossmic/deptrac-shim.git",
+                "reference": "2ff8320c94b4fa5cfeaf08b3f98b5679c959cdd2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qossmic/deptrac-shim/zipball/2ff8320c94b4fa5cfeaf08b3f98b5679c959cdd2",
+                "reference": "2ff8320c94b4fa5cfeaf08b3f98b5679c959cdd2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "ext-zlib": "*",
+                "php": "^7.4 || 8.0.* || 8.1.*"
+            },
+            "replace": {
+                "qossmic/deptrac": "self.version"
+            },
+            "suggest": {
+                "ext-dom": "For using the JUnit output formatter"
+            },
+            "bin": [
+                "deptrac"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Mönch",
+                    "email": "simon.moench@qossmic.com",
+                    "role": "maintainer"
+                },
+                {
+                    "name": "Denis Brumann",
+                    "email": "denis.brumann@qossmic.com",
+                    "role": "maintainer"
+                }
+            ],
+            "description": "deptrac phar distribution",
+            "support": {
+                "issues": "https://github.com/qossmic/deptrac-shim/issues",
+                "source": "https://github.com/qossmic/deptrac-shim/tree/0.24.0"
+            },
+            "time": "2022-08-12T10:10:47+00:00"
         },
         {
             "name": "rector/rector",

@@ -27,6 +27,26 @@ jobs:
     name: "Static analysis"
     uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.3.0"
 
+  architecture:
+    name: "Check architeture"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v1"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.25.0"
+        with:
+          coverage: "none"
+          php-version: "8.2"
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "locked"
+          composer-options: "--prefer-dist"
+
+      - name: "Check package level"
+        run: "vendor/bin/deptrac --config-file deptrac.packages.yaml --formatter=github-actions"
+
   unit-tests:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continues-integration.yml@v0.3.0"
