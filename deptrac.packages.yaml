@@ -1,0 +1,58 @@
+deptrac:
+  skip_violations:
+    phpDocumentor\Guides\RestructuredText\Directives\Uml:
+      - phpDocumentor\Guides\Graphs\Nodes\UmlNode # yamllint disable-line rule:quoted-strings
+  paths:
+    - "./packages"
+  exclude_files:
+    - '#.*Test\.php$#' # yamllint disable-line rule:quoted-strings
+    - '#.*Setup/QuickStart\.php$#' # yamllint disable-line rule:quoted-strings
+
+  analyser:
+    types:
+      - "class"
+      - "class_superglobal"
+      - "file"
+      - "function"
+      - "function_superglobal"
+      - "function_call"
+
+  layers:
+    - name: "CLI"
+      collectors:
+        - type: "directory"
+          value: "packages/guides-cli/src"
+    - name: "Integration"
+      collectors:
+        - type: "directory"
+          value: "packages/guides-symfony/src"
+    - name: "Guides"
+      collectors:
+        - type: "directory"
+          value: "packages/guides/src"
+    - name: "RST"
+      collectors:
+        - type: "directory"
+          value: "packages/guides-restructured-text/src"
+    - name: "Markdown"
+      collectors:
+        - type: "directory"
+          value: "packages/guides-markdown/src"
+    - name: "Graphs"
+      collectors:
+        - type: "directory"
+          value: "packages/guides-graphs/src"
+
+  ruleset:
+    CLI:
+      - "Guides"
+      - "Integration"
+    Integration:
+      - "Guides"
+      - "RST"
+    RST:
+      - "Guides"
+    Markdown:
+      - "Guides"
+    Graphs:
+      - "Guides"

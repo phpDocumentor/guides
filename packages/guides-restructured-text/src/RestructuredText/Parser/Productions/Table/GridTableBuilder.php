@@ -6,11 +6,11 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\Table;
 
 use Exception;
 use LogicException;
+use phpDocumentor\Guides\Exception\InvalidTableStructure;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Exception\InvalidTableStructure;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 
