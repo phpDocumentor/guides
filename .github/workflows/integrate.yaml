@@ -28,7 +28,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.3.0"
 
   architecture:
-    name: "Check architeture"
+    name: "Check architecture"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v1"

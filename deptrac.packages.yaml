@@ -1,59 +1,58 @@
 deptrac:
   skip_violations:
     phpDocumentor\Guides\RestructuredText\Directives\Uml:
-      - phpDocumentor\Guides\Graphs\Nodes\UmlNode
+      - phpDocumentor\Guides\Graphs\Nodes\UmlNode # yamllint disable-line rule:quoted-strings
   paths:
-    - ./packages
+    - "./packages"
   exclude_files:
-    - '#.*Test\.php$#'
-    - '#.*Setup/QuickStart\.php$#'
+    - '#.*Test\.php$#' # yamllint disable-line rule:quoted-strings
+    - '#.*Setup/QuickStart\.php$#' # yamllint disable-line rule:quoted-strings
 
   analyser:
     types:
-      - class
-      - class_superglobal
-      - file
-      - function
-      - function_superglobal
-      - function_call
+      - "class"
+      - "class_superglobal"
+      - "file"
+      - "function"
+      - "function_superglobal"
+      - "function_call"
 
   layers:
-    - name: CLI
+    - name: "CLI"
       collectors:
-        - type: directory
-          value: packages/guides-cli/src
-    - name: Integration
+        - type: "directory"
+          value: "packages/guides-cli/src"
+    - name: "Integration"
       collectors:
-        - type: directory
-          value: packages/guides-symfony/src
-    - name: Guides
+        - type: "directory"
+          value: "packages/guides-symfony/src"
+    - name: "Guides"
       collectors:
-        - type: directory
-          value: packages/guides/src
-    - name: RST
+        - type: "directory"
+          value: "packages/guides/src"
+    - name: "RST"
       collectors:
-        - type: directory
-          value: packages/guides-restructured-text/src
-    - name: Markdown
+        - type: "directory"
+          value: "packages/guides-restructured-text/src"
+    - name: "Markdown"
       collectors:
-        - type: directory
-          value: packages/guides-markdown/src
-    - name: Graphs
+        - type: "directory"
+          value: "packages/guides-markdown/src"
+    - name: "Graphs"
       collectors:
-        - type: directory
-          value: packages/guides-graphs/src
+        - type: "directory"
+          value: "packages/guides-graphs/src"
 
   ruleset:
     CLI:
-      - Guides
-      - Integration
+      - "Guides"
+      - "Integration"
     Integration:
-      - Guides
-      - RST
+      - "Guides"
+      - "RST"
     RST:
-      - Guides
+      - "Guides"
     Markdown:
-      - Guides
+      - "Guides"
     Graphs:
-      - Guides
-
+      - "Guides"
