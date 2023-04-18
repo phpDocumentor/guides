@@ -8,6 +8,7 @@
 
     <config name="php_version" value="70400"/>
     <exclude-pattern>packages/*/examples/*</exclude-pattern>
+    <exclude-pattern>tests/*/_*</exclude-pattern>
 
     <arg value="p"/>
 
