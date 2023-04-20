@@ -89,8 +89,9 @@ final class Run extends Command
 
         $destinationFileSystem = new Filesystem(new Local($outputDir));
 
+        $outputFormats = $input->getOption('output-format');
 
-        foreach ($input->getOption('output-format') as $format) {
+        foreach ($outputFormats as $format) {
             $this->commandBus->handle(
                 new RenderCommand(
                     $format,
@@ -101,6 +102,18 @@ final class Run extends Command
                 )
             );
         }
+
+        $lastFormat = '';
+
+        if (count($outputFormats) > 1) {
+            $lastFormat = (count($outputFormats) > 2 ? ',' : '') . ' and ' . strtoupper(array_pop($outputFormats));
+        }
+
+        $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;
+
+        $output->writeln(
+            'Successfully placed ' . count($documents) . ' rendered ' . $formatsText . ' files into ' . $outputDir
+        );
 
         return 0;
     }
