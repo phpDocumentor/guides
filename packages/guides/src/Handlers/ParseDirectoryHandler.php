@@ -61,7 +61,7 @@ final class ParseDirectoryHandler
         $hasIndexFile = false;
         foreach ($this->indexFileNames as $indexName) {
             $indexFilename = sprintf('%s.%s', $indexName, $extension);
-            if (!$filesystem->has($directory . '/' . $indexFilename)) {
+            if ($filesystem->has($directory . '/' . $indexFilename)) {
                 $hasIndexFile = true;
                 break;
             }
