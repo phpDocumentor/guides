@@ -14,15 +14,9 @@ class EnvironmentBuilder
     private Environment $environment;
 
     /** @param ExtensionInterface[] $extensions */
-    public function __construct(iterable $extensions = [])
+    public function __construct(FilesystemLoader $filesystemLoader, iterable $extensions = [])
     {
-        $this->environment = new Environment(
-            new FilesystemLoader(
-                [
-                    __DIR__ . '/../../resources/template/html/guides',
-                ]
-            )
-        );
+        $this->environment = new Environment($filesystemLoader);
 
         foreach ($extensions as $extension) {
             $this->environment->addExtension($extension);

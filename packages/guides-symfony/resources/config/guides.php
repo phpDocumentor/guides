@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
+use Twig\Loader\FilesystemLoader;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -113,10 +114,17 @@ return static function (ContainerConfigurator $container): void {
         ->tag('twig.extension')
         ->autowire()
 
+        ->set(FilesystemLoader::class)
+        ->arg('$paths',
+            [
+                __DIR__ . '/../../../guides/resources/template/html/guides',
+            ]
+        )
 
 
         ->set(EnvironmentBuilder::class)
         ->arg('$extensions', tagged_iterator('twig.extension'))
+        ->arg('$filesystemLoader', service(FilesystemLoader::class))
 
         ->set(TemplateRenderer::class, TwigTemplateRenderer::class)
         ->arg('$environmentBuilder', new Reference(EnvironmentBuilder::class));
