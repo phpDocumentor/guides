@@ -2,7 +2,7 @@
 
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.0/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
         bootstrap="vendor/autoload.php"
         colors="true"
         forceCoversAnnotation="false"
@@ -22,9 +22,9 @@
             <directory>./tests/Integration/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">packages/**/src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>
