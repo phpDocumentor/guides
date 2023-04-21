@@ -24,6 +24,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
@@ -44,7 +45,8 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(RenderDocumentHandler::class)
         ->tag('phpdoc.guides.command', ['command' => RenderDocumentCommand::class])
-        ->arg('$renderer', inline_service(DelegatingNodeRenderer::class))
+        ->arg('$renderer', service(DelegatingNodeRenderer::class))
+        ->arg('$eventDispatcher', service(\Psr\EventDispatcher\EventDispatcherInterface::class))
 
         ->set(CommandBus::class)
         ->args([
