@@ -29,6 +29,11 @@
       "name": "guides-symfony",
       "directory": "packages/guides-symfony",
       "target": "git@github.com:phpDocumentor/guides-symfony.git"
+    },
+    {
+      "name": "guides-theme-bootstrap",
+      "directory": "packages/guides-theme-bootstrap",
+      "target": "git@github.com:phpDocumentor/guides-theme-bootstrap.git"
     }
   ]
 }
