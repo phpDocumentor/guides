@@ -45,13 +45,11 @@ class DummyNode implements Node
         return false;
     }
 
-    /** {@inheritDoc} */
-    public function setValue($value): void
+    public function setValue(mixed $value): void
     {
     }
 
-    /** {@inheritDoc} */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->data;
     }

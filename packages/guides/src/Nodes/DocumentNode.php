@@ -101,13 +101,13 @@ final class DocumentNode extends CompoundNode
     }
 
     /**
-     * @param TType|null $default
+     * @param TType $default
      *
-     * @phpstan-return ($default is null ? (string | Node | null) : (TType | string | Node))
+     * @phpstan-return TType|string|Node
      *
      * @template TType as mixed
      */
-    public function getVariable(string $name, $default): string|Node|null
+    public function getVariable(string $name, mixed $default): mixed
     {
         return $this->variables[$name] ?? $default;
     }

@@ -28,13 +28,13 @@ abstract class AbstractNode implements Node
     }
 
     /** @param TValue $value */
-    public function setValue($value): void
+    public function setValue(mixed $value): void
     {
         $this->value = $value;
     }
 
     /** @return TValue */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
