@@ -2,187 +2,161 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\RST\Integration;
+namespace phpDocumentor\Guides\Integration;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use phpDocumentor\Guides\Compiler\Compiler;
-use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
-use phpDocumentor\Guides\Compiler\NodeTransformers\TocNodeTransformer;
-use phpDocumentor\Guides\Compiler\Passes\MetasPass;
-use phpDocumentor\Guides\Compiler\Passes\TransformerPass;
-use phpDocumentor\Guides\FileCollector;
-use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
-use phpDocumentor\Guides\Handlers\ParseDirectoryHandler;
-use phpDocumentor\Guides\Handlers\ParseFileCommand;
-use phpDocumentor\Guides\Handlers\ParseFileHandler;
-use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
-use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
-use phpDocumentor\Guides\RenderContext;
-use League\Tactician\Setup\QuickStart;
-use phpDocumentor\Guides\Twig\TwigRenderer;
-use phpDocumentor\Guides\UrlGenerator;
-use PHPUnit\Framework\TestCase;
-use Flyfinder\Finder;
-
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\AbstractLogger;
+use phpDocumentor\Guides\ApplicationTestCase;
+use phpDocumentor\Guides\Cli\Command\Run;
+use phpDocumentor\Guides\Configuration;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\ExpectationFailedException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
+
+use function array_filter;
+use function array_walk;
+use function assert;
+use function escapeshellarg;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function implode;
 use function setlocale;
+use function str_replace;
+use function system;
+use function trim;
 
 use const LC_ALL;
 
-/**
- * Integration tests for the bootstrap template found in phpdocumentor/guides-theme-bootstrap
- */
-class IntegrationBootstrapTest extends TestCase
+class IntegrationBootstrapTest extends ApplicationTestCase
 {
-    private const TEST_DIR = 'tests-bootstrap';
-
     protected function setUp(): void
     {
+        self::prepareContainer(new Configuration([
+            __DIR__ . '/../../packages/guides-theme-bootstrap/resources/template',
+            __DIR__ . '/../../packages/guides/resources/template/html/guides',
+        ]));
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
     /**
      * @param String[] $compareFiles
-     * @dataProvider getIntegrationTests
+     *
+     * @dataProvider getTestsForDirectoryTest
      */
-    public function testIntegration(
+    public function testHtmlIntegration(
         string $inputPath,
         string $expectedPath,
         string $outputPath,
         array $compareFiles
     ): void {
-        system("rm -rf " . escapeshellarg($outputPath));
-        system("mkdir " . escapeshellarg($outputPath));
-
-        $metas = new Metas([]);
-        $logger = new class($outputPath) extends AbstractLogger {
-
-            private $outputPath;
-
-            public function __construct($outputPath)
-            {
-                $this->outputPath = $outputPath;
-            }
-
-            public function log($level, $message, array $context = []): void
-            {
-                $message = $level . ':' . $message . PHP_EOL;
-                file_put_contents($this->outputPath . '/log' . $level . '.txt', $message, FILE_APPEND);
-            }
-        };
-
-        $commandbus = QuickStart::create(
-            [
-                ParseFileCommand::class => new ParseFileHandler(
-                    $logger,
-                    new class implements EventDispatcherInterface {
-                        public function dispatch(object $event)
-                        {
-                            return $event;
-                        }
-                    },
-                    \phpDocumentor\Guides\Setup\QuickStart::createRstParser()
-                )
-            ]
-        );
-
-        $parseDirectoryHandler = new ParseDirectoryHandler(
-            new FileCollector($metas),
-            $commandbus,
-        );
-        $sourceFileSystem = new Filesystem(new Local(
-            $inputPath
-        ));
-        $sourceFileSystem->addPlugin(new Finder());
-
-        $parseDirCommand = new ParseDirectoryCommand(
-            $sourceFileSystem,
-            '',
-            'rst'
-        );
-
-        $documents = $parseDirectoryHandler->handle($parseDirCommand);
-        $compliler = new Compiler([
-            new MetasPass($metas),
-            new TransformerPass(
-                new DocumentNodeTraverser(
-                    [
-                        new TocNodeTransformer($metas)
-                    ]
-                )
-            )
-        ]);
-        $documents = $compliler->run($documents);
-
-        /** @var TwigRenderer $renderer */
-        $renderer = \phpDocumentor\Guides\Setup\QuickStart::createRenderer (
-            $metas,
-
-            [
-                __DIR__  . '/../../packages/guides-theme-bootstrap/resources/template'
-            ],
-        );
-        $renderDocumentHandler = new RenderDocumentHandler($renderer);
-
-        foreach ($documents as $document) {
-            $renderDocumentHandler->handle(
-                new RenderDocumentCommand(
-                    $document,
-                    RenderContext::forDocument(
-                        $document,
-                        $sourceFileSystem,
-                        new Filesystem(new Local($outputPath)),
-                        '/',
-                        $metas,
-                        new UrlGenerator(),
-                        'html'
-                    )
-                )
-            );
+        system('rm -rf ' . escapeshellarg($outputPath));
+        self::assertDirectoryExists($inputPath);
+        self::assertDirectoryExists($expectedPath);
+        self::assertNotEmpty($compareFiles);
+        if (file_exists($inputPath . '/skip')) {
+            $this->markTestIncomplete($inputPath);
         }
+
+        system('mkdir ' . escapeshellarg($outputPath));
+
+        $command = $this->getContainer()->get(Run::class);
+        assert($command instanceof Run);
+
+        $input = new ArrayInput(
+            [
+                'input' => $inputPath,
+                'output' => $outputPath,
+                '--output-format' => ['html', 'intersphinx'],
+            ],
+            $command->getDefinition()
+        );
+
+        $outputBuffer = new BufferedOutput();
+
+        $command->run(
+            $input,
+            $outputBuffer
+        );
 
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
-            self::assertFileExists($outputFile);
-            self::assertFileEquals($compareFile, $outputFile);
+            self::assertFileEqualsTrimmed($compareFile, $outputFile);
         }
+    }
+
+    /**
+     * Asserts that the contents of one file is equal to the contents of another
+     * file. It ignores empty lines and whitespace at the start and end of each line
+     *
+     * @throws InvalidArgumentException
+     * @throws ExpectationFailedException
+     */
+    public static function assertFileEqualsTrimmed(string $expected, string $actual, string $message = ''): void
+    {
+        static::assertFileExists($expected, $message);
+        static::assertFileExists($actual, $message);
+
+        $constraint = new IsEqual(self::getTrimmedFileContent($expected));
+
+        static::assertThat(self::getTrimmedFileContent($actual), $constraint, $message);
+    }
+
+    public static function getTrimmedFileContent(string $file): string
+    {
+        $contentArray = explode("\n", file_get_contents($file));
+        array_walk($contentArray, static function (&$value): void {
+            $value = trim($value);
+        });
+        $contentArray = array_filter($contentArray, static function ($value) {
+            return $value !== '';
+        });
+
+        return implode("\n", $contentArray);
     }
 
     /**
      * @return mixed[]
      */
-    public function getIntegrationTests(): array
+    public function getTestsForDirectoryTest(): array
+    {
+        return $this->getTestsForDirectory('/tests-bootstrap');
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function getTestsForDirectory(string $directory = '/tests'): array
     {
         $finder = new SymfonyFinder();
         $finder
             ->directories()
-            ->in(__DIR__ . '/' . self::TEST_DIR);
+            ->in(__DIR__ . $directory)
+            ->depth('== 0');
 
         $tests = [];
 
         foreach ($finder as $dir) {
-
-            if (file_exists($dir->getPathname() . '/input')) {
-                $compareFiles = [];
-                $fileFinder = new \Symfony\Component\Finder\Finder();
-                $fileFinder
-                    ->files()
-                    ->in($dir->getPathname() . '/expected');
-                foreach ($fileFinder as $file) {
-                    $compareFiles[] = $file->getPathname();
-                }
-                $tests[] = [
-                    $dir->getPathname() . '/input',
-                    $dir->getPathname() . '/expected',
-                    $dir->getPathname() . '/temp',
-                    $compareFiles
-                ];
+            if (!file_exists($dir->getPathname() . '/input')) {
+                continue;
             }
+
+            $compareFiles = [];
+            $fileFinder = new SymfonyFinder();
+            $fileFinder
+                ->files()
+                ->in($dir->getPathname() . '/expected');
+            foreach ($fileFinder as $file) {
+                $compareFiles[] = $file->getPathname();
+            }
+
+            $tests[$dir->getPathname()] = [
+                $dir->getPathname() . '/input',
+                $dir->getPathname() . '/expected',
+                $dir->getPathname() . '/temp',
+                $compareFiles,
+            ];
         }
 
         return $tests;

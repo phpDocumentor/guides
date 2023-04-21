@@ -43,6 +43,7 @@ use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\Test\TestLogger;
+use Twig\Loader\FilesystemLoader;
 
 final class QuickStart
 {
@@ -69,6 +70,9 @@ final class QuickStart
         $renderer->setNodeRendererFactory(new LazyNodeRendererFactory($nodeFactoryCallback));
 
         $twigBuilder = new EnvironmentBuilder(
+            new FilesystemLoader([
+                __DIR__ . '/../../packages/guides/resources/template/html/guides',
+            ]),
             [
                 new AssetsExtension(
                     $logger,

@@ -18,12 +18,12 @@ use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
-use Twig\Loader\FilesystemLoader;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Twig\Loader\FilesystemLoader;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
@@ -115,7 +115,8 @@ return static function (ContainerConfigurator $container): void {
         ->autowire()
 
         ->set(FilesystemLoader::class)
-        ->arg('$paths',
+        ->arg(
+            '$paths',
             [
                 __DIR__ . '/../../../guides/resources/template/html/guides',
             ]
