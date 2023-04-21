@@ -20,7 +20,7 @@ use function current;
 final class SpanParserTest extends TestCase
 {
     public Generator $faker;
-    private ParserContext & MockObject $parserContext;
+    private ParserContext&MockObject $parserContext;
     private SpanParser $spanProcessor;
 
     public function setUp(): void
