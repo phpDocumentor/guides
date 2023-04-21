@@ -13,15 +13,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 use function implode;
 
-abstract class AbstractRuleTest extends TestCase
+abstract class RuleTestCase extends TestCase
 {
-    use ProphecyTrait;
-
     protected static function assertRemainingEquals(string $expected, LinesIterator $actual): void
     {
         $rest = '';
@@ -43,22 +39,21 @@ abstract class AbstractRuleTest extends TestCase
                 'test',
                 'test',
                 1,
-                $this->prophesize(FilesystemInterface::class)->reveal(),
+                $this->createStub(FilesystemInterface::class),
                 new UrlGenerator()
             ),
-            $this->prophesize(MarkupLanguageParser::class)->reveal()
+            $this->createStub(MarkupLanguageParser::class)
         );
     }
 
     protected function givenInlineMarkupRule(): InlineMarkupRule
     {
-        $spanParser = $this->prophesize(SpanParser::class);
-        $spanParser->parse(
-            Argument::any(),
-            Argument::any()
-        )->will(static fn ($args): SpanNode => new SpanNode(implode("\n", $args[0])));
+        $spanParser = $this->createMock(SpanParser::class);
+        $spanParser->method('parse')->willReturnCallback(
+            static fn (array $arg): SpanNode => new SpanNode(implode("\n", $arg))
+        );
 
-        return new InlineMarkupRule($spanParser->reveal());
+        return new InlineMarkupRule($spanParser);
     }
 
     protected function givenCollectAllRuleContainer(): RuleContainer

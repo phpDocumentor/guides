@@ -6,13 +6,14 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function explode;
 use function sprintf;
 use function var_export;
 
-abstract class NbspRoleRuleTest extends TestCase
+class NbspRoleRuleTest extends TestCase
 {
     private NbspRoleRule $rule;
 
@@ -23,9 +24,8 @@ abstract class NbspRoleRuleTest extends TestCase
 
     /**
      * @param string[] $tokenStrings
-     *
-     * @dataProvider ruleAppliesProvider
      */
+    #[DataProvider('ruleAppliesProvider')]
     public function testApplies(array $tokenStrings, bool $expected): void
     {
         $tokens = new TokenIterator($tokenStrings);
@@ -41,7 +41,7 @@ abstract class NbspRoleRuleTest extends TestCase
         );
     }
 
-    /** @dataProvider expectedTokenProvider */
+    #[DataProvider('expectedTokenProvider')]
     public function testApply(string $input, InlineMarkupToken $expected): void
     {
         $tokens = new TokenIterator(explode(' ', $input));
@@ -53,7 +53,7 @@ abstract class NbspRoleRuleTest extends TestCase
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
-    public function ruleAppliesProvider(): array
+    public static function ruleAppliesProvider(): array
     {
         return [
             [
@@ -74,7 +74,7 @@ abstract class NbspRoleRuleTest extends TestCase
     /**
      * @return array<int, array<int, string | InlineMarkupToken>>
      */
-    public function expectedTokenProvider(): array
+    public static function expectedTokenProvider(): array
     {
         return [
             [

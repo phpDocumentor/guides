@@ -66,7 +66,7 @@ jobs:
     needs: "unit-tests"
     with:
       php-versions: "['8.1', '8.2']"
-      test-suite: "functional --verbose"
+      test-suite: "functional"
 
   integration-tests:
     name: "integration test"
@@ -74,4 +74,4 @@ jobs:
     needs: "unit-tests"
     with:
       php-versions: "['8.1', '8.2']"
-      test-suite: "integration --verbose"
+      test-suite: "integration"

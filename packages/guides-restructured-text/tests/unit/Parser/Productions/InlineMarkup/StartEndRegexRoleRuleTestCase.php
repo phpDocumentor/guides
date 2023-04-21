@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function explode;
 use function sprintf;
 use function var_export;
 
-abstract class StartEndRegexRoleRuleTest extends TestCase
+abstract class StartEndRegexRoleRuleTestCase extends TestCase
 {
     /**
      * @param string[] $tokenStrings
-     *
-     * @dataProvider ruleAppliesProvider
      */
+    #[DataProvider('ruleAppliesProvider')]
     public function testApplies(array $tokenStrings, bool $expected): void
     {
         $tokens = new TokenIterator($tokenStrings);
@@ -33,7 +33,7 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
         );
     }
 
-    /** @dataProvider expectedLiteralContentProvider  */
+    #[DataProvider('expectedLiteralContentProvider')]
     public function testApply(string $input, ValueToken $expectedToken): void
     {
         $tokens = new TokenIterator(explode(' ', $input));
@@ -42,7 +42,7 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
         self::assertEquals($expectedToken, $this->getRule()->apply($tokens));
     }
 
-    /** @dataProvider notEndingProvider  */
+    #[DataProvider('notEndingProvider')]
     public function testNotEnding(string $input, string $expected): void
     {
         $tokens = new TokenIterator(explode(' ', $input));
@@ -56,15 +56,15 @@ abstract class StartEndRegexRoleRuleTest extends TestCase
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
-    abstract public function ruleAppliesProvider(): array;
+    abstract public static function ruleAppliesProvider(): array;
 
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    abstract public function expectedLiteralContentProvider(): array;
+    abstract public static function expectedLiteralContentProvider(): array;
 
     /**
      * @return array<int, array<int, string>>
      */
-    abstract public function notEndingProvider(): array;
+    abstract public static function notEndingProvider(): array;
 }

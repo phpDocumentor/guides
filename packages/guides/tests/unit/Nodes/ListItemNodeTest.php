@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \phpDocumentor\Guides\Nodes\ListItemNode
- * @covers ::<private>
  */
 final class ListItemNodeTest extends TestCase
 {
@@ -25,7 +24,6 @@ final class ListItemNodeTest extends TestCase
      * @covers ::__construct
      * @covers ::getPrefix
      * @covers ::isOrdered
-     * @covers ::getContents
      * @covers ::getValue
      */
     public function testPrefixingCharacterTypeOfListAndContentsOfItemCanBeRecorded(): void

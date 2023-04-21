@@ -7,8 +7,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\RawNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-final class EnumeratedListRuleTest extends AbstractRuleTest
+final class EnumeratedListRuleTest extends RuleTestCase
 {
     private EnumeratedListRule $rule;
 
@@ -18,7 +19,7 @@ final class EnumeratedListRuleTest extends AbstractRuleTest
         $this->rule = new EnumeratedListRule($ruleContainer);
     }
 
-    /** @dataProvider startChars */
+    #[DataProvider('startChars')]
     public function testAppliesForAllPossibleStartChars(string $char): void
     {
         $input = $char . ' test';
@@ -28,7 +29,7 @@ final class EnumeratedListRuleTest extends AbstractRuleTest
         self::assertTrue($this->rule->applies($context));
     }
 
-    /** @dataProvider startChars */
+    #[DataProvider('startChars')]
     public function testListItemContentCanBeOnANewLine(string $char): void
     {
         $input = <<<INPUT
@@ -42,7 +43,7 @@ INPUT;
     }
 
     /** @return iterable<string, non-empty-list<string>> */
-    public function startChars(): iterable
+    public static function startChars(): iterable
     {
         $chars = [
             '#',

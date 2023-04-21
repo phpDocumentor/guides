@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 
-class TextRoleRuleTest extends StartEndRegexRoleRuleTest
+class TextRoleRuleTest extends StartEndRegexRoleRuleTestCase
 {
     private TextRoleRule $rule;
 
@@ -26,7 +26,7 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
-    public function ruleAppliesProvider(): array
+    public static function ruleAppliesProvider(): array
     {
         return [
             [
@@ -55,7 +55,7 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    public function expectedLiteralContentProvider(): array
+    public static function expectedLiteralContentProvider(): array
     {
         return [
             [
@@ -76,7 +76,7 @@ class TextRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string>>
      */
-    public function notEndingProvider(): array
+    public static function notEndingProvider(): array
     {
         return [
             [

@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
-final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
+final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTestCase
 {
     private EmphasisRoleRule $rule;
 
@@ -24,7 +24,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
-    public function ruleAppliesProvider(): array
+    public static function ruleAppliesProvider(): array
     {
         return [
             [
@@ -41,7 +41,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    public function expectedLiteralContentProvider(): array
+    public static function expectedLiteralContentProvider(): array
     {
         return [
             [
@@ -62,7 +62,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string>>
      */
-    public function notEndingProvider(): array
+    public static function notEndingProvider(): array
     {
         return [
             [

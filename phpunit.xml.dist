@@ -2,14 +2,14 @@
 
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
         bootstrap="vendor/autoload.php"
         colors="true"
-        forceCoversAnnotation="false"
-        beStrictAboutTodoAnnotatedTests="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
         beStrictAboutChangesToGlobalState="true"
+        cacheDirectory=".phpunit.cache"
+        requireCoverageMetadata="false"
 >
     <testsuites>
         <testsuite name="unit">
@@ -22,9 +22,10 @@
             <directory>./tests/Integration/</directory>
         </testsuite>
     </testsuites>
-    <coverage>
+    <coverage/>
+    <source>
         <include>
             <directory suffix=".php">packages/**/src</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

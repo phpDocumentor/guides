@@ -9,8 +9,9 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-final class DefinitionListRuleTest extends AbstractRuleTest
+final class DefinitionListRuleTest extends RuleTestCase
 {
     private DefinitionListRule $rule;
 
@@ -19,14 +20,14 @@ final class DefinitionListRuleTest extends AbstractRuleTest
         $this->rule = new DefinitionListRule($this->givenInlineMarkupRule(), $this->givenCollectAllRuleContainer());
     }
 
-    /** @dataProvider definitionListProvider */
+    #[DataProvider('definitionListProvider')]
     public function testAppliesReturnsTrueOnValidInput(string $input): void
     {
         $context = $this->createContext($input);
         self::assertTrue($this->rule->applies($context));
     }
 
-    /** @dataProvider isDefinitionListFalseProvider */
+    #[DataProvider('isDefinitionListFalseProvider')]
     public function testAppliesReturnsFalseOnInvalidInput(string $input): void
     {
         $context = $this->createContext($input);
@@ -189,7 +190,7 @@ RST, $context->getDocumentIterator());
     }
 
     /** @return array<string, string[]> */
-    public function definitionListProvider(): array
+    public static function definitionListProvider(): array
     {
         return [
             'line ending with colon and space' => ["Test:\n  Definition"],
@@ -212,7 +213,7 @@ EOT,
     }
 
     /** @return array<string, string[]> */
-    public function isDefinitionListFalseProvider(): array
+    public static function isDefinitionListFalseProvider(): array
     {
         return [
             'empty lines' => [''],

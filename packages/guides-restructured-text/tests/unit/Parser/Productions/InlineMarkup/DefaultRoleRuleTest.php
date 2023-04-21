@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ValueToken;
 
-final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
+final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTestCase
 {
     private DefaultRoleRule $rule;
 
@@ -24,7 +24,7 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, array<int, string> | bool>>
      */
-    public function ruleAppliesProvider(): array
+    public static function ruleAppliesProvider(): array
     {
         return [
             [
@@ -45,7 +45,7 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string | ValueToken>>
      */
-    public function expectedLiteralContentProvider(): array
+    public static function expectedLiteralContentProvider(): array
     {
         return [
             [
@@ -62,7 +62,7 @@ final class DefaultRoleRuleTest extends StartEndRegexRoleRuleTest
     /**
      * @return array<int, array<int, string>>
      */
-    public function notEndingProvider(): array
+    public static function notEndingProvider(): array
     {
         return [
             [
