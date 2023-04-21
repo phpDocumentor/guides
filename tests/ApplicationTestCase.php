@@ -19,8 +19,7 @@ class ApplicationTestCase extends TestCase
 {
     private static ContainerBuilder $container;
 
-    /** @beforeClass */
-    public static function prepareContainer(): void
+    public static function prepareContainer(Configuration $configuration): void
     {
         self::$container = new ContainerBuilder();
 
@@ -31,7 +30,7 @@ class ApplicationTestCase extends TestCase
         // Load container configuration
         foreach (Application::getDefaultExtensions() as $extension) {
             self::$container->registerExtension($extension);
-            self::$container->loadFromExtension($extension->getAlias());
+            self::$container->loadFromExtension($extension->getAlias(), [$configuration]);
         }
 
         self::$container->addCompilerPass(new NodeRendererPass());
@@ -42,7 +41,7 @@ class ApplicationTestCase extends TestCase
                 $container->getDefinition(DelegatingNodeRenderer::class)->setPublic(true);
             }
         });
-
+        
         // Compile container
         self::$container->compile(true);
     }

@@ -29,11 +29,14 @@ use function trim;
 
 use const LC_ALL;
 
-class IntegrationTest extends ApplicationTestCase
+class IntegrationBootstrapTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
-        self::prepareContainer(new Configuration());
+        self::prepareContainer(new Configuration([
+            __DIR__ . '/../../packages/guides-theme-bootstrap/resources/template',
+            __DIR__ . '/../../packages/guides/resources/template/html/guides',
+        ]));
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
@@ -118,15 +121,7 @@ class IntegrationTest extends ApplicationTestCase
      */
     public function getTestsForDirectoryTest(): array
     {
-        return $this->getTestsForDirectory();
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getTestsForLatex(): array
-    {
-        return $this->getTestsForDirectory('/tests-latex');
+        return $this->getTestsForDirectory('/tests-bootstrap');
     }
 
     /**

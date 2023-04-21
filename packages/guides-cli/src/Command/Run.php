@@ -76,7 +76,6 @@ final class Run extends Command
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
-
         $documents = $this->commandBus->handle(
             new ParseDirectoryCommand(
                 $sourceFileSystem,

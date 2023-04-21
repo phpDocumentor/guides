@@ -23,6 +23,7 @@ use phpDocumentor\Guides\UrlGenerator;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Twig\Loader\FilesystemLoader;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
@@ -113,10 +114,18 @@ return static function (ContainerConfigurator $container): void {
         ->tag('twig.extension')
         ->autowire()
 
+        ->set(FilesystemLoader::class)
+        ->arg(
+            '$paths',
+            [
+                __DIR__ . '/../../../guides/resources/template/html/guides',
+            ]
+        )
 
 
         ->set(EnvironmentBuilder::class)
         ->arg('$extensions', tagged_iterator('twig.extension'))
+        ->arg('$filesystemLoader', service(FilesystemLoader::class))
 
         ->set(TemplateRenderer::class, TwigTemplateRenderer::class)
         ->arg('$environmentBuilder', new Reference(EnvironmentBuilder::class));
