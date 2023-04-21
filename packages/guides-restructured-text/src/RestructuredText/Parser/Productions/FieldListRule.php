@@ -37,7 +37,7 @@ use function trim;
 final class FieldListRule implements Rule
 {
     /** @param FieldListItemRule[] $fieldListItemRules */
-    public function __construct(private RuleContainer $productions, private array $fieldListItemRules)
+    public function __construct(private RuleContainer $productions, private iterable $fieldListItemRules)
     {
     }
 

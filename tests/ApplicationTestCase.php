@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -34,6 +35,7 @@ class ApplicationTestCase extends TestCase
         }
 
         self::$container->addCompilerPass(new NodeRendererPass());
+        self::$container->addCompilerPass(new ParserRulesPass());
         self::$container->addCompilerPass(new class implements CompilerPassInterface {
             public function process(ContainerBuilder $container): void
             {
@@ -41,7 +43,7 @@ class ApplicationTestCase extends TestCase
                 $container->getDefinition(DelegatingNodeRenderer::class)->setPublic(true);
             }
         });
-        
+
         // Compile container
         self::$container->compile(true);
     }

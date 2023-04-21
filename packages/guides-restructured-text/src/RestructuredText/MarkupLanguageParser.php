@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use RuntimeException;
@@ -20,24 +19,13 @@ class MarkupLanguageParser implements ParserInterface
 {
     private ParserContext|null $parserContext = null;
 
-    /** @var Directive[] */
-    private array $directives = [];
-
     private string|null $filename = null;
 
     private DocumentParserContext|null $documentParser = null;
 
-    /**
-     * @param iterable<Directive> $directives
-     * @param Rule<DocumentNode> $startingRule
-     */
-    public function __construct(
-        private Rule $startingRule,
-        iterable $directives,
-    ) {
-        foreach ($directives as $directive) {
-            $this->registerDirective($directive);
-        }
+    /** @param Rule<DocumentNode> $startingRule */
+    public function __construct(private Rule $startingRule)
+    {
     }
 
     public function supports(string $inputFormat): bool
@@ -50,7 +38,6 @@ class MarkupLanguageParser implements ParserInterface
     {
         return new MarkupLanguageParser(
             $this->startingRule,
-            $this->directives,
         );
     }
 
@@ -63,14 +50,6 @@ class MarkupLanguageParser implements ParserInterface
         }
 
         return $this->parserContext;
-    }
-
-    private function registerDirective(Directive $directive): void
-    {
-        $this->directives[$directive->getName()] = $directive;
-        foreach ($directive->getAliases() as $alias) {
-            $this->directives[$alias] = $directive;
-        }
     }
 
     public function getDocument(): DocumentNode

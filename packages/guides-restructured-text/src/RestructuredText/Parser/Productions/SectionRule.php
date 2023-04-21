@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 /** @implements Rule<SectionNode> */
 final class SectionRule implements Rule
 {
-    public function __construct(private TitleRule $titleRule, private RuleContainer $productions)
+    public function __construct(private TitleRule $titleRule, private RuleContainer $bodyElements)
     {
     }
 
@@ -87,7 +87,7 @@ final class SectionRule implements Rule
                 return $on;
             }
 
-            $this->productions->apply($documentParserContext, $on);
+            $this->bodyElements->apply($documentParserContext, $on);
         }
 
         return $on;

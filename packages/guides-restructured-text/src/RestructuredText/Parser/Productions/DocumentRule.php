@@ -16,24 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorsFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ContactFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\CopyrightFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function implode;
 use function md5;
@@ -41,59 +24,8 @@ use function md5;
 /** @implements Rule<DocumentNode> */
 final class DocumentRule implements Rule
 {
-    private RuleContainer $productions;
-
-    /** @param iterable<DirectiveHandler> $directiveHandlers */
-    public function __construct(iterable $directiveHandlers)
+    public function __construct(private RuleContainer $structuralElements)
     {
-        $spanParser = new SpanParser();
-        $literalBlockRule = new LiteralBlockRule();
-        $transitionRule = new TransitionRule(); // Transition rule must follow Title rule
-
-        $inlineMarkupRule = new InlineMarkupRule($spanParser);
-        // TODO: Somehow move this into the top of the instantiation chain so that you can configure which rules
-        //       to use when consuming this library
-        //
-        // TODO, these productions are now used in sections and documentrule,
-        //    however most of them do not apply on documents?
-        $productions = new RuleContainer();
-        $productions->push(new LinkRule());
-        $productions->push($literalBlockRule);
-        $productions->push(new BlockQuoteRule());
-        $productions->push(new ListRule($productions));
-        $productions->push(new EnumeratedListRule($productions));
-        $productions->push(new DirectiveRule($directiveHandlers));
-        $productions->push(new CommentRule());
-        $productions->push(new GridTableRule($productions));
-        $productions->push(new SimpleTableRule($productions));
-        $productions->push(new DefinitionListRule($inlineMarkupRule, $productions));
-        $fieldListItemRules = [];
-        $fieldListItemRules[] = new AbstractFieldListItemRule();
-        $fieldListItemRules[] = new AddressFieldListItemRule();
-        $fieldListItemRules[] = new AuthorFieldListItemRule();
-        $fieldListItemRules[] = new AuthorsFieldListItemRule();
-        $fieldListItemRules[] = new ContactFieldListItemRule();
-        $fieldListItemRules[] = new CopyrightFieldListItemRule();
-        $fieldListItemRules[] = new DateFieldListItemRule();
-        $fieldListItemRules[] = new DedicationFieldListItemRule();
-        $fieldListItemRules[] = new NocommentsFieldListItemRule();
-        $fieldListItemRules[] = new NosearchFieldListItemRule();
-        $fieldListItemRules[] = new OrganizationFieldListItemRule();
-        $fieldListItemRules[] = new OrphanFieldListItemRule();
-        $fieldListItemRules[] = new RevisionFieldListItemRule();
-        $fieldListItemRules[] = new TocDepthFieldListItemRule();
-        $fieldListItemRules[] = new VersionFieldListItemRule();
-            $productions->push(new FieldListRule($productions, $fieldListItemRules));
-
-        // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
-        $productions->push(new ParagraphRule($inlineMarkupRule));
-
-        $this->productions = (
-            new RuleContainer(
-                $transitionRule,
-                new SectionRule(new TitleRule($spanParser), $productions),
-            )
-        )->merge($productions);
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -116,7 +48,7 @@ final class DocumentRule implements Rule
         // this is done because we are transitioning to a method where a Substate can take the current
         // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
-            $this->productions->apply($documentParserContext, $on);
+            $this->structuralElements->apply($documentParserContext, $on);
         }
 
         return $on;
