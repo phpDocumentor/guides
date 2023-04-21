@@ -10,24 +10,12 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class PostRenderDocument
 {
-    /** @var NodeRenderer<DocumentNode> */
-    private NodeRenderer $renderer;
-
-    private RenderDocumentCommand $command;
-
-    /**
-     * @param NodeRenderer<DocumentNode> $renderer
-     * @param RenderDocumentCommand $command
-     */
-    public function __construct(NodeRenderer $renderer, RenderDocumentCommand $command)
+    /** @param NodeRenderer<DocumentNode> $renderer */
+    public function __construct(private NodeRenderer $renderer, private RenderDocumentCommand $command)
     {
-        $this->renderer = $renderer;
-        $this->command = $command;
     }
 
-    /**
-     * @return NodeRenderer<DocumentNode>
-     */
+    /** @return NodeRenderer<DocumentNode> */
     public function getRenderer(): NodeRenderer
     {
         return $this->renderer;

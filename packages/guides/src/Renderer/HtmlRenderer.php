@@ -7,9 +7,6 @@ namespace phpDocumentor\Guides\Renderer;
 use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
-use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
 
@@ -17,12 +14,9 @@ class HtmlRenderer implements TypeRenderer
 {
     public const TYPE = 'html';
 
-    /** @param NodeRenderer<DocumentNode> $renderer */
     public function __construct(
-        private readonly NodeRenderer $renderer,
-        private readonly CommandBus $commandBus
-    )
-    {
+        private readonly CommandBus $commandBus,
+    ) {
     }
 
     public function supports(string $outputFormat): bool

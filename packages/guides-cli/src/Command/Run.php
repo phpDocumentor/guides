@@ -19,10 +19,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_pop;
+use function count;
 use function getcwd;
+use function implode;
 use function is_dir;
 use function sprintf;
 use function str_starts_with;
+use function strtoupper;
 
 final class Run extends Command
 {
@@ -106,7 +110,7 @@ final class Run extends Command
         $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;
 
         $output->writeln(
-            'Successfully placed ' . count($documents) . ' rendered ' . $formatsText . ' files into ' . $outputDir
+            'Successfully placed ' . count($documents) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
         );
 
         return 0;

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
+use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
-use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
 
@@ -16,9 +14,9 @@ class LatexRenderer implements TypeRenderer
 {
     public const TYPE = 'tex';
 
-    /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private readonly NodeRenderer $renderer)
-    {
+    public function __construct(
+        private readonly CommandBus $commandBus,
+    ) {
     }
 
     public function supports(string $outputFormat): bool
@@ -28,9 +26,8 @@ class LatexRenderer implements TypeRenderer
 
     public function render(RenderCommand $renderCommand): void
     {
-        $renderDocumentHandler = new RenderDocumentHandler($this->renderer);
         foreach ($renderCommand->getDocuments() as $document) {
-            $renderDocumentHandler->handle(
+            $this->commandBus->handle(
                 new RenderDocumentCommand(
                     $document,
                     RenderContext::forDocument(

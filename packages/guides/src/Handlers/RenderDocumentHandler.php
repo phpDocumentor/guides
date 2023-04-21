@@ -17,15 +17,14 @@ final class RenderDocumentHandler
     /** @param NodeRenderer<DocumentNode> $renderer */
     public function __construct(
         private readonly NodeRenderer $renderer,
-        private readonly EventDispatcherInterface $eventDispatcher
-    )
-    {
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function handle(RenderDocumentCommand $command): void
     {
         $preRenderDocumentEvent = $this->eventDispatcher->dispatch(
-            new PreRenderDocument($this->renderer, $command)
+            new PreRenderDocument($this->renderer, $command),
         );
         assert($preRenderDocumentEvent instanceof PreRenderDocument);
 
@@ -38,7 +37,7 @@ final class RenderDocumentHandler
         );
 
         $postRenderDocumentEvent = $this->eventDispatcher->dispatch(
-            new PostRenderDocument($this->renderer, $command)
+            new PostRenderDocument($this->renderer, $command),
         );
         assert($postRenderDocumentEvent instanceof PostRenderDocument);
     }

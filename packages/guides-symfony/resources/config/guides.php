@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
@@ -82,7 +83,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(HtmlRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
         ->args(
-            ['$renderer' => service(DelegatingNodeRenderer::class)],
+            ['$commandBus' => service(CommandBus::class)],
         )
 
         ->set(IntersphinxRenderer::class)
