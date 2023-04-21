@@ -33,9 +33,7 @@ final class GenericNode extends AbstractNode
 {
     private string $name;
 
-    /**
-     * @param Node|string|null $value
-     */
+    /** @param Node|string|null $value */
     public function __construct(string $name, $value = null)
     {
         $this->name = $name;

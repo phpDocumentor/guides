@@ -42,7 +42,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
 
             $this->metas->addLinkTarget(
                 $node->toString(),
-                new InternalTarget($currentDocument->getFilePath(), $node->toString())
+                new InternalTarget($currentDocument->getFilePath(), $node->toString()),
             );
         }
 

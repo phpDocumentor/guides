@@ -58,9 +58,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return $this->renderer->renderTemplate($renderContext, 'inline/literal.html.twig', ['node' => $token]);
     }
 
-    /**
-     * @param string[] $attributes
-     */
+    /** @param string[] $attributes */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
@@ -72,7 +70,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
                 'url' => $this->urlGenerator->generateUrl($url),
                 'text' => $title ?: $url,
                 'attributes' => $attributes,
-            ]
+            ],
         );
     }
 
@@ -81,9 +79,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return htmlspecialchars($span, ENT_QUOTES);
     }
 
-    /**
-     * @param array<string|null> $value
-     */
+    /** @param array<string|null> $value */
     public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
     {
         $text = $value['text'] ?: $reference->getText();

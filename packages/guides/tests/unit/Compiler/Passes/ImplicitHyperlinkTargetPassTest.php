@@ -22,13 +22,13 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         foreach (['Document 1', 'Section A', 'Section B'] as $titles) {
             $document->addChildNode(
                 new SectionNode(
-                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString())
-                )
+                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                ),
             );
             $expected->addChildNode(
                 new SectionNode(
-                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString())
-                )
+                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                ),
             );
         }
 
@@ -47,13 +47,13 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         foreach (['Document 1', 'Section A', 'Section A'] as $titles) {
             $document->addChildNode(
                 new SectionNode(
-                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString())
-                )
+                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                ),
             );
             $expected->addChildNode(
                 new SectionNode(
-                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString())
-                )
+                    new TitleNode(new SpanNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                ),
             );
         }
 
@@ -73,10 +73,10 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected = new DocumentNode('1', 'index');
 
         $document->addChildNode(new SectionNode(
-            new TitleNode(new SpanNode('Document 1'), 1, 'document-1')
+            new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
         ));
         $expected->addChildNode(new SectionNode(
-            new TitleNode(new SpanNode('Document 1'), 1, 'document-1')
+            new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
         ));
 
         $document->addChildNode(new AnchorNode('custom-anchor'));
@@ -84,7 +84,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected = $expected->removeNode(1);
 
         $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a'))
+            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a')),
         );
         $expectedTitle = new TitleNode(new SpanNode('Section A'), 1, 'section-a');
         $expectedTitle->setId('custom-anchor');
@@ -102,7 +102,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected = new DocumentNode('1', 'index');
 
         $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Document 1'), 1, 'document-1'))
+            new SectionNode(new TitleNode(new SpanNode('Document 1'), 1, 'document-1')),
         );
         $expectedTitle = new TitleNode(new SpanNode('Document 1'), 1, 'document-1');
         $expectedTitle->setId('document-1-1');
@@ -113,7 +113,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected = $expected->removeNode(1);
 
         $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a'))
+            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a')),
         );
         $expectedTitle = new TitleNode(new SpanNode('Section A'), 1, 'section-a');
         $expectedTitle->setId('document-1');

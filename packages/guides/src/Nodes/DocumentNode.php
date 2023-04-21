@@ -19,9 +19,7 @@ use function array_filter;
 use function strtolower;
 use function trim;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 final class DocumentNode extends CompoundNode
 {
     private string $hash;

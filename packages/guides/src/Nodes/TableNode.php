@@ -18,9 +18,7 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use function count;
 use function max;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 class TableNode extends CompoundNode
 {
     /** @var TableRow[] */
@@ -36,6 +34,7 @@ class TableNode extends CompoundNode
     public function __construct(array $rows, array $headers)
     {
         parent::__construct();
+
         $this->data = $rows;
         $this->headers = $headers;
     }
@@ -55,17 +54,13 @@ class TableNode extends CompoundNode
         return count($this->data);
     }
 
-    /**
-     * @return TableRow[]
-     */
+    /** @return TableRow[] */
     public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @return TableRow[]
-     */
+    /** @return TableRow[] */
     public function getHeaders(): array
     {
         return $this->headers;

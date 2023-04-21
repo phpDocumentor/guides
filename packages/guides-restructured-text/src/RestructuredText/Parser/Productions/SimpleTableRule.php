@@ -134,7 +134,7 @@ final class SimpleTableRule implements Rule
                 $cellContents[$column] .= "\n" . mb_substr(
                     $line,
                     $columnDefinition['start'],
-                    $columnDefinition['length']
+                    $columnDefinition['length'],
                 );
             }
         }
@@ -205,7 +205,7 @@ final class SimpleTableRule implements Rule
         $firstCellContent = mb_substr(
             $documentIterator->getNextLine(),
             $columnDefinition['start'],
-            $columnDefinition['length']
+            $columnDefinition['length'],
         );
 
         return trim($firstCellContent) === '';

@@ -47,7 +47,7 @@ final class IncludeDirective extends Directive
         $origin = $parserContext->getOrigin();
         if (!$origin->has($path)) {
             throw new RuntimeException(
-                sprintf('Include "%s" (%s) does not exist or is not readable.', $data, $path)
+                sprintf('Include "%s" (%s) does not exist or is not readable.', $data, $path),
             );
         }
 
@@ -66,7 +66,7 @@ final class IncludeDirective extends Directive
         if (array_key_exists('code', $options)) {
             $contents = str_replace("\r\n", "\n", $contents);
             $codeNode = new CodeNode(
-                explode('\n', $contents)
+                explode('\n', $contents),
             );
             $codeNode->setLanguage($options['code']);
 

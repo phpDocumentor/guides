@@ -39,7 +39,7 @@ final class TemplateNodeRenderer implements NodeRenderer
         return $this->renderer->renderTemplate(
             $renderContext,
             $this->template,
-            ['node' => $node]
+            ['node' => $node],
         );
     }
 }

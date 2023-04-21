@@ -35,7 +35,7 @@ class IntersphinxRenderer implements TypeRenderer
         foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
             $url = $this->urlGenerator->canonicalUrl(
                 '',
-                $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html')
+                $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
             );
             $inventory['std:doc'][$key] = [
                 '',
@@ -48,7 +48,7 @@ class IntersphinxRenderer implements TypeRenderer
         $json = (string) json_encode($inventory, JSON_PRETTY_PRINT);
         $renderCommand->getDestination()->put(
             'objects.inv.json',
-            $json
+            $json,
         );
     }
 }

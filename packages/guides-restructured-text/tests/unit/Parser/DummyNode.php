@@ -14,9 +14,7 @@ class DummyNode implements Node
     /** @var DirectiveOption[] $directiveOptions the array of options for this directive */
     private array $directiveOptions;
 
-    /**
-     * @param DirectiveOption[] $directiveOptions
-     */
+    /** @param DirectiveOption[] $directiveOptions */
     public function __construct(string $name, string $data, array $directiveOptions)
     {
         $this->name = $name;
@@ -29,17 +27,13 @@ class DummyNode implements Node
         return $this->name;
     }
 
-    /**
-     * @return DirectiveOption[]
-     */
+    /** @return DirectiveOption[] */
     public function getDirectiveOptions(): array
     {
         return $this->directiveOptions;
     }
 
-    /**
-     * @return array<string, scalar|null>
-     */
+    /** @return array<string, scalar|null> */
     public function getOptions(): array
     {
         return [];

@@ -22,9 +22,7 @@ class NbspRoleRuleTest extends TestCase
         $this->rule = new NbspRoleRule();
     }
 
-    /**
-     * @param string[] $tokenStrings
-     */
+    /** @param string[] $tokenStrings */
     #[DataProvider('ruleAppliesProvider')]
     public function testApplies(array $tokenStrings, bool $expected): void
     {
@@ -36,8 +34,8 @@ class NbspRoleRuleTest extends TestCase
             sprintf(
                 '%s does not apply with expected result "%s"',
                 var_export($tokenStrings, true),
-                var_export($expected, true)
-            )
+                var_export($expected, true),
+            ),
         );
     }
 
@@ -50,9 +48,7 @@ class NbspRoleRuleTest extends TestCase
         self::assertEquals($expected, $this->rule->apply($tokens));
     }
 
-    /**
-     * @return array<int, array<int, array<int, string> | bool>>
-     */
+    /** @return array<int, array<int, array<int, string> | bool>> */
     public static function ruleAppliesProvider(): array
     {
         return [
@@ -71,9 +67,7 @@ class NbspRoleRuleTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<int, array<int, string | InlineMarkupToken>>
-     */
+    /** @return array<int, array<int, string | InlineMarkupToken>> */
     public static function expectedTokenProvider(): array
     {
         return [

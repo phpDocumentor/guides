@@ -96,7 +96,7 @@ final class ListRule implements Rule
             // An offset of 1 or lower indicates that the list line didn't contain any text.
             if ($listConfig['indenting'] <= 1) {
                 $listConfig['indenting'] = strlen($documentIterator->current()) - strlen(
-                    ltrim($documentIterator->current())
+                    ltrim($documentIterator->current()),
                 );
             }
 

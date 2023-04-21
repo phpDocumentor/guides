@@ -47,20 +47,20 @@ return static function (ContainerConfigurator $container): void {
 
         ->load(
             'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\',
-            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php'
+            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php',
         )
 
         ->load(
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
-            '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php'
+            '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php',
         )
 
         ->load(
             'phpDocumentor\\Guides\\References\\Resolver\\',
-            '%vendor_dir%/phpdocumentor/guides/src/References/Resolver'
+            '%vendor_dir%/phpdocumentor/guides/src/References/Resolver',
         )->load(
             'phpDocumentor\\Guides\\NodeRenderers\\',
-            '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers'
+            '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers',
         )
 
         ->set(Metas::class)
@@ -82,7 +82,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(HtmlRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
         ->args(
-            ['$renderer' => service(DelegatingNodeRenderer::class)]
+            ['$renderer' => service(DelegatingNodeRenderer::class)],
         )
 
         ->set(IntersphinxRenderer::class)
@@ -119,7 +119,7 @@ return static function (ContainerConfigurator $container): void {
             '$paths',
             [
                 __DIR__ . '/../../../guides/resources/template/html/guides',
-            ]
+            ],
         )
 
 

@@ -56,7 +56,7 @@ class AdmonitionNodeRenderer implements NodeRenderer
                 'text' => $node->getText(),
                 'class' => implode(' ', $classes),
                 'node' => $node->getValue(),
-            ]
+            ],
         );
     }
 }

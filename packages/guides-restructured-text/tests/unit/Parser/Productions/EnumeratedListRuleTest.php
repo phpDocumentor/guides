@@ -76,7 +76,7 @@ INPUT;
 
     public function testListItemMustBeIntended(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 a.
 test
 INPUT;
@@ -88,7 +88,7 @@ INPUT;
 
     public function testSimpleListCreation(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 1. first items
 2. second item
 
@@ -100,11 +100,11 @@ INPUT;
         $result = $this->rule->apply($context);
 
         self::assertRemainingEquals(
-            <<<REST
+            <<<'REST'
 Not included
 
 REST,
-            $context->getDocumentIterator()
+            $context->getDocumentIterator(),
         );
 
         self::assertEquals(
@@ -113,15 +113,15 @@ REST,
                     new ListItemNode('1', false, [new RawNode('first items')]),
                     new ListItemNode('2', false, [new RawNode('second item')]),
                 ],
-                true
+                true,
             ),
-            $result
+            $result,
         );
     }
 
     public function testListWithoutNewLineInParagraphResultsInWarning(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 1. first items
 2. second item
 Not included
@@ -132,11 +132,11 @@ INPUT;
         $result = $this->rule->apply($context);
 
         self::assertRemainingEquals(
-            <<<REST
+            <<<'REST'
 Not included
 
 REST,
-            $context->getDocumentIterator()
+            $context->getDocumentIterator(),
         );
 
         self::assertEquals(
@@ -145,15 +145,15 @@ REST,
                     new ListItemNode('1', false, [new RawNode('first items')]),
                     new ListItemNode('2', false, [new RawNode('second item')]),
                 ],
-                true
+                true,
             ),
-            $result
+            $result,
         );
     }
 
     public function testListFistTekstOnNewLine(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 (#)
   first items
 (#)
@@ -168,11 +168,11 @@ INPUT;
         $result = $this->rule->apply($context);
 
         self::assertRemainingEquals(
-            <<<REST
+            <<<'REST'
 Not included
 
 REST,
-            $context->getDocumentIterator()
+            $context->getDocumentIterator(),
         );
 
         self::assertEquals(
@@ -181,15 +181,15 @@ REST,
                     new ListItemNode('#', false, [new RawNode('first items')]),
                     new ListItemNode('#', false, [new RawNode("second item\nother line")]),
                 ],
-                true
+                true,
             ),
-            $result
+            $result,
         );
     }
 
     public function testListWithOddIndenting(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 1. 
   first items
 2. 
@@ -203,11 +203,11 @@ INPUT;
         $result = $this->rule->apply($context);
 
         self::assertRemainingEquals(
-            <<<REST
+            <<<'REST'
   Not included
 
 REST,
-            $context->getDocumentIterator()
+            $context->getDocumentIterator(),
         );
 
         self::assertEquals(
@@ -216,15 +216,15 @@ REST,
                     new ListItemNode('1', false, [new RawNode('first items')]),
                     new ListItemNode('2', false, [new RawNode("second item\nother line")]),
                 ],
-                true
+                true,
             ),
-            $result
+            $result,
         );
     }
 
     public function testListShouldCheckTheNextLineToBeValid(): void
     {
-        $input = <<<INPUT
+        $input = <<<'INPUT'
 1. first items
 2) second item
 (#) Not included

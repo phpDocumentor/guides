@@ -33,7 +33,7 @@ class FileCollector
         $directory = trim($directory, '/');
         /** @var array<array<string>> $files */
         $files = $filesystem->find(
-            new AndSpecification(new InPath(new Path($directory)), new HasExtension([$extension]))
+            new AndSpecification(new InPath(new Path($directory)), new HasExtension([$extension])),
         );
 
         // completely populate the splFileInfos property
@@ -66,7 +66,7 @@ class FileCollector
     {
         if (!isset($this->fileInfos[$filename])) {
             throw new InvalidArgumentException(
-                sprintf('No file info found for "%s" - file does not exist.', $filename)
+                sprintf('No file info found for "%s" - file does not exist.', $filename),
             );
         }
 

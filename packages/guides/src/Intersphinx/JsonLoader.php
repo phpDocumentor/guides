@@ -28,7 +28,7 @@ class JsonLoader
     {
         $response = $this->client->request(
             'GET',
-            $url
+            $url,
         );
         $jsonString = implode("\n", $response->toArray());
 

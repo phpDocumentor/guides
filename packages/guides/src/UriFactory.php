@@ -45,10 +45,10 @@ final class UriFactory
                 sprintf(
                     'The uri "%s" could not be parsed, the following error occured: %s',
                     $uriString,
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 ),
                 0,
-                $exception
+                $exception,
             );
         }
     }
@@ -65,7 +65,7 @@ final class UriFactory
                 'scheme' => 'phar',
                 'host' => '',
                 'path' => $path,
-            ]
+            ],
         );
     }
 }

@@ -17,9 +17,7 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 
 use function array_values;
 
-/**
- * @extends CompoundNode<DefinitionListItemNode>
- */
+/** @extends CompoundNode<DefinitionListItemNode> */
 class DefinitionListNode extends CompoundNode
 {
     //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found

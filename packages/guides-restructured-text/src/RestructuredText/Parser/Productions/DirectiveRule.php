@@ -44,9 +44,7 @@ final class DirectiveRule implements Rule
     /** @var array<string, DirectiveHandler> */
     private array $directives;
 
-    /**
-     * @param iterable<DirectiveHandler> $directives
-     */
+    /** @param iterable<DirectiveHandler> $directives */
     public function __construct(iterable $directives = [])
     {
         foreach ($directives as $directive) {
@@ -89,9 +87,9 @@ final class DirectiveRule implements Rule
                 $directive->getName(),
                 $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
                     'in "%s" ',
-                    $documentParserContext->getContext()->getCurrentFileName()
+                    $documentParserContext->getContext()->getCurrentFileName(),
                 ) : '',
-                $openingLine
+                $openingLine,
             );
 
             $documentParserContext->getContext()->addError($message);
@@ -108,7 +106,7 @@ final class DirectiveRule implements Rule
                 $documentParserContext->withContentsPreserveSpace($buffer->getLinesString()),
                 $directive->getVariable(),
                 $directive->getData(),
-                $directive->getOptions()
+                $directive->getOptions(),
             );
         } catch (Throwable $e) {
             $message = sprintf(
@@ -116,9 +114,9 @@ final class DirectiveRule implements Rule
                 $directiveHandler->getName(),
                 $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
                     ' in "%s"',
-                    $documentParserContext->getContext()->getCurrentFileName()
+                    $documentParserContext->getContext()->getCurrentFileName(),
                 ) : '',
-                $e->getMessage()
+                $e->getMessage(),
             );
 
             $documentParserContext->getContext()->addError($message);
@@ -133,7 +131,7 @@ final class DirectiveRule implements Rule
             return new Directive(
                 $match[2],
                 $match[3],
-                trim($match[4])
+                trim($match[4]),
             );
         }
 

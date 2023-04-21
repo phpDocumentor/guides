@@ -75,9 +75,7 @@ class ParserContext
         $this->anonymous[] = strtolower(trim($name));
     }
 
-    /**
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     public function getLinks(): array
     {
         return $this->links;

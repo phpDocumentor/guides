@@ -18,9 +18,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
         ];
     }
 
-    /**
-     * @throws TextRoleNotFoundException
-     */
+    /** @throws TextRoleNotFoundException */
     public function getTextRole(string $name): TextRole
     {
         // First look for a textrole with the exact name

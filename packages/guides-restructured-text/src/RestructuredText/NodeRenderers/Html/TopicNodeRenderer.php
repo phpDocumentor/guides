@@ -48,7 +48,7 @@ final class TopicNodeRenderer implements NodeRenderer
             [
                 'name' => $node->getName(),
                 'node' => $node->getValue(),
-            ]
+            ],
         );
     }
 }

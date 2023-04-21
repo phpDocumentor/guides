@@ -38,14 +38,14 @@ final class ParseDirectoryHandler
         $this->guardThatAnIndexFileExists(
             $origin,
             $currentDirectory,
-            $extension
+            $extension,
         );
 
         $files = $this->fileCollector->collect($origin, $currentDirectory, $extension, $this->metas);
         $documents = [];
         foreach ($files as $file) {
             $documents[] = $this->commandBus->handle(
-                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1)
+                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1),
             );
         }
 
@@ -71,7 +71,7 @@ final class ParseDirectoryHandler
             $indexFilename = sprintf('%s.%s', $this->indexFileNames[0], $extension);
 
             throw new InvalidArgumentException(
-                sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory)
+                sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory),
             );
         }
     }

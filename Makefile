@@ -6,11 +6,11 @@ help: ## Displays this list of targets with descriptions
 
 .PHONY: code-style
 code-style:
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest -d memory_limit=1024M -s
+	$(PHP_BIN) vendor/bin/phpcs
 
 .PHONY: fix-code-style
 fix-code-style:
-	docker run -it --rm -v${PWD}:/opt/project -w /opt/project phpdoc/phpcs-ga:latest phpcbf
+	$(PHP_BIN) vendor/bin/phpcbf
 
 .PHONY: static-code-analysis
 static-code-analysis: vendor phpstan psalm test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm

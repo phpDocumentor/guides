@@ -14,9 +14,7 @@ use function var_export;
 
 abstract class StartEndRegexRoleRuleTestCase extends TestCase
 {
-    /**
-     * @param string[] $tokenStrings
-     */
+    /** @param string[] $tokenStrings */
     #[DataProvider('ruleAppliesProvider')]
     public function testApplies(array $tokenStrings, bool $expected): void
     {
@@ -28,8 +26,8 @@ abstract class StartEndRegexRoleRuleTestCase extends TestCase
             sprintf(
                 '%s does not apply with expected result "%s"',
                 var_export($tokenStrings, true),
-                var_export($expected, true)
-            )
+                var_export($expected, true),
+            ),
         );
     }
 
@@ -53,18 +51,12 @@ abstract class StartEndRegexRoleRuleTestCase extends TestCase
 
     abstract public function getRule(): StartEndRegexRoleRule;
 
-    /**
-     * @return array<int, array<int, array<int, string> | bool>>
-     */
+    /** @return array<int, array<int, array<int, string> | bool>> */
     abstract public static function ruleAppliesProvider(): array;
 
-    /**
-     * @return array<int, array<int, string | ValueToken>>
-     */
+    /** @return array<int, array<int, string | ValueToken>> */
     abstract public static function expectedLiteralContentProvider(): array;
 
-    /**
-     * @return array<int, array<int, string>>
-     */
+    /** @return array<int, array<int, string>> */
     abstract public static function notEndingProvider(): array;
 }

@@ -24,12 +24,11 @@ class SpanNode extends TextNode
     public function __construct(string $content, array $tokens = [])
     {
         parent::__construct($content);
+
         $this->tokens = $tokens;
     }
 
-    /**
-     * @return InlineMarkupToken[]
-     */
+    /** @return InlineMarkupToken[] */
     public function getTokens(): array
     {
         return $this->tokens;

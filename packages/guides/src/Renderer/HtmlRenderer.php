@@ -44,9 +44,9 @@ class HtmlRenderer implements TypeRenderer
                         $renderCommand->getDestinationPath(),
                         $renderCommand->getMetas(),
                         new UrlGenerator(),
-                        $renderCommand->getOutputFormat()
-                    )
-                )
+                        $renderCommand->getOutputFormat(),
+                    ),
+                ),
             );
         }
     }

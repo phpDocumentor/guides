@@ -18,9 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function sprintf;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 class VersionChangeNode extends CompoundNode
 {
     private string $type;
@@ -33,6 +31,7 @@ class VersionChangeNode extends CompoundNode
     public function __construct(string $type, string $versionLabel, string $versionModified, array $value)
     {
         parent::__construct($value);
+
         $this->type = $type;
         $this->versionLabel = sprintf($versionLabel, $versionModified);
         $this->versionModified = $versionModified;

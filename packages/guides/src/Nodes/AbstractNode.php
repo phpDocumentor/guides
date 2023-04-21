@@ -9,9 +9,7 @@ use function implode;
 use function preg_replace;
 use function strtolower;
 
-/**
- * @template TValue
- */
+/** @template TValue */
 abstract class AbstractNode implements Node
 {
     /** @var string[] */
@@ -23,33 +21,25 @@ abstract class AbstractNode implements Node
     /** @var TValue */
     protected $value;
 
-    /**
-     * @return array<string, scalar|null>
-     */
+    /** @return array<string, scalar|null> */
     public function getOptions(): array
     {
         return $this->options;
     }
 
-    /**
-     * @param TValue $value
-     */
+    /** @param TValue $value */
     public function setValue($value): void
     {
         $this->value = $value;
     }
 
-    /**
-     * @return TValue
-     */
+    /** @return TValue */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getClasses(): array
     {
         return $this->classes;

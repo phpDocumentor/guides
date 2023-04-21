@@ -40,9 +40,9 @@ abstract class RuleTestCase extends TestCase
                 'test',
                 1,
                 $this->createStub(FilesystemInterface::class),
-                new UrlGenerator()
+                new UrlGenerator(),
             ),
-            $this->createStub(MarkupLanguageParser::class)
+            $this->createStub(MarkupLanguageParser::class),
         );
     }
 

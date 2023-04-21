@@ -41,7 +41,7 @@ class TableNodeRenderer implements NodeRenderer
                 'tableNode' => $node,
                 'tableHeaderRows' => $headers,
                 'tableRows' => $rows,
-            ]
+            ],
         );
     }
 

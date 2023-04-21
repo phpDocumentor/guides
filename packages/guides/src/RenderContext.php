@@ -74,7 +74,7 @@ class RenderContext
             $destination,
             $metas,
             $urlGenerator,
-            $ouputFormat
+            $ouputFormat,
         );
 
         $self->document = $documentNode;
@@ -130,7 +130,7 @@ class RenderContext
 
         return $this->urlGenerator->canonicalUrl(
             $baseUrl,
-            $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor)
+            $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor),
         );
     }
 

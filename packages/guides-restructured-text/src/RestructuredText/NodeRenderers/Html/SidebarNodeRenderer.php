@@ -47,7 +47,7 @@ final class SidebarNodeRenderer implements NodeRenderer
             [
                 'title' => $node->getTitle(),
                 'node' => $node->getValue(),
-            ]
+            ],
         );
     }
 }

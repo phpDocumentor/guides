@@ -15,8 +15,6 @@ namespace phpDocumentor\Guides;
 
 interface TemplateRenderer
 {
-    /**
-     * @param array<string, mixed> $params
-     */
+    /** @param array<string, mixed> $params */
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string;
 }

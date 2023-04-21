@@ -25,9 +25,7 @@ final class TwigTemplateRenderer implements TemplateRenderer
         $this->environmentBuilder = $environmentBuilder;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
+    /** @param array<string, mixed> $params */
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();

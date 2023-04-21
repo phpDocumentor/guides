@@ -17,9 +17,7 @@ use function get_class;
 /** @extends AbstractBlock<ParagraphNode> */
 final class Paragraph extends AbstractBlock
 {
-    /**
-     * @return ParagraphNode
-     */
+    /** @return ParagraphNode */
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
     {
         $context = new ParagraphNode([new SpanNode('', [])]);

@@ -30,9 +30,7 @@ class ResolvedReference
     /** @var string[] */
     private array $attributes;
 
-    /**
-     * @param string[] $attributes
-     */
+    /** @param string[] $attributes */
     public function __construct(
         ?string $file,
         string $text,
@@ -62,17 +60,13 @@ class ResolvedReference
         return $this->url;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * @param string[] $attributes
-     */
+    /** @param string[] $attributes */
     private function validateAttributes(array $attributes): void
     {
         foreach ($attributes as $attribute => $_value) {

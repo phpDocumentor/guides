@@ -36,7 +36,7 @@ final class DefinitionListRuleTest extends RuleTestCase
 
     public function testParsDefinitionList(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 term 1
     Definition 1.
 
@@ -76,9 +76,9 @@ RST;
                     new DefinitionNode(
                         [
                             new RawNode('Definition 1.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
             new DefinitionListItemNode(
                 new SpanNode('term 2'),
@@ -94,11 +94,10 @@ Definition 2, paragraph 1.
     This is a note belongs to definition 2.
 
 Definition 2, paragraph 2.
-RST
-                        ),
-                        ]
+RST),
+                        ],
                     ),
-                ]
+                ],
             ),
             new DefinitionListItemNode(
                 new SpanNode('term 3'),
@@ -107,9 +106,9 @@ RST
                     new DefinitionNode(
                         [
                             new RawNode('Definition 3.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
             new DefinitionListItemNode(
                 new SpanNode('term 4'),
@@ -121,9 +120,9 @@ RST
                     new DefinitionNode(
                         [
                             new RawNode('Definition 4.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
             new DefinitionListItemNode(
                 new SpanNode('- term 5'),
@@ -132,9 +131,9 @@ RST
                     new DefinitionNode(
                         [
                             new RawNode('Without escaping, this would be an option list item.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
             new DefinitionListItemNode(
                 new SpanNode('... another definition:'),
@@ -143,9 +142,9 @@ RST
                     new DefinitionNode(
                         [
                             new RawNode('With two dots this would be a directive.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
         );
 
@@ -155,7 +154,7 @@ RST
 
     public function testDefinitionListFollowedByDirective(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 term 1
     Definition 1.
     
@@ -175,14 +174,14 @@ RST;
                     new DefinitionNode(
                         [
                             new RawNode('Definition 1.'),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
         );
 
         self::assertEquals($expected, $result);
-        self::assertRemainingEquals(<<<RST
+        self::assertRemainingEquals(<<<'RST'
 .. some:: directive
     :argument: whatever
 
@@ -197,13 +196,13 @@ RST, $context->getDocumentIterator());
             'line ending with newline' => ["Test\n  Definition"],
             'line ending with two spaces' => ["Test  \n  Definition"],
             'term with classifiers' => [
-                <<<EOT
+                <<<'EOT'
 Term 1: classifier 1: classifier 2
   Definition
 EOT,
             ],
             'multiple definitions' => [
-                <<<EOT
+                <<<'EOT'
 Term 2: classifier 1
   Definition 1
   Definition 2

@@ -11,9 +11,7 @@ use function array_column;
 use function array_flip;
 use function preg_match;
 
-/**
- * @extends AbstractLexer<int, string>
- */
+/** @extends AbstractLexer<int, string> */
 final class SpanLexer extends AbstractLexer
 {
     public const WORD = 1;
@@ -87,9 +85,7 @@ final class SpanLexer extends AbstractLexer
         return [];
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     protected function getType(&$value)
     {
         if (preg_match('/[a-z0-9-]+_{2}/i', $value)) {

@@ -47,7 +47,7 @@ class AdmonitionDirective extends SubDirective
         return (new AdmonitionNode(
             $name,
             $data,
-            $document->getChildren()
+            $document->getChildren(),
         ))->withOptions($this->optionsToArray($options));
     }
 }

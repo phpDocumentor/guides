@@ -105,8 +105,8 @@ class MarkupLanguageParser implements ParserInterface
             new Toctree(
                 new ToctreeBuilder(
                     new GlobSearcher(new UrlGenerator()),
-                    new UrlGenerator()
-                )
+                    new UrlGenerator(),
+                ),
             ),
             new TopicDirective(),
             new Uml(),
@@ -129,7 +129,7 @@ class MarkupLanguageParser implements ParserInterface
     {
         return new MarkupLanguageParser(
             $this->startingRule,
-            $this->directives
+            $this->directives,
         );
     }
 
@@ -137,7 +137,7 @@ class MarkupLanguageParser implements ParserInterface
     {
         if ($this->parserContext === null) {
             throw new RuntimeException(
-                'A parser\'s Environment should not be consulted before parsing has started'
+                'A parser\'s Environment should not be consulted before parsing has started',
             );
         }
 
@@ -182,9 +182,7 @@ class MarkupLanguageParser implements ParserInterface
         throw new InvalidArgumentException('Content is not a valid document content');
     }
 
-    /**
-     * @deprecated this should be replaced by proper usage of productions in other productions, by now this is a hack.
-     */
+    /** @deprecated this should be replaced by proper usage of productions in other productions, by now this is a hack. */
     public function parseFragment(DocumentParserContext $documentParserContext, string $contents): DocumentNode
     {
         $documentParserContext = $documentParserContext->withContents($contents);

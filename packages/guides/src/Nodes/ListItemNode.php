@@ -17,13 +17,12 @@ final class ListItemNode extends CompoundNode
     /** @var bool whether the list marker represents an enumerated list */
     private bool $ordered;
 
-    /**
-     * @param Node[] $contents
-     */
+    /** @param Node[] $contents */
     public function __construct(string $prefix, bool $ordered, array $contents)
     {
         $this->prefix   = $prefix;
         $this->ordered  = $ordered;
+
         parent::__construct($contents);
     }
 

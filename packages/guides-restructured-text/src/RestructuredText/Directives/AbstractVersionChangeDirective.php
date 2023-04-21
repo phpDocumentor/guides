@@ -17,9 +17,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 
-/**
- * @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded
- */
+/** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
     private string $type;
@@ -43,7 +41,7 @@ abstract class AbstractVersionChangeDirective extends SubDirective
             $this->type,
             $this->label,
             $data,
-            $document->getChildren()
+            $document->getChildren(),
         ))->withOptions($this->optionsToArray($options));
     }
 

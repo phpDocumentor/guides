@@ -19,9 +19,7 @@ namespace phpDocumentor\Guides\Nodes;
  */
 abstract class CompoundNode extends AbstractNode
 {
-    /**
-     * @param list<TValue> $value
-     */
+    /** @param list<TValue> $value */
     public function __construct(array $value = [])
     {
         $this->value = $value;

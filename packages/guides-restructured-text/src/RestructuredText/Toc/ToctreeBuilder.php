@@ -56,7 +56,7 @@ class ToctreeBuilder
             } else {
                 $absoluteUrl = $this->urlGenerator->absoluteUrl(
                     $parserContext->getDirName(),
-                    $file
+                    $file,
                 );
 
                 $toctreeFiles[] = $absoluteUrl;
@@ -66,20 +66,16 @@ class ToctreeBuilder
         return $toctreeFiles;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     private function parseToctreeFiles(LinesIterator $lines): array
     {
         return array_filter(
             array_map('trim', $lines->toArray()),
-            static fn (string $file): bool => $file !== ''
+            static fn (string $file): bool => $file !== '',
         );
     }
 
-    /**
-     * @param mixed[] $options
-     */
+    /** @param mixed[] $options */
     private function isGlob(array $options, string $file): bool
     {
         return isset($options['glob']) && strpos($file, '*') !== false;

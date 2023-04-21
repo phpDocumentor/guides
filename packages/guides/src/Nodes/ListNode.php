@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-/**
- * @extends CompoundNode<ListItemNode>
- */
+/** @extends CompoundNode<ListItemNode> */
 final class ListNode extends CompoundNode
 {
     private bool $ordered;
@@ -23,9 +21,7 @@ final class ListNode extends CompoundNode
     /** @var ListItemNode[] */
     private array $items;
 
-    /**
-     * @param ListItemNode[] $items
-     */
+    /** @param ListItemNode[] $items */
     public function __construct(array $items, bool $ordered = false)
     {
         parent::__construct();
@@ -34,9 +30,7 @@ final class ListNode extends CompoundNode
         $this->ordered = $ordered;
     }
 
-    /**
-     * @return ListItemNode[]
-     */
+    /** @return ListItemNode[] */
     public function getChildren(): array
     {
         return $this->items;

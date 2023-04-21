@@ -6,9 +6,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use function array_merge;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 final class SectionNode extends CompoundNode
 {
     private TitleNode $title;
@@ -16,6 +14,7 @@ final class SectionNode extends CompoundNode
     public function __construct(TitleNode $title)
     {
         parent::__construct();
+
         $this->title = $title;
     }
 

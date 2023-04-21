@@ -65,9 +65,7 @@ class SpanParser
         return stripslashes($result);
     }
 
-    /**
-     * @param string[] $tokenData
-     */
+    /** @param string[] $tokenData */
     private function addToken(string $type, string $id, array $tokenData): void
     {
         $this->tokens[$id] = new InlineMarkupToken($type, $id, $tokenData);
@@ -86,7 +84,7 @@ class SpanParser
 
                 return $id;
             },
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -126,7 +124,7 @@ class SpanParser
         $this->tokens[$id] = new CrossReferenceNode(
             $id,
             'ref',
-            $link
+            $link,
         );
 
         return $id;
@@ -151,7 +149,7 @@ class SpanParser
                 [
                     'link' => $url,
                     'url' => $scheme . $url,
-                ]
+                ],
             );
 
             return $id;
@@ -160,7 +158,7 @@ class SpanParser
         return preg_replace_callback(
             $absoluteUriPattern,
             $standaloneHyperlinkCallback,
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -186,7 +184,7 @@ class SpanParser
                 [
                     'link' => $url,
                     'url' => 'mailto:' . $url,
-                ]
+                ],
             );
 
             return $id;
@@ -195,7 +193,7 @@ class SpanParser
         return preg_replace_callback(
             $emailAddressPattern,
             $standaloneEmailAddressCallback,
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -214,13 +212,13 @@ class SpanParser
                 case SpanLexer::NAMED_REFERENCE:
                     $result .= $this->createNamedReference(
                         $parserContext,
-                        trim((string) $this->lexer->token->value, '_')
+                        trim((string) $this->lexer->token->value, '_'),
                     );
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
                     $result .= $this->createAnonymousReference(
                         $parserContext,
-                        trim((string) $this->lexer->token->value, '_')
+                        trim((string) $this->lexer->token->value, '_'),
                     );
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
@@ -322,7 +320,7 @@ class SpanParser
                             trim($part),
                             $anchor,
                             $text,
-                            $domain
+                            $domain,
                         );
 
                         return $id;
@@ -477,7 +475,7 @@ class SpanParser
                 'type' => InlineMarkupToken::TYPE_LINK,
                 'link' => $link,
                 'url' => $url ?? '',
-            ]
+            ],
         );
 
         return $id;

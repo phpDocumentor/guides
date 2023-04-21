@@ -18,9 +18,7 @@ final class RenderCommand
     private FilesystemInterface $destination;
     private string $destinationPath;
 
-    /**
-     * @param DocumentNode[] $documents
-     */
+    /** @param DocumentNode[] $documents */
     public function __construct(
         string $outputFormat,
         array $documents,
@@ -42,9 +40,7 @@ final class RenderCommand
         return $this->outputFormat;
     }
 
-    /**
-     * @return DocumentNode[]
-     */
+    /** @return DocumentNode[] */
     public function getDocuments(): array
     {
         return $this->documents;

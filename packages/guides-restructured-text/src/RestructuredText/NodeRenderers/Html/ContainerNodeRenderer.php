@@ -48,7 +48,7 @@ final class ContainerNodeRenderer implements NodeRenderer
                 'class' => $node->getOption('class'),
                 'id' => $node->getOption('name'),
                 'node' => $node->getValue(),
-            ]
+            ],
         );
     }
 }

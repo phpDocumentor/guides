@@ -30,7 +30,7 @@ final class DocumentTitleNodeRenderer implements NodeRenderer
         return $this->renderer->renderTemplate(
             $renderContext,
             'page/header/title.html.twig',
-            ['title' => $node->getValue()]
+            ['title' => $node->getValue()],
         );
     }
 }

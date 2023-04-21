@@ -24,8 +24,8 @@ final class RenderDocumentHandler
             $command->getFileDestination(),
             $this->renderer->render(
                 $command->getDocument(),
-                $command->getContext()
-            )
+                $command->getContext(),
+            ),
         );
     }
 }

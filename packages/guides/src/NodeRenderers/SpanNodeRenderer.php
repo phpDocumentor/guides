@@ -77,9 +77,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return $this->renderTokens($node, $span, $renderContext);
     }
 
-    /**
-     * @param string[] $attributes
-     */
+    /** @param string[] $attributes */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
@@ -91,7 +89,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 'url' => $this->urlGenerator->generateUrl($url),
                 'title' => $title,
                 'attributes' => $attributes,
-            ]
+            ],
         );
     }
 
@@ -115,7 +113,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return preg_replace_callback(
             '/\*\*(.+)\*\*/mUsi',
             fn (array $matches): string => trim($this->strongEmphasis($matches[1], $renderContext)),
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -124,7 +122,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return preg_replace_callback(
             '/\*(.+)\*/mUsi',
             fn (array $matches): string => trim($this->emphasis($matches[1], $renderContext)),
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -148,7 +146,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 return $variable;
             },
-            $span
+            $span,
         ) ?? '';
     }
 
@@ -174,7 +172,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 $span = str_replace(
                     $token->getId(),
                     $this->link($context, $reference->getUrl(), $reference->getText(), $reference->getAttributes()),
-                    $span
+                    $span,
                 );
 
                 continue;
@@ -206,7 +204,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return str_replace(
             $token->getId(),
             $this->literal($token, $context),
-            $span
+            $span,
         );
     }
 
@@ -228,7 +226,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 if ($metaEntry !== null) {
                     $url = $context->relativeDocUrl(
                         $metaEntry->getFile(),
-                        (new AsciiSlugger())->slug($link)->lower()->toString()
+                        (new AsciiSlugger())->slug($link)->lower()->toString(),
                     );
                 }
             }

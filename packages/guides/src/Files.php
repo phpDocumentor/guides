@@ -19,9 +19,7 @@ use IteratorAggregate;
 
 use function in_array;
 
-/**
- * @implements IteratorAggregate<string>
- */
+/** @implements IteratorAggregate<string> */
 final class Files implements IteratorAggregate
 {
     /** @var string[] */
@@ -36,9 +34,7 @@ final class Files implements IteratorAggregate
         $this->files[] = $filename;
     }
 
-    /**
-     * @return Iterator<string>
-     */
+    /** @return Iterator<string> */
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->files);

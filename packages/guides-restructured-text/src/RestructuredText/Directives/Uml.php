@@ -78,12 +78,12 @@ final class Uml extends Directive
         $fileName = sprintf(
             '%s/%s',
             dirname($parserContext->getCurrentAbsolutePath()),
-            $path
+            $path,
         );
 
         if (!$parserContext->getOrigin()->has($fileName)) {
             $parserContext->addError(
-                sprintf('Tried to include "%s" as a diagram but the file could not be found', $fileName)
+                sprintf('Tried to include "%s" as a diagram but the file could not be found', $fileName),
             );
 
             return null;

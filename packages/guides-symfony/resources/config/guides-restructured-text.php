@@ -18,16 +18,16 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
         ->load(
             'phpDocumentor\\Guides\\RestructuredText\\Directives\\',
-            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Directives'
+            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Directives',
         )
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
-            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html'
+            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
         ->set(phpDocumentor\Guides\RestructuredText\MarkupLanguageParser::class)
         ->args([
             '$startingRule' => service(
-                phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule::class
+                phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule::class,
             ),
             '$directives' => tagged_iterator('phpdoc.guides.directive'),
         ])

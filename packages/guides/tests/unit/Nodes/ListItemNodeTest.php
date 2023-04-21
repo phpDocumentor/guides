@@ -15,9 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Guides\Nodes\ListItemNode
- */
+/** @coversDefaultClass \phpDocumentor\Guides\Nodes\ListItemNode */
 final class ListItemNodeTest extends TestCase
 {
     /**

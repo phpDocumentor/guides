@@ -35,7 +35,7 @@ final class TocNodeTransformerTest extends TestCase
                     new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
                 ),
             ],
-            $transformedNode->getEntries()
+            $transformedNode->getEntries(),
         );
     }
 
@@ -53,13 +53,13 @@ final class TocNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
+                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'),
                 ),
                 new TocEntry(
                     'index',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 ),
-            ]
+            ],
         );
 
         self::assertEquals(
@@ -70,7 +70,7 @@ final class TocNodeTransformerTest extends TestCase
                     new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
                 ),
             ],
-            $transformedNode->getEntries()
+            $transformedNode->getEntries(),
         );
     }
 
@@ -88,13 +88,13 @@ final class TocNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1')
+                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'),
                 ),
                 new TocEntry(
                     'index',
                     new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
                 ),
-            ]
+            ],
         );
 
         self::assertEquals(
@@ -105,7 +105,7 @@ final class TocNodeTransformerTest extends TestCase
                 ),
                 $entry,
             ],
-            $transformedNode->getEntries()
+            $transformedNode->getEntries(),
         );
     }
 
@@ -130,7 +130,7 @@ final class TocNodeTransformerTest extends TestCase
                 'index' => $indexDoc,
                 'page2' => $page2,
                 'page3' => $page3,
-            ]
+            ],
         );
     }
 }

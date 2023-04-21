@@ -16,9 +16,7 @@ use function get_class;
 /** @extends AbstractBlock<ListNode> */
 final class ListBlock extends AbstractBlock
 {
-    /**
-     * @return ListNode
-     */
+    /** @return ListNode */
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
     {
         $context = new ListNode([], false);

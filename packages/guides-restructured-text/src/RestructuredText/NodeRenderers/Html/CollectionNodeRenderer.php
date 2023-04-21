@@ -46,7 +46,7 @@ final class CollectionNodeRenderer implements NodeRenderer
             'body/collection.html.twig',
             [
                 'node' => $node->getValue(),
-            ]
+            ],
         );
     }
 }

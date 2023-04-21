@@ -16,9 +16,7 @@ class InlineMarkupToken
     /** @var string[] */
     private array $token;
 
-    /**
-     * @param string[] $token
-     */
+    /** @param string[] $token */
     public function __construct(string $type, string $id, array $token)
     {
         $this->type = $type;
@@ -42,9 +40,7 @@ class InlineMarkupToken
         return $this->token[$key] ?? '';
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getTokenData(): array
     {
         return $this->token;

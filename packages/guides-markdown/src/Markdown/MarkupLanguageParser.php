@@ -110,7 +110,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
                 $title = new TitleNode(
                     new SpanNode($content->getLiteral(), []),
                     $node->getLevel(),
-                    $this->idGenerator->slug($content->getLiteral())->lower()->toString()
+                    $this->idGenerator->slug($content->getLiteral())->lower()->toString(),
                 );
                 $document->addChildNode($title);
                 continue;
@@ -171,7 +171,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
     {
         if ($this->parserContext === null) {
             throw new RuntimeException(
-                'A parser\'s Environment should not be consulted before parsing has started'
+                'A parser\'s Environment should not be consulted before parsing has started',
             );
         }
 

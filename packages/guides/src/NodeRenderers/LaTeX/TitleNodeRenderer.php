@@ -52,7 +52,7 @@ class TitleNodeRenderer implements NodeRenderer
             [
                 'type' => $type,
                 'titleNode' => $node,
-            ]
+            ],
         );
     }
 

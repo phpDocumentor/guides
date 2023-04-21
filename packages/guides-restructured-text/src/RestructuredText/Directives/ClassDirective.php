@@ -32,7 +32,7 @@ class ClassDirective extends SubDirective
 
         $normalizedClasses = array_map(
             static fn (string $class): string => (new AsciiSlugger())->slug($class)->lower()->toString(),
-            $classes
+            $classes,
         );
 
         $document->setClasses($normalizedClasses);

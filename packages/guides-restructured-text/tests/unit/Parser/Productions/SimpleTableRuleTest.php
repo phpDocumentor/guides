@@ -59,7 +59,7 @@ class SimpleTableRuleTest extends RuleTestCase
 
     public function testApplyReturns2ColumnTableWithoutHeader(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 ===  ===
 AAA  BBB
 C    D
@@ -79,7 +79,7 @@ RST;
                 $row1,
                 $row2,
             ],
-            []
+            [],
         );
 
         $result = $this->rule->apply($this->createContext($input), null);
@@ -89,7 +89,7 @@ RST;
 
     public function testApplyReturns2ColumnTableWithMultiLineCells(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 ===  ===
 AAA  BBB
      BBB
@@ -110,7 +110,7 @@ RST;
                 $row1,
                 $row2,
             ],
-            []
+            [],
         );
 
         $result = $this->rule->apply($this->createContext($input), null);
@@ -120,7 +120,7 @@ RST;
 
     public function testApplyReturns3ColumnTableWithHeader(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 =========== ========== ========
 First col   Second col Third col
 =========== ========== ========
@@ -163,7 +163,7 @@ RST;
                 $row4,
                 $row5,
             ],
-            [$row1]
+            [$row1],
         );
 
         $result = $this->rule->apply($this->createContext($input), null);
@@ -173,7 +173,7 @@ RST;
 
     public function testApplyReturns3ColumnTableIgnoringRuler(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 =========== ========== ========
 First col   Second col Third col
 =========== ========== ========
@@ -213,7 +213,7 @@ RST;
                 $row3,
                 $row4,
             ],
-            [$row1]
+            [$row1],
         );
 
         $content = $this->createContext($input);
@@ -221,13 +221,13 @@ RST;
 
         self::assertEquals($expected, $result);
         self::assertRemainingEquals(
-            <<<RST
+            <<<'RST'
 
 This is not table content
 
 RST
             ,
-            $content->getDocumentIterator()
+            $content->getDocumentIterator(),
         );
     }
 

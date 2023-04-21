@@ -38,9 +38,7 @@ class IntegrationTest extends ApplicationTestCase
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
-    /**
-     * @param String[] $compareFiles
-     */
+    /** @param String[] $compareFiles */
     #[DataProvider('getTestsForDirectoryTest')]
     public function testHtmlIntegration(
         string $inputPath,
@@ -67,14 +65,14 @@ class IntegrationTest extends ApplicationTestCase
                 'output' => $outputPath,
                 '--output-format' => ['html', 'intersphinx'],
             ],
-            $command->getDefinition()
+            $command->getDefinition(),
         );
 
         $outputBuffer = new BufferedOutput();
 
         $command->run(
             $input,
-            $outputBuffer
+            $outputBuffer,
         );
 
         foreach ($compareFiles as $compareFile) {
@@ -113,25 +111,19 @@ class IntegrationTest extends ApplicationTestCase
         return implode("\n", $contentArray);
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public static function getTestsForDirectoryTest(): array
     {
         return self::getTestsForDirectory();
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public static function getTestsForLatex(): array
     {
         return self::getTestsForDirectory('/tests-latex');
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     private static function getTestsForDirectory(string $directory = '/tests'): array
     {
         $finder = new SymfonyFinder();

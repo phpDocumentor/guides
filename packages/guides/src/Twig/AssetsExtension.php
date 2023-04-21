@@ -63,8 +63,8 @@ final class AssetsExtension extends AbstractExtension
             new TwigTest(
                 'node',
                 /** @param mixed $value */
-                static fn ($value): bool => $value instanceof Node
-),
+                static fn ($value): bool => $value instanceof Node,
+            ),
         ];
     }
 
@@ -124,7 +124,7 @@ final class AssetsExtension extends AbstractExtension
         Assert::string($canonicalUrl);
         $outputPath = $this->urlGenerator->absoluteUrl(
             $renderContext->getDestinationPath(),
-            $canonicalUrl
+            $canonicalUrl,
         );
 
         try {

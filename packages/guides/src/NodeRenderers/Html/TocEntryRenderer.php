@@ -33,7 +33,7 @@ final class TocEntryRenderer implements NodeRenderer
             [
                 'url' => $renderContext->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),
                 'node' => $node,
-            ]
+            ],
         );
     }
 }

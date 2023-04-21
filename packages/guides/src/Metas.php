@@ -24,9 +24,7 @@ final class Metas
     /** @var array<string, InternalTarget> */
     private array $internalLinkTargets = [];
 
-    /**
-     * @param DocumentEntry[] $entries
-     */
+    /** @param DocumentEntry[] $entries */
     public function __construct(array $entries = [])
     {
         $this->entries = $entries;
@@ -37,17 +35,13 @@ final class Metas
         $this->entries[$documentEntry->getFile()] = $documentEntry;
     }
 
-    /**
-     * @return DocumentEntry[]
-     */
+    /** @return DocumentEntry[] */
     public function getAll(): array
     {
         return $this->entries;
     }
 
-    /**
-     * @param DocumentEntry[] $metaEntries
-     */
+    /** @param DocumentEntry[] $metaEntries */
     public function setMetaEntries(array $metaEntries): void
     {
         $this->entries = $metaEntries;

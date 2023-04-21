@@ -56,7 +56,7 @@ class TitleRule implements Rule
         $title = '';
         $overlineLetter = $this->currentLineIsAnOverline(
             $documentIterator->current(),
-            $documentIterator->getNextLine()
+            $documentIterator->getNextLine(),
         );
 
         if ($overlineLetter !== '') {
@@ -84,7 +84,7 @@ class TitleRule implements Rule
         return new TitleNode(
             $this->spanParser->parse($title, $context),
             $level,
-            (new AsciiSlugger())->slug($title)->lower()->toString()
+            (new AsciiSlugger())->slug($title)->lower()->toString(),
         );
     }
 

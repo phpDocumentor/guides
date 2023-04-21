@@ -17,9 +17,7 @@ abstract class TextNode extends AbstractNode
         $this->setValue($value);
     }
 
-    /**
-     * @param string[] $lines
-     */
+    /** @param string[] $lines */
     protected static function normalizeLines(array $lines): string
     {
         if ($lines !== []) {

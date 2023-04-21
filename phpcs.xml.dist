@@ -3,18 +3,28 @@
  <description>The coding standard for phpDocumentor guides.</description>
 
     <file>packages</file>
-    <file>packages</file>
     <file>tests</file>
 
     <config name="php_version" value="70400"/>
+
     <exclude-pattern>packages/*/examples/*</exclude-pattern>
     <exclude-pattern>tests/*/_*</exclude-pattern>
 
-    <arg value="p"/>
+    <arg value="nps"/>
 
-    <rule ref="phpDocumentor">
+    <rule ref="Doctrine">
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSame"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousPrefix"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
+
+        <exclude name="Squiz.Commenting.FunctionComment"/>
+    </rule>
+
+    <rule ref="Generic.Formatting.SpaceAfterNot">
+        <properties>
+            <property name="spacing" value="0"/>
+        </properties>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.NoAssignment">
@@ -24,10 +34,6 @@
     <rule ref="PSR2">
         <include-pattern>*\.php</include-pattern>
     </rule>
-
-    <!-- Set the minimum PHP version for PHPCompatibility.
-         This should be kept in sync with the requirements in the composer.json file. -->
-    <config name="testVersion" value="7.4-"/>
 
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
           <exclude-pattern>*/tests/*/*.php</exclude-pattern>

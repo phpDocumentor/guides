@@ -16,9 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Nodes;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 class AdmonitionNode extends CompoundNode
 {
     private string $name;
@@ -29,6 +27,7 @@ class AdmonitionNode extends CompoundNode
     public function __construct(string $name, string $text, array $value)
     {
         parent::__construct($value);
+
         $this->name = $name;
         $this->text = $text;
     }

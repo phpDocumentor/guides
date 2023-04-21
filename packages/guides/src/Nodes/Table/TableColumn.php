@@ -18,9 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function trim;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 final class TableColumn extends CompoundNode
 {
     private string $content;
@@ -35,6 +33,7 @@ final class TableColumn extends CompoundNode
         $this->content = trim($content);
         $this->colSpan = $colSpan;
         $this->rowSpan = $rowSpan;
+
         parent::__construct($nodes);
     }
 

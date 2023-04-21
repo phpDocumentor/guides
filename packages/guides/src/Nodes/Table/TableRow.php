@@ -31,9 +31,7 @@ final class TableRow
         $this->columns[] = $tableColumn;
     }
 
-    /**
-     * @return TableColumn[]
-     */
+    /** @return TableColumn[] */
     public function getColumns(): array
     {
         return $this->columns;
@@ -75,8 +73,8 @@ final class TableRow
                         'Malformed table: lines "%s" and "%s" appear to be in the same row, '
                         . 'but don\'t share the same number of columns.',
                         $this->toString(),
-                        $targetRow->toString()
-                    )
+                        $targetRow->toString(),
+                    ),
                 );
             }
 
@@ -90,8 +88,8 @@ final class TableRow
             ' | ',
             array_map(
                 static fn (TableColumn $column): string => $column->getContent(),
-                $this->columns
-            )
+                $this->columns,
+            ),
         );
     }
 

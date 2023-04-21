@@ -59,7 +59,7 @@ final class RuleContainer
     {
         return new self(
             ...$this->productions,
-            ...$productions->productions
+            ...$productions->productions,
         );
     }
 }
