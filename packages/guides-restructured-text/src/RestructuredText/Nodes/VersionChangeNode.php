@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
+namespace phpDocumentor\Guides\RestructuredText\Nodes;
+
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
+
+use function sprintf;
+
+/**
+ * @extends CompoundNode<Node>
+ */
+class VersionChangeNode extends CompoundNode
+{
+    private string $type;
+
+    private string $versionLabel;
+
+    private string $versionModified;
+
+    /** {@inheritDoc} */
+    public function __construct(string $type, string $versionLabel, string $versionModified, array $value)
+    {
+        parent::__construct($value);
+        $this->type = $type;
+        $this->versionLabel = sprintf($versionLabel, $versionModified);
+        $this->versionModified = $versionModified;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getVersionLabel(): string
+    {
+        return $this->versionLabel;
+    }
+
+    public function getVersionModified(): string
+    {
+        return $this->versionModified;
+    }
+}
