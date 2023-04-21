@@ -1,4 +1,4 @@
-PHP_BIN = docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:7.4
+PHP_BIN = docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:8.2-cli
 
 .PHONY: help
 help: ## Displays this list of targets with descriptions

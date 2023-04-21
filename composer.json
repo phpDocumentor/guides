@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "config": {
         "platform": {
-            "php": "7.4.1"
+            "php": "8.1.0"
         },
         "allow-plugins": {
             "phpstan/extension-installer": true,
@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "php": "^7.4||^8.0",
+        "php": "^8.1",
         "ext-mbstring": "*",
         "ext-json": "*",
         "league/flysystem": "^1.0",

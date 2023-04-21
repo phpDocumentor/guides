@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83a0c0a660db66ac33dccb20a7e726b1",
+    "content-hash": "76646beed465b9d3645fc438dfa654d5",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1164,14 +1164,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "d13468011a44991dcd054f85ee4082063f385f74"
+                "reference": "6052e7a12571a6115bce5cd45f20f6094307877e"
             },
             "require": {
                 "ext-json": "*",
                 "league/flysystem": "^1.0",
                 "league/tactician": "^1.1",
                 "league/uri": "^6.5",
-                "php": "^7.4||^8.0",
+                "php": "^8.1",
                 "phpdocumentor/flyfinder": "^1.1",
                 "psr/event-dispatcher": "^1.0",
                 "symfony/string": "^5.4",
@@ -1198,6 +1198,7 @@
             "license": [
                 "MIT"
             ],
+            "description": "Contains the core functionality from the phpDocumentor Guides.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -1209,10 +1210,11 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "6a64db1a0ee275e15f6177e4b573282b3472ab79"
+                "reference": "34771ca6b0a1a4888687b9345a12a469192ee75f"
             },
             "require": {
                 "monolog/monolog": "^2.9",
+                "php": "^8.1",
                 "phpdocumentor/guides": "dev-main@dev",
                 "phpdocumentor/guides-restructured-text": "dev-main@dev",
                 "phpdocumentor/guides-symfony": "dev-main@dev",
@@ -1239,7 +1241,7 @@
                     "email": "jaap@phpdoc.org"
                 }
             ],
-            "description": "Small console application allowing you to run phpDocumentor guides as a stand alone application",
+            "description": "Allows you to run phpDocumentor Guides as a stand alone application as console command",
             "transport-options": {
                 "relative": true
             }
@@ -1250,10 +1252,11 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "c398d085c48f730f0b393700d916d4878d441f29"
+                "reference": "1c87005edc2f3434d9fa07b52de5a2c5038e3901"
             },
             "require": {
-                "php": "^7.4.0||^8.0",
+                "php": "^8.1",
+                "phpdocumentor/guides": "dev-main@dev",
                 "symfony/process": "^5.4",
                 "twig/twig": "~2.0"
             },
@@ -1273,6 +1276,7 @@
             "license": [
                 "MIT"
             ],
+            "description": "Provides Plantuml support for restructured text rendered by the phpDocumentor's Guides library.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -1284,12 +1288,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "1c32d36d174b76cef04f81f7ed958034097e4328"
+                "reference": "a43310af78c9095346688917adb1dda2be897467"
             },
             "require": {
                 "doctrine/event-manager": "^1.2",
                 "doctrine/lexer": "^2.1",
-                "php": "^7.4||^8.0",
+                "php": "^8.1",
+                "phpdocumentor/guides": "dev-main@dev",
                 "webmozart/assert": "^1.11"
             },
             "type": "library",
@@ -1308,6 +1313,7 @@
             "license": [
                 "MIT"
             ],
+            "description": "Adds reStructuredText Markup support to the phpDocumentor's Guides library.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -1319,9 +1325,10 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-symfony",
-                "reference": "875568ac4f842fbee7ad852d2c0b9be23d1685f7"
+                "reference": "282ca522ce94487a4e1a638ddf362158208300bf"
             },
             "require": {
+                "php": "^8.1",
                 "phpdocumentor/guides": "dev-main@dev",
                 "phpdocumentor/guides-restructured-text": "dev-main@dev",
                 "symfony/config": "^5.4",
@@ -6725,13 +6732,13 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4||^8.0",
+        "php": "^8.1",
         "ext-mbstring": "*",
         "ext-json": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.4.1"
+        "php": "8.1.0"
     },
     "plugin-api-version": "2.3.0"
 }
