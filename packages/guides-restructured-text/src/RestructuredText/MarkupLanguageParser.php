@@ -9,7 +9,6 @@ use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\BestPracticeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Code;
@@ -83,7 +82,6 @@ class MarkupLanguageParser implements ParserInterface
 
         $directives = [
             new AdmonitionDirective(),
-            new BestPracticeDirective(),
             new CautionDirective(),
             new ClassDirective(),
             new Code(),

@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-class BestPracticeDirective extends AbstractAdmonitionDirective
+class ErrorDirective extends AbstractAdmonitionDirective
 {
     public function __construct()
     {
-        parent::__construct('best-practice', 'Best Practice');
+        parent::__construct('error', 'Error');
     }
 }
