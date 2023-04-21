@@ -5,16 +5,11 @@ parameters:
   ignoreErrors:
     # FlyFinder plugin adds a find method to FlySystem's Filesystem
     - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
-    - '#ArrayObject<\(int\|string\), phpDocumentor\\Guides\\NodeRenderers\\NodeRenderer<phpDocumentor\\Guides\\Nodes\\Node>> does not accept .*#'
     - '#Method phpDocumentor\\Guides\\Handlers\\ParseDirectoryHandler::handle\(\) should return array<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns array<int<0, max>, mixed>#'
 
     -
       message: '#Unreachable statement - code above always terminates\.#'
       path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
-
-    -
-      message: '#Method phpDocumentor\\Guides\\Setup\\QuickStart::createRenderer\(\) should return phpDocumentor\\Guides\\NodeRenderers\\NodeRenderer<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns phpDocumentor\\Guides\\NodeRenderers\\DelegatingNodeRenderer\.#'
-      path: packages/guides/src/Setup/QuickStart.php
 
   paths:
     - packages/guides/src
