@@ -47,7 +47,7 @@ class IntegrationBootstrapTest extends ApplicationTestCase
         string $inputPath,
         string $expectedPath,
         string $outputPath,
-        array $compareFiles
+        array $compareFiles,
     ): void {
         system('rm -rf ' . escapeshellarg($outputPath));
         self::assertDirectoryExists($inputPath);

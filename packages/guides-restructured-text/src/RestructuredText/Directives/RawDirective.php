@@ -31,8 +31,8 @@ class RawDirective extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $node = new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
 
         $document = $documentParserContext->getDocument();

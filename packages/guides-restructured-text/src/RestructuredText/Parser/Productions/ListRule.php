@@ -53,11 +53,8 @@ final class ListRule implements Rule
          # (or eol, if text starts on a new line)
         /ux';
 
-    private RuleContainer $productions;
-
-    public function __construct(RuleContainer $productions)
+    public function __construct(private RuleContainer $productions)
     {
-        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -67,7 +64,7 @@ final class ListRule implements Rule
         return $this->isListLine($documentIterator->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -112,7 +109,7 @@ final class ListRule implements Rule
         return new ListNode($items, false);
     }
 
-    private function isListLine(?string $line): bool
+    private function isListLine(string|null $line): bool
     {
         if ($line === null) {
             return false;
@@ -135,7 +132,7 @@ final class ListRule implements Rule
         ];
     }
 
-    private function isListItemStart(?string $line, ?string $listMarker = null): bool
+    private function isListItemStart(string|null $line, string|null $listMarker = null): bool
     {
         if ($line === null) {
             return false;

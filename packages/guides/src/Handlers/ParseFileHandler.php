@@ -30,23 +30,14 @@ use function trim;
 
 final class ParseFileHandler
 {
-    private LoggerInterface $logger;
-
-    private Parser $parser;
-
-    private EventDispatcherInterface $eventDispatcher;
-
     public function __construct(
-        LoggerInterface $logger,
-        EventDispatcherInterface $eventDispatcher,
-        Parser $parser
+        private LoggerInterface $logger,
+        private EventDispatcherInterface $eventDispatcher,
+        private Parser $parser,
     ) {
-        $this->logger = $logger;
-        $this->parser = $parser;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function handle(ParseFileCommand $command): ?DocumentNode
+    public function handle(ParseFileCommand $command): DocumentNode|null
     {
         $this->logger->info(sprintf('Parsing %s', $command->getFile()));
 
@@ -79,8 +70,8 @@ final class ParseFileHandler
         string $documentFolder,
         string $fileName,
         string $extension,
-        int $initialHeaderLevel
-    ): ?DocumentNode {
+        int $initialHeaderLevel,
+    ): DocumentNode|null {
         $path = $this->buildPathOnFileSystem($fileName, $documentFolder, $extension);
         $fileContents = $this->getFileContents($origin, $path);
 
@@ -99,7 +90,7 @@ final class ParseFileHandler
         $document = null;
         try {
             $document = $this->parser->parse($preParseDocumentEvent->getContents(), $extension);
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             $this->logger->error(
                 sprintf('Unable to parse %s, input format was not recognized', $path),
             );

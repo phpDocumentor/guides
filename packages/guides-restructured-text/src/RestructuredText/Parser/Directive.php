@@ -17,22 +17,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
  */
 class Directive
 {
-    private string $variable;
-
-    private string $name;
-
-    private string $data;
-
-    /** @var DirectiveOption[] */
-    private array $options;
-
     /** @param DirectiveOption[] $options */
-    public function __construct(string $variable, string $name, string $data, array $options = [])
+    public function __construct(private string $variable, private string $name, private string $data, private array $options = [])
     {
-        $this->variable = $variable;
-        $this->name = $name;
-        $this->data = $data;
-        $this->options = $options;
     }
 
     public function getVariable(): string

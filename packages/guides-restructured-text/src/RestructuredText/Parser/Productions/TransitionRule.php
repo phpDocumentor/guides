@@ -37,7 +37,7 @@ final class TransitionRule implements Rule
         return $this->currentLineIsASeparator($line, $nextLine) !== null;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -53,7 +53,7 @@ final class TransitionRule implements Rule
         return new SeparatorNode(1);
     }
 
-    private function currentLineIsASeparator(string $line, ?string $nextLine): ?string
+    private function currentLineIsASeparator(string $line, string|null $nextLine): string|null
     {
         $letter = LineChecker::isSpecialLine($line, self::SEPERATOR_LENGTH_MIN);
         if (!LinesIterator::isNullOrEmptyLine($nextLine)) {

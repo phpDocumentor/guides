@@ -16,11 +16,8 @@ use const JSON_THROW_ON_ERROR;
 
 class JsonLoader
 {
-    private HttpClientInterface $client;
-
-    public function __construct(HttpClientInterface $client)
+    public function __construct(private HttpClientInterface $client)
     {
-        $this->client = $client;
     }
 
     /** @return array<mixed> */

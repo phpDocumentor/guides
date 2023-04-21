@@ -8,16 +8,11 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class PostParseDocument
 {
-    private ?DocumentNode $documentNode;
-    private string $fileName;
-
-    public function __construct(string $fileName, ?DocumentNode $documentNode)
+    public function __construct(private string $fileName, private DocumentNode|null $documentNode)
     {
-        $this->documentNode = $documentNode;
-        $this->fileName = $fileName;
     }
 
-    public function getDocumentNode(): ?DocumentNode
+    public function getDocumentNode(): DocumentNode|null
     {
         return $this->documentNode;
     }

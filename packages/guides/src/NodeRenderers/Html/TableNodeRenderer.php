@@ -22,11 +22,8 @@ use phpDocumentor\Guides\TemplateRenderer;
 /** @implements NodeRenderer<TableNode> */
 class TableNodeRenderer implements NodeRenderer
 {
-    private TemplateRenderer $renderer;
-
-    public function __construct(TemplateRenderer $renderer)
+    public function __construct(private TemplateRenderer $renderer)
     {
-        $this->renderer = $renderer;
     }
 
     public function render(Node $node, RenderContext $renderContext): string

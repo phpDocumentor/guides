@@ -23,7 +23,7 @@ class LaTeXMain extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): Node {
         return new MainNode($data);
     }

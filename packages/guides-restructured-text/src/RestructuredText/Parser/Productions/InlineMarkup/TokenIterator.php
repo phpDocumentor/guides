@@ -15,13 +15,10 @@ class TokenIterator implements Iterator
     /** @var int[] */
     private array $snapShot = [];
     private int $position = 0;
-    /** @var string[]  */
-    private array $tokens;
 
     /** @param string[] $tokens */
-    public function __construct(array $tokens)
+    public function __construct(private array $tokens)
     {
-        $this->tokens = $tokens;
     }
 
     public function current(): string
@@ -48,7 +45,7 @@ class TokenIterator implements Iterator
         return isset($this->tokens[$this->position]);
     }
 
-    public function getNext(): ?string
+    public function getNext(): string|null
     {
         return $this->tokens[$this->position + 1] ?? null;
     }

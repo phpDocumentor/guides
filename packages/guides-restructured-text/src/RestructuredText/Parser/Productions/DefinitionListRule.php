@@ -42,13 +42,8 @@ use function trim;
  */
 final class DefinitionListRule implements Rule
 {
-    private InlineMarkupRule $inlineMarkupRule;
-    private RuleContainer $definitionProducers;
-
-    public function __construct(InlineMarkupRule $inlineMarkupRule, RuleContainer $definitionProducers)
+    public function __construct(private InlineMarkupRule $inlineMarkupRule, private RuleContainer $definitionProducers)
     {
-        $this->inlineMarkupRule = $inlineMarkupRule;
-        $this->definitionProducers = $definitionProducers;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -59,7 +54,7 @@ final class DefinitionListRule implements Rule
         );
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $iterator = $documentParserContext->getDocumentIterator();
         $definitionListItems = [];
@@ -148,7 +143,7 @@ final class DefinitionListRule implements Rule
         return $node;
     }
 
-    private function isDefinitionTerm(?string $currentLine, ?string $nextLine): bool
+    private function isDefinitionTerm(string|null $currentLine, string|null $nextLine): bool
     {
         if ($currentLine === null || LinesIterator::isEmptyLine($currentLine)) {
             return false;

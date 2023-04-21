@@ -6,11 +6,8 @@ namespace phpDocumentor\Guides\Meta;
 
 class DocumentReferenceEntry implements ChildEntry
 {
-    private string $file;
-
-    public function __construct(string $file)
+    public function __construct(private string $file)
     {
-        $this->file = $file;
     }
 
     public function getFile(): string

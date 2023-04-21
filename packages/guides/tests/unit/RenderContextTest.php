@@ -21,7 +21,7 @@ final class RenderContextTest extends TestCase
         string $destinationPath,
         string $linkedDocument,
         string $result,
-        ?string $anchor = null
+        string|null $anchor = null,
     ): void {
         $documentNode = new DocumentNode(md5('hash'), $filePath);
 

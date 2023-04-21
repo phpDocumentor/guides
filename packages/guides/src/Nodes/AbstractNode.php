@@ -28,13 +28,13 @@ abstract class AbstractNode implements Node
     }
 
     /** @param TValue $value */
-    public function setValue($value): void
+    public function setValue(mixed $value): void
     {
         $this->value = $value;
     }
 
     /** @return TValue */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
@@ -96,12 +96,11 @@ abstract class AbstractNode implements Node
     /**
      * @param TType|null $default
      *
-     * @return mixed|null
      * @phpstan-return ($default is null ? mixed|null: TType|null)
      *
      * @template TType as mixed
      */
-    public function getOption(string $name, $default = null)
+    public function getOption(string $name, $default = null): mixed
     {
         return $this->options[$name] ?? $default;
     }

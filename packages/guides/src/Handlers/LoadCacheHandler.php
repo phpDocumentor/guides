@@ -18,14 +18,8 @@ use phpDocumentor\Guides\Metas;
 
 final class LoadCacheHandler
 {
-    private CachedMetasLoader $cachedMetasLoader;
-
-    private Metas $metas;
-
-    public function __construct(CachedMetasLoader $cachedMetasLoader, Metas $metas)
+    public function __construct(private CachedMetasLoader $cachedMetasLoader, private Metas $metas)
     {
-        $this->metas = $metas;
-        $this->cachedMetasLoader = $cachedMetasLoader;
     }
 
     public function handle(LoadCacheCommand $command): void

@@ -16,13 +16,8 @@ use Webmozart\Assert\Assert;
 /** @implements Rule<SectionNode> */
 final class SectionRule implements Rule
 {
-    private TitleRule $titleRule;
-    private RuleContainer $productions;
-
-    public function __construct(TitleRule $titleRule, RuleContainer $productions)
+    public function __construct(private TitleRule $titleRule, private RuleContainer $productions)
     {
-        $this->titleRule = $titleRule;
-        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -31,7 +26,7 @@ final class SectionRule implements Rule
     }
 
     /** @param DocumentNode|SectionNode $on */
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();

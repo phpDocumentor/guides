@@ -17,11 +17,8 @@ use phpDocumentor\Guides\Nodes\TocNode;
 
 final class MetasPass implements CompilerPass
 {
-    private Metas $metas;
-
-    public function __construct(Metas $metas)
+    public function __construct(private Metas $metas)
     {
-        $this->metas = $metas;
     }
 
     /** {@inheritDoc} */

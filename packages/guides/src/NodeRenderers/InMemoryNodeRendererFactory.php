@@ -17,19 +17,12 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class InMemoryNodeRendererFactory implements NodeRendererFactory
 {
-    /** @var iterable<NodeRenderer<Node>> */
-    private iterable $nodeRenderers;
-
-    /** @var NodeRenderer<Node> */
-    private NodeRenderer $defaultNodeRenderer;
-
     /**
      * @param iterable<NodeRenderer<Node>> $nodeRenderers
      * @param NodeRenderer<Node> $defaultNodeRenderer
      */
-    public function __construct(iterable $nodeRenderers, NodeRenderer $defaultNodeRenderer)
+    public function __construct(private iterable $nodeRenderers, private NodeRenderer $defaultNodeRenderer)
     {
-        $this->nodeRenderers = $nodeRenderers;
         foreach ($nodeRenderers as $nodeRenderer) {
             if (!$nodeRenderer instanceof NodeRendererFactoryAware) {
                 continue;
@@ -38,7 +31,6 @@ class InMemoryNodeRendererFactory implements NodeRendererFactory
             $nodeRenderer->setNodeRendererFactory($this);
         }
 
-        $this->defaultNodeRenderer = $defaultNodeRenderer;
         if (!$defaultNodeRenderer instanceof NodeRendererFactoryAware) {
             return;
         }

@@ -10,29 +10,15 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class RenderCommand
 {
-    private string $outputFormat;
-    /** @var DocumentNode[] */
-    private array $documents;
-    private Metas $metas;
-    private FilesystemInterface $origin;
-    private FilesystemInterface $destination;
-    private string $destinationPath;
-
     /** @param DocumentNode[] $documents */
     public function __construct(
-        string $outputFormat,
-        array $documents,
-        Metas $metas,
-        FilesystemInterface $origin,
-        FilesystemInterface $destination,
-        string $destinationPath = '/'
+        private string $outputFormat,
+        private array $documents,
+        private Metas $metas,
+        private FilesystemInterface $origin,
+        private FilesystemInterface $destination,
+        private string $destinationPath = '/',
     ) {
-        $this->outputFormat = $outputFormat;
-        $this->documents = $documents;
-        $this->metas = $metas;
-        $this->origin = $origin;
-        $this->destination = $destination;
-        $this->destinationPath = $destinationPath;
     }
 
     public function getOutputFormat(): string

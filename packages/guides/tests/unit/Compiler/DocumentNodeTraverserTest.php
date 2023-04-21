@@ -29,7 +29,7 @@ final class DocumentNodeTraverserTest extends TestCase
                     return $node;
                 }
 
-                public function leaveNode(Node $node): ?Node
+                public function leaveNode(Node $node): Node|null
                 {
                     return null;
                 }
@@ -63,11 +63,8 @@ final class DocumentNodeTraverserTest extends TestCase
         $transformers = [
             new /** @implements NodeTransformer<TocNode> */
             class ($replacement) implements NodeTransformer {
-                private TocNode $replacement;
-
-                public function __construct(TocNode $replacement)
+                public function __construct(private TocNode $replacement)
                 {
-                    $this->replacement = $replacement;
                 }
 
                 public function enterNode(Node $node): Node
@@ -75,7 +72,7 @@ final class DocumentNodeTraverserTest extends TestCase
                     return $this->replacement;
                 }
 
-                public function leaveNode(Node $node): ?Node
+                public function leaveNode(Node $node): Node|null
                 {
                     return $node;
                 }

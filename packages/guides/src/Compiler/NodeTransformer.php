@@ -21,7 +21,7 @@ interface NodeTransformer
      *
      * @return T|null
      */
-    public function leaveNode(Node $node): ?Node;
+    public function leaveNode(Node $node): Node|null;
 
     /** @psalm-assert-if-true T $node */
     public function supports(Node $node): bool;

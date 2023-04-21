@@ -31,12 +31,8 @@ namespace phpDocumentor\Guides\Nodes;
  */
 final class GenericNode extends AbstractNode
 {
-    private string $name;
-
-    /** @param Node|string|null $value */
-    public function __construct(string $name, $value = null)
+    public function __construct(private string $name, Node|string|null $value = null)
     {
-        $this->name = $name;
         $this->value = $value;
     }
 

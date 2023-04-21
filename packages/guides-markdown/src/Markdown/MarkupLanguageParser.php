@@ -32,7 +32,6 @@ use phpDocumentor\Guides\ParserContext;
 use RuntimeException;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-use function get_class;
 use function md5;
 use function strtolower;
 
@@ -40,12 +39,12 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 {
     private MarkdownParser $markdownParser;
 
-    private ?ParserContext $parserContext = null;
+    private ParserContext|null $parserContext = null;
 
     /** @var ParserInterface<Node>[] */
     private array $parsers;
 
-    private ?DocumentNode $document = null;
+    private DocumentNode|null $document = null;
     private AsciiSlugger $idGenerator;
 
     public function __construct()
@@ -149,7 +148,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
             echo 'DOCUMENT CONTEXT: I am '
                 . 'leaving'
                 . ' a '
-                . get_class($node)
+                . $node::class
                 . ' node'
                 . "\n";
         }

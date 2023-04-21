@@ -22,7 +22,7 @@ use function is_string;
 /** @implements NodeRenderer<Node> */
 class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
-    private ?NodeRendererFactory $nodeRendererFactory = null;
+    private NodeRendererFactory|null $nodeRendererFactory = null;
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {

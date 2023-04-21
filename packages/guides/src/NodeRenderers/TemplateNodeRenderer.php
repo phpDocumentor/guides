@@ -14,18 +14,9 @@ use phpDocumentor\Guides\TemplateRenderer;
  */
 final class TemplateNodeRenderer implements NodeRenderer
 {
-    private TemplateRenderer $renderer;
-
-    private string $template;
-
-    private string $nodeClass;
-
     /** @param class-string<T> $nodeClass */
-    public function __construct(TemplateRenderer $renderer, string $template, string $nodeClass)
+    public function __construct(private TemplateRenderer $renderer, private string $template, private string $nodeClass)
     {
-        $this->renderer = $renderer;
-        $this->template = $template;
-        $this->nodeClass = $nodeClass;
     }
 
     public function supports(Node $node): bool

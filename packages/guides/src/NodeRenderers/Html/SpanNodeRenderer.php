@@ -59,7 +59,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     }
 
     /** @param string[] $attributes */
-    public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
+    public function link(RenderContext $context, string|null $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
 

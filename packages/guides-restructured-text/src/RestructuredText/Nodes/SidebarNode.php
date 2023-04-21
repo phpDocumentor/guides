@@ -19,14 +19,10 @@ use phpDocumentor\Guides\Nodes\Node;
 /** @extends CompoundNode<Node> */
 final class SidebarNode extends CompoundNode
 {
-    private string $title;
-
     /** {@inheritDoc} */
-    public function __construct(string $title, array $value)
+    public function __construct(private string $title, array $value)
     {
         parent::__construct($value);
-
-        $this->title = $title;
     }
 
     public function getTitle(): string

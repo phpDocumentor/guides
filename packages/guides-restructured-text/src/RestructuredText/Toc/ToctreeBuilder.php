@@ -15,14 +15,8 @@ use function strpos;
 
 class ToctreeBuilder
 {
-    private GlobSearcher $globSearcher;
-
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(GlobSearcher $globSearcher, UrlGeneratorInterface $urlGenerator)
+    public function __construct(private GlobSearcher $globSearcher, private UrlGeneratorInterface $urlGenerator)
     {
-        $this->globSearcher = $globSearcher;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -33,7 +27,7 @@ class ToctreeBuilder
     public function buildToctreeFiles(
         ParserContext $parserContext,
         LinesIterator $lines,
-        array $options
+        array $options,
     ): array {
         $toctreeFiles = [];
 

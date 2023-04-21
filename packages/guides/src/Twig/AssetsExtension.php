@@ -31,20 +31,12 @@ use function trim;
 
 final class AssetsExtension extends AbstractExtension
 {
-    private LoggerInterface $logger;
-    /** @var NodeRenderer<Node> */
-    private NodeRenderer $nodeRenderer;
-    private UrlGeneratorInterface $urlGenerator;
-
     /** @param NodeRenderer<Node> $nodeRenderer */
     public function __construct(
-        LoggerInterface $logger,
-        NodeRenderer $nodeRenderer,
-        UrlGeneratorInterface $urlGenerator
+        private LoggerInterface $logger,
+        private NodeRenderer $nodeRenderer,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->logger = $logger;
-        $this->nodeRenderer = $nodeRenderer;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /** @return TwigFunction[] */
@@ -89,7 +81,7 @@ final class AssetsExtension extends AbstractExtension
      * @param array{env: RenderContext} $context
      * @param Node|Node[]|null $node
      */
-    public function renderNode(array $context, $node): string
+    public function renderNode(array $context, Node|array|null $node): string
     {
         if ($node === null) {
             return '';
@@ -113,8 +105,8 @@ final class AssetsExtension extends AbstractExtension
     }
 
     private function copyAsset(
-        ?RenderContext $renderContext,
-        string $sourcePath
+        RenderContext|null $renderContext,
+        string $sourcePath,
     ): string {
         if (!$renderContext instanceof RenderContext) {
             return $sourcePath;

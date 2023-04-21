@@ -22,32 +22,17 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
  */
 class CrossReferenceNode extends InlineMarkupToken
 {
-    private string $id;
-
-    private string $literal;
-
-    private ?string $role;
-
-    private ?string $domain;
-
-    private ?string $anchor;
-
-    private ?string $text;
+    private string|null $role;
 
     public function __construct(
-        string $id,
+        private string $id,
         string $role,
-        string $literal,
-        ?string $anchor = null,
-        ?string $text = null,
-        ?string $domain = null
+        private string $literal,
+        private string|null $anchor = null,
+        private string|null $text = null,
+        private string|null $domain = null,
     ) {
-        $this->id = $id;
-        $this->literal = $literal;
         $this->role = $role;
-        $this->domain = $domain;
-        $this->anchor = $anchor;
-        $this->text = $text;
     }
 
     public function getId(): string
@@ -60,22 +45,22 @@ class CrossReferenceNode extends InlineMarkupToken
         return $this->literal;
     }
 
-    public function getRole(): ?string
+    public function getRole(): string|null
     {
         return $this->role;
     }
 
-    public function getDomain(): ?string
+    public function getDomain(): string|null
     {
         return $this->domain;
     }
 
-    public function getAnchor(): ?string
+    public function getAnchor(): string|null
     {
         return $this->anchor;
     }
 
-    public function getText(?string $default = null): string
+    public function getText(string|null $default = null): string
     {
         return $this->text ?? $default ?? $this->literal;
     }

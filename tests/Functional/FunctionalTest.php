@@ -52,7 +52,7 @@ class FunctionalTest extends ApplicationTestCase
         string $format,
         string $rst,
         string $expected,
-        bool $useIndenter = true
+        bool $useIndenter = true,
     ): void {
         $expectedLines = explode("\n", $expected);
         $firstLine     = $expectedLines[0];

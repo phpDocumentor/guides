@@ -11,30 +11,16 @@ use function sprintf;
 
 final class TableSeparatorLineConfig
 {
-    private bool $isHeader;
-
-    /** @var int[][] */
-    private array $partRanges;
-
-    private string $lineCharacter;
-
-    private string $rawContent;
-
     /** @param int[][] $partRanges */
     public function __construct(
-        bool $isHeader,
-        array $partRanges,
-        string $lineCharacter,
-        string $rawContent
+        private bool $isHeader,
+        private array $partRanges,
+        private string $lineCharacter,
+        private string $rawContent,
     ) {
         if (!in_array($lineCharacter, ['=', '-'], true)) {
             throw new InvalidArgumentException(sprintf('Unexpected line character "%s"', $lineCharacter));
         }
-
-        $this->isHeader = $isHeader;
-        $this->partRanges = $partRanges;
-        $this->lineCharacter = $lineCharacter;
-        $this->rawContent = $rawContent;
     }
 
     public function isHeader(): bool

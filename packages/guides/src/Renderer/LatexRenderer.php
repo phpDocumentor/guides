@@ -16,13 +16,9 @@ class LatexRenderer implements TypeRenderer
 {
     public const TYPE = 'tex';
 
-    /** @var NodeRenderer<DocumentNode> */
-    private NodeRenderer $renderer;
-
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(NodeRenderer $renderer)
+    public function __construct(private NodeRenderer $renderer)
     {
-        $this->renderer = $renderer;
     }
 
     public function supports(string $outputFormat): bool

@@ -9,13 +9,9 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class RenderDocumentHandler
 {
-    /** @var NodeRenderer<DocumentNode> */
-    private NodeRenderer $renderer;
-
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(NodeRenderer $renderer)
+    public function __construct(private NodeRenderer $renderer)
     {
-        $this->renderer = $renderer;
     }
 
     public function handle(RenderDocumentCommand $command): void

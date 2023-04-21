@@ -34,11 +34,9 @@ use function trim;
 class TitleRule implements Rule
 {
     private const TITLE_LENGTH_MIN = 2;
-    private SpanParser $spanParser;
 
-    public function __construct(SpanParser $spanParser)
+    public function __construct(private SpanParser $spanParser)
     {
-        $this->spanParser = $spanParser;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -50,7 +48,7 @@ class TitleRule implements Rule
             || $this->nextLineIsAnUnderline($line, $nextLine);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $title = '';
@@ -88,7 +86,7 @@ class TitleRule implements Rule
         );
     }
 
-    private function currentLineIsAnOverline(string $line, ?string $nextLine): string
+    private function currentLineIsAnOverline(string $line, string|null $nextLine): string
     {
         $letter = LineChecker::isSpecialLine($line, self::TITLE_LENGTH_MIN);
         if (LinesIterator::isNullOrEmptyLine($nextLine)) {
@@ -102,7 +100,7 @@ class TitleRule implements Rule
         return $letter ?? '';
     }
 
-    private function nextLineIsAnUnderline(string $line, ?string $nextLine): string
+    private function nextLineIsAnUnderline(string $line, string|null $nextLine): string
     {
         $letter = LineChecker::isSpecialLine($nextLine ?? '', self::TITLE_LENGTH_MIN);
 

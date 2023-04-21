@@ -8,16 +8,11 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 
 class DocumentEntry implements Entry
 {
-    private string $file;
-
     /** @var ChildEntry[] */
     private array $entries = [];
-    private TitleNode $titleNode;
 
-    public function __construct(string $file, TitleNode $titleNode)
+    public function __construct(private string $file, private TitleNode $titleNode)
     {
-        $this->file = $file;
-        $this->titleNode = $titleNode;
     }
 
     public function getTitle(): TitleNode

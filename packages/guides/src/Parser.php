@@ -28,20 +28,16 @@ use function getcwd;
  */
 final class Parser
 {
-    private ?ParserContext $parserContext = null;
-
-    private UrlGeneratorInterface $urlGenerator;
+    private ParserContext|null $parserContext = null;
 
     /** @var MarkupLanguageParser[] */
     private array $parserStrategies = [];
 
     /** @param iterable<MarkupLanguageParser> $parserStrategies */
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        iterable $parserStrategies
+        private UrlGeneratorInterface $urlGenerator,
+        iterable $parserStrategies,
     ) {
-        $this->urlGenerator = $urlGenerator;
-
         foreach ($parserStrategies as $strategy) {
             $this->registerStrategy($strategy);
         }
@@ -57,10 +53,10 @@ final class Parser
      * @psalm-assert Metas $this->metas
      */
     public function prepare(
-        ?FilesystemInterface $origin,
+        FilesystemInterface|null $origin,
         string $sourcePath,
         string $fileName,
-        int $initialHeaderLevel = 1
+        int $initialHeaderLevel = 1,
     ): void {
         if ($origin === null) {
             $cwd = getcwd();
@@ -78,7 +74,7 @@ final class Parser
 
     public function parse(
         string $text,
-        string $inputFormat = 'rst'
+        string $inputFormat = 'rst',
     ): DocumentNode {
         if ($this->parserContext === null) {
             // Environment is not set; then the prepare method hasn't been called and we consider
@@ -111,7 +107,7 @@ final class Parser
         string $sourcePath,
         string $file,
         FilesystemInterface $origin,
-        int $initialHeaderLevel
+        int $initialHeaderLevel,
     ): ParserContext {
         return new ParserContext(
             $file,

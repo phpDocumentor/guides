@@ -16,14 +16,11 @@ use Webmozart\Assert\Assert;
 /** @implements NodeTransformer<DocumentNode|AnchorNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
 {
-    private Metas $metas;
-
     /** @var SplStack<DocumentNode> */
     private SplStack $documentStack;
 
-    public function __construct(Metas $metas)
+    public function __construct(private Metas $metas)
     {
-        $this->metas = $metas;
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are
          *       now produced by the {@see \phpDocumentor\Guides\RestructuredText\MarkupLanguageParser::getSubParser}

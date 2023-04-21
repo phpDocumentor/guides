@@ -8,15 +8,8 @@ use phpDocumentor\Guides\Parser;
 
 final class PreParseDocument
 {
-    private Parser $parser;
-    private string $contents;
-    private string $fileName;
-
-    public function __construct(Parser $parser, string $fileName, string $contents)
+    public function __construct(private Parser $parser, private string $fileName, private string $contents)
     {
-        $this->parser = $parser;
-        $this->contents = $contents;
-        $this->fileName = $fileName;
     }
 
     public function getParser(): Parser

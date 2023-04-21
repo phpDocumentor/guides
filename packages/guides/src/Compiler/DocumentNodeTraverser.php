@@ -11,14 +11,11 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
-    private NodeTransformerFactory $nodeTransformerFactory;
-
-    public function __construct(NodeTransformerFactory $nodeTransformerFactory)
+    public function __construct(private NodeTransformerFactory $nodeTransformerFactory)
     {
-        $this->nodeTransformerFactory = $nodeTransformerFactory;
     }
 
-    public function traverse(DocumentNode $node): ?Node
+    public function traverse(DocumentNode $node): Node|null
     {
         foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
             $node = $this->traverseForTransformer($transformer, $node);
@@ -37,7 +34,7 @@ final class DocumentNodeTraverser
      *
      * @template TNode as Node
      */
-    private function traverseForTransformer(NodeTransformer $transformer, Node $node): ?Node
+    private function traverseForTransformer(NodeTransformer $transformer, Node $node): Node|null
     {
         $supports = $transformer->supports($node);
 

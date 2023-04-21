@@ -22,11 +22,8 @@ use function ltrim;
 /** @implements NodeTransformer<TocNode> */
 final class TocNodeTransformer implements NodeTransformer
 {
-    private Metas $metas;
-
-    public function __construct(Metas $metas)
+    public function __construct(private Metas $metas)
     {
-        $this->metas = $metas;
     }
 
     public function enterNode(Node $node): Node
@@ -47,7 +44,7 @@ final class TocNodeTransformer implements NodeTransformer
         return $node->withEntries($entries);
     }
 
-    public function leaveNode(Node $node): ?Node
+    public function leaveNode(Node $node): Node|null
     {
         return $node;
     }
@@ -78,7 +75,7 @@ final class TocNodeTransformer implements NodeTransformer
         DocumentEntry $document,
         SectionEntry $entry,
         int $depth,
-        TocNode $node
+        TocNode $node,
     ): Traversable {
         if ($depth > $node->getDepth()) {
             return new ArrayIterator([]);
@@ -94,7 +91,7 @@ final class TocNodeTransformer implements NodeTransformer
         MetaEntry $child,
         DocumentEntry $document,
         int $depth,
-        TocNode $node
+        TocNode $node,
     ): Traversable {
         if ($child instanceof SectionEntry) {
             yield new Entry(

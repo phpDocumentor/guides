@@ -12,11 +12,8 @@ use function array_filter;
 
 final class TransformerPass implements CompilerPass
 {
-    private DocumentNodeTraverser $documentNodeTraverser;
-
-    public function __construct(DocumentNodeTraverser $documentNodeTraverser)
+    public function __construct(private DocumentNodeTraverser $documentNodeTraverser)
     {
-        $this->documentNodeTraverser = $documentNodeTraverser;
     }
 
     /** {@inheritDoc} */

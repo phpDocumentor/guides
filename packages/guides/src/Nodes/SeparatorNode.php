@@ -16,13 +16,9 @@ namespace phpDocumentor\Guides\Nodes;
 /** @extends CompoundNode<Node> */
 class SeparatorNode extends CompoundNode
 {
-    protected int $level;
-
-    public function __construct(int $level)
+    public function __construct(protected int $level)
     {
         parent::__construct([]);
-
-        $this->level = $level;
     }
 
     public function getLevel(): int

@@ -16,16 +16,12 @@ use function sprintf;
 final class ParseDirectoryHandler
 {
     private FileCollector $fileCollector;
-    private CommandBus $commandBus;
     /** @var string[]  */
     private array $indexFileNames = ['index', 'Index'];
-    private Metas $metas;
 
-    public function __construct(FileCollector $scanner, CommandBus $commandBus, Metas $metas)
+    public function __construct(FileCollector $scanner, private CommandBus $commandBus, private Metas $metas)
     {
         $this->fileCollector = $scanner;
-        $this->commandBus = $commandBus;
-        $this->metas = $metas;
     }
 
     /** @return DocumentNode[] */
@@ -55,7 +51,7 @@ final class ParseDirectoryHandler
     private function guardThatAnIndexFileExists(
         FilesystemInterface $filesystem,
         string $directory,
-        string $sourceFormat
+        string $sourceFormat,
     ): void {
         $extension = $sourceFormat;
         $hasIndexFile = false;

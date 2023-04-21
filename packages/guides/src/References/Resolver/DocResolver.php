@@ -15,7 +15,7 @@ final class DocResolver implements Resolver
         return $node->getRole() === 'doc';
     }
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference
+    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null
     {
         $filePath = $context->canonicalUrl($node->getUrl());
 
@@ -47,7 +47,7 @@ final class DocResolver implements Resolver
         RenderContext $renderContext,
         string $text,
         array $attributes = [],
-        ?string $anchor = null
+        string|null $anchor = null,
     ): ResolvedReference {
         return new ResolvedReference(
             $file,

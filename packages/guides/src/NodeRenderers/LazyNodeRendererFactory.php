@@ -11,7 +11,7 @@ final class LazyNodeRendererFactory implements NodeRendererFactory
     /** @var callable */
     private $factory;
 
-    private ?NodeRendererFactory $innerFactory = null;
+    private NodeRendererFactory|null $innerFactory = null;
 
     public function __construct(callable $factory)
     {

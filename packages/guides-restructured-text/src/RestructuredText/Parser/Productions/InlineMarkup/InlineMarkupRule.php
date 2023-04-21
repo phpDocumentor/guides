@@ -10,5 +10,5 @@ interface InlineMarkupRule
 {
     public function applies(TokenIterator $tokens): bool;
 
-    public function apply(TokenIterator $tokens): ?InlineMarkupToken;
+    public function apply(TokenIterator $tokens): InlineMarkupToken|null;
 }

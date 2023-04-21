@@ -12,5 +12,5 @@ interface Resolver
 {
     public function supports(CrossReferenceNode $node, RenderContext $context): bool;
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference;
+    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null;
 }

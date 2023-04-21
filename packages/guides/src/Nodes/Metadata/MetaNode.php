@@ -15,12 +15,8 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 
 class MetaNode extends MetadataNode
 {
-    protected string $key;
-
-    public function __construct(string $key, string $value)
+    public function __construct(protected string $key, string $value)
     {
-        $this->key = $key;
-
         parent::__construct($value);
     }
 

@@ -19,11 +19,8 @@ use Twig\TwigFunction;
 
 final class UmlExtension extends AbstractExtension
 {
-    private DiagramRenderer $diagramRenderer;
-
-    public function __construct(DiagramRenderer $diagramRenderer)
+    public function __construct(private DiagramRenderer $diagramRenderer)
     {
-        $this->diagramRenderer = $diagramRenderer;
     }
 
     /** @return TwigFunction[] */
@@ -34,7 +31,7 @@ final class UmlExtension extends AbstractExtension
         ];
     }
 
-    public function uml(string $source): ?string
+    public function uml(string $source): string|null
     {
         return $this->diagramRenderer->render($source);
     }

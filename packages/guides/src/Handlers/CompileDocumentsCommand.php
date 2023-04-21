@@ -8,13 +8,9 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class CompileDocumentsCommand
 {
-    /** @var DocumentNode[] */
-    private array $documents;
-
     /** @param DocumentNode[] $documents */
-    public function __construct(array $documents)
+    public function __construct(private array $documents)
     {
-        $this->documents = $documents;
     }
 
     /** @return DocumentNode[] */

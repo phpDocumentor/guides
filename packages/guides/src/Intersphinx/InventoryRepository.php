@@ -11,13 +11,9 @@ use function strtolower;
 
 class InventoryRepository
 {
-    /** @var array<String, Inventory> */
-    private array $inventories;
-
     /** @param array<String, Inventory> $inventories */
-    public function __construct(array $inventories)
+    public function __construct(private array $inventories)
     {
-        $this->inventories = $inventories;
     }
 
     public function hasInventory(string $key): bool

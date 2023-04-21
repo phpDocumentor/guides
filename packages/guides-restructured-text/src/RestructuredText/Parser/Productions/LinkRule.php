@@ -37,7 +37,7 @@ final class LinkRule implements Rule
         return $link !== null;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $link = $this->parseLink($documentIterator->current());
@@ -56,7 +56,7 @@ final class LinkRule implements Rule
         return $node;
     }
 
-    private function parseLink(string $line): ?LinkParser
+    private function parseLink(string $line): LinkParser|null
     {
         // Links
         if (preg_match('/^\.\. _`(.+)`: (.+)$/mUsi', $line, $match) > 0) {

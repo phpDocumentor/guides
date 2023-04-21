@@ -24,8 +24,8 @@ class TopicDirective extends SubDirective
         DocumentNode $document,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         return new TopicNode(
             $data,
             $document->getChildren(),

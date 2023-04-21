@@ -15,5 +15,5 @@ namespace phpDocumentor\Guides\Graphs\Renderer;
 
 interface DiagramRenderer
 {
-    public function render(string $diagram): ?string;
+    public function render(string $diagram): string|null;
 }

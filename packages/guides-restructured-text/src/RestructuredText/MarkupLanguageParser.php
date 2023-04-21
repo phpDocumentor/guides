@@ -49,31 +49,26 @@ use function strtolower;
 
 class MarkupLanguageParser implements ParserInterface
 {
-    private ?ParserContext $parserContext = null;
+    private ParserContext|null $parserContext = null;
 
     /** @var Directive[] */
     private array $directives = [];
 
-    private ?string $filename = null;
+    private string|null $filename = null;
 
-    private ?DocumentParserContext $documentParser = null;
-
-    /** @var Rule<DocumentNode> */
-    private Rule $startingRule;
+    private DocumentParserContext|null $documentParser = null;
 
     /**
      * @param iterable<Directive> $directives
      * @param Rule<DocumentNode> $startingRule
      */
     public function __construct(
-        Rule $startingRule,
-        iterable $directives
+        private Rule $startingRule,
+        iterable $directives,
     ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
-
-        $this->startingRule = $startingRule;
     }
 
     public static function createInstance(): self

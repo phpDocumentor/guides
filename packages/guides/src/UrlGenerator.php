@@ -33,7 +33,7 @@ final class UrlGenerator implements UrlGeneratorInterface
             }
 
             return $this->relativeUrl($path);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $path;
         }
     }
@@ -112,7 +112,7 @@ final class UrlGenerator implements UrlGeneratorInterface
         return ltrim(implode('/', $dirNameParts) . '/' . implode('/', $urlPass1), '/');
     }
 
-    public function createFileUrl(string $filename, string $outputFormat = 'html', ?string $anchor = null): string
+    public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string
     {
         return $filename . '.' . $outputFormat .
             ($anchor !== null ? '#' . $anchor : '');

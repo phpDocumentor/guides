@@ -19,17 +19,10 @@ use phpDocumentor\Guides\Nodes\Node;
 /** @extends CompoundNode<Node> */
 class AdmonitionNode extends CompoundNode
 {
-    private string $name;
-
-    private string $text;
-
     /** {@inheritDoc} */
-    public function __construct(string $name, string $text, array $value)
+    public function __construct(private string $name, private string $text, array $value)
     {
         parent::__construct($value);
-
-        $this->name = $name;
-        $this->text = $text;
     }
 
     public function getName(): string

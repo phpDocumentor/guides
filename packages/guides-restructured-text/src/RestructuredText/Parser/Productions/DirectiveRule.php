@@ -70,7 +70,7 @@ final class DirectiveRule implements Rule
         return preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
@@ -125,7 +125,7 @@ final class DirectiveRule implements Rule
         return null;
     }
 
-    private function parseDirective(string $line): ?Directive
+    private function parseDirective(string $line): Directive|null
     {
         if (preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line, $match) > 0) {
             return new Directive(
@@ -138,7 +138,7 @@ final class DirectiveRule implements Rule
         return null;
     }
 
-    private function getDirectiveHandler(Directive $directive): ?DirectiveHandler
+    private function getDirectiveHandler(Directive $directive): DirectiveHandler|null
     {
         return $this->directives[strtolower($directive->getName())] ?? null;
     }
@@ -173,7 +173,7 @@ final class DirectiveRule implements Rule
      */
     private function collectDirectiveOptionContent(
         LinesIterator $documentIterator,
-        DirectiveOption $directiveOption
+        DirectiveOption $directiveOption,
     ): void {
         while (
             !LinesIterator::isNullOrEmptyLine($documentIterator->getNextLine())
@@ -184,7 +184,7 @@ final class DirectiveRule implements Rule
         }
     }
 
-    private function isDirectiveOption(?string $line): bool
+    private function isDirectiveOption(string|null $line): bool
     {
         if ($line === null) {
             return false;
@@ -194,7 +194,7 @@ final class DirectiveRule implements Rule
             $this->parseDirectiveOption($line);
 
             return true;
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return false;
         }
     }

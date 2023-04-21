@@ -42,7 +42,7 @@ class ClassNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node): ?Node
+    public function leaveNode(Node $node): Node|null
     {
         if ($node instanceof ClassNode) {
             //Remove the class node from the tree.

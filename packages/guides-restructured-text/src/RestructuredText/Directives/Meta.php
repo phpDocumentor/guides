@@ -26,8 +26,8 @@ class Meta extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $document = $documentParserContext->getDocument();
 
         foreach ($options as $option) {

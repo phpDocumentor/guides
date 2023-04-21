@@ -30,7 +30,7 @@ interface SpanRenderer
     public function literal(LiteralToken $token, RenderContext $renderContext): string;
 
     /** @param string[] $attributes */
-    public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string;
+    public function link(RenderContext $context, string|null $url, string $title, array $attributes = []): string;
 
     public function escape(string $span, RenderContext $renderContext): string;
 

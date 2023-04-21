@@ -7,22 +7,8 @@ namespace phpDocumentor\Guides\Nodes\Lists;
 /** @deprecated Needs to be removed duplicate of {@see ListItemNode} */
 final class ListItem
 {
-    private string $prefix;
-
-    private bool $ordered;
-
-    private int $depth;
-
-    /** @var mixed */
-    private $text;
-
-    /** @param mixed $text */
-    public function __construct(string $prefix, bool $ordered, int $depth, $text)
+    public function __construct(private string $prefix, private bool $ordered, private int $depth, private mixed $text)
     {
-        $this->prefix = $prefix;
-        $this->ordered = $ordered;
-        $this->depth = $depth;
-        $this->text = $text;
     }
 
     public function getPrefix(): string
@@ -40,14 +26,12 @@ final class ListItem
         return $this->depth;
     }
 
-    /** @return mixed */
-    public function getText()
+    public function getText(): mixed
     {
         return $this->text;
     }
 
-    /** @param mixed $text */
-    public function setText($text): void
+    public function setText(mixed $text): void
     {
         $this->text = $text;
     }

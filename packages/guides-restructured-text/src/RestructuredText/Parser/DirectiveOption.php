@@ -6,16 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 class DirectiveOption
 {
-    private string $name;
-
-    /** @var scalar|null */
-    private $value;
-
-    /** @param scalar|null $value */
-    public function __construct(string $name, $value)
+    public function __construct(private string $name, private string|int|float|bool|null $value = null)
     {
-        $this->name = $name;
-        $this->value = $value;
     }
 
     public function getName(): string
@@ -23,8 +15,7 @@ class DirectiveOption
         return $this->name;
     }
 
-    /** @return scalar|null */
-    public function getValue()
+    public function getValue(): string|int|float|bool|null
     {
         return $this->value;
     }

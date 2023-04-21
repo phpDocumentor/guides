@@ -48,11 +48,8 @@ use function trim;
  */
 final class InlineMarkupRule implements Rule
 {
-    private SpanParser $spanParser;
-
-    public function __construct(SpanParser $spanParser)
+    public function __construct(private SpanParser $spanParser)
     {
-        $this->spanParser = $spanParser;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -67,7 +64,7 @@ final class InlineMarkupRule implements Rule
      *
      * @template TParent as CompoundNode
      */
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = $this->collectContent($documentIterator);
@@ -97,7 +94,7 @@ final class InlineMarkupRule implements Rule
         return $buffer;
     }
 
-    private function isWhiteline(?string $line): bool
+    private function isWhiteline(string|null $line): bool
     {
         if ($line === null) {
             return true;

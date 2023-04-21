@@ -40,7 +40,7 @@ class SpanParser
     }
 
     /** @param string|string[] $span */
-    public function parse($span, ParserContext $parserContext): SpanNode
+    public function parse(string|array $span, ParserContext $parserContext): SpanNode
     {
         $this->tokens = [];
         if (is_array($span)) {
@@ -88,7 +88,7 @@ class SpanParser
         ) ?? '';
     }
 
-    private function createNamedReference(ParserContext $parserContext, string $link, ?string $url = null): string
+    private function createNamedReference(ParserContext $parserContext, string $link, string|null $url = null): string
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
@@ -397,7 +397,7 @@ class SpanParser
         return '`';
     }
 
-    private function parseEmbeddedUrl(): ?string
+    private function parseEmbeddedUrl(): string|null
     {
         if ($this->lexer->token === null) {
             return null;
@@ -460,7 +460,7 @@ class SpanParser
         return $anchor;
     }
 
-    private function createOneOffLink(string $link, ?string $url): string
+    private function createOneOffLink(string $link, string|null $url): string
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced

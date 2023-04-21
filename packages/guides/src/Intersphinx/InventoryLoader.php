@@ -8,18 +8,11 @@ use function is_array;
 
 final class InventoryLoader
 {
-    private InventoryRepository $inventoryRepository;
-    private JsonLoader $jsonLoader;
-    private string $pathToJson;
-
     public function __construct(
-        InventoryRepository $inventoryRepository,
-        JsonLoader $jsonLoader,
-        string $pathToJson = 'objects.inv.json'
+        private InventoryRepository $inventoryRepository,
+        private JsonLoader $jsonLoader,
+        private string $pathToJson = 'objects.inv.json',
     ) {
-        $this->inventoryRepository = $inventoryRepository;
-        $this->jsonLoader          = $jsonLoader;
-        $this->pathToJson          = $pathToJson;
     }
 
     public function getInventoryRepository(): InventoryRepository

@@ -19,14 +19,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    private string $name;
-
-    private string $text;
-
-    public function __construct(string $name, string $text)
+    public function __construct(private string $name, private string $text)
     {
-        $this->name = $name;
-        $this->text = $text;
     }
 
     /** {@inheritDoc} */
@@ -34,8 +28,8 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         DocumentNode $document,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         return (new AdmonitionNode(
             $this->name,
             $this->text,

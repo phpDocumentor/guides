@@ -51,11 +51,8 @@ final class EnumeratedListRule implements Rule
 
     private string $expression;
 
-    private RuleContainer $productions;
-
-    public function __construct(RuleContainer $productions)
+    public function __construct(private RuleContainer $productions)
     {
-        $this->productions = $productions;
         $expression = sprintf(self::LIST_MARKER, self::NUMBER, self::NUMBER);
         $expression .= '|' . sprintf(self::LIST_MARKER, self::ROMAN_NUMBER, self::ROMAN_NUMBER);
         $expression .= '|' . sprintf(self::LIST_MARKER, self::ALPHABETIC, self::ALPHABETIC);
@@ -76,7 +73,7 @@ final class EnumeratedListRule implements Rule
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -121,7 +118,7 @@ final class EnumeratedListRule implements Rule
         return new ListNode($items, true);
     }
 
-    private function isListLine(?string $line): bool
+    private function isListLine(string|null $line): bool
     {
         if ($line === null) {
             return false;
@@ -145,7 +142,7 @@ final class EnumeratedListRule implements Rule
         ];
     }
 
-    private function isListItemStart(?string $line, ?string $listMarker = null): bool
+    private function isListItemStart(string|null $line, string|null $listMarker = null): bool
     {
         if (LinesIterator::isNullOrEmptyLine($line)) {
             return false;

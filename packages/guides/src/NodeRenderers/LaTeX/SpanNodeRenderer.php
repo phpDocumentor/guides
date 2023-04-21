@@ -51,11 +51,8 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return $this->renderer->renderTemplate($renderContext, 'roles/literal.tex.twig', ['node' => $token]);
     }
 
-    /**
-     * @param string[] $attributes
-     * @param TitleNode|string $title
-     */
-    public function link(RenderContext $context, ?string $url, $title, array $attributes = []): string
+    /** @param string[] $attributes */
+    public function link(RenderContext $context, string|null $url, TitleNode|string $title, array $attributes = []): string
     {
         $type = 'href';
 

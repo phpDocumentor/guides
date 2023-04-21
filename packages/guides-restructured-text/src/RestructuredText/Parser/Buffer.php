@@ -13,13 +13,9 @@ use function substr;
 
 class Buffer
 {
-    /** @var string[] */
-    private array $lines;
-
     /** @param string[] $lines */
-    public function __construct(array $lines = [])
+    public function __construct(private array $lines = [])
     {
-        $this->lines = $lines;
     }
 
     public function isEmpty(): bool
@@ -63,12 +59,12 @@ class Buffer
         return implode("\n", $this->lines);
     }
 
-    public function pop(): ?string
+    public function pop(): string|null
     {
         return array_pop($this->lines);
     }
 
-    public function getLastLine(): ?string
+    public function getLastLine(): string|null
     {
         $lastLineKey = count($this->lines) - 1;
 
