@@ -29,8 +29,6 @@ final class Application extends BaseApplication
     public static function getDefaultExtensions(): array
     {
         return [
-            new GuidesExtension(),
-            new ReStructuredTextExtension(),
             new ApplicationExtension(),
         ];
     }

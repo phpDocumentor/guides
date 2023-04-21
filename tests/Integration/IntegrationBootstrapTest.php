@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 
+use phpDocumentor\Guides\DependencyInjection\GuidesExtension;
 use function array_filter;
 use function array_walk;
 use function assert;
@@ -34,10 +35,13 @@ class IntegrationBootstrapTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
-        self::prepareContainer(new Configuration([
-            __DIR__ . '/../../packages/guides-theme-bootstrap/resources/template',
-            __DIR__ . '/../../packages/guides/resources/template/html/guides',
-        ]));
+        $this->prepareContainer([
+            GuidesExtension::class => [
+                'template_paths' => [
+                    __DIR__ . '/../../packages/guides-theme-bootstrap/resources/template',
+                ],
+            ],
+        ]);
         setlocale(LC_ALL, 'en_US.utf8');
     }
 

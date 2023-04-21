@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\DependencyInjection;
+namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
@@ -27,7 +27,7 @@ class ReStructuredTextExtension extends Extension
     {
         $loader = new PhpFileLoader(
             $container,
-            new FileLocator(dirname(__DIR__, 2) . '/resources/config'),
+            new FileLocator(dirname(__DIR__, 3) . '/resources/config'),
         );
 
         foreach (self::HTML as $node => $template) {

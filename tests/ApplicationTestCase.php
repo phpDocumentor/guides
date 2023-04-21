@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\Application;
+use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
+use phpDocumentor\Guides\DependencyInjection\ContainerFactory;
+use phpDocumentor\Guides\DependencyInjection\TestExtension;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use function dirname;
@@ -18,38 +22,29 @@ use function rtrim;
 
 class ApplicationTestCase extends TestCase
 {
-    private static ContainerBuilder $container;
-
-    public static function prepareContainer(Configuration $configuration): void
-    {
-        self::$container = new ContainerBuilder();
-
-        // Load manual parameters
-        self::$container->setParameter('vendor_dir', dirname(__DIR__) . '/vendor');
-        self::$container->setParameter('working_directory', rtrim(getcwd(), '/'));
-
-        // Load container configuration
-        foreach (Application::getDefaultExtensions() as $extension) {
-            self::$container->registerExtension($extension);
-            self::$container->loadFromExtension($extension->getAlias(), [$configuration]);
-        }
-
-        self::$container->addCompilerPass(new NodeRendererPass());
-        self::$container->addCompilerPass(new ParserRulesPass());
-        self::$container->addCompilerPass(new class implements CompilerPassInterface {
-            public function process(ContainerBuilder $container): void
-            {
-                $container->getDefinition(Parser::class)->setPublic(true);
-                $container->getDefinition(DelegatingNodeRenderer::class)->setPublic(true);
-            }
-        });
-
-        // Compile container
-        self::$container->compile(true);
-    }
+    private ?Container $container = null;
 
     public function getContainer(): ContainerBuilder
     {
-        return self::$container;
+        if (null === $this->container) {
+            $this->prepareContainer();
+        }
+
+        return $this->container;
+    }
+
+    /** @param array<string, array<mixed>> $configuration */
+    protected function prepareContainer(array $configuration = []): void
+    {
+        $containerFactory = new ContainerFactory([
+            new ApplicationExtension(),
+            new TestExtension(),
+        ]);
+
+        foreach ($configuration as $extension => $extensionConfig) {
+            $containerFactory->loadExtensionConfig($extension, $extensionConfig);
+        }
+
+        $this->container = $containerFactory->create(dirname(__DIR__) . '/vendor');
     }
 }

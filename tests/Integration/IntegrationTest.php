@@ -34,7 +34,6 @@ class IntegrationTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
-        self::prepareContainer(new Configuration());
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
