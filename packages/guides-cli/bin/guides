@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $vendorDir = dirname(__DIR__) . '/../../vendor';
@@ -42,6 +43,7 @@ foreach (Application::getDefaultExtensions() as $extension) {
 }
 
 $container->addCompilerPass(new NodeRendererPass());
+$container->addCompilerPass(new ParserRulesPass());
 
 // Compile container
 $container->compile(true);

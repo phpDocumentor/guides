@@ -42,7 +42,7 @@ use function trim;
  */
 final class DefinitionListRule implements Rule
 {
-    public function __construct(private InlineMarkupRule $inlineMarkupRule, private RuleContainer $definitionProducers)
+    public function __construct(private InlineMarkupRule $inlineMarkupRule, private RuleContainer $bodyElements)
     {
     }
 
@@ -128,7 +128,7 @@ final class DefinitionListRule implements Rule
         $node = new DefinitionNode([]);
         $nodeContext = $documentParserContext->withContents($buffer->getLinesString());
         while ($nodeContext->getDocumentIterator()->valid()) {
-            $this->definitionProducers->apply($nodeContext, $node);
+            $this->bodyElements->apply($nodeContext, $node);
         }
 
         if (count($node->getChildren()) > 1) {
