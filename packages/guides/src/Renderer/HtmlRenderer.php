@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
+use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
@@ -19,10 +20,15 @@ class HtmlRenderer implements TypeRenderer
     /** @var NodeRenderer<DocumentNode> */
     private NodeRenderer $renderer;
 
+    private CommandBus $commandBus;
+
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(NodeRenderer $renderer)
-    {
+    public function __construct(
+        NodeRenderer $renderer,
+        CommandBus $commandBus
+    ) {
         $this->renderer = $renderer;
+        $this->commandBus = $commandBus;
     }
 
     public function supports(string $outputFormat): bool
@@ -32,9 +38,8 @@ class HtmlRenderer implements TypeRenderer
 
     public function render(RenderCommand $renderCommand): void
     {
-        $renderDocumentHandler = new RenderDocumentHandler($this->renderer);
         foreach ($renderCommand->getDocuments() as $document) {
-            $renderDocumentHandler->handle(
+            $this->commandBus->handle(
                 new RenderDocumentCommand(
                     $document,
                     RenderContext::forDocument(
