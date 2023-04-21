@@ -36,7 +36,7 @@ class CodeBlock extends Directive
         array $options
     ): ?Node {
         $node = new CodeNode(
-            $documentParserContext->getDocumentIterator()->toArray()
+            $documentParserContext->getDocumentIterator()->toArray(),
         );
 
         $node->setLanguage(trim($data));
@@ -52,9 +52,7 @@ class CodeBlock extends Directive
         return $node;
     }
 
-    /**
-     * @param mixed[] $options
-     */
+    /** @param mixed[] $options */
     private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
     {
         $startingLineNumber = null;

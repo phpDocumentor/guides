@@ -26,9 +26,7 @@ use function str_repeat;
 use function str_replace;
 use function trim;
 
-/**
- * @implements Iterator<string>
- */
+/** @implements Iterator<string> */
 class LinesIterator implements Iterator
 {
     /** @var string[] */
@@ -129,17 +127,13 @@ class LinesIterator implements Iterator
         return $document;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function toArray(): array
     {
         return $this->lines;
     }
 
-    /**
-     * @psalm-assert-if-false non-empty-string $line
-     */
+    /** @psalm-assert-if-false non-empty-string $line */
     public static function isEmptyLine(?string $line): bool
     {
         if ($line === null) {
@@ -149,9 +143,7 @@ class LinesIterator implements Iterator
         return trim($line) === '';
     }
 
-    /**
-     * @psalm-assert-if-true null $line
-     */
+    /** @psalm-assert-if-true null $line */
     public static function isNullOrEmptyLine(?string $line): bool
     {
         if ($line === null) {

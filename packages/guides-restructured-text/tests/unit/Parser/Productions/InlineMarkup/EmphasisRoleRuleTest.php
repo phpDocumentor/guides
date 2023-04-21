@@ -21,9 +21,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTestCase
         return $this->rule;
     }
 
-    /**
-     * @return array<int, array<int, array<int, string> | bool>>
-     */
+    /** @return array<int, array<int, array<int, string> | bool>> */
     public static function ruleAppliesProvider(): array
     {
         return [
@@ -38,9 +36,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTestCase
         ];
     }
 
-    /**
-     * @return array<int, array<int, string | ValueToken>>
-     */
+    /** @return array<int, array<int, string | ValueToken>> */
     public static function expectedLiteralContentProvider(): array
     {
         return [
@@ -59,9 +55,7 @@ final class EmphasisRoleRuleTest extends StartEndRegexRoleRuleTestCase
         ];
     }
 
-    /**
-     * @return array<int, array<int, string>>
-     */
+    /** @return array<int, array<int, string>> */
     public static function notEndingProvider(): array
     {
         return [

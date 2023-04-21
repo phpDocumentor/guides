@@ -43,7 +43,7 @@ final class TransitionRule implements Rule
 
         $overlineLetter = $this->currentLineIsASeparator(
             $documentIterator->current(),
-            $documentIterator->getNextLine()
+            $documentIterator->getNextLine(),
         );
 
         if ($overlineLetter !== null) {

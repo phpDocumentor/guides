@@ -23,8 +23,6 @@ interface NodeTransformer
      */
     public function leaveNode(Node $node): ?Node;
 
-    /**
-     * @psalm-assert-if-true T $node
-     */
+    /** @psalm-assert-if-true T $node */
     public function supports(Node $node): bool;
 }

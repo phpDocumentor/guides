@@ -19,14 +19,12 @@ class GlobSearcher
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function globSearch(ParserContext $parserContext, string $globPattern): array
     {
         $fileSystem = $parserContext->getOrigin();
         $files = $fileSystem->find(
-            new Glob(rtrim($parserContext->absoluteRelativePath(''), '/') . '/' . $globPattern)
+            new Glob(rtrim($parserContext->absoluteRelativePath(''), '/') . '/' . $globPattern),
         );
         $allFiles = [];
         foreach ($files as $file) {

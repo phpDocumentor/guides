@@ -20,7 +20,7 @@ class GuidesExtension extends Extension
     {
         $loader = new PhpFileLoader(
             $container,
-            new FileLocator(dirname(__DIR__, 2) . '/resources/config')
+            new FileLocator(dirname(__DIR__, 2) . '/resources/config'),
         );
 
         $loader->load('command_bus.php');

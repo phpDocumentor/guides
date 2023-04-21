@@ -16,9 +16,7 @@ namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode
- */
+/** @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode */
 final class DefinitionListTermTest extends TestCase
 {
     /**
@@ -48,9 +46,7 @@ final class DefinitionListTermTest extends TestCase
         self::assertSame([$classifier], $definitionListTerm->getClassifiers());
     }
 
-    /**
-     * @covers ::__construct
-     */
+    /** @covers ::__construct */
     public function testDefinitionsAreMadeAvailable(): void
     {
         $term = $this->createStub(SpanNode::class);

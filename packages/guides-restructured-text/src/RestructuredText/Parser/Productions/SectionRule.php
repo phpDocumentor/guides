@@ -13,9 +13,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use SplStack;
 use Webmozart\Assert\Assert;
 
-/**
- * @implements Rule<SectionNode>
- */
+/** @implements Rule<SectionNode> */
 final class SectionRule implements Rule
 {
     private TitleRule $titleRule;

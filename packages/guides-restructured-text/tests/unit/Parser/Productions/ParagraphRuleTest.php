@@ -35,7 +35,7 @@ final class ParagraphRuleTest extends RuleTestCase
         $result = $rule->apply($documentParser);
         self::assertEquals(
             $node,
-            $result
+            $result,
         );
 
         self::assertSame($nextLine, $documentParser->getDocumentIterator()->getNextLine());
@@ -52,7 +52,7 @@ final class ParagraphRuleTest extends RuleTestCase
                 'remaining' => null,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline
 paragraph
 RST
@@ -60,18 +60,18 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline
 paragraph
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => null,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline
 paragraph
 
@@ -81,18 +81,18 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline
 paragraph
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline
 paragraph
 
@@ -102,18 +102,18 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline
 paragraph
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline next paragraph is a literal block
 paragraph::
 
@@ -123,19 +123,19 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline next paragraph is a literal block
 paragraph::
 
@@ -145,19 +145,19 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline next paragraph is a literal block
 paragraph: ::
 
@@ -167,19 +167,19 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
                 'nextLiteral' => true,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 
@@ -191,19 +191,19 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
                 'nextLiteral' => false,
             ],
             [
-                'input' => <<<RST
+                'input' => <<<'RST'
 This is a top-level paragraph.
 
     This paragraph belongs to a first-level block quote.
@@ -212,12 +212,12 @@ RST
                 'output' => new ParagraphNode(
                     [
                         new SpanNode(
-                            <<<RST
+                            <<<'RST'
 This is a top-level paragraph.
 RST,
-                            []
+                            [],
                         ),
-                    ]
+                    ],
                 ),
                 'remaining' => '',
                 'nextLiteral' => false,

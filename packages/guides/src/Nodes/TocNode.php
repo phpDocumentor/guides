@@ -32,9 +32,7 @@ class TocNode extends CompoundNode
     /** @var Entry[] */
     private array $entries = [];
 
-    /**
-     * @param string[] $files
-     */
+    /** @param string[] $files */
     public function __construct(array $files)
     {
         $this->files = $files;
@@ -42,9 +40,7 @@ class TocNode extends CompoundNode
         parent::__construct();
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getFiles(): array
     {
         return $this->files;

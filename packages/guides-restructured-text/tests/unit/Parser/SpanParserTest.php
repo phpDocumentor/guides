@@ -43,7 +43,7 @@ final class SpanParserTest extends TestCase
         self::assertEquals(LiteralToken::TYPE, $token->getType());
         self::assertEquals(
             ['type' => 'literal'],
-            $token->getTokenData()
+            $token->getTokenData(),
         );
     }
 
@@ -109,7 +109,7 @@ final class SpanParserTest extends TestCase
                 'url' => $url,
                 'link' => $text,
             ],
-            $token->getTokenData()
+            $token->getTokenData(),
         );
         self::assertMatchesRegularExpression($referenceId, $result->getValue());
     }
@@ -139,7 +139,7 @@ final class SpanParserTest extends TestCase
                 'Phrase < Reference',
             ],
             [
-                <<<TEXT
+                <<<'TEXT'
 This text is an example of `Phrase
                  Reference`_.
 TEXT
@@ -212,7 +212,7 @@ TEXT
                 'url' => '',
                 'link' => 'internal ref',
             ],
-            $token->getTokenData()
+            $token->getTokenData(),
         );
     }
 
@@ -255,7 +255,7 @@ TEXT
                 'url' => 'mailto:' . $email,
                 'type' => InlineMarkupToken::TYPE_LINK,
             ],
-            $token->getTokenData()
+            $token->getTokenData(),
         );
     }
 
@@ -277,7 +277,7 @@ TEXT
                 'url' => $url,
                 'type' => InlineMarkupToken::TYPE_LINK,
             ],
-            $token->getTokenData()
+            $token->getTokenData(),
         );
     }
 

@@ -29,7 +29,7 @@ class CommandLocator implements HandlerLocator
             throw new MissingHandlerException(
                 sprintf('No handler found for command "%s"', $commandName),
                 $e->getCode(),
-                $e
+                $e,
             );
         }
     }

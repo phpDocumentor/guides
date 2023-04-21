@@ -9,9 +9,7 @@ use OutOfBoundsException;
 
 use function array_pop;
 
-/**
- * @implements Iterator<int, string>
- */
+/** @implements Iterator<int, string> */
 class TokenIterator implements Iterator
 {
     /** @var int[] */

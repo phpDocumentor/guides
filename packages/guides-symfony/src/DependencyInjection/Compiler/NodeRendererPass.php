@@ -55,7 +55,7 @@ final class NodeRendererPass implements CompilerPassInterface
             $definition = $container->getDefinition($id);
             $definition->addMethodCall(
                 'setNodeRendererFactory',
-                [new Reference(NodeRendererFactory::class)]
+                [new Reference(NodeRendererFactory::class)],
             );
             $definition->clearTag('phpdoc.guides.noderendererfactoryaware');
         }
@@ -68,7 +68,7 @@ final class NodeRendererPass implements CompilerPassInterface
                     '$renderer' => new Reference(TemplateRenderer::class),
                     '$template' => $template,
                     '$nodeClass' => $node,
-                ]
+                ],
             );
             $definition->addTag('phpdoc.guides.noderenderer.html');
 

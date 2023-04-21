@@ -35,9 +35,7 @@ final class Parser
     /** @var MarkupLanguageParser[] */
     private array $parserStrategies = [];
 
-    /**
-     * @param iterable<MarkupLanguageParser> $parserStrategies
-     */
+    /** @param iterable<MarkupLanguageParser> $parserStrategies */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         iterable $parserStrategies
@@ -74,7 +72,7 @@ final class Parser
             $sourcePath,
             $fileName,
             $origin,
-            $initialHeaderLevel
+            $initialHeaderLevel,
         );
     }
 
@@ -120,7 +118,7 @@ final class Parser
             $sourcePath,
             $initialHeaderLevel,
             $origin,
-            $this->urlGenerator
+            $this->urlGenerator,
         );
     }
 }

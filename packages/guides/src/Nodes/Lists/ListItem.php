@@ -16,9 +16,7 @@ final class ListItem
     /** @var mixed */
     private $text;
 
-    /**
-     * @param mixed $text
-     */
+    /** @param mixed $text */
     public function __construct(string $prefix, bool $ordered, int $depth, $text)
     {
         $this->prefix = $prefix;
@@ -42,25 +40,19 @@ final class ListItem
         return $this->depth;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function getText()
     {
         return $this->text;
     }
 
-    /**
-     * @param mixed $text
-     */
+    /** @param mixed $text */
     public function setText($text): void
     {
         $this->text = $text;
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public function toArray(): array
     {
         return [

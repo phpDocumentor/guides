@@ -16,9 +16,7 @@ class EmphasisTextRole implements TextRole
         return self::NAME;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function getAliases(): array
     {
         return ['italic'];

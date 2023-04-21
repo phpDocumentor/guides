@@ -13,9 +13,7 @@ class InMemoryRendererFactory implements TypeRendererFactory
     /** @var iterable<TypeRenderer> */
     private iterable $renderSets;
 
-    /**
-     * @param iterable<TypeRenderer> $renderSets
-     */
+    /** @param iterable<TypeRenderer> $renderSets */
     public function __construct(iterable $renderSets)
     {
         $this->renderSets = $renderSets;

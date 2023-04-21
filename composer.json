@@ -9,6 +9,7 @@
         },
         "allow-plugins": {
             "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "symfony/runtime": false
         },
         "sort-packages": true
@@ -48,6 +49,8 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "doctrine/coding-standard": "^11.1",
         "fakerphp/faker": "^1.19",
         "gajus/dindent": "^2.0",
         "jangregor/phpstan-prophecy": "^1.0",
@@ -59,6 +62,7 @@
         "psalm/plugin-phpunit": "^0.18.4",
         "qossmic/deptrac-shim": "^0.24.0",
         "rector/rector": "^0.15.23",
+        "squizlabs/php_codesniffer": "^3.7",
         "symfony/finder": "^5.4",
         "vimeo/psalm": "^5.9"
     },

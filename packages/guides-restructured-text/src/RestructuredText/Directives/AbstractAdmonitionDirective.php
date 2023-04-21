@@ -39,7 +39,7 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         return (new AdmonitionNode(
             $this->name,
             $this->text,
-            $document->getChildren()
+            $document->getChildren(),
         ))->withOptions($this->optionsToArray($options));
     }
 

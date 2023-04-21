@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
+use function str_ends_with;
 use function substr;
 use function trim;
 
@@ -89,7 +90,7 @@ final class ParagraphRule implements Rule
 
         $this->inlineMarkupRule->apply(
             $documentParserContext->withContents($buffer->getLinesString()),
-            $node
+            $node,
         );
 
         return $node;

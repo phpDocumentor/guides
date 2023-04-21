@@ -100,7 +100,7 @@ final class GridTableRuleTest extends RuleTestCase
     /** @return Generator<mixed[]> */
     public static function prettyTableBasicsProvider(): Generator
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -130,7 +130,7 @@ RST;
 
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
 
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +-----------------------------------+---------------+
@@ -147,7 +147,7 @@ RST;
 
     public static function gridTableWithColSpanProvider(): Generator
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +------------------------+------------+----------+----------+
 | Header row, column 1   | Header 2   | Header 3 | Header 4 |
 | (header rows optional) |            |          |          |
@@ -175,7 +175,7 @@ RST;
 
         yield [$input, [$row1, $row2], [$headerRow]];
 
-        $input = <<<RST
+        $input = <<<'RST'
 +------------------------+------------+------------+----------+
 | Header row, column 1   | Header 2   | Header 3   | Header 4 |
 | (header rows optional) |            |            |          |
@@ -196,7 +196,7 @@ RST;
 
     public static function gridTableWithRowSpanProvider(): Generator
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -230,7 +230,7 @@ RST;
 
     public function gridTableFollowUpTextProvider(): Generator
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -253,7 +253,7 @@ RST;
 
     public function testTableNotClosed(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -276,13 +276,13 @@ Malformed table: Line
 does not appear to be a complete table row
 ERROR
             ,
-            $context
+            $context,
         );
     }
 
     public function testErrorMultipleHeaderRows(): void
     {
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -314,14 +314,14 @@ in file test
 +-----------------------------------+---------------+
 ERROR
             ,
-            $context
+            $context,
         );
     }
 
     public function testNotEndingWithWhiteLine(): void
     {
         $this->markTestSkipped('Not correct yet');
-        $input = <<<RST
+        $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
 +===================================+===============+
@@ -354,7 +354,7 @@ in file test
 +-----------------------------------+---------------+
 ERROR
             ,
-            $context
+            $context,
         );
     }
 

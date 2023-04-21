@@ -18,9 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function array_filter;
 
-/**
- * @extends CompoundNode<Node>
- */
+/** @extends CompoundNode<Node> */
 final class TopicNode extends CompoundNode
 {
     private string $name;
@@ -29,6 +27,7 @@ final class TopicNode extends CompoundNode
     public function __construct(string $name, array $value)
     {
         parent::__construct(array_filter($value));
+
         $this->name = $name;
     }
 

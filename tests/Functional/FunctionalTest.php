@@ -84,7 +84,7 @@ class FunctionalTest extends ApplicationTestCase
             '',
             new Metas(),
             new UrlGenerator(),
-            $format
+            $format,
         );
 
         $rendered = '';
@@ -92,7 +92,7 @@ class FunctionalTest extends ApplicationTestCase
         foreach ($document->getNodes() as $node) {
             $rendered .= $renderer->render(
                 $node,
-                $context
+                $context,
             );
         }
 
@@ -107,13 +107,11 @@ class FunctionalTest extends ApplicationTestCase
 
         self::assertSame(
             $this->trimTrailingWhitespace($expected),
-            $this->trimTrailingWhitespace($rendered)
+            $this->trimTrailingWhitespace($rendered),
         );
     }
 
-    /**
-     * @return mixed[]
-     */
+    /** @return mixed[] */
     public static function getFunctionalTests(): array
     {
         $finder = new Finder();
@@ -147,7 +145,7 @@ class FunctionalTest extends ApplicationTestCase
 
                 if (strpos($file->getFilename(), $dir->getFilename()) !== 0) {
                     throw new Exception(
-                        sprintf('Test filename "%s" does not match directory name', $file->getPathname())
+                        sprintf('Test filename "%s" does not match directory name', $file->getPathname()),
                     );
                 }
 

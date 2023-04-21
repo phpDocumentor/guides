@@ -16,9 +16,7 @@ class DummyDirective extends DirectiveHandler
         return $this->name;
     }
 
-    /**
-     * @param DirectiveOption[] $options the array of options for this directive
-     */
+    /** @param DirectiveOption[] $options the array of options for this directive */
     public function process(
         DocumentParserContext $documentParserContext,
         string $variable,

@@ -33,7 +33,7 @@ final class DocResolver implements Resolver
             $context,
             $node->getText($entry->getTitle()->toString()),
             [],
-            $node->getAnchor()
+            $node->getAnchor(),
         );
     }
 
@@ -53,7 +53,7 @@ final class DocResolver implements Resolver
             $file,
             $text,
             $renderContext->relativeDocUrl($file, $anchor),
-            $attributes
+            $attributes,
         );
     }
 }

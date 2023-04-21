@@ -15,14 +15,10 @@ namespace phpDocumentor\Guides\Nodes;
 
 interface Node
 {
-    /**
-     * @return array<string, scalar|null>
-     */
+    /** @return array<string, scalar|null> */
     public function getOptions(): array;
 
-    /**
-     * @param array<string, scalar|null> $options
-     */
+    /** @param array<string, scalar|null> $options */
     public function withOptions(array $options): Node;
 
     public function hasOption(string $name): bool;
@@ -33,14 +29,10 @@ interface Node
     /** @return mixed */
     public function getValue();
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getClasses(): array;
 
-    /**
-     * @param string[] $classes
-     */
+    /** @param string[] $classes */
     public function setClasses(array $classes): void;
 
     public function getClassesString(): string;

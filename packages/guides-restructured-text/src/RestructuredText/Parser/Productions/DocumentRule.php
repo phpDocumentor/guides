@@ -28,9 +28,7 @@ final class DocumentRule implements Rule
 {
     private RuleContainer $productions;
 
-    /**
-     * @param iterable<DirectiveHandler> $directiveHandlers
-     */
+    /** @param iterable<DirectiveHandler> $directiveHandlers */
     public function __construct(iterable $directiveHandlers)
     {
         $spanParser = new SpanParser();
@@ -61,7 +59,7 @@ final class DocumentRule implements Rule
         $this->productions = (
             new RuleContainer(
                 $transitionRule,
-                new SectionRule(new TitleRule($spanParser), $productions)
+                new SectionRule(new TitleRule($spanParser), $productions),
             )
         )->merge($productions);
     }
@@ -76,7 +74,7 @@ final class DocumentRule implements Rule
     {
         $on ??= new DocumentNode(
             md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),
-            $documentParserContext->getContext()->getCurrentFileName()
+            $documentParserContext->getContext()->getCurrentFileName(),
         );
 
         $documentParserContext->setDocument($on);

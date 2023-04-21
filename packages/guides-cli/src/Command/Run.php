@@ -22,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function getcwd;
 use function is_dir;
 use function sprintf;
+use function str_starts_with;
 
 final class Run extends Command
 {
@@ -36,13 +37,13 @@ final class Run extends Command
             'input',
             InputArgument::OPTIONAL,
             'Directory to read for files',
-            'docs'
+            'docs',
         );
         $this->addArgument(
             'output',
             InputArgument::OPTIONAL,
             'Directory to read for files',
-            'output'
+            'output',
         );
 
         $this->addOption(
@@ -50,14 +51,14 @@ final class Run extends Command
             null,
             InputOption::VALUE_OPTIONAL,
             'Format of the input can be RST, or Markdown',
-            'rst'
+            'rst',
         );
         $this->addOption(
             'output-format',
             null,
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
             'Format of the input can be html',
-            ['html']
+            ['html'],
         );
 
         $this->commandBus = $commandBus;
@@ -81,7 +82,7 @@ final class Run extends Command
                 $sourceFileSystem,
                 '',
                 $input->getOption('input-format'),
-            )
+            ),
         );
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
@@ -96,8 +97,8 @@ final class Run extends Command
                     $documents,
                     $this->metas,
                     $sourceFileSystem,
-                    $destinationFileSystem
-                )
+                    $destinationFileSystem,
+                ),
             );
         }
 

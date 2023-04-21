@@ -20,9 +20,7 @@ final class TableSeparatorLineConfig
 
     private string $rawContent;
 
-    /**
-     * @param int[][] $partRanges
-     */
+    /** @param int[][] $partRanges */
     public function __construct(
         bool $isHeader,
         array $partRanges,

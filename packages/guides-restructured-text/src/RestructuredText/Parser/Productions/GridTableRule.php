@@ -70,7 +70,7 @@ final class GridTableRule implements Rule
             if ($lineLength !== mb_strlen($documentIterator->current())) {
                 $documentParserContext->getContext()->addError(sprintf(
                     "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
-                    $documentIterator->current()
+                    $documentIterator->current(),
                 ));
             }
 
@@ -83,8 +83,8 @@ final class GridTableRule implements Rule
                             'Malformed table: multiple "header rows" using "===" were found. See table '
                             . 'lines "%d" and "%d"',
                             $context->getHeaderRows() + 1,
-                            $lineNumber
-                        )
+                            $lineNumber,
+                        ),
                     );
                 }
 
@@ -128,7 +128,7 @@ final class GridTableRule implements Rule
             $char === '=',
             $parts,
             $char,
-            $line
+            $line,
         );
     }
 

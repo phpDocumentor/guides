@@ -18,8 +18,8 @@ final class ReferenceResolverTest extends TestCase
         self::assertNull(
             $referenceResolver->resolve(
                 new CrossReferenceNode('id', 'role', 'literal'),
-                $this->createMock(RenderContext::class)
-            )
+                $this->createMock(RenderContext::class),
+            ),
         );
     }
 

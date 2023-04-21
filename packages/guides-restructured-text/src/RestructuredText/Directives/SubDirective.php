@@ -33,7 +33,7 @@ abstract class SubDirective extends Directive
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
             $documentParserContext->getContext(),
-            implode("\n", $documentParserContext->getDocumentIterator()->toArray())
+            implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
         );
 
         $newNode = $this->processSub($document, $variable, $data, $options);
@@ -52,9 +52,7 @@ abstract class SubDirective extends Directive
         return $newNode;
     }
 
-    /**
-     * @param DirectiveOption[] $options
-     */
+    /** @param DirectiveOption[] $options */
     public function processSub(
         DocumentNode $document,
         string $variable,

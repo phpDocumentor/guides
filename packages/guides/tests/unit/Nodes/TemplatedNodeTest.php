@@ -15,9 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Guides\Nodes\TemplatedNode
- */
+/** @coversDefaultClass \phpDocumentor\Guides\Nodes\TemplatedNode */
 final class TemplatedNodeTest extends TestCase
 {
     /**

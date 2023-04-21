@@ -55,7 +55,7 @@ final class ParseFileHandler
             $command->getDirectory(),
             $command->getFile(),
             $command->getExtension(),
-            $command->getInitialHeaderLevel()
+            $command->getInitialHeaderLevel(),
         );
     }
 
@@ -88,11 +88,11 @@ final class ParseFileHandler
             $origin,
             $documentFolder,
             $fileName,
-            $initialHeaderLevel
+            $initialHeaderLevel,
         );
 
         $preParseDocumentEvent = $this->eventDispatcher->dispatch(
-            new PreParseDocument($this->parser, $path, $fileContents)
+            new PreParseDocument($this->parser, $path, $fileContents),
         );
         assert($preParseDocumentEvent instanceof PreParseDocument);
 
@@ -101,7 +101,7 @@ final class ParseFileHandler
             $document = $this->parser->parse($preParseDocumentEvent->getContents(), $extension);
         } catch (RuntimeException $e) {
             $this->logger->error(
-                sprintf('Unable to parse %s, input format was not recognized', $path)
+                sprintf('Unable to parse %s, input format was not recognized', $path),
             );
         }
 

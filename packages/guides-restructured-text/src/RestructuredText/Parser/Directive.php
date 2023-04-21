@@ -26,9 +26,7 @@ class Directive
     /** @var DirectiveOption[] */
     private array $options;
 
-    /**
-     * @param DirectiveOption[] $options
-     */
+    /** @param DirectiveOption[] $options */
     public function __construct(string $variable, string $name, string $data, array $options = [])
     {
         $this->variable = $variable;
@@ -52,9 +50,7 @@ class Directive
         return $this->data;
     }
 
-    /**
-     * @return DirectiveOption[]
-     */
+    /** @return DirectiveOption[] */
     public function getOptions(): array
     {
         return $this->options;

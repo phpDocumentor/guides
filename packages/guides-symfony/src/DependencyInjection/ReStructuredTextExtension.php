@@ -27,7 +27,7 @@ class ReStructuredTextExtension extends Extension
     {
         $loader = new PhpFileLoader(
             $container,
-            new FileLocator(dirname(__DIR__, 2) . '/resources/config')
+            new FileLocator(dirname(__DIR__, 2) . '/resources/config'),
         );
 
         foreach (self::HTML as $node => $template) {
@@ -37,7 +37,7 @@ class ReStructuredTextExtension extends Extension
                     '$renderer' => new Reference(TemplateRenderer::class),
                     '$template' => $template,
                     '$nodeClass' => $node,
-                ]
+                ],
             );
             $definition->addTag('phpdoc.guides.noderenderer.html');
 

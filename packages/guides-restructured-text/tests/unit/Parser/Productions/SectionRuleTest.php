@@ -29,7 +29,7 @@ final class SectionRuleTest extends TestCase
 {
     public function testFirstTitleOpensSection(): void
     {
-        $content = <<<RST
+        $content = <<<'RST'
 #########
 Title 1
 #########
@@ -39,7 +39,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser
+            $spanParser,
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -49,13 +49,13 @@ RST;
         $rule->apply($documentParser, $document);
         self::assertEquals(
             [new SectionNode(new TitleNode(new SpanNode('Title 1'), 1, 'title-1'))],
-            $document->getNodes()
+            $document->getNodes(),
         );
     }
 
     public function testSecondLevelTitleOpensChildSection(): void
     {
-        $content = <<<RST
+        $content = <<<'RST'
 #########
 Title 1
 #########
@@ -68,7 +68,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser
+            $spanParser,
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -82,13 +82,13 @@ RST;
 
         self::assertEquals(
             [$section],
-            $document->getNodes()
+            $document->getNodes(),
         );
     }
 
     public function testSameLevelSectionsAreAddedAtTheSameLevel(): void
     {
-        $content = <<<RST
+        $content = <<<'RST'
 #########
 Title 1
 #########
@@ -104,7 +104,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser
+            $spanParser,
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -119,13 +119,13 @@ RST;
 
         self::assertEquals(
             [$section],
-            $document->getNodes()
+            $document->getNodes(),
         );
     }
 
     public function testSameLevelSectionsAreAddedAtTheSameLevel2(): void
     {
-        $content = <<<RST
+        $content = <<<'RST'
 #########
 Title 1
 #########
@@ -153,7 +153,7 @@ RST;
         $spanParser = $this->getSpanParser();
 
         $titleRule = new TitleRule(
-            $spanParser
+            $spanParser,
         );
 
         $rule = new SectionRule($titleRule, new RuleContainer());
@@ -172,7 +172,7 @@ RST;
 
         self::assertEquals(
             [$section, $section2, $section3],
-            $document->getNodes()
+            $document->getNodes(),
         );
     }
 

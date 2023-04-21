@@ -49,8 +49,7 @@ final class DirectiveRuleTest extends RuleTestCase
         $context = $this->createContext(<<<'NOWDOC'
 .. dummy:: data
     :option: 
-NOWDOC
-        );
+NOWDOC);
         $node = $this->rule->apply($context);
         self::assertInstanceOf(DummyNode::class, $node);
         self::assertCount(1, $node->getDirectiveOptions());
@@ -63,8 +62,7 @@ NOWDOC
         $context = $this->createContext(<<<'NOWDOC'
 .. dummy:: data
     :option: value
-NOWDOC
-        );
+NOWDOC);
         $node = $this->rule->apply($context);
         self::assertInstanceOf(DummyNode::class, $node);
         self::assertCount(1, $node->getDirectiveOptions());
@@ -79,15 +77,14 @@ NOWDOC
     :option: some very long option
       in multiple, very long,
       lines
-NOWDOC
-        );
+NOWDOC);
         $node = $this->rule->apply($context);
         self::assertInstanceOf(DummyNode::class, $node);
         self::assertCount(1, $node->getDirectiveOptions());
         self::assertEquals('option', array_values($node->getDirectiveOptions())[0]->getName());
         self::assertEquals(
             'some very long option in multiple, very long, lines',
-            array_values($node->getDirectiveOptions())[0]->getValue()
+            array_values($node->getDirectiveOptions())[0]->getValue(),
         );
     }
 

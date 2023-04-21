@@ -38,7 +38,7 @@ class SidebarDirective extends SubDirective
     ): ?Node {
         return (new SidebarNode(
             $data,
-            $document->getChildren()
+            $document->getChildren(),
         ))->withOptions($this->optionsToArray($options));
     }
 }

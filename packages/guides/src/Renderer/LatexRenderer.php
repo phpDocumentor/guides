@@ -44,9 +44,9 @@ class LatexRenderer implements TypeRenderer
                         '/',
                         $renderCommand->getMetas(),
                         new UrlGenerator(),
-                        $renderCommand->getOutputFormat()
-                    )
-                )
+                        $renderCommand->getOutputFormat(),
+                    ),
+                ),
             );
         }
     }

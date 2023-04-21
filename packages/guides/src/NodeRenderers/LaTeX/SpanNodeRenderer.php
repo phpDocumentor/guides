@@ -75,7 +75,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
                 'url' => $url,
                 'title' => $title,
                 'attributes' => $attributes,
-            ]
+            ],
         );
     }
 
@@ -84,9 +84,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return $span;
     }
 
-    /**
-     * @param string[] $value
-     */
+    /** @param string[] $value */
     public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
     {
         $text = $value['text'] ?: $reference->getText();

@@ -10,9 +10,7 @@ interface TextRole
 {
     public function getName(): string;
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getAliases(): array;
 
     public function processNode(string $content): InlineMarkupToken;

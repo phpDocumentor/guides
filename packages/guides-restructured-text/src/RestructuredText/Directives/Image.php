@@ -42,8 +42,8 @@ class Image extends Directive
         return new ImageNode(
             $this->urlGenerator->absoluteUrl(
                 dirname($documentParserContext->getContext()->getCurrentAbsolutePath()),
-                $data
-            )
+                $data,
+            ),
         );
     }
 }

@@ -29,15 +29,11 @@ interface SpanRenderer
 
     public function literal(LiteralToken $token, RenderContext $renderContext): string;
 
-    /**
-     * @param string[] $attributes
-     */
+    /** @param string[] $attributes */
     public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string;
 
     public function escape(string $span, RenderContext $renderContext): string;
 
-    /**
-     * @param string[] $value
-     */
+    /** @param string[] $value */
     public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string;
 }

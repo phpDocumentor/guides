@@ -15,9 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Guides\Nodes\SeparatorNode
- */
+/** @coversDefaultClass \phpDocumentor\Guides\Nodes\SeparatorNode */
 final class SeparatorNodeTest extends TestCase
 {
     /**

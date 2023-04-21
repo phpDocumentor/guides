@@ -44,7 +44,7 @@ class Toctree extends Directive
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
             $parserContext,
             $documentParserContext->getDocumentIterator(),
-            $options
+            $options,
         );
 
         return (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));

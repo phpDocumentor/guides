@@ -81,9 +81,7 @@ final class ParserContext
         $this->headerRows = $rowNumber;
     }
 
-    /**
-     * @return array<int, int>
-     */
+    /** @return array<int, int> */
     public function getColumnRanges(): array
     {
         $columnRanges = [];

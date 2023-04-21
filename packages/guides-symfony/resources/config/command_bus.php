@@ -53,7 +53,7 @@ return static function (ContainerConfigurator $container): void {
                 ->args([
                     inline_service(ClassNameExtractor::class),
                     inline_service(CommandLocator::class)->args(
-                        [tagged_locator('phpdoc.guides.command', 'command')]
+                        [tagged_locator('phpdoc.guides.command', 'command')],
                     ),
                     inline_service(HandleInflector::class),
                 ]),

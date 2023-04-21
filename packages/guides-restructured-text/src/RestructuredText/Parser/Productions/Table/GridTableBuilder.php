@@ -56,7 +56,7 @@ class GridTableBuilder
 
                     // we just hit a proper "gap" record the line up until now
                     $row->addColumn(
-                        $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan)
+                        $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
                     );
                     $currentSpan = 1;
                     $currentColumnStart = null;
@@ -77,7 +77,7 @@ class GridTableBuilder
 
             if ($currentColumnStart !== null) {
                 $row->addColumn(
-                    $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan)
+                    $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
                 );
             }
 
@@ -97,7 +97,7 @@ class GridTableBuilder
                         !$column->isCompletelyEmpty()
                         && str_repeat(
                             '-',
-                            mb_strlen($column->getContent())
+                            mb_strlen($column->getContent()),
                         ) === $column->getContent()
                     ) {
                         // only a line separator in this column - not content!
@@ -174,9 +174,7 @@ class GridTableBuilder
         return new TableNode($rows, $headers);
     }
 
-    /**
-     * @param TableRow[] $rows
-     */
+    /** @param TableRow[] $rows */
     private function findColumnInPreviousRows(int $columnIndex, array $rows, int $currentRowIndex): TableColumn
     {
         /** @var TableRow[] $reversedRows */
@@ -214,7 +212,7 @@ class GridTableBuilder
                         "%s\nin file %s\n\n%s",
                         $error,
                         $documentParserContext->getContext()->getCurrentFileName(),
-                        $tableAsString
+                        $tableAsString,
                     ));
             }
 
@@ -280,13 +278,11 @@ class GridTableBuilder
     ): TableColumn {
         return new TableColumn(
             mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
-            $currentSpan
+            $currentSpan,
         );
     }
 
-    /**
-     * @phpstan-assert int $previousColumnEnd
-     */
+    /** @phpstan-assert int $previousColumnEnd */
     private function assertColumnEnded(?int $currentColumnStart, ?int $previousColumnEnd): void
     {
         if (($currentColumnStart !== null) && $previousColumnEnd === null) {
@@ -294,9 +290,7 @@ class GridTableBuilder
         }
     }
 
-    /**
-     * @return array<int, bool>
-     */
+    /** @return array<int, bool> */
     private function findRowSpans(ParserContext $context): array
     {
         $partialSeparatorRows = [];

@@ -44,7 +44,7 @@ final class Inventory
         if (!$this->hasInventoryGroup($lowerCaseKey)) {
             throw new RuntimeException(
                 'Inventory group with key ' . $lowerCaseKey . ' not found. ',
-                1671398986
+                1671398986,
             );
         }
 

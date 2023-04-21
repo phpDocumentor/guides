@@ -100,7 +100,7 @@ final class TocNodeTransformer implements NodeTransformer
             yield new Entry(
                 $document->getFile(),
                 $child->getTitle(),
-                iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false)
+                iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false),
             );
         }
 

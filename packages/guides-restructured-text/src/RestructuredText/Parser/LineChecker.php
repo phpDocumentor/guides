@@ -102,7 +102,7 @@ class LineChecker
                 $line[$i],
                 $line[$i] !== '*' && $line[$i] !== '-',
                 $depth,
-                [$match[4]]
+                [$match[4]],
             );
         }
 
@@ -111,7 +111,7 @@ class LineChecker
                 $line[$i],
                 $line[$i] !== '*' && $line[$i] !== '-',
                 $depth,
-                ['']
+                [''],
             );
         }
 

@@ -11,9 +11,7 @@ class DirectiveOption
     /** @var scalar|null */
     private $value;
 
-    /**
-     * @param scalar|null $value
-     */
+    /** @param scalar|null $value */
     public function __construct(string $name, $value)
     {
         $this->name = $name;
@@ -25,9 +23,7 @@ class DirectiveOption
         return $this->name;
     }
 
-    /**
-     * @return scalar|null
-     */
+    /** @return scalar|null */
     public function getValue()
     {
         return $this->value;

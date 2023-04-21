@@ -65,8 +65,8 @@ final class BlockQuoteRule implements Rule
         return new QuoteNode(
             $documentParserContext->getParser()->getSubParser()->parse(
                 $documentParserContext->getContext(),
-                (new Buffer($lines))->getLinesString()
-            )->getChildren()
+                (new Buffer($lines))->getLinesString(),
+            )->getChildren(),
         );
     }
 

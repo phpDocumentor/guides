@@ -28,7 +28,7 @@ class TopicDirective extends SubDirective
     ): ?Node {
         return new TopicNode(
             $data,
-            $document->getChildren()
+            $document->getChildren(),
         );
     }
 

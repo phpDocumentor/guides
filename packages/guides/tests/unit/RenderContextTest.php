@@ -33,11 +33,11 @@ final class RenderContextTest extends TestCase
             new Metas([
                 'getting-started/configuration' => new DocumentEntry(
                     'getting-started/configuration',
-                    TitleNode::emptyNode()
+                    TitleNode::emptyNode(),
                 ),
             ]),
             new UrlGenerator(),
-            'txt'
+            'txt',
         );
 
         self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));

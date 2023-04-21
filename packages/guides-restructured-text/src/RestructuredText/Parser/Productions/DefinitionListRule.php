@@ -32,6 +32,7 @@ use function explode;
 use function ltrim;
 use function mb_strlen;
 use function mb_substr;
+use function str_starts_with;
 use function trim;
 
 /**
@@ -54,7 +55,7 @@ final class DefinitionListRule implements Rule
     {
         return $this->isDefinitionTerm(
             $documentParser->getDocumentIterator()->current(),
-            $documentParser->getDocumentIterator()->getNextLine()
+            $documentParser->getDocumentIterator()->getNextLine(),
         );
     }
 
@@ -85,10 +86,10 @@ final class DefinitionListRule implements Rule
             $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
             array_map(
                 fn ($classification): SpanNode => $this->inlineMarkupRule->apply(
-                    $documentParserContext->withContents($classification)
+                    $documentParserContext->withContents($classification),
                 ),
-                $parts
-            )
+                $parts,
+            ),
         );
 
         Assert::string($documentIterator->getNextLine());

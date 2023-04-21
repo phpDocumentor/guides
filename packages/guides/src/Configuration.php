@@ -11,9 +11,7 @@ final class Configuration
     /** @var string[] */
     private array $templatePaths;
 
-    /**
-     * @param string[]|null $templatePaths
-     */
+    /** @param string[]|null $templatePaths */
     public function __construct(?array $templatePaths = null)
     {
         $this->templatePaths = $templatePaths ?? [
@@ -21,17 +19,13 @@ final class Configuration
         ];
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getTemplatePaths(): array
     {
         return $this->templatePaths;
     }
 
-    /**
-     * @param string[] $templatePaths
-     */
+    /** @param string[] $templatePaths */
     public function setTemplatePaths(array $templatePaths): void
     {
         $this->templatePaths = $templatePaths;

@@ -16,9 +16,7 @@ namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 
-/**
- * @extends CompoundNode<DefinitionNode>
- */
+/** @extends CompoundNode<DefinitionNode> */
 final class DefinitionListItemNode extends CompoundNode
 {
     private SpanNode $term;
@@ -34,6 +32,7 @@ final class DefinitionListItemNode extends CompoundNode
     {
         $this->term = $term;
         $this->classifiers = $classifiers;
+
         parent::__construct($definitions);
     }
 
@@ -42,9 +41,7 @@ final class DefinitionListItemNode extends CompoundNode
         return $this->term;
     }
 
-    /**
-     * @return SpanNode[]
-     */
+    /** @return SpanNode[] */
     public function getClassifiers(): array
     {
         return $this->classifiers;
