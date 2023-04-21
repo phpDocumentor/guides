@@ -18,6 +18,21 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ContactFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\CopyrightFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function implode;
@@ -52,6 +67,23 @@ final class DocumentRule implements Rule
         $productions->push(new GridTableRule($productions));
         $productions->push(new SimpleTableRule($productions));
         $productions->push(new DefinitionListRule($inlineMarkupRule, $productions));
+        $fieldListItemRules = [];
+        $fieldListItemRules[] = new AbstractFieldListItemRule();
+        $fieldListItemRules[] = new AddressFieldListItemRule();
+        $fieldListItemRules[] = new AuthorFieldListItemRule();
+        $fieldListItemRules[] = new AuthorsFieldListItemRule();
+        $fieldListItemRules[] = new ContactFieldListItemRule();
+        $fieldListItemRules[] = new CopyrightFieldListItemRule();
+        $fieldListItemRules[] = new DateFieldListItemRule();
+        $fieldListItemRules[] = new DedicationFieldListItemRule();
+        $fieldListItemRules[] = new NocommentsFieldListItemRule();
+        $fieldListItemRules[] = new NosearchFieldListItemRule();
+        $fieldListItemRules[] = new OrganizationFieldListItemRule();
+        $fieldListItemRules[] = new OrphanFieldListItemRule();
+        $fieldListItemRules[] = new RevisionFieldListItemRule();
+        $fieldListItemRules[] = new TocDepthFieldListItemRule();
+        $fieldListItemRules[] = new VersionFieldListItemRule();
+            $productions->push(new FieldListRule($productions, $fieldListItemRules));
 
         // For now: ParagraphRule must be last as it is the rule that applies if none other applies.
         $productions->push(new ParagraphRule($inlineMarkupRule));

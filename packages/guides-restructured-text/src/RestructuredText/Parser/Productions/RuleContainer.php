@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -47,6 +48,12 @@ final class RuleContainer
             $newNode = $production->apply($documentParserContext, $on);
             if ($newNode !== null) {
                 $on->addChildNode($newNode);
+            }
+
+            // TODO: Change the handling of detecting MetaNodes in form of
+            // field lists after the subparser handling has been refactored.
+            if ($production instanceof TitleRule && $on instanceof DocumentNode) {
+                $on->setTitleFound(true);
             }
 
             break;

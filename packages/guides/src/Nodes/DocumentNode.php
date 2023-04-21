@@ -48,6 +48,8 @@ final class DocumentNode extends CompoundNode
     /** @var string[] */
     private array $links;
 
+    private bool $titleFound = false;
+
     public function __construct(string $value, string $filePath)
     {
         parent::__construct([]);
@@ -126,5 +128,15 @@ final class DocumentNode extends CompoundNode
     public function getLink(string $name): string|null
     {
         return $this->links[strtolower(trim($name))] ?? null;
+    }
+
+    public function isTitleFound(): bool
+    {
+        return $this->titleFound;
+    }
+
+    public function setTitleFound(bool $titleFound): void
+    {
+        $this->titleFound = $titleFound;
     }
 }
