@@ -16,7 +16,6 @@
         <directory name="packages/guides-restructured-text/tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
-            <file name="packages/guides/src/Setup/QuickStart.php" />
         </ignoreFiles>
     </projectFiles>
 
