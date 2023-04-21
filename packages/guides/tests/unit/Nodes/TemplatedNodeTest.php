@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \phpDocumentor\Guides\Nodes\TemplatedNode
- * @covers ::<private>
  */
 final class TemplatedNodeTest extends TestCase
 {

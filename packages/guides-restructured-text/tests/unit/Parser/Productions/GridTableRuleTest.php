@@ -19,16 +19,14 @@ use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use Prophecy\PhpUnit\ProphecyTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function assert;
 use function count;
 use function current;
 
-final class GridTableRuleTest extends AbstractRuleTest
+final class GridTableRuleTest extends RuleTestCase
 {
-    use ProphecyTrait;
-
     private GridTableRule $rule;
 
     protected function setUp(): void
@@ -36,12 +34,12 @@ final class GridTableRuleTest extends AbstractRuleTest
         $this->rule = new GridTableRule($this->givenCollectAllRuleContainer());
     }
 
-    private function createColumnNode(string $content, int $colSpan = 1): TableColumn
+    private static function createColumnNode(string $content, int $colSpan = 1): TableColumn
     {
         return new TableColumn($content, $colSpan, [new RawNode($content)]);
     }
 
-    /** @dataProvider tableStartProvider */
+    #[DataProvider('tableStartProvider')]
     public function testApplies(string $input): void
     {
         $parser = $this->createContext($input);
@@ -50,7 +48,7 @@ final class GridTableRuleTest extends AbstractRuleTest
     }
 
     /** @return string[][] */
-    public function tableStartProvider(): array
+    public static function tableStartProvider(): array
     {
         return [
             ['+--+'],
@@ -59,7 +57,7 @@ final class GridTableRuleTest extends AbstractRuleTest
         ];
     }
 
-    /** @dataProvider nonTableStartProvider */
+    #[DataProvider('nonTableStartProvider')]
     public function testDoesNotApply(string $input): void
     {
         $parser = $this->createContext($input);
@@ -68,7 +66,7 @@ final class GridTableRuleTest extends AbstractRuleTest
     }
 
     /** @return string[][] */
-    public function nonTableStartProvider(): array
+    public static function nonTableStartProvider(): array
     {
         return [
             ['+==+==+'],
@@ -83,11 +81,10 @@ final class GridTableRuleTest extends AbstractRuleTest
      *
      * @param non-empty-list<TableRow> $rows
      * @param non-empty-list<TableRow> $headers
-     *
-     * @dataProvider prettyTableBasicsProvider
-     * @dataProvider gridTableWithColSpanProvider
-     * @dataProvider gridTableWithRowSpanProvider
      */
+    #[DataProvider('prettyTableBasicsProvider')]
+    #[DataProvider('gridTableWithColSpanProvider')]
+    #[DataProvider('gridTableWithRowSpanProvider')]
     public function testSimpleTableCreation(string $input, array $rows, array $headers): void
     {
         $context = $this->createContext($input);
@@ -101,7 +98,7 @@ final class GridTableRuleTest extends AbstractRuleTest
     }
 
     /** @return Generator<mixed[]> */
-    public function prettyTableBasicsProvider(): Generator
+    public static function prettyTableBasicsProvider(): Generator
     {
         $input = <<<RST
 +-----------------------------------+---------------+
@@ -116,20 +113,20 @@ final class GridTableRuleTest extends AbstractRuleTest
 RST;
 
         $headerRow = new TableRow();
-        $headerRow->addColumn($this->createColumnNode('Property'));
-        $headerRow->addColumn($this->createColumnNode('Data Type'));
+        $headerRow->addColumn(self::createColumnNode('Property'));
+        $headerRow->addColumn(self::createColumnNode('Data Type'));
 
         $row1 = new TableRow();
-        $row1->addColumn($this->createColumnNode('description'));
-        $row1->addColumn($this->createColumnNode('string'));
+        $row1->addColumn(self::createColumnNode('description'));
+        $row1->addColumn(self::createColumnNode('string'));
 
         $row2 = new TableRow();
-        $row2->addColumn($this->createColumnNode('author'));
-        $row2->addColumn($this->createColumnNode('string'));
+        $row2->addColumn(self::createColumnNode('author'));
+        $row2->addColumn(self::createColumnNode('string'));
 
         $row3 = new TableRow();
-        $row3->addColumn($this->createColumnNode('keywords'));
-        $row3->addColumn($this->createColumnNode('string'));
+        $row3->addColumn(self::createColumnNode('keywords'));
+        $row3->addColumn(self::createColumnNode('string'));
 
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
 
@@ -148,7 +145,7 @@ RST;
         yield [$input, [$headerRow, $row1, $row2, $row3], []];
     }
 
-    public function gridTableWithColSpanProvider(): Generator
+    public static function gridTableWithColSpanProvider(): Generator
     {
         $input = <<<RST
 +------------------------+------------+----------+----------+
@@ -161,20 +158,20 @@ RST;
 +------------------------+------------+---------------------+
 RST;
         $headerRow = new TableRow();
-        $headerRow->addColumn($this->createColumnNode("Header row, column 1\n(header rows optional)"));
-        $headerRow->addColumn($this->createColumnNode('Header 2'));
-        $headerRow->addColumn($this->createColumnNode('Header 3'));
-        $headerRow->addColumn($this->createColumnNode('Header 4'));
+        $headerRow->addColumn(self::createColumnNode("Header row, column 1\n(header rows optional)"));
+        $headerRow->addColumn(self::createColumnNode('Header 2'));
+        $headerRow->addColumn(self::createColumnNode('Header 3'));
+        $headerRow->addColumn(self::createColumnNode('Header 4'));
 
         $row1 = new TableRow();
-        $row1->addColumn($this->createColumnNode('body row 1, column 1'));
-        $row1->addColumn($this->createColumnNode('column 2'));
-        $row1->addColumn($this->createColumnNode('column 3'));
-        $row1->addColumn($this->createColumnNode('column 4'));
+        $row1->addColumn(self::createColumnNode('body row 1, column 1'));
+        $row1->addColumn(self::createColumnNode('column 2'));
+        $row1->addColumn(self::createColumnNode('column 3'));
+        $row1->addColumn(self::createColumnNode('column 4'));
 
         $row2 = new TableRow();
-        $row2->addColumn($this->createColumnNode('body row 2'));
-        $row2->addColumn($this->createColumnNode('Cells may span columns.', 3));
+        $row2->addColumn(self::createColumnNode('body row 2'));
+        $row2->addColumn(self::createColumnNode('Cells may span columns.', 3));
 
         yield [$input, [$row1, $row2], [$headerRow]];
 
@@ -190,14 +187,14 @@ RST;
 RST;
 
         $row2 = new TableRow();
-        $row2->addColumn($this->createColumnNode('body row 2'));
-        $row2->addColumn($this->createColumnNode('Cells may span columns.', 2));
-        $row2->addColumn($this->createColumnNode('column 4'));
+        $row2->addColumn(self::createColumnNode('body row 2'));
+        $row2->addColumn(self::createColumnNode('Cells may span columns.', 2));
+        $row2->addColumn(self::createColumnNode('column 4'));
 
         yield [$input, [$row1, $row2], [$headerRow]];
     }
 
-    public function gridTableWithRowSpanProvider(): Generator
+    public static function gridTableWithRowSpanProvider(): Generator
     {
         $input = <<<RST
 +-----------------------------------+---------------+
@@ -212,21 +209,21 @@ RST;
 RST;
 
         $headerRow = new TableRow();
-        $headerRow->addColumn($this->createColumnNode('Property'));
-        $headerRow->addColumn($this->createColumnNode('Data Type'));
+        $headerRow->addColumn(self::createColumnNode('Property'));
+        $headerRow->addColumn(self::createColumnNode('Data Type'));
 
         $row1 = new TableRow();
-        $row1->addColumn($this->createColumnNode('description'));
-        $rowSpan = $this->createColumnNode('string');
+        $row1->addColumn(self::createColumnNode('description'));
+        $rowSpan = self::createColumnNode('string');
         $rowSpan->incrementRowSpan();
         $row1->addColumn($rowSpan);
 
         $row2 = new TableRow();
-        $row2->addColumn($this->createColumnNode('author'));
+        $row2->addColumn(self::createColumnNode('author'));
 
         $row3 = new TableRow();
-        $row3->addColumn($this->createColumnNode('keywords'));
-        $row3->addColumn($this->createColumnNode('string'));
+        $row3->addColumn(self::createColumnNode('keywords'));
+        $row3->addColumn(self::createColumnNode('string'));
 
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
     }
@@ -244,12 +241,12 @@ Some text
 RST;
 
         $headerRow = new TableRow();
-        $headerRow->addColumn($this->createColumnNode('Property'));
-        $headerRow->addColumn($this->createColumnNode('Data Type'));
+        $headerRow->addColumn(self::createColumnNode('Property'));
+        $headerRow->addColumn(self::createColumnNode('Data Type'));
 
         $row3 = new TableRow();
-        $row3->addColumn($this->createColumnNode('keywords'));
-        $row3->addColumn($this->createColumnNode('string'));
+        $row3->addColumn(self::createColumnNode('keywords'));
+        $row3->addColumn(self::createColumnNode('string'));
 
         yield [$input, [$row3], [$headerRow]];
     }

@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \phpDocumentor\Guides\Nodes\SeparatorNode
- * @covers ::<private>
  */
 final class SeparatorNodeTest extends TestCase
 {

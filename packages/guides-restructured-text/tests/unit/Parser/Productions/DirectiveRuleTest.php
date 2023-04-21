@@ -9,10 +9,11 @@ use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
 use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function array_values;
 
-final class DirectiveRuleTest extends AbstractRuleTest
+final class DirectiveRuleTest extends RuleTestCase
 {
     private DirectiveRule $rule;
     private DirectiveHandler $directiveHandler;
@@ -23,14 +24,14 @@ final class DirectiveRuleTest extends AbstractRuleTest
         $this->rule = new DirectiveRule([$this->directiveHandler]);
     }
 
-    /** @dataProvider simpleDirectiveProvider */
+    #[DataProvider('simpleDirectiveProvider')]
     public function testApplies(string $input): void
     {
         $context = $this->createContext($input);
         self::assertTrue($this->rule->applies($context));
     }
 
-    /** @dataProvider simpleNonDirectiveProvider */
+    #[DataProvider('simpleNonDirectiveProvider')]
     public function testNotApplies(string $input): void
     {
         $context = $this->createContext($input);
@@ -90,7 +91,7 @@ NOWDOC
         );
     }
 
-    /** @dataProvider codeBlockValueProvider */
+    #[DataProvider('codeBlockValueProvider')]
     public function testCodeBlockValue(string $input, string $expectedValue): void
     {
         $this->rule = new DirectiveRule([$this->directiveHandler, new CodeBlock()]);
@@ -101,7 +102,7 @@ NOWDOC
     }
 
     /** @return array<int, array<int, string>> */
-    public function codeBlockValueProvider(): array
+    public static function codeBlockValueProvider(): array
     {
         return [
             [
@@ -126,7 +127,7 @@ EXPECTED,
     }
 
     /** @return array<array<string>> */
-    public function simpleDirectiveProvider(): array
+    public static function simpleDirectiveProvider(): array
     {
         return [
             ['.. name::'],
@@ -139,7 +140,7 @@ EXPECTED,
     }
 
     /** @return array<array<string>> */
-    public function simpleNonDirectiveProvider(): array
+    public static function simpleNonDirectiveProvider(): array
     {
         return [
             [''],

@@ -15,23 +15,19 @@ namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
 use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode
- * @covers ::<private>
  */
 final class DefinitionListTermTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
      * @covers ::__construct
      * @covers ::getTerm
      */
     public function testTheDefinitionTermTextIsAvailable(): void
     {
-        $term = $this->prophesize(SpanNode::class)->reveal();
+        $term = $this->createStub(SpanNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [], []);
 
@@ -44,8 +40,8 @@ final class DefinitionListTermTest extends TestCase
      */
     public function testClassifiersAreMadeAvailable(): void
     {
-        $term = $this->prophesize(SpanNode::class)->reveal();
-        $classifier = $this->prophesize(SpanNode::class)->reveal();
+        $term = $this->createStub(SpanNode::class);
+        $classifier = $this->createStub(SpanNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [$classifier], []);
 
@@ -54,12 +50,10 @@ final class DefinitionListTermTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::getDefinitions
-     * @covers ::getFirstDefinition
      */
     public function testDefinitionsAreMadeAvailable(): void
     {
-        $term = $this->prophesize(SpanNode::class)->reveal();
+        $term = $this->createStub(SpanNode::class);
         $definition1 = new DefinitionNode([]);
         $definition2 = new DefinitionNode([]);
 

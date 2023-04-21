@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace unit;
 
 use phpDocumentor\Guides\UrlGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class UrlGeneratorTest extends TestCase
 {
-    /** @dataProvider cannicalUrlProvider */
+    #[DataProvider('cannicalUrlProvider')]
     public function testCannicalUrl(string $basePath, string $url, string $result): void
     {
         $urlGenerator = new UrlGenerator();
@@ -17,7 +18,7 @@ final class UrlGeneratorTest extends TestCase
     }
 
     /** @return string[][] */
-    public function cannicalUrlProvider(): array
+    public static function cannicalUrlProvider(): array
     {
         return [
             [
@@ -53,7 +54,7 @@ final class UrlGeneratorTest extends TestCase
         ];
     }
 
-    /** @dataProvider abstractUrlProvider */
+    #[DataProvider('abstractUrlProvider')]
     public function testAbsoluteUrl(string $basePath, string $url, string $result): void
     {
         $urlGenerator = new UrlGenerator();
@@ -61,7 +62,7 @@ final class UrlGeneratorTest extends TestCase
     }
 
     /** @return string[][] */
-    public function abstractUrlProvider(): array
+    public static function abstractUrlProvider(): array
     {
         return [
             [

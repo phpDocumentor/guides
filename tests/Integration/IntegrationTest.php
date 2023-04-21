@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Integration;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Cli\Command\Run;
 use phpDocumentor\Guides\Configuration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -39,9 +40,8 @@ class IntegrationTest extends ApplicationTestCase
 
     /**
      * @param String[] $compareFiles
-     *
-     * @dataProvider getTestsForDirectoryTest
      */
+    #[DataProvider('getTestsForDirectoryTest')]
     public function testHtmlIntegration(
         string $inputPath,
         string $expectedPath,
@@ -116,23 +116,23 @@ class IntegrationTest extends ApplicationTestCase
     /**
      * @return mixed[]
      */
-    public function getTestsForDirectoryTest(): array
+    public static function getTestsForDirectoryTest(): array
     {
-        return $this->getTestsForDirectory();
+        return self::getTestsForDirectory();
     }
 
     /**
      * @return mixed[]
      */
-    public function getTestsForLatex(): array
+    public static function getTestsForLatex(): array
     {
-        return $this->getTestsForDirectory('/tests-latex');
+        return self::getTestsForDirectory('/tests-latex');
     }
 
     /**
      * @return mixed[]
      */
-    private function getTestsForDirectory(string $directory = '/tests'): array
+    private static function getTestsForDirectory(string $directory = '/tests'): array
     {
         $finder = new SymfonyFinder();
         $finder

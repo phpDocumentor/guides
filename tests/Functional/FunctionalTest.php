@@ -15,6 +15,7 @@ use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
@@ -45,9 +46,7 @@ class FunctionalTest extends ApplicationTestCase
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
-    /**
-     * @dataProvider getFunctionalTests
-     */
+    #[DataProvider('getFunctionalTests')]
     public function testFunctional(
         string $file,
         string $format,
@@ -115,7 +114,7 @@ class FunctionalTest extends ApplicationTestCase
     /**
      * @return mixed[]
      */
-    public function getFunctionalTests(): array
+    public static function getFunctionalTests(): array
     {
         $finder = new Finder();
         $finder

@@ -6,12 +6,10 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use Prophecy\PhpUnit\ProphecyTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-final class ParagraphRuleTest extends AbstractRuleTest
+final class ParagraphRuleTest extends RuleTestCase
 {
-    use ProphecyTrait;
-
     /**
      * @uses \phpDocumentor\Guides\RestructuredText\Parser\LinesIterator
      *
@@ -19,8 +17,8 @@ final class ParagraphRuleTest extends AbstractRuleTest
      * @covers \phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule::apply
      * @covers \phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule::applies
      * @covers \phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule::isWhiteline
-     * @dataProvider paragraphProvider
      */
+    #[DataProvider('paragraphProvider')]
     public function testParagraphNodeFromLinesIterator(
         string $input,
         ParagraphNode $node,
@@ -45,7 +43,7 @@ final class ParagraphRuleTest extends AbstractRuleTest
     }
 
     /** @return mixed[][] */
-    public function paragraphProvider(): array
+    public static function paragraphProvider(): array
     {
         return [
             [

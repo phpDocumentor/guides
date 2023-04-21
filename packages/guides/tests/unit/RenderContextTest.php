@@ -8,16 +8,14 @@ use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 use function md5;
 
 final class RenderContextTest extends TestCase
 {
-    use ProphecyTrait;
-
-    /** @dataProvider documentPathProvider */
+    #[DataProvider('documentPathProvider')]
     public function testRelativeDocUrl(
         string $filePath,
         string $destinationPath,
@@ -29,8 +27,8 @@ final class RenderContextTest extends TestCase
 
         $context = RenderContext::forDocument(
             $documentNode,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(FilesystemInterface::class)->reveal(),
+            $this->createStub(FilesystemInterface::class),
+            $this->createStub(FilesystemInterface::class),
             $destinationPath,
             new Metas([
                 'getting-started/configuration' => new DocumentEntry(
@@ -46,7 +44,7 @@ final class RenderContextTest extends TestCase
     }
 
     /** @return string[][] */
-    public function documentPathProvider(): array
+    public static function documentPathProvider(): array
     {
         return [
             [

@@ -8,12 +8,10 @@ use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use Prophecy\PhpUnit\ProphecyTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class SimpleTableRuleTest extends AbstractRuleTest
+class SimpleTableRuleTest extends RuleTestCase
 {
-    use ProphecyTrait;
-
     private SimpleTableRule $rule;
 
     protected function setUp(): void
@@ -21,7 +19,7 @@ class SimpleTableRuleTest extends AbstractRuleTest
         $this->rule = new SimpleTableRule($this->givenCollectAllRuleContainer());
     }
 
-    /** @dataProvider simpleTableStartProvider */
+    #[DataProvider('simpleTableStartProvider')]
     public function testApplies(string $input): void
     {
         $parser = $this->createContext($input);
@@ -30,7 +28,7 @@ class SimpleTableRuleTest extends AbstractRuleTest
     }
 
     /** @return string[][] */
-    public function simpleTableStartProvider(): array
+    public static function simpleTableStartProvider(): array
     {
         return [
             ['== =='],
@@ -41,7 +39,7 @@ class SimpleTableRuleTest extends AbstractRuleTest
         ];
     }
 
-    /** @dataProvider nonSimpleTableStartProvider */
+    #[DataProvider('nonSimpleTableStartProvider')]
     public function testDoesNotApply(string $input): void
     {
         $parser = $this->createContext($input);
@@ -50,7 +48,7 @@ class SimpleTableRuleTest extends AbstractRuleTest
     }
 
     /** @return string[][] */
-    public function nonSimpleTableStartProvider(): array
+    public static function nonSimpleTableStartProvider(): array
     {
         return [
             ['+==+==+'],

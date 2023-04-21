@@ -11,27 +11,22 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 
 use function current;
 
 final class SpanParserTest extends TestCase
 {
     public Generator $faker;
-    use ProphecyTrait;
-
-    /** @var ObjectProphecy<ParserContext> */
-    private ObjectProphecy $parserContext;
-
+    private ParserContext & MockObject $parserContext;
     private SpanParser $spanProcessor;
 
     public function setUp(): void
     {
         $this->faker = Factory::create();
-        $this->parserContext = $this->prophesize(ParserContext::class);
-        $this->parserContext->resetAnonymousStack()->hasReturnVoid();
+        $this->parserContext = $this->createMock(ParserContext::class);
         $this->spanProcessor = new SpanParser();
     }
 
@@ -39,7 +34,7 @@ final class SpanParserTest extends TestCase
     {
         $result = $this->spanProcessor->parse(
             'This text is an example of ``inline literals``.',
-            $this->parserContext->reveal()
+            $this->parserContext,
         );
         $token = current($result->getTokens());
 
@@ -52,17 +47,17 @@ final class SpanParserTest extends TestCase
         );
     }
 
-    /** @dataProvider invalidNotationsProvider */
+    #[DataProvider('invalidNotationsProvider')]
     public function testIncompleteStructuresAreIgnored(string $input): void
     {
-        $result = $this->spanProcessor->parse($input, $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse($input, $this->parserContext);
 
         self::assertSame($input, $result->getValue());
         self::assertCount(0, $result->getTokens());
     }
 
     /** @return array<string, string[]> */
-    public function invalidNotationsProvider(): array
+    public static function invalidNotationsProvider(): array
     {
         return [
             'Literal start without end' => ['This text is an example of `` mis-used.'],
@@ -84,12 +79,12 @@ final class SpanParserTest extends TestCase
     {
         $result = $this->spanProcessor->parse(
             'This text is an example of role:`mis-used`.',
-            $this->parserContext->reveal()
+            $this->parserContext,
         );
         self::assertMatchesRegularExpression('#This text is an example of [a-z0-9]{40}\\.#', $result->getValue());
     }
 
-    /** @dataProvider namedHyperlinkReferenceProvider */
+    #[DataProvider('namedHyperlinkReferenceProvider')]
     public function testNamedHyperlinkReferencesAreReplaced(
         string $input,
         string $referenceId,
@@ -97,7 +92,13 @@ final class SpanParserTest extends TestCase
         string $url = '',
         bool $anonymous = false
     ): void {
-        $result = $this->spanProcessor->parse($input, $this->parserContext->reveal());
+        if ($anonymous === true || $url === '') {
+            $this->parserContext->expects(self::never())->method('setLink');
+        } else {
+            $this->parserContext->expects(self::once())->method('setLink');
+        }
+
+        $result = $this->spanProcessor->parse($input, $this->parserContext);
         $token = current($result->getTokens());
 
         self::assertInstanceOf(InlineMarkupToken::class, $token);
@@ -111,20 +112,10 @@ final class SpanParserTest extends TestCase
             $token->getTokenData()
         );
         self::assertMatchesRegularExpression($referenceId, $result->getValue());
-
-        if ($url === '') {
-            return;
-        }
-
-        if ($anonymous === true) {
-            return;
-        }
-
-        $this->parserContext->setLink($text, $url)->shouldHaveBeenCalledOnce();
     }
 
     /** @return array<int, array<int, bool|string>> */
-    public function namedHyperlinkReferenceProvider(): array
+    public static function namedHyperlinkReferenceProvider(): array
     {
         return [
             [
@@ -184,19 +175,19 @@ TEXT
         ];
     }
 
-    /** @dataProvider AnonymousHyperlinksProvider */
+    #[DataProvider('AnonymousHyperlinksProvider')]
     public function testAnonymousHyperlinksAreReplacedWithToken(
         string $input,
         string $referenceId,
         string $text,
         string $url = ''
     ): void {
+        $this->parserContext->expects(self::once())->method('pushAnonymous')->with($text);
         $this->testNamedHyperlinkReferencesAreReplaced($input, $referenceId, $text, $url);
-        $this->parserContext->pushAnonymous($text)->shouldHaveBeenCalled()->hasReturnVoid();
     }
 
     /** @return string[][] */
-    public function AnonymousHyperlinksProvider(): array
+    public static function AnonymousHyperlinksProvider(): array
     {
         return [
             [
@@ -209,7 +200,7 @@ TEXT
 
     public function testInlineInternalTargetsAreReplaced(): void
     {
-        $result = $this->spanProcessor->parse('Some _`internal ref` in text.', $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse('Some _`internal ref` in text.', $this->parserContext);
         $token = current($result->getTokens());
 
         self::assertStringNotContainsString('_`internal ref`', $result->getValue());
@@ -250,7 +241,7 @@ TEXT
     {
         $email = $this->faker->email;
 
-        $result = $this->spanProcessor->parse($email, $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse($email, $this->parserContext);
         $tokens = $result->getTokens();
         $token = current($tokens);
 
@@ -272,7 +263,7 @@ TEXT
     {
         $url = $this->faker->url;
 
-        $result = $this->spanProcessor->parse($url, $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse($url, $this->parserContext);
         $tokens = $result->getTokens();
         $token = current($tokens);
 
@@ -290,9 +281,7 @@ TEXT
         );
     }
 
-    /**
-     * @dataProvider crossReferenceProvider
-     */
+    #[DataProvider('crossReferenceProvider')]
     public function testInterpretedTextIsParsedIntoCrossReferenceNode(
         string $span,
         string $replaced,
@@ -302,7 +291,7 @@ TEXT
         ?string $anchor = null,
         ?string $text = null
     ): void {
-        $result = $this->spanProcessor->parse($span, $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse($span, $this->parserContext);
         $token = current($result->getTokens());
 
         self::assertStringNotContainsString($replaced, $result->getValue());
@@ -315,7 +304,7 @@ TEXT
     }
 
     /** @return array<string, array<string, string|null>> */
-    public function crossReferenceProvider(): array
+    public static function crossReferenceProvider(): array
     {
         return [
             'interpreted text without role' => [
@@ -372,7 +361,7 @@ TEXT
 
     public function testNoReplacementsAreDoneWhenNotNeeded(): void
     {
-        $result = $this->spanProcessor->parse('Raw token', $this->parserContext->reveal());
+        $result = $this->spanProcessor->parse('Raw token', $this->parserContext);
         self::assertSame('Raw token', $result->getValue());
         self::assertEmpty($result->getTokens());
     }

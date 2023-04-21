@@ -7,8 +7,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\RawNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-final class ListRuleTest extends AbstractRuleTest
+final class ListRuleTest extends RuleTestCase
 {
     private ListRule $rule;
 
@@ -18,7 +19,7 @@ final class ListRuleTest extends AbstractRuleTest
         $this->rule = new ListRule($ruleContainer);
     }
 
-    /** @dataProvider startChars */
+    #[DataProvider('startChars')]
     public function testAppliesForAllPossibleStartChars(string $char): void
     {
         $input = $char . ' test';
@@ -29,7 +30,7 @@ final class ListRuleTest extends AbstractRuleTest
     }
 
     /** @return string[][] */
-    public function startChars(): array
+    public static function startChars(): array
     {
         return [
             ['*'],

@@ -24,13 +24,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 final class SectionRuleTest extends TestCase
 {
-    use ProphecyTrait;
-
     public function testFirstTitleOpensSection(): void
     {
         $content = <<<RST
@@ -182,13 +178,12 @@ RST;
 
     private function getSpanParser(): SpanParser
     {
-        $spanParser = $this->prophesize(SpanParser::class);
-        $spanParser->parse(
-            Argument::any(),
-            Argument::type(ParserContext::class)
-        )->will(static fn ($args): SpanNode => new SpanNode($args[0]));
+        $spanParser = $this->createMock(SpanParser::class);
+        $spanParser->method('parse')->willReturnCallback(
+            static fn (string $arg): SpanNode => new SpanNode($arg)
+        );
 
-        return $spanParser->reveal();
+        return $spanParser;
     }
 
     private function getDocumentParserContext(string $content): DocumentParserContext
@@ -197,14 +192,14 @@ RST;
             'foo',
             'test',
             1,
-            $this->prophesize(FilesystemInterface::class)->reveal(),
-            $this->prophesize(UrlGeneratorInterface::class)->reveal()
+            $this->createStub(FilesystemInterface::class),
+            $this->createStub(UrlGeneratorInterface::class),
         );
 
         return new DocumentParserContext(
             $content,
             $parserContext,
-            $this->prophesize(MarkupLanguageParser::class)->reveal()
+            $this->createStub(MarkupLanguageParser::class),
         );
     }
 }
