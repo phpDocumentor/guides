@@ -3,6 +3,9 @@
     "description": "Integration package for symfony applications to use guides",
     "type": "library",
     "license": "MIT",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "phpDocumentor\\Guides\\": "src/"
@@ -16,9 +19,9 @@
     ],
     "require": {
         "php": "^8.1",
-        "symfony/dependency-injection": "^5.4",
-        "symfony/config": "^5.4",
         "phpdocumentor/guides": "dev-main@dev",
-        "phpdocumentor/guides-restructured-text": "dev-main@dev"
+        "phpdocumentor/guides-restructured-text": "dev-main@dev",
+        "symfony/config": "^5.4",
+        "symfony/dependency-injection": "^5.4"
     }
 }

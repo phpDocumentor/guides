@@ -4,6 +4,9 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "phpDocumentor\\Guides\\": "src/"

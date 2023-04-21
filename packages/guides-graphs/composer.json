@@ -4,6 +4,9 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "phpDocumentor\\Guides\\": "src/"
@@ -19,8 +22,8 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.1",
+        "phpdocumentor/guides": "dev-main@dev",
         "symfony/process": "^5.4",
-        "twig/twig": "~2.0",
-        "phpdocumentor/guides": "dev-main@dev"
+        "twig/twig": "~2.0"
     }
 }
