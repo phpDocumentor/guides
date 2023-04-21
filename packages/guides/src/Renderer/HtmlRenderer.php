@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
+use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
@@ -17,7 +18,10 @@ class HtmlRenderer implements TypeRenderer
     public const TYPE = 'html';
 
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private readonly NodeRenderer $renderer)
+    public function __construct(
+        private readonly NodeRenderer $renderer,
+        private readonly CommandBus $commandBus
+    )
     {
     }
 
@@ -28,9 +32,8 @@ class HtmlRenderer implements TypeRenderer
 
     public function render(RenderCommand $renderCommand): void
     {
-        $renderDocumentHandler = new RenderDocumentHandler($this->renderer);
         foreach ($renderCommand->getDocuments() as $document) {
-            $renderDocumentHandler->handle(
+            $this->commandBus->handle(
                 new RenderDocumentCommand(
                     $document,
                     RenderContext::forDocument(
