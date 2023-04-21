@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76646beed465b9d3645fc438dfa654d5",
+    "content-hash": "fb8d0cc351f5e2586bb21ac102f1ec65",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -6724,17 +6724,17 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phpdocumentor/guides": 20,
-        "phpdocumentor/guides-restructured-text": 20,
-        "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-cli": 20,
+        "phpdocumentor/guides-graphs": 20,
+        "phpdocumentor/guides-restructured-text": 20,
         "phpdocumentor/guides-symfony": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1",
-        "ext-mbstring": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

@@ -4,6 +4,9 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "phpDocumentor\\Guides\\": "src/"
@@ -21,14 +24,14 @@
         "php": "^8.1",
         "ext-json": "*",
         "league/flysystem": "^1.0",
-        "phpdocumentor/flyfinder": "^1.1",
-        "twig/twig": "~2.15",
-        "webmozart/assert": "^1.11",
         "league/tactician": "^1.1",
+        "league/uri": "^6.5",
+        "phpdocumentor/flyfinder": "^1.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/string": "^5.4",
         "symfony/translation-contracts": "^2.1",
-        "league/uri": "^6.5"
+        "twig/twig": "~2.15",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "psr/log": "^1.0"
