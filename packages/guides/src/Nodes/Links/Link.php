@@ -9,17 +9,8 @@ final class Link
     public const TYPE_LINK = 'link';
     public const TYPE_ANCHOR = 'anchor';
 
-    private string $name;
-
-    private string $url;
-
-    private string $type;
-
-    public function __construct(string $name, string $url, string $type)
+    public function __construct(private string $name, private string $url, private string $type)
     {
-        $this->name = $name;
-        $this->url = $url;
-        $this->type = $type;
     }
 
     public function getName(): string

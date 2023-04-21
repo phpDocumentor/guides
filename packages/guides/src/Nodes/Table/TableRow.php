@@ -37,7 +37,7 @@ final class TableRow
         return $this->columns;
     }
 
-    public function getColumn(int $index): ?TableColumn
+    public function getColumn(int $index): TableColumn|null
     {
         return $this->columns[$index] ?? null;
     }

@@ -24,19 +24,15 @@ class TableNode extends CompoundNode
     /** @var TableRow[] */
     protected array $data = [];
 
-    /** @var TableRow[] */
-    protected array $headers = [];
-
     /**
      * @param TableRow[] $rows
      * @param TableRow[] $headers
      */
-    public function __construct(array $rows, array $headers)
+    public function __construct(array $rows, protected array $headers = [])
     {
         parent::__construct();
 
         $this->data = $rows;
-        $this->headers = $headers;
     }
 
     public function getCols(): int

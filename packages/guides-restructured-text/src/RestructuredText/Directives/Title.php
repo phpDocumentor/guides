@@ -25,8 +25,8 @@ class Title extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $document = $documentParserContext->getDocument();
         $document->addHeaderNode(new DocumentTitleNode($data));
 

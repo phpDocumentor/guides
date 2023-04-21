@@ -30,7 +30,7 @@ use function max;
 /** @implements NodeRenderer<TableNode> */
 class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
-    private ?NodeRendererFactory $nodeRendererFactory = null;
+    private NodeRendererFactory|null $nodeRendererFactory = null;
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {

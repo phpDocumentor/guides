@@ -22,11 +22,8 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
  */
 class Figure extends SubDirective
 {
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function getName(): string
@@ -39,8 +36,8 @@ class Figure extends SubDirective
         DocumentNode $document,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $image = new ImageNode($this->urlGenerator->relativeUrl($data));
         $scalarOptions = $this->optionsToArray($options);
         $image = $image->withOptions([

@@ -16,14 +16,6 @@ use function trim;
 
 class ParserContext
 {
-    private UrlGeneratorInterface $urlGenerator;
-
-    private string $currentFileName;
-
-    private FilesystemInterface $origin;
-
-    private string $currentDirectory;
-
     /** @var array<string, string> */
     private array $links = [];
 
@@ -33,20 +25,13 @@ class ParserContext
     /** @var string[] */
     private array $errors = [];
 
-    private int $initialHeaderLevel;
-
     public function __construct(
-        string $currentFileName,
-        string $currentDirectory,
-        int $initialHeaderLevel,
-        FilesystemInterface $origin,
-        UrlGeneratorInterface $urlGenerator
+        private string $currentFileName,
+        private string $currentDirectory,
+        private int $initialHeaderLevel,
+        private FilesystemInterface $origin,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->initialHeaderLevel = $initialHeaderLevel;
-        $this->origin = $origin;
-        $this->urlGenerator = $urlGenerator;
-        $this->currentFileName = $currentFileName;
-        $this->currentDirectory = $currentDirectory;
     }
 
     public function getInitialHeaderLevel(): int

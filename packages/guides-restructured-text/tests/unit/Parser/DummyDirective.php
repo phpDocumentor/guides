@@ -21,8 +21,8 @@ class DummyDirective extends DirectiveHandler
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         return new DummyNode($variable, $data, $options);
     }
 }

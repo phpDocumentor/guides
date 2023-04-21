@@ -14,11 +14,9 @@ use const JSON_PRETTY_PRINT;
 class IntersphinxRenderer implements TypeRenderer
 {
     public const TYPE = 'intersphinx';
-    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function supports(string $outputFormat): bool

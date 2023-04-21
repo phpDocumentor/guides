@@ -28,8 +28,8 @@ abstract class SubDirective extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
             $documentParserContext->getContext(),
@@ -57,8 +57,8 @@ abstract class SubDirective extends Directive
         DocumentNode $document,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         return null;
     }
 }

@@ -26,10 +26,7 @@ use function str_starts_with;
 
 final class Run extends Command
 {
-    private CommandBus $commandBus;
-    private Metas $metas;
-
-    public function __construct(CommandBus $commandBus, Metas $metas)
+    public function __construct(private CommandBus $commandBus, private Metas $metas)
     {
         parent::__construct('run');
 
@@ -60,9 +57,6 @@ final class Run extends Command
             'Format of the input can be html',
             ['html'],
         );
-
-        $this->commandBus = $commandBus;
-        $this->metas = $metas;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

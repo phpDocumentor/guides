@@ -43,8 +43,8 @@ final class Uml extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $parser = $documentParserContext->getParser();
         $parserContext = $parser->getParserContext();
 
@@ -73,7 +73,7 @@ final class Uml extends Directive
         return $node;
     }
 
-    private function loadExternalUmlFile(ParserContext $parserContext, string $path): ?string
+    private function loadExternalUmlFile(ParserContext $parserContext, string $path): string|null
     {
         $fileName = sprintf(
             '%s/%s',

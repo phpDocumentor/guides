@@ -30,11 +30,8 @@ use function trim;
  */
 final class ParagraphRule implements Rule
 {
-    private InlineMarkupRule $inlineMarkupRule;
-
-    public function __construct(InlineMarkupRule $inlineMarkupRule)
+    public function __construct(private InlineMarkupRule $inlineMarkupRule)
     {
-        $this->inlineMarkupRule = $inlineMarkupRule;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -45,7 +42,7 @@ final class ParagraphRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -96,7 +93,7 @@ final class ParagraphRule implements Rule
         return $node;
     }
 
-    private function isWhiteline(?string $line): bool
+    private function isWhiteline(string|null $line): bool
     {
         if ($line === null) {
             return true;

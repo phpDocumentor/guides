@@ -22,11 +22,8 @@ use function trim;
 /** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
 {
-    private RuleContainer $productions;
-
-    public function __construct(RuleContainer $productions)
+    public function __construct(private RuleContainer $productions)
     {
-        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -35,7 +32,7 @@ final class SimpleTableRule implements Rule
     }
 
     /** {@inheritDoc} */
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $columnDefinition = $this->getColumnDefinition($documentIterator->current());
@@ -155,7 +152,7 @@ final class SimpleTableRule implements Rule
     private function createColumn(
         string $content,
         DocumentParserContext $documentParserContext,
-        int $colspan
+        int $colspan,
     ): TableColumn {
         if (trim($content) === '\\') {
             $content = '';
@@ -186,7 +183,7 @@ final class SimpleTableRule implements Rule
         return preg_match('/^(?:={2,} +)+={2,}$/', trim($line)) > 0;
     }
 
-    private function isColspanDefinition(?string $line): bool
+    private function isColspanDefinition(string|null $line): bool
     {
         if ($line === null) {
             return false;

@@ -9,13 +9,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class CustomNodeTransformerFactory implements NodeTransformerFactory
 {
-    /** @var iterable<NodeTransformer<Node>> */
-    private iterable $transformers;
-
     /** @param iterable<NodeTransformer<Node>> $transformers */
-    public function __construct(iterable $transformers)
+    public function __construct(private iterable $transformers)
     {
-        $this->transformers = $transformers;
     }
 
     /** @return iterable<NodeTransformer<Node>> */

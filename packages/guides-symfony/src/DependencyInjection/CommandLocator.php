@@ -13,11 +13,8 @@ use function sprintf;
 
 class CommandLocator implements HandlerLocator
 {
-    private ContainerInterface $commands;
-
-    public function __construct(ContainerInterface $commands)
+    public function __construct(private ContainerInterface $commands)
     {
-        $this->commands = $commands;
     }
 
     /** {@inheritDoc} */

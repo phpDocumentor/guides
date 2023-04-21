@@ -15,14 +15,8 @@ namespace phpDocumentor\Guides\Meta;
 
 class InternalTarget
 {
-    private string $documentPath;
-
-    private string $anchorName;
-
-    public function __construct(string $documentPath, string $anchorName)
+    public function __construct(private string $documentPath, private string $anchorName)
     {
-        $this->documentPath = $documentPath;
-        $this->anchorName = $anchorName;
     }
 
     public function getDocumentPath(): string

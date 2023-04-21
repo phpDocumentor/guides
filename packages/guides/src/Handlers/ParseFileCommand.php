@@ -17,24 +17,13 @@ use League\Flysystem\FilesystemInterface;
 
 final class ParseFileCommand
 {
-    private string $directory;
-    private string $file;
-    private FilesystemInterface $origin;
-    private string $extension;
-    private int $initialHeaderLevel;
-
     public function __construct(
-        FilesystemInterface $origin,
-        string $directory,
-        string $file,
-        string $extension,
-        int $initialHeaderLevel
+        private FilesystemInterface $origin,
+        private string $directory,
+        private string $file,
+        private string $extension,
+        private int $initialHeaderLevel,
     ) {
-        $this->origin = $origin;
-        $this->directory = $directory;
-        $this->file = $file;
-        $this->extension = $extension;
-        $this->initialHeaderLevel = $initialHeaderLevel;
     }
 
     public function getOrigin(): FilesystemInterface

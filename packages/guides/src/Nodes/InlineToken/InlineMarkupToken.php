@@ -9,19 +9,9 @@ class InlineMarkupToken
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';
 
-    private string $type;
-
-    private string $id;
-
-    /** @var string[] */
-    private array $token;
-
     /** @param string[] $token */
-    public function __construct(string $type, string $id, array $token)
+    public function __construct(private string $type, private string $id, private array $token)
     {
-        $this->type = $type;
-        $this->id = $id;
-        $this->token = $token;
         $this->token['type'] = $type;
     }
 

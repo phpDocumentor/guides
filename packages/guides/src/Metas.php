@@ -18,16 +18,12 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 
 final class Metas
 {
-    /** @var DocumentEntry[] */
-    private array $entries;
-
     /** @var array<string, InternalTarget> */
     private array $internalLinkTargets = [];
 
     /** @param DocumentEntry[] $entries */
-    public function __construct(array $entries = [])
+    public function __construct(private array $entries = [])
     {
-        $this->entries = $entries;
     }
 
     public function addDocument(DocumentEntry $documentEntry): void
@@ -47,7 +43,7 @@ final class Metas
         $this->entries = $metaEntries;
     }
 
-    public function findDocument(string $filePath): ?DocumentEntry
+    public function findDocument(string $filePath): DocumentEntry|null
     {
         return $this->entries[$filePath] ?? null;
     }
@@ -57,7 +53,7 @@ final class Metas
         $this->internalLinkTargets[$anchorName] = $target;
     }
 
-    public function getInternalTarget(string $anchorName): ?InternalTarget
+    public function getInternalTarget(string $anchorName): InternalTarget|null
     {
         return $this->internalLinkTargets[$anchorName] ?? null;
     }

@@ -26,36 +26,20 @@ use function trim;
 
 class RenderContext
 {
-    private UrlGeneratorInterface $urlGenerator;
-
-    private string $currentFileName;
-
-    private FilesystemInterface $origin;
-
-    private Metas $metas;
-
     private string $destinationPath;
 
-    private string $outputFormat;
     private DocumentNode $document;
-    private FilesystemInterface $destination;
 
     private function __construct(
         string $outputFolder,
-        string $currentFileName,
-        FilesystemInterface $origin,
-        FilesystemInterface $destination,
-        Metas $metas,
-        UrlGeneratorInterface $urlGenerator,
-        string $outputFormat
+        private string $currentFileName,
+        private FilesystemInterface $origin,
+        private FilesystemInterface $destination,
+        private Metas $metas,
+        private UrlGeneratorInterface $urlGenerator,
+        private string $outputFormat,
     ) {
-        $this->currentFileName = $currentFileName;
         $this->destinationPath = trim($outputFolder, '/');
-        $this->origin = $origin;
-        $this->urlGenerator = $urlGenerator;
-        $this->metas = $metas;
-        $this->outputFormat = $outputFormat;
-        $this->destination = $destination;
     }
 
     public static function forDocument(
@@ -65,7 +49,7 @@ class RenderContext
         string $destinationPath,
         Metas $metas,
         UrlGeneratorInterface $urlGenerator,
-        string $ouputFormat
+        string $ouputFormat,
     ): self {
         $self = new self(
             $destinationPath,
@@ -85,12 +69,11 @@ class RenderContext
     /**
      * @param TType|null $default
      *
-     * @return mixed|null
      * @phpstan-return ($default is null ? mixed|null: TType|string|Node)
      *
      * @template TType as mixed
      */
-    public function getVariable(string $variable, $default = null)
+    public function getVariable(string $variable, $default = null): mixed
     {
         return $this->document->getVariable($variable, $default);
     }
@@ -110,12 +93,12 @@ class RenderContext
         return '';
     }
 
-    public function canonicalUrl(string $url): ?string
+    public function canonicalUrl(string $url): string|null
     {
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }
 
-    public function relativeDocUrl(string $filename, ?string $anchor = null): string
+    public function relativeDocUrl(string $filename, string|null $anchor = null): string
     {
         if (UriInfo::isAbsolutePath(Uri::createFromString($filename))) {
             return $this->destinationPath . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
@@ -160,7 +143,7 @@ class RenderContext
         return $this->metas;
     }
 
-    public function getMetaEntry(): ?DocumentEntry
+    public function getMetaEntry(): DocumentEntry|null
     {
         return $this->metas->findDocument($this->currentFileName);
     }

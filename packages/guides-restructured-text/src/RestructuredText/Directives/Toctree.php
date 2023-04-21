@@ -20,11 +20,8 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  */
 class Toctree extends Directive
 {
-    private ToctreeBuilder $toctreeBuilder;
-
-    public function __construct(ToctreeBuilder $toctreeBuilder)
+    public function __construct(private ToctreeBuilder $toctreeBuilder)
     {
-        $this->toctreeBuilder = $toctreeBuilder;
     }
 
     public function getName(): string
@@ -37,8 +34,8 @@ class Toctree extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $parserContext = $documentParserContext->getParser()->getParserContext();
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(

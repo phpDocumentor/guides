@@ -23,16 +23,10 @@ final class TableColumn extends CompoundNode
 {
     private string $content;
 
-    private int $colSpan;
-
-    private int $rowSpan;
-
     /** @param Node[] $nodes */
-    public function __construct(string $content, int $colSpan, array $nodes = [], int $rowSpan = 1)
+    public function __construct(string $content, private int $colSpan, array $nodes = [], private int $rowSpan = 1)
     {
         $this->content = trim($content);
-        $this->colSpan = $colSpan;
-        $this->rowSpan = $rowSpan;
 
         parent::__construct($nodes);
     }

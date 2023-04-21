@@ -10,20 +10,10 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 /** @extends AbstractNode<TitleNode> */
 final class Entry extends AbstractNode
 {
-    private string $url;
-
-    /** @var Entry[] */
-    private array $children;
-
-    private bool $isDocumentRoot;
-
     /** @param Entry[] $children */
-    public function __construct(string $url, TitleNode $title, array $children = [], bool $isDocumentRoot = false)
+    public function __construct(private string $url, TitleNode $title, private array $children = [], private bool $isDocumentRoot = false)
     {
-        $this->url = $url;
         $this->value = $title;
-        $this->children = $children;
-        $this->isDocumentRoot = $isDocumentRoot;
     }
 
     public function getUrl(): string

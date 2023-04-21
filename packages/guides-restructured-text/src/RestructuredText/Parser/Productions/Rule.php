@@ -39,5 +39,5 @@ interface Rule
      *
      * @template TParent as CompoundNode
      */
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node;
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null;
 }

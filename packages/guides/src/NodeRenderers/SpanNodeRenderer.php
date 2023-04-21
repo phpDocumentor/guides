@@ -36,25 +36,14 @@ use function trim;
 /** @implements NodeRenderer<SpanNode> */
 abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRendererFactoryAware
 {
-    protected TemplateRenderer $renderer;
-
-    private ?NodeRendererFactory $nodeRendererFactory = null;
-
-    private ReferenceResolver $referenceResolver;
-
-    private LoggerInterface $logger;
-    protected UrlGeneratorInterface $urlGenerator;
+    private NodeRendererFactory|null $nodeRendererFactory = null;
 
     public function __construct(
-        TemplateRenderer $renderer,
-        ReferenceResolver $referenceResolver,
-        LoggerInterface $logger,
-        UrlGeneratorInterface $urlGenerator
+        protected TemplateRenderer $renderer,
+        private ReferenceResolver $referenceResolver,
+        private LoggerInterface $logger,
+        protected UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->renderer = $renderer;
-        $this->referenceResolver = $referenceResolver;
-        $this->logger = $logger;
-        $this->urlGenerator = $urlGenerator;
     }
 
     abstract public function nbsp(RenderContext $renderContext): string;
@@ -78,7 +67,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     }
 
     /** @param string[] $attributes */
-    public function link(RenderContext $context, ?string $url, string $title, array $attributes = []): string
+    public function link(RenderContext $context, string|null $url, string $title, array $attributes = []): string
     {
         $url = (string) $url;
 

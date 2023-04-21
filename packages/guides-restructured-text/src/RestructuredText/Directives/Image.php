@@ -20,11 +20,8 @@ use function dirname;
  */
 class Image extends Directive
 {
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function getName(): string
@@ -37,7 +34,7 @@ class Image extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): Node {
         return new ImageNode(
             $this->urlGenerator->absoluteUrl(

@@ -70,7 +70,7 @@ final class DocumentRule implements Rule
     }
 
     /** @param DocumentNode|null $on */
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $on ??= new DocumentNode(
             md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),

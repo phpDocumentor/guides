@@ -16,12 +16,9 @@ namespace phpDocumentor\Guides\Nodes;
 /** @extends AbstractNode<ImageNode> */
 class FigureNode extends AbstractNode
 {
-    protected ?Node $document;
-
-    public function __construct(ImageNode $image, ?Node $document = null)
+    public function __construct(ImageNode $image, protected Node|null $document = null)
     {
         $this->value = $image;
-        $this->document = $document;
     }
 
     public function getImage(): ImageNode
@@ -29,7 +26,7 @@ class FigureNode extends AbstractNode
         return $this->value;
     }
 
-    public function getDocument(): ?Node
+    public function getDocument(): Node|null
     {
         return $this->document;
     }

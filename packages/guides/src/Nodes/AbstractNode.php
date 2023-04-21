@@ -96,12 +96,11 @@ abstract class AbstractNode implements Node
     /**
      * @param TType|null $default
      *
-     * @return mixed|null
      * @phpstan-return ($default is null ? mixed|null: TType|null)
      *
      * @template TType as mixed
      */
-    public function getOption(string $name, $default = null)
+    public function getOption(string $name, $default = null): mixed
     {
         return $this->options[$name] ?? $default;
     }

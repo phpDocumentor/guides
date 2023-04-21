@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 final class LineCheckerTest extends TestCase
 {
     #[DataProvider('specialLineProvider')]
-    public function testSpecialLine(string $input, int $max, ?string $expected): void
+    public function testSpecialLine(string $input, int $max, string|null $expected): void
     {
         self::assertEquals($expected, LineChecker::isSpecialLine($input, $max));
     }

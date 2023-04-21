@@ -16,13 +16,11 @@ use function preg_replace_callback;
 
 class TextRoleRule extends StartEndRegexRoleRule
 {
-    private TextRoleFactory $textRoleFactory;
     private const START = '/^:([a-z0-9]+):`/';
     private const END = '/(?<![`\\\\])`{1}$/';
 
-    public function __construct(TextRoleFactory $textRoleFactory)
+    public function __construct(private TextRoleFactory $textRoleFactory)
     {
-        $this->textRoleFactory = $textRoleFactory;
     }
 
     public function getStartRegex(): string
@@ -47,7 +45,7 @@ class TextRoleRule extends StartEndRegexRoleRule
             $textRole = $this->textRoleFactory->getTextRole($role);
 
             return $textRole->processNode($content);
-        } catch (TextRoleNotFoundException $exception) {
+        } catch (TextRoleNotFoundException) {
             return new GenericTextRoleToken('??', (string) $role, $content);
         }
     }

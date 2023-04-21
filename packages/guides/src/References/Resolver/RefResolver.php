@@ -15,7 +15,7 @@ final class RefResolver implements Resolver
         return $node->getRole() === 'ref';
     }
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference
+    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null
     {
         $url = $node->getUrl();
 

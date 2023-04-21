@@ -12,7 +12,7 @@ final class Configuration
     private array $templatePaths;
 
     /** @param string[]|null $templatePaths */
-    public function __construct(?array $templatePaths = null)
+    public function __construct(array|null $templatePaths = null)
     {
         $this->templatePaths = $templatePaths ?? [
             __DIR__ . '/../../../packages/guides/resources/template/html/guides',

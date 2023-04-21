@@ -73,7 +73,7 @@ final class DocumentNode extends CompoundNode
         return array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType);
     }
 
-    public function getTitle(): ?TitleNode
+    public function getTitle(): TitleNode|null
     {
         foreach ($this->value as $node) {
             if ($node instanceof SectionNode && $node->getTitle()->getLevel() === 1) {
@@ -103,18 +103,16 @@ final class DocumentNode extends CompoundNode
     /**
      * @param TType|null $default
      *
-     * @return string|Node|null
      * @phpstan-return ($default is null ? (string | Node | null) : (TType | string | Node))
      *
      * @template TType as mixed
      */
-    public function getVariable(string $name, $default)
+    public function getVariable(string $name, $default): string|Node|null
     {
         return $this->variables[$name] ?? $default;
     }
 
-    /** @param string|Node $value */
-    public function addVariable(string $name, $value): void
+    public function addVariable(string $name, string|Node $value): void
     {
         $this->variables[$name] = $value;
     }
@@ -125,7 +123,7 @@ final class DocumentNode extends CompoundNode
         $this->links = $links;
     }
 
-    public function getLink(string $name): ?string
+    public function getLink(string $name): string|null
     {
         return $this->links[strtolower(trim($name))] ?? null;
     }

@@ -20,14 +20,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
-    private string $type;
-
-    private string $label;
-
-    public function __construct(string $type, string $label)
+    public function __construct(private string $type, private string $label)
     {
-        $this->type = $type;
-        $this->label = $label;
     }
 
     /** {@inheritDoc} */
@@ -35,8 +29,8 @@ abstract class AbstractVersionChangeDirective extends SubDirective
         DocumentNode $document,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         return (new VersionChangeNode(
             $this->type,
             $this->label,

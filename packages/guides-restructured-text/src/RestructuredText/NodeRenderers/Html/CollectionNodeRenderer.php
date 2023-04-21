@@ -23,11 +23,8 @@ use phpDocumentor\Guides\TemplateRenderer;
 /** @implements NodeRenderer<CollectionNode> */
 final class CollectionNodeRenderer implements NodeRenderer
 {
-    private TemplateRenderer $renderer;
-
-    public function __construct(TemplateRenderer $renderer)
+    public function __construct(private TemplateRenderer $renderer)
     {
-        $this->renderer = $renderer;
     }
 
     public function supports(Node $node): bool

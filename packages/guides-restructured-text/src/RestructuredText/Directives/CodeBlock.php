@@ -33,8 +33,8 @@ class CodeBlock extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $node = new CodeNode(
             $documentParserContext->getDocumentIterator()->toArray(),
         );

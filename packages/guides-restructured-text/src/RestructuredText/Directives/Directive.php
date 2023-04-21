@@ -59,8 +59,8 @@ abstract class Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
-    ): ?Node {
+        array $options,
+    ): Node|null {
         $document = $documentParserContext->getDocument();
 
         $processNode = $this->processNode($documentParserContext, $variable, $data, $options)
@@ -88,7 +88,7 @@ abstract class Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): Node {
         $this->processAction($documentParserContext, $variable, $data, $options);
 
@@ -107,7 +107,7 @@ abstract class Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): void {
     }
 

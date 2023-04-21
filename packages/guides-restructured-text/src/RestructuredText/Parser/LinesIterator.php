@@ -49,7 +49,7 @@ class LinesIterator implements Iterator
         $this->rewind();
     }
 
-    public function getNextLine(): ?string
+    public function getNextLine(): string|null
     {
         return $this->lines[$this->position + 1] ?? null;
     }
@@ -57,7 +57,7 @@ class LinesIterator implements Iterator
     /**
      * Moves the lookahead token forward.
      */
-    public function peek(): ?string
+    public function peek(): string|null
     {
         if (isset($this->lines[$this->position + $this->peek])) {
             return $this->lines[$this->position + $this->peek++];
@@ -134,7 +134,7 @@ class LinesIterator implements Iterator
     }
 
     /** @psalm-assert-if-false non-empty-string $line */
-    public static function isEmptyLine(?string $line): bool
+    public static function isEmptyLine(string|null $line): bool
     {
         if ($line === null) {
             return false;
@@ -144,7 +144,7 @@ class LinesIterator implements Iterator
     }
 
     /** @psalm-assert-if-true null $line */
-    public static function isNullOrEmptyLine(?string $line): bool
+    public static function isNullOrEmptyLine(string|null $line): bool
     {
         if ($line === null) {
             return true;
@@ -164,7 +164,7 @@ class LinesIterator implements Iterator
      * @param int $minIndent can be used to require a specific level of
      *                       indentation for non-blank lines (number of spaces)
      */
-    public static function isBlockLine(?string $line, int $minIndent = 1): bool
+    public static function isBlockLine(string|null $line, int $minIndent = 1): bool
     {
         if ($line === null) {
             return false;

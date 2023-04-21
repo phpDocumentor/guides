@@ -22,8 +22,8 @@ final class ParagraphRuleTest extends RuleTestCase
     public function testParagraphNodeFromLinesIterator(
         string $input,
         ParagraphNode $node,
-        ?string $nextLine,
-        bool $nextLiteral = false
+        string|null $nextLine,
+        bool $nextLiteral = false,
     ): void {
         $documentParser = $this->createContext($input);
 

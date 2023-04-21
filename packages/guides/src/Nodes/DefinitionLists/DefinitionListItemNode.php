@@ -19,20 +19,12 @@ use phpDocumentor\Guides\Nodes\SpanNode;
 /** @extends CompoundNode<DefinitionNode> */
 final class DefinitionListItemNode extends CompoundNode
 {
-    private SpanNode $term;
-
-    /** @var SpanNode[] */
-    private array $classifiers;
-
     /**
      * @param SpanNode[] $classifiers
      * @param DefinitionNode[] $definitions
      */
-    public function __construct(SpanNode $term, array $classifiers, array $definitions = [])
+    public function __construct(private SpanNode $term, private array $classifiers, array $definitions = [])
     {
-        $this->term = $term;
-        $this->classifiers = $classifiers;
-
         parent::__construct($definitions);
     }
 

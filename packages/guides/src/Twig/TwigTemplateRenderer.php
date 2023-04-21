@@ -18,11 +18,8 @@ use phpDocumentor\Guides\TemplateRenderer;
 
 final class TwigTemplateRenderer implements TemplateRenderer
 {
-    private EnvironmentBuilder $environmentBuilder;
-
-    public function __construct(EnvironmentBuilder $environmentBuilder)
+    public function __construct(private EnvironmentBuilder $environmentBuilder)
     {
-        $this->environmentBuilder = $environmentBuilder;
     }
 
     /** @param array<string, mixed> $params */

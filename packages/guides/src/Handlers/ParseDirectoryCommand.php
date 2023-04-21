@@ -8,20 +8,11 @@ use League\Flysystem\FilesystemInterface;
 
 final class ParseDirectoryCommand
 {
-    private FilesystemInterface $origin;
-
-    private string $directory;
-
-    private string $inputFormat;
-
     public function __construct(
-        FilesystemInterface $origin,
-        string $directory,
-        string $inputFormat
+        private FilesystemInterface $origin,
+        private string $directory,
+        private string $inputFormat,
     ) {
-        $this->origin = $origin;
-        $this->directory = $directory;
-        $this->inputFormat = $inputFormat;
     }
 
     public function getOrigin(): FilesystemInterface

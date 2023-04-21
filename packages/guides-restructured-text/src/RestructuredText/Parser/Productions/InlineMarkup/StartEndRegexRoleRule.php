@@ -26,7 +26,7 @@ abstract class StartEndRegexRoleRule implements InlineMarkupRule
         return preg_match($this->getStartRegex(), $tokens->current()) === 1;
     }
 
-    public function apply(TokenIterator $tokens): ?InlineMarkupToken
+    public function apply(TokenIterator $tokens): InlineMarkupToken|null
     {
         $tokens->snapShot();
         $content = $tokens->current();

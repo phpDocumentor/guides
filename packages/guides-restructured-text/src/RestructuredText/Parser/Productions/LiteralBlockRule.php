@@ -43,7 +43,7 @@ final class LiteralBlockRule implements Rule
         return $isBlockLine && $nextIndentedBlockShouldBeALiteralBlock;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
@@ -64,7 +64,7 @@ final class LiteralBlockRule implements Rule
         return new CodeNode($lines);
     }
 
-    private function isBlockLine(?string $line): bool
+    private function isBlockLine(string|null $line): bool
     {
         if ($line === null) {
             return false;

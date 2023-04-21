@@ -26,12 +26,9 @@ class DocumentParserContext
     /** @var bool public is temporary */
     public bool $nextIndentedBlockShouldBeALiteralBlock = false;
 
-    public ?DocumentNode $document = null;
+    public DocumentNode|null $document = null;
 
     private LinesIterator $documentIterator;
-    private ParserContext $context;
-    private MarkupLanguageParser $markupLanguageParser;
-
     private int $currentTitleLevel;
 
     /** @var string[] */
@@ -39,13 +36,11 @@ class DocumentParserContext
 
     public function __construct(
         string $content,
-        ParserContext $context,
-        MarkupLanguageParser $markupLanguageParser
+        private ParserContext $context,
+        private MarkupLanguageParser $markupLanguageParser,
     ) {
         $this->documentIterator = new LinesIterator();
         $this->documentIterator->load($content);
-        $this->context = $context;
-        $this->markupLanguageParser = $markupLanguageParser;
         $this->currentTitleLevel = $context->getInitialHeaderLevel() - 1;
     }
 

@@ -22,16 +22,11 @@ use function tempnam;
 
 class PlantumlRenderer implements DiagramRenderer
 {
-    private LoggerInterface $logger;
-    private string $plantUmlBinaryPath;
-
-    public function __construct(LoggerInterface $logger, string $plantUmlBinaryPath)
+    public function __construct(private LoggerInterface $logger, private string $plantUmlBinaryPath)
     {
-        $this->logger = $logger;
-        $this->plantUmlBinaryPath = $plantUmlBinaryPath;
     }
 
-    public function render(string $diagram): ?string
+    public function render(string $diagram): string|null
     {
         $output = <<<PUML
 @startuml

@@ -15,11 +15,8 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
  */
 class Replace extends Directive
 {
-    private SpanParser $spanParser;
-
-    public function __construct(SpanParser $spanParser)
+    public function __construct(private SpanParser $spanParser)
     {
-        $this->spanParser = $spanParser;
     }
 
     public function getName(): string
@@ -32,7 +29,7 @@ class Replace extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): Node {
         return $this->spanParser->parse($data, $documentParserContext->getParser()->getParserContext());
     }

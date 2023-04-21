@@ -20,7 +20,7 @@ class NbspRoleRule implements InlineMarkupRule
         return $tokens->current() === '~';
     }
 
-    public function apply(TokenIterator $tokens): ?InlineMarkupToken
+    public function apply(TokenIterator $tokens): InlineMarkupToken|null
     {
         $tokens->snapShot();
 

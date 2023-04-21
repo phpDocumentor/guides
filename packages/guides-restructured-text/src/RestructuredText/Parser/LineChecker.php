@@ -49,7 +49,7 @@ class LineChecker
         '~',
     ];
 
-    public static function isSpecialLine(string $line, int $minimumLength = 2): ?string
+    public static function isSpecialLine(string $line, int $minimumLength = 2): string|null
     {
         if (mb_strlen($line) < $minimumLength) {
             return null;
@@ -81,7 +81,7 @@ class LineChecker
         return false;
     }
 
-    private function parseListLine(string $line): ?ListItem
+    private function parseListLine(string $line): ListItem|null
     {
         $depth = 0;
 

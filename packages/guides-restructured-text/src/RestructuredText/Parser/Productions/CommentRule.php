@@ -33,7 +33,7 @@ final class CommentRule implements Rule
         return $this->isComment($documentParser->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
@@ -48,7 +48,7 @@ final class CommentRule implements Rule
         return null;
     }
 
-    private function isCommentLine(?string $line): bool
+    private function isCommentLine(string|null $line): bool
     {
         if ($line === null) {
             return false;

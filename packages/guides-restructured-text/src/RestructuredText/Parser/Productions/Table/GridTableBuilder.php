@@ -200,8 +200,8 @@ class GridTableBuilder
     public function buildNode(
         ParserContext $tableParserContext,
         DocumentParserContext $documentParserContext,
-        RuleContainer $productions
-    ): ?TableNode {
+        RuleContainer $productions,
+    ): TableNode|null {
         $tableNode = $this->compile($tableParserContext);
 
         if ($tableParserContext->hasErrors()) {
@@ -235,7 +235,7 @@ class GridTableBuilder
     private function buildRow(
         TableRow $row,
         DocumentParserContext $documentParserContext,
-        RuleContainer $productions
+        RuleContainer $productions,
     ): TableRow {
         $newRow = new TableRow();
         foreach ($row->getColumns() as $col) {
@@ -248,7 +248,7 @@ class GridTableBuilder
     private function buildColumn(
         TableColumn $col,
         DocumentParserContext $documentParserContext,
-        RuleContainer $productions
+        RuleContainer $productions,
     ): TableColumn {
         $content = $col->getContent();
         $context = $documentParserContext->withContents($content);
@@ -273,8 +273,8 @@ class GridTableBuilder
     private function createColumn(
         string $line,
         int $currentColumnStart,
-        ?int $previousColumnEnd,
-        int $currentSpan
+        int|null $previousColumnEnd,
+        int $currentSpan,
     ): TableColumn {
         return new TableColumn(
             mb_substr($line, $currentColumnStart, $previousColumnEnd - $currentColumnStart),
@@ -283,7 +283,7 @@ class GridTableBuilder
     }
 
     /** @phpstan-assert int $previousColumnEnd */
-    private function assertColumnEnded(?int $currentColumnStart, ?int $previousColumnEnd): void
+    private function assertColumnEnded(int|null $currentColumnStart, int|null $previousColumnEnd): void
     {
         if (($currentColumnStart !== null) && $previousColumnEnd === null) {
             throw new LogicException('The previous column end is not set yet');

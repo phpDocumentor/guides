@@ -9,11 +9,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class CompileDocumentsHandler
 {
-    private Compiler $compiler;
-
-    public function __construct(Compiler $compiler)
+    public function __construct(private Compiler $compiler)
     {
-        $this->compiler = $compiler;
     }
 
     /** @return DocumentNode[] */

@@ -21,20 +21,14 @@ use function sprintf;
 /** @extends CompoundNode<Node> */
 class VersionChangeNode extends CompoundNode
 {
-    private string $type;
-
     private string $versionLabel;
 
-    private string $versionModified;
-
     /** {@inheritDoc} */
-    public function __construct(string $type, string $versionLabel, string $versionModified, array $value)
+    public function __construct(private string $type, string $versionLabel, private string $versionModified, array $value)
     {
         parent::__construct($value);
 
-        $this->type = $type;
         $this->versionLabel = sprintf($versionLabel, $versionModified);
-        $this->versionModified = $versionModified;
     }
 
     public function getType(): string

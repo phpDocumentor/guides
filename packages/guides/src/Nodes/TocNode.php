@@ -26,17 +26,12 @@ class TocNode extends CompoundNode
 {
     private const DEFAULT_DEPTH = 2;
 
-    /** @var string[] */
-    private array $files;
-
     /** @var Entry[] */
     private array $entries = [];
 
     /** @param string[] $files */
-    public function __construct(array $files)
+    public function __construct(private array $files)
     {
-        $this->files = $files;
-
         parent::__construct();
     }
 

@@ -10,13 +10,9 @@ use function sprintf;
 
 class InMemoryRendererFactory implements TypeRendererFactory
 {
-    /** @var iterable<TypeRenderer> */
-    private iterable $renderSets;
-
     /** @param iterable<TypeRenderer> $renderSets */
-    public function __construct(iterable $renderSets)
+    public function __construct(private iterable $renderSets)
     {
-        $this->renderSets = $renderSets;
     }
 
     public function getRenderSet(string $outputFormat): TypeRenderer

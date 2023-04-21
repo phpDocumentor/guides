@@ -8,14 +8,11 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 
 class SectionEntry implements ChildEntry
 {
-    private TitleNode $title;
-
     /** @var ChildEntry[] */
     private array $children = [];
 
-    public function __construct(TitleNode $title)
+    public function __construct(private TitleNode $title)
     {
-        $this->title = $title;
     }
 
     public function getId(): string

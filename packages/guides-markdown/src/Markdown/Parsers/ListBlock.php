@@ -11,8 +11,6 @@ use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 
-use function get_class;
-
 /** @extends AbstractBlock<ListNode> */
 final class ListBlock extends AbstractBlock
 {
@@ -35,7 +33,7 @@ final class ListBlock extends AbstractBlock
             echo 'LIST CONTEXT: I am '
                 . 'leaving'
                 . ' a '
-                . get_class($node)
+                . $node::class
                 . ' node'
                 . "\n";
         }

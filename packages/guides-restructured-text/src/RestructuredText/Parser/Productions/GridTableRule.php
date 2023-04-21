@@ -36,12 +36,10 @@ use function trim;
 final class GridTableRule implements Rule
 {
     private GridTableBuilder $builder;
-    private RuleContainer $productions;
 
-    public function __construct(RuleContainer $productions)
+    public function __construct(private RuleContainer $productions)
     {
         $this->builder = new GridTableBuilder();
-        $this->productions = $productions;
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -49,7 +47,7 @@ final class GridTableRule implements Rule
         return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $line = $documentIterator->current();

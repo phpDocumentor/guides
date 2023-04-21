@@ -17,8 +17,7 @@ use const JSON_THROW_ON_ERROR;
 final class InventoryLoaderTest extends TestCase
 {
     private InventoryLoader $inventoryLoader;
-    /** @var JsonLoader&MockObject */
-    private $jsonLoader;
+    private JsonLoader&MockObject $jsonLoader;
     private InventoryRepository $inventoryRepository;
     /** @var array<string, mixed> */
     private array $json;

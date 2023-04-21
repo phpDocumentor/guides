@@ -23,16 +23,12 @@ use phpDocumentor\Guides\RenderContext;
  */
 final class ReferenceResolver
 {
-    /** @var iterable<Resolver> */
-    private iterable $resolvers;
-
     /** @param iterable<Resolver> $resolvers */
-    public function __construct(iterable $resolvers)
+    public function __construct(private iterable $resolvers)
     {
-        $this->resolvers = $resolvers;
     }
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ?ResolvedReference
+    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null
     {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->supports($node, $context)) {

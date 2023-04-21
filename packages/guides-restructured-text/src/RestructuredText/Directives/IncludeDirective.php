@@ -37,7 +37,7 @@ final class IncludeDirective extends Directive
         DocumentParserContext $documentParserContext,
         string $variable,
         string $data,
-        array $options
+        array $options,
     ): Node {
         $parser = $documentParserContext->getParser();
         $subParser = $parser->getSubParser();

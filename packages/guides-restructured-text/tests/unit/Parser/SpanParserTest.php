@@ -90,7 +90,7 @@ final class SpanParserTest extends TestCase
         string $referenceId,
         string $text,
         string $url = '',
-        bool $anonymous = false
+        bool $anonymous = false,
     ): void {
         if ($anonymous === true || $url === '') {
             $this->parserContext->expects(self::never())->method('setLink');
@@ -180,7 +180,7 @@ TEXT
         string $input,
         string $referenceId,
         string $text,
-        string $url = ''
+        string $url = '',
     ): void {
         $this->parserContext->expects(self::once())->method('pushAnonymous')->with($text);
         $this->testNamedHyperlinkReferencesAreReplaced($input, $referenceId, $text, $url);
@@ -287,9 +287,9 @@ TEXT
         string $replaced,
         string $url,
         string $role = 'ref',
-        ?string $domain = null,
-        ?string $anchor = null,
-        ?string $text = null
+        string|null $domain = null,
+        string|null $anchor = null,
+        string|null $text = null,
     ): void {
         $result = $this->spanProcessor->parse($span, $this->parserContext);
         $token = current($result->getTokens());

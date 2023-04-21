@@ -16,18 +16,11 @@ namespace phpDocumentor\Guides\Nodes;
 /** @extends CompoundNode<TextNode> */
 class TitleNode extends CompoundNode
 {
-    protected int $level;
-
-    protected string $id;
-
     protected string $target = '';
 
-    public function __construct(SpanNode $value, int $level, string $id)
+    public function __construct(SpanNode $value, protected int $level, protected string $id)
     {
         parent::__construct([$value]);
-
-        $this->level = $level;
-        $this->id = $id;
     }
 
     public static function emptyNode(): self

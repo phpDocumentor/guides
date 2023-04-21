@@ -44,7 +44,7 @@ final class BlockQuoteRule implements Rule
         return $isWhiteSpace && $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, ?CompoundNode $on = null): ?Node
+    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = new Buffer();
@@ -70,7 +70,7 @@ final class BlockQuoteRule implements Rule
         );
     }
 
-    private function isBlockLine(?string $line, int $minIndent = 1): bool
+    private function isBlockLine(string|null $line, int $minIndent = 1): bool
     {
         if ($line === null) {
             return false;

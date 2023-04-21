@@ -17,15 +17,10 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 class SpanNode extends TextNode
 {
-    /** @var InlineMarkupToken[] */
-    protected array $tokens;
-
     /** @param InlineMarkupToken[] $tokens */
-    public function __construct(string $content, array $tokens = [])
+    public function __construct(string $content, protected array $tokens = [])
     {
         parent::__construct($content);
-
-        $this->tokens = $tokens;
     }
 
     /** @return InlineMarkupToken[] */

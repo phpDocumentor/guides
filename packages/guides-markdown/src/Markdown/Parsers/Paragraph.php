@@ -12,8 +12,6 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 
-use function get_class;
-
 /** @extends AbstractBlock<ParagraphNode> */
 final class Paragraph extends AbstractBlock
 {
@@ -36,7 +34,7 @@ final class Paragraph extends AbstractBlock
             echo 'PARAGRAPH CONTEXT: I am '
                 . 'leaving'
                 . ' a '
-                . get_class($node)
+                . $node::class
                 . ' node'
                 . "\n";
         }

@@ -9,13 +9,9 @@ use function array_merge;
 /** @extends CompoundNode<Node> */
 final class SectionNode extends CompoundNode
 {
-    private TitleNode $title;
-
-    public function __construct(TitleNode $title)
+    public function __construct(private TitleNode $title)
     {
         parent::__construct();
-
-        $this->title = $title;
     }
 
     public function getTitle(): TitleNode
