@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use RuntimeException;
 
@@ -35,19 +36,17 @@ final class IncludeDirective extends BaseDirective
     /** {@inheritDoc} */
     public function processNode(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node {
         $parser = $documentParserContext->getParser();
         $subParser = $parser->getSubParser();
         $parserContext = $parser->getParserContext();
-        $path = $parserContext->absoluteRelativePath($data);
+        $path = $parserContext->absoluteRelativePath($directive->getData());
 
         $origin = $parserContext->getOrigin();
         if (!$origin->has($path)) {
             throw new RuntimeException(
-                sprintf('Include "%s" (%s) does not exist or is not readable.', $data, $path),
+                sprintf('Include "%s" (%s) does not exist or is not readable.', $directive->getData(), $path),
             );
         }
 
@@ -57,18 +56,18 @@ final class IncludeDirective extends BaseDirective
             throw new RuntimeException(sprintf('Could not load file from path %s', $path));
         }
 
-        if (array_key_exists('literal', $options)) {
+        if (array_key_exists('literal', $directive->getOptions())) {
             $contents = str_replace("\r\n", "\n", $contents);
 
             return new LiteralBlockNode($contents);
         }
 
-        if (array_key_exists('code', $options)) {
+        if (array_key_exists('code', $directive->getOptions())) {
             $contents = str_replace("\r\n", "\n", $contents);
             $codeNode = new CodeNode(
                 explode('\n', $contents),
             );
-            $codeNode->setLanguage($options['code']);
+            $codeNode->setLanguage((string) $directive->getOption('code')->getValue());
 
             return $codeNode;
         }

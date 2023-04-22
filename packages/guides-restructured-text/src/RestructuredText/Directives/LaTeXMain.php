@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\MainNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -21,10 +22,8 @@ class LaTeXMain extends BaseDirective
     /** {@inheritDoc} */
     public function processNode(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node {
-        return new MainNode($data);
+        return new MainNode($directive->getData());
     }
 }
