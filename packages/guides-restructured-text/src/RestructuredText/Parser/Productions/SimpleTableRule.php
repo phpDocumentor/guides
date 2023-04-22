@@ -22,6 +22,8 @@ use function trim;
 /** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
 {
+    public const PRIORITY = 40;
+
     public function __construct(private RuleContainer $productions)
     {
     }

@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class ParserRulesPass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
     public function process(ContainerBuilder $container): void
     {
         $body = $container->findDefinition('phpdoc.guides.parser.rst.body_elements');
         $structual = $container->findDefinition('phpdoc.guides.parser.rst.structural_elements');
 
-        foreach ($container->findTaggedServiceIds('phpdoc.guides.parser.rst.structural_element') as $id => $tags) {
-            $structual->addMethodCall('push', [new Reference($id)]);
+        foreach ($this->findAndSortTaggedServices('phpdoc.guides.parser.rst.structural_element', $container) as $reference) {
+            $structual->addMethodCall('push', [$reference]);
         }
 
-        foreach ($container->findTaggedServiceIds('phpdoc.guides.parser.rst.body_element') as $id => $tags) {
-            $body->addMethodCall('push', [new Reference($id)]);
+        foreach ($this->findAndSortTaggedServices('phpdoc.guides.parser.rst.body_element', $container) as $reference) {
+            $body->addMethodCall('push', [$reference]);
             //TODO: remove this call to $structual, body elements should not be part of it once subparser is removed
-            $structual->addMethodCall('push', [new Reference($id)]);
+            $structual->addMethodCall('push', [$reference]);
         }
     }
 }

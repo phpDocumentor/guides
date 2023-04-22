@@ -38,6 +38,8 @@ use function trim;
  */
 final class ListRule implements Rule
 {
+    public const PRIORITY = 90;
+
     /**
      * A regex matching all bullet list markers and a subset of the enumerated list markers.
      *

@@ -27,6 +27,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
  */
 final class TransitionRule implements Rule
 {
+    public const PRIORITY = 20;
     public const SEPERATOR_LENGTH_MIN = 4;
 
     public function applies(DocumentParserContext $documentParser): bool

@@ -42,6 +42,8 @@ use function trim;
  */
 final class EnumeratedListRule implements Rule
 {
+    public const PRIORITY = 80;
+
     private const ROMAN_NUMBER = '((?:M{0,3})(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3}))(?<!^)';
     private const NUMBER = '(\d+|#)';
 

@@ -36,6 +36,8 @@ use function trim;
  */
 final class BlockQuoteRule implements Rule
 {
+    public const PRIORITY = 100;
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         $isWhiteSpace = trim($documentParser->getDocumentIterator()->current()) === '';

@@ -28,6 +28,8 @@ use function trim;
  */
 final class CommentRule implements Rule
 {
+    public const PRIORITY = 60;
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         return $this->isComment($documentParser->getDocumentIterator()->current());
