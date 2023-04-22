@@ -26,9 +26,7 @@ abstract class SubDirective extends Directive
     /** {@inheritDoc} */
     final public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
@@ -36,15 +34,15 @@ abstract class SubDirective extends Directive
             implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
         );
 
-        $newNode = $this->processSub($document, $variable, $data, $options);
+        $newNode = $this->processSub($document, $directive->getVariable(), $directive->getData(), $directive->getOptions());
 
         if ($newNode === null) {
             return null;
         }
 
         $document = $documentParserContext->getDocument();
-        if ($variable !== '') {
-            $document->addVariable($variable, $newNode);
+        if ($directive->getVariable() !== '') {
+            $document->addVariable($directive->getVariable(), $newNode);
 
             return null;
         }

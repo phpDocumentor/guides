@@ -29,15 +29,13 @@ class RawDirective extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $node = new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
 
         $document = $documentParserContext->getDocument();
-        if ($variable !== '') {
-            $document->addVariable($variable, $node);
+        if ($directive->getVariable() !== '') {
+            $document->addVariable($directive->getVariable(), $node);
 
             return null;
         }

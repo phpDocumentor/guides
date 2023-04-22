@@ -32,11 +32,10 @@ class Toctree extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $parserContext = $documentParserContext->getParser()->getParserContext();
+        $options = $directive->getOptions();
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
             $parserContext,

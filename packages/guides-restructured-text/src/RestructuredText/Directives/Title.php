@@ -23,12 +23,10 @@ class Title extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $document = $documentParserContext->getDocument();
-        $document->addHeaderNode(new DocumentTitleNode($data));
+        $document->addHeaderNode(new DocumentTitleNode($directive->getData()));
 
         return null;
     }

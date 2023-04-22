@@ -31,20 +31,18 @@ class CodeBlock extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $node = new CodeNode(
             $documentParserContext->getDocumentIterator()->toArray(),
         );
 
-        $node->setLanguage(trim($data));
-        $this->setStartingLineNumberBasedOnOptions($options, $node);
+        $node->setLanguage(trim($directive->getData()));
+        $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
 
-        if ($variable !== '') {
+        if ($directive->getVariable() !== '') {
             $document = $documentParserContext->getDocument();
-            $document->addVariable($variable, $node);
+            $document->addVariable($directive->getVariable(), $node);
 
             return null;
         }

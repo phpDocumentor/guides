@@ -106,9 +106,7 @@ final class DirectiveRule implements Rule
         try {
             return $directiveHandler->process(
                 $documentParserContext->withContentsPreserveSpace($buffer->getLinesString()),
-                $directive->getVariable(),
-                $directive->getData(),
-                $directive->getOptions(),
+                $directive,
             );
         } catch (Throwable $e) {
             $message = sprintf(

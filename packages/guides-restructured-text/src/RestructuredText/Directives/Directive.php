@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive as DirectiveModel;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -51,24 +52,20 @@ abstract class Directive
      *
      * @param DocumentParserContext $documentParserContext the current document context with the content
      *    of the directive
-     * @param string $variable the variable name of the directive
-     * @param string $data the data of the directive (following ::)
-     * @param DirectiveOption[] $options the array of options for this directive
+     * @param DirectiveModel $directive parsed directive containing options and variable
      */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        DirectiveModel $directive,
     ): Node|null {
         $document = $documentParserContext->getDocument();
 
-        $processNode = $this->processNode($documentParserContext, $variable, $data, $options)
+        $processNode = $this->processNode($documentParserContext, $directive->getVariable(), $directive->getData(), $directive->getOptions())
             // Ensure options are always available
-            ->withOptions($this->optionsToArray($options));
+            ->withOptions($this->optionsToArray($directive->getOptions()));
 
-        if ($variable !== '') {
-            $document->addVariable($variable, $processNode);
+        if ($directive->getVariable() !== '') {
+            $document->addVariable($directive->getVariable(), $processNode);
 
             return null;
         }

@@ -24,13 +24,11 @@ class Meta extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         $document = $documentParserContext->getDocument();
 
-        foreach ($options as $option) {
+        foreach ($directive->getOptions() as $option) {
             $document->addHeaderNode(new MetaNode($option->getName(), (string) $option->getValue()));
         }
 

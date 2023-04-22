@@ -47,4 +47,9 @@ class Directive
     {
         $this->options[$value->getName()] = $value;
     }
+
+    public function getOption(string $name): DirectiveOption
+    {
+        return $this->options[$name] ?? new DirectiveOption($name, null);
+    }
 }

@@ -16,13 +16,10 @@ class DummyDirective extends DirectiveHandler
         return $this->name;
     }
 
-    /** @param DirectiveOption[] $options the array of options for this directive */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return new DummyNode($variable, $data, $options);
+        return new DummyNode($directive->getVariable(), $directive->getData(), $directive->getOptions());
     }
 }
