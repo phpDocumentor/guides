@@ -58,13 +58,6 @@ final class Uml extends Directive
         $node->setClasses(explode(' ', (string) $directive->getOption('classes')->getValue()));
         $node->setCaption($directive->getData());
 
-        $document = $parser->getDocument();
-        if ($directive->getVariable() !== '') {
-            $document->addVariable($directive->getVariable(), $node);
-
-            return null;
-        }
-
         return $node;
     }
 

@@ -34,20 +34,7 @@ abstract class SubDirective extends Directive
             implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
         );
 
-        $newNode = $this->processSub($document, $directive->getVariable(), $directive->getData(), $directive->getOptions());
-
-        if ($newNode === null) {
-            return null;
-        }
-
-        $document = $documentParserContext->getDocument();
-        if ($directive->getVariable() !== '') {
-            $document->addVariable($directive->getVariable(), $newNode);
-
-            return null;
-        }
-
-        return $newNode;
+        return $this->processSub($document, $directive->getVariable(), $directive->getData(), $directive->getOptions());
     }
 
     /** @param DirectiveOption[] $options */

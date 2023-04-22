@@ -31,15 +31,6 @@ class RawDirective extends Directive
         DocumentParserContext $documentParserContext,
         \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
-        $node = new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
-
-        $document = $documentParserContext->getDocument();
-        if ($directive->getVariable() !== '') {
-            $document->addVariable($directive->getVariable(), $node);
-
-            return null;
-        }
-
-        return $node;
+        return new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
     }
 }

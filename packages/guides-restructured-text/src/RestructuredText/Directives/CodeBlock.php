@@ -40,13 +40,6 @@ class CodeBlock extends Directive
         $node->setLanguage(trim($directive->getData()));
         $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
 
-        if ($directive->getVariable() !== '') {
-            $document = $documentParserContext->getDocument();
-            $document->addVariable($directive->getVariable(), $node);
-
-            return null;
-        }
-
         return $node;
     }
 

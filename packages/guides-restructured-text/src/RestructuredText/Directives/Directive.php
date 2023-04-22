@@ -60,17 +60,9 @@ abstract class Directive
     ): Node|null {
         $document = $documentParserContext->getDocument();
 
-        $processNode = $this->processNode($documentParserContext, $directive->getVariable(), $directive->getData(), $directive->getOptions())
+        return $this->processNode($documentParserContext, $directive->getVariable(), $directive->getData(), $directive->getOptions())
             // Ensure options are always available
             ->withOptions($this->optionsToArray($directive->getOptions()));
-
-        if ($directive->getVariable() !== '') {
-            $document->addVariable($directive->getVariable(), $processNode);
-
-            return null;
-        }
-
-        return $processNode;
     }
 
     /**
