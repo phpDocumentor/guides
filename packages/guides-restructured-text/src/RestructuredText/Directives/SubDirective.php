@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
@@ -34,15 +33,18 @@ abstract class SubDirective extends Directive
             implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
         );
 
-        return $this->processSub($document, $directive->getVariable(), $directive->getData(), $directive->getOptions());
+        $node = $this->processSub($document, $directive);
+
+        if ($node === null) {
+            return null;
+        }
+
+        return $node->withOptions($this->optionsToArray($directive->getOptions()));
     }
 
-    /** @param DirectiveOption[] $options */
     protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
     ): Node|null {
         return null;
     }

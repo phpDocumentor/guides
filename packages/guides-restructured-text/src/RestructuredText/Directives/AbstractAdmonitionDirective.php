@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
@@ -23,18 +24,19 @@ abstract class AbstractAdmonitionDirective extends SubDirective
     {
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     final protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return (new AdmonitionNode(
+        return new AdmonitionNode(
             $this->name,
             $this->text,
             $document->getChildren(),
-        ))->withOptions($this->optionsToArray($options));
+        );
     }
 
     final public function getName(): string

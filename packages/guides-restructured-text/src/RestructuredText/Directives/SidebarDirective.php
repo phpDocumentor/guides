@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * Divs a sub document in a div with a given class or set of classes.
@@ -29,16 +30,17 @@ class SidebarDirective extends SubDirective
         return 'sidebar';
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return (new SidebarNode(
-            $data,
+        return new SidebarNode(
+            $directive->getData(),
             $document->getChildren(),
-        ))->withOptions($this->optionsToArray($options));
+        );
     }
 }

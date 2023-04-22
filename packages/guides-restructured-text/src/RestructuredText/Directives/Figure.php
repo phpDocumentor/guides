@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 /**
@@ -31,15 +32,16 @@ class Figure extends SubDirective
         return 'figure';
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        $image = new ImageNode($this->urlGenerator->relativeUrl($data));
-        $scalarOptions = $this->optionsToArray($options);
+        $image = new ImageNode($this->urlGenerator->relativeUrl($directive->getData()));
+        $scalarOptions = $this->optionsToArray($directive->getOptions());
         $image = $image->withOptions([
             'width' => $scalarOptions['width'] ?? null,
             'height' => $scalarOptions['height'] ?? null,

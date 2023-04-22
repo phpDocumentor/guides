@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * Divs a sub document in a div with a given class or set of classes.
@@ -26,13 +27,14 @@ class ContainerDirective extends SubDirective
         return ['div'];
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return (new ContainerNode($document->getChildren()))->withOptions(['class' => $data]);
+        return (new ContainerNode($document->getChildren()))->withOptions(['class' => $directive->getData()]);
     }
 }

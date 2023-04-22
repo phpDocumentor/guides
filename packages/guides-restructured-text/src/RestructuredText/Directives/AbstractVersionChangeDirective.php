@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
@@ -24,19 +25,20 @@ abstract class AbstractVersionChangeDirective extends SubDirective
     {
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     final protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return (new VersionChangeNode(
+        return new VersionChangeNode(
             $this->type,
             $this->label,
-            $data,
+            $directive->getData(),
             $document->getChildren(),
-        ))->withOptions($this->optionsToArray($options));
+        );
     }
 
     final public function getName(): string

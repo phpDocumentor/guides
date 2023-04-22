@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function array_map;
@@ -21,14 +22,15 @@ class ClassDirective extends SubDirective
         return 'class';
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        $classes = explode(' ', $data);
+        $classes = explode(' ', $directive->getData());
 
         $normalizedClasses = array_map(
             static fn (string $class): string => (new AsciiSlugger())->slug($class)->lower()->toString(),
@@ -38,7 +40,7 @@ class ClassDirective extends SubDirective
         $document->setClasses($normalizedClasses);
 
         if (!$document instanceof DocumentNode || $document->getNodes() === []) {
-            $classNode = new ClassNode($data);
+            $classNode = new ClassNode($directive->getData());
             $classNode->setClasses($classes);
 
             return $classNode;

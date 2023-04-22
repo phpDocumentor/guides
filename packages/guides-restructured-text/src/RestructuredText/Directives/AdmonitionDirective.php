@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function preg_replace;
 use function strtolower;
@@ -39,15 +40,21 @@ class AdmonitionDirective extends SubDirective
         return 'admonition';
     }
 
-    /** {@inheritDoc} */
-    protected function processSub(DocumentNode $document, string $variable, string $data, array $options): Node|null
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
+    protected function processSub(DocumentNode $document, Directive $directive): Node|null
     {
-        $name = trim(preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($data)) ?? '', '-');
+        $name = trim(
+            preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($directive->getData())) ?? '',
+            '-',
+        );
 
-        return (new AdmonitionNode(
+        return new AdmonitionNode(
             $name,
-            $data,
+            $directive->getData(),
             $document->getChildren(),
-        ))->withOptions($this->optionsToArray($options));
+        );
     }
 }

@@ -16,18 +16,20 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 class TopicDirective extends SubDirective
 {
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     *
+     * @param Directive $directive
+     */
     final protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         return new TopicNode(
-            $data,
+            $directive->getData(),
             $document->getChildren(),
         );
     }
