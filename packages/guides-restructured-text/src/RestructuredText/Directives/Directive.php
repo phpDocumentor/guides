@@ -58,8 +58,6 @@ abstract class Directive
         DocumentParserContext $documentParserContext,
         DirectiveModel $directive,
     ): Node|null {
-        $document = $documentParserContext->getDocument();
-
         return $this->processNode($documentParserContext, $directive->getVariable(), $directive->getData(), $directive->getOptions())
             // Ensure options are always available
             ->withOptions($this->optionsToArray($directive->getOptions()));
