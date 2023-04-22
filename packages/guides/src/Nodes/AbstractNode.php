@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use function array_merge;
+use function array_unique;
 use function array_walk;
 use function implode;
 use function preg_replace;
@@ -68,7 +69,7 @@ abstract class AbstractNode implements Node
             // strip trailing hyphens
             $value = (string) preg_replace('/-$/', '', $value);
         });
-        $this->classes = $classes;
+        $this->classes = array_unique($classes);
     }
 
     public function getClassesString(): string

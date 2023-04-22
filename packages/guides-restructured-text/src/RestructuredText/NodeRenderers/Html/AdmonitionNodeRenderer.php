@@ -41,9 +41,6 @@ class AdmonitionNodeRenderer implements NodeRenderer
         }
 
         $classes = $node->getClasses();
-        if ($node->getOption('class') !== null) {
-            $classes[] = $node->getOption('class');
-        }
 
         return $this->renderer->renderTemplate(
             $renderContext,
