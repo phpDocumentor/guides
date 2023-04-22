@@ -41,6 +41,8 @@ use const PHP_INT_MAX;
  */
 final class DirectiveRule implements Rule
 {
+    public const PRIORITY = 70;
+
     /** @var array<string, DirectiveHandler> */
     private array $directives;
 

@@ -16,6 +16,8 @@ use Webmozart\Assert\Assert;
 /** @implements Rule<SectionNode> */
 final class SectionRule implements Rule
 {
+    public const PRIORITY = 10;
+
     public function __construct(private TitleRule $titleRule, private RuleContainer $bodyElements)
     {
     }

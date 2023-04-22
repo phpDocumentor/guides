@@ -35,6 +35,8 @@ use function trim;
  */
 final class GridTableRule implements Rule
 {
+    public const PRIORITY = 50;
+
     private GridTableBuilder $builder;
 
     public function __construct(private RuleContainer $productions)

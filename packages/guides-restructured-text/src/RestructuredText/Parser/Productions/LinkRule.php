@@ -30,6 +30,8 @@ use function trim;
  */
 final class LinkRule implements Rule
 {
+    public const PRIORITY = 120;
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         $link = $this->parseLink($documentParser->getDocumentIterator()->current());

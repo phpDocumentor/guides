@@ -30,6 +30,8 @@ use function trim;
  */
 final class LiteralBlockRule implements Rule
 {
+    public const PRIORITY = 120;
+
     public function applies(DocumentParserContext $documentParser): bool
     {
         $nextIndentedBlockShouldBeALiteralBlock = $documentParser->nextIndentedBlockShouldBeALiteralBlock;

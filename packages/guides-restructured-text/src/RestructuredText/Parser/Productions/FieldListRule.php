@@ -36,6 +36,8 @@ use function trim;
  */
 final class FieldListRule implements Rule
 {
+    public const PRIORITY = 20;
+
     /** @param FieldListItemRule[] $fieldListItemRules */
     public function __construct(private RuleContainer $productions, private iterable $fieldListItemRules)
     {
