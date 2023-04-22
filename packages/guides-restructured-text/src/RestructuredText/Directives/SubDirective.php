@@ -38,7 +38,7 @@ abstract class SubDirective extends Directive
     }
 
     /** @param DirectiveOption[] $options */
-    public function processSub(
+    protected function processSub(
         DocumentNode $document,
         string $variable,
         string $data,

@@ -40,7 +40,7 @@ class AdmonitionDirective extends SubDirective
     }
 
     /** {@inheritDoc} */
-    public function processSub(DocumentNode $document, string $variable, string $data, array $options): Node|null
+    protected function processSub(DocumentNode $document, string $variable, string $data, array $options): Node|null
     {
         $name = trim(preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($data)) ?? '', '-');
 

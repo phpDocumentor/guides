@@ -22,7 +22,7 @@ class ClassDirective extends SubDirective
     }
 
     /** {@inheritDoc} */
-    public function processSub(
+    protected function processSub(
         DocumentNode $document,
         string $variable,
         string $data,

@@ -29,6 +29,12 @@ class CodeBlock extends Directive
     }
 
     /** {@inheritDoc} */
+    public function getAliases(): array
+    {
+        return ['code'];
+    }
+
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
         \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,

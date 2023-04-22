@@ -6,7 +6,6 @@ use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\Code;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
@@ -80,7 +79,6 @@ return static function (ContainerConfigurator $container): void {
         ->set(AttentionDirective::class)
         ->set(CautionDirective::class)
         ->set(ClassDirective::class)
-        ->set(Code::class)
         ->set(CodeBlock::class)
         ->set(ContainerDirective::class)
         ->set(DangerDirective::class)

@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 class TopicDirective extends SubDirective
 {
     /** {@inheritDoc} */
-    final public function processSub(
+    final protected function processSub(
         DocumentNode $document,
         string $variable,
         string $data,
