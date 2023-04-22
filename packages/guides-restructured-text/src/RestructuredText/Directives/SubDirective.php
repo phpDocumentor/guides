@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
@@ -20,12 +21,12 @@ use function implode;
  *      You can imagine anything here, like adding *emphasis*, lists or
  *      titles
  */
-abstract class SubDirective extends Directive
+abstract class SubDirective extends BaseDirective
 {
     /** {@inheritDoc} */
     final public function process(
         DocumentParserContext $documentParserContext,
-        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
+        Directive $directive,
     ): Node|null {
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
@@ -44,7 +45,7 @@ abstract class SubDirective extends Directive
 
     protected function processSub(
         DocumentNode $document,
-        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
+        Directive $directive,
     ): Node|null {
         return null;
     }

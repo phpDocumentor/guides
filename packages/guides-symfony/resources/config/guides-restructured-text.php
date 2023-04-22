@@ -64,7 +64,7 @@ return static function (ContainerConfigurator $container): void {
         ->autoconfigure()
         ->bind('$bodyElements', service('phpdoc.guides.parser.rst.body_elements'))
         ->bind('$structuralElements', service('phpdoc.guides.parser.rst.structural_elements'))
-        ->instanceof(phpDocumentor\Guides\RestructuredText\Directives\Directive::class)
+        ->instanceof(phpDocumentor\Guides\RestructuredText\Directives\BaseDirective::class)
         ->tag('phpdoc.guides.directive')
         ->instanceof(FieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')

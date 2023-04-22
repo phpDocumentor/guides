@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 
-class DummyDirective extends DirectiveHandler
+class DummyBaseDirective extends DirectiveHandler
 {
     private string $name = 'dummy';
 

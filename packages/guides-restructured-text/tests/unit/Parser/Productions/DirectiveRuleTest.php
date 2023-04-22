@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
+use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
-use phpDocumentor\Guides\RestructuredText\Parser\DummyDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\DummyBaseDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -20,7 +20,7 @@ final class DirectiveRuleTest extends RuleTestCase
 
     public function setUp(): void
     {
-        $this->directiveHandler = new DummyDirective();
+        $this->directiveHandler = new DummyBaseDirective();
         $this->rule = new DirectiveRule([$this->directiveHandler]);
     }
 

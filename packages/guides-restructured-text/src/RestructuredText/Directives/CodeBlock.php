@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function trim;
@@ -21,7 +22,7 @@ use function trim;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
-class CodeBlock extends Directive
+class CodeBlock extends BaseDirective
 {
     public function getName(): string
     {
@@ -37,7 +38,7 @@ class CodeBlock extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
+        Directive $directive,
     ): Node|null {
         $node = new CodeNode(
             $documentParserContext->getDocumentIterator()->toArray(),

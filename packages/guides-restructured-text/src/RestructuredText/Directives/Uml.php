@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Webmozart\Assert\Assert;
 
@@ -30,7 +31,7 @@ use function str_replace;
  *    :Transform AST into artifacts;
  *    stop
  */
-final class Uml extends Directive
+final class Uml extends BaseDirective
 {
     public function getName(): string
     {
@@ -40,7 +41,7 @@ final class Uml extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
+        Directive $directive,
     ): Node|null {
         $parser = $documentParserContext->getParser();
         $parserContext = $parser->getParserContext();

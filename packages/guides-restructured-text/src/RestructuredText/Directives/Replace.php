@@ -13,7 +13,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
  *
  * .. |test| replace:: The Test String!
  */
-class Replace extends Directive
+class Replace extends BaseDirective
 {
     public function __construct(private SpanParser $spanParser)
     {

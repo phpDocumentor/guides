@@ -25,7 +25,7 @@ use function explode;
 use function sprintf;
 use function str_replace;
 
-final class IncludeDirective extends Directive
+final class IncludeDirective extends BaseDirective
 {
     public function getName(): string
     {

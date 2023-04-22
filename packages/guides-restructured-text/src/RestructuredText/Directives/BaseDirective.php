@@ -25,7 +25,7 @@ use function array_map;
  *  The directive can define variables, create special nodes or change
  *  the node that directly follows it
  */
-abstract class Directive
+abstract class BaseDirective
 {
     /**
      * Get the directive name

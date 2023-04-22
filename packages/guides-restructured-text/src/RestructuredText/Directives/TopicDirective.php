@@ -20,10 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 class TopicDirective extends SubDirective
 {
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
+    /** {@inheritDoc} */
     final protected function processSub(
         DocumentNode $document,
         Directive $directive,

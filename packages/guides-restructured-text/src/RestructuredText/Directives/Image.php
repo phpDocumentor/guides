@@ -18,7 +18,7 @@ use function dirname;
  *      :width: 100
  *      :title: An image
  */
-class Image extends Directive
+class Image extends BaseDirective
 {
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {

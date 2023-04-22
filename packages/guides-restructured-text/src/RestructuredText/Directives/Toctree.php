@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
@@ -18,7 +19,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  */
-class Toctree extends Directive
+class Toctree extends BaseDirective
 {
     public function __construct(private ToctreeBuilder $toctreeBuilder)
     {
@@ -32,7 +33,7 @@ class Toctree extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        \phpDocumentor\Guides\RestructuredText\Parser\Directive $directive,
+        Directive $directive,
     ): Node|null {
         $parserContext = $documentParserContext->getParser()->getParserContext();
         $options = $directive->getOptions();

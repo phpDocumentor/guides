@@ -11,7 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 /**
  * Marks the document as LaTeX main
  */
-class LaTeXMain extends Directive
+class LaTeXMain extends BaseDirective
 {
     public function getName(): string
     {
