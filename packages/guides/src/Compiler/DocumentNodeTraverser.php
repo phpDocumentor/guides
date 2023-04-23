@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
-    public function __construct(private NodeTransformerFactory $nodeTransformerFactory)
+    public function __construct(private readonly NodeTransformerFactory $nodeTransformerFactory)
     {
     }
 

@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\Node;
 class AdmonitionNode extends CompoundNode
 {
     /** {@inheritDoc} */
-    public function __construct(private string $name, private string $text, array $value)
+    public function __construct(private readonly string $name, private readonly string $text, array $value)
     {
         parent::__construct($value);
     }

@@ -10,7 +10,7 @@ class InlineMarkupToken
     public const TYPE_LINK = 'link';
 
     /** @param string[] $token */
-    public function __construct(private string $type, private string $id, private array $token)
+    public function __construct(private readonly string $type, private readonly string $id, private array $token)
     {
         $this->token['type'] = $type;
     }

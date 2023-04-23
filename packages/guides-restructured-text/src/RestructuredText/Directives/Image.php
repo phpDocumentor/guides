@@ -21,7 +21,7 @@ use function dirname;
  */
 class Image extends BaseDirective
 {
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
     {
     }
 

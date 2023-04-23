@@ -44,7 +44,7 @@ final class DefinitionListRule implements Rule
 {
     public const PRIORITY = 30;
 
-    public function __construct(private InlineMarkupRule $inlineMarkupRule, private RuleContainer $bodyElements)
+    public function __construct(private readonly InlineMarkupRule $inlineMarkupRule, private readonly RuleContainer $bodyElements)
     {
     }
 

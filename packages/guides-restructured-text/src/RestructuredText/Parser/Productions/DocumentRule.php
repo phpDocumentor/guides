@@ -24,7 +24,7 @@ use function md5;
 /** @implements Rule<DocumentNode> */
 final class DocumentRule implements Rule
 {
-    public function __construct(private RuleContainer $structuralElements)
+    public function __construct(private readonly RuleContainer $structuralElements)
     {
     }
 

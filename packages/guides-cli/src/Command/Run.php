@@ -26,7 +26,7 @@ use function str_starts_with;
 
 final class Run extends Command
 {
-    public function __construct(private CommandBus $commandBus, private Metas $metas)
+    public function __construct(private readonly CommandBus $commandBus, private readonly Metas $metas)
     {
         parent::__construct('run');
 

@@ -16,7 +16,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
  */
 class Replace extends BaseDirective
 {
-    public function __construct(private SpanParser $spanParser)
+    public function __construct(private readonly SpanParser $spanParser)
     {
     }
 

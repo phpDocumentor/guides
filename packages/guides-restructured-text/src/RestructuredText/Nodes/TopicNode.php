@@ -22,7 +22,7 @@ use function array_filter;
 final class TopicNode extends CompoundNode
 {
     /** {@inheritDoc} */
-    public function __construct(private string $name, array $value)
+    public function __construct(private readonly string $name, array $value)
     {
         parent::__construct(array_filter($value));
     }

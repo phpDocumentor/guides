@@ -24,7 +24,7 @@ class MarkupLanguageParser implements ParserInterface
     private DocumentParserContext|null $documentParser = null;
 
     /** @param Rule<DocumentNode> $startingRule */
-    public function __construct(private Rule $startingRule)
+    public function __construct(private readonly Rule $startingRule)
     {
     }
 

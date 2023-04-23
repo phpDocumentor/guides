@@ -22,7 +22,7 @@ use function tempnam;
 
 class PlantumlRenderer implements DiagramRenderer
 {
-    public function __construct(private LoggerInterface $logger, private string $plantUmlBinaryPath)
+    public function __construct(private readonly LoggerInterface $logger, private readonly string $plantUmlBinaryPath)
     {
     }
 

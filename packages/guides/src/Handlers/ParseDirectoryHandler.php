@@ -15,13 +15,13 @@ use function sprintf;
 
 final class ParseDirectoryHandler
 {
-    private FileCollector $fileCollector;
-    /** @var string[]  */
-    private array $indexFileNames = ['index', 'Index'];
+    private const INDEX_FILE_NAMES = ['index', 'Index'];
 
-    public function __construct(FileCollector $scanner, private CommandBus $commandBus, private Metas $metas)
-    {
-        $this->fileCollector = $scanner;
+    public function __construct(
+        private readonly FileCollector $fileCollector,
+        private readonly CommandBus $commandBus,
+        private readonly Metas $metas,
+    ) {
     }
 
     /** @return DocumentNode[] */
@@ -55,7 +55,7 @@ final class ParseDirectoryHandler
     ): void {
         $extension = $sourceFormat;
         $hasIndexFile = false;
-        foreach ($this->indexFileNames as $indexName) {
+        foreach (self::INDEX_FILE_NAMES as $indexName) {
             $indexFilename = sprintf('%s.%s', $indexName, $extension);
             if ($filesystem->has($directory . '/' . $indexFilename)) {
                 $hasIndexFile = true;
@@ -64,7 +64,7 @@ final class ParseDirectoryHandler
         }
 
         if (!$hasIndexFile) {
-            $indexFilename = sprintf('%s.%s', $this->indexFileNames[0], $extension);
+            $indexFilename = sprintf('%s.%s', self::INDEX_FILE_NAMES[0], $extension);
 
             throw new InvalidArgumentException(
                 sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory),

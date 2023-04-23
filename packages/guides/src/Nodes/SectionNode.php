@@ -9,7 +9,7 @@ use function array_merge;
 /** @extends CompoundNode<Node> */
 final class SectionNode extends CompoundNode
 {
-    public function __construct(private TitleNode $title)
+    public function __construct(private readonly TitleNode $title)
     {
         parent::__construct();
     }

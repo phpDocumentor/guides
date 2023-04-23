@@ -22,8 +22,6 @@ use function trim;
 /** @extends CompoundNode<Node> */
 final class DocumentNode extends CompoundNode
 {
-    private string $hash;
-
     /**
      * Header nodes are rendered in the head of a html page.
      * They contain metadata about the document.
@@ -42,20 +40,16 @@ final class DocumentNode extends CompoundNode
      */
     private array $variables = [];
 
-    /** @var string Absolute file path of this document */
-    private string $filePath;
-
     /** @var string[] */
     private array $links;
 
     private bool $titleFound = false;
 
-    public function __construct(string $value, string $filePath)
-    {
+    public function __construct(
+        private readonly string $hash,
+        private readonly string $filePath,
+    ) {
         parent::__construct([]);
-
-        $this->hash = $value;
-        $this->filePath = $filePath;
     }
 
     public function getFilePath(): string

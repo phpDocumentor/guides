@@ -9,9 +9,9 @@ use League\Flysystem\FilesystemInterface;
 final class ParseDirectoryCommand
 {
     public function __construct(
-        private FilesystemInterface $origin,
-        private string $directory,
-        private string $inputFormat,
+        private readonly FilesystemInterface $origin,
+        private readonly string $directory,
+        private readonly string $inputFormat,
     ) {
     }
 

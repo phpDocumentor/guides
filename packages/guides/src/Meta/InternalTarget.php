@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Meta;
 
 class InternalTarget
 {
-    public function __construct(private string $documentPath, private string $anchorName)
+    public function __construct(private readonly string $documentPath, private readonly string $anchorName)
     {
     }
 

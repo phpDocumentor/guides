@@ -20,7 +20,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  */
 class AddressNode extends MetadataNode
 {
-    public function __construct(private string $body)
+    public function __construct(private readonly string $body)
     {
         parent::__construct($body);
     }

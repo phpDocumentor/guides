@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\Node;
 final class FieldListItemNode extends CompoundNode
 {
     /** @param Node[] $children */
-    public function __construct(private string $term, private string $plaintextContent = '', array $children = [])
+    public function __construct(private readonly string $term, private string $plaintextContent = '', array $children = [])
     {
         parent::__construct($children);
     }

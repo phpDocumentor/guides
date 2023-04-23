@@ -23,7 +23,7 @@ use phpDocumentor\Guides\TemplateRenderer;
 /** @implements  NodeRenderer<TocNode> */
 class TocNodeRenderer implements NodeRenderer
 {
-    public function __construct(private TemplateRenderer $renderer)
+    public function __construct(private readonly TemplateRenderer $renderer)
     {
     }
 

@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Parser;
 
 final class PreParseDocument
 {
-    public function __construct(private Parser $parser, private string $fileName, private string $contents)
+    public function __construct(private readonly Parser $parser, private readonly string $fileName, private string $contents)
     {
     }
 

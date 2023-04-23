@@ -40,8 +40,8 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     public function __construct(
         protected TemplateRenderer $renderer,
-        private ReferenceResolver $referenceResolver,
-        private LoggerInterface $logger,
+        private readonly ReferenceResolver $referenceResolver,
+        private readonly LoggerInterface $logger,
         protected UrlGeneratorInterface $urlGenerator,
     ) {
     }

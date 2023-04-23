@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\Nodes\Lists;
 /** @deprecated Needs to be removed duplicate of {@see ListItemNode} */
 final class ListItem
 {
-    public function __construct(private string $prefix, private bool $ordered, private int $depth, private mixed $text)
+    public function __construct(private readonly string $prefix, private readonly bool $ordered, private readonly int $depth, private mixed $text)
     {
     }
 

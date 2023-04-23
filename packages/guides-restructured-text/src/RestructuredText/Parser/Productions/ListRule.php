@@ -55,7 +55,7 @@ final class ListRule implements Rule
          # (or eol, if text starts on a new line)
         /ux';
 
-    public function __construct(private RuleContainer $productions)
+    public function __construct(private readonly RuleContainer $productions)
     {
     }
 

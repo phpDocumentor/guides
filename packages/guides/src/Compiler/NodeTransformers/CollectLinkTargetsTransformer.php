@@ -17,9 +17,9 @@ use Webmozart\Assert\Assert;
 final class CollectLinkTargetsTransformer implements NodeTransformer
 {
     /** @var SplStack<DocumentNode> */
-    private SplStack $documentStack;
+    private readonly SplStack $documentStack;
 
-    public function __construct(private Metas $metas)
+    public function __construct(private readonly Metas $metas)
     {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are

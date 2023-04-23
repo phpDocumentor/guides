@@ -21,7 +21,7 @@ class InMemoryNodeRendererFactory implements NodeRendererFactory
      * @param iterable<NodeRenderer<Node>> $nodeRenderers
      * @param NodeRenderer<Node> $defaultNodeRenderer
      */
-    public function __construct(private iterable $nodeRenderers, private NodeRenderer $defaultNodeRenderer)
+    public function __construct(private readonly iterable $nodeRenderers, private readonly NodeRenderer $defaultNodeRenderer)
     {
         foreach ($nodeRenderers as $nodeRenderer) {
             if (!$nodeRenderer instanceof NodeRendererFactoryAware) {

@@ -24,7 +24,7 @@ use phpDocumentor\Guides\RenderContext;
 final class ReferenceResolver
 {
     /** @param iterable<Resolver> $resolvers */
-    public function __construct(private iterable $resolvers)
+    public function __construct(private readonly iterable $resolvers)
     {
     }
 

@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 final class Entry extends AbstractNode
 {
     /** @param Entry[] $children */
-    public function __construct(private string $url, TitleNode $title, private array $children = [], private bool $isDocumentRoot = false)
+    public function __construct(private readonly string $url, TitleNode $title, private readonly array $children = [], private readonly bool $isDocumentRoot = false)
     {
         $this->value = $title;
     }

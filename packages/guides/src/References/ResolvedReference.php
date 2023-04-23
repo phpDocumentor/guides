@@ -23,10 +23,10 @@ class ResolvedReference
 {
     /** @param string[] $attributes */
     public function __construct(
-        private string|null $file,
-        private string $text,
-        private string|null $url,
-        private array $attributes = [],
+        private readonly string|null $file,
+        private readonly string $text,
+        private readonly string|null $url,
+        private readonly array $attributes = [],
     ) {
         $this->validateAttributes($attributes);
     }

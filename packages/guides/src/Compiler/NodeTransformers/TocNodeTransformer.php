@@ -22,7 +22,7 @@ use function ltrim;
 /** @implements NodeTransformer<TocNode> */
 final class TocNodeTransformer implements NodeTransformer
 {
-    public function __construct(private Metas $metas)
+    public function __construct(private readonly Metas $metas)
     {
     }
 

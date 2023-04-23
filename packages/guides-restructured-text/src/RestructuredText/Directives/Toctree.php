@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  */
 class Toctree extends BaseDirective
 {
-    public function __construct(private ToctreeBuilder $toctreeBuilder)
+    public function __construct(private readonly ToctreeBuilder $toctreeBuilder)
     {
     }
 

@@ -23,7 +23,7 @@ final class DefinitionListItemNode extends CompoundNode
      * @param SpanNode[] $classifiers
      * @param DefinitionNode[] $definitions
      */
-    public function __construct(private SpanNode $term, private array $classifiers, array $definitions = [])
+    public function __construct(private readonly SpanNode $term, private readonly array $classifiers, array $definitions = [])
     {
         parent::__construct($definitions);
     }

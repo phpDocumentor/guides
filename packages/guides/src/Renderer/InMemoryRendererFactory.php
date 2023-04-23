@@ -11,7 +11,7 @@ use function sprintf;
 class InMemoryRendererFactory implements TypeRendererFactory
 {
     /** @param iterable<TypeRenderer> $renderSets */
-    public function __construct(private iterable $renderSets)
+    public function __construct(private readonly iterable $renderSets)
     {
     }
 

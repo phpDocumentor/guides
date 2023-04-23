@@ -23,7 +23,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  */
 class TopicNode extends MetadataNode
 {
-    public function __construct(string $title, private string $body)
+    public function __construct(string $title, private readonly string $body)
     {
         parent::__construct($title);
     }

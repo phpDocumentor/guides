@@ -32,12 +32,12 @@ class RenderContext
 
     private function __construct(
         string $outputFolder,
-        private string $currentFileName,
-        private FilesystemInterface $origin,
-        private FilesystemInterface $destination,
-        private Metas $metas,
-        private UrlGeneratorInterface $urlGenerator,
-        private string $outputFormat,
+        private readonly string $currentFileName,
+        private readonly FilesystemInterface $origin,
+        private readonly FilesystemInterface $destination,
+        private readonly Metas $metas,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly string $outputFormat,
     ) {
         $this->destinationPath = trim($outputFolder, '/');
     }

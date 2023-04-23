@@ -15,7 +15,7 @@ class IntersphinxRenderer implements TypeRenderer
 {
     public const TYPE = 'intersphinx';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
     {
     }
 

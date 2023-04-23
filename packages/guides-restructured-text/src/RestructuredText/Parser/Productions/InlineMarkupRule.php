@@ -48,7 +48,7 @@ use function trim;
  */
 final class InlineMarkupRule implements Rule
 {
-    public function __construct(private SpanParser $spanParser)
+    public function __construct(private readonly SpanParser $spanParser)
     {
     }
 

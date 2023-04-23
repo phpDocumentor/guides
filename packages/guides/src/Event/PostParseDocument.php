@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class PostParseDocument
 {
-    public function __construct(private string $fileName, private DocumentNode|null $documentNode)
+    public function __construct(private readonly string $fileName, private readonly DocumentNode|null $documentNode)
     {
     }
 

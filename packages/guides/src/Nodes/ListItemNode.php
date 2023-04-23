@@ -11,18 +11,12 @@ namespace phpDocumentor\Guides\Nodes;
  */
 final class ListItemNode extends CompoundNode
 {
-    /** @var string the list marker used for this item */
-    private string $prefix;
-
-    /** @var bool whether the list marker represents an enumerated list */
-    private bool $ordered;
-
     /** @param Node[] $contents */
-    public function __construct(string $prefix, bool $ordered, array $contents)
-    {
-        $this->prefix   = $prefix;
-        $this->ordered  = $ordered;
-
+    public function __construct(
+        private readonly string $prefix,
+        private readonly bool $ordered,
+        array $contents,
+    ) {
         parent::__construct($contents);
     }
 

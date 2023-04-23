@@ -17,7 +17,7 @@ class LatexRenderer implements TypeRenderer
     public const TYPE = 'tex';
 
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private NodeRenderer $renderer)
+    public function __construct(private readonly NodeRenderer $renderer)
     {
     }
 

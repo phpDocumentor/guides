@@ -19,7 +19,7 @@ class TextRoleRule extends StartEndRegexRoleRule
     private const START = '/^:([a-z0-9]+):`/';
     private const END = '/(?<![`\\\\])`{1}$/';
 
-    public function __construct(private TextRoleFactory $textRoleFactory)
+    public function __construct(private readonly TextRoleFactory $textRoleFactory)
     {
     }
 

@@ -19,7 +19,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  */
 class ContactNode extends MetadataNode
 {
-    public function __construct(private string $email)
+    public function __construct(private readonly string $email)
     {
         parent::__construct($email);
     }
