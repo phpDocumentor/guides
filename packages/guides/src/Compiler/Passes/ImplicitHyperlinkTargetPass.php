@@ -15,9 +15,7 @@ use function array_map;
 use function array_merge;
 use function current;
 use function in_array;
-use function key;
 use function next;
-use function prev;
 
 /**
  * Resolves the hyperlink target for each section in the document.
@@ -42,23 +40,6 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
             $nodes = $document->getNodes();
             $node = current($nodes);
             do {
-                if ($node instanceof AnchorNode) {
-                    // override implicit section reference if an anchor precedes the section
-                    $key = key($nodes);
-                    $section = next($nodes);
-                    if (!$section instanceof SectionNode) {
-                        prev($nodes);
-                        continue;
-                    }
-
-                    $section->getTitle()->setId($node->getValue());
-                    if ($key !== null) {
-                        $document = $document->removeNode($key);
-                    }
-
-                    continue;
-                }
-
                 if (!($node instanceof SectionNode)) {
                     continue;
                 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
-use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -63,64 +62,6 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $section = $expected->getNodes()[2];
         self::assertInstanceOf(SectionNode::class, $section);
         $section->getTitle()->setId('section-a-1');
-
-        self::assertEquals([$expected], $resultDocuments);
-    }
-
-    public function testExplicit(): void
-    {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
-
-        $document->addChildNode(new SectionNode(
-            new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
-        ));
-        $expected->addChildNode(new SectionNode(
-            new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
-        ));
-
-        $document->addChildNode(new AnchorNode('custom-anchor'));
-        $expected->addChildNode(new AnchorNode('removed'));
-        $expected = $expected->removeNode(1);
-
-        $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a')),
-        );
-        $expectedTitle = new TitleNode(new SpanNode('Section A'), 1, 'section-a');
-        $expectedTitle->setId('custom-anchor');
-        $expected->addChildNode(new SectionNode($expectedTitle));
-
-        $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
-
-        self::assertEquals([$expected], $resultDocuments);
-    }
-
-    public function testExplicitHasPriorityOverImplicit(): void
-    {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
-
-        $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Document 1'), 1, 'document-1')),
-        );
-        $expectedTitle = new TitleNode(new SpanNode('Document 1'), 1, 'document-1');
-        $expectedTitle->setId('document-1-1');
-        $expected->addChildNode(new SectionNode($expectedTitle));
-
-        $document->addChildNode(new AnchorNode('document-1'));
-        $expected->addChildNode(new AnchorNode('removed'));
-        $expected = $expected->removeNode(1);
-
-        $document->addChildNode(
-            new SectionNode(new TitleNode(new SpanNode('Section A'), 1, 'section-a')),
-        );
-        $expectedTitle = new TitleNode(new SpanNode('Section A'), 1, 'section-a');
-        $expectedTitle->setId('document-1');
-        $expected->addChildNode(new SectionNode($expectedTitle));
-
-        $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
 
         self::assertEquals([$expected], $resultDocuments);
     }

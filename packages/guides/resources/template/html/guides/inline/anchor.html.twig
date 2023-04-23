@@ -1,1 +1,1 @@
-<a id="{{ node.value }}"></a>
+{% if node.parentNode == null %}<a id="{{ node.value }}"></a>{% endif %}

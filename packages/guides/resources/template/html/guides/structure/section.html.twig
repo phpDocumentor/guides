@@ -1,4 +1,9 @@
-<div class="section{% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.title.id }}">
+{% for anchor in node.anchors %}
+    {% if anchor != node.identifier %}
+        <a id="{{ anchor }}"></a>
+    {% endif %}
+{% endfor %}
+<div class="section{% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.identifier }}">
     {{ renderNode(node.title) }}
     {% for childNode in node.children %}
         {{ renderNode(childNode) }}

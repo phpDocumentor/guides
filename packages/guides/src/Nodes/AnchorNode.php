@@ -15,4 +15,15 @@ namespace phpDocumentor\Guides\Nodes;
 
 final class AnchorNode extends TextNode
 {
+    private Node|null $parentNode = null;
+
+    public function getParentNode(): Node|null
+    {
+        return $this->parentNode;
+    }
+
+    public function setParentNode(Node|null $parentNode): void
+    {
+        $this->parentNode = $parentNode;
+    }
 }
