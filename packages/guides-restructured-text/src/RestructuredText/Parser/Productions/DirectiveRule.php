@@ -24,6 +24,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Throwable;
 
+use function array_merge;
+use function explode;
+use function is_string;
 use function ltrim;
 use function mb_strlen;
 use function min;
@@ -113,6 +116,8 @@ final class DirectiveRule implements Rule
                 return null;
             }
 
+            $node = $this->postProcessNode($node, $directive->getOptions());
+
             if ($directive->getVariable() !== '') {
                 $documentParserContext->getDocument()->addVariable($directive->getVariable(), $node);
 
@@ -135,6 +140,24 @@ final class DirectiveRule implements Rule
         }
 
         return null;
+    }
+
+    /**
+     * Post processes a node created by a directive to apply common options
+     *
+     * @param DirectiveOption[] $options
+     */
+    private function postProcessNode(Node $node, array $options): Node
+    {
+        foreach ($options as $option) {
+            if ($option->getName() !== 'class' || !is_string($option->getValue()) || $option->getValue() === '') {
+                continue;
+            }
+
+            $node->setClasses(array_merge($node->getClasses(), explode(' ', (string) $option->getValue())));
+        }
+
+        return $node;
     }
 
     private function parseDirective(string $line): Directive|null
