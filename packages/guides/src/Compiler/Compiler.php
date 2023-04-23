@@ -10,7 +10,7 @@ use SplPriorityQueue;
 class Compiler
 {
     /** @var SplPriorityQueue<int, CompilerPass> */
-    private SplPriorityQueue $passes;
+    private readonly SplPriorityQueue $passes;
 
     /** @param iterable<CompilerPass> $passes */
     public function __construct(iterable $passes)
