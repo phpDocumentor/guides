@@ -9,9 +9,9 @@ use function is_array;
 final class InventoryLoader
 {
     public function __construct(
-        private InventoryRepository $inventoryRepository,
-        private JsonLoader $jsonLoader,
-        private string $pathToJson = 'objects.inv.json',
+        private readonly InventoryRepository $inventoryRepository,
+        private readonly JsonLoader $jsonLoader,
+        private readonly string $pathToJson = 'objects.inv.json',
     ) {
     }
 

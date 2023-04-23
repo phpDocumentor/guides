@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
 /** @implements NodeRenderer<TemplatedNode> */
 final class TemplatedNodeRenderer implements NodeRenderer
 {
-    public function __construct(private TemplateRenderer $renderer)
+    public function __construct(private readonly TemplateRenderer $renderer)
     {
     }
 

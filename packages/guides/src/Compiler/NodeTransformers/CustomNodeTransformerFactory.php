@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Nodes\Node;
 final class CustomNodeTransformerFactory implements NodeTransformerFactory
 {
     /** @param iterable<NodeTransformer<Node>> $transformers */
-    public function __construct(private iterable $transformers)
+    public function __construct(private readonly iterable $transformers)
     {
     }
 

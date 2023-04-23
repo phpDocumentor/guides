@@ -15,7 +15,7 @@ final class Inventory
     private array $groups = [];
 
     /** @param String $baseUrl */
-    public function __construct(private string $baseUrl)
+    public function __construct(private readonly string $baseUrl)
     {
     }
 

@@ -19,7 +19,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    public function __construct(private string $name, private string $text)
+    public function __construct(private readonly string $name, private readonly string $text)
     {
     }
 

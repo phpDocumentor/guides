@@ -11,7 +11,7 @@ class DocumentEntry implements Entry
     /** @var ChildEntry[] */
     private array $entries = [];
 
-    public function __construct(private string $file, private TitleNode $titleNode)
+    public function __construct(private readonly string $file, private readonly TitleNode $titleNode)
     {
     }
 

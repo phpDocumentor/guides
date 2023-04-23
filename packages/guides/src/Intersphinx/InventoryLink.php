@@ -9,10 +9,10 @@ use function preg_match;
 final class InventoryLink
 {
     public function __construct(
-        private string $project,
-        private string $version,
-        private string $path,
-        private string $title,
+        private readonly string $project,
+        private readonly string $version,
+        private readonly string $path,
+        private readonly string $title,
     ) {
         if (preg_match('/^([a-zA-Z0-9-_.]+\/)*([a-zA-Z0-9-_.])+\.html(#[^#]*)?$/', $path) < 1) {
             throw new InvalidInventoryLink('Inventory link "' . $path . '" has an invalid scheme. ', 1671398986);

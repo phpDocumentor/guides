@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\Node;
 class OrganizationNode extends MetadataNode
 {
     /** @param Node[] $children */
-    public function __construct(string $plaintext, private array $children)
+    public function __construct(string $plaintext, private readonly array $children)
     {
         parent::__construct($plaintext);
     }

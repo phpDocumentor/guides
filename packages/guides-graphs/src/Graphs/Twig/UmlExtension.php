@@ -19,7 +19,7 @@ use Twig\TwigFunction;
 
 final class UmlExtension extends AbstractExtension
 {
-    public function __construct(private DiagramRenderer $diagramRenderer)
+    public function __construct(private readonly DiagramRenderer $diagramRenderer)
     {
     }
 

@@ -13,7 +13,7 @@ namespace phpDocumentor\Guides\Nodes;
 final class TemplatedNode extends AbstractNode
 {
     /** @param array<string, mixed> $data */
-    public function __construct(string $value, private array $data)
+    public function __construct(string $value, private readonly array $data)
     {
         $this->value = $value;
     }

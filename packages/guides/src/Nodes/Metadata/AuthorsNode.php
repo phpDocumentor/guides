@@ -19,7 +19,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 class AuthorsNode extends MetadataNode
 {
     /** @param AuthorNode[] $authorNodes */
-    public function __construct(private array $authorNodes)
+    public function __construct(private readonly array $authorNodes)
     {
         parent::__construct('');
     }

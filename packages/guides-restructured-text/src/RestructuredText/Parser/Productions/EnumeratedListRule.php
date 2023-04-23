@@ -53,7 +53,7 @@ final class EnumeratedListRule implements Rule
 
     private string $expression;
 
-    public function __construct(private RuleContainer $productions)
+    public function __construct(private readonly RuleContainer $productions)
     {
         $expression = sprintf(self::LIST_MARKER, self::NUMBER, self::NUMBER);
         $expression .= '|' . sprintf(self::LIST_MARKER, self::ROMAN_NUMBER, self::ROMAN_NUMBER);

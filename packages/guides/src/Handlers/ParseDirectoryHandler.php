@@ -19,7 +19,7 @@ final class ParseDirectoryHandler
     /** @var string[]  */
     private array $indexFileNames = ['index', 'Index'];
 
-    public function __construct(FileCollector $scanner, private CommandBus $commandBus, private Metas $metas)
+    public function __construct(FileCollector $scanner, private readonly CommandBus $commandBus, private readonly Metas $metas)
     {
         $this->fileCollector = $scanner;
     }

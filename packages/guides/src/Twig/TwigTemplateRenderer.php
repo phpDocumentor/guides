@@ -18,7 +18,7 @@ use phpDocumentor\Guides\TemplateRenderer;
 
 final class TwigTemplateRenderer implements TemplateRenderer
 {
-    public function __construct(private EnvironmentBuilder $environmentBuilder)
+    public function __construct(private readonly EnvironmentBuilder $environmentBuilder)
     {
     }
 

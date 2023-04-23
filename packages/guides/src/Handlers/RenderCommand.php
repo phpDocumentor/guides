@@ -12,12 +12,12 @@ final class RenderCommand
 {
     /** @param DocumentNode[] $documents */
     public function __construct(
-        private string $outputFormat,
-        private array $documents,
-        private Metas $metas,
-        private FilesystemInterface $origin,
-        private FilesystemInterface $destination,
-        private string $destinationPath = '/',
+        private readonly string $outputFormat,
+        private readonly array $documents,
+        private readonly Metas $metas,
+        private readonly FilesystemInterface $origin,
+        private readonly FilesystemInterface $destination,
+        private readonly string $destinationPath = '/',
     ) {
     }
 

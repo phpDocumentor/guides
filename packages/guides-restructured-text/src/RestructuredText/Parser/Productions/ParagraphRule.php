@@ -32,7 +32,7 @@ final class ParagraphRule implements Rule
 {
     public const PRIORITY = 10;
 
-    public function __construct(private InlineMarkupRule $inlineMarkupRule)
+    public function __construct(private readonly InlineMarkupRule $inlineMarkupRule)
     {
     }
 

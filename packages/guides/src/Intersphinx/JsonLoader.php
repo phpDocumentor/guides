@@ -16,7 +16,7 @@ use const JSON_THROW_ON_ERROR;
 
 class JsonLoader
 {
-    public function __construct(private HttpClientInterface $client)
+    public function __construct(private readonly HttpClientInterface $client)
     {
     }
 

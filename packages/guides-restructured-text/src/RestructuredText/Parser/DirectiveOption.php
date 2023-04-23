@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 class DirectiveOption
 {
-    public function __construct(private string $name, private string|int|float|bool|null $value = null)
+    public function __construct(private readonly string $name, private string|int|float|bool|null $value = null)
     {
     }
 

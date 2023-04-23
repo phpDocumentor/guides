@@ -12,7 +12,7 @@ use function array_filter;
 
 final class TransformerPass implements CompilerPass
 {
-    public function __construct(private DocumentNodeTraverser $documentNodeTraverser)
+    public function __construct(private readonly DocumentNodeTraverser $documentNodeTraverser)
     {
     }
 

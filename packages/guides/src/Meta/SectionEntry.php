@@ -11,7 +11,7 @@ class SectionEntry implements ChildEntry
     /** @var ChildEntry[] */
     private array $children = [];
 
-    public function __construct(private TitleNode $title)
+    public function __construct(private readonly TitleNode $title)
     {
     }
 

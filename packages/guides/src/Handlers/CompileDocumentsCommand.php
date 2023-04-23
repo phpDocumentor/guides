@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 final class CompileDocumentsCommand
 {
     /** @param DocumentNode[] $documents */
-    public function __construct(private array $documents)
+    public function __construct(private readonly array $documents)
     {
     }
 

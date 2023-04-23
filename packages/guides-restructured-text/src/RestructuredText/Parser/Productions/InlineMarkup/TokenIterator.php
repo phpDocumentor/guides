@@ -17,7 +17,7 @@ class TokenIterator implements Iterator
     private int $position = 0;
 
     /** @param string[] $tokens */
-    public function __construct(private array $tokens)
+    public function __construct(private readonly array $tokens)
     {
     }
 

@@ -31,9 +31,9 @@ use function trim;
 final class ParseFileHandler
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private EventDispatcherInterface $eventDispatcher,
-        private Parser $parser,
+        private readonly LoggerInterface $logger,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly Parser $parser,
     ) {
     }
 

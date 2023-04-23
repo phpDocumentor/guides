@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes\Links;
 
 final class InvalidLink
 {
-    public function __construct(private string $name)
+    public function __construct(private readonly string $name)
     {
     }
 

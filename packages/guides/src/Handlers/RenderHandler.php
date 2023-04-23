@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 
 final class RenderHandler
 {
-    public function __construct(private TypeRendererFactory $renderSetFactory)
+    public function __construct(private readonly TypeRendererFactory $renderSetFactory)
     {
     }
 

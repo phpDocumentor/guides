@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Handlers;
 
 final class LoadCacheCommand
 {
-    public function __construct(private string $cacheDirectory, private bool $useCaching = true)
+    public function __construct(private readonly string $cacheDirectory, private readonly bool $useCaching = true)
     {
     }
 

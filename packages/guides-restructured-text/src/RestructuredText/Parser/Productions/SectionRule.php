@@ -18,7 +18,7 @@ final class SectionRule implements Rule
 {
     public const PRIORITY = 10;
 
-    public function __construct(private TitleRule $titleRule, private RuleContainer $bodyElements)
+    public function __construct(private readonly TitleRule $titleRule, private readonly RuleContainer $bodyElements)
     {
     }
 

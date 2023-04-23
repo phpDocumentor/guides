@@ -15,7 +15,7 @@ use function strpos;
 
 class ToctreeBuilder
 {
-    public function __construct(private GlobSearcher $globSearcher, private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly GlobSearcher $globSearcher, private readonly UrlGeneratorInterface $urlGenerator)
     {
     }
 

@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class DefaultNodeTransformerFactory implements NodeTransformerFactory
 {
-    public function __construct(private Metas $metas)
+    public function __construct(private readonly Metas $metas)
     {
     }
 

@@ -22,7 +22,7 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
  */
 class Figure extends SubDirective
 {
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
     {
     }
 

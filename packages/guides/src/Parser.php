@@ -35,7 +35,7 @@ final class Parser
 
     /** @param iterable<MarkupLanguageParser> $parserStrategies */
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
+        private readonly UrlGeneratorInterface $urlGenerator,
         iterable $parserStrategies,
     ) {
         foreach ($parserStrategies as $strategy) {

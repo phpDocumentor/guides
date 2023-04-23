@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Metas;
 
 final class LoadCacheHandler
 {
-    public function __construct(private CachedMetasLoader $cachedMetasLoader, private Metas $metas)
+    public function __construct(private readonly CachedMetasLoader $cachedMetasLoader, private readonly Metas $metas)
     {
     }
 

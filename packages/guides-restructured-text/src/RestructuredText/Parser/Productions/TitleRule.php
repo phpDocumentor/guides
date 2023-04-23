@@ -35,7 +35,7 @@ class TitleRule implements Rule
 {
     private const TITLE_LENGTH_MIN = 2;
 
-    public function __construct(private SpanParser $spanParser)
+    public function __construct(private readonly SpanParser $spanParser)
     {
     }
 

@@ -12,7 +12,7 @@ class DummyNode implements Node
     private array $directiveOptions;
 
     /** @param DirectiveOption[] $directiveOptions */
-    public function __construct(private string $name, private string $data, array $directiveOptions)
+    public function __construct(private readonly string $name, private readonly string $data, array $directiveOptions)
     {
         $this->directiveOptions = $directiveOptions;
     }

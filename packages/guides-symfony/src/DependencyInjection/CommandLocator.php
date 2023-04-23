@@ -13,7 +13,7 @@ use function sprintf;
 
 class CommandLocator implements HandlerLocator
 {
-    public function __construct(private ContainerInterface $commands)
+    public function __construct(private readonly ContainerInterface $commands)
     {
     }
 

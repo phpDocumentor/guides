@@ -18,11 +18,11 @@ use League\Flysystem\FilesystemInterface;
 final class ParseFileCommand
 {
     public function __construct(
-        private FilesystemInterface $origin,
-        private string $directory,
-        private string $file,
-        private string $extension,
-        private int $initialHeaderLevel,
+        private readonly FilesystemInterface $origin,
+        private readonly string $directory,
+        private readonly string $file,
+        private readonly string $extension,
+        private readonly int $initialHeaderLevel,
     ) {
     }
 

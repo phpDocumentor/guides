@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 
 final class CompileDocumentsHandler
 {
-    public function __construct(private Compiler $compiler)
+    public function __construct(private readonly Compiler $compiler)
     {
     }
 

@@ -63,7 +63,7 @@ final class DocumentNodeTraverserTest extends TestCase
         $transformers = [
             new /** @implements NodeTransformer<TocNode> */
             class ($replacement) implements NodeTransformer {
-                public function __construct(private TocNode $replacement)
+                public function __construct(private readonly TocNode $replacement)
                 {
                 }
 

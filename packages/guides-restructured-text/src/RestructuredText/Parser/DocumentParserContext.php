@@ -36,8 +36,8 @@ class DocumentParserContext
 
     public function __construct(
         string $content,
-        private ParserContext $context,
-        private MarkupLanguageParser $markupLanguageParser,
+        private readonly ParserContext $context,
+        private readonly MarkupLanguageParser $markupLanguageParser,
     ) {
         $this->documentIterator = new LinesIterator();
         $this->documentIterator->load($content);

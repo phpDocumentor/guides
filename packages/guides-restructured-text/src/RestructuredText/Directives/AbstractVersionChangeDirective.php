@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
-    public function __construct(private string $type, private string $label)
+    public function __construct(private readonly string $type, private readonly string $label)
     {
     }
 

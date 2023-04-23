@@ -24,7 +24,7 @@ class VersionChangeNode extends CompoundNode
     private string $versionLabel;
 
     /** {@inheritDoc} */
-    public function __construct(private string $type, string $versionLabel, private string $versionModified, array $value)
+    public function __construct(private readonly string $type, string $versionLabel, private readonly string $versionModified, array $value)
     {
         parent::__construct($value);
 

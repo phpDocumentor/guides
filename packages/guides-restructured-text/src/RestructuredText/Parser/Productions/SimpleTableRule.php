@@ -24,7 +24,7 @@ final class SimpleTableRule implements Rule
 {
     public const PRIORITY = 40;
 
-    public function __construct(private RuleContainer $productions)
+    public function __construct(private readonly RuleContainer $productions)
     {
     }
 

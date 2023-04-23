@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\Node;
 final class SidebarNode extends CompoundNode
 {
     /** {@inheritDoc} */
-    public function __construct(private string $title, array $value)
+    public function __construct(private readonly string $title, array $value)
     {
         parent::__construct($value);
     }

@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 final class RenderDocumentHandler
 {
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private NodeRenderer $renderer)
+    public function __construct(private readonly NodeRenderer $renderer)
     {
     }
 

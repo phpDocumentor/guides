@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Handlers;
 
 final class PersistCacheCommand
 {
-    public function __construct(private string $cacheDirectory, private bool $useCache = false)
+    public function __construct(private readonly string $cacheDirectory, private readonly bool $useCache = false)
     {
     }
 

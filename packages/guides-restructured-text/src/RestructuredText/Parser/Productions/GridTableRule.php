@@ -39,7 +39,7 @@ final class GridTableRule implements Rule
 
     private GridTableBuilder $builder;
 
-    public function __construct(private RuleContainer $productions)
+    public function __construct(private readonly RuleContainer $productions)
     {
         $this->builder = new GridTableBuilder();
     }

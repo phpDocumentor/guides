@@ -30,7 +30,7 @@ class TocNode extends CompoundNode
     private array $entries = [];
 
     /** @param string[] $files */
-    public function __construct(private array $files)
+    public function __construct(private readonly array $files)
     {
         parent::__construct();
     }

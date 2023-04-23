@@ -13,10 +13,10 @@ final class TableSeparatorLineConfig
 {
     /** @param int[][] $partRanges */
     public function __construct(
-        private bool $isHeader,
-        private array $partRanges,
-        private string $lineCharacter,
-        private string $rawContent,
+        private readonly bool $isHeader,
+        private readonly array $partRanges,
+        private readonly string $lineCharacter,
+        private readonly string $rawContent,
     ) {
         if (!in_array($lineCharacter, ['=', '-'], true)) {
             throw new InvalidArgumentException(sprintf('Unexpected line character "%s"', $lineCharacter));

@@ -26,11 +26,11 @@ class ParserContext
     private array $errors = [];
 
     public function __construct(
-        private string $currentFileName,
-        private string $currentDirectory,
-        private int $initialHeaderLevel,
-        private FilesystemInterface $origin,
-        private UrlGeneratorInterface $urlGenerator,
+        private readonly string $currentFileName,
+        private readonly string $currentDirectory,
+        private readonly int $initialHeaderLevel,
+        private readonly FilesystemInterface $origin,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }
 

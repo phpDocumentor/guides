@@ -33,9 +33,9 @@ final class AssetsExtension extends AbstractExtension
 {
     /** @param NodeRenderer<Node> $nodeRenderer */
     public function __construct(
-        private LoggerInterface $logger,
-        private NodeRenderer $nodeRenderer,
-        private UrlGeneratorInterface $urlGenerator,
+        private readonly LoggerInterface $logger,
+        private readonly NodeRenderer $nodeRenderer,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }
 

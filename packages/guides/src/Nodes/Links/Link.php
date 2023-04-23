@@ -9,7 +9,7 @@ final class Link
     public const TYPE_LINK = 'link';
     public const TYPE_ANCHOR = 'anchor';
 
-    public function __construct(private string $name, private string $url, private string $type)
+    public function __construct(private readonly string $name, private readonly string $url, private readonly string $type)
     {
     }
 
