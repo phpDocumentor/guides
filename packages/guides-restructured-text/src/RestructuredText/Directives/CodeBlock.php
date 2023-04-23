@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function trim;
@@ -21,7 +22,7 @@ use function trim;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
-class CodeBlock extends Directive
+class CodeBlock extends BaseDirective
 {
     public function getName(): string
     {
@@ -29,25 +30,22 @@ class CodeBlock extends Directive
     }
 
     /** {@inheritDoc} */
+    public function getAliases(): array
+    {
+        return ['code'];
+    }
+
+    /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         $node = new CodeNode(
             $documentParserContext->getDocumentIterator()->toArray(),
         );
 
-        $node->setLanguage(trim($data));
-        $this->setStartingLineNumberBasedOnOptions($options, $node);
-
-        if ($variable !== '') {
-            $document = $documentParserContext->getDocument();
-            $document->addVariable($variable, $node);
-
-            return null;
-        }
+        $node->setLanguage(trim($directive->getData()));
+        $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
 
         return $node;
     }

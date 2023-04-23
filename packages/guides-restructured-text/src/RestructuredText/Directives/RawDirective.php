@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\RawNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
@@ -19,7 +20,7 @@ use function implode;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#raw-data-pass-through
  */
-class RawDirective extends Directive
+class RawDirective extends BaseDirective
 {
     public function getName(): string
     {
@@ -29,19 +30,8 @@ class RawDirective extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        $node = new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
-
-        $document = $documentParserContext->getDocument();
-        if ($variable !== '') {
-            $document->addVariable($variable, $node);
-
-            return null;
-        }
-
-        return $node;
+        return new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
     }
 }

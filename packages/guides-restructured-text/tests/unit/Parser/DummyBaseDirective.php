@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 
-class DummyDirective extends DirectiveHandler
+class DummyBaseDirective extends DirectiveHandler
 {
     private string $name = 'dummy';
 
@@ -16,13 +16,10 @@ class DummyDirective extends DirectiveHandler
         return $this->name;
     }
 
-    /** @param DirectiveOption[] $options the array of options for this directive */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        return new DummyNode($variable, $data, $options);
+        return new DummyNode($directive->getVariable(), $directive->getData(), $directive->getOptions());
     }
 }

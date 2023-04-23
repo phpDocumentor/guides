@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
@@ -21,14 +21,12 @@ use function implode;
  *      You can imagine anything here, like adding *emphasis*, lists or
  *      titles
  */
-abstract class SubDirective extends Directive
+abstract class SubDirective extends BaseDirective
 {
     /** {@inheritDoc} */
     final public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         $subParser = $documentParserContext->getParser()->getSubParser();
         $document = $subParser->parse(
@@ -36,28 +34,18 @@ abstract class SubDirective extends Directive
             implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
         );
 
-        $newNode = $this->processSub($document, $variable, $data, $options);
+        $node = $this->processSub($document, $directive);
 
-        if ($newNode === null) {
+        if ($node === null) {
             return null;
         }
 
-        $document = $documentParserContext->getDocument();
-        if ($variable !== '') {
-            $document->addVariable($variable, $newNode);
-
-            return null;
-        }
-
-        return $newNode;
+        return $node->withOptions($this->optionsToArray($directive->getOptions()));
     }
 
-    /** @param DirectiveOption[] $options */
-    public function processSub(
+    protected function processSub(
         DocumentNode $document,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         return null;
     }

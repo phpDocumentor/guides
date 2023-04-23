@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -24,7 +25,7 @@ use function array_map;
  *  The directive can define variables, create special nodes or change
  *  the node that directly follows it
  */
-abstract class Directive
+abstract class BaseDirective
 {
     /**
      * Get the directive name
@@ -51,29 +52,15 @@ abstract class Directive
      *
      * @param DocumentParserContext $documentParserContext the current document context with the content
      *    of the directive
-     * @param string $variable the variable name of the directive
-     * @param string $data the data of the directive (following ::)
-     * @param DirectiveOption[] $options the array of options for this directive
+     * @param Directive $directive parsed directive containing options and variable
      */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
-        $document = $documentParserContext->getDocument();
-
-        $processNode = $this->processNode($documentParserContext, $variable, $data, $options)
+        return $this->processNode($documentParserContext, $directive)
             // Ensure options are always available
-            ->withOptions($this->optionsToArray($options));
-
-        if ($variable !== '') {
-            $document->addVariable($variable, $processNode);
-
-            return null;
-        }
-
-        return $processNode;
+            ->withOptions($this->optionsToArray($directive->getOptions()));
     }
 
     /**
@@ -81,18 +68,12 @@ abstract class Directive
      * document, which is common
      *
      * The arguments are the same that process
-     *
-     * @param mixed[] $options
      */
     public function processNode(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node {
-        $this->processAction($documentParserContext, $variable, $data, $options);
-
-        return new GenericNode($variable, $data);
+        return new GenericNode($directive->getVariable(), $directive->getData());
     }
 
     /**

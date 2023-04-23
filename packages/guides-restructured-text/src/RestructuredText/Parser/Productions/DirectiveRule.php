@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Directives\Directive as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
@@ -104,12 +104,22 @@ final class DirectiveRule implements Rule
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
-            return $directiveHandler->process(
+            $node = $directiveHandler->process(
                 $documentParserContext->withContentsPreserveSpace($buffer->getLinesString()),
-                $directive->getVariable(),
-                $directive->getData(),
-                $directive->getOptions(),
+                $directive,
             );
+
+            if ($node === null) {
+                return null;
+            }
+
+            if ($directive->getVariable() !== '') {
+                $documentParserContext->getDocument()->addVariable($directive->getVariable(), $node);
+
+                return null;
+            }
+
+            return $node;
         } catch (Throwable $e) {
             $message = sprintf(
                 'Error while processing "%s" directive%s: %s',

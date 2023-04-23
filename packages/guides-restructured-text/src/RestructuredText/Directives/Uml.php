@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Webmozart\Assert\Assert;
 
@@ -31,7 +31,7 @@ use function str_replace;
  *    :Transform AST into artifacts;
  *    stop
  */
-final class Uml extends Directive
+final class Uml extends BaseDirective
 {
     public function getName(): string
     {
@@ -41,34 +41,23 @@ final class Uml extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         $parser = $documentParserContext->getParser();
         $parserContext = $parser->getParserContext();
 
-        $caption = $data;
         $value = implode("\n", $documentParserContext->getDocumentIterator()->toArray());
 
         if (empty($value)) {
-            $value = $this->loadExternalUmlFile($parserContext, $data);
+            $value = $this->loadExternalUmlFile($parserContext, $directive->getData());
             if ($value === null) {
                 return null;
             }
         }
 
-        $classes = $options['classes'] ?? new DirectiveOption('classes', '');
         $node = new UmlNode($value);
-        $node->setClasses(explode(' ', (string) $classes->getValue()));
-        $node->setCaption($caption);
-
-        $document = $parser->getDocument();
-        if ($variable !== '') {
-            $document->addVariable($variable, $node);
-
-            return null;
-        }
+        $node->setClasses(explode(' ', (string) $directive->getOption('classes')->getValue()));
+        $node->setCaption($directive->getData());
 
         return $node;
     }

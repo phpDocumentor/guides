@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Metadata\DocumentTitleNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
@@ -13,7 +14,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  *
  * .. title:: Page title
  */
-class Title extends Directive
+class Title extends BaseDirective
 {
     public function getName(): string
     {
@@ -23,12 +24,10 @@ class Title extends Directive
     /** {@inheritDoc} */
     public function process(
         DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
+        Directive $directive,
     ): Node|null {
         $document = $documentParserContext->getDocument();
-        $document->addHeaderNode(new DocumentTitleNode($data));
+        $document->addHeaderNode(new DocumentTitleNode($directive->getData()));
 
         return null;
     }
