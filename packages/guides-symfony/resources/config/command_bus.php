@@ -20,9 +20,11 @@ use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
 use phpDocumentor\Guides\Handlers\RenderHandler;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
 
 return static function (ContainerConfigurator $container): void {
@@ -44,7 +46,8 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(RenderDocumentHandler::class)
         ->tag('phpdoc.guides.command', ['command' => RenderDocumentCommand::class])
-        ->arg('$renderer', inline_service(DelegatingNodeRenderer::class))
+        ->arg('$renderer', service(DelegatingNodeRenderer::class))
+        ->arg('$eventDispatcher', service(EventDispatcherInterface::class))
 
         ->set(CommandBus::class)
         ->args([
