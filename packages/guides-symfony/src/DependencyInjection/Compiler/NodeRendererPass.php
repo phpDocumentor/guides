@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetaNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\Nodes\RubricNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -49,6 +50,7 @@ final class NodeRendererPass implements CompilerPassInterface
         ListNode::class => 'body/list/list.html.twig',
         ListItemNode::class => 'body/list/list-item.html.twig',
         LiteralBlockNode::class => 'body/literal-block.html.twig',
+        RubricNode::class => 'body/rubric.html.twig',
     ];
 
     public function process(ContainerBuilder $container): void

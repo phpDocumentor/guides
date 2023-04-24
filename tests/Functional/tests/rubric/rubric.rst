@@ -10,7 +10,3 @@
 
 .. rubric:: The data
     :Argument 1: The argument is ignored
-
-.. rubric:: The content is just a normal node
-
-    Some content, treated as normal node.

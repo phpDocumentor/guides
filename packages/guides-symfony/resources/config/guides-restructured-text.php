@@ -23,6 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Replace;
 use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\RubricDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
@@ -96,6 +97,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(RawDirective::class)
         ->set(Replace::class)
         ->set(RoleDirective::class)
+        ->set(RubricDirective::class)
         ->set(SeeAlsoDirective::class)
         ->set(SidebarDirective::class)
         ->set(TipDirective::class)
