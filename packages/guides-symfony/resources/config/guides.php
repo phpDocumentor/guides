@@ -15,6 +15,7 @@ use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
+use phpDocumentor\Guides\Renderer\LatexRenderer;
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
@@ -81,6 +82,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(DocumentNodeTraverser::class)
 
         ->set(HtmlRenderer::class)
+        ->tag('phpdoc.renderer.typerenderer')
+        ->args(
+            ['$commandBus' => service(CommandBus::class)],
+        )
+        ->set(LatexRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
         ->args(
             ['$commandBus' => service(CommandBus::class)],
