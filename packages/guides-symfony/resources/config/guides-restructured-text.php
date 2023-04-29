@@ -18,6 +18,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\ImportantDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IncludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
+use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Meta;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
@@ -81,6 +82,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(CautionDirective::class)
         ->set(ClassDirective::class)
         ->set(CodeBlock::class)
+        ->args([
+            '$codeNodeOptionMapper' => service(
+                phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class,
+            ),
+        ])
         ->set(ContainerDirective::class)
         ->set(DangerDirective::class)
         ->set(DeprecatedDirective::class)
@@ -92,6 +98,12 @@ return static function (ContainerConfigurator $container): void {
         ->set(IncludeDirective::class)
         ->set(IndexDirective::class)
         ->set(LaTeXMain::class)
+        ->set(LiteralincludeDirective::class)
+        ->args([
+            '$codeNodeOptionMapper' => service(
+                phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class,
+            ),
+        ])
         ->set(Meta::class)
         ->set(NoteDirective::class)
         ->set(RawDirective::class)
@@ -162,5 +174,6 @@ return static function (ContainerConfigurator $container): void {
         ->set(phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule::class)
         ->set(phpDocumentor\Guides\RestructuredText\Span\SpanParser::class)
         ->set(phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher::class)
-        ->set(phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder::class);
+        ->set(phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder::class)
+        ->set(phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class);
 };

@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyBaseDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -91,7 +92,7 @@ NOWDOC);
     #[DataProvider('codeBlockValueProvider')]
     public function testCodeBlockValue(string $input, string $expectedValue): void
     {
-        $this->rule = new DirectiveRule([$this->directiveHandler, new CodeBlock()]);
+        $this->rule = new DirectiveRule([$this->directiveHandler, new CodeBlock(new CodeNodeOptionMapper())]);
         $context = $this->createContext($input);
         $node = $this->rule->apply($context);
         self::assertInstanceOf(CodeNode::class, $node);
