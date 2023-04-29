@@ -29,6 +29,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Title;
 use phpDocumentor\Guides\RestructuredText\Directives\Toctree;
+use phpDocumentor\Guides\RestructuredText\Directives\TodoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TopicDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\Uml;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
@@ -103,6 +104,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(TipDirective::class)
         ->set(Title::class)
         ->set(Toctree::class)
+        ->set(TodoDirective::class)
         ->set(TopicDirective::class)
         ->set(Uml::class)
         ->set(VersionAddedDirective::class)
