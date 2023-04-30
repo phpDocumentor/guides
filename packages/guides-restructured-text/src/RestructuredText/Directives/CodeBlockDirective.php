@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function trim;
@@ -50,8 +51,45 @@ class CodeBlockDirective extends BaseDirective
         );
 
         $node->setLanguage(trim($directive->getData()));
+        $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
+        $this->setCaptionBasedOnOptions($directive->getOptions(), $node);
         $this->codeNodeOptionMapper->apply($node, $directive->getOptions());
 
+        if ($directive->getVariable() !== '') {
+            $document = $documentParserContext->getDocument();
+            $document->addVariable($directive->getVariable(), $node);
+
+            return null;
+        }
+
         return $node;
+    }
+
+    /** @param mixed[] $options */
+    private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
+    {
+        $startingLineNumber = null;
+        if (isset($options['linenos'])) {
+            $startingLineNumber = 1;
+        }
+
+        $startingLineNumber = $options['number-lines'] ?? $options['lineno-start'] ?? $startingLineNumber;
+
+        if ($startingLineNumber === null) {
+            return;
+        }
+
+        $node->setStartingLineNumber((int) $startingLineNumber);
+    }
+
+    /** @param DirectiveOption[] $options */
+    private function setCaptionBasedOnOptions(array $options, CodeNode $node): void
+    {
+        $caption = null;
+        if (isset($options['caption'])) {
+            $caption = (string) $options['caption']->getValue();
+        }
+
+        $node->setCaption($caption);
     }
 }

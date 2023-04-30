@@ -22,6 +22,8 @@ class CodeNode extends TextNode
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;
 
+    protected string|null $caption = null;
+
     /** @param string[] $lines */
     public function __construct(array $lines)
     {
@@ -46,5 +48,15 @@ class CodeNode extends TextNode
     public function getStartingLineNumber(): int|null
     {
         return $this->startingLineNumber;
+    }
+
+    public function getCaption(): string|null
+    {
+        return $this->caption;
+    }
+
+    public function setCaption(string|null $caption): void
+    {
+        $this->caption = $caption;
     }
 }
