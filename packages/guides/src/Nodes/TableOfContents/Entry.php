@@ -22,6 +22,12 @@ final class Entry extends AbstractNode
     }
 
     /** @return Entry[] */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /** @return Entry[] */
     public function getEntries(): array
     {
         return $this->children;

@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 
-use function is_scalar;
+use function is_int;
 
 use const PHP_INT_MAX;
 
@@ -24,7 +24,7 @@ use const PHP_INT_MAX;
  *
  * @extends CompoundNode<Node>
  */
-class TocNode extends CompoundNode
+class ContentMenuNode extends CompoundNode
 {
     private const DEFAULT_DEPTH = PHP_INT_MAX;
 
@@ -45,12 +45,8 @@ class TocNode extends CompoundNode
 
     public function getDepth(): int
     {
-        if ($this->hasOption('depth') && is_scalar($this->getOption('depth'))) {
+        if (is_int($this->getOption('depth'))) {
             return (int) $this->getOption('depth');
-        }
-
-        if ($this->hasOption('maxdepth') && is_scalar($this->getOption('maxdepth'))) {
-            return (int) $this->getOption('maxdepth');
         }
 
         return self::DEFAULT_DEPTH;
@@ -69,10 +65,5 @@ class TocNode extends CompoundNode
     public function getEntries(): array
     {
         return $this->entries;
-    }
-
-    public function isPageLevelOnly(): bool
-    {
-        return $this->hasOption('titlesonly');
     }
 }

@@ -94,11 +94,13 @@ final class TocNodeTransformer implements NodeTransformer
         TocNode $node,
     ): Traversable {
         if ($child instanceof SectionEntry) {
-            yield new Entry(
-                $document->getFile(),
-                $child->getTitle(),
-                iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false),
-            );
+            if (!$node->isPageLevelOnly() || $depth === 1) {
+                yield new Entry(
+                    $document->getFile(),
+                    $child->getTitle(),
+                    iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node), false),
+                );
+            }
         }
 
         if (!($child instanceof DocumentReferenceEntry)) {
