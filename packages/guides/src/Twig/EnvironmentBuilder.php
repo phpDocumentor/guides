@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\RenderContext;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
 
@@ -16,7 +17,11 @@ class EnvironmentBuilder
     /** @param ExtensionInterface[] $extensions */
     public function __construct(FilesystemLoader $filesystemLoader, iterable $extensions = [])
     {
-        $this->environment = new Environment($filesystemLoader);
+        $this->environment = new Environment(
+            $filesystemLoader,
+            ['debug' => true],
+        );
+        $this->environment->addExtension(new DebugExtension());
 
         foreach ($extensions as $extension) {
             $this->environment->addExtension($extension);
