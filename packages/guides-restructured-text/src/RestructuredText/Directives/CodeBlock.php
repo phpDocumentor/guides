@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
@@ -24,6 +25,10 @@ use function trim;
  */
 class CodeBlock extends BaseDirective
 {
+    public function __construct(private readonly CodeNodeOptionMapper $codeNodeOptionMapper)
+    {
+    }
+
     public function getName(): string
     {
         return 'code-block';
@@ -45,25 +50,8 @@ class CodeBlock extends BaseDirective
         );
 
         $node->setLanguage(trim($directive->getData()));
-        $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
+        $this->codeNodeOptionMapper->apply($node, $directive->getOptions());
 
         return $node;
-    }
-
-    /** @param mixed[] $options */
-    private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
-    {
-        $startingLineNumber = null;
-        if (isset($options['linenos'])) {
-            $startingLineNumber = 1;
-        }
-
-        $startingLineNumber = $options['number-lines'] ?? $options['lineno-start'] ?? $startingLineNumber;
-
-        if ($startingLineNumber === null) {
-            return;
-        }
-
-        $node->setStartingLineNumber((int) $startingLineNumber);
     }
 }
