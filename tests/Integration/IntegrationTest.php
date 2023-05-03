@@ -77,7 +77,7 @@ class IntegrationTest extends ApplicationTestCase
 
         foreach ($compareFiles as $compareFile) {
             $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
-            self::assertFileEqualsTrimmed($compareFile, $outputFile);
+            self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
         }
     }
 
@@ -148,7 +148,7 @@ class IntegrationTest extends ApplicationTestCase
                 $compareFiles[] = $file->getPathname();
             }
 
-            $tests[$dir->getPathname()] = [
+            $tests[$dir->getRelativePathname()] = [
                 $dir->getPathname() . '/input',
                 $dir->getPathname() . '/expected',
                 $dir->getPathname() . '/temp',

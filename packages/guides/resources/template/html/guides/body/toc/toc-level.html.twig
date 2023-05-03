@@ -1,7 +1,5 @@
-{% spaceless %}
-    <ul class="phpdocumentor-list">
-        {% for tocItem in node.entries %}
-            {{ renderNode(tocItem) }}
-        {% endfor %}
-    </ul>
-{% endspaceless %}
+<ul class="phpdocumentor-list">
+    {% for tocItem in node.entries -%}
+        {{ renderNode(tocItem) }}
+    {% endfor %}
+</ul>
