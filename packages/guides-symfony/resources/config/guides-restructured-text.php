@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
@@ -33,7 +34,6 @@ use phpDocumentor\Guides\RestructuredText\Directives\TitleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ToctreeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TodoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TopicDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\UmlDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
