@@ -10,7 +10,6 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TocNode;
@@ -42,8 +41,7 @@ final class MetasPass implements CompilerPass
         return 10000;
     }
 
-    /** @param DocumentNode|SectionNode $node */
-    private function traverse(CompoundNode $node, Entry $currentSection): void
+    private function traverse(DocumentNode|SectionNode $node, Entry $currentSection): void
     {
         foreach ($node->getChildren() as $child) {
             if ($child instanceof SectionNode) {

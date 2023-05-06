@@ -99,6 +99,6 @@ abstract class BaseDirective
      */
     protected function optionsToArray(array $options): array
     {
-        return array_map(static fn (DirectiveOption $option) => $option->getValue(), $options);
+        return array_map(static fn (DirectiveOption $option): bool|float|int|string|null => $option->getValue(), $options);
     }
 }

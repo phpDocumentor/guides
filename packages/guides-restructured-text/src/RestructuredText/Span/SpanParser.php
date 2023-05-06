@@ -26,12 +26,12 @@ class SpanParser
 {
     private int $tokenId = 0;
 
-    private string $prefix;
+    private readonly string $prefix;
 
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
-    private SpanLexer $lexer;
+    private readonly SpanLexer $lexer;
 
     public function __construct()
     {

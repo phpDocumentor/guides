@@ -37,7 +37,7 @@ final class GridTableRule implements Rule
 {
     public const PRIORITY = 50;
 
-    private GridTableBuilder $builder;
+    private readonly GridTableBuilder $builder;
 
     public function __construct(private readonly RuleContainer $productions)
     {

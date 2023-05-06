@@ -27,7 +27,7 @@ class InventoryRepository
     {
         $lowerCaseKey = strtolower($key);
         if (!$this->hasInventory($lowerCaseKey)) {
-            throw new RuntimeException('Inventory with key ' . $lowerCaseKey . ' not found. ', 1671398986);
+            throw new RuntimeException('Inventory with key ' . $lowerCaseKey . ' not found. ', 1_671_398_986);
         }
 
         return $this->inventories[$lowerCaseKey];

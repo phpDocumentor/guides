@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use function array_merge;
 use function array_unique;
 use function array_walk;
 use function implode;
@@ -85,7 +84,7 @@ abstract class AbstractNode implements Node
     public function withOptions(array $options): Node
     {
         $result = clone $this;
-        $result->options = array_merge($result->options, $options);
+        $result->options = [...$result->options, ...$options];
 
         return $result;
     }

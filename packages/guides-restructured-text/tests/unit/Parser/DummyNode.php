@@ -8,13 +8,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class DummyNode implements Node
 {
-    /** @var DirectiveOption[] $directiveOptions the array of options for this directive */
-    private array $directiveOptions;
-
     /** @param DirectiveOption[] $directiveOptions */
-    public function __construct(private readonly string $name, private readonly string $data, array $directiveOptions)
+    public function __construct(private readonly string $name, private readonly string $data, private readonly array $directiveOptions)
     {
-        $this->directiveOptions = $directiveOptions;
     }
 
     public function getName(): string

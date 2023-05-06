@@ -318,7 +318,7 @@ ERROR
         );
     }
 
-    public function testNotEndingWithWhiteLine(): void
+    public function testNotEndingWithWhiteLine(): never
     {
         $this->markTestSkipped('Not correct yet');
         $input = <<<'RST'

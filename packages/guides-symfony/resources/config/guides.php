@@ -3,15 +3,25 @@
 declare(strict_types=1);
 
 use League\Tactician\CommandBus;
+use phpDocumentor\Guides\Compiler\Compiler;
+use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
+use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
+use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\References\ReferenceResolver;
+use phpDocumentor\Guides\References\Resolver\Resolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -35,16 +45,16 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()
         ->autowire()
         ->autoconfigure()
-        ->instanceof(phpDocumentor\Guides\References\Resolver\Resolver::class)
+        ->instanceof(Resolver::class)
         ->tag('phpdoc.guides.reference.resolver')
 
-        ->instanceof(phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware::class)
+        ->instanceof(NodeRendererFactoryAware::class)
         ->tag('phpdoc.guides.noderendererfactoryaware')
 
-        ->instanceof(phpDocumentor\Guides\Compiler\CompilerPass::class)
+        ->instanceof(CompilerPass::class)
         ->tag('phpdoc.guides.compiler.passes')
 
-        ->instanceof(phpDocumentor\Guides\Compiler\NodeTransformer::class)
+        ->instanceof(NodeTransformer::class)
         ->tag('phpdoc.guides.compiler.nodeTransformers')
 
         ->load(
@@ -70,10 +80,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(ReferenceResolver::class)
         ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference.resolver'))
 
-        ->set(phpDocumentor\Guides\Parser::class)
+        ->set(Parser::class)
         ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))
 
-        ->set(phpDocumentor\Guides\Compiler\Compiler::class)
+        ->set(Compiler::class)
         ->arg('$passes', tagged_iterator('phpdoc.guides.compiler.passes'))
 
         ->set(NodeTransformerFactory::class, CustomNodeTransformerFactory::class)
@@ -95,16 +105,16 @@ return static function (ContainerConfigurator $container): void {
         ->set(IntersphinxRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
 
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer::class)
+        ->set(SpanNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer::class)
+        ->set(TableNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer::class)
+        ->set(MenuNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer::class)
+        ->set(MenuEntryRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
 
-        ->set(phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory::class)
+        ->set(InMemoryNodeRendererFactory::class)
         ->args([
             '$nodeRenderers' => tagged_iterator('phpdoc.guides.noderenderer.html'),
             '$defaultNodeRenderer' => new Reference(DefaultNodeRenderer::class),

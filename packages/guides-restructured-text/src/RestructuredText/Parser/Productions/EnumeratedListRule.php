@@ -51,7 +51,7 @@ final class EnumeratedListRule implements Rule
 
     private const LIST_MARKER = '(^%s([\.)])(?:\s+|$)|^[(]%s[)](?:\s+|$))';
 
-    private string $expression;
+    private readonly string $expression;
 
     public function __construct(private readonly RuleContainer $productions)
     {

@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 final class PreRenderDocument
 {
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private NodeRenderer $renderer, private RenderDocumentCommand $command)
+    public function __construct(private readonly NodeRenderer $renderer, private readonly RenderDocumentCommand $command)
     {
     }
 

@@ -25,6 +25,6 @@ final class RenderDocumentCommand
 
     public function getFileDestination(): string
     {
-        return $this->getContext()->getCurrentFileDestination();
+        return $this->renderContext->getCurrentFileDestination();
     }
 }

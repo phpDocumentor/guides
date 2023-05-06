@@ -21,7 +21,7 @@ use function sprintf;
 /** @extends CompoundNode<Node> */
 class VersionChangeNode extends CompoundNode
 {
-    private string $versionLabel;
+    private readonly string $versionLabel;
 
     /** {@inheritDoc} */
     public function __construct(private readonly string $type, string $versionLabel, private readonly string $versionModified, array $value)

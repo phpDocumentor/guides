@@ -216,7 +216,7 @@ TEXT
         );
     }
 
-    public function testFootNoteReferencesAreReplaced(): void
+    public function testFootNoteReferencesAreReplaced(): never
     {
         $result = null;
         $token = null;

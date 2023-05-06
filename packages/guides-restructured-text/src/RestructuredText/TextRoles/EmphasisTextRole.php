@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 
 class EmphasisTextRole implements TextRole
 {
-    public const NAME = 'emphasis';
+    final public const NAME = 'emphasis';
 
     public function getName(): string
     {

@@ -38,11 +38,11 @@ class JsonLoader
         try {
             $json = json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new RuntimeException('File loaded from ' . $url . ' did not contain a valid JSON. ', 1671398987, $e);
+            throw new RuntimeException('File loaded from ' . $url . ' did not contain a valid JSON. ', 1_671_398_987, $e);
         }
 
         if (!is_array($json)) {
-            throw new RuntimeException('File loaded from ' . $url . ' did not contain a valid array. ', 1671398988);
+            throw new RuntimeException('File loaded from ' . $url . ' did not contain a valid array. ', 1_671_398_988);
         }
 
         return $json;

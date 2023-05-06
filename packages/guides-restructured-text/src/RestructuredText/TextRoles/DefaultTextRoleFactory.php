@@ -9,7 +9,7 @@ use function in_array;
 class DefaultTextRoleFactory implements TextRoleFactory
 {
     /** @var TextRole[] $textRoles */
-    private array $textRoles;
+    private readonly array $textRoles;
 
     public function __construct()
     {
