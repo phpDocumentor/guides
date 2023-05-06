@@ -8,6 +8,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlock;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
@@ -55,6 +56,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
+use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -89,6 +91,8 @@ return static function (ContainerConfigurator $container): void {
             ),
         ])
         ->set(ContainerDirective::class)
+        ->set(ContentsDirective::class)
+        ->arg('$urlGenerator', service(UrlGeneratorInterface::class))
         ->set(DangerDirective::class)
         ->set(DeprecatedDirective::class)
         ->set(ErrorDirective::class)

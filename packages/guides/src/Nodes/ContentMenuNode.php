@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes;
 use function is_scalar;
 
 /** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */
-class TocNode extends MenuNode
+class ContentMenuNode extends MenuNode
 {
     public function getDepth(): int
     {
@@ -24,15 +24,11 @@ class TocNode extends MenuNode
             return (int) $this->getOption('depth');
         }
 
-        if ($this->hasOption('maxdepth') && is_scalar($this->getOption('maxdepth'))) {
-            return (int) $this->getOption('maxdepth');
-        }
-
         return self::DEFAULT_DEPTH;
     }
 
     public function isPageLevelOnly(): bool
     {
-        return $this->hasOption('titlesonly');
+        return false;
     }
 }

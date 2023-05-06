@@ -8,19 +8,20 @@ use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 use PHPUnit\Framework\TestCase;
 
-final class TocNodeTransformerTest extends TestCase
+final class MenuNodeTransformerTest extends TestCase
 {
     public function testSimpleFlatToc(): void
     {
         $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
-        $transformer = new TocNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer($metas);
 
         $transformedNode = $transformer->enterNode($node);
 
@@ -39,11 +40,30 @@ final class TocNodeTransformerTest extends TestCase
         );
     }
 
+    public function testSimpleContents(): void
+    {
+        $metas = $this->givenMetas();
+        $node = (new ContentMenuNode(['index']))->withOptions(['depth' => 1]);
+        $transformer = new MenuNodeTransformer($metas);
+
+        $transformedNode = $transformer->enterNode($node);
+
+        self::assertEquals(
+            [
+                new TocEntry(
+                    'index',
+                    new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+                ),
+            ],
+            $transformedNode->getEntries(),
+        );
+    }
+
     public function testTocWithChildNodes(): void
     {
         $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 2]);
-        $transformer = new TocNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer($metas);
 
         $transformedNode = $transformer->enterNode($node);
 
@@ -78,7 +98,7 @@ final class TocNodeTransformerTest extends TestCase
     {
         $metas = $this->givenMetas();
         $node = (new TocNode(['page3']))->withOptions(['maxdepth' => 3]);
-        $transformer = new TocNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer($metas);
 
         $transformedNode = $transformer->enterNode($node);
 
