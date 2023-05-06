@@ -1,7 +1,4 @@
 deptrac:
-  skip_violations:
-    phpDocumentor\Guides\RestructuredText\Directives\UmlDirective:
-      - phpDocumentor\Guides\Graphs\Nodes\UmlNode # yamllint disable-line rule:quoted-strings
   paths:
     - "./packages"
   exclude_files:
@@ -56,3 +53,4 @@ deptrac:
       - "Guides"
     Graphs:
       - "Guides"
+      - "RST"
