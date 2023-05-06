@@ -38,6 +38,7 @@
         "phpdocumentor/guides-graphs": "dev-main@dev",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
         "phpdocumentor/guides-symfony": "dev-main@dev",
+        "phpdocumentor/guides-theme-bootstrap": "@dev",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1",
         "symfony/contracts": "^2.5",
@@ -89,6 +90,10 @@
         },
         {
             "url": "./packages/guides-symfony",
+            "type": "path"
+        },
+        {
+            "url": "./packages/guides-theme-bootstrap",
             "type": "path"
         }
     ]
