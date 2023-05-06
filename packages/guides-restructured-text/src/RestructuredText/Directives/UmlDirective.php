@@ -31,7 +31,7 @@ use function str_replace;
  *    :Transform AST into artifacts;
  *    stop
  */
-final class Uml extends BaseDirective
+final class UmlDirective extends BaseDirective
 {
     public function getName(): string
     {

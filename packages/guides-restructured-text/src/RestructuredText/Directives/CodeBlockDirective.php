@@ -23,7 +23,7 @@ use function trim;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
-class CodeBlock extends BaseDirective
+class CodeBlockDirective extends BaseDirective
 {
     public function __construct(private readonly CodeNodeOptionMapper $codeNodeOptionMapper)
     {

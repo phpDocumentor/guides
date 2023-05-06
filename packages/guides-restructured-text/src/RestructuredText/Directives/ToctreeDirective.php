@@ -19,7 +19,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  */
-class Toctree extends BaseDirective
+class ToctreeDirective extends BaseDirective
 {
     public function __construct(private readonly ToctreeBuilder $toctreeBuilder)
     {

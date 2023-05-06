@@ -12,7 +12,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /**
  * Wraps a sub document in a div with a given class
  */
-class Wrap extends SubDirective
+class WrapDirective extends SubDirective
 {
     public function getName(): string
     {

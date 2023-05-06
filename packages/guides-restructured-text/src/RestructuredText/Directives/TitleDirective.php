@@ -14,7 +14,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  *
  * .. title:: Page title
  */
-class Title extends BaseDirective
+class TitleDirective extends BaseDirective
 {
     public function getName(): string
     {
