@@ -14,7 +14,7 @@ use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
  *
  * .. |test| replace:: The Test String!
  */
-class Replace extends BaseDirective
+class ReplaceDirective extends BaseDirective
 {
     public function __construct(private readonly SpanParser $spanParser)
     {

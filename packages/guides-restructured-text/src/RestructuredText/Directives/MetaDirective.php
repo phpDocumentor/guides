@@ -15,7 +15,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  * .. meta::
  *      :key: value
  */
-class Meta extends BaseDirective
+class MetaDirective extends BaseDirective
 {
     public function getName(): string
     {
