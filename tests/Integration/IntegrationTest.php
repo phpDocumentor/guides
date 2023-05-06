@@ -50,35 +50,44 @@ class IntegrationTest extends ApplicationTestCase
         self::assertDirectoryExists($inputPath);
         self::assertDirectoryExists($expectedPath);
         self::assertNotEmpty($compareFiles);
-        if (file_exists($inputPath . '/skip')) {
-            $this->markTestIncomplete($inputPath);
+
+        $skip = file_exists($inputPath . '/skip');
+
+        try {
+            system('mkdir ' . escapeshellarg($outputPath));
+
+            $command = $this->getContainer()->get(Run::class);
+            assert($command instanceof Run);
+
+            $input = new ArrayInput(
+                [
+                    'input' => $inputPath,
+                    'output' => $outputPath,
+                    '--output-format' => ['html', 'intersphinx'],
+                ],
+                $command->getDefinition(),
+            );
+
+            $outputBuffer = new BufferedOutput();
+
+            $command->run(
+                $input,
+                $outputBuffer,
+            );
+
+            foreach ($compareFiles as $compareFile) {
+                $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
+                self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
+            }
+        } catch (ExpectationFailedException $e) {
+            if ($skip) {
+                $this->markTestIncomplete(file_get_contents($inputPath . '/skip') ?: '');
+            }
+
+            throw $e;
         }
 
-        system('mkdir ' . escapeshellarg($outputPath));
-
-        $command = $this->getContainer()->get(Run::class);
-        assert($command instanceof Run);
-
-        $input = new ArrayInput(
-            [
-                'input' => $inputPath,
-                'output' => $outputPath,
-                '--output-format' => ['html', 'intersphinx'],
-            ],
-            $command->getDefinition(),
-        );
-
-        $outputBuffer = new BufferedOutput();
-
-        $command->run(
-            $input,
-            $outputBuffer,
-        );
-
-        foreach ($compareFiles as $compareFile) {
-            $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
-            self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
-        }
+        $this->assertFalse($skip, 'Test passes while marked as SKIP.');
     }
 
     /**

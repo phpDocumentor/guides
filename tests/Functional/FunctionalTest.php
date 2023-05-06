@@ -16,10 +16,12 @@ use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
 use function array_map;
+use function array_shift;
 use function explode;
 use function file_exists;
 use function file_get_contents;
@@ -57,58 +59,70 @@ class FunctionalTest extends ApplicationTestCase
         $expectedLines = explode("\n", $expected);
         $firstLine     = $expectedLines[0];
 
-        if (strpos($firstLine, 'SKIP') === 0) {
-            $this->markTestIncomplete(substr($firstLine, 5) ?: '');
+        $skip = strpos($firstLine, 'SKIP') === 0;
+        if ($skip) {
+            array_shift($expectedLines);
+            $expected = implode("\n", $expectedLines);
         }
 
-        if (strpos($firstLine, 'Exception:') === 0) {
-            /** @psalm-var class-string<Throwable> */
-            $exceptionClass = str_replace('Exception: ', '', $firstLine);
-            $this->expectException($exceptionClass);
+        try {
+            if (strpos($firstLine, 'Exception:') === 0) {
+                /** @psalm-var class-string<Throwable> */
+                $exceptionClass = str_replace('Exception: ', '', $firstLine);
+                $this->expectException($exceptionClass);
 
-            $expectedExceptionMessage = $expectedLines;
-            unset($expectedExceptionMessage[0]);
-            $expectedExceptionMessage = implode("\n", $expectedExceptionMessage);
+                $expectedExceptionMessage = $expectedLines;
+                unset($expectedExceptionMessage[0]);
+                $expectedExceptionMessage = implode("\n", $expectedExceptionMessage);
 
-            $this->expectExceptionMessage($expectedExceptionMessage);
-        }
+                $this->expectExceptionMessage($expectedExceptionMessage);
+            }
 
-        $parser = $this->getContainer()->get(Parser::class);
-        $document = $parser->parse($rst);
+            $parser = $this->getContainer()->get(Parser::class);
+            $document = $parser->parse($rst);
 
-        $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
-        $context = RenderContext::forDocument(
-            $document,
-            new Filesystem(new MemoryAdapter()),
-            $outfs = new Filesystem(new MemoryAdapter()),
-            '',
-            new Metas(),
-            new UrlGenerator(),
-            $format,
-        );
-
-        $rendered = '';
-
-        foreach ($document->getNodes() as $node) {
-            $rendered .= $renderer->render(
-                $node,
-                $context,
+            $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
+            $context = RenderContext::forDocument(
+                $document,
+                new Filesystem(new MemoryAdapter()),
+                $outfs = new Filesystem(new MemoryAdapter()),
+                '',
+                new Metas(),
+                new UrlGenerator(),
+                $format,
             );
+
+            $rendered = '';
+
+            foreach ($document->getNodes() as $node) {
+                $rendered .= $renderer->render(
+                    $node,
+                    $context,
+                );
+            }
+
+            if ($format === 'html' && $useIndenter) {
+                $indenter = new Indenter();
+                $rendered = $indenter->indent($rendered);
+            }
+
+            if (isset($expectedExceptionMessage)) {
+                return;
+            }
+
+            self::assertSame(
+                $this->trimTrailingWhitespace($expected),
+                $this->trimTrailingWhitespace($rendered),
+            );
+        } catch (ExpectationFailedException $e) {
+            if ($skip) {
+                $this->markTestIncomplete(substr($firstLine, 5) ?: '');
+            }
+
+            throw $e;
         }
 
-        if ($format === 'html' && $useIndenter) {
-            $indenter = new Indenter();
-            $rendered = $indenter->indent($rendered);
-        }
-
-        if (isset($expectedExceptionMessage)) {
-            return;
-        }
-
-        self::assertSame(
-            $this->trimTrailingWhitespace($expected),
-            $this->trimTrailingWhitespace($rendered),
-        );
+        $this->assertFalse($skip, 'Test passes while marked as SKIP.');
     }
 
     /** @return mixed[] */
