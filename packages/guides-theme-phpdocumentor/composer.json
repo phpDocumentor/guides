@@ -1,0 +1,7 @@
+{
+    "name": "phpdocumentor/guides-theme-phpdocumentor",
+    "description": "A theme for use in the phpdocumentor",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://www.phpdoc.org"
+}
