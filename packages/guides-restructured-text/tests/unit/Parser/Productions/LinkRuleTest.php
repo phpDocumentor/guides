@@ -80,7 +80,7 @@ class LinkRuleTest extends RuleTestCase
     }
 
     /** @return Generator<string, array{string}> */
-    public function provideInvalidLinks(): Generator
+    public static function provideInvalidLinks(): Generator
     {
         yield 'Empty line' => [''];
 
