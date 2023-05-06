@@ -21,18 +21,13 @@ use function max;
 /** @extends CompoundNode<Node> */
 class TableNode extends CompoundNode
 {
-    /** @var TableRow[] */
-    protected array $data = [];
-
     /**
-     * @param TableRow[] $rows
+     * @param TableRow[] $data
      * @param TableRow[] $headers
      */
-    public function __construct(array $rows, protected array $headers = [])
+    public function __construct(protected array $data, protected array $headers = [])
     {
         parent::__construct();
-
-        $this->data = $rows;
     }
 
     public function getCols(): int

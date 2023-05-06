@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Renderer;
 
 class HtmlRenderer extends BaseTypeRenderer
 {
-    public const TYPE = 'html';
+    final public const TYPE = 'html';
 
     public function supports(string $outputFormat): bool
     {

@@ -43,8 +43,8 @@ final class AssetsExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('asset', [$this, 'asset'], ['is_safe' => ['html'], 'needs_context' => true]),
-            new TwigFunction('renderNode', [$this, 'renderNode'], ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('asset', $this->asset(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
@@ -55,7 +55,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigTest(
                 'node',
                 /** @param mixed $value */
-                static fn ($value): bool => $value instanceof Node,
+                static fn (mixed $value): bool => $value instanceof Node,
             ),
         ];
     }

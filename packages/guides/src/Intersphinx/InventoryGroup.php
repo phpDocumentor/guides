@@ -31,7 +31,7 @@ final class InventoryGroup
     {
         $lowerCaseKey = strtolower($key);
         if (!array_key_exists($lowerCaseKey, $this->links)) {
-            throw new RuntimeException('Inventory link with key ' . $lowerCaseKey . ' not found. ', 1671398986);
+            throw new RuntimeException('Inventory link with key ' . $lowerCaseKey . ' not found. ', 1_671_398_986);
         }
 
         return $this->links[$lowerCaseKey];

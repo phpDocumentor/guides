@@ -35,9 +35,7 @@ class TextRoleRule extends StartEndRegexRoleRule
 
     protected function createToken(string $content): InlineMarkupToken
     {
-        $role = (string) preg_replace_callback('/:([a-z0-9]+):`(.+)`/mUsi', static function ($match): string {
-            return $match[1];
-        }, $content);
+        $role = (string) preg_replace_callback('/:([a-z0-9]+):`(.+)`/mUsi', static fn ($match): string => $match[1], $content);
         $content = (string) preg_replace($this->getStartRegex(), '', $content);
         assert(is_string($content));
         $content = (string) preg_replace($this->getEndRegex(), '', $content);

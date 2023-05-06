@@ -11,7 +11,7 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
 use function array_filter;
 use function array_map;
 use function in_array;
-use function strpos;
+use function str_contains;
 
 class ToctreeBuilder
 {
@@ -72,6 +72,6 @@ class ToctreeBuilder
     /** @param mixed[] $options */
     private function isGlob(array $options, string $file): bool
     {
-        return isset($options['glob']) && strpos($file, '*') !== false;
+        return isset($options['glob']) && str_contains($file, '*');
     }
 }

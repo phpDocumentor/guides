@@ -23,6 +23,7 @@ use function array_pop;
 use function count;
 use function getcwd;
 use function implode;
+use function is_countable;
 use function is_dir;
 use function sprintf;
 use function str_starts_with;
@@ -103,14 +104,14 @@ final class Run extends Command
 
         $lastFormat = '';
 
-        if (count($outputFormats) > 1) {
-            $lastFormat = (count($outputFormats) > 2 ? ',' : '') . ' and ' . strtoupper(array_pop($outputFormats));
+        if ((is_countable($outputFormats) ? count($outputFormats) : 0) > 1) {
+            $lastFormat = ((is_countable($outputFormats) ? count($outputFormats) : 0) > 2 ? ',' : '') . ' and ' . strtoupper((string) array_pop($outputFormats));
         }
 
         $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;
 
         $output->writeln(
-            'Successfully placed ' . count($documents) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
+            'Successfully placed ' . (is_countable($documents) ? count($documents) : 0) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
         );
 
         return 0;

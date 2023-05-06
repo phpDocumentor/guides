@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
@@ -23,6 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
 use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ReplaceDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
@@ -38,10 +41,12 @@ use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DefinitionListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\EnumeratedListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
@@ -56,6 +61,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
+use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
+use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -69,11 +77,11 @@ return static function (ContainerConfigurator $container): void {
         ->autoconfigure()
         ->bind('$bodyElements', service('phpdoc.guides.parser.rst.body_elements'))
         ->bind('$structuralElements', service('phpdoc.guides.parser.rst.structural_elements'))
-        ->instanceof(phpDocumentor\Guides\RestructuredText\Directives\BaseDirective::class)
+        ->instanceof(BaseDirective::class)
         ->tag('phpdoc.guides.directive')
         ->instanceof(FieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
-        ->instanceof(phpDocumentor\Guides\NodeRenderers\NodeRenderer::class)
+        ->instanceof(NodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
@@ -87,7 +95,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(CodeBlockDirective::class)
         ->args([
             '$codeNodeOptionMapper' => service(
-                phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class,
+                CodeNodeOptionMapper::class,
             ),
         ])
         ->set(ContainerDirective::class)
@@ -106,7 +114,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(LiteralincludeDirective::class)
         ->args([
             '$codeNodeOptionMapper' => service(
-                phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class,
+                CodeNodeOptionMapper::class,
             ),
         ])
         ->set(MetaDirective::class)
@@ -170,16 +178,16 @@ return static function (ContainerConfigurator $container): void {
         ->set(SectionRule::class)
         ->tag('phpdoc.guides.parser.rst.structural_element', ['priority' => SectionRule::PRIORITY])
 
-        ->set(phpDocumentor\Guides\RestructuredText\MarkupLanguageParser::class)
+        ->set(MarkupLanguageParser::class)
         ->args([
             '$startingRule' => service(
-                phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule::class,
+                DocumentRule::class,
             ),
         ])
         ->tag('phpdoc.guides.parser.markupLanguageParser')
-        ->set(phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule::class)
-        ->set(phpDocumentor\Guides\RestructuredText\Span\SpanParser::class)
-        ->set(phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher::class)
-        ->set(phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder::class)
-        ->set(phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper::class);
+        ->set(DocumentRule::class)
+        ->set(SpanParser::class)
+        ->set(GlobSearcher::class)
+        ->set(ToctreeBuilder::class)
+        ->set(CodeNodeOptionMapper::class);
 };

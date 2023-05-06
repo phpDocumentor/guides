@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Renderer;
 
 class LatexRenderer extends BaseTypeRenderer
 {
-    public const TYPE = 'tex';
+    final public const TYPE = 'tex';
 
     public function supports(string $outputFormat): bool
     {

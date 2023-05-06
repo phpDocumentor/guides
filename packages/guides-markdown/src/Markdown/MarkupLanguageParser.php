@@ -37,15 +37,15 @@ use function strtolower;
 
 final class MarkupLanguageParser implements MarkupLanguageParserInterface
 {
-    private MarkdownParser $markdownParser;
+    private readonly MarkdownParser $markdownParser;
 
     private ParserContext|null $parserContext = null;
 
     /** @var ParserInterface<Node>[] */
-    private array $parsers;
+    private readonly array $parsers;
 
     private DocumentNode|null $document = null;
-    private AsciiSlugger $idGenerator;
+    private readonly AsciiSlugger $idGenerator;
 
     public function __construct()
     {
