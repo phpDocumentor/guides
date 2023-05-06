@@ -8,17 +8,16 @@ use phpDocumentor\Guides\RenderContext;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
-use Twig\Loader\FilesystemLoader;
 
 class EnvironmentBuilder
 {
     private Environment $environment;
 
     /** @param ExtensionInterface[] $extensions */
-    public function __construct(FilesystemLoader $filesystemLoader, iterable $extensions = [])
+    public function __construct(ThemeManager $themeManager, iterable $extensions = [])
     {
         $this->environment = new Environment(
-            $filesystemLoader,
+            $themeManager->getFilesystemLoader(),
             ['debug' => true],
         );
         $this->environment->addExtension(new DebugExtension());

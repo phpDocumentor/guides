@@ -39,6 +39,7 @@
         "phpdocumentor/guides-restructured-text": "@dev",
         "phpdocumentor/guides-symfony": "@dev",
         "phpdocumentor/guides-theme-bootstrap": "@dev",
+        "phpdocumentor/guides-theme-phpdocumentor": "@dev",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1",
         "symfony/contracts": "^2.5",

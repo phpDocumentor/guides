@@ -12,6 +12,7 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Twig\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,8 +32,11 @@ use function strtoupper;
 
 final class Run extends Command
 {
-    public function __construct(private readonly CommandBus $commandBus, private readonly Metas $metas)
-    {
+    public function __construct(
+        private readonly CommandBus $commandBus,
+        private readonly Metas $metas,
+        private readonly ThemeManager $themeManager,
+    ) {
         parent::__construct('run');
 
         $this->addArgument(
@@ -62,6 +66,14 @@ final class Run extends Command
             'Format of the input can be html',
             ['html'],
         );
+
+        $this->addOption(
+            'theme',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'The theme used for rendering.',
+            'default',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -83,6 +95,18 @@ final class Run extends Command
                 $input->getOption('input-format'),
             ),
         );
+        $this->themeManager->registerTheme(
+            'bootstrap',
+            [$this->getAbsolutePath('vendor/phpdocumentor/guides-theme-bootstrap/resources/template/')],
+        );
+        $this->themeManager->registerTheme(
+            'phpdocumentor',
+            [$this->getAbsolutePath('vendor/phpdocumentor/guides-theme-phpdocumentor/resources/template/')],
+        );
+
+        if ($input->hasOption('theme')) {
+            $this->themeManager->useTheme($input->getOption('theme') ?? 'default');
+        }
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
 
