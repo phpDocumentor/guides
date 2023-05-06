@@ -19,7 +19,7 @@ class DefaultNodeTransformerFactory implements NodeTransformerFactory
     {
         /** @var iterable<NodeTransformer<Node>> $transformers */
         $transformers = [
-            new TocNodeTransformer($this->metas),
+            new MenuNodeTransformer($this->metas),
             new CollectLinkTargetsTransformer($this->metas),
             new ClassNodeTransformer(),
         ];

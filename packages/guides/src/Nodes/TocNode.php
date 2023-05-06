@@ -13,36 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
-
 use function is_scalar;
 
-use const PHP_INT_MAX;
-
-/**
- * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
- *
- * @extends CompoundNode<Node>
- */
-class TocNode extends CompoundNode
+/** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */
+class TocNode extends MenuNode
 {
-    private const DEFAULT_DEPTH = PHP_INT_MAX;
-
-    /** @var Entry[] */
-    private array $entries = [];
-
-    /** @param string[] $files */
-    public function __construct(private readonly array $files)
-    {
-        parent::__construct();
-    }
-
-    /** @return string[] */
-    public function getFiles(): array
-    {
-        return $this->files;
-    }
-
     public function getDepth(): int
     {
         if ($this->hasOption('depth') && is_scalar($this->getOption('depth'))) {
@@ -54,21 +29,6 @@ class TocNode extends CompoundNode
         }
 
         return self::DEFAULT_DEPTH;
-    }
-
-    /** @param Entry[] $entries */
-    public function withEntries(array $entries): self
-    {
-        $that = clone $this;
-        $that->entries = $entries;
-
-        return $that;
-    }
-
-    /** @return Entry[] */
-    public function getEntries(): array
-    {
-        return $this->entries;
     }
 
     public function isPageLevelOnly(): bool

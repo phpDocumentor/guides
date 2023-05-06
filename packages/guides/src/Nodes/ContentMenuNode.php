@@ -13,57 +13,22 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
+use function is_scalar;
 
-use function is_int;
-
-use const PHP_INT_MAX;
-
-/**
- * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
- *
- * @extends CompoundNode<Node>
- */
-class ContentMenuNode extends CompoundNode
+/** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */
+class ContentMenuNode extends MenuNode
 {
-    private const DEFAULT_DEPTH = PHP_INT_MAX;
-
-    /** @var Entry[] */
-    private array $entries = [];
-
-    /** @param string[] $files */
-    public function __construct(private readonly array $files)
-    {
-        parent::__construct();
-    }
-
-    /** @return string[] */
-    public function getFiles(): array
-    {
-        return $this->files;
-    }
-
     public function getDepth(): int
     {
-        if (is_int($this->getOption('depth'))) {
+        if ($this->hasOption('depth') && is_scalar($this->getOption('depth'))) {
             return (int) $this->getOption('depth');
         }
 
         return self::DEFAULT_DEPTH;
     }
 
-    /** @param Entry[] $entries */
-    public function withEntries(array $entries): self
+    public function isPageLevelOnly(): bool
     {
-        $that = clone $this;
-        $that->entries = $entries;
-
-        return $that;
-    }
-
-    /** @return Entry[] */
-    public function getEntries(): array
-    {
-        return $this->entries;
+        return false;
     }
 }

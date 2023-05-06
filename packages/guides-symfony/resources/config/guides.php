@@ -99,9 +99,9 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\TocNodeRenderer::class)
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-        ->set(phpDocumentor\Guides\NodeRenderers\Html\TocEntryRenderer::class)
+        ->set(phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
 
         ->set(phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory::class)

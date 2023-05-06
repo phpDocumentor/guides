@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -37,7 +37,7 @@ class ContentsDirective extends BaseDirective
             $documentParserContext->getContext()->getCurrentFileName(),
         );
 
-        return (new TocNode([$absoluteUrl]))
+        return (new ContentMenuNode([$absoluteUrl]))
             ->withOptions($this->optionsToArray($options));
     }
 }

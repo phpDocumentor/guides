@@ -11,7 +11,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
 /** @implements NodeRenderer<Entry> */
-final class TocEntryRenderer implements NodeRenderer
+final class MenuEntryRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {
@@ -26,7 +26,7 @@ final class TocEntryRenderer implements NodeRenderer
     {
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/toc/toc-item.html.twig',
+            'body/menu/menu-item.html.twig',
             [
                 'url' => $renderContext->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),
                 'node' => $node,

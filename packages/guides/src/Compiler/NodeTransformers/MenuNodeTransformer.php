@@ -11,16 +11,16 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
-use phpDocumentor\Guides\Nodes\TocNode;
 use Traversable;
 
 use function iterator_to_array;
 use function ltrim;
 
-/** @implements NodeTransformer<TocNode> */
-final class TocNodeTransformer implements NodeTransformer
+/** @implements NodeTransformer<MenuNode> */
+final class MenuNodeTransformer implements NodeTransformer
 {
     public function __construct(private readonly Metas $metas)
     {
@@ -51,11 +51,11 @@ final class TocNodeTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof TocNode;
+        return $node instanceof MenuNode;
     }
 
     /** @return iterable<Entry> */
-    private function buildFromDocumentEntry(DocumentEntry $document, int $depth, TocNode $node): iterable
+    private function buildFromDocumentEntry(DocumentEntry $document, int $depth, MenuNode $node): iterable
     {
         if ($depth > $node->getDepth()) {
             return new ArrayIterator([]);
@@ -75,7 +75,7 @@ final class TocNodeTransformer implements NodeTransformer
         DocumentEntry $document,
         SectionEntry $entry,
         int $depth,
-        TocNode $node,
+        MenuNode $node,
     ): Traversable {
         if ($depth > $node->getDepth()) {
             return new ArrayIterator([]);
@@ -91,7 +91,7 @@ final class TocNodeTransformer implements NodeTransformer
         MetaEntry $child,
         DocumentEntry $document,
         int $depth,
-        TocNode $node,
+        MenuNode $node,
     ): Traversable {
         if ($child instanceof SectionEntry) {
             if (!$node->isPageLevelOnly() || $depth === 1) {

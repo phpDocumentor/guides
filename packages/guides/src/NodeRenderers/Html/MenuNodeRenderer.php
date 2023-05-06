@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\ContentMenuNode;
+use phpDocumentor\Guides\Nodes\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
-/** @implements NodeRenderer<TocNode> */
-final class TocNodeRenderer implements NodeRenderer
+/** @implements NodeRenderer<MenuNode> */
+final class MenuNodeRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {
@@ -29,7 +31,7 @@ final class TocNodeRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $renderContext): string
     {
-        Assert::isInstanceOf($node, TocNode::class);
+        Assert::isInstanceOf($node, MenuNode::class);
 
         if ($node->getOption('hidden', false)) {
             return '';
@@ -37,13 +39,26 @@ final class TocNodeRenderer implements NodeRenderer
 
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/toc/toc.html.twig',
+            $this->getTemplate($node),
             ['node' => $node],
         );
     }
 
+    private function getTemplate(Node $node): string
+    {
+        if ($node instanceof TocNode) {
+            return 'body/menu/table-of-content.html.twig';
+        }
+
+        if ($node instanceof ContentMenuNode) {
+            return 'body/menu/content-menu.html.twig';
+        }
+
+        return 'body/menu/menu.html.twig';
+    }
+
     public function supports(Node $node): bool
     {
-        return $node instanceof TocNode;
+        return $node instanceof MenuNode;
     }
 }
