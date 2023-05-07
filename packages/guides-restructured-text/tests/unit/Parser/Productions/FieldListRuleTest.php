@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Monolog\Logger;
+use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
@@ -23,6 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\Nocomment
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ProjectFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
@@ -31,9 +34,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class FieldListRuleTest extends RuleTestCase
 {
     private FieldListRule $rule;
+    private ProjectMeta $projectMeta;
 
     protected function setUp(): void
     {
+        $this->projectMeta = new ProjectMeta(new Logger('test'));
         $fieldListItemRules = [];
         $fieldListItemRules[] = new AbstractFieldListItemRule();
         $fieldListItemRules[] = new AddressFieldListItemRule();
@@ -47,9 +52,10 @@ final class FieldListRuleTest extends RuleTestCase
         $fieldListItemRules[] = new NosearchFieldListItemRule();
         $fieldListItemRules[] = new OrganizationFieldListItemRule();
         $fieldListItemRules[] = new OrphanFieldListItemRule();
+        $fieldListItemRules[] = new ProjectFieldListItemRule($this->projectMeta);
         $fieldListItemRules[] = new RevisionFieldListItemRule();
         $fieldListItemRules[] = new TocDepthFieldListItemRule();
-        $fieldListItemRules[] = new VersionFieldListItemRule();
+        $fieldListItemRules[] = new VersionFieldListItemRule($this->projectMeta);
         $this->rule = new FieldListRule($this->givenCollectAllRuleContainer(), $fieldListItemRules);
     }
 
@@ -79,6 +85,40 @@ final class FieldListRuleTest extends RuleTestCase
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
 
+    /** @param MetadataNode[] $expectedNodesArray */
+    #[DataProvider('projectProvider')]
+    public function testProjectTitle(string $input, string $expectedTitle, array $expectedNodesArray, string|null $nextLine): void
+    {
+        $context = $this->createContext($input);
+
+        $documentNode = new DocumentNode('', '');
+        $documentNode->setTitleFound(false);
+
+        $result = $this->rule->apply($context, $documentNode);
+
+        self::assertNull($result);
+        self::assertEquals($expectedTitle, $this->projectMeta->getTitle());
+        self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
+        self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
+    }
+
+    /** @param MetadataNode[] $expectedNodesArray */
+    #[DataProvider('versionProvider')]
+    public function testProjectVersion(string $input, string $expectedVersion, array $expectedNodesArray, string|null $nextLine): void
+    {
+        $context = $this->createContext($input);
+
+        $documentNode = new DocumentNode('', '');
+        $documentNode->setTitleFound(false);
+
+        $result = $this->rule->apply($context, $documentNode);
+
+        self::assertNull($result);
+        self::assertEquals($expectedVersion, $this->projectMeta->getVersion());
+        self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
+        self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
+    }
+
     /** @param MetadataNode[] $expectedArray */
     #[DataProvider('metadataProvider')]
     public function testApplyAsMetadata(string $input, array $expectedArray, string|null $nextLine): void
@@ -93,6 +133,88 @@ final class FieldListRuleTest extends RuleTestCase
         self::assertNull($result);
         self::assertEquals($expectedArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
+    }
+
+    /** @return array<string, mixed[]> */
+    public static function projectProvider(): array
+    {
+        return [
+            'testProjectOneLine' => [
+
+                <<<'RST'
+:project: The project
+
+This is normal text again.
+
+RST,
+                'The project',
+                [],
+                'This is normal text again.' . "\n",
+            ],
+
+            'testProjectNextLine' => [
+
+                <<<'RST'
+:project: 
+    The project
+
+This is normal text again.
+
+RST,
+                'The project',
+                [],
+                'This is normal text again.' . "\n",
+            ],
+        ];
+    }
+
+    /** @return array<string, mixed[]> */
+    public static function versionProvider(): array
+    {
+        return [
+            'testVersionAlone' => [
+
+                <<<'RST'
+:version: 
+    3.1.4
+
+This is normal text again.
+
+RST,
+                '3.1.4',
+                [],
+                'This is normal text again.' . "\n",
+            ],
+            'testProjectAndVersion' => [
+
+                <<<'RST'
+:project: 
+    The project
+:version:
+    3.1.4
+
+This is normal text again.
+
+RST,
+                '3.1.4',
+                [],
+                'This is normal text again.' . "\n",
+            ],
+            'testProjectAndVersionSameLine' => [
+
+                <<<'RST'
+:project: The project
+:version: 3.1.4
+
+This is normal text again.
+
+RST,
+                '3.1.4',
+                [],
+                'This is normal text again.' . "\n",
+            ],
+
+        ];
     }
 
     /** @return array<string, mixed[]> */

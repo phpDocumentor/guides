@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
+use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
@@ -49,6 +50,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\EnumeratedListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ProjectFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\GridTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
@@ -172,6 +175,14 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => ParagraphRule::PRIORITY])
         ->set(InlineMarkupRule::class)
         ->set(TitleRule::class)
+
+        ->set(ProjectFieldListItemRule::class)
+        ->arg('$projectMeta', service(ProjectMeta::class))
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(VersionFieldListItemRule::class)
+        ->arg('$projectMeta', service(ProjectMeta::class))
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(TransitionRule::class)
         ->tag('phpdoc.guides.parser.rst.structural_element', ['priority' => TransitionRule::PRIORITY])

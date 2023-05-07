@@ -20,5 +20,5 @@ interface FieldListItemRule
 {
     public function applies(FieldListItemNode $fieldListItemNode): bool;
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode;
+    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode|null;
 }
