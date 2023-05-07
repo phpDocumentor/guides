@@ -16,6 +16,16 @@ class ProjectMeta
     ) {
     }
 
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): void
+    {
+        $this->version = $version;
+    }
+
     public function getVersion(): string|null
     {
         return $this->version;
