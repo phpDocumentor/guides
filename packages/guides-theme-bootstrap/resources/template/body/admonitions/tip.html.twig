@@ -1,0 +1,4 @@
+<div class="alert alert-info {{ class ? (' '~class) }}{% if node.classes %} {{ node.classesString }}{% endif %}" role="alert">
+    <h4 class="alert-heading">Tip</h4>
+    {{ renderNode(node) }}
+</div>
