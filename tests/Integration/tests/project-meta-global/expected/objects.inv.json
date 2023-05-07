@@ -1,0 +1,16 @@
+{
+    "std:doc": {
+        "a_page": [
+            "My Project",
+            "3.1.4",
+            "a_page.html",
+            "A Page"
+        ],
+        "index": [
+            "My Project",
+            "3.1.4",
+            "index.html",
+            "Document Title"
+        ]
+    }
+}
