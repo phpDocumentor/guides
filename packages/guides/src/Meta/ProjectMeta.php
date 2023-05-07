@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
-
 use Monolog\Logger;
 
 class ProjectMeta
 {
     private string|null $title = null;
 
-    public function __construct(private readonly Logger $logger)
+    public function __construct(
+        private readonly Logger $logger)
     {
     }
 
