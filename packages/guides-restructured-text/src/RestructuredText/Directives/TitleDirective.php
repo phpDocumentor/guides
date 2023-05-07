@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\Metadata\DocumentTitleNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
@@ -27,7 +26,7 @@ class TitleDirective extends BaseDirective
         Directive $directive,
     ): Node|null {
         $document = $documentParserContext->getDocument();
-        $document->addHeaderNode(new DocumentTitleNode($directive->getData()));
+        $document->setMetaTitle($directive->getData());
 
         return null;
     }
