@@ -49,8 +49,22 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\DefinitionListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\EnumeratedListRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AuthorsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ContactFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\CopyrightFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ProjectFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\GridTableRule;
@@ -176,8 +190,51 @@ return static function (ContainerConfigurator $container): void {
         ->set(InlineMarkupRule::class)
         ->set(TitleRule::class)
 
+
+        ->set(AbstractFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(AddressFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(AuthorFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(AuthorsFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(ContactFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(CopyrightFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(DateFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(DedicationFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(NocommentsFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(NosearchFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(OrganizationFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(OrphanFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
         ->set(ProjectFieldListItemRule::class)
         ->arg('$projectMeta', service(ProjectMeta::class))
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(RevisionFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(TocDepthFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(VersionFieldListItemRule::class)

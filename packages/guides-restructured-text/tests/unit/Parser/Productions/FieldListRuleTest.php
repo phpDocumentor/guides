@@ -229,7 +229,7 @@ RST,
 This is normal text again.
 
 RST,
-                [new TopicNode('Abstract', 'This is the Abstract!')],
+                [new TopicNode('abstract', 'This is the Abstract!')],
                 'This is normal text again.' . "\n",
             ],
             'testOrganization' => [
