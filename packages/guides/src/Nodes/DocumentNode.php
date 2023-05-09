@@ -45,6 +45,8 @@ final class DocumentNode extends CompoundNode
 
     private bool $titleFound = false;
 
+    private string|null $metaTitle = null;
+
     public function __construct(
         private readonly string $hash,
         private readonly string $filePath,
@@ -69,6 +71,19 @@ final class DocumentNode extends CompoundNode
         return array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType);
     }
 
+    public function getPageTitle(): string|null
+    {
+        if ($this->metaTitle !== null) {
+            return $this->metaTitle;
+        }
+
+        if ($this->getTitle() instanceof TitleNode) {
+            return $this->getTitle()->toString();
+        }
+
+        return null;
+    }
+
     public function getTitle(): TitleNode|null
     {
         foreach ($this->value as $node) {
@@ -78,6 +93,11 @@ final class DocumentNode extends CompoundNode
         }
 
         return null;
+    }
+
+    public function setMetaTitle(string $metaTitle): void
+    {
+        $this->metaTitle = $metaTitle;
     }
 
     public function addHeaderNode(MetadataNode $node): void

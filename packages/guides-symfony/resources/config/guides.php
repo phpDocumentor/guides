@@ -9,9 +9,11 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
@@ -105,6 +107,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(IntersphinxRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
 
+        ->set(DocumentNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
         ->set(SpanNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(TableNodeRenderer::class)
@@ -113,6 +117,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(MenuEntryRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
+
+        ->set(ProjectMeta::class)
 
         ->set(InMemoryNodeRendererFactory::class)
         ->args([
