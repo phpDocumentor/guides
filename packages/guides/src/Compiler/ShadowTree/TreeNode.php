@@ -123,6 +123,18 @@ final class TreeNode
         $this->node->addChildNode($child);
     }
 
+    public function pushChild(Node $child): void
+    {
+        if ($this->node instanceof CompoundNode === false) {
+            throw new LogicException('Cannot add a child to a non-compound node');
+        }
+
+        $shadowNode = self::createFromNode($child, $this);
+        $shadowNode->setRoot($this->root);
+        array_unshift($this->children, $shadowNode);
+        $this->node->pushChildNode($child);
+    }
+
     /** @return self<Node>|self<DocumentNode>|null */
     public function getParent(): TreeNode|null
     {
@@ -164,5 +176,16 @@ final class TreeNode
                 break;
             }
         }
+    }
+
+    public function findPosition(Node $node): ?int
+    {
+        foreach ($this->children as $key => $child) {
+            if ($child->getNode() === $node) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 }

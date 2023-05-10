@@ -42,10 +42,18 @@ class CompilerContext
         return $this->shadowTree->getRoot()->getNode();
     }
 
-    public function withShadowTree(DocumentNode $documentNode): static
+    public function withDocumentShadowTree(DocumentNode $documentNode): static
     {
         $that = clone $this;
         $that->shadowTree = TreeNode::createFromDocument($documentNode);
+
+        return $that;
+    }
+
+    public function withShadowTree(TreeNode $shadowTree): static
+    {
+        $that = clone $this;
+        $that->shadowTree = $shadowTree;
 
         return $that;
     }

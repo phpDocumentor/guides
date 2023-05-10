@@ -128,9 +128,7 @@ class IntegrationTest extends ApplicationTestCase
         static::assertFileExists($expected, $message);
         static::assertFileExists($actual, $message);
 
-        $constraint = new IsEqual(self::getTrimmedFileContent($expected));
-
-        static::assertThat(self::getTrimmedFileContent($actual), $constraint, $message);
+        static::assertEquals(self::getTrimmedFileContent($expected), self::getTrimmedFileContent($actual), $message);
     }
 
     public static function getTrimmedFileContent(string $file): string

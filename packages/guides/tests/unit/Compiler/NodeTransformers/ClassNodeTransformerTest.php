@@ -20,7 +20,7 @@ final class ClassNodeTransformerTest extends TestCase
     {
         $context = new CompilerContext(new ProjectNode());
 
-        return $context->withShadowTree(new DocumentNode('123', $path));
+        return $context->withDocumentShadowTree(new DocumentNode('123', $path));
     }
 
     public function testLeaveNodeWillReturnNullWhenNodeIsClass(): void

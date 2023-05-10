@@ -31,7 +31,7 @@ class TocNodeWithDocumentEntryTransformerTest extends TestCase
         $documentNode = new DocumentNode('123', $currentPath);
         $documentNode->setDocumentEntry(new DocumentEntryNode($currentPath, TitleNode::emptyNode()));
 
-        return $context->withShadowTree($documentNode);
+        return $context->withDocumentShadowTree($documentNode);
     }
 
     /**
