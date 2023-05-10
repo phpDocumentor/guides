@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function json_encode;
@@ -15,8 +16,10 @@ class IntersphinxRenderer implements TypeRenderer
 {
     final public const TYPE = 'intersphinx';
 
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly ProjectMeta $projectMeta,
+    ) {
     }
 
     public function supports(string $outputFormat): bool
@@ -36,8 +39,8 @@ class IntersphinxRenderer implements TypeRenderer
                 $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
             );
             $inventory['std:doc'][$key] = [
-                '',
-                '',
+                $this->projectMeta->getTitle(),
+                $this->projectMeta->getVersion(),
                 $url,
                 $documentEntry->getTitle()->toString(),
             ];

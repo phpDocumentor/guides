@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 
 use function strtolower;
 
-class VersionFieldListItemRule implements FieldListItemRule
+class ProjectFieldListItemRule implements FieldListItemRule
 {
     public function __construct(private readonly ProjectMeta $projectMeta)
     {
@@ -18,12 +18,12 @@ class VersionFieldListItemRule implements FieldListItemRule
 
     public function applies(FieldListItemNode $fieldListItemNode): bool
     {
-        return strtolower($fieldListItemNode->getTerm()) === 'version';
+        return strtolower($fieldListItemNode->getTerm()) === 'project';
     }
 
     public function apply(FieldListItemNode $fieldListItemNode): MetadataNode|null
     {
-        $this->projectMeta->setVersion($fieldListItemNode->getPlaintextContent());
+        $this->projectMeta->setTitle($fieldListItemNode->getPlaintextContent());
 
         return null;
     }

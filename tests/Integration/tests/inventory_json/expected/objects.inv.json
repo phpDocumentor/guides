@@ -1,38 +1,38 @@
 {
     "std:doc": {
         "index": [
-            "",
-            "",
+            null,
+            null,
             "index.html",
             "Document Title"
         ],
         "page1": [
-            "",
-            "",
+            null,
+            null,
             "page1.html",
             "Page 1"
         ],
         "page2": [
-            "",
-            "",
+            null,
+            null,
             "page2.html",
             "Page 2"
         ],
         "subfolder\/index": [
-            "",
-            "",
+            null,
+            null,
             "subfolder\/index.html",
             "Subfolder Index"
         ],
         "subfolder\/subpage1": [
-            "",
-            "",
+            null,
+            null,
             "subfolder\/subpage1.html",
             "Subpage 1"
         ],
         "subfolder\/subpage2": [
-            "",
-            "",
+            null,
+            null,
             "subfolder\/subpage2.html",
             "Subpage 2"
         ]

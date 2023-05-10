@@ -39,4 +39,13 @@ final class FieldListItemNode extends CompoundNode
     {
         $this->plaintextContent = $plaintextContent;
     }
+
+    public function addPlaintextContentLine(string $plaintextContent): void
+    {
+        if ($this->plaintextContent !== '') {
+            $this->plaintextContent .= "\n";
+        }
+
+        $this->plaintextContent .= $plaintextContent;
+    }
 }

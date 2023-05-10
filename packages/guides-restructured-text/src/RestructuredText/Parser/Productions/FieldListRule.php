@@ -78,8 +78,13 @@ final class FieldListRule implements Rule
                     continue;
                 }
 
+                $metaNode = $fieldListItemRule->apply($fieldListItemNode);
+                if ($metaNode === null) {
+                    continue;
+                }
+
                 $documentNode->addHeaderNode(
-                    $fieldListItemRule->apply($fieldListItemNode),
+                    $metaNode,
                 );
             }
         }
@@ -123,10 +128,11 @@ final class FieldListRule implements Rule
         if ($nextLine !== null && !$this->isFieldLine($nextLine)) {
             $indenting = mb_strlen($nextLine) - mb_strlen(trim($nextLine));
             if ($indenting > 0) {
+                $buffer->push(mb_substr($documentIterator->getNextLine() ?? '', $indenting));
+                $documentIterator->next();
                 while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
-                    $documentIterator->next();
                     $emptyLinesBelongToDefinition = false;
-                    if (LinesIterator::isEmptyLine($documentIterator->current())) {
+                    if (LinesIterator::isEmptyLine($documentIterator->getNextLine())) {
                         $peek = $documentIterator->peek();
                         while (LinesIterator::isEmptyLine($peek)) {
                             $peek = $documentIterator->peek();
@@ -137,18 +143,23 @@ final class FieldListRule implements Rule
 
                     if (
                         $emptyLinesBelongToDefinition === false
-                        && LinesIterator::isEmptyLine($documentIterator->current())
+                        && LinesIterator::isEmptyLine($documentIterator->getNextLine())
                     ) {
                         break;
                     }
 
-                    $buffer->push(mb_substr($documentIterator->current(), $indenting));
+                    $buffer->push(mb_substr($documentIterator->getNextLine() ?? '', $indenting));
+                    $documentIterator->next();
                 }
             }
         }
 
         if ($firstLine === '' && $buffer->count() === 0) {
             return;
+        }
+
+        foreach ($buffer->getLines() as $line) {
+            $fieldListItemNode->addPlaintextContentLine($line);
         }
 
         $nodeContext = $documentParserContext->withContents($firstLine . "\n" . $buffer->getLinesString());
