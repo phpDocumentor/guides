@@ -22,7 +22,7 @@ class CodeNode extends TextNode
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;
 
-    protected string|null $caption = null;
+    private string|null $caption = null;
 
     /** @param string[] $lines */
     public function __construct(array $lines)
