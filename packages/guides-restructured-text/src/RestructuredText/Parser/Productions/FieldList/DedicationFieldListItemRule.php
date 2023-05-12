@@ -19,6 +19,6 @@ class DedicationFieldListItemRule implements FieldListItemRule
 
     public function apply(FieldListItemNode $fieldListItemNode): MetadataNode
     {
-        return new TopicNode('Dedication', $fieldListItemNode->getPlaintextContent());
+        return new TopicNode('dedication', $fieldListItemNode->getPlaintextContent());
     }
 }

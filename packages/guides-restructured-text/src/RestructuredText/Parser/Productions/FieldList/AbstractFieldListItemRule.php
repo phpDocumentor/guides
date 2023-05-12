@@ -19,6 +19,6 @@ class AbstractFieldListItemRule implements FieldListItemRule
 
     public function apply(FieldListItemNode $fieldListItemNode): MetadataNode
     {
-        return new TopicNode('Abstract', $fieldListItemNode->getPlaintextContent());
+        return new TopicNode('abstract', $fieldListItemNode->getPlaintextContent());
     }
 }
