@@ -1,76 +1,76 @@
 {
     "std:doc": {
         "index": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "index.html",
             "Document Title"
         ],
         "page1": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "page1.html",
             "Page 1"
         ],
         "page2": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "page2.html",
             "Page 2"
         ],
         "subfolder\/index": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "subfolder\/index.html",
             "Subfolder Index"
         ],
         "subfolder\/subpage1": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "subfolder\/subpage1.html",
             "Subpage 1"
         ],
         "subfolder\/subpage2": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "subfolder\/subpage2.html",
             "Subpage 2"
         ]
     },
     "std:label": {
-        "document-title": [
-            null,
-            null,
-            "index.html#document-title",
+        "my_index": [
+            "My Project",
+            "3.1.4",
+            "index.html#my_index",
             "Document Title"
         ],
-        "page-1": [
-            null,
-            null,
-            "page1.html#page-1",
+        "my_cool_page": [
+            "My Project",
+            "3.1.4",
+            "page1.html#my_cool_page",
             "Page 1"
         ],
         "page-2": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "page2.html#page-2",
             "Page 2"
         ],
         "subfolder-index": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "subfolder\/index.html#subfolder-index",
             "Subfolder Index"
         ],
-        "subpage-1": [
-            null,
-            null,
-            "subfolder\/subpage1.html#subpage-1",
+        "another_cool_page": [
+            "My Project",
+            "3.1.4",
+            "subfolder\/subpage1.html#another_cool_page",
             "Subpage 1"
         ],
         "subpage-2": [
-            null,
-            null,
+            "My Project",
+            "3.1.4",
             "subfolder\/subpage2.html#subpage-2",
             "Subpage 2"
         ]
