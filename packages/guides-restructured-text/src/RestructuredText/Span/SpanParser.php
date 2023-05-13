@@ -328,6 +328,15 @@ class SpanParser
 
                     $inText = true;
                     break;
+                case SpanLexer::WHITESPACE:
+                    if (!$inText) {
+                        // textroles may not contain whitespace, we are not in a textrole but have found a common colon
+                        break 2;
+                    }
+
+                    $part .= $token->value;
+
+                    break;
                 default:
                     $part .= $token->value;
             }

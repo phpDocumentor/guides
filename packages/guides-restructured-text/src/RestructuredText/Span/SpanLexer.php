@@ -28,6 +28,7 @@ final class SpanLexer extends AbstractLexer
     public const ANONYMOUSE_REFERENCE = 12;
     public const COLON = 13;
     public const OCTOTHORPE = 14;
+    public const WHITESPACE = 15;
 
     /**
      * Map between string position and position in token list.
@@ -94,6 +95,10 @@ final class SpanLexer extends AbstractLexer
 
         if (preg_match('/[a-z0-9-]+_{1}/i', $value)) {
             return self::NAMED_REFERENCE;
+        }
+
+        if (preg_match('/\s/i', $value)) {
+            return self::WHITESPACE;
         }
 
         switch ($value) {
