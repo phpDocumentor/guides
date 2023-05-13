@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -16,6 +18,7 @@ class ParserTest extends TestCase
         $this->expectExceptionMessage('Unable to parse document, no matching parsing strategy could be found');
 
         $parser = new Parser(
+            $this->createMock(SettingsManager::class),
             $this->createMock(UrlGeneratorInterface::class),
             [$this->createMock(MarkupLanguageParser::class)],
         );
@@ -25,7 +28,7 @@ class ParserTest extends TestCase
 
     public function testParseWillCallMarkupLanguageParserWhenInputFormatMatched(): void
     {
-        $documentNode = new DocumentNode('foobar', 'rst');
+        $documentNode = new DocumentNode(new ProjectNode(), 'foobar', 'rst');
         $languageParser = $this->createMock(MarkupLanguageParser::class);
         $languageParser->method('supports')->willReturn(true);
         $languageParser->expects(self::once())
@@ -35,6 +38,7 @@ class ParserTest extends TestCase
             );
 
         $parser = new Parser(
+            $this->createMock(SettingsManager::class),
             $this->createMock(UrlGeneratorInterface::class),
             [$languageParser],
         );

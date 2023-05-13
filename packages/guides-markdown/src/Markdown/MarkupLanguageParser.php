@@ -25,6 +25,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -76,7 +77,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->getParserContext()->getCurrentAbsolutePath());
+        $document = new DocumentNode(new ProjectNode(), $hash, $this->getParserContext()->getCurrentAbsolutePath());
         $this->document = $document;
 
         while ($event = $walker->next()) {

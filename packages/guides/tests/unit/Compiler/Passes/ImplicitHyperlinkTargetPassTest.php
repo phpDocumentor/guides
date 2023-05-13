@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -16,8 +17,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 {
     public function testAllImplicitUniqueSections(): void
     {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
+        $document = new DocumentNode(new ProjectNode(), '1', 'index');
+        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
         $slugger = new AsciiSlugger();
         foreach (['Document 1', 'Section A', 'Section B'] as $titles) {
             $document->addChildNode(
@@ -40,8 +41,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 
     public function testImplicitWithConflict(): void
     {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
+        $document = new DocumentNode(new ProjectNode(), '1', 'index');
+        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
         $slugger = new AsciiSlugger();
 
         foreach (['Document 1', 'Section A', 'Section A'] as $titles) {
@@ -69,8 +70,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 
     public function testExplicit(): void
     {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
+        $document = new DocumentNode(new ProjectNode(), '1', 'index');
+        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
 
         $document->addChildNode(new SectionNode(
             new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
@@ -98,8 +99,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 
     public function testExplicitHasPriorityOverImplicit(): void
     {
-        $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
+        $document = new DocumentNode(new ProjectNode(), '1', 'index');
+        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
 
         $document->addChildNode(
             new SectionNode(new TitleNode(new SpanNode('Document 1'), 1, 'document-1')),

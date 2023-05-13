@@ -17,6 +17,8 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
@@ -33,11 +35,18 @@ final class Parser
     /** @var MarkupLanguageParser[] */
     private array $parserStrategies = [];
 
+    private ProjectNode $projectNode;
+
     /** @param iterable<MarkupLanguageParser> $parserStrategies */
     public function __construct(
+        private readonly SettingsManager $settingsManager,
         private readonly UrlGeneratorInterface $urlGenerator,
         iterable $parserStrategies,
     ) {
+        $this->projectNode = new ProjectNode(
+            $this->settingsManager->getProjectSettings()->getTitle(),
+            $this->settingsManager->getProjectSettings()->getVersion(),
+        );
         foreach ($parserStrategies as $strategy) {
             $this->registerStrategy($strategy);
         }
@@ -110,6 +119,7 @@ final class Parser
         int $initialHeaderLevel,
     ): ParserContext {
         return new ParserContext(
+            $this->projectNode,
             $file,
             $sourcePath,
             $initialHeaderLevel,

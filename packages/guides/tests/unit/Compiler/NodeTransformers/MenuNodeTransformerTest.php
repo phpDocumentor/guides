@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -24,7 +25,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'));
+        $transformedNode = $transformer->enterNode($node, new DocumentNode(new ProjectNode(), '123', 'some/path'));
 
         self::assertEquals(
             [
@@ -47,7 +48,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'index'));
+        $transformedNode = $transformer->enterNode($node, new DocumentNode(new ProjectNode(), '123', 'index'));
 
         self::assertEquals(
             [
@@ -70,7 +71,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new ContentMenuNode(['index']))->withOptions(['depth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'));
+        $transformedNode = $transformer->enterNode($node, new DocumentNode(new ProjectNode(), '123', 'some/path'));
 
         self::assertEquals(
             [
@@ -89,7 +90,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 2]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'));
+        $transformedNode = $transformer->enterNode($node, new DocumentNode(new ProjectNode(), '123', 'some/path'));
 
         $entry = new TocEntry(
             'index',
@@ -124,7 +125,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['page3']))->withOptions(['maxdepth' => 3]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'));
+        $transformedNode = $transformer->enterNode($node, new DocumentNode(new ProjectNode(), '123', 'some/path'));
 
         $entry = new TocEntry(
             'index',

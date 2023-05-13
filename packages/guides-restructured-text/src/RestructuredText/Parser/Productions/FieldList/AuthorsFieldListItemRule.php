@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorNode;
@@ -25,7 +26,7 @@ class AuthorsFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'authors';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentNode $documentNode): MetadataNode
     {
         $authorNodes = [];
         if (count($fieldListItemNode->getChildren()) === 1) {

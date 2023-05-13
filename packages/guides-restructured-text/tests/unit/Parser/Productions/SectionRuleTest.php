@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -44,7 +45,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode('foo', 'index');
+        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
 
         $rule->apply($documentParser, $document);
         self::assertEquals(
@@ -73,7 +74,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode('foo', 'index');
+        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
 
         $rule->apply($documentParser, $document);
 
@@ -109,7 +110,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode('foo', 'index');
+        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
 
         $rule->apply($documentParser, $document);
 
@@ -158,7 +159,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode('foo', 'index');
+        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
 
         $rule->apply($documentParser, $document);
 
@@ -189,6 +190,7 @@ RST;
     private function getDocumentParserContext(string $content): DocumentParserContext
     {
         $parserContext = new ParserContext(
+            new ProjectNode(),
             'foo',
             'test',
             1,

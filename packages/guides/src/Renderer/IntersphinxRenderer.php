@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Meta\ProjectMeta;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function json_encode;
@@ -18,7 +18,6 @@ class IntersphinxRenderer implements TypeRenderer
 
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly ProjectMeta $projectMeta,
     ) {
     }
 
@@ -33,6 +32,11 @@ class IntersphinxRenderer implements TypeRenderer
             'std:doc' => [],
             'std:label' => [],
         ];
+        if (isset($renderCommand->getDocuments()[0])) {
+            $projectNode = $renderCommand->getDocuments()[0]->getProjectNode();
+        } else {
+            $projectNode = new ProjectNode();
+        }
 
         foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
             $url = $this->urlGenerator->canonicalUrl(
@@ -40,8 +44,8 @@ class IntersphinxRenderer implements TypeRenderer
                 $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
             );
             $inventory['std:doc'][$key] = [
-                $this->projectMeta->getTitle(),
-                $this->projectMeta->getVersion(),
+                $projectNode->getTitle(),
+                $projectNode->getVersion(),
                 $url,
                 $documentEntry->getTitle()->toString(),
             ];
@@ -53,8 +57,8 @@ class IntersphinxRenderer implements TypeRenderer
                 $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
             );
             $inventory['std:label'][$key] = [
-                $this->projectMeta->getTitle(),
-                $this->projectMeta->getVersion(),
+                $projectNode->getTitle(),
+                $projectNode->getVersion(),
                 $url,
                 $internalTarget->getTitle(),
             ];

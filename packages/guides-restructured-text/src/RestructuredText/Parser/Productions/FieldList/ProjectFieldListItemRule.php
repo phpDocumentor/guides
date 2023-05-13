@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
-use phpDocumentor\Guides\Meta\ProjectMeta;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use Psr\Log\LoggerInterface;
 
+use function sprintf;
 use function strtolower;
 
 class ProjectFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(private readonly ProjectMeta $projectMeta)
+    public function __construct(private readonly LoggerInterface $logger)
     {
     }
 
@@ -21,9 +23,22 @@ class ProjectFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'project';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode|null
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentNode $documentNode): MetadataNode|null
     {
-        $this->projectMeta->setTitle($fieldListItemNode->getPlaintextContent());
+        $currentTitle = $documentNode->getProjectNode()->getTitle();
+        $newTitle = $fieldListItemNode->getPlaintextContent();
+        if (
+            $currentTitle !== null
+            && $currentTitle !== $newTitle
+        ) {
+            $this->logger->warning(sprintf(
+                'Project title was set more then once: %s and %s',
+                $currentTitle,
+                $newTitle,
+            ));
+        }
+
+        $documentNode->getProjectNode()->setTitle($newTitle);
 
         return null;
     }

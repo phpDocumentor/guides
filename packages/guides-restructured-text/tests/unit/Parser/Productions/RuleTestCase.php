@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -36,6 +37,7 @@ abstract class RuleTestCase extends TestCase
         return new DocumentParserContext(
             $input,
             new ParserContext(
+                new ProjectNode(),
                 'test',
                 'test',
                 1,

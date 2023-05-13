@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use RuntimeException;
@@ -42,6 +43,11 @@ class DocumentParserContext
         $this->documentIterator = new LinesIterator();
         $this->documentIterator->load($content);
         $this->currentTitleLevel = $context->getInitialHeaderLevel() - 1;
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->context->getProjectNode();
     }
 
     public function getContext(): ParserContext

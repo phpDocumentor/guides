@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Compiler;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -17,7 +18,7 @@ final class DocumentNodeTraverserTest extends TestCase
 {
     public function testRemoveNodeFromDocument(): void
     {
-        $document = new DocumentNode('foo', '/index.rst');
+        $document = new DocumentNode(new ProjectNode(), 'foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
@@ -57,7 +58,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
     public function testReplaceNode(): void
     {
-        $document = new DocumentNode('foo', '/index.rst');
+        $document = new DocumentNode(new ProjectNode(), 'foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 

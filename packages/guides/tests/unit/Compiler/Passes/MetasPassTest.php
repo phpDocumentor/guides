@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -24,7 +25,7 @@ final class MetasPassTest extends TestCase
         $section11 = new SectionNode(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1'));
         $section->addChildNode($section11);
 
-        $document = new DocumentNode('1', 'index');
+        $document = new DocumentNode(new ProjectNode(), '1', 'index');
         $document->addChildNode($section);
 
         $metas = new Metas([]);

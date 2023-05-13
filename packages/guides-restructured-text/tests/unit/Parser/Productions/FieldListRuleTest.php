@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use Monolog\Logger;
-use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\Metadata\OrganizationNode;
 use phpDocumentor\Guides\Nodes\Metadata\TopicNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
@@ -34,11 +34,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class FieldListRuleTest extends RuleTestCase
 {
     private FieldListRule $rule;
-    private ProjectMeta $projectMeta;
 
     protected function setUp(): void
     {
-        $this->projectMeta = new ProjectMeta(new Logger('test'));
         $fieldListItemRules = [];
         $fieldListItemRules[] = new AbstractFieldListItemRule();
         $fieldListItemRules[] = new AddressFieldListItemRule();
@@ -52,10 +50,10 @@ final class FieldListRuleTest extends RuleTestCase
         $fieldListItemRules[] = new NosearchFieldListItemRule();
         $fieldListItemRules[] = new OrganizationFieldListItemRule();
         $fieldListItemRules[] = new OrphanFieldListItemRule();
-        $fieldListItemRules[] = new ProjectFieldListItemRule($this->projectMeta);
+        $fieldListItemRules[] = new ProjectFieldListItemRule(new Logger('test'));
         $fieldListItemRules[] = new RevisionFieldListItemRule();
         $fieldListItemRules[] = new TocDepthFieldListItemRule();
-        $fieldListItemRules[] = new VersionFieldListItemRule($this->projectMeta);
+        $fieldListItemRules[] = new VersionFieldListItemRule(new Logger('test'));
         $this->rule = new FieldListRule($this->givenCollectAllRuleContainer(), $fieldListItemRules);
     }
 
@@ -91,13 +89,13 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode('', '');
+        $documentNode = new DocumentNode(new ProjectNode(), '', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedTitle, $this->projectMeta->getTitle());
+        self::assertEquals($expectedTitle, $documentNode->getProjectNode()->getTitle());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
@@ -108,13 +106,13 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode('', '');
+        $documentNode = new DocumentNode(new ProjectNode(), '', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedVersion, $this->projectMeta->getVersion());
+        self::assertEquals($expectedVersion, $documentNode->getProjectNode()->getVersion());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
@@ -125,7 +123,7 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode('', '');
+        $documentNode = new DocumentNode(new ProjectNode(), '', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);

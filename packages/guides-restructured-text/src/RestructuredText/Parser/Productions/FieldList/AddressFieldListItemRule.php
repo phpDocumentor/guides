@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\AddressNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
@@ -17,7 +18,7 @@ class AddressFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'address';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentNode $documentNode): MetadataNode
     {
         return new AddressNode($fieldListItemNode->getPlaintextContent());
     }

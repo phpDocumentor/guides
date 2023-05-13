@@ -15,7 +15,9 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Twig\Theme\ThemeManager;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
+use phpDocumentor\Guides\Twig\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,6 +31,7 @@ use function getcwd;
 use function implode;
 use function is_countable;
 use function is_dir;
+use function is_file;
 use function sprintf;
 use function str_starts_with;
 use function strtoupper;
@@ -40,6 +43,7 @@ final class Run extends Command
         private readonly Metas $metas,
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
+        private readonly SettingsManager $settingsManager,
     ) {
         parent::__construct('run');
 
@@ -94,6 +98,17 @@ final class Run extends Command
         if (!is_dir($inputDir)) {
             throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
+        }
+
+        if (is_file($inputDir . '/settings.php')) {
+            $settings = require $inputDir . '/settings.php';
+            if (!$settings instanceof ProjectSettings) {
+                throw new RuntimeException('settings.php must return an instance of ' . ProjectSettings::class);
+            }
+
+            $this->settingsManager->setProjectSettings($settings);
+        } else {
+            $this->settingsManager->setProjectSettings(new ProjectSettings());
         }
 
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));

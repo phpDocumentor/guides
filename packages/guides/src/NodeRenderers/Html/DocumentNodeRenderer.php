@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
-use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -23,7 +22,6 @@ final class DocumentNodeRenderer implements NodeRenderer
 
     public function __construct(
         private readonly TemplateRenderer $renderer,
-        private readonly ProjectMeta $projectMeta,
     ) {
     }
 
@@ -39,8 +37,8 @@ final class DocumentNodeRenderer implements NodeRenderer
         $data = [
             'node' => $node,
             'title' => $node->getPageTitle(),
+            'project' => $node->getProjectNode(),
             'parts' => $node->getDocumentPartNodes(),
-            'guides_project' => $this->projectMeta,
         ];
 
         return $this->renderer->renderTemplate(

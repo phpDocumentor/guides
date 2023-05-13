@@ -78,7 +78,7 @@ final class FieldListRule implements Rule
                     continue;
                 }
 
-                $metaNode = $fieldListItemRule->apply($fieldListItemNode);
+                $metaNode = $fieldListItemRule->apply($fieldListItemNode, $documentNode);
                 if ($metaNode === null) {
                     continue;
                 }

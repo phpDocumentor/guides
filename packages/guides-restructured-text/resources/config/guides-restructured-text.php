@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
-use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
@@ -90,6 +89,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGeneratorInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
@@ -254,8 +254,10 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(ProjectFieldListItemRule::class)
-        ->arg('$projectMeta', service(ProjectMeta::class))
         ->tag('phpdoc.guides.parser.rst.fieldlist')
+        ->args([
+            '$logger' => service(LoggerInterface::class),
+        ])
 
         ->set(RevisionFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
@@ -264,7 +266,9 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(VersionFieldListItemRule::class)
-        ->arg('$projectMeta', service(ProjectMeta::class))
+        ->args([
+            '$logger' => service(LoggerInterface::class),
+        ])
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(TransitionRule::class)
@@ -274,9 +278,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(MarkupLanguageParser::class)
         ->args([
-            '$startingRule' => service(
-                DocumentRule::class,
-            ),
+            '$startingRule' => service(DocumentRule::class),
         ])
         ->tag('phpdoc.guides.parser.markupLanguageParser')
         ->set(DocumentRule::class)

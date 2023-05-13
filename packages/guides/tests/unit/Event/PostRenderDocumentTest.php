@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ class PostRenderDocumentTest extends TestCase
 {
     public function testEventCreation(): void
     {
-        $document = new DocumentNode('hash', 'path');
+        $document = new DocumentNode(new ProjectNode(), 'hash', 'path');
         $command = new RenderDocumentCommand(
             $document,
             RenderContext::forDocument(

@@ -1,0 +1,18 @@
+{
+    "std:doc": {
+        "index": [
+            "My Project",
+            "3.1.4",
+            "index.html",
+            "Document Title"
+        ]
+    },
+    "std:label": {
+        "document-title": [
+            "My Project",
+            "3.1.4",
+            "index.html#document-title",
+            "Document Title"
+        ]
+    }
+}
