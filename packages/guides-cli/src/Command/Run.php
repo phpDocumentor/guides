@@ -8,6 +8,9 @@ use Flyfinder\Finder;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Tactician\CommandBus;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
@@ -35,6 +38,7 @@ final class Run extends Command
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly Metas $metas,
+        private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
     ) {
         parent::__construct('run');
@@ -66,6 +70,13 @@ final class Run extends Command
             'Format of the input can be html',
             ['html'],
         );
+        $this->addOption(
+            'log-path',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Write log to this path',
+            'php://stder',
+        );
 
         $this->addOption(
             'theme',
@@ -88,6 +99,14 @@ final class Run extends Command
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
+        $logPath = $input->getOption('log-path') ?? 'php://stder';
+        if ($logPath === 'php://stder') {
+            $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING));
+        } else {
+            $this->logger->pushHandler(new StreamHandler($logPath . '/warning.log', Logger::WARNING));
+            $this->logger->pushHandler(new StreamHandler($logPath . '/error.log', Logger::ERROR));
+        }
+
         $documents = $this->commandBus->handle(
             new ParseDirectoryCommand(
                 $sourceFileSystem,

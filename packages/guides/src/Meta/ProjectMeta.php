@@ -24,7 +24,7 @@ class ProjectMeta
     public function setVersion(string $version): void
     {
         if ($this->version !== null) {
-            $this->logger->warning('Project version was set more then one: ' . $this->title . ' and ' . $version);
+            $this->logger->warning('Project version was set more then once: ' . $this->version . ' and ' . $version);
         }
 
         $this->version = $version;
@@ -38,7 +38,7 @@ class ProjectMeta
     public function setTitle(string $title): void
     {
         if ($this->title !== null) {
-            $this->logger->warning('Project title was set more then one: ' . $this->title . ' and ' . $title);
+            $this->logger->warning('Project title was set more then once: ' . $this->title . ' and ' . $title);
         }
 
         $this->title = $title;

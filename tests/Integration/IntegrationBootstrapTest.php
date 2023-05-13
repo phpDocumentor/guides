@@ -63,6 +63,7 @@ class IntegrationBootstrapTest extends ApplicationTestCase
             [
                 'input' => $inputPath,
                 'output' => $outputPath,
+                '--log-path' => $outputPath . '/logs',
                 '--theme' => 'bootstrap',
                 '--output-format' => ['html', 'intersphinx'],
             ],

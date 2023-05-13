@@ -63,6 +63,7 @@ class IntegrationPhpDocumentorTest extends ApplicationTestCase
             [
                 'input' => $inputPath,
                 'output' => $outputPath,
+                '--log-path' => $outputPath . '/logs',
                 '--theme' => 'phpdocumentor',
                 '--output-format' => ['html', 'intersphinx'],
             ],

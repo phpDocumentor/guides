@@ -63,6 +63,7 @@ class IntegrationLatexTest extends ApplicationTestCase
             [
                 'input' => $inputPath,
                 'output' => $outputPath,
+                '--log-path' => $outputPath . '/logs',
                 '--output-format' => ['tex', 'intersphinx'],
             ],
             $command->getDefinition(),
