@@ -17,7 +17,7 @@ Standalone Usage
 
 #.  Run the application to render your docs::
 
-        vendor/bin/guides my-docs-input my-docs-output
+        vendor/bin/guides my-docs-input my-docs-output --theme=bootstrap
 
 ..  hint::
     For more options run::

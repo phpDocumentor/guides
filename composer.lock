@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f7f43d5130594b6030b5184535cf743",
+    "content-hash": "da4bca2d2502151e0c9b66de5cfb28df",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1116,7 +1116,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-main",
+            "version": "dev-theme-manager",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1158,15 +1158,16 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-main",
+            "version": "dev-theme-manager",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "556847e43c91fa6feeb92f76a56c61c9975ea699"
+                "reference": "55496ceeacf0a49b3c3b4424a2c049a4fff3876c"
             },
             "require": {
                 "php": "^8.1",
                 "phpdocumentor/guides": "dev-main@dev",
+                "phpdocumentor/guides-restructured-text": "dev-main@dev",
                 "symfony/process": "^5.4",
                 "twig/twig": "~2.0"
             },
@@ -1259,6 +1260,42 @@
                 }
             ],
             "description": "Integration package for symfony applications to use guides",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-theme-bootstrap",
+            "version": "dev-theme-manager",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-theme-bootstrap",
+                "reference": "c6a35e071e7860ba5032b2a1ec4d9472c0783ce7"
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "description": "A theme for phpdocumentor/guides based on Bootstrap",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-theme-phpdocumentor",
+            "version": "dev-theme-manager",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-theme-phpdocumentor",
+                "reference": "746947525361e85dfc5f917919015422d8b1553d"
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "description": "A theme for use in the phpdocumentor",
+            "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
             }
@@ -6649,7 +6686,9 @@
         "phpdocumentor/guides-cli": 20,
         "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-restructured-text": 20,
-        "phpdocumentor/guides-symfony": 20
+        "phpdocumentor/guides-symfony": 20,
+        "phpdocumentor/guides-theme-bootstrap": 20,
+        "phpdocumentor/guides-theme-phpdocumentor": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

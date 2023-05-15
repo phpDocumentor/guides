@@ -34,10 +34,7 @@ class IntegrationBootstrapTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
-        self::prepareContainer(new Configuration([
-            __DIR__ . '/../../packages/guides-theme-bootstrap/resources/template',
-            __DIR__ . '/../../packages/guides/resources/template/html/guides',
-        ]));
+        self::prepareContainer(new Configuration());
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
@@ -66,6 +63,7 @@ class IntegrationBootstrapTest extends ApplicationTestCase
             [
                 'input' => $inputPath,
                 'output' => $outputPath,
+                '--theme' => 'bootstrap',
                 '--output-format' => ['html', 'intersphinx'],
             ],
             $command->getDefinition(),

@@ -33,11 +33,13 @@
         "league/uri": "^6.5",
         "league/uri-interfaces": "^2.3",
         "phpdocumentor/flyfinder": "^1.1",
-        "phpdocumentor/guides": "dev-main@dev",
-        "phpdocumentor/guides-cli": "dev-main@dev",
-        "phpdocumentor/guides-graphs": "dev-main@dev",
-        "phpdocumentor/guides-restructured-text": "dev-main@dev",
-        "phpdocumentor/guides-symfony": "dev-main@dev",
+        "phpdocumentor/guides": "@dev",
+        "phpdocumentor/guides-cli": "@dev",
+        "phpdocumentor/guides-graphs": "@dev",
+        "phpdocumentor/guides-restructured-text": "@dev",
+        "phpdocumentor/guides-symfony": "@dev",
+        "phpdocumentor/guides-theme-bootstrap": "@dev",
+        "phpdocumentor/guides-theme-phpdocumentor": "@dev",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1",
         "symfony/contracts": "^2.5",
@@ -68,27 +70,7 @@
     },
     "repositories": [
         {
-            "url": "./packages/guides",
-            "type": "path"
-        },
-        {
-            "url": "./packages/guides-cli",
-            "type": "path"
-        },
-        {
-            "url": "./packages/guides-restructured-text",
-            "type": "path"
-        },
-        {
-            "url": "./packages/guides-markdown",
-            "type": "path"
-        },
-        {
-          "url": "./packages/guides-graphs",
-          "type": "path"
-        },
-        {
-            "url": "./packages/guides-symfony",
+            "url": "./packages/*",
             "type": "path"
         }
     ]
