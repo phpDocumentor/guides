@@ -11,12 +11,11 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
 
-use function filter_var;
 use function implode;
 use function is_array;
 use function mt_getrandmax;
-use function preg_match;
 use function preg_replace;
 use function preg_replace_callback;
 use function random_int;
@@ -25,8 +24,6 @@ use function str_replace;
 use function stripslashes;
 use function time;
 use function trim;
-
-use const FILTER_VALIDATE_INT;
 
 class SpanParser
 {
@@ -37,11 +34,8 @@ class SpanParser
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
-    private readonly SpanLexer $lexer;
-
-    public function __construct()
+    public function __construct(private readonly AnnotationUtility $annotationUtility, private readonly SpanLexer $lexer)
     {
-        $this->lexer = new SpanLexer();
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
 
@@ -297,9 +291,9 @@ class SpanParser
                     $token = $this->lexer->token;
                     if ($token->type === SpanLexer::UNDERSCORE) {
                         $id = $this->generateId();
-                        if ($this->isFootnote($annotationName)) {
-                            $number = $this->getNaturalNumber($annotationName);
-                            $name = $this->getFootnoteName($annotationName);
+                        if ($this->annotationUtility->isFootnoteKey($annotationName)) {
+                            $number = $this->annotationUtility->getFootnoteNumber($annotationName);
+                            $name = $this->annotationUtility->getFootnoteName($annotationName);
                             $this->tokens[$id] = new FootnoteInlineNode(
                                 $id,
                                 $annotationName,
@@ -333,35 +327,6 @@ class SpanParser
         $this->rollback($startPosition);
 
         return '[';
-    }
-
-    private function isFootnote(string $key): bool
-    {
-        return $this->isAnonymousFootnote($key)
-            || $this->getFootnoteName($key) !== null
-            || $this->getNaturalNumber($key) !== null;
-    }
-
-    private function isAnonymousFootnote(string $key): bool
-    {
-        return $key === '#';
-    }
-
-    private function getFootnoteName(string $key): string|null
-    {
-        preg_match('/^[#][a-zA-Z0-9]*$/msi', $key, $matches);
-
-        return $matches[0] ?? null;
-    }
-
-    private function getNaturalNumber(string $key): int|null
-    {
-        $intValue = filter_var($key, FILTER_VALIDATE_INT);
-        if ($intValue === false || $intValue < 1) {
-            return null;
-        }
-
-        return $intValue;
     }
 
     private function parseInterpretedText(): string

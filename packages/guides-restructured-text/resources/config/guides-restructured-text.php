@@ -78,9 +78,12 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
+use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
+use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\Utility\LineUtility;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -104,6 +107,11 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
+
+        ->set(LineUtility::class)
+        ->set(AnnotationUtility::class)
+
+        ->set(SpanLexer::class)
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
