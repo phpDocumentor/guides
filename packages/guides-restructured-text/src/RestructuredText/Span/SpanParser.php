@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 
+use function filter_var;
 use function implode;
 use function is_array;
 use function mt_getrandmax;
+use function preg_match;
 use function preg_replace;
 use function preg_replace_callback;
 use function random_int;
@@ -21,6 +25,8 @@ use function str_replace;
 use function stripslashes;
 use function time;
 use function trim;
+
+use const FILTER_VALIDATE_INT;
 
 class SpanParser
 {
@@ -231,9 +237,11 @@ class SpanParser
                     $link = $this->parseNamedReference($parserContext);
                     $result .= $link;
                     break;
-
                 case SpanLexer::NAMED_REFERENCE_END:
                     $result .= $this->createNamedReference($parserContext, $result);
+                    break;
+                case SpanLexer::ANNOTATION_START:
+                    $result .= $this->parseAnnotation();
                     break;
                 default:
                     $result .= $this->lexer->token->value;
@@ -264,6 +272,96 @@ class SpanParser
         }
 
         return $text;
+    }
+
+    private function parseAnnotation(): string
+    {
+        if ($this->lexer->token === null) {
+            return '[';
+        }
+
+        $startPosition = $this->lexer->token->position;
+        $annotationName = '';
+
+        $this->lexer->moveNext();
+
+        while ($this->lexer->token !== null) {
+            $token = $this->lexer->token;
+            switch ($token->type) {
+                case SpanLexer::ANNOTATION_END:
+                    // `]`  found, look for `_`
+                    if (!$this->lexer->moveNext()) {
+                        break 2;
+                    }
+
+                    $token = $this->lexer->token;
+                    if ($token->type === SpanLexer::UNDERSCORE) {
+                        $id = $this->generateId();
+                        if ($this->isFootnote($annotationName)) {
+                            $number = $this->getNaturalNumber($annotationName);
+                            $name = $this->getFootnoteName($annotationName);
+                            $this->tokens[$id] = new FootnoteInlineNode(
+                                $id,
+                                $annotationName,
+                                $name ?? '',
+                                $number ?? 0,
+                            );
+                        } else {
+                            $this->tokens[$id] = new CitationInlineNode(
+                                $id,
+                                $annotationName,
+                                $annotationName,
+                            );
+                        }
+
+                        return $id;
+                    }
+
+                    break 2;
+                case SpanLexer::WHITESPACE:
+                    // Annotation keys may not contain whitespace
+                    break 2;
+                default:
+                    $annotationName .= $token->value;
+            }
+
+            if ($this->lexer->moveNext() === false && $this->lexer->token === null) {
+                break;
+            }
+        }
+
+        $this->rollback($startPosition);
+
+        return '[';
+    }
+
+    private function isFootnote(string $key): bool
+    {
+        return $this->isAnonymousFootnote($key)
+            || $this->getFootnoteName($key) !== null
+            || $this->getNaturalNumber($key) !== null;
+    }
+
+    private function isAnonymousFootnote(string $key): bool
+    {
+        return $key === '#';
+    }
+
+    private function getFootnoteName(string $key): string|null
+    {
+        preg_match('/^[#][a-zA-Z0-9]*$/msi', $key, $matches);
+
+        return $matches[0] ?? null;
+    }
+
+    private function getNaturalNumber(string $key): int|null
+    {
+        $intValue = filter_var($key, FILTER_VALIDATE_INT);
+        if ($intValue === false || $intValue < 1) {
+            return null;
+        }
+
+        return $intValue;
     }
 
     private function parseInterpretedText(): string

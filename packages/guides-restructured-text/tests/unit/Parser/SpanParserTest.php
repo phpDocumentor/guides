@@ -6,7 +6,10 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Faker\Factory;
 use Faker\Generator;
+use phpDocumentor\Guides\Nodes\InlineToken\AnnotationInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\ParserContext;
@@ -69,6 +72,7 @@ final class SpanParserTest extends TestCase
             'Embedded url start outside context' => ['This text is an example of <a>'],
             'Just an text_with_underscores' => ['Just an text_with_underscores'],
             'Text with several colons' => ['This text contains: several: colons'],
+            'Text with invalid footnote' => ['This contains [Some arbitary text]_'],
         ];
     }
 
@@ -218,25 +222,64 @@ TEXT
         );
     }
 
-    public function testFootNoteReferencesAreReplaced(): never
+    #[DataProvider('annotationProvider')]
+    public function testAnnotationsAreReplaced(
+        string $input,
+        string $outputDoesNotContain,
+        string $expectedType,
+        string $expectedName,
+        int $expectedFootnoteNumber = 0,
+    ): void {
+        $result = $this->spanProcessor->parse($input, $this->parserContext);
+        $token = current($result->getTokens());
+
+        self::assertStringNotContainsString($outputDoesNotContain, $result->toString());
+        self::assertInstanceOf(AnnotationInlineNode::class, $token);
+        self::assertEquals($expectedType, $token->getType());
+        self::assertEquals($expectedName, $token->getName());
+        if (!($token instanceof FootnoteInlineNode)) {
+            return;
+        }
+
+        self::assertEquals($expectedFootnoteNumber, $token->getNumber());
+    }
+
+    /** @return array<string, array<int, int|string>> */
+    public static function annotationProvider(): array
     {
-        $result = null;
-        $token = null;
-        $this->markTestSkipped('Footnotes are not supported yet');
-//        $result = $this->spanProcessor->parse('Please RTFM [1]_.', $this->parserContext->reveal());
-//        $token = current($result->getTokens());
-//
-//        self::assertStringNotContainsString('[1]_', $result->getValueString());
-//        self::assertInstanceOf(SpanToken::class, $token);
-//        self::assertEquals(SpanToken::TYPE_REFERENCE, $token->getType());
-//        self::assertEquals(
-//            [
-//                'type' => SpanToken::TYPE_REFERENCE,
-//                'url' => '_`internal ref`',
-//                'link' => 'internal ref',
-//            ],
-//            $token->getTokenData()
-//        );
+        return [
+            'numbered footnote' => [
+                'Please RTFM [1]_.',
+                '[1]_',
+                FootnoteInlineNode::TYPE,
+                '',
+                1,
+            ],
+            'named footnote' => [
+                'Lorem ipsum [#f1]_ dolor sit',
+                '[#f1]_',
+                FootnoteInlineNode::TYPE,
+                '#f1',
+            ],
+            'anonymous footnote' => [
+                'Lorem ipsum [#]_ dolor sit',
+                '[#]_',
+                FootnoteInlineNode::TYPE,
+                '#',
+            ],
+            'citation' => [
+                'Lorem ipsum [Ref]_ dolor sit amet.',
+                '[Ref]_',
+                CitationInlineNode::TYPE,
+                'Ref',
+            ],
+            'citation with digit' => [
+                'Lorem ipsum [123Ref]_ dolor sit amet.',
+                '[123Ref]_',
+                CitationInlineNode::TYPE,
+                '123Ref',
+            ],
+        ];
     }
 
     public function testEmailAddressesAreReplacedWithToken(): void

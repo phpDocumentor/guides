@@ -29,6 +29,8 @@ final class SpanLexer extends AbstractLexer
     public const COLON = 13;
     public const OCTOTHORPE = 14;
     public const WHITESPACE = 15;
+    public const ANNOTATION_START = 16;
+    public const ANNOTATION_END = 17;
 
     /**
      * Map between string position and position in token list.
@@ -134,6 +136,12 @@ final class SpanLexer extends AbstractLexer
 
             case '#':
                 return self::OCTOTHORPE;
+
+            case '[':
+                return self::ANNOTATION_START;
+
+            case ']':
+                return self::ANNOTATION_END;
 
             default:
                 return self::WORD;
