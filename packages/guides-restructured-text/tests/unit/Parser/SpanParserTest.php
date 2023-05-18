@@ -63,10 +63,12 @@ final class SpanParserTest extends TestCase
             'Literal start without end' => ['This text is an example of `` mis-used.'],
             'Backtick without end' => ['This text is an example of `  ` mis-used.'],
             'Interpreted text without end' => ['This text is an example of :role:`foo mis-used.'],
+            'Text role with spaces' => ['This text is an example of :invalid role:`foo mis-used.'],
             'Just a colon in a text' => ['This text is an example of role: mis-used.'],
             'Line ending with a colon' => ['to create new Symfony applications:'],
             'Embedded url start outside context' => ['This text is an example of <a>'],
             'Just an text_with_underscores' => ['Just an text_with_underscores'],
+            'Text with several colons' => ['This text contains: several: colons'],
         ];
     }
 
@@ -314,6 +316,12 @@ TEXT
             ],
             'interpreted text with role' => [
                 'span' => 'Some :doc:`title ref` in text.',
+                'replaced' => ':doc:`title ref`',
+                'url' => 'title ref',
+                'role' => 'doc',
+            ],
+            'interpreted text with role, colon in text' => [
+                'span' => 'See also: :doc:`title ref`.',
                 'replaced' => ':doc:`title ref`',
                 'url' => 'title ref',
                 'role' => 'doc',
