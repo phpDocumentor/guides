@@ -53,7 +53,7 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "doctrine/coding-standard": "^11.1",
-        "fakerphp/faker": "^1.19",
+        "fakerphp/faker": "^1.22",
         "gajus/dindent": "^2.0",
         "jangregor/phpstan-prophecy": "^1.0",
         "league/flysystem-memory": "^1.0",
