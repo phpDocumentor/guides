@@ -17,10 +17,10 @@ use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
-use phpDocumentor\Guides\RestructuredText\Utility\LineUtility;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function is_string;
 use function preg_match;
@@ -35,8 +35,6 @@ final class AnnotationRule implements Rule
     public const PRIORITY = 70;
 
     public function __construct(
-        private readonly AnnotationUtility $annotationUtility,
-        private readonly LineUtility $lineUtility,
         private readonly InlineMarkupRule $inlineMarkupRule,
     ) {
     }
@@ -68,16 +66,20 @@ final class AnnotationRule implements Rule
 
         while (
             $documentIterator->getNextLine() !== null
-            && $this->lineUtility->isWhiteline($documentIterator->getNextLine()) === false
+            && LinesIterator::isEmptyLine($documentIterator->getNextLine()) === false
         ) {
             $documentIterator->next();
             $buffer->push($documentIterator->current());
         }
 
-        if (!$this->annotationUtility->isFootnoteKey($annotationKey)) {
+        if (!AnnotationUtility::isFootnoteKey($annotationKey)) {
             $node = new CitationNode([], $annotationKey);
         } else {
-            $node = new FootnoteNode([], $this->annotationUtility->getFootnoteName($annotationKey) ?? '', $this->annotationUtility->getFootnoteNumber($annotationKey) ?? 0);
+            $node = new FootnoteNode(
+                [],
+                AnnotationUtility::getFootnoteName($annotationKey) ?? '',
+                AnnotationUtility::getFootnoteNumber($annotationKey) ?? 0,
+            );
         }
 
         $buffer->trimLines();

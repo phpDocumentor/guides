@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
+use phpDocumentor\Guides\Meta\CitationTarget;
+use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
@@ -110,5 +112,29 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     public function supports(Node $node): bool
     {
         return $node instanceof SpanNode;
+    }
+
+    public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string
+    {
+        return $this->renderer->renderTemplate(
+            $renderContext,
+            'inline/citation.html.twig',
+            [
+                'url' => $renderContext->relativeDocUrl($citationTarget->getDocumentPath(), $citationTarget->getAnchor()),
+                'citation' => $citationTarget,
+            ],
+        );
+    }
+
+    public function footnote(FootnoteTarget $footnoteTarget, RenderContext $renderContext): string
+    {
+        return $this->renderer->renderTemplate(
+            $renderContext,
+            'inline/footnote.html.twig',
+            [
+                'url' => $renderContext->relativeDocUrl($footnoteTarget->getDocumentPath(), $footnoteTarget->getAnchor()),
+                'footnote' => $footnoteTarget,
+            ],
+        );
     }
 }

@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
 
 use function implode;
 use function is_array;
@@ -34,7 +34,7 @@ class SpanParser
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
-    public function __construct(private readonly AnnotationUtility $annotationUtility, private readonly SpanLexer $lexer)
+    public function __construct(private readonly SpanLexer $lexer)
     {
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
@@ -291,9 +291,9 @@ class SpanParser
                     $token = $this->lexer->token;
                     if ($token->type === SpanLexer::UNDERSCORE) {
                         $id = $this->generateId();
-                        if ($this->annotationUtility->isFootnoteKey($annotationName)) {
-                            $number = $this->annotationUtility->getFootnoteNumber($annotationName);
-                            $name = $this->annotationUtility->getFootnoteName($annotationName);
+                        if (AnnotationUtility::isFootnoteKey($annotationName)) {
+                            $number = AnnotationUtility::getFootnoteNumber($annotationName);
+                            $name = AnnotationUtility::getFootnoteName($annotationName);
                             $this->tokens[$id] = new FootnoteInlineNode(
                                 $id,
                                 $annotationName,

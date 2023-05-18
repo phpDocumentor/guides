@@ -30,4 +30,6 @@ abstract class AnnotationNode extends CompoundNode
     {
         return $this->name;
     }
+
+    abstract public function getAnchor(): string;
 }

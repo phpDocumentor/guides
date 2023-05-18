@@ -7,12 +7,14 @@ namespace phpDocumentor\Guides\DependencyInjection\Compiler;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\Nodes\AnchorNode;
+use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
+use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
@@ -65,6 +67,8 @@ final class NodeRendererPass implements CompilerPassInterface
         ListItemNode::class => 'body/list/list-item.html.twig',
         LiteralBlockNode::class => 'body/literal-block.html.twig',
         RubricNode::class => 'body/rubric.html.twig',
+        CitationNode::class => 'body/citation.html.twig',
+        FootnoteNode::class => 'body/footnote.html.twig',
         // Output as Metatags
         AuthorNode::class => 'structure/header/author.html.twig',
         CopyrightNode::class => 'structure/header/copyright.html.twig',

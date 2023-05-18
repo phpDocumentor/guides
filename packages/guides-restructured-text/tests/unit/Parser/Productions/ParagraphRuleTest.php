@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\RestructuredText\Utility\LineUtility;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ParagraphRuleTest extends RuleTestCase
@@ -30,7 +29,7 @@ final class ParagraphRuleTest extends RuleTestCase
 
         $markupRule = $this->givenInlineMarkupRule();
 
-        $rule = new ParagraphRule(new LineUtility(), $markupRule);
+        $rule = new ParagraphRule($markupRule);
 
         self::assertTrue($rule->applies($documentParser));
         $result = $rule->apply($documentParser);

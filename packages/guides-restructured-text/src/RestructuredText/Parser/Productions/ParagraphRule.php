@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Utility\LineUtility;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function str_ends_with;
 use function substr;
@@ -34,7 +34,6 @@ final class ParagraphRule implements Rule
     public const PRIORITY = 10;
 
     public function __construct(
-        private readonly LineUtility $lineUtility,
         private readonly InlineMarkupRule $inlineMarkupRule,
     ) {
     }
@@ -56,7 +55,7 @@ final class ParagraphRule implements Rule
 
         while (
             $documentIterator->getNextLine() !== null
-            && $this->lineUtility->isWhiteline($documentIterator->getNextLine()) === false
+            && LinesIterator::isEmptyLine($documentIterator->getNextLine()) === false
         ) {
             $documentIterator->next();
             $buffer->push($documentIterator->current());

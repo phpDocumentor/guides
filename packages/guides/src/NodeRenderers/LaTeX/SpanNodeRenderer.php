@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers\LaTeX;
 
+use phpDocumentor\Guides\Meta\CitationTarget;
+use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
@@ -101,5 +103,17 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     public function supports(Node $node): bool
     {
         return $node instanceof SpanNode;
+    }
+
+    public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string
+    {
+        // TODO: Implement citation() method.
+        return '';
+    }
+
+    public function footnote(FootnoteTarget $footnoteTarget, RenderContext $renderContext): string
+    {
+        // TODO: Implement footnote() method.
+        return '';
     }
 }

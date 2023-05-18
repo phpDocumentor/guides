@@ -15,7 +15,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +31,7 @@ final class SpanParserTest extends TestCase
     {
         $this->faker = Factory::create();
         $this->parserContext = $this->createMock(ParserContext::class);
-        $this->spanProcessor = new SpanParser(new AnnotationUtility(), new SpanLexer());
+        $this->spanProcessor = new SpanParser(new SpanLexer());
     }
 
     public function testInlineLiteralsAreReplacedWithToken(): void

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function strtolower;
+
 /**
  * Defines a citation that can be referenced by an CitationInlineNode
  *
@@ -22,4 +24,8 @@ namespace phpDocumentor\Guides\Nodes;
  */
 class CitationNode extends AnnotationNode
 {
+    public function getAnchor(): string
+    {
+        return 'citation-' . strtolower($this->getName());
+    }
 }

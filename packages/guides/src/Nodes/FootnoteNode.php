@@ -26,13 +26,23 @@ namespace phpDocumentor\Guides\Nodes;
 class FootnoteNode extends AnnotationNode
 {
     /** @param list<TextNode> $value */
-    public function __construct(array $value, string $name, private readonly int $number)
+    public function __construct(array $value, string $name, private int $number)
     {
         parent::__construct($value, $name);
+    }
+
+    public function setNumber(int $number): void
+    {
+        $this->number = $number;
     }
 
     public function getNumber(): int
     {
         return $this->number;
+    }
+
+    public function getAnchor(): string
+    {
+        return 'footnote-' . $this->getNumber();
     }
 }

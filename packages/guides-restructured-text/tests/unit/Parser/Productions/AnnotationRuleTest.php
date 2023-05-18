@@ -9,8 +9,6 @@ use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
-use phpDocumentor\Guides\RestructuredText\Utility\AnnotationUtility;
-use phpDocumentor\Guides\RestructuredText\Utility\LineUtility;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function implode;
@@ -21,7 +19,7 @@ final class AnnotationRuleTest extends RuleTestCase
 
     public function setUp(): void
     {
-        $this->rule = new AnnotationRule(new AnnotationUtility(), new LineUtility(), $this->givenInlineMarkupRule());
+        $this->rule = new AnnotationRule($this->givenInlineMarkupRule());
     }
 
     #[DataProvider('simpleAnnotationProvider')]
