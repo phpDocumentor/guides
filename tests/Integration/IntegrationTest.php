@@ -75,6 +75,13 @@ class IntegrationTest extends ApplicationTestCase
                 $input,
                 $outputBuffer,
             );
+            if (!file_exists($expectedPath . '/logs/error.log')) {
+                self::assertFileDoesNotExist($outputPath . '/logs/error.log');
+            }
+
+            if (!file_exists($expectedPath . '/logs/warning.log')) {
+                self::assertFileDoesNotExist($outputPath . '/logs/warning.log');
+            }
 
             foreach ($compareFiles as $compareFile) {
                 $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
