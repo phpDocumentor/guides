@@ -10,7 +10,6 @@ use phpDocumentor\Guides\Configuration;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\ExpectationFailedException;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
@@ -24,6 +23,7 @@ use function file_exists;
 use function file_get_contents;
 use function implode;
 use function setlocale;
+use function str_ends_with;
 use function str_replace;
 use function system;
 use function trim;
@@ -63,6 +63,7 @@ class IntegrationTest extends ApplicationTestCase
                 [
                     'input' => $inputPath,
                     'output' => $outputPath,
+                    '--log-path' => $outputPath . '/logs',
                     '--output-format' => ['html', 'intersphinx'],
                 ],
                 $command->getDefinition(),
@@ -77,7 +78,11 @@ class IntegrationTest extends ApplicationTestCase
 
             foreach ($compareFiles as $compareFile) {
                 $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
-                self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
+                if (str_ends_with($compareFile, '.log')) {
+                    self::assertFileContainsLines($compareFile, $outputFile);
+                } else {
+                    self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
+                }
             }
         } catch (ExpectationFailedException $e) {
             if ($skip) {
@@ -91,10 +96,26 @@ class IntegrationTest extends ApplicationTestCase
     }
 
     /**
+     * Asserts that each line of the expected file is contained in actual
+     *
+     * @throws ExpectationFailedException
+     */
+    public static function assertFileContainsLines(string $expected, string $actual): void
+    {
+        static::assertFileExists($expected);
+        static::assertFileExists($actual);
+
+        $lines = explode("\n", file_get_contents($expected));
+        $actualContent =  file_get_contents($actual);
+        foreach ($lines as $line) {
+            static::assertStringContainsString($line, $actualContent, 'File "' . $actual . '" does not contain "' . $line . '"');
+        }
+    }
+
+    /**
      * Asserts that the contents of one file is equal to the contents of another
      * file. It ignores empty lines and whitespace at the start and end of each line
      *
-     * @throws InvalidArgumentException
      * @throws ExpectationFailedException
      */
     public static function assertFileEqualsTrimmed(string $expected, string $actual, string $message = ''): void
