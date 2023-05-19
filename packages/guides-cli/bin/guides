@@ -6,9 +6,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\Application;
-use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
-use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
+use phpDocumentor\Guides\DependencyInjection\ContainerFactory;
 
 $vendorDir = dirname(__DIR__) . '/../../vendor';
 $autoloadDirectory = $vendorDir . '/autoload.php';
@@ -30,22 +29,8 @@ if (file_exists($autoloadDirectory)){
     require $vendorDir . '/autoload.php';
 }
 
-$container = new ContainerBuilder();
-
-// Load manual parameters
-$container->setParameter('vendor_dir', $vendorDir);
-$container->setParameter('working_directory', rtrim(getcwd(), '/'));
-
-// Load container configuration
-foreach (Application::getDefaultExtensions() as $extension) {
-    $container->registerExtension($extension);
-    $container->loadFromExtension($extension->getAlias());
-}
-
-$container->addCompilerPass(new NodeRendererPass());
-$container->addCompilerPass(new ParserRulesPass());
-
-// Compile container
-$container->compile(true);
-
-exit($container->get(Application::class)->run());
+/** @var Application $application */
+$application = (new ContainerFactory([new ApplicationExtension()]))
+    ->create($vendorDir)
+    ->get(Application::class);
+$application->run();
