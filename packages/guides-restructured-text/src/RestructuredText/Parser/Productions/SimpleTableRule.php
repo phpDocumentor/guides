@@ -12,10 +12,12 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use Psr\Log\LoggerInterface;
 
 use function count;
 use function mb_substr;
 use function preg_match;
+use function sprintf;
 use function strlen;
 use function trim;
 
@@ -24,8 +26,10 @@ final class SimpleTableRule implements Rule
 {
     public const PRIORITY = 40;
 
-    public function __construct(private readonly RuleContainer $productions)
-    {
+    public function __construct(
+        private readonly RuleContainer $productions,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -120,6 +124,23 @@ final class SimpleTableRule implements Rule
         $line = $documentIterator->current();
         foreach ($columnDefinitions as $column => $columnDefinition) {
             $cellContents[$column] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
+            if ($columnDefinition['start'] + $columnDefinition['length'] >= strlen($line)) {
+                continue;
+            }
+
+            $gap = mb_substr($line, $columnDefinition['start'] + $columnDefinition['length'], 1);
+            if ($gap === ' ') {
+                continue;
+            }
+
+            $this->logger->error(
+                sprintf(
+                    'File "%s"; Malformed table: content "%s" appears in the "gap" on row "%s"',
+                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $gap,
+                    $line,
+                ),
+            );
         }
 
         while (

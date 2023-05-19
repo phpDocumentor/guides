@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
@@ -16,7 +17,7 @@ class SimpleTableRuleTest extends RuleTestCase
 
     protected function setUp(): void
     {
-        $this->rule = new SimpleTableRule($this->givenCollectAllRuleContainer());
+        $this->rule = new SimpleTableRule($this->givenCollectAllRuleContainer(), new Logger('test'));
     }
 
     #[DataProvider('simpleTableStartProvider')]
