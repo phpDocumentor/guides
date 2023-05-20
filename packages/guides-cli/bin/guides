@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
-use phpDocumentor\Guides\DependencyInjection\ContainerFactory;
+use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
 
 $vendorDir = dirname(__DIR__) . '/../../vendor';
 $autoloadDirectory = $vendorDir . '/autoload.php';
