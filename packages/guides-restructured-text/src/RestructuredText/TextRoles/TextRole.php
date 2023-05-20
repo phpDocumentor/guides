@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
 interface TextRole
 {
@@ -13,5 +15,10 @@ interface TextRole
     /** @return string[] */
     public function getAliases(): array;
 
-    public function processNode(string $content): InlineMarkupToken;
+    public function processNode(
+        ParserContext $parserContext,
+        string $id,
+        string $role,
+        string $content
+    ): InlineMarkupToken;
 }

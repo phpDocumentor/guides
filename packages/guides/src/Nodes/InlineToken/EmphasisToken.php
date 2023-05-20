@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\InlineToken;
 
-final class EmphasisToken extends ValueToken
+final class EmphasisToken extends InlineMarkupToken
 {
     public const TYPE = 'emphasis';
 

@@ -6,13 +6,8 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
 
 class InlineMarkupToken
 {
-    public const TYPE_REFERENCE = 'reference';
-    public const TYPE_LINK = 'link';
-
-    /** @param string[] $token */
-    public function __construct(private readonly string $type, private readonly string $id, private array $token)
+    public function __construct(private readonly string $type, private readonly string $id, private readonly string $content)
     {
-        $this->token['type'] = $type;
     }
 
     public function getType(): string
@@ -25,14 +20,8 @@ class InlineMarkupToken
         return $this->id;
     }
 
-    public function get(string $key): string
+    public function getContent(): string
     {
-        return $this->token[$key] ?? '';
-    }
-
-    /** @return string[] */
-    public function getTokenData(): array
-    {
-        return $this->token;
+        return $this->content;
     }
 }

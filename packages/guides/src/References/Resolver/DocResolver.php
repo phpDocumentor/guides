@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References\Resolver;
 
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 
 final class DocResolver implements Resolver
 {
-    public function supports(CrossReferenceNode $node, RenderContext $context): bool
+    public function supports(DocReferenceNode $node, RenderContext $context): bool
     {
-        return $node->getRole() === 'doc';
+        return true;
     }
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null
+    public function resolve(DocReferenceNode $node, RenderContext $context): ResolvedReference|null
     {
-        $filePath = $context->canonicalUrl($node->getUrl());
+        $filePath = $context->canonicalUrl($node->getDocumentLink());
 
         if ($filePath === null) {
             return null;
@@ -29,7 +29,7 @@ final class DocResolver implements Resolver
         }
 
         return $this->createResolvedReference(
-            $node->getUrl(),
+            $node->getDocumentLink(),
             $context,
             $node->getText($entry->getTitle()->toString()),
             [],

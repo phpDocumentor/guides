@@ -6,12 +6,13 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
-class EmphasisTextRole implements TextRole
+class LiteralTextRole implements TextRole
 {
-    final public const NAME = 'emphasis';
+    final public const NAME = 'literal';
 
     public function getName(): string
     {
@@ -21,7 +22,7 @@ class EmphasisTextRole implements TextRole
     /** @inheritDoc */
     public function getAliases(): array
     {
-        return ['italic'];
+        return [];
     }
 
     public function processNode(
@@ -31,6 +32,6 @@ class EmphasisTextRole implements TextRole
         string $content,
     ): InlineMarkupToken
     {
-        return new EmphasisToken($id, $content);
+        return new LiteralToken($id, $content);
     }
 }

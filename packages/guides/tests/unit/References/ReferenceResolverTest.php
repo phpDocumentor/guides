@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References;
 
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\References\Resolver\Resolver;
 use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ final class ReferenceResolverTest extends TestCase
 
         self::assertNull(
             $referenceResolver->resolve(
-                new CrossReferenceNode('id', 'role', 'literal'),
+                new DocReferenceNode('id', 'role', 'literal'),
                 $this->createMock(RenderContext::class),
             ),
         );
@@ -25,7 +25,7 @@ final class ReferenceResolverTest extends TestCase
 
     public function testReferenceResolverCallsMatchingResolver(): void
     {
-        $crossReference = new CrossReferenceNode('id', 'role', 'literal');
+        $crossReference = new DocReferenceNode('id', 'role', 'literal');
         $expected = new ResolvedReference('file', 'text', 'url');
 
         $noMatch = $this->createMock(Resolver::class);

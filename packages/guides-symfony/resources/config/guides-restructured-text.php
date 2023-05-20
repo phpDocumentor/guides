@@ -68,6 +68,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthF
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\GridTableRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkup\TextRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\LinkRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\ListRule;
@@ -78,7 +79,15 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
+use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\EmphasisTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -104,6 +113,18 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
+
+
+        ->set(DocReferenceTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(EmphasisTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(LiteralTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(ReferenceTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+
+        ->set(SpanLexer::class)
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
@@ -152,6 +173,14 @@ return static function (ContainerConfigurator $container): void {
         ->set(VersionChangedDirective::class)
         ->set(WarningDirective::class)
         ->set(WrapDirective::class)
+
+
+        ->set(TextRoleFactory::class, DefaultTextRoleFactory::class)
+        ->arg('$genericTextRole', service(GenericTextRole::class))
+        ->arg('$textRoles', tagged_iterator('phpdoc.guides.parser.rst.text_role'))
+
+        ->set(GenericTextRole::class)
+
 
         ->set('phpdoc.guides.parser.rst.body_elements', RuleContainer::class)
         ->set('phpdoc.guides.parser.rst.structural_elements', RuleContainer::class)

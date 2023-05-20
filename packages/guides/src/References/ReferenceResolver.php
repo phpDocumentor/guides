@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\References;
 
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\References\Resolver\Resolver;
 use phpDocumentor\Guides\RenderContext;
 
@@ -28,7 +28,7 @@ final class ReferenceResolver
     {
     }
 
-    public function resolve(CrossReferenceNode $node, RenderContext $context): ResolvedReference|null
+    public function resolve(DocReferenceNode $node, RenderContext $context): ResolvedReference|null
     {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->supports($node, $context)) {

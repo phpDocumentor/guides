@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\HyperlinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NamedReferenceNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use function implode;
 use function is_array;
 use function mt_getrandmax;
@@ -33,7 +36,9 @@ class SpanParser
 
     private readonly SpanLexer $lexer;
 
-    public function __construct()
+    public function __construct(
+        private readonly TextRoleFactory $textRoleFactory
+    )
     {
         $this->lexer = new SpanLexer();
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
@@ -65,10 +70,9 @@ class SpanParser
         return stripslashes($result);
     }
 
-    /** @param string[] $tokenData */
-    private function addToken(string $type, string $id, array $tokenData): void
+    private function addToken(string $id, InlineMarkupToken $token): void
     {
-        $this->tokens[$id] = new InlineMarkupToken($type, $id, $tokenData);
+        $this->tokens[$id] = $token;
     }
 
     private function replaceLiterals(string $span): string
@@ -121,7 +125,7 @@ class SpanParser
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         $id = $this->generateId();
-        $this->tokens[$id] = new CrossReferenceNode(
+        $this->tokens[$id] = new DocReferenceNode(
             $id,
             'ref',
             $link,
@@ -141,15 +145,12 @@ class SpanParser
         // Standalone hyperlink callback
         $standaloneHyperlinkCallback = function (array $match, string $scheme = ''): string {
             $id = $this->generateId();
-            $url = $match[1];
 
             $this->addToken(
-                InlineMarkupToken::TYPE_LINK,
                 $id,
-                [
-                    'link' => $url,
-                    'url' => $scheme . $url,
-                ],
+                new HyperlinkToken(
+                    id: $id,url:$match[1]
+                )
             );
 
             return $id;
@@ -179,12 +180,10 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                InlineMarkupToken::TYPE_LINK,
                 $id,
-                [
-                    'link' => $url,
-                    'url' => 'mailto:' . $url,
-                ],
+                new HyperlinkToken(
+                    id: $id,url:'mailto:' . $url, text: $url
+                )
             );
 
             return $id;
@@ -225,7 +224,7 @@ class SpanParser
                     $result .= $this->parseInternalReference($parserContext);
                     break;
                 case SpanLexer::COLON:
-                    $result .= $this->parseInterpretedText();
+                    $result .= $this->parseTextrole($parserContext);
                     break;
                 case SpanLexer::BACKTICK:
                     $link = $this->parseNamedReference($parserContext);
@@ -266,7 +265,7 @@ class SpanParser
         return $text;
     }
 
-    private function parseInterpretedText(): string
+    private function parseTextrole(ParserContext $parserContext): string
     {
         if ($this->lexer->token === null) {
             return ':';
@@ -275,8 +274,6 @@ class SpanParser
         $startPosition = $this->lexer->token->position;
         $domain = null;
         $role = null;
-        $anchor = null;
-        $text = null;
         $part = '';
         $inText = false;
 
@@ -296,33 +293,15 @@ class SpanParser
                     $role = $part;
                     $part = '';
                     break;
-                case SpanLexer::EMBEDED_URL_START:
-                    $text = trim($part);
-                    $part = '';
-                    break;
-                case SpanLexer::EMBEDED_URL_END:
-                    break;
-                case SpanLexer::OCTOTHORPE:
-                    $anchor = $this->parseAnchor();
-                    break;
                 case SpanLexer::BACKTICK:
                     if ($role === null) {
-                        $this->rollback($startPosition);
-
-                        return ':';
+                        break 2;
                     }
-
                     if ($inText) {
                         $id = $this->generateId();
-                        $this->tokens[$id] = new CrossReferenceNode(
-                            $id,
-                            $role,
-                            trim($part),
-                            $anchor,
-                            $text,
-                            $domain,
-                        );
-
+                        $textRole = $this->textRoleFactory->getTextRole($role, $domain);
+                        $fullRole = ($domain?($domain . ':'):'') . $role;
+                        $this->tokens[$id] = $textRole->processNode($parserContext, $id, $fullRole, $part);
                         return $id;
                     }
 
@@ -444,31 +423,6 @@ class SpanParser
         $this->lexer->moveNext();
     }
 
-    private function parseAnchor(): string
-    {
-        $anchor = '';
-        while ($this->lexer->moveNext()) {
-            $token = $this->lexer->token;
-            if ($token === null) {
-                break;
-            }
-
-            switch ($token->type) {
-                case SpanLexer::BACKTICK:
-                case SpanLexer::EMBEDED_URL_END:
-                    $this->lexer->resetPosition($token->position);
-
-                    return $anchor;
-
-                default:
-                    $anchor .= $token->value;
-                    break;
-            }
-        }
-
-        return $anchor;
-    }
-
     private function createOneOffLink(string $link, string|null $url): string
     {
         // the link may have a new line in it, so we need to strip it
@@ -477,15 +431,18 @@ class SpanParser
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         $id = $this->generateId();
-        $this->addToken(
-            InlineMarkupToken::TYPE_LINK,
-            $id,
-            [
-                'type' => InlineMarkupToken::TYPE_LINK,
-                'link' => $link,
-                'url' => $url ?? '',
-            ],
-        );
+        if ($url !== null) {
+            $this->addToken(
+                $id,
+                new HyperlinkToken(id: $id, url: $url, text: $link)
+            );
+        } else {
+            $this->addToken(
+                $id,
+                new NamedReferenceNode(id: $id, referenceName: $link)
+            );
+        }
+
 
         return $id;
     }
