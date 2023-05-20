@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\DependencyInjection;
 
 use LogicException;
+use phpDocumentor\Guides\RestructuredText\DependencyInjection\ReStructuredTextExtension;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

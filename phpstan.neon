@@ -7,6 +7,8 @@ parameters:
     - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
     - '#Method phpDocumentor\\Guides\\Handlers\\ParseDirectoryHandler::handle\(\) should return array<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns array<int<0, max>, mixed>#'
 
+    - '#Cannot call method end\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null.#'
+
     -
       message: '#Unreachable statement - code above always terminates\.#'
       path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
