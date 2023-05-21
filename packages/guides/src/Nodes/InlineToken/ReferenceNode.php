@@ -55,8 +55,7 @@ class ReferenceNode extends AbstractLinkToken
 
     public function getText(string|null $default = null): string
     {
-        // todo: resolve internal target title
-        return $this->text ?? $default ?? $this->referenceName;
+        return $this->text ?? $this->internalTarget?->getTitle() ?? $this->referenceName;
     }
 
     public function getUrl(): string

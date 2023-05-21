@@ -31,18 +31,18 @@ class DefaultTextRoleFactory implements TextRoleFactory
     public function getTextRole(string $name, string|null $domain = null): TextRole
     {
         if ($domain === null) {
-            return $this->findTextRole($this->textRoles, $name, $domain);
+            return $this->findTextRole($this->textRoles, $name);
         }
 
         if (isset($this->domains[$domain])) {
-            return $this->findTextRole($this->domains[$domain], $name, $domain);
+            return $this->findTextRole($this->domains[$domain], $name);
         }
 
         return $this->genericTextRole;
     }
 
     /** @param TextRole[] $textRoles */
-    public function findTextRole(array $textRoles, string $name, string|null $domain): TextRole
+    private function findTextRole(array $textRoles, string $name): TextRole
     {
         // First look for a textrole with the exact name
         foreach ($textRoles as $textRole) {

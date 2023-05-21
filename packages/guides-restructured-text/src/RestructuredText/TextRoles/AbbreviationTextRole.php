@@ -38,19 +38,15 @@ class AbbreviationTextRole implements TextRole
         string $role,
         string $content,
     ): InlineMarkupToken {
-        $term       = '';
-        $definition = '';
-        if (preg_match('/(.+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
-            $term       =  trim($matches[1]);
-            $definition = trim($matches[2]);
-        } else {
-            $this->logger->warning(
-                'Abbreviation has not definition. Usage: :abbreviation:`term (some term definition)`',
-                $parserContext->getLoggerInformation(),
-            );
-            $term = $content;
+        if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
+            return new AbbreviationToken($id, trim($matches[1]), trim($matches[2]));
         }
 
-        return new AbbreviationToken($id, $term, $definition);
+        $this->logger->warning(
+            'Abbreviation has no definition. Usage: :abbreviation:`term (some term definition)`',
+            $parserContext->getLoggerInformation(),
+        );
+
+        return new AbbreviationToken($id, $content, '');
     }
 }

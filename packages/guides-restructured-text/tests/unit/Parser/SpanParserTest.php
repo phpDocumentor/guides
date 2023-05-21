@@ -15,7 +15,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
@@ -31,7 +30,6 @@ final class SpanParserTest extends TestCase
 {
     private DefaultTextRoleFactory $defaultTextRoleFactory;
     public Logger $logger;
-    public SpanLexer $spanLexer;
     public Generator $faker;
     private ParserContext&MockObject $parserContext;
     private SpanParser $spanProcessor;
@@ -40,12 +38,11 @@ final class SpanParserTest extends TestCase
     {
         $this->faker = Factory::create();
         $this->logger = new Logger('test');
-        $this->spanLexer = new SpanLexer();
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
             [
-                new ReferenceTextRole($this->spanLexer, $this->logger),
-                new DocReferenceTextRole($this->spanLexer, $this->logger),
+                new ReferenceTextRole($this->logger),
+                new DocReferenceTextRole($this->logger),
             ],
         );
         $this->parserContext = $this->createMock(ParserContext::class);

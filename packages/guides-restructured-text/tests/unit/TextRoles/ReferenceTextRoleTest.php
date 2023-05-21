@@ -15,16 +15,14 @@ use PHPUnit\Framework\TestCase;
 class ReferenceTextRoleTest extends TestCase
 {
     private Logger $logger;
-    private SpanLexer $spanLexer;
     private ReferenceTextRole $referenceTextRole;
     private ParserContext&MockObject $parserContext;
 
     public function setUp(): void
     {
         $this->logger = new Logger('test');
-        $this->spanLexer = new SpanLexer();
         $this->parserContext = $this->createMock(ParserContext::class);
-        $this->referenceTextRole = new ReferenceTextRole($this->spanLexer, $this->logger);
+        $this->referenceTextRole = new ReferenceTextRole($this->logger);
     }
 
     #[DataProvider('referenceProvider')]

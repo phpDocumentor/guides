@@ -21,4 +21,5 @@ You will then find the rendered documentation in the directory output
 .. toctree::
     about
     usage
+    extension/index
     rst-reference/index

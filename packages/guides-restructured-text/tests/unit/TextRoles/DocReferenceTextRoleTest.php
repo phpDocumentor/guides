@@ -7,7 +7,6 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,16 +14,14 @@ use PHPUnit\Framework\TestCase;
 class DocReferenceTextRoleTest extends TestCase
 {
     private Logger $logger;
-    private SpanLexer $spanLexer;
     private DocReferenceTextRole $docReferenceTextRole;
     private ParserContext&MockObject $parserContext;
 
     public function setUp(): void
     {
         $this->logger = new Logger('test');
-        $this->spanLexer = new SpanLexer();
         $this->parserContext = $this->createMock(ParserContext::class);
-        $this->docReferenceTextRole = new DocReferenceTextRole($this->spanLexer, $this->logger);
+        $this->docReferenceTextRole = new DocReferenceTextRole($this->logger);
     }
 
     #[DataProvider('docReferenceProvider')]

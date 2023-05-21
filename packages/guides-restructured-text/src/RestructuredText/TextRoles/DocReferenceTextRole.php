@@ -16,11 +16,13 @@ use function trim;
 class DocReferenceTextRole implements TextRole
 {
     final public const NAME = 'doc';
+    private SpanLexer $lexer;
 
     public function __construct(
-        private SpanLexer $lexer,
         private readonly LoggerInterface $logger,
     ) {
+        // Do not inject the $lexer. It contains a state.
+        $this->lexer = new SpanLexer();
     }
 
     public function getName(): string
