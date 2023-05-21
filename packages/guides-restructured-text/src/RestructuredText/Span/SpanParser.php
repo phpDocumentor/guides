@@ -117,23 +117,6 @@ class SpanParser
         return $id;
     }
 
-    private function createCrossReference(string $link): string
-    {
-        // the link may have a new line in it, so we need to strip it
-        // before setting the link and adding a token to be replaced
-        $link = str_replace("\n", ' ', $link);
-        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
-
-        $id = $this->generateId();
-        $this->tokens[$id] = new CrossReferenceNode(
-            $id,
-            'ref',
-            $link,
-        );
-
-        return $id;
-    }
-
     private function replaceStandaloneHyperlinks(string $span): string
     {
         // Replace standalone hyperlinks using a modified version of @gruber's
@@ -422,7 +405,13 @@ class SpanParser
                         return '`';
                     }
 
-                    return $this->createCrossReference($text);
+                    $id = $this->generateId();
+                    $this->tokens[$id] = new LiteralToken(
+                        $id,
+                        $text,
+                    );
+
+                    return $id;
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);

@@ -22,8 +22,6 @@ use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
 use phpDocumentor\Guides\Parser;
-use phpDocumentor\Guides\References\ReferenceResolver;
-use phpDocumentor\Guides\References\Resolver\Resolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -52,8 +50,6 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()
         ->autowire()
         ->autoconfigure()
-        ->instanceof(Resolver::class)
-        ->tag('phpdoc.guides.reference.resolver')
 
         ->instanceof(NodeRendererFactoryAware::class)
         ->tag('phpdoc.guides.noderendererfactoryaware')
@@ -75,17 +71,12 @@ return static function (ContainerConfigurator $container): void {
         )
 
         ->load(
-            'phpDocumentor\\Guides\\References\\Resolver\\',
-            '%vendor_dir%/phpdocumentor/guides/src/References/Resolver',
-        )->load(
             'phpDocumentor\\Guides\\NodeRenderers\\',
             '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers',
         )
 
         ->set(Metas::class)
         ->set(UrlGeneratorInterface::class, UrlGenerator::class)
-        ->set(ReferenceResolver::class)
-        ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference.resolver'))
 
         ->set(Parser::class)
         ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))

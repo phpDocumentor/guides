@@ -23,7 +23,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -44,7 +43,6 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     public function __construct(
         protected TemplateRenderer $renderer,
-        private readonly ReferenceResolver $referenceResolver,
         private readonly LoggerInterface $logger,
         protected UrlGeneratorInterface $urlGenerator,
     ) {
@@ -152,25 +150,6 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     private function renderTokens(SpanNode $node, string $span, RenderContext $context): string
     {
         foreach ($node->getTokens() as $token) {
-            if ($token instanceof CrossReferenceNode) {
-                $reference = $this->referenceResolver->resolve($token, $context);
-
-                if ($reference === null) {
-                    $this->logger->error(sprintf('Invalid cross reference: %s', $token->getUrl()));
-
-                    $span = str_replace($token->getId(), $token->getText(), $span);
-                    continue;
-                }
-
-                $span = str_replace(
-                    $token->getId(),
-                    $this->link($context, $reference->getUrl(), $reference->getText(), $reference->getAttributes()),
-                    $span,
-                );
-
-                continue;
-            }
-
             $span = $this->renderToken($token, $span, $context);
         }
 

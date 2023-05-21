@@ -17,7 +17,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
-use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 
 interface SpanRenderer
@@ -42,7 +41,4 @@ interface SpanRenderer
     public function linkToken(AbstractLinkToken $spanToken, RenderContext $context): string;
 
     public function escape(string $span, RenderContext $renderContext): string;
-
-    /** @param string[] $value */
-    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string;
 }

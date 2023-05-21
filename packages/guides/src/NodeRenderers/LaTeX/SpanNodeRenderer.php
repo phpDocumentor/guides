@@ -21,7 +21,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 
 use function is_string;
@@ -82,23 +81,6 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     public function escape(string $span, RenderContext $renderContext): string
     {
         return $span;
-    }
-
-    /** @param string[] $value */
-    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
-    {
-        $text = $value['text'] ?: $reference->getText();
-        $url = $reference->getUrl();
-
-        if ($value['anchor'] !== '') {
-            $url .= $value['anchor'];
-        }
-
-        if ($url === null) {
-            $url = '';
-        }
-
-        return $this->link($renderContext, $url, $text);
     }
 
     public function supports(Node $node): bool

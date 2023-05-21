@@ -22,7 +22,6 @@ use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
 
 use function htmlspecialchars;
@@ -82,34 +81,6 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     public function escape(string $span, RenderContext $renderContext): string
     {
         return htmlspecialchars($span, ENT_QUOTES);
-    }
-
-    /** @param array<string|null> $value */
-    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
-    {
-        $text = $value['text'] ?: $reference->getText();
-        $text = trim($text);
-
-        // reference to another document
-        if ($reference->getUrl() !== null) {
-            $url = $reference->getUrl();
-
-            if ($value['anchor'] !== null) {
-                $url .= '#' . $value['anchor'];
-            }
-
-            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
-
-            // reference to anchor in existing document
-        } elseif ($value['url'] !== null) {
-            $url = $renderContext->getLink($value['url']);
-
-            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
-        } else {
-            $link = $this->link($renderContext, '#', $text . ' (unresolved reference)', $reference->getAttributes());
-        }
-
-        return $link;
     }
 
     public function supports(Node $node): bool
