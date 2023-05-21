@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Integration;
 
 use phpDocumentor\Guides\ApplicationTestCase;
+use phpDocumentor\Guides\Bootstrap\DependencyInjection\BootstrapExtension;
 use phpDocumentor\Guides\Cli\Command\Run;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsEqual;
@@ -33,6 +34,8 @@ class IntegrationBootstrapTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
+        $this->prepareContainer(extraExtensions: [new BootstrapExtension()]);
+
         setlocale(LC_ALL, 'en_US.utf8');
     }
 

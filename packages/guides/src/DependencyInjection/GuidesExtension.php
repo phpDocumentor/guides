@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\DependencyInjection;
 
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
+use phpDocumentor\Guides\Twig\ThemeManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -29,6 +30,11 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $rootNode
             ->children()
                 ->arrayNode('base_template_paths')
+                    ->defaultValue([])
+                    ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('themes')
+                    ->defaultValue([])
                     ->scalarPrototype()->end()
                 ->end()
             ->end();
@@ -51,6 +57,11 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
+
+        foreach ($config['themes'] as $themeName => $themePath) {
+            $container->getDefinition(ThemeManager::class)
+                ->addMethodCall('registerTheme', [$themeName, [$themePath]]);
+        }
     }
 
     public function process(ContainerBuilder $container): void
