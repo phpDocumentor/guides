@@ -153,4 +153,12 @@ final class DocumentNode extends CompoundNode
     {
         $this->titleFound = $titleFound;
     }
+
+    /** @return array<string, string> */
+    public function getLoggerInformation(): array
+    {
+        return [
+            'rst-file' => $this->getFilePath() . '.rst',
+        ];
+    }
 }

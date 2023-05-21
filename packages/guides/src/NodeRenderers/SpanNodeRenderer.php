@@ -16,9 +16,8 @@ namespace phpDocumentor\Guides\NodeRenderers;
 use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
-use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
@@ -43,7 +42,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     public function __construct(
         protected TemplateRenderer $renderer,
-        private readonly LoggerInterface $logger,
+        protected readonly LoggerInterface $logger,
         protected UrlGeneratorInterface $urlGenerator,
     ) {
     }
@@ -166,7 +165,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
                 return trim($this->renderLinkToken($spanToken, $span, $context));
 
             case $spanToken instanceof GenericTextRoleToken:
-                return sprintf(':%s:`%s`', $spanToken->getType(), $spanToken->getContent());
+                return trim($this->renderGenericTextRoleToken($spanToken, $span, $context));
 
             case $spanToken instanceof CitationInlineNode:
                 assert($spanToken instanceof CitationInlineNode);
@@ -176,6 +175,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             case $spanToken instanceof FootnoteInlineNode:
                 assert($spanToken instanceof FootnoteInlineNode);
 
+                return trim($this->renderFootnote($spanToken, $span, $context));
 
             default:
                 // TODO: move these link types to AbstractLinkToken as well
@@ -185,6 +185,15 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 return $spanToken->getType();
         }
+    }
+
+    private function renderGenericTextRoleToken(GenericTextRoleToken $token, string $span, RenderContext $context): string
+    {
+        return str_replace(
+            $token->getId(),
+            $this->genericTextRole($token, $context),
+            $span,
+        );
     }
 
     private function renderCitation(CitationInlineNode $token, string $span, RenderContext $context): string

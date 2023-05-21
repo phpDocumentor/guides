@@ -18,11 +18,13 @@ use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
 use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RenderContext;
+use Twig\Error\LoaderError;
 
 use function htmlspecialchars;
 use function trim;
@@ -108,6 +110,27 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         ));
     }
 
+    public function genericTextRole(GenericTextRoleToken $token, RenderContext $renderContext): string
+    {
+        try {
+            return trim($this->renderer->renderTemplate(
+                $renderContext,
+                'inline/textroles/' . $token->getType() . '.html.twig',
+                ['textrole' => $token],
+            ));
+        } catch (LoaderError) {
+            $this->logger->warning(
+                'File "' . $renderContext->getCurrentFileName() . '" not template found for textrole "' . $token->getType() . '"',
+                $renderContext->getLoggerInformation(),
+            );
+
+            return trim($this->renderer->renderTemplate(
+                $renderContext,
+                'inline/textroles/generic.html.twig',
+                ['textrole' => $token],
+            ));
+        }
+    }
 
     public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string
     {

@@ -17,14 +17,15 @@ final class DocumentNodeTraverser
 
     public function traverse(DocumentNode $node): Node|null
     {
+        $traversedNode = $node;
         foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
-            $node = $this->traverseForTransformer($transformer, $node);
-            if ($node === null) {
+            $traversedNode = $this->traverseForTransformer($transformer, $node, $node);
+            if ($traversedNode === null) {
                 return null;
             }
         }
 
-        return $node;
+        return $traversedNode;
     }
 
     /**

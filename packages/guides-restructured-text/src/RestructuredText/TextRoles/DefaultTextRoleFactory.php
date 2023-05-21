@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use Psr\Log\LoggerInterface;
-
 use function in_array;
-use function sprintf;
 
 class DefaultTextRoleFactory implements TextRoleFactory
 {
@@ -19,7 +16,6 @@ class DefaultTextRoleFactory implements TextRoleFactory
      * @param array<string, TextRole[]> $domains
      */
     public function __construct(
-        private readonly LoggerInterface $logger,
         private readonly TextRole $genericTextRole,
         iterable $textRoles = [],
         private array $domains = [],
@@ -42,8 +38,6 @@ class DefaultTextRoleFactory implements TextRoleFactory
             return $this->findTextRole($this->domains[$domain], $name, $domain);
         }
 
-        $this->logger->warning(sprintf('No text role for "%s:%s" found.', $domain, $name));
-
         return $this->genericTextRole;
     }
 
@@ -62,12 +56,6 @@ class DefaultTextRoleFactory implements TextRoleFactory
             if (in_array($name, $textRole->getAliases())) {
                 return $textRole;
             }
-        }
-
-        if ($domain === null) {
-            $this->logger->warning(sprintf('No text role for "%s" found.', $name));
-        } else {
-            $this->logger->warning(sprintf('No text role for "%s" found for domain "%s".', $name, $domain));
         }
 
         return $this->genericTextRole;

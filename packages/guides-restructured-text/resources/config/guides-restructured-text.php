@@ -81,11 +81,10 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
-use phpDocumentor\Guides\RestructuredText\TextRoles\EmphasisTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
-use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
@@ -117,11 +116,9 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocReferenceTextRole::class)
         ->tag('phpdoc.guides.parser.rst.text_role')
-        ->set(EmphasisTextRole::class)
-        ->tag('phpdoc.guides.parser.rst.text_role')
-        ->set(LiteralTextRole::class)
-        ->tag('phpdoc.guides.parser.rst.text_role')
         ->set(ReferenceTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(AbbreviationTextRole::class)
         ->tag('phpdoc.guides.parser.rst.text_role')
 
         ->set(AdmonitionDirective::class)

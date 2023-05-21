@@ -7,10 +7,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 use Faker\Factory;
 use Faker\Generator;
 use Monolog\Logger;
-use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\AnnotationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
@@ -43,7 +42,6 @@ final class SpanParserTest extends TestCase
         $this->logger = new Logger('test');
         $this->spanLexer = new SpanLexer();
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
-            $this->logger,
             new GenericTextRole(),
             [
                 new ReferenceTextRole($this->spanLexer, $this->logger),

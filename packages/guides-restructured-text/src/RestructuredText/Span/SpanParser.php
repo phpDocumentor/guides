@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
 use function implode;
 use function is_array;
@@ -31,14 +30,14 @@ class SpanParser
     private int $tokenId = 0;
 
     private readonly string $prefix;
+    private readonly SpanLexer $lexer;
 
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
     public function __construct(
-        private readonly TextRoleFactory $textRoleFactory
-    )
-    {
+        private readonly TextRoleFactory $textRoleFactory,
+    ) {
         $this->lexer = new SpanLexer();
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
@@ -254,6 +253,7 @@ class SpanParser
 
         return $text;
     }
+
     private function parseAnnotation(): string
     {
         if ($this->lexer->token === null) {

@@ -80,10 +80,10 @@ class ReferenceResolverPass implements CompilerPass
         if ($target === null) {
             $this->logger->warning(
                 sprintf(
-                    'File "%s": reference "%s" could not be resolved',
-                    $document->getFilePath(),
+                    'Reference "%s" could not be resolved',
                     $referenceNode->getReferenceName(),
                 ),
+                $document->getLoggerInformation(),
             );
 
             return;
@@ -100,10 +100,10 @@ class ReferenceResolverPass implements CompilerPass
         if ($documentEntry === null) {
             $this->logger->warning(
                 sprintf(
-                    'File "%s": link to document "%s" could not be resolved',
-                    $document->getFilePath(),
+                    'Link to document "%s" could not be resolved',
                     $docReferenceNode->getDocumentLink(),
                 ),
+                $document->getLoggerInformation(),
             );
 
             return;

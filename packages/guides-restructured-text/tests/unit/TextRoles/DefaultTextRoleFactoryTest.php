@@ -16,7 +16,6 @@ class DefaultTextRoleFactoryTest extends TestCase
     {
         $this->logger = new Logger('test');
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
-            $this->logger,
             new GenericTextRole(),
             [],
             [],
@@ -37,8 +36,8 @@ class DefaultTextRoleFactoryTest extends TestCase
 
     public function testRegisteredTextRoleIsReturned(): void
     {
-        $this->defaultTextRoleFactory->registerTextRole(new EmphasisTextRole());
-        $textRole = $this->defaultTextRoleFactory->getTextRole('emphasis');
-        self::assertInstanceOf(EmphasisTextRole::class, $textRole);
+        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole($this->logger));
+        $textRole = $this->defaultTextRoleFactory->getTextRole('abbreviation');
+        self::assertInstanceOf(AbbreviationTextRole::class, $textRole);
     }
 }

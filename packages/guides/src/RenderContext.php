@@ -133,6 +133,14 @@ class RenderContext
         return $this->currentFileName;
     }
 
+    /** @return array<string, string> */
+    public function getLoggerInformation(): array
+    {
+        return [
+            'rst-file' => $this->getCurrentFileName(),
+        ];
+    }
+
     public function getOrigin(): FilesystemInterface
     {
         return $this->origin;

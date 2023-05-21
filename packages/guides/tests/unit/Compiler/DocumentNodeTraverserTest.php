@@ -24,12 +24,12 @@ final class DocumentNodeTraverserTest extends TestCase
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
             new /** @implements NodeTransformer<Node> */
             class implements NodeTransformer {
-                public function enterNode(Node $node): Node
+                public function enterNode(Node $node, DocumentNode $documentNode): Node
                 {
                     return $node;
                 }
 
-                public function leaveNode(Node $node): Node|null
+                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
                 {
                     return null;
                 }
@@ -67,12 +67,12 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                 }
 
-                public function enterNode(Node $node): Node
+                public function enterNode(Node $node, DocumentNode $documentNode): Node
                 {
                     return $this->replacement;
                 }
 
-                public function leaveNode(Node $node): Node|null
+                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
                 {
                     return $node;
                 }

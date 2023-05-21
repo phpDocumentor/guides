@@ -56,12 +56,14 @@ class DocReferenceTextRole implements TextRole
                     $part = '';
                     break;
                 case SpanLexer::EMBEDED_URL_END:
-                    if ($this->lexer->moveNext() !== false) {
-                        $this->logger->warning(sprintf(
-                            'File %s reference contains unexpected content: "%s"',
-                            $parserContext->getCurrentFileName(),
-                            $content,
-                        ));
+                    if ($this->lexer->peek() !== null) {
+                        $this->logger->warning(
+                            sprintf(
+                                'Reference contains unexpected content after closing `>`: "%s"',
+                                $content,
+                            ),
+                            $parserContext->getLoggerInformation(),
+                        );
                     }
 
                     break 2;
