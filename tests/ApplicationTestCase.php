@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
 use phpDocumentor\Guides\DependencyInjection\TestExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 use function dirname;
 
@@ -27,14 +28,16 @@ class ApplicationTestCase extends TestCase
 
     /**
      * @param array<string, array<mixed>> $configuration
+     * @param list<ExtensionInterface> $extraExtensions
      *
      * @phpstan-assert Container $this->container
      */
-    protected function prepareContainer(array $configuration = []): void
+    protected function prepareContainer(array $configuration = [], array $extraExtensions = []): void
     {
         $containerFactory = new ContainerFactory([
             new ApplicationExtension(),
             new TestExtension(),
+            ...$extraExtensions,
         ]);
 
         foreach ($configuration as $extension => $extensionConfig) {

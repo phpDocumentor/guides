@@ -29,8 +29,12 @@ if (file_exists($autoloadDirectory)){
     require $vendorDir . '/autoload.php';
 }
 
+$containerFactory = new ContainerFactory([new ApplicationExtension()]);
+if (is_file(getcwd().'/guides.xml')) {
+    $containerFactory->addConfigFile('guides.xml');
+}
+$container = $containerFactory->create($vendorDir);
+
 /** @var Application $application */
-$application = (new ContainerFactory([new ApplicationExtension()]))
-    ->create($vendorDir)
-    ->get(Application::class);
+$application = $container->get(Application::class);
 $application->run();

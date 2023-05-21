@@ -3,5 +3,10 @@
     "description": "A theme for phpdocumentor/guides based on Bootstrap",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://www.phpdoc.org"
+    "homepage": "https://www.phpdoc.org",
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\Bootstrap\\": "src/"
+        }
+    }
 }

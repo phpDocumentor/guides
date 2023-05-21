@@ -25,7 +25,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_pop;
 use function count;
-use function dirname;
 use function getcwd;
 use function implode;
 use function is_countable;
@@ -114,14 +113,6 @@ final class Run extends Command
                 '',
                 $input->getOption('input-format'),
             ),
-        );
-        $this->themeManager->registerTheme(
-            'bootstrap',
-            [dirname(__FILE__) . '/../../../guides-theme-bootstrap/resources/template/'],
-        );
-        $this->themeManager->registerTheme(
-            'phpdocumentor',
-            [dirname(__FILE__) . '/../../../guides-theme-phpdocumentor/resources/template/'],
         );
 
         if ($input->hasOption('theme')) {

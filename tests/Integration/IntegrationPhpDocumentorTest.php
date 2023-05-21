@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Integration;
 
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Cli\Command\Run;
+use phpDocumentor\Guides\PhpDocumentor\DependencyInjection\PhpDocumentorExtension;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -33,6 +34,8 @@ class IntegrationPhpDocumentorTest extends ApplicationTestCase
 {
     protected function setUp(): void
     {
+        $this->prepareContainer(extraExtensions: [new PhpDocumentorExtension()]);
+
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
