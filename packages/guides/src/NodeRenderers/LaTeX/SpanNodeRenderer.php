@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\NodeRenderers\LaTeX;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
+use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -105,6 +106,7 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return $node instanceof SpanNode;
     }
 
+
     public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string
     {
         // TODO: Implement citation() method.
@@ -115,5 +117,11 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     {
         // TODO: Implement footnote() method.
         return '';
+    }
+
+    public function linkToken(AbstractLinkToken $spanToken, RenderContext $context): string
+    {
+        // TODO: Implement linkToken() method.
+        return 'todo.tex';
     }
 }

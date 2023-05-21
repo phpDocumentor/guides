@@ -16,7 +16,10 @@ namespace phpDocumentor\Guides\NodeRenderers\Html;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
+use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\References\ResolvedReference;
@@ -113,6 +116,27 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
     {
         return $node instanceof SpanNode;
     }
+
+    public function linkToken(AbstractLinkToken $spanToken, RenderContext $context): string
+    {
+        if ($spanToken instanceof DocReferenceNode && $spanToken->getDocumentEntry() !== null) {
+            $url = $context->relativeDocUrl($spanToken->getDocumentEntry()->getFile(), $spanToken->getAnchor());
+            $spanToken->setUrl($url);
+        } elseif ($spanToken instanceof ReferenceNode && $spanToken->getInternalTarget() !== null) {
+            $url =  $context->relativeDocUrl(
+                $spanToken->getInternalTarget()->getDocumentPath(),
+                $spanToken->getInternalTarget()->getAnchor(),
+            );
+            $spanToken->setUrl($url);
+        }
+
+        return trim($this->renderer->renderTemplate(
+            $context,
+            'inline/' . $spanToken->getType() . '.html.twig',
+            ['linkToken' => $spanToken],
+        ));
+    }
+
 
     public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string
     {

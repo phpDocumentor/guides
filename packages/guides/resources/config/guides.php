@@ -98,6 +98,9 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeTraverser::class)
 
+
+        ->set(UrlGenerator::class)
+
         ->set(HtmlRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
         ->args(

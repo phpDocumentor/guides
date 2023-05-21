@@ -6,15 +6,22 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Faker\Factory;
 use Faker\Generator;
+use Monolog\Logger;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\AnnotationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +30,9 @@ use function current;
 
 final class SpanParserTest extends TestCase
 {
+    private DefaultTextRoleFactory $defaultTextRoleFactory;
+    public Logger $logger;
+    public SpanLexer $spanLexer;
     public Generator $faker;
     private ParserContext&MockObject $parserContext;
     private SpanParser $spanProcessor;
@@ -30,8 +40,18 @@ final class SpanParserTest extends TestCase
     public function setUp(): void
     {
         $this->faker = Factory::create();
+        $this->logger = new Logger('test');
+        $this->spanLexer = new SpanLexer();
+        $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
+            $this->logger,
+            new GenericTextRole(),
+            [
+                new ReferenceTextRole($this->spanLexer, $this->logger),
+                new DocReferenceTextRole($this->spanLexer, $this->logger),
+            ],
+        );
         $this->parserContext = $this->createMock(ParserContext::class);
-        $this->spanProcessor = new SpanParser(new SpanLexer());
+        $this->spanProcessor = new SpanParser($this->defaultTextRoleFactory);
     }
 
     public function testInlineLiteralsAreReplacedWithToken(): void
@@ -327,12 +347,11 @@ TEXT
         );
     }
 
-    #[DataProvider('crossReferenceProvider')]
-    public function testInterpretedTextIsParsedIntoCrossReferenceNode(
+    #[DataProvider('docReferenceProvider')]
+    public function testDocReferenceIsParsedIntoDocReferenceNode(
         string $span,
         string $replaced,
         string $url,
-        string $role = 'ref',
         string|null $domain = null,
         string|null $anchor = null,
         string|null $text = null,
@@ -341,72 +360,168 @@ TEXT
         $token = current($result->getTokens());
 
         self::assertStringNotContainsString($replaced, $result->getValue());
-        self::assertInstanceOf(CrossReferenceNode::class, $token);
-        self::assertEquals($url, $token->getUrl());
-        self::assertEquals($role, $token->getRole());
-        self::assertEquals($domain, $token->getDomain());
-        self::assertEquals($anchor, $token->getAnchor());
+        self::assertInstanceOf(DocReferenceNode::class, $token);
+        self::assertEquals($url, $token->getDocumentLink(), 'DocumentLinks are different');
+        self::assertEquals($domain, $token->getDomain(), 'Domains are different');
+        self::assertEquals($anchor, $token->getAnchor(), 'Anchors are different');
         self::assertEquals($text ?? $url, $token->getText());
     }
 
     /** @return array<string, array<string, string|null>> */
-    public static function crossReferenceProvider(): array
+    public static function docReferenceProvider(): array
     {
         return [
-            'interpreted text without role' => [
-                'span' => 'Some `title ref` in text.',
-                'replaced' => '`title ref`',
-                'url' => 'title ref',
+            'doc role x' => [
+                'span' => 'Some :doc:`x` in text.',
+                'replaced' => ':doc:`x`',
+                'url' => 'x',
             ],
+            'doc role' => [
+                'span' => 'Some :doc:`path/to/document` in text.',
+                'replaced' => ':doc:`path/to/document`',
+                'url' => 'path/to/document',
+            ],
+            'doc role absolute' => [
+                'span' => 'Some :doc:`/absolute/path/to/document` in text.',
+                'replaced' => ':doc:`/absolute/path/to/document`',
+                'url' => '/absolute/path/to/document',
+            ],
+            'doc with domain' => [
+                'span' => 'Some :doc:`mydomain:path/to/document` in text.',
+                'replaced' => ':doc:`mydomain:path/to/document`',
+                'url' => 'path/to/document',
+                'domain' => 'mydomain',
+            ],
+            'doc with role and anchor' => [
+                'span' => 'Some :doc:`foo/subdoc#anchor` in text.',
+                'replaced' => ':doc:`foo/subdoc#anchor`',
+                'url' => 'foo/subdoc',
+                'domain' => null,
+                'anchor' => 'anchor',
+            ],
+            'doc with domain, role and anchor' => [
+                'span' => 'Some :doc:`mydomain:foo/subdoc#anchor` in text.',
+                'replaced' => ':doc:`mydomain:foo/subdoc#anchor`',
+                'url' => 'foo/subdoc',
+                'domain' => 'mydomain',
+                'anchor' => 'anchor',
+            ],
+            'doc role, anchor and custom text' => [
+                'span' => 'Some :doc:`link <mydomain:foo/subdoc#anchor>` in text.',
+                'replaced' => ':doc:`link <mydomain:oo/subdoc#anchor>`',
+                'url' => 'foo/subdoc',
+                'domain' => 'mydomain',
+                'anchor' => 'anchor',
+                'text' => 'link',
+            ],
+            'doc role, with double point in text' => [
+                'span' => 'Some :doc:`text: sometext <mydomain:foo/subdoc#anchor>` in text.',
+                'replaced' => ':doc:`text: sometext <mydomain:foo/subdoc#anchor>`',
+                'url' => 'foo/subdoc',
+                'domain' => 'mydomain',
+                'anchor' => 'anchor',
+                'text' => 'text: sometext',
+            ],
+        ];
+    }
+
+    #[DataProvider('referenceProvider')]
+    public function testReferenceIsParsedIntoReferenceNode(
+        string $span,
+        string $replaced,
+        string $referenceName,
+        string|null $domain = null,
+        string|null $text = null,
+    ): void {
+        $result = $this->spanProcessor->parse($span, $this->parserContext);
+        $token = current($result->getTokens());
+
+        self::assertStringNotContainsString($replaced, $result->getValue());
+        self::assertInstanceOf(ReferenceNode::class, $token);
+        self::assertEquals($referenceName, $token->getReferenceName(), 'Urls are different');
+        self::assertEquals($domain, $token->getDomain(), 'Domains are different');
+        self::assertEquals($text ?? $referenceName, $token->getText());
+    }
+
+    /** @return array<string, array<string, string|null>> */
+    public static function referenceProvider(): array
+    {
+        return [
+            'ref role x' => [
+                'span' => 'Some :ref:`x` in text.',
+                'replaced' => ':ref:`x`',
+                'referenceName' => 'x',
+            ],
+            'ref role' => [
+                'span' => 'Some :ref:`title ref` in text.',
+                'replaced' => ':ref:`title ref`',
+                'referenceName' => 'title ref',
+            ],
+            'ref role with domain' => [
+                'span' => 'Some :ref:`mydomain:title ref` in text.',
+                'replaced' => ':ref:`mydomain:title ref`',
+                'referenceName' => 'title ref',
+                'domain' => 'mydomain',
+            ],
+            'ref role with domain and custom text' => [
+                'span' => 'Some :ref:`link <mydomain:something>` in text.',
+                'replaced' => ':ref:`link <mydomain:something>`',
+                'referenceName' => 'something',
+                'domain' => 'mydomain',
+                'text' => 'link',
+            ],
+            'ref role colon in text' => [
+                'span' => ':ref:`Text: with colon <mydomain:something>` in text.',
+                'replaced' => ':ref:`Text: with colon <mydomain:something>`',
+                'referenceName' => 'something',
+                'domain' => 'mydomain',
+                'text' => 'Text: with colon',
+            ],
+        ];
+    }
+
+    #[DataProvider('textRoleProvider')]
+    public function testTextRoleIsParsedIntoInlineMarkupToken(
+        string $span,
+        string $replaced,
+        string $role,
+    ): void {
+        $result = $this->spanProcessor->parse($span, $this->parserContext);
+        $token = current($result->getTokens());
+
+        self::assertStringNotContainsString($replaced, $result->getValue());
+        self::assertInstanceOf(InlineMarkupToken::class, $token);
+        self::assertEquals($role, $token->getType());
+    }
+
+    /** @return array<string, array<string, string|null>> */
+    public static function textRoleProvider(): array
+    {
+        return [
             'interpreted text with role' => [
                 'span' => 'Some :doc:`title ref` in text.',
                 'replaced' => ':doc:`title ref`',
-                'url' => 'title ref',
                 'role' => 'doc',
             ],
             'interpreted text with role, colon in text' => [
                 'span' => 'See also: :doc:`title ref`.',
                 'replaced' => ':doc:`title ref`',
-                'url' => 'title ref',
                 'role' => 'doc',
-            ],
-            'interpreted text with role and anchor' => [
-                'span' => 'Some :doc:`foo/subdoc#anchor` in text.',
-                'replaced' => ':doc:`foo/subdoc#anchor`',
-                'url' => 'foo/subdoc',
-                'role' => 'doc',
-                'domain' => null,
-                'anchor' => 'anchor',
-            ],
-            'interpreted text with role, anchor and custom text' => [
-                'span' => 'Some :doc:`link <foo/subdoc#anchor>` in text.',
-                'replaced' => ':doc:`link <foo/subdoc#anchor>`',
-                'url' => 'foo/subdoc',
-                'role' => 'doc',
-                'domain' => null,
-                'anchor' => 'anchor',
-                'text' => 'link',
             ],
             'interpreted text with domain and role' => [
                 'span' => 'Some :php:class:`title ref` in text.',
                 'replaced' => ':php:class:`title ref`',
-                'url' => 'title ref',
-                'role' => 'class',
-                'domain' => 'php',
+                'role' => 'php:class',
             ],
             'just a interpreted text with domain and role' => [
                 'span' => ':php:class:`title ref`',
                 'replaced' => ':php:class:`title ref`',
-                'url' => 'title ref',
-                'role' => 'class',
-                'domain' => 'php',
+                'role' => 'php:class',
             ],
             'php method reference' => [
                 'span' => ':php:method:`phpDocumentor\Descriptor\ClassDescriptor::getParent()`',
                 'replaced' => ':php:method:`phpDocumentor\Descriptor\ClassDescriptor::getParent()`',
-                'url' => 'phpDocumentor\Descriptor\ClassDescriptor::getParent()',
-                'role' => 'method',
-                'domain' => 'php',
+                'role' => 'php:method',
             ],
         ];
     }

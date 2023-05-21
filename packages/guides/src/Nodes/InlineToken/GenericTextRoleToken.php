@@ -8,13 +8,18 @@ final class GenericTextRoleToken extends ValueToken
 {
     public const TYPE = 'role';
 
-    public function __construct(string $id, private readonly string $role, string $value)
+    public function __construct(string $id, private readonly string $role, private readonly string $content)
     {
-        parent::__construct(self::TYPE, $id, $value);
+        parent::__construct($role, $id, $content);
     }
 
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
     }
 }

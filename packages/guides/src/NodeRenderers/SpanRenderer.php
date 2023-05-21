@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers;
 
+use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
@@ -37,6 +38,8 @@ interface SpanRenderer
 
     /** @param string[] $attributes */
     public function link(RenderContext $context, string|null $url, string $title, array $attributes = []): string;
+
+    public function linkToken(AbstractLinkToken $spanToken, RenderContext $context): string;
 
     public function escape(string $span, RenderContext $renderContext): string;
 

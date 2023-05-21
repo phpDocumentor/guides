@@ -30,6 +30,7 @@ class CrossReferenceNode extends InlineMarkupToken
         private readonly string|null $text = null,
         private readonly string|null $domain = null,
     ) {
+        parent::__construct('cross-reference', $id, []);
     }
 
     public function getId(): string

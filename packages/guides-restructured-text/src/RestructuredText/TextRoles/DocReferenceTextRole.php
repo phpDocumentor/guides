@@ -94,9 +94,6 @@ class DocReferenceTextRole implements TextRole
         $this->lexer->moveNext();
         while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
-            if ($token == null) {
-                break;
-            }
 
             switch ($token->type) {
                 case SpanLexer::BACKTICK:

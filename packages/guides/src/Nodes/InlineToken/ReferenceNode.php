@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\InlineToken;
 
+use phpDocumentor\Guides\Meta\InternalTarget;
+
 /**
  * This class should be moved into Nodes, but right now the span parser is producing this.
  * I just want to get started to improve reference handling
@@ -22,7 +24,10 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
 class ReferenceNode extends AbstractLinkToken
 {
     public const TYPE = 'ref';
+    // URL can only be resolved during rendering as it contains file endings for html / latex etc
     private string $url = '';
+    // Is resolved in the compiler
+    private InternalTarget|null $internalTarget = null;
 
     public function __construct(
         private readonly string $id,
@@ -50,6 +55,7 @@ class ReferenceNode extends AbstractLinkToken
 
     public function getText(string|null $default = null): string
     {
+        // todo: resolve internal target title
         return $this->text ?? $default ?? $this->referenceName;
     }
 
@@ -61,5 +67,15 @@ class ReferenceNode extends AbstractLinkToken
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    public function getInternalTarget(): InternalTarget|null
+    {
+        return $this->internalTarget;
+    }
+
+    public function setInternalTarget(InternalTarget $internalTarget): void
+    {
+        $this->internalTarget = $internalTarget;
     }
 }

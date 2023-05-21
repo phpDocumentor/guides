@@ -1,0 +1,5 @@
+{% if linkToken.url != null %}
+    <a href="{{ linkToken.url|raw }}">{{ linkToken.text | raw }}</a>
+{% else %}
+    {{ linkToken.text | raw }}
+{% endif %}
