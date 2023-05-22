@@ -19,10 +19,6 @@ deptrac:
       collectors:
         - type: "directory"
           value: "packages/guides-cli/src"
-    - name: "Integration"
-      collectors:
-        - type: "directory"
-          value: "packages/guides-symfony/src"
     - name: "Guides"
       collectors:
         - type: "directory"
@@ -42,9 +38,6 @@ deptrac:
 
   ruleset:
     CLI:
-      - "Guides"
-      - "Integration"
-    Integration:
       - "Guides"
       - "RST"
     RST:

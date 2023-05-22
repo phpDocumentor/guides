@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
-use phpDocumentor\Guides\DependencyInjection\ContainerFactory;
+use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
 use phpDocumentor\Guides\DependencyInjection\TestExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;

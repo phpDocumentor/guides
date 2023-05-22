@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da0b25df102798ddd79ce56b8d8c663c",
+    "content-hash": "f888b1ae053c271d7d5eed2ad7650318",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1116,18 +1116,17 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-main",
+            "version": "dev-extension",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "bb90619da567108ef20d963494b46335391a1a04"
+                "reference": "2a1bc4aadc0dbb014519264c4cb2c63a4e6027f8"
             },
             "require": {
                 "monolog/monolog": "^2.9",
                 "php": "^8.1",
                 "phpdocumentor/guides": "dev-main@dev",
                 "phpdocumentor/guides-restructured-text": "dev-main@dev",
-                "phpdocumentor/guides-symfony": "dev-main@dev",
                 "symfony/config": "^5.4",
                 "symfony/console": "^5.4",
                 "symfony/dependency-injection": "^5.4",
@@ -1158,7 +1157,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-main",
+            "version": "dev-extension",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1230,43 +1229,8 @@
             }
         },
         {
-            "name": "phpdocumentor/guides-symfony",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "./packages/guides-symfony",
-                "reference": "ce8a0b19c3747b67dcfe426aeb40f4452da6e4b1"
-            },
-            "require": {
-                "php": "^8.1",
-                "phpdocumentor/guides": "dev-main@dev",
-                "phpdocumentor/guides-restructured-text": "dev-main@dev",
-                "symfony/config": "^5.4",
-                "symfony/dependency-injection": "^5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\Guides\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "jaapio",
-                    "email": "jaap@phpdoc.org"
-                }
-            ],
-            "description": "Integration package for symfony applications to use guides",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-main",
+            "version": "dev-extension",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -1284,7 +1248,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-phpdocumentor",
-            "version": "dev-main",
+            "version": "dev-extension",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-phpdocumentor",
@@ -4230,16 +4194,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.15.4",
+            "version": "v4.15.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "6bb5176bc4af8bcb7d926f88718db9b96a2d4290"
+                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/6bb5176bc4af8bcb7d926f88718db9b96a2d4290",
-                "reference": "6bb5176bc4af8bcb7d926f88718db9b96a2d4290",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/11e2663a5bc9db5d714eedb4277ee300403b4a9e",
+                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e",
                 "shasum": ""
             },
             "require": {
@@ -4280,9 +4244,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.4"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.5"
             },
-            "time": "2023-03-05T19:49:14+00:00"
+            "time": "2023-05-19T20:20:00+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6279,16 +6243,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.11.1",
+            "version": "8.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "af87461316b257e46e15bb041dca6fca3796d822"
+                "reference": "f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/af87461316b257e46e15bb041dca6fca3796d822",
-                "reference": "af87461316b257e46e15bb041dca6fca3796d822",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7",
+                "reference": "f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7",
                 "shasum": ""
             },
             "require": {
@@ -6300,11 +6264,11 @@
             "require-dev": {
                 "phing/phing": "2.17.4",
                 "php-parallel-lint/php-parallel-lint": "1.3.2",
-                "phpstan/phpstan": "1.10.14",
+                "phpstan/phpstan": "1.10.15",
                 "phpstan/phpstan-deprecation-rules": "1.1.3",
                 "phpstan/phpstan-phpunit": "1.3.11",
                 "phpstan/phpstan-strict-rules": "1.5.1",
-                "phpunit/phpunit": "7.5.20|8.5.21|9.6.6|10.1.1"
+                "phpunit/phpunit": "7.5.20|8.5.21|9.6.8|10.1.3"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -6328,7 +6292,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.11.1"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.12.1"
             },
             "funding": [
                 {
@@ -6340,20 +6304,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-24T08:19:01+00:00"
+            "time": "2023-05-15T21:42:25+00:00"
         },
         {
             "name": "spatie/array-to-xml",
-            "version": "3.1.5",
+            "version": "3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/array-to-xml.git",
-                "reference": "13f76acef5362d15c71ae1ac6350cc3df5e25e43"
+                "reference": "e210b98957987c755372465be105d32113f339a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/13f76acef5362d15c71ae1ac6350cc3df5e25e43",
-                "reference": "13f76acef5362d15c71ae1ac6350cc3df5e25e43",
+                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/e210b98957987c755372465be105d32113f339a4",
+                "reference": "e210b98957987c755372465be105d32113f339a4",
                 "shasum": ""
             },
             "require": {
@@ -6391,7 +6355,7 @@
                 "xml"
             ],
             "support": {
-                "source": "https://github.com/spatie/array-to-xml/tree/3.1.5"
+                "source": "https://github.com/spatie/array-to-xml/tree/3.1.6"
             },
             "funding": [
                 {
@@ -6403,7 +6367,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-24T13:43:51+00:00"
+            "time": "2023-05-11T14:04:07+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -6689,7 +6653,6 @@
         "phpdocumentor/guides-cli": 20,
         "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-restructured-text": 20,
-        "phpdocumentor/guides-symfony": 20,
         "phpdocumentor/guides-theme-bootstrap": 20,
         "phpdocumentor/guides-theme-phpdocumentor": 20
     },

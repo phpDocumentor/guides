@@ -40,10 +40,14 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Twig\Loader\FilesystemLoader;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container): void {
+    $container->parameters()
+        ->set('phpdoc.guides.base_template_paths', [__DIR__ . '/../../../guides/resources/template/html']);
+
     $container->services()
         ->defaults()
         ->autowire()
@@ -142,17 +146,13 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$filesystemLoader', service(FilesystemLoader::class))
         ->arg(
             '$defaultPaths',
-            [
-                __DIR__ . '/../../../guides/resources/template/html/guides',
-            ],
+            param('phpdoc.guides.base_template_paths'),
         )
 
         ->set(FilesystemLoader::class)
         ->arg(
             '$paths',
-            [
-                __DIR__ . '/../../../guides/resources/template/html/guides',
-            ],
+            param('phpdoc.guides.base_template_paths'),
         )
 
         ->set(EnvironmentBuilder::class)

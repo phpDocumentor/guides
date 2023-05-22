@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\DependencyInjection;
+namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
@@ -11,6 +11,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -18,16 +19,16 @@ use function dirname;
 use function strrchr;
 use function substr;
 
-class ReStructuredTextExtension extends Extension
+class ReStructuredTextExtension extends Extension implements PrependExtensionInterface
 {
     private const HTML = [VersionChangeNode::class => 'body/version-change.html.twig'];
 
-    /** @param string[] $configs */
+    /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new PhpFileLoader(
             $container,
-            new FileLocator(dirname(__DIR__, 2) . '/resources/config'),
+            new FileLocator(dirname(__DIR__, 3) . '/resources/config'),
         );
 
         foreach (self::HTML as $node => $template) {
@@ -41,9 +42,16 @@ class ReStructuredTextExtension extends Extension
             );
             $definition->addTag('phpdoc.guides.noderenderer.html');
 
-            $container->setDefinition('phpdoc.guides.rst.' . substr(strrchr($node, '\\'), 1), $definition);
+            $container->setDefinition('phpdoc.guides.rst.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
         }
 
         $loader->load('guides-restructured-text.php');
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('guides', [
+            'base_template_paths' => [dirname(__DIR__, 3) . '/resources/template/html'],
+        ]);
     }
 }

@@ -22,7 +22,6 @@
         "monolog/monolog": "^2.9",
         "phpdocumentor/guides": "dev-main@dev",
         "phpdocumentor/guides-restructured-text": "dev-main@dev",
-        "phpdocumentor/guides-symfony": "dev-main@dev",
         "symfony/config": "^5.4",
         "symfony/console": "^5.4",
         "symfony/dependency-injection": "^5.4",
