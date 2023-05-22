@@ -58,6 +58,12 @@ final class Metas
         return $this->internalLinkTargets[$anchorName] ?? null;
     }
 
+    /** @return array<string, InternalTarget> */
+    public function getAllInternalTargets(): array
+    {
+        return $this->internalLinkTargets;
+    }
+
     public function reset(): void
     {
         $this->internalLinkTargets = [];

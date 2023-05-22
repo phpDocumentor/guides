@@ -12,5 +12,19 @@
             "index.html",
             "Document Title"
         ]
+    },
+    "std:label": {
+        "a-page": [
+            "My Project",
+            "3.1.4",
+            "a_page.html#a-page",
+            "A Page"
+        ],
+        "document-title": [
+            "My Project",
+            "3.1.4",
+            "index.html#document-title",
+            "Document Title"
+        ]
     }
 }

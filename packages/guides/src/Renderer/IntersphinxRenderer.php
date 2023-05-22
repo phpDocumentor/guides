@@ -31,6 +31,7 @@ class IntersphinxRenderer implements TypeRenderer
     {
         $inventory = [
             'std:doc' => [],
+            'std:label' => [],
         ];
 
         foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
@@ -43,6 +44,19 @@ class IntersphinxRenderer implements TypeRenderer
                 $this->projectMeta->getVersion(),
                 $url,
                 $documentEntry->getTitle()->toString(),
+            ];
+        }
+
+        foreach ($renderCommand->getMetas()->getAllInternalTargets() as $key => $internalTarget) {
+            $url = $this->urlGenerator->canonicalUrl(
+                '',
+                $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
+            );
+            $inventory['std:label'][$key] = [
+                $this->projectMeta->getTitle(),
+                $this->projectMeta->getVersion(),
+                $url,
+                $internalTarget->getTitle(),
             ];
         }
 

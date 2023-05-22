@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SectionNode;
 use SplStack;
 use Webmozart\Assert\Assert;
 
@@ -41,6 +42,18 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                 $node->toString(),
                 new InternalTarget($currentDocument->getFilePath(), $node->toString()),
             );
+        } elseif ($node instanceof SectionNode) {
+            $currentDocument = $this->documentStack->top();
+            Assert::notNull($currentDocument);
+            $anchor = $node->getTitle()->getId();
+            $this->metas->addLinkTarget(
+                $anchor,
+                new InternalTarget(
+                    $currentDocument->getFilePath(),
+                    $anchor,
+                    $node->getTitle()->toString(),
+                ),
+            );
         }
 
         return $node;
@@ -57,6 +70,6 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof DocumentNode || $node instanceof AnchorNode;
+        return $node instanceof DocumentNode || $node instanceof AnchorNode || $node instanceof SectionNode;
     }
 }

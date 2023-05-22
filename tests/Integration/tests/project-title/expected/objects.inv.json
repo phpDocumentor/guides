@@ -6,5 +6,13 @@
             "index.html",
             "Document Title"
         ]
+    },
+    "std:label": {
+        "document-title": [
+            "My Project",
+            null,
+            "index.html#document-title",
+            "Document Title"
+        ]
     }
 }
