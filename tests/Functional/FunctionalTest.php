@@ -9,7 +9,6 @@ use Gajus\Dindent\Indenter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 use phpDocumentor\Guides\ApplicationTestCase;
-use phpDocumentor\Guides\Configuration;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
@@ -39,12 +38,10 @@ use const LC_ALL;
 
 class FunctionalTest extends ApplicationTestCase
 {
-    private const RENDER_DOCUMENT_FILES = ['main-directive'];
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
     protected function setUp(): void
     {
-        self::prepareContainer(new Configuration());
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
