@@ -1,0 +1,42 @@
+{
+    "std:doc": {
+        "index": [
+            null,
+            null,
+            "index.html",
+            "Page"
+        ],
+        "rst-overview": [
+            null,
+            null,
+            "rst-overview.html",
+            "Overview"
+        ],
+        "sphinx-overview": [
+            null,
+            null,
+            "sphinx-overview.html",
+            "Overview"
+        ]
+    },
+    "std:label": {
+        "page": [
+            null,
+            null,
+            "index.html#page",
+            "Page"
+        ],
+        "rst-overview": [
+            null,
+            null,
+            "rst-overview.html#rst-overview",
+            "Overview"
+        ],
+        "sphinx-overview": [
+            null,
+            null,
+            "sphinx-overview.html#sphinx-overview",
+            "Overview"
+        ]
+    }
+}
