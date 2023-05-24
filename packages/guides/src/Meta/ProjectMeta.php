@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class ProjectMeta
 {
@@ -12,7 +12,7 @@ class ProjectMeta
     private string|null $version = null;
 
     public function __construct(
-        private readonly Logger $logger,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
