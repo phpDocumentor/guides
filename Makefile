@@ -1,4 +1,4 @@
-PHP_BIN = docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:8.2-cli
+PHP_BIN = docker run -it --rm -v${PWD}:/opt/project -w /opt/project php:8.2-cli php -d memory_limit=1024M
 
 .PHONY: help
 help: ## Displays this list of targets with descriptions
