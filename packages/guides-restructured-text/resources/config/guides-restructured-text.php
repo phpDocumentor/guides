@@ -43,6 +43,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DefinitionListRule;
@@ -78,6 +79,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
+use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
@@ -104,6 +106,8 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
+
+        ->set(SpanLexer::class)
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
@@ -156,6 +160,8 @@ return static function (ContainerConfigurator $container): void {
         ->set('phpdoc.guides.parser.rst.body_elements', RuleContainer::class)
         ->set('phpdoc.guides.parser.rst.structural_elements', RuleContainer::class)
 
+        ->set(AnnotationRule::class)
+        ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => AnnotationRule::PRIORITY])
         ->set(LinkRule::class)
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => LinkRule::PRIORITY])
         ->set(LiteralBlockRule::class)

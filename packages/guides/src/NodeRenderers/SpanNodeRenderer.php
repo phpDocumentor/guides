@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers;
 
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
@@ -183,9 +185,58 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
             case InlineMarkupToken::TYPE_LINK:
                 return trim($this->renderLink($spanToken, $span, $context));
+
+            case CitationInlineNode::TYPE:
+                assert($spanToken instanceof CitationInlineNode);
+
+                return trim($this->renderCitation($spanToken, $span, $context));
+
+            case FootnoteInlineNode::TYPE:
+                assert($spanToken instanceof FootnoteInlineNode);
+
+                return trim($this->renderFootnote($spanToken, $span, $context));
         }
 
         throw new InvalidArgumentException(sprintf('Unknown token type %s', $spanToken->getType()));
+    }
+
+    private function renderCitation(CitationInlineNode $token, string $span, RenderContext $context): string
+    {
+        $citationTarget = $context->getMetas()->getCitationTarget($token->getName());
+        if ($citationTarget === null) {
+            $replacement = '[' . $token->getName() . ']';
+        } else {
+            $replacement = $this->citation($citationTarget, $context);
+        }
+
+        return str_replace(
+            $token->getId(),
+            $replacement,
+            $span,
+        );
+    }
+
+    private function renderFootnote(FootnoteInlineNode $token, string $span, RenderContext $context): string
+    {
+        if ($token->getNumber() > 0) {
+            $footnoteTarget = $context->getMetas()->getFootnoteTarget($token->getNumber());
+        } elseif ($token->getName() !== '') {
+            $footnoteTarget = $context->getMetas()->getFootnoteTargetByName($token->getName());
+        } else {
+            $footnoteTarget = $context->getMetas()->getFootnoteTargetAnonymous();
+        }
+
+        if ($footnoteTarget === null) {
+            $replacement = '[' . $token->getNumber() . ']';
+        } else {
+            $replacement = $this->footnote($footnoteTarget, $context);
+        }
+
+        return str_replace(
+            $token->getId(),
+            $replacement,
+            $span,
+        );
     }
 
     private function renderLiteral(LiteralToken $token, string $span, RenderContext $context): string

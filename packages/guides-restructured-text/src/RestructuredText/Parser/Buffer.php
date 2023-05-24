@@ -10,6 +10,7 @@ use function count;
 use function implode;
 use function strlen;
 use function substr;
+use function trim;
 
 class Buffer
 {
@@ -78,6 +79,13 @@ class Buffer
     public function clear(): void
     {
         $this->lines = [];
+    }
+
+    public function trimLines(): void
+    {
+        array_walk($this->lines, static function (&$value): void {
+            $value = trim($value);
+        });
     }
 
     public function unIndent(int $indentation): void

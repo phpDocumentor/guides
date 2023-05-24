@@ -1,0 +1,8 @@
+<div class="footnote {% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.anchor }}">
+    <div class="footnote-label">[{{ node.number }}]</div>
+    <div class="footnote-content">
+        {%- for child in node.children -%}
+            {{ renderNode(child) }}
+        {%- endfor -%}
+    </div>
+</div>
