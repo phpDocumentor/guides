@@ -1234,9 +1234,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "c6a35e071e7860ba5032b2a1ec4d9472c0783ce7"
+                "reference": "d238578b0b349739d554abab9c4c954a161df348"
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\Bootstrap\\": "src/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -1252,9 +1257,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-phpdocumentor",
-                "reference": "746947525361e85dfc5f917919015422d8b1553d"
+                "reference": "41eb8ac585ddad0c48a68d3110687df6029ea87c"
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\PhpDocumentor\\": "src/"
+                }
+            },
             "license": [
                 "MIT"
             ],
