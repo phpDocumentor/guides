@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f888b1ae053c271d7d5eed2ad7650318",
+    "content-hash": "1674af34770e6a94de0d8d4847c4a302",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1116,7 +1116,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-user-config",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1157,7 +1157,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-user-config",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1230,7 +1230,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-user-config",
+            "version": "dev-main"
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -1253,7 +1253,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-phpdocumentor",
-            "version": "dev-user-config",
+            "version": "dev-main"
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-phpdocumentor",
@@ -6551,16 +6551,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "5.11.0",
+            "version": "5.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "c9b192ab8400fdaf04b2b13d110575adc879aa90"
+                "reference": "f90118cdeacd0088e7215e64c0c99ceca819e176"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/c9b192ab8400fdaf04b2b13d110575adc879aa90",
-                "reference": "c9b192ab8400fdaf04b2b13d110575adc879aa90",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/f90118cdeacd0088e7215e64c0c99ceca819e176",
+                "reference": "f90118cdeacd0088e7215e64c0c99ceca819e176",
                 "shasum": ""
             },
             "require": {
@@ -6651,9 +6651,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/5.11.0"
+                "source": "https://github.com/vimeo/psalm/tree/5.12.0"
             },
-            "time": "2023-05-04T21:35:44+00:00"
+            "time": "2023-05-22T21:19:03+00:00"
         }
     ],
     "aliases": [],

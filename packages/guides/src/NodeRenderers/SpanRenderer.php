@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\NodeRenderers;
 
+use phpDocumentor\Guides\Meta\CitationTarget;
+use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
@@ -28,6 +30,10 @@ interface SpanRenderer
     public function br(RenderContext $renderContext): string;
 
     public function literal(LiteralToken $token, RenderContext $renderContext): string;
+
+    public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string;
+
+    public function footnote(FootnoteTarget $footnoteTarget, RenderContext $renderContext): string;
 
     /** @param string[] $attributes */
     public function link(RenderContext $context, string|null $url, string $title, array $attributes = []): string;

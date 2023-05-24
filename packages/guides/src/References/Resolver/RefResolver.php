@@ -29,6 +29,6 @@ final class RefResolver implements Resolver
             return null;
         }
 
-        return new ResolvedReference($url, $node->getText(), $context->relativeDocUrl($filePath, $target->getAnchor()));
+        return new ResolvedReference($url, $node->getText($target->getTitle()), $context->relativeDocUrl($filePath, $target->getAnchor()));
     }
 }

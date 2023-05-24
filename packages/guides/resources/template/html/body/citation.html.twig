@@ -1,0 +1,8 @@
+<div class="citation {% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.anchor }}">
+    <div class="citation-label">[{{ node.name }}]</div>
+    <div class="citation-content">
+        {%- for child in node.children -%}
+            {{ renderNode(child) }}
+        {%- endfor -%}
+    </div>
+</div>

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
 
 use function implode;
 use function is_array;
@@ -31,11 +34,8 @@ class SpanParser
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
-    private readonly SpanLexer $lexer;
-
-    public function __construct()
+    public function __construct(private readonly SpanLexer $lexer)
     {
-        $this->lexer = new SpanLexer();
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
 
@@ -231,9 +231,11 @@ class SpanParser
                     $link = $this->parseNamedReference($parserContext);
                     $result .= $link;
                     break;
-
                 case SpanLexer::NAMED_REFERENCE_END:
                     $result .= $this->createNamedReference($parserContext, $result);
+                    break;
+                case SpanLexer::ANNOTATION_START:
+                    $result .= $this->parseAnnotation();
                     break;
                 default:
                     $result .= $this->lexer->token->value;
@@ -264,6 +266,67 @@ class SpanParser
         }
 
         return $text;
+    }
+
+    private function parseAnnotation(): string
+    {
+        if ($this->lexer->token === null) {
+            return '[';
+        }
+
+        $startPosition = $this->lexer->token->position;
+        $annotationName = '';
+
+        $this->lexer->moveNext();
+
+        while ($this->lexer->token !== null) {
+            $token = $this->lexer->token;
+            switch ($token->type) {
+                case SpanLexer::ANNOTATION_END:
+                    // `]`  found, look for `_`
+                    if (!$this->lexer->moveNext()) {
+                        break 2;
+                    }
+
+                    $token = $this->lexer->token;
+                    if ($token->type === SpanLexer::UNDERSCORE) {
+                        $id = $this->generateId();
+                        if (AnnotationUtility::isFootnoteKey($annotationName)) {
+                            $number = AnnotationUtility::getFootnoteNumber($annotationName);
+                            $name = AnnotationUtility::getFootnoteName($annotationName);
+                            $this->tokens[$id] = new FootnoteInlineNode(
+                                $id,
+                                $annotationName,
+                                $name ?? '',
+                                $number ?? 0,
+                            );
+                        } else {
+                            $this->tokens[$id] = new CitationInlineNode(
+                                $id,
+                                $annotationName,
+                                $annotationName,
+                            );
+                        }
+
+                        return $id;
+                    }
+
+                    break 2;
+                case SpanLexer::WHITESPACE:
+                    // Annotation keys may not contain whitespace
+                    break 2;
+                default:
+                    $annotationName .= $token->value;
+            }
+
+            if ($this->lexer->moveNext() === false && $this->lexer->token === null) {
+                break;
+            }
+        }
+
+        $this->rollback($startPosition);
+
+        return '[';
     }
 
     private function parseInterpretedText(): string

@@ -17,7 +17,7 @@ class InternalTarget
 {
     public function __construct(
         private readonly string $documentPath,
-        private readonly string $anchorName,
+        protected string $anchorName,
         private readonly string|null $title = null,
     ) {
     }
@@ -30,6 +30,11 @@ class InternalTarget
     public function getAnchor(): string
     {
         return $this->anchorName;
+    }
+
+    public function setAnchorName(string $anchorName): void
+    {
+        $this->anchorName = $anchorName;
     }
 
     public function getTitle(): string|null
