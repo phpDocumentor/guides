@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Compiler\Passes;
+namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerPass;
+use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
@@ -22,18 +21,13 @@ use function sprintf;
 use function str_contains;
 
 /**
- * Resolves reference tokens in span nodes
+ * @implements NodeTransformer<Node>
  *
- * This follows the reStructuredText rules as outlined in:
- * https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#implicit-hyperlink-targets
+ * The "class" directive sets the "classes" attribute value on its content or on the first immediately following
+ * non-comment element. https://docutils.sourceforge.io/docs/ref/rst/directives.html#class
  */
-class ReferenceResolverPass implements CompilerPass
+class ReferenceNodeTransformer implements NodeTransformer
 {
-    public function getPriority(): int
-    {
-        return 500; // must be run *after* MetasPass
-    }
-
     public function __construct(
         private readonly Metas $metas,
         private readonly UrlGenerator $urlGenerator,
@@ -41,37 +35,33 @@ class ReferenceResolverPass implements CompilerPass
     ) {
     }
 
-    /** {@inheritDoc} */
-    public function run(array $documents): array
+    public function enterNode(Node $node, DocumentNode $documentNode): Node
     {
-        foreach ($documents as $document) {
-            $this->traverse($document, $document->getFilePath(), $document);
-        }
-
-        return $documents;
+        return $node;
     }
 
-    private function traverse(Node $node, string $path, DocumentNode $document): void
+    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
     {
-        if (!($node instanceof CompoundNode)) {
-            return;
+        if (!$node instanceof SpanNode) {
+            return $node;
         }
 
-        foreach ($node->getChildren() as $child) {
-            if ($child instanceof SpanNode) {
-                foreach ($child->getTokens() as $token) {
-                    if ($token instanceof ReferenceNode) {
-                        $this->resolveReference($token, $document);
-                    } else {
-                        if ($token instanceof DocReferenceNode) {
-                            $this->resolveDocReference($token, $document);
-                        }
-                    }
+        foreach ($node->getTokens() as $token) {
+            if ($token instanceof ReferenceNode) {
+                $this->resolveReference($token, $documentNode);
+            } else {
+                if ($token instanceof DocReferenceNode) {
+                    $this->resolveDocReference($token, $documentNode);
                 }
-            } elseif ($child instanceof CompoundNode) {
-                $this->traverse($child, $path, $document);
             }
         }
+
+        return $node;
+    }
+
+    public function supports(Node $node): bool
+    {
+        return $node instanceof SpanNode;
     }
 
     private function resolveReference(ReferenceNode $referenceNode, DocumentNode $document): void
@@ -125,5 +115,11 @@ class ReferenceResolverPass implements CompilerPass
         }
 
         return $this->urlGenerator->canonicalUrl($path, $url);
+    }
+
+    public function getPriority(): int
+    {
+        // After CollectLinkTargetsTransformer
+        return 3000;
     }
 }

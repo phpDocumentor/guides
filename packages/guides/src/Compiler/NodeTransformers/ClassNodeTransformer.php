@@ -22,7 +22,7 @@ class ClassNodeTransformer implements NodeTransformer
     /** @var string[] */
     private array $classes = [];
 
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node, DocumentNode $documentNode): Node
     {
         if ($node instanceof DocumentNode) {
             // unset classes when entering the next document
@@ -42,7 +42,7 @@ class ClassNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node): Node|null
+    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
     {
         if ($node instanceof ClassNode) {
             //Remove the class node from the tree.
@@ -56,5 +56,10 @@ class ClassNodeTransformer implements NodeTransformer
     {
         // Every node can have a class attached to it, however the node renderer decides on if to render the class
         return true;
+    }
+
+    public function getPriority(): int
+    {
+        return 20000;
     }
 }

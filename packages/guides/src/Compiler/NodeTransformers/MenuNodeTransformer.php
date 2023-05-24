@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
@@ -26,7 +27,7 @@ final class MenuNodeTransformer implements NodeTransformer
     {
     }
 
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node, DocumentNode $documentNode): Node
     {
         $entries = [];
 
@@ -44,7 +45,7 @@ final class MenuNodeTransformer implements NodeTransformer
         return $node->withEntries($entries);
     }
 
-    public function leaveNode(Node $node): Node|null
+    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
     {
         return $node;
     }
@@ -113,5 +114,11 @@ final class MenuNodeTransformer implements NodeTransformer
         }
 
         yield from $this->buildFromDocumentEntry($subDocument, ++$depth, $node);
+    }
+
+    public function getPriority(): int
+    {
+        // After CollectLinkTargetsTransformer
+        return 4000;
     }
 }

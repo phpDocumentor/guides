@@ -38,8 +38,13 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                     return $node instanceof TocNode;
                 }
+
+                public function getPriority(): int
+                {
+                    return 2000;
+                }
             },
-        ]));
+        ]), 2000);
 
         $actual = $traverser->traverse($document);
 
@@ -81,10 +86,15 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                     return $node instanceof TocNode;
                 }
+
+                public function getPriority(): int
+                {
+                    return 2000;
+                }
             },
         ];
 
-        $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers));
+        $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
 
         $actual = $traverser->traverse($document);
 
