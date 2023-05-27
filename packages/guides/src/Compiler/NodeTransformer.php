@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @template T of Node */
@@ -14,15 +15,17 @@ interface NodeTransformer
      *
      * @return T
      */
-    public function enterNode(Node $node): Node;
+    public function enterNode(Node $node, DocumentNode $documentNode): Node;
 
     /**
      * @param T $node
      *
      * @return T|null
      */
-    public function leaveNode(Node $node): Node|null;
+    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null;
 
     /** @psalm-assert-if-true T $node */
     public function supports(Node $node): bool;
+
+    public function getPriority(): int;
 }

@@ -30,7 +30,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         $this->documentStack = new SplStack();
     }
 
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node, DocumentNode $documentNode): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
@@ -59,7 +59,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node): Node
+    public function leaveNode(Node $node, DocumentNode $documentNode): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();
@@ -71,5 +71,11 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     public function supports(Node $node): bool
     {
         return $node instanceof DocumentNode || $node instanceof AnchorNode || $node instanceof SectionNode;
+    }
+
+    public function getPriority(): int
+    {
+        // After MetasPass
+        return 5000;
     }
 }

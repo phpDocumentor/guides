@@ -11,4 +11,7 @@ interface NodeTransformerFactory
 {
     /** @return iterable<NodeTransformer<Node>> */
     public function getTransformers(): iterable;
+
+    /** @return int[] */
+    public function getPriorities(): array;
 }

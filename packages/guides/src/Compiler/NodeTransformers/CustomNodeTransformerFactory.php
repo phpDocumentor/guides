@@ -7,6 +7,10 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\Node;
 
+use function array_map;
+use function array_unique;
+use function sort;
+
 final class CustomNodeTransformerFactory implements NodeTransformerFactory
 {
     /** @param iterable<NodeTransformer<Node>> $transformers */
@@ -18,5 +22,21 @@ final class CustomNodeTransformerFactory implements NodeTransformerFactory
     public function getTransformers(): iterable
     {
         return $this->transformers;
+    }
+
+    /** @return int[] */
+    public function getPriorities(): array
+    {
+        $transformers = [...$this->transformers];
+        $priorites = array_map(
+            static function (NodeTransformer $transformer) {
+                return $transformer->getPriority();
+            },
+            $transformers,
+        );
+        sort($priorites);
+        $priorites = array_unique($priorites);
+
+        return $priorites;
     }
 }

@@ -19,7 +19,7 @@ final class ClassNodeTransformerTest extends TestCase
         $node = new ClassNode('class');
         $transformer = new ClassNodeTransformer();
 
-        self::assertNull($transformer->leaveNode($node));
+        self::assertNull($transformer->leaveNode($node, new DocumentNode('123', 'some/path')));
     }
 
     public function testLeaveNodeWillReturnNodeWhenNodeIsNotClass(): void
@@ -27,7 +27,7 @@ final class ClassNodeTransformerTest extends TestCase
         $node = new AnchorNode('foo');
         $transformer = new ClassNodeTransformer();
 
-        self::assertSame($node, $transformer->leaveNode($node));
+        self::assertSame($node, $transformer->leaveNode($node, new DocumentNode('123', 'some/path')));
     }
 
     public function testEnterNodeReturnsNode(): void
@@ -35,7 +35,7 @@ final class ClassNodeTransformerTest extends TestCase
         $node = new ClassNode('class');
         $transformer = new ClassNodeTransformer();
 
-        self::assertSame($node, $transformer->enterNode($node));
+        self::assertSame($node, $transformer->enterNode($node, new DocumentNode('123', 'some/path')));
     }
 
     public function testClassesFromClassNodeAreAddedToNode(): void
@@ -44,11 +44,11 @@ final class ClassNodeTransformerTest extends TestCase
         $classNode->setClasses(['class1', 'class2']);
 
         $transformer = new ClassNodeTransformer();
-        $transformer->enterNode($classNode);
+        $transformer->enterNode($classNode, new DocumentNode('123', 'some/path'));
 
         $section = new SectionNode(new TitleNode(new SpanNode('foo'), 1, 'id'));
 
-        $transformer->enterNode($section);
+        $transformer->enterNode($section, new DocumentNode('123', 'some/path'));
 
         self::assertSame(['class1', 'class2'], $section->getClasses());
     }
@@ -59,8 +59,8 @@ final class ClassNodeTransformerTest extends TestCase
         $classNode->setClasses(['class1', 'class2']);
 
         $transformer = new ClassNodeTransformer();
-        $transformer->enterNode($classNode);
-        $transformer->enterNode(new DocumentNode('hash', 'file'));
+        $transformer->enterNode($classNode, new DocumentNode('123', 'some/path'));
+        $transformer->enterNode(new DocumentNode('hash', 'file'), new DocumentNode('123', 'some/path'));
         $section = new SectionNode(new TitleNode(new SpanNode('foo'), 1, 'id'));
 
         self::assertSame([], $section->getClasses());

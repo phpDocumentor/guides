@@ -6,6 +6,5 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 interface TextRoleFactory
 {
-    /** @throws TextRoleNotFoundException */
-    public function getTextRole(string $name): TextRole;
+    public function getTextRole(string $name, string|null $domain = null): TextRole;
 }

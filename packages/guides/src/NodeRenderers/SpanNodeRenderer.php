@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers;
 
 use InvalidArgumentException;
+use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\References\ReferenceResolver;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -42,8 +42,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     public function __construct(
         protected TemplateRenderer $renderer,
-        private readonly ReferenceResolver $referenceResolver,
-        private readonly LoggerInterface $logger,
+        protected readonly LoggerInterface $logger,
         protected UrlGeneratorInterface $urlGenerator,
     ) {
     }
@@ -150,25 +149,6 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
     private function renderTokens(SpanNode $node, string $span, RenderContext $context): string
     {
         foreach ($node->getTokens() as $token) {
-            if ($token instanceof CrossReferenceNode) {
-                $reference = $this->referenceResolver->resolve($token, $context);
-
-                if ($reference === null) {
-                    $this->logger->error(sprintf('Invalid cross reference: %s', $token->getUrl()));
-
-                    $span = str_replace($token->getId(), $token->getText(), $span);
-                    continue;
-                }
-
-                $span = str_replace(
-                    $token->getId(),
-                    $this->link($context, $reference->getUrl(), $reference->getText(), $reference->getAttributes()),
-                    $span,
-                );
-
-                continue;
-            }
-
             $span = $this->renderToken($token, $span, $context);
         }
 
@@ -177,27 +157,43 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     private function renderToken(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
     {
-        switch ($spanToken->getType()) {
-            case LiteralToken::TYPE:
-                assert($spanToken instanceof LiteralToken);
-
+        switch (true) {
+            case $spanToken instanceof LiteralToken:
                 return trim($this->renderLiteral($spanToken, $span, $context));
 
-            case InlineMarkupToken::TYPE_LINK:
-                return trim($this->renderLink($spanToken, $span, $context));
+            case $spanToken instanceof AbstractLinkToken:
+                return trim($this->renderLinkToken($spanToken, $span, $context));
 
-            case CitationInlineNode::TYPE:
+            case $spanToken instanceof GenericTextRoleToken:
+                return trim($this->renderGenericTextRoleToken($spanToken, $span, $context));
+
+            case $spanToken instanceof CitationInlineNode:
                 assert($spanToken instanceof CitationInlineNode);
 
                 return trim($this->renderCitation($spanToken, $span, $context));
 
-            case FootnoteInlineNode::TYPE:
+            case $spanToken instanceof FootnoteInlineNode:
                 assert($spanToken instanceof FootnoteInlineNode);
 
                 return trim($this->renderFootnote($spanToken, $span, $context));
-        }
 
-        throw new InvalidArgumentException(sprintf('Unknown token type %s', $spanToken->getType()));
+            default:
+                // TODO: move these link types to AbstractLinkToken as well
+                if ($spanToken->getType() === InlineMarkupToken::TYPE_LINK) {
+                    return trim($this->renderLink($spanToken, $span, $context));
+                }
+
+                return $spanToken->getType();
+        }
+    }
+
+    private function renderGenericTextRoleToken(GenericTextRoleToken $token, string $span, RenderContext $context): string
+    {
+        return str_replace(
+            $token->getId(),
+            $this->genericTextRole($token, $context),
+            $span,
+        );
     }
 
     private function renderCitation(CitationInlineNode $token, string $span, RenderContext $context): string
@@ -246,6 +242,13 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
             $this->literal($token, $context),
             $span,
         );
+    }
+
+    private function renderLinkToken(AbstractLinkToken $spanToken, string $span, RenderContext $context): string
+    {
+        $link = $this->linkToken($spanToken, $context);
+
+        return str_replace($spanToken->getId(), $link, $span);
     }
 
     private function renderLink(InlineMarkupToken $spanToken, string $span, RenderContext $context): string

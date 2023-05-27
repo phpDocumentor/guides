@@ -79,13 +79,19 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -107,7 +113,13 @@ return static function (ContainerConfigurator $container): void {
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
 
-        ->set(SpanLexer::class)
+
+        ->set(DocReferenceTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(ReferenceTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(AbbreviationTextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
@@ -156,6 +168,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(VersionChangedDirective::class)
         ->set(WarningDirective::class)
         ->set(WrapDirective::class)
+
+
+        ->set(TextRoleFactory::class, DefaultTextRoleFactory::class)
+        ->arg('$genericTextRole', inline_service(GenericTextRole::class))
+        ->arg('$textRoles', tagged_iterator('phpdoc.guides.parser.rst.text_role'))
 
         ->set('phpdoc.guides.parser.rst.body_elements', RuleContainer::class)
         ->set('phpdoc.guides.parser.rst.structural_elements', RuleContainer::class)

@@ -16,11 +16,15 @@ namespace phpDocumentor\Guides\NodeRenderers\Html;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\NodeRenderers\SpanNodeRenderer as BaseSpanNodeRenderer;
+use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\References\ResolvedReference;
 use phpDocumentor\Guides\RenderContext;
+use Twig\Error\LoaderError;
 
 use function htmlspecialchars;
 use function trim;
@@ -81,37 +85,51 @@ class SpanNodeRenderer extends BaseSpanNodeRenderer
         return htmlspecialchars($span, ENT_QUOTES);
     }
 
-    /** @param array<string|null> $value */
-    public function reference(RenderContext $renderContext, ResolvedReference $reference, array $value): string
-    {
-        $text = $value['text'] ?: $reference->getText();
-        $text = trim($text);
-
-        // reference to another document
-        if ($reference->getUrl() !== null) {
-            $url = $reference->getUrl();
-
-            if ($value['anchor'] !== null) {
-                $url .= '#' . $value['anchor'];
-            }
-
-            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
-
-            // reference to anchor in existing document
-        } elseif ($value['url'] !== null) {
-            $url = $renderContext->getLink($value['url']);
-
-            $link = $this->link($renderContext, $url, $text, $reference->getAttributes());
-        } else {
-            $link = $this->link($renderContext, '#', $text . ' (unresolved reference)', $reference->getAttributes());
-        }
-
-        return $link;
-    }
-
     public function supports(Node $node): bool
     {
         return $node instanceof SpanNode;
+    }
+
+    public function linkToken(AbstractLinkToken $spanToken, RenderContext $context): string
+    {
+        if ($spanToken instanceof DocReferenceNode && $spanToken->getDocumentEntry() !== null) {
+            $url = $context->relativeDocUrl($spanToken->getDocumentEntry()->getFile(), $spanToken->getAnchor());
+            $spanToken->setUrl($url);
+        } elseif ($spanToken instanceof ReferenceNode && $spanToken->getInternalTarget() !== null) {
+            $url =  $context->relativeDocUrl(
+                $spanToken->getInternalTarget()->getDocumentPath(),
+                $spanToken->getInternalTarget()->getAnchor(),
+            );
+            $spanToken->setUrl($url);
+        }
+
+        return trim($this->renderer->renderTemplate(
+            $context,
+            'inline/' . $spanToken->getType() . '.html.twig',
+            ['linkToken' => $spanToken],
+        ));
+    }
+
+    public function genericTextRole(GenericTextRoleToken $token, RenderContext $renderContext): string
+    {
+        try {
+            return trim($this->renderer->renderTemplate(
+                $renderContext,
+                'inline/textroles/' . $token->getType() . '.html.twig',
+                ['textrole' => $token],
+            ));
+        } catch (LoaderError) {
+            $this->logger->warning(
+                'File "' . $renderContext->getCurrentFileName() . '" not template found for textrole "' . $token->getType() . '"',
+                $renderContext->getLoggerInformation(),
+            );
+
+            return trim($this->renderer->renderTemplate(
+                $renderContext,
+                'inline/textroles/generic.html.twig',
+                ['textrole' => $token],
+            ));
+        }
     }
 
     public function citation(CitationTarget $citationTarget, RenderContext $renderContext): string

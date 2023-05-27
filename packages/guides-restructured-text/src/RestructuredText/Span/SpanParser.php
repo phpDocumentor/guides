@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Span;
 
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
 use function implode;
 use function is_array;
@@ -30,12 +30,15 @@ class SpanParser
     private int $tokenId = 0;
 
     private readonly string $prefix;
+    private readonly SpanLexer $lexer;
 
     /** @var InlineMarkupToken[] */
     private array $tokens = [];
 
-    public function __construct(private readonly SpanLexer $lexer)
-    {
+    public function __construct(
+        private readonly TextRoleFactory $textRoleFactory,
+    ) {
+        $this->lexer = new SpanLexer();
         $this->prefix = random_int(0, mt_getrandmax()) . '|' . time();
     }
 
@@ -109,23 +112,6 @@ class SpanParser
         $parserContext->resetAnonymousStack();
         $id = $this->createNamedReference($parserContext, $link);
         $parserContext->pushAnonymous($link);
-
-        return $id;
-    }
-
-    private function createCrossReference(string $link): string
-    {
-        // the link may have a new line in it, so we need to strip it
-        // before setting the link and adding a token to be replaced
-        $link = str_replace("\n", ' ', $link);
-        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
-
-        $id = $this->generateId();
-        $this->tokens[$id] = new CrossReferenceNode(
-            $id,
-            'ref',
-            $link,
-        );
 
         return $id;
     }
@@ -225,7 +211,7 @@ class SpanParser
                     $result .= $this->parseInternalReference($parserContext);
                     break;
                 case SpanLexer::COLON:
-                    $result .= $this->parseInterpretedText();
+                    $result .= $this->parseTextrole($parserContext);
                     break;
                 case SpanLexer::BACKTICK:
                     $link = $this->parseNamedReference($parserContext);
@@ -329,7 +315,7 @@ class SpanParser
         return '[';
     }
 
-    private function parseInterpretedText(): string
+    private function parseTextrole(ParserContext $parserContext): string
     {
         if ($this->lexer->token === null) {
             return ':';
@@ -338,8 +324,6 @@ class SpanParser
         $startPosition = $this->lexer->token->position;
         $domain = null;
         $role = null;
-        $anchor = null;
-        $text = null;
         $part = '';
         $inText = false;
 
@@ -359,32 +343,16 @@ class SpanParser
                     $role = $part;
                     $part = '';
                     break;
-                case SpanLexer::EMBEDED_URL_START:
-                    $text = trim($part);
-                    $part = '';
-                    break;
-                case SpanLexer::EMBEDED_URL_END:
-                    break;
-                case SpanLexer::OCTOTHORPE:
-                    $anchor = $this->parseAnchor();
-                    break;
                 case SpanLexer::BACKTICK:
                     if ($role === null) {
-                        $this->rollback($startPosition);
-
-                        return ':';
+                        break 2;
                     }
 
                     if ($inText) {
                         $id = $this->generateId();
-                        $this->tokens[$id] = new CrossReferenceNode(
-                            $id,
-                            $role,
-                            trim($part),
-                            $anchor,
-                            $text,
-                            $domain,
-                        );
+                        $textRole = $this->textRoleFactory->getTextRole($role, $domain);
+                        $fullRole = ($domain ? $domain . ':' : '') . $role;
+                        $this->tokens[$id] = $textRole->processNode($parserContext, $id, $fullRole, $part);
 
                         return $id;
                     }
@@ -437,7 +405,13 @@ class SpanParser
                         return '`';
                     }
 
-                    return $this->createCrossReference($text);
+                    $id = $this->generateId();
+                    $this->tokens[$id] = new LiteralToken(
+                        $id,
+                        $text,
+                    );
+
+                    return $id;
 
                 case SpanLexer::NAMED_REFERENCE_END:
                     return $this->createNamedReference($parserContext, $text, $url);
@@ -505,31 +479,6 @@ class SpanParser
         $this->lexer->resetPosition($position);
         $this->lexer->moveNext();
         $this->lexer->moveNext();
-    }
-
-    private function parseAnchor(): string
-    {
-        $anchor = '';
-        while ($this->lexer->moveNext()) {
-            $token = $this->lexer->token;
-            if ($token === null) {
-                break;
-            }
-
-            switch ($token->type) {
-                case SpanLexer::BACKTICK:
-                case SpanLexer::EMBEDED_URL_END:
-                    $this->lexer->resetPosition($token->position);
-
-                    return $anchor;
-
-                default:
-                    $anchor .= $token->value;
-                    break;
-            }
-        }
-
-        return $anchor;
     }
 
     private function createOneOffLink(string $link, string|null $url): string

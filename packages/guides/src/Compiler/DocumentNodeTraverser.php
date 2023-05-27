@@ -11,20 +11,27 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
-    public function __construct(private readonly NodeTransformerFactory $nodeTransformerFactory)
-    {
+    public function __construct(
+        private readonly NodeTransformerFactory $nodeTransformerFactory,
+        private readonly int $priority,
+    ) {
     }
 
     public function traverse(DocumentNode $node): Node|null
     {
+        $traversedNode = $node;
         foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
-            $node = $this->traverseForTransformer($transformer, $node);
-            if ($node === null) {
+            if ($transformer->getPriority() !== $this->priority) {
+                continue;
+            }
+
+            $traversedNode = $this->traverseForTransformer($transformer, $node, $node);
+            if ($traversedNode === null) {
                 return null;
             }
         }
 
-        return $node;
+        return $traversedNode;
     }
 
     /**
@@ -34,17 +41,17 @@ final class DocumentNodeTraverser
      *
      * @template TNode as Node
      */
-    private function traverseForTransformer(NodeTransformer $transformer, Node $node): Node|null
+    private function traverseForTransformer(NodeTransformer $transformer, Node $node, DocumentNode $documentNode): Node|null
     {
         $supports = $transformer->supports($node);
 
         if ($supports) {
-            $node = $transformer->enterNode($node);
+            $node = $transformer->enterNode($node, $documentNode);
         }
 
         if ($node instanceof CompoundNode) {
             foreach ($node->getChildren() as $key => $childNode) {
-                $transformed = $this->traverseForTransformer($transformer, $childNode);
+                $transformed = $this->traverseForTransformer($transformer, $childNode, $documentNode);
                 if ($transformed === null) {
                     $node = $node->removeNode($key);
                     continue;
@@ -59,7 +66,7 @@ final class DocumentNodeTraverser
         }
 
         if ($supports) {
-            $node = $transformer->leaveNode($node);
+            $node = $transformer->leaveNode($node, $documentNode);
         }
 
         return $node;

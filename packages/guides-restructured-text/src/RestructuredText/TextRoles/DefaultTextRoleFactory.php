@@ -8,32 +8,56 @@ use function in_array;
 
 class DefaultTextRoleFactory implements TextRoleFactory
 {
-    /** @var TextRole[] $textRoles */
-    private readonly array $textRoles;
+    /** @var TextRole[] */
+    private array $textRoles;
 
-    public function __construct()
-    {
-        $this->textRoles = [
-            new EmphasisTextRole(),
-        ];
+    /**
+     * @param iterable<TextRole> $textRoles
+     * @param array<string, TextRole[]> $domains
+     */
+    public function __construct(
+        private readonly TextRole $genericTextRole,
+        iterable $textRoles = [],
+        private array $domains = [],
+    ) {
+        $this->textRoles = [...$textRoles];
     }
 
-    /** @throws TextRoleNotFoundException */
-    public function getTextRole(string $name): TextRole
+    public function registerTextRole(TextRole $textRoles): void
+    {
+        $this->textRoles[] = $textRoles;
+    }
+
+    public function getTextRole(string $name, string|null $domain = null): TextRole
+    {
+        if ($domain === null) {
+            return $this->findTextRole($this->textRoles, $name);
+        }
+
+        if (isset($this->domains[$domain])) {
+            return $this->findTextRole($this->domains[$domain], $name);
+        }
+
+        return $this->genericTextRole;
+    }
+
+    /** @param TextRole[] $textRoles */
+    private function findTextRole(array $textRoles, string $name): TextRole
     {
         // First look for a textrole with the exact name
-        foreach ($this->textRoles as $textRole) {
+        foreach ($textRoles as $textRole) {
             if ($textRole->getName() === $name) {
                 return $textRole;
             }
         }
 
-        foreach ($this->textRoles as $textRole) {
+        // Textrole name takes precedence over alias
+        foreach ($textRoles as $textRole) {
             if (in_array($name, $textRole->getAliases())) {
                 return $textRole;
             }
         }
 
-        throw new TextRoleNotFoundException('No text role for "' . $name . '" found.');
+        return $this->genericTextRole;
     }
 }
