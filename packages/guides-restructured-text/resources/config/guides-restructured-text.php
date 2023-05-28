@@ -15,6 +15,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\DocumentBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\FigureDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
@@ -136,6 +137,7 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$urlGenerator', service(UrlGeneratorInterface::class))
         ->set(DangerDirective::class)
         ->set(DeprecatedDirective::class)
+        ->set(DocumentBlockDirective::class)
         ->set(ErrorDirective::class)
         ->set(FigureDirective::class)
         ->set(HintDirective::class)

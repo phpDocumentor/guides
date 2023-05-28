@@ -1,0 +1,11 @@
+{% if node.options.menu == 'mainmenu' %}
+    {% include "body/menu/mainmenu/table-of-content.html.twig" %}
+{% elseif node.options.menu == 'navbar' %}
+    {% include "body/menu/navbar/table-of-content.html.twig" %}
+{% else %}
+<div class="toc">
+    {% for entry in node.entries -%}
+        {{ renderNode(entry) }}
+    {% endfor %}
+</div>
+{% endif %}

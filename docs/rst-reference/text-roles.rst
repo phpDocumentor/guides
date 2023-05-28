@@ -1,3 +1,4 @@
+..  include:: /include.rst.txt
 
 ==========
 Text Roles

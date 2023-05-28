@@ -4,9 +4,17 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
-            "phpDocumentor\\Guides\\Bootstrap\\": "src/"
+            "phpDocumentor\\Guides\\": "src/"
         }
+    },
+    "require": {
+        "php": "^8.1",
+        "phpdocumentor/guides": "dev-main@dev",
+        "phpdocumentor/guides-restructured-text": "dev-main@dev"
     }
 }
