@@ -181,35 +181,41 @@ class SpanParser
                         $parserContext,
                         trim((string) $this->lexer->token->value, '_'),
                     );
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::ANONYMOUSE_REFERENCE:
                     $result .= $this->createAnonymousReference(
                         $parserContext,
                         trim((string) $this->lexer->token->value, '_'),
                     );
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::INTERNAL_REFERENCE_START:
                     $result .= $this->parseInternalReference($parserContext);
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::COLON:
                     $result .= $this->parseTextrole($parserContext);
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::BACKTICK:
                     $link = $this->parseNamedReference($parserContext);
                     $result .= $link;
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::NAMED_REFERENCE_END:
                     $result .= $this->createNamedReference($parserContext, $result);
+                    $this->lexer->moveNext();
                     break;
                 case SpanLexer::ANNOTATION_START:
                     $result .= $this->parseAnnotation();
+                    $this->lexer->moveNext();
                     break;
                 default:
                     $result .= $this->lexer->token->value;
+                    $this->lexer->moveNext();
                     break;
             }
-
-            $this->lexer->moveNext();
         }
 
         return $result;
