@@ -125,14 +125,8 @@ final class SpanParserTest extends TestCase
         $token = current($result->getTokens());
 
         self::assertInstanceOf(HyperLinkNode::class, $token);
-        self::assertEquals(
-            [
-                'url' => $url,
-                'link' => $text,
-                'type' => 'link',
-            ],
-            $token->getTokenData(),
-        );
+        self::assertEquals($url, $token->getUrl());
+        self::assertEquals($text, $token->getLink());
         self::assertMatchesRegularExpression($referenceId, $result->getValue());
     }
 
@@ -227,14 +221,8 @@ TEXT
 
         self::assertStringNotContainsString('_`internal ref`', $result->getValue());
         self::assertInstanceOf(HyperLinkNode::class, $token);
-        self::assertEquals(
-            [
-                'url' => '',
-                'link' => 'internal ref',
-                'type' => 'link',
-            ],
-            $token->getTokenData(),
-        );
+        self::assertEquals('', $token->getUrl());
+        self::assertEquals('internal ref', $token->getLink());
     }
 
     #[DataProvider('annotationProvider')]
@@ -308,14 +296,8 @@ TEXT
         self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertStringNotContainsString($email, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(
-            [
-                'link' => $email,
-                'url' => 'mailto:' . $email,
-                'type' => 'link',
-            ],
-            $token->getTokenData(),
-        );
+        self::assertEquals($email, $token->getLink());
+        self::assertEquals('mailto:' . $email, $token->getUrl());
     }
 
     public function testInlineUrlsAreReplacedWithToken(): void
@@ -329,14 +311,8 @@ TEXT
         self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertStringNotContainsString($url, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(
-            [
-                'link' => $url,
-                'url' => $url,
-                'type' => 'link',
-            ],
-            $token->getTokenData(),
-        );
+        self::assertEquals($url, $token->getLink());
+        self::assertEquals($url, $token->getUrl());
     }
 
     #[DataProvider('docReferenceProvider')]

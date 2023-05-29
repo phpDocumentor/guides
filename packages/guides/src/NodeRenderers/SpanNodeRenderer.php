@@ -252,8 +252,8 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
     private function renderLink(HyperLinkNode $spanToken, string $span, RenderContext $context): string
     {
-        $url = $spanToken->get('url');
-        $link = $spanToken->get('link');
+        $url = $spanToken->getUrl();
+        $link = $spanToken->getLink();
 
         if ($url === '') {
             $url = $context->getLink($link);

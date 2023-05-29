@@ -69,12 +69,6 @@ class SpanParser
         return stripslashes($result);
     }
 
-    /** @param string[] $tokenData */
-    private function addToken(string $id, array $tokenData): void
-    {
-        $this->tokens[$id] = new HyperLinkNode($id, '', $tokenData);
-    }
-
     private function replaceLiterals(string $span): string
     {
         return preg_replace_callback(
@@ -130,13 +124,7 @@ class SpanParser
             $id = $this->generateId();
             $url = $match[1];
 
-            $this->addToken(
-                $id,
-                [
-                    'link' => $url,
-                    'url' => $scheme . $url,
-                ],
-            );
+            $this->tokens[$id] = new HyperLinkNode($id, $url, $scheme . $url);
 
             return $id;
         };
@@ -164,13 +152,7 @@ class SpanParser
             $id = $this->generateId();
             $url = $match[1];
 
-            $this->addToken(
-                $id,
-                [
-                    'link' => $url,
-                    'url' => 'mailto:' . $url,
-                ],
-            );
+            $this->tokens[$id] = new HyperLinkNode($id, $url, 'mailto:' . $url);
 
             return $id;
         };
@@ -488,13 +470,8 @@ class SpanParser
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         $id = $this->generateId();
-        $this->addToken(
-            $id,
-            [
-                'link' => $link,
-                'url' => $url ?? '',
-            ],
-        );
+
+        $this->tokens[$id] = new HyperLinkNode($id, $link, $url ?? '');
 
         return $id;
     }
