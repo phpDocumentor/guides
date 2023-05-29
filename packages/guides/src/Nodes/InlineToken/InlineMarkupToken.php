@@ -7,11 +7,8 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
 use phpDocumentor\Guides\Nodes\AbstractNode;
 
 /** @extends AbstractNode<String> */
-class InlineMarkupToken extends AbstractNode
+abstract class InlineMarkupToken extends AbstractNode
 {
-    public const TYPE_REFERENCE = 'reference';
-    public const TYPE_LINK = 'link';
-
     /** @param string[] $token */
     public function __construct(private readonly string $type, private readonly string $id, string $value = '', private array $token = [])
     {

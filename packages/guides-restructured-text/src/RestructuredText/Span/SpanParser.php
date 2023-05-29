@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Span;
 
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\SpanNode;
@@ -69,9 +70,9 @@ class SpanParser
     }
 
     /** @param string[] $tokenData */
-    private function addToken(string $type, string $id, array $tokenData): void
+    private function addToken(string $id, array $tokenData): void
     {
-        $this->tokens[$id] = new InlineMarkupToken($type, $id, '', $tokenData);
+        $this->tokens[$id] = new HyperLinkNode($id, '', $tokenData);
     }
 
     private function replaceLiterals(string $span): string
@@ -130,7 +131,6 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -165,7 +165,6 @@ class SpanParser
             $url = $match[1];
 
             $this->addToken(
-                InlineMarkupToken::TYPE_LINK,
                 $id,
                 [
                     'link' => $url,
@@ -490,10 +489,8 @@ class SpanParser
 
         $id = $this->generateId();
         $this->addToken(
-            InlineMarkupToken::TYPE_LINK,
             $id,
             [
-                'type' => InlineMarkupToken::TYPE_LINK,
                 'link' => $link,
                 'url' => $url ?? '',
             ],

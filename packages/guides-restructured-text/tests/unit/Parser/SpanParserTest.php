@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\AnnotationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
@@ -123,13 +124,12 @@ final class SpanParserTest extends TestCase
         $result = $this->spanProcessor->parse($input, $this->parserContext);
         $token = current($result->getTokens());
 
-        self::assertInstanceOf(InlineMarkupToken::class, $token);
-        self::assertEquals(InlineMarkupToken::TYPE_LINK, $token->getType());
+        self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertEquals(
             [
-                'type' => InlineMarkupToken::TYPE_LINK,
                 'url' => $url,
                 'link' => $text,
+                'type' => 'link',
             ],
             $token->getTokenData(),
         );
@@ -226,13 +226,12 @@ TEXT
         $token = current($result->getTokens());
 
         self::assertStringNotContainsString('_`internal ref`', $result->getValue());
-        self::assertInstanceOf(InlineMarkupToken::class, $token);
-        self::assertEquals(InlineMarkupToken::TYPE_LINK, $token->getType());
+        self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertEquals(
             [
-                'type' => InlineMarkupToken::TYPE_LINK,
                 'url' => '',
                 'link' => 'internal ref',
+                'type' => 'link',
             ],
             $token->getTokenData(),
         );
@@ -306,15 +305,14 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertInstanceOf(InlineMarkupToken::class, $token);
+        self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertStringNotContainsString($email, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertSame(
             [
                 'link' => $email,
                 'url' => 'mailto:' . $email,
-                'type' => InlineMarkupToken::TYPE_LINK,
+                'type' => 'link',
             ],
             $token->getTokenData(),
         );
@@ -328,15 +326,14 @@ TEXT
         $tokens = $result->getTokens();
         $token = current($tokens);
 
-        self::assertInstanceOf(InlineMarkupToken::class, $token);
+        self::assertInstanceOf(HyperLinkNode::class, $token);
         self::assertStringNotContainsString($url, $result->getValue());
         self::assertCount(1, $tokens);
-        self::assertSame(InlineMarkupToken::TYPE_LINK, $token->getType());
         self::assertSame(
             [
                 'link' => $url,
                 'url' => $url,
-                'type' => InlineMarkupToken::TYPE_LINK,
+                'type' => 'link',
             ],
             $token->getTokenData(),
         );

@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\AbstractLinkToken;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\Node;
@@ -177,12 +178,10 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
 
                 return trim($this->renderFootnote($spanToken, $span, $context));
 
-            default:
-                // TODO: move these link types to AbstractLinkToken as well
-                if ($spanToken->getType() === InlineMarkupToken::TYPE_LINK) {
-                    return trim($this->renderLink($spanToken, $span, $context));
-                }
+            case $spanToken instanceof HyperLinkNode:
+                return trim($this->renderLink($spanToken, $span, $context));
 
+            default:
                 return $spanToken->getType();
         }
     }
@@ -251,7 +250,7 @@ abstract class SpanNodeRenderer implements NodeRenderer, SpanRenderer, NodeRende
         return str_replace($spanToken->getId(), $link, $span);
     }
 
-    private function renderLink(InlineMarkupToken $spanToken, string $span, RenderContext $context): string
+    private function renderLink(HyperLinkNode $spanToken, string $span, RenderContext $context): string
     {
         $url = $spanToken->get('url');
         $link = $spanToken->get('link');
