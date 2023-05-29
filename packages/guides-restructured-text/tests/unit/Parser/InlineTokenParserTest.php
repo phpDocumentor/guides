@@ -6,11 +6,24 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InternalReferenceRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\PlainTextRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -25,9 +38,22 @@ final class InlineTokenParserTest extends TestCase
     {
         $this->logger = new Logger('test');
         $this->parserContext = $this->createMock(ParserContext::class);
+        $defaultTextRoleFactory = new DefaultTextRoleFactory(
+            new GenericTextRole(),
+            [
+                new ReferenceTextRole($this->logger),
+                new DocReferenceTextRole($this->logger),
+            ],
+        );
         $this->inlineTokenParser = new InlineTokenParser([
             new NamedReferenceRule(),
+            new AnonymousReferenceRule(),
             new PlainTextRule(),
+            new InternalReferenceRule(),
+            new TextRoleRule($defaultTextRoleFactory),
+            new NamedPhraseRule(),
+            new AnonymousPhraseRule(),
+            new AnnotationRoleRule(),
         ]);
     }
 
@@ -69,6 +95,86 @@ final class InlineTokenParserTest extends TestCase
                     new HyperLinkNode('', 'myref', ''),
                     new PlainTextToken('', ' xyz'),
                 ]),
+            ],
+            'Anonymous Reference' => [
+                'myref__',
+                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+            ],
+            'Anonymous Reference in string' => [
+                'abc: myref__ xyz',
+                new InlineNode([
+                    new PlainTextToken('', 'abc: '),
+                    new HyperLinkNode('', 'myref', ''),
+                    new PlainTextToken('', ' xyz'),
+                ]),
+            ],
+            'Internal Reference' => [
+                '_`myref`',
+                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+            ],
+            'Internal Reference in string' => [
+                'abc: _`myref` xyz',
+                new InlineNode([
+                    new PlainTextToken('', 'abc: '),
+                    new HyperLinkNode('', 'myref', ''),
+                    new PlainTextToken('', ' xyz'),
+                ]),
+            ],
+            'No Internal Reference' => [
+                '_`myref',
+                new InlineNode([new PlainTextToken('', '_`myref')]),
+            ],
+            'Textrole' => [
+                ':doc:`path/to/document`',
+                new InlineNode([new DocReferenceNode('', 'path/to/document')]),
+            ],
+            'Textrole in string' => [
+                'abc: :doc:`path/to/document` xyz',
+                new InlineNode([
+                    new PlainTextToken('', 'abc: '),
+                    new DocReferenceNode('', 'path/to/document'),
+                    new PlainTextToken('', ' xyz'),
+                ]),
+            ],
+            'Named Reference, Phrased' => [
+                '`myref`_',
+                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+            ],
+            'Named Reference, Phrased, With URL' => [
+                '`myref<https://test.com>`_',
+                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+            ],
+            'Named Reference, Phrased, With URL not ended' => [
+                '`myref<https://test.com`_',
+                new InlineNode([new HyperLinkNode('', 'myref<https://test.com', '')]),
+            ],
+            'Anonymous Reference, Phrased' => [
+                '`myref`__',
+                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+            ],
+            'Anonymous Reference, Phrased, With URL' => [
+                '`myref<https://test.com>`__',
+                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+            ],
+            'Footnote' => [
+                '[1]_',
+                new InlineNode([new FootnoteInlineNode('', '1', '', 1)]),
+            ],
+            'Named Footnote' => [
+                '[#f1]_',
+                new InlineNode([new FootnoteInlineNode('', '#f1', '#f1', 0)]),
+            ],
+            'Footnote in text' => [
+                'Please RTFM [#f1]_.',
+                new InlineNode([
+                    new PlainTextToken('', 'Please RTFM '),
+                    new FootnoteInlineNode('', '#f1', '#f1', 0),
+                    new PlainTextToken('', '.'),
+                ]),
+            ],
+            'Citation' => [
+                '[f1]_',
+                new InlineNode([new CitationInlineNode('', 'f1', 'f1')]),
             ],
         ];
     }

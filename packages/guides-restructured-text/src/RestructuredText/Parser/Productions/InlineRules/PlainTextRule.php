@@ -26,6 +26,7 @@ class PlainTextRule implements InlineRule
 
     public function getPriority(): int
     {
-        return 100;
+        // Must come last as it catches all
+        return 0;
     }
 }

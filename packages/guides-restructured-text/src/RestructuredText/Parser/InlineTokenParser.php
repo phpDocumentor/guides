@@ -15,12 +15,16 @@ use function usort;
 
 class InlineTokenParser
 {
+    /** @var InlineRule[] */
+    private array $rules;
+
     /** @param InlineRule[] $inlineRules */
-    public function __construct(private array $inlineRules)
+    public function __construct(array $inlineRules = [])
     {
         usort($inlineRules, static function (InlineRule $a, InlineRule $b): int {
             return $a->getPriority() > $b->getPriority() ? -1 : 1;
         });
+        $this->rules = $inlineRules;
     }
 
     public function parse(string $content, ParserContext $parserContext): InlineNode
@@ -32,7 +36,7 @@ class InlineTokenParser
         $nodes = [];
         $previous = null;
         while ($lexer->token !== null) {
-            foreach ($this->inlineRules as $inlineRule) {
+            foreach ($this->rules as $inlineRule) {
                 $node = null;
                 if ($inlineRule->applies($lexer)) {
                     $node = $inlineRule->apply($parserContext, $lexer);
