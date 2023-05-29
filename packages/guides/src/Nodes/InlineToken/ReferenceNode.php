@@ -31,11 +31,11 @@ class ReferenceNode extends AbstractLinkToken
 
     public function __construct(
         private readonly string $id,
-        private readonly string $referenceName,
+        string $referenceName,
         private readonly string|null $domain = null,
         private readonly string|null $text = null,
     ) {
-        parent::__construct(self::TYPE, $id, []);
+        parent::__construct(self::TYPE, $id, $referenceName);
     }
 
     public function getId(): string
@@ -45,7 +45,7 @@ class ReferenceNode extends AbstractLinkToken
 
     public function getReferenceName(): string
     {
-        return $this->referenceName;
+        return $this->value;
     }
 
     public function getDomain(): string|null
@@ -55,7 +55,7 @@ class ReferenceNode extends AbstractLinkToken
 
     public function getText(string|null $default = null): string
     {
-        return $this->text ?? $this->internalTarget?->getTitle() ?? $this->referenceName;
+        return $this->text ?? $this->internalTarget?->getTitle() ?? $this->value;
     }
 
     public function getUrl(): string

@@ -10,6 +10,6 @@ final class NbspToken extends InlineMarkupToken
 
     public function __construct(string $id)
     {
-        parent::__construct(self::TYPE, $id, []);
+        parent::__construct(self::TYPE, $id);
     }
 }

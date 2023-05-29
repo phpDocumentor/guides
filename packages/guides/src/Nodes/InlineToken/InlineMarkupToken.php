@@ -13,8 +13,9 @@ class InlineMarkupToken extends AbstractNode
     public const TYPE_LINK = 'link';
 
     /** @param string[] $token */
-    public function __construct(private readonly string $type, private readonly string $id, private array $token)
+    public function __construct(private readonly string $type, private readonly string $id, string $value = '', private array $token = [])
     {
+        $this->value = $value;
         $this->token['type'] = $type;
     }
 

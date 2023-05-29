@@ -28,12 +28,12 @@ class DocReferenceNode extends AbstractLinkToken
 
     public function __construct(
         private readonly string $id,
-        private readonly string $documentLink,
+        string $documentLink,
         private readonly string|null $anchor = null,
         private readonly string|null $domain = null,
         private readonly string|null $text = null,
     ) {
-        parent::__construct(self::TYPE, $id, []);
+        parent::__construct(self::TYPE, $id, $documentLink);
     }
 
     public function getId(): string
@@ -43,7 +43,7 @@ class DocReferenceNode extends AbstractLinkToken
 
     public function getDocumentLink(): string
     {
-        return $this->documentLink;
+        return $this->value;
     }
 
     public function getAnchor(): string|null
@@ -58,7 +58,7 @@ class DocReferenceNode extends AbstractLinkToken
 
     public function getText(string|null $default = null): string
     {
-        return $this->text ?? $this->getTextFromDocumentEntry() ?? $this->documentLink;
+        return $this->text ?? $this->getTextFromDocumentEntry() ?? $this->getDocumentLink();
     }
 
     private function getTextFromDocumentEntry(): string|null

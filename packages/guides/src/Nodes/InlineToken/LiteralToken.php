@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\InlineToken;
 
-final class LiteralToken extends ValueToken
+final class LiteralToken extends InlineMarkupToken
 {
     public const TYPE = 'literal';
 

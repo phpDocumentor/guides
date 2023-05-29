@@ -71,7 +71,7 @@ class SpanParser
     /** @param string[] $tokenData */
     private function addToken(string $type, string $id, array $tokenData): void
     {
-        $this->tokens[$id] = new InlineMarkupToken($type, $id, $tokenData);
+        $this->tokens[$id] = new InlineMarkupToken($type, $id, '', $tokenData);
     }
 
     private function replaceLiterals(string $span): string
