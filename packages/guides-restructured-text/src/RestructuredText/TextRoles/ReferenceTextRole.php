@@ -36,6 +36,7 @@ class ReferenceTextRole implements TextRole
         return [];
     }
 
+    /** @return ReferenceNode */
     public function processNode(
         ParserContext $parserContext,
         string $id,

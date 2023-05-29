@@ -23,6 +23,7 @@ class GenericTextRole implements TextRole
         return [];
     }
 
+    /** @return GenericTextRoleToken */
     public function processNode(
         ParserContext $parserContext,
         string $id,

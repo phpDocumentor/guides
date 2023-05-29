@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\InlineToken;
 
-class InlineMarkupToken
+use phpDocumentor\Guides\Nodes\AbstractNode;
+
+/** @extends AbstractNode<String> */
+class InlineMarkupToken extends AbstractNode
 {
     public const TYPE_REFERENCE = 'reference';
     public const TYPE_LINK = 'link';

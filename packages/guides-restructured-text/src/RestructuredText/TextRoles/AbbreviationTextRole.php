@@ -32,6 +32,7 @@ class AbbreviationTextRole implements TextRole
         return [];
     }
 
+    /** @return AbbreviationToken */
     public function processNode(
         ParserContext $parserContext,
         string $id,

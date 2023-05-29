@@ -6,13 +6,10 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
 
 class ValueToken extends InlineMarkupToken
 {
-    public function __construct(string $type, string $id, private readonly string $value)
+    public function __construct(string $type, string $id, string $value)
     {
-        parent::__construct($type, $id, []);
-    }
+        $this->value = $value;
 
-    public function getValue(): string
-    {
-        return $this->value;
+        parent::__construct($type, $id, []);
     }
 }
