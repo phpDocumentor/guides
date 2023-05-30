@@ -63,7 +63,7 @@
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^0.16.0",
         "squizlabs/php_codesniffer": "^3.7",
-        "symfony/finder": "^5.4",
+        "symfony/finder": "^6.2",
         "vimeo/psalm": "^5.12"
     },
     "repositories": [
