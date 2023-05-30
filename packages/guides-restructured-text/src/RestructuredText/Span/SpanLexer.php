@@ -31,6 +31,9 @@ final class SpanLexer extends AbstractLexer
     public const WHITESPACE = 15;
     public const ANNOTATION_START = 16;
     public const ANNOTATION_END = 17;
+    public const DOUBLE_BACKTICK = 18;
+    public const HYPERLINK = 19;
+    public const EMAIL = 10;
 
     /**
      * Map between string position and position in token list.
@@ -45,8 +48,11 @@ final class SpanLexer extends AbstractLexer
     protected function getCatchablePatterns(): array
     {
         return [
+            'https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)',
+            '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
+            '``',
             '`__',
             '`_',
             '<',
@@ -91,6 +97,14 @@ final class SpanLexer extends AbstractLexer
     /** @inheritDoc */
     protected function getType(&$value)
     {
+        if (preg_match('/https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)/i', $value)) {
+            return self::HYPERLINK;
+        }
+
+        if (preg_match('/\\S+@\\S+\\.\\S+/i', $value)) {
+            return self::EMAIL;
+        }
+
         if (preg_match('/[a-z0-9-]+_{2}/i', $value)) {
             return self::ANONYMOUSE_REFERENCE;
         }
@@ -104,6 +118,9 @@ final class SpanLexer extends AbstractLexer
         }
 
         switch ($value) {
+            case '``':
+                return self::DOUBLE_BACKTICK;
+
             case '`':
                 return self::BACKTICK;
 

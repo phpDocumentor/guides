@@ -10,15 +10,19 @@ use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\DefaultTextRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InternalReferenceRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\LiteralRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\PlainTextRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\StandaloneHyperlinkRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
@@ -54,6 +58,9 @@ final class InlineTokenParserTest extends TestCase
             new NamedPhraseRule(),
             new AnonymousPhraseRule(),
             new AnnotationRoleRule(),
+            new LiteralRule(),
+            new DefaultTextRoleRule(),
+            new StandaloneHyperlinkRule(),
         ]);
     }
 
@@ -175,6 +182,26 @@ final class InlineTokenParserTest extends TestCase
             'Citation' => [
                 '[f1]_',
                 new InlineNode([new CitationInlineNode('', 'f1', 'f1')]),
+            ],
+            'Literal' => [
+                '``simple``',
+                new InlineNode([new LiteralToken('', 'simple')]),
+            ],
+            'Literal complex' => [
+                '``**nothing** is` interpreted in here``',
+                new InlineNode([new LiteralToken('', '**nothing** is` interpreted in here')]),
+            ],
+            'Literal not ended' => [
+                '``end is missing',
+                new InlineNode([new PlainTextToken('', '``end is missing')]),
+            ],
+            'Default Textrole' => [
+                '`simple`',
+                new InlineNode([new LiteralToken('', 'simple')]),
+            ],
+            'Hyperlink' => [
+                'https://example.com',
+                new InlineNode([new HyperLinkNode('', 'https://example.com', '')]),
             ],
         ];
     }
