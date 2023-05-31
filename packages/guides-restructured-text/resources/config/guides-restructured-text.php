@@ -170,9 +170,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(WrapDirective::class)
 
 
-        ->set(TextRoleFactory::class, DefaultTextRoleFactory::class)
+        ->set(DefaultTextRoleFactory::class, DefaultTextRoleFactory::class)
         ->arg('$genericTextRole', inline_service(GenericTextRole::class))
         ->arg('$textRoles', tagged_iterator('phpdoc.guides.parser.rst.text_role'))
+        ->alias(TextRoleFactory::class, DefaultTextRoleFactory::class)
 
         ->set('phpdoc.guides.parser.rst.body_elements', RuleContainer::class)
         ->set('phpdoc.guides.parser.rst.structural_elements', RuleContainer::class)
