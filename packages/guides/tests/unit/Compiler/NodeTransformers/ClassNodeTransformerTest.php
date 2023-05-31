@@ -8,9 +8,9 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +23,7 @@ final class ClassNodeTransformerTest extends TestCase
 
         return $context;
     }
-    
+
     public function testLeaveNodeWillReturnNullWhenNodeIsClass(): void
     {
         $node = new ClassNode('class');
@@ -57,7 +57,7 @@ final class ClassNodeTransformerTest extends TestCase
         $context = self::getCompilerContext('some/path');
         $transformer->enterNode($classNode, $context);
 
-        $section = new SectionNode(new TitleNode(new SpanNode('foo'), 1, 'id'));
+        $section = new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('foo'), 1, 'id'));
 
         $transformer->enterNode($section, $context);
 
@@ -73,7 +73,7 @@ final class ClassNodeTransformerTest extends TestCase
         $context = self::getCompilerContext('some/path');
         $transformer->enterNode($classNode, $context);
         $transformer->enterNode(new DocumentNode('hash', 'file'), $context);
-        $section = new SectionNode(new TitleNode(new SpanNode('foo'), 1, 'id'));
+        $section = new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('foo'), 1, 'id'));
 
         self::assertSame([], $section->getClasses());
     }

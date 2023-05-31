@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
-
-use function implode;
 
 abstract class RuleTestCase extends TestCase
 {
@@ -50,12 +49,14 @@ abstract class RuleTestCase extends TestCase
 
     protected function givenInlineMarkupRule(): InlineMarkupRule
     {
-        $spanParser = $this->createMock(SpanParser::class);
-        $spanParser->method('parse')->willReturnCallback(
-            static fn (array $arg): SpanNode => new SpanNode(implode("\n", $arg))
+        $inlineTokenParser = $this->createMock(InlineTokenParser::class);
+        $inlineTokenParser->method('parse')->willReturnCallback(
+            static fn (string $arg): InlineNode => new InlineNode([
+                new PlainTextToken('', $arg),
+            ])
         );
 
-        return new InlineMarkupRule($spanParser);
+        return new InlineMarkupRule($inlineTokenParser);
     }
 
     protected function givenCollectAllRuleContainer(): RuleContainer

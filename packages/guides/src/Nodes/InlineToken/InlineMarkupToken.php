@@ -23,4 +23,9 @@ abstract class InlineMarkupToken extends AbstractNode
     {
         return $this->id;
     }
+
+    public function toString(): string
+    {
+        return $this->value;
+    }
 }

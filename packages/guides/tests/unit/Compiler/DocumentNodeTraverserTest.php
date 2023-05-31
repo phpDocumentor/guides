@@ -6,10 +6,10 @@ namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +20,7 @@ final class DocumentNodeTraverserTest extends TestCase
     {
         $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
-        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
+        $document->addChildNode(new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
             new /** @implements NodeTransformer<Node> */
@@ -51,7 +51,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
-            [1 => new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo'))],
+            [1 => new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('Foo'), 1, 'foo'))],
             $actual->getChildren(),
         );
     }
@@ -60,7 +60,7 @@ final class DocumentNodeTraverserTest extends TestCase
     {
         $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
-        $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
+        $document->addChildNode(new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
         $replacement = new TocNode(['/readme.rst']);
 
@@ -103,7 +103,7 @@ final class DocumentNodeTraverserTest extends TestCase
         self::assertEquals(
             [
                 $replacement,
-                new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')),
+                new SectionNode(new TitleNode(InlineNode::getPlainTextInlineNode('Foo'), 1, 'foo')),
             ],
             $actual->getChildren(),
         );

@@ -16,11 +16,11 @@ namespace phpDocumentor\Guides\Nodes;
 /**
  * Defines a footnote or citation
  *
- * @extends CompoundNode<TextNode>
+ * @extends CompoundNode<InlineNode>
  */
 abstract class AnnotationNode extends CompoundNode
 {
-    /** @param list<TextNode> $value */
+    /** @param list<InlineNode> $value */
     public function __construct(array $value, private readonly string $name)
     {
         parent::__construct($value);

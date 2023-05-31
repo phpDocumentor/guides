@@ -7,8 +7,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\RawNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class DefinitionListRuleTest extends RuleTestCase
@@ -34,7 +34,7 @@ final class DefinitionListRuleTest extends RuleTestCase
         self::assertFalse($this->rule->applies($context));
     }
 
-    public function testParsDefinitionList(): void
+    public function testParseDefinitionList(): void
     {
         $input = <<<'RST'
 term 1
@@ -70,7 +70,7 @@ RST;
         $result = $this->rule->apply($context);
         $expected = new DefinitionListNode(
             new DefinitionListItemNode(
-                new SpanNode('term 1'),
+                InlineNode::getPlainTextInlineNode('term 1'),
                 [],
                 [
                     new DefinitionNode(
@@ -81,7 +81,7 @@ RST;
                 ],
             ),
             new DefinitionListItemNode(
-                new SpanNode('term 2'),
+                InlineNode::getPlainTextInlineNode('term 2'),
                 [],
                 [
                     new DefinitionNode(
@@ -100,8 +100,8 @@ RST),
                 ],
             ),
             new DefinitionListItemNode(
-                new SpanNode('term 3'),
-                [new SpanNode('classifier')],
+                InlineNode::getPlainTextInlineNode('term 3'),
+                [InlineNode::getPlainTextInlineNode('classifier')],
                 [
                     new DefinitionNode(
                         [
@@ -111,10 +111,10 @@ RST),
                 ],
             ),
             new DefinitionListItemNode(
-                new SpanNode('term 4'),
+                InlineNode::getPlainTextInlineNode('term 4'),
                 [
-                    new SpanNode('classifier one'),
-                    new SpanNode('classifier two'),
+                    InlineNode::getPlainTextInlineNode('classifier one'),
+                    InlineNode::getPlainTextInlineNode('classifier two'),
                 ],
                 [
                     new DefinitionNode(
@@ -125,7 +125,7 @@ RST),
                 ],
             ),
             new DefinitionListItemNode(
-                new SpanNode('- term 5'),
+                InlineNode::getPlainTextInlineNode('- term 5'),
                 [],
                 [
                     new DefinitionNode(
@@ -136,7 +136,7 @@ RST),
                 ],
             ),
             new DefinitionListItemNode(
-                new SpanNode('... another definition:'),
+                InlineNode::getPlainTextInlineNode('... another definition:'),
                 [],
                 [
                     new DefinitionNode(
@@ -168,7 +168,7 @@ RST;
         $result = $this->rule->apply($context);
         $expected = new DefinitionListNode(
             new DefinitionListItemNode(
-                new SpanNode('term 1'),
+                InlineNode::getPlainTextInlineNode('term 1'),
                 [],
                 [
                     new DefinitionNode(

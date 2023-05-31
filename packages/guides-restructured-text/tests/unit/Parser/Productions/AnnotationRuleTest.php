@@ -7,11 +7,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\AnnotationNode;
 use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use PHPUnit\Framework\Attributes\DataProvider;
-
-use function implode;
 
 final class AnnotationRuleTest extends RuleTestCase
 {
@@ -87,19 +84,19 @@ final class AnnotationRuleTest extends RuleTestCase
         return [
             'single line citation' => [
                 'input' => '..  [name] Some Citation',
-                'output' => new CitationNode([new SpanNode('Some Citation', [])], 'name'),
+                'output' => new CitationNode([InlineNode::getPlainTextInlineNode('Some Citation')], 'name'),
             ],
             'single line Anonymous numbered footnote' => [
                 'input' => '..  [#] Anonymous numbered footnote',
-                'output' => new FootnoteNode([new SpanNode('Anonymous numbered footnote', [])], '#', 0),
+                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Anonymous numbered footnote')], '#', 0),
             ],
             'single line Numbered footnote' => [
                 'input' => '..  [42] Numbered footnote',
-                'output' => new FootnoteNode([new SpanNode('Numbered footnote', [])], '', 42),
+                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Numbered footnote')], '', 42),
             ],
             'single line named footnote' => [
                 'input' => '..  [#somename] Named footnote',
-                'output' => new FootnoteNode([new SpanNode('Named footnote', [])], '#somename', 0),
+                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Named footnote')], '#somename', 0),
             ],
             'multi line citation' => [
                 'input' => <<<'RST'
@@ -109,12 +106,11 @@ RST
                 ,
                 'output' => new CitationNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
 RST,
-                            [],
                         ),
                     ],
                     'name',
@@ -131,12 +127,11 @@ RST
                 ,
                 'output' => new CitationNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
 RST,
-                            [],
                         ),
                     ],
                     'name',
@@ -153,12 +148,11 @@ RST
                 ,
                 'output' => new FootnoteNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
 RST,
-                            [],
                         ),
                     ],
                     '#name',
@@ -176,12 +170,11 @@ RST
                 ,
                 'output' => new FootnoteNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
 RST,
-                            [],
                         ),
                     ],
                     '',
@@ -190,15 +183,5 @@ RST,
                 'remaining' => 'This is a new paragraph',
             ],
         ];
-    }
-
-    protected function givenInlineMarkupRule(): InlineMarkupRule
-    {
-        $spanParser = $this->createMock(SpanParser::class);
-        $spanParser->method('parse')->willReturnCallback(
-            static fn (array $arg): SpanNode => new SpanNode(implode("\n", $arg))
-        );
-
-        return new InlineMarkupRule($spanParser);
     }
 }

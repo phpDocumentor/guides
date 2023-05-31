@@ -12,9 +12,7 @@
     </InvalidArgument>
   </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
-    <UndefinedDocblockClass>
-      <code><![CDATA[($on is null ? SpanNode: TParent<Node>|SpanNode|null)]]></code>
-    </UndefinedDocblockClass>
+    <UndefinedDocblockClass/>
   </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/SectionRule.php">
     <MoreSpecificImplementedParamType>

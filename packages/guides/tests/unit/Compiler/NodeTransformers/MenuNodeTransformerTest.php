@@ -11,8 +11,8 @@ use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Nodes\TocNode;
@@ -40,11 +40,11 @@ final class MenuNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'),
                 ),
                 new TocEntry(
                     'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 2'), 1, 'title-2'),
                 ),
             ],
             $transformedNode->getEntries(),
@@ -86,7 +86,7 @@ final class MenuNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'),
                 ),
             ],
             $transformedNode->getEntries(),
@@ -103,15 +103,15 @@ final class MenuNodeTransformerTest extends TestCase
 
         $entry = new TocEntry(
             'index',
-            new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+            new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'),
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'),
                 ),
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2'),
                 ),
             ],
         );
@@ -121,7 +121,7 @@ final class MenuNodeTransformerTest extends TestCase
                 $entry,
                 new TocEntry(
                     'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 2'), 1, 'title-2'),
                 ),
             ],
             $transformedNode->getEntries(),
@@ -138,15 +138,15 @@ final class MenuNodeTransformerTest extends TestCase
 
         $entry = new TocEntry(
             'index',
-            new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+            new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'),
             [
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'),
                 ),
                 new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2'),
                 ),
             ],
         );
@@ -155,7 +155,7 @@ final class MenuNodeTransformerTest extends TestCase
             [
                 new TocEntry(
                     'page3',
-                    new TitleNode(new SpanNode('Title 3', []), 1, 'title-3'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 3'), 1, 'title-3'),
                 ),
                 $entry,
             ],
@@ -166,17 +166,17 @@ final class MenuNodeTransformerTest extends TestCase
     private function givenMetas(): Metas
     {
         $indexDoc = new DocumentEntry('index', TitleNode::emptyNode());
-        $section = new SectionEntry(new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'));
-        $subSection = new SectionEntry(new TitleNode(new SpanNode('Title 1.1', []), 2, 'title-1-1'));
+        $section = new SectionEntry(new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'));
+        $subSection = new SectionEntry(new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'));
         $section->addChild($subSection);
-        $section->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 1.2', []), 2, 'title-1-2')));
+        $section->addChild(new SectionEntry(new TitleNode(InlineNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2')));
         $indexDoc->addChild($section);
 
         $page2 = new DocumentEntry('page2', TitleNode::emptyNode());
-        $page2->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 2', []), 1, 'title-2')));
+        $page2->addChild(new SectionEntry(new TitleNode(InlineNode::getPlainTextInlineNode('Title 2'), 1, 'title-2')));
 
         $page3 = new DocumentEntry('page3', TitleNode::emptyNode());
-        $page3->addChild(new SectionEntry(new TitleNode(new SpanNode('Title 3', []), 1, 'title-3')));
+        $page3->addChild(new SectionEntry(new TitleNode(InlineNode::getPlainTextInlineNode('Title 3'), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 
         return new Metas(

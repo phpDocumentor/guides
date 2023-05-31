@@ -17,9 +17,9 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function mb_strlen;
@@ -35,7 +35,7 @@ class TitleRule implements Rule
 {
     private const TITLE_LENGTH_MIN = 2;
 
-    public function __construct(private readonly SpanParser $spanParser)
+    public function __construct(private readonly InlineTokenParser $inlineTokenParser)
     {
     }
 
@@ -80,7 +80,7 @@ class TitleRule implements Rule
         $level = $documentParserContext->getLevel($overlineLetter, $underlineLetter);
 
         return new TitleNode(
-            $this->spanParser->parse($title, $context),
+            $this->inlineTokenParser->parse($title, $context),
             $level,
             (new AsciiSlugger())->slug($title)->lower()->toString(),
         );

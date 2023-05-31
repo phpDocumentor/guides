@@ -1116,7 +1116,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-main",
+            "version": "dev-tokennodes",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1157,7 +1157,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-main",
+            "version": "dev-tokennodes",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1230,7 +1230,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-main",
+            "version": "dev-tokennodes",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",

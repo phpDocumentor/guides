@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ParagraphRuleTest extends RuleTestCase
@@ -48,7 +48,7 @@ final class ParagraphRuleTest extends RuleTestCase
         return [
             [
                 'input' => 'some text.',
-                'output' => new ParagraphNode([new SpanNode('some text.', [])]),
+                'output' => new ParagraphNode([InlineNode::getPlainTextInlineNode('some text.')]),
                 'remaining' => null,
             ],
             [
@@ -59,13 +59,10 @@ RST
 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
-                            <<<'RST'
+                        InlineNode::getPlainTextInlineNode(<<<'RST'
 some multiline
 paragraph
-RST,
-                            [],
-                        ),
+RST),
                     ],
                 ),
                 'remaining' => null,
@@ -80,13 +77,10 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
-                            <<<'RST'
+                        InlineNode::getPlainTextInlineNode(<<<'RST'
 some multiline
 paragraph
-RST,
-                            [],
-                        ),
+RST),
                     ],
                 ),
                 'remaining' => '',
@@ -101,12 +95,11 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 paragraph
 RST,
-                            [],
                         ),
                     ],
                 ),
@@ -122,12 +115,11 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            [],
                         ),
                     ],
                 ),
@@ -144,12 +136,11 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            [],
                         ),
                     ],
                 ),
@@ -166,12 +157,11 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            [],
                         ),
                     ],
                 ),
@@ -190,12 +180,11 @@ RST
             ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
 RST,
-                            [],
                         ),
                     ],
                 ),
@@ -211,11 +200,10 @@ RST
     ,
                 'output' => new ParagraphNode(
                     [
-                        new SpanNode(
+                        InlineNode::getPlainTextInlineNode(
                             <<<'RST'
 This is a top-level paragraph.
 RST,
-                            [],
                         ),
                     ],
                 ),

@@ -14,26 +14,26 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 
 /** @extends CompoundNode<DefinitionNode> */
 final class DefinitionListItemNode extends CompoundNode
 {
     /**
-     * @param SpanNode[] $classifiers
+     * @param InlineNode[] $classifiers
      * @param DefinitionNode[] $definitions
      */
-    public function __construct(private readonly SpanNode $term, private readonly array $classifiers, array $definitions = [])
+    public function __construct(private readonly InlineNode $term, private readonly array $classifiers, array $definitions = [])
     {
         parent::__construct($definitions);
     }
 
-    public function getTerm(): SpanNode
+    public function getTerm(): InlineNode
     {
         return $this->term;
     }
 
-    /** @return SpanNode[] */
+    /** @return InlineNode[] */
     public function getClassifiers(): array
     {
         return $this->classifiers;
