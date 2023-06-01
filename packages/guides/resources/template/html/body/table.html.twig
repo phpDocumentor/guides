@@ -19,11 +19,9 @@
             <tr>
                 {% for column in tableRow.columns %}
                 <td{% if column.colSpan > 1 %} colspan="{{ column.colSpan }}"{% endif %}{% if column.rowSpan > 1 %} rowspan="{{ column.rowSpan }}"{% endif %}>
-                    {%- if column.children is not empty %}
-                        {%- for child in column.children -%}
-                                {{- renderNode(child) -}}
-                        {% endfor %}
-                    {%- else %}&nbsp;{% endif %}</td>
+                    {%- for child in column.children -%}
+                        {{- renderNode(child) -}}
+                    {%- else %}&nbsp;{% endfor %}</td>
                 {% endfor %}
             </tr>
         {% endfor %}
