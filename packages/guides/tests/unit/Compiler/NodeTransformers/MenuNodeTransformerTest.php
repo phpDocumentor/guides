@@ -63,11 +63,11 @@ final class MenuNodeTransformerTest extends TestCase
             [
                 (new TocEntry(
                     'index',
-                    new TitleNode(new SpanNode('Title 1', []), 1, 'title-1'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'),
                 ))->withOptions(['active' => 'true']),
                 new TocEntry(
                     'page2',
-                    new TitleNode(new SpanNode('Title 2', []), 1, 'title-2'),
+                    new TitleNode(InlineNode::getPlainTextInlineNode('Title 2'), 1, 'title-2'),
                 ),
             ],
             $transformedNode->getEntries(),

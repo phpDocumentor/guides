@@ -18,13 +18,13 @@ class InlineTokenParser
     /** @var InlineRule[] */
     private array $rules;
 
-    /** @param InlineRule[] $inlineRules */
-    public function __construct(array $inlineRules = [])
+    /** @param iterable<InlineRule> $inlineRules */
+    public function __construct(iterable $inlineRules)
     {
-        usort($inlineRules, static function (InlineRule $a, InlineRule $b): int {
+        $this->rules = [...$inlineRules];
+        usort($this->rules, static function (InlineRule $a, InlineRule $b): int {
             return $a->getPriority() > $b->getPriority() ? -1 : 1;
         });
-        $this->rules = $inlineRules;
     }
 
     public function parse(string $content, ParserContext $parserContext): InlineNode

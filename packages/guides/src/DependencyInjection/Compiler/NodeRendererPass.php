@@ -16,6 +16,7 @@ use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
+use phpDocumentor\Guides\Nodes\InlineNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
@@ -69,6 +70,7 @@ final class NodeRendererPass implements CompilerPassInterface
         RubricNode::class => 'body/rubric.html.twig',
         CitationNode::class => 'body/citation.html.twig',
         FootnoteNode::class => 'body/footnote.html.twig',
+        InlineNode::class => 'inline/inline-node.html.twig',
         // Output as Metatags
         AuthorNode::class => 'structure/header/author.html.twig',
         CopyrightNode::class => 'structure/header/copyright.html.twig',
