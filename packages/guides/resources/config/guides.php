@@ -30,7 +30,7 @@ use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
-use phpDocumentor\Guides\Twig\ThemeManager;
+use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use phpDocumentor\Guides\UrlGenerator;
 use phpDocumentor\Guides\UrlGeneratorInterface;

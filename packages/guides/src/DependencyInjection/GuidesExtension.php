@@ -6,7 +6,8 @@ namespace phpDocumentor\Guides\DependencyInjection;
 
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
-use phpDocumentor\Guides\Twig\ThemeManager;
+use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
+use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function assert;
 use function dirname;
+use function is_array;
 
 class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface
 {
@@ -35,7 +37,20 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->end()
                 ->arrayNode('themes')
                     ->defaultValue([])
-                    ->scalarPrototype()->end()
+                    ->arrayPrototype()
+                        ->beforeNormalization()
+                            ->ifTrue(static fn ($v) => !is_array($v) || !isset($v['templates']))
+                            ->then(static fn (string $v) => ['templates' => (array) $v])
+                        ->end()
+                        ->children()
+                            ->scalarNode('extends')->end()
+                            ->arrayNode('templates')
+                                ->isRequired()
+                                ->cannotBeEmpty()
+                                ->scalarPrototype()->end()
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
 
@@ -58,9 +73,9 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
 
-        foreach ($config['themes'] as $themeName => $themePath) {
+        foreach ($config['themes'] as $themeName => $themeConfig) {
             $container->getDefinition(ThemeManager::class)
-                ->addMethodCall('registerTheme', [$themeName, [$themePath]]);
+                ->addMethodCall('registerTheme', [new ThemeConfig($themeName, $themeConfig['templates'], $themeConfig['extends'] ?? null)]);
         }
     }
 
