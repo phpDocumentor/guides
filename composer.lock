@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "875fbf82f8d33a90145ae25e78774307",
+    "content-hash": "9b8cc47c6f6aaf4acbd6a9ba166cf4a9",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1116,7 +1116,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-bootstrap-menu",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1157,7 +1157,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-bootstrap-menu",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1230,7 +1230,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-bootstrap-menu",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -3622,22 +3622,22 @@
         },
         {
             "name": "doctrine/coding-standard",
-            "version": "11.1.0",
+            "version": "12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/coding-standard.git",
-                "reference": "4bcfa9d922e13cb3b8078d4752e3ba276f959c88"
+                "reference": "1b2b7dc58c68833af481fb9325c25abd40681c79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/coding-standard/zipball/4bcfa9d922e13cb3b8078d4752e3ba276f959c88",
-                "reference": "4bcfa9d922e13cb3b8078d4752e3ba276f959c88",
+                "url": "https://api.github.com/repos/doctrine/coding-standard/zipball/1b2b7dc58c68833af481fb9325c25abd40681c79",
+                "reference": "1b2b7dc58c68833af481fb9325c25abd40681c79",
                 "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7 || ^1.0.0",
                 "php": "^7.2 || ^8.0",
-                "slevomat/coding-standard": "^8.6.2",
+                "slevomat/coding-standard": "^8.11",
                 "squizlabs/php_codesniffer": "^3.7"
             },
             "type": "phpcodesniffer-standard",
@@ -3672,9 +3672,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/coding-standard/issues",
-                "source": "https://github.com/doctrine/coding-standard/tree/11.1.0"
+                "source": "https://github.com/doctrine/coding-standard/tree/12.0.0"
             },
-            "time": "2023-01-06T09:12:24+00:00"
+            "time": "2023-04-24T17:43:28+00:00"
         },
         {
             "name": "fakerphp/faker",
