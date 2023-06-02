@@ -1,0 +1,5 @@
+{% if parts.mainmenu %}
+    {% for child in parts.mainmenu -%}
+        {{ renderNode(child) }}
+    {%~ endfor -%}
+{% endif %}

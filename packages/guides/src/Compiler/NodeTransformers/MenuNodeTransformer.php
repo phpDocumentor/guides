@@ -17,6 +17,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use Traversable;
 
+use function array_merge;
+use function assert;
 use function iterator_to_array;
 use function ltrim;
 
@@ -38,6 +40,11 @@ final class MenuNodeTransformer implements NodeTransformer
             }
 
             foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node) as $entry) {
+                if ($entry->getUrl() === $documentNode->getFilePath()) {
+                    $entry = $entry->withOptions(array_merge($entry->getOptions(), ['active' => true]));
+                    assert($entry instanceof Entry);
+                }
+
                 $entries[] = $entry;
             }
         }

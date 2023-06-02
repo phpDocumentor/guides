@@ -31,6 +31,13 @@ final class DocumentNode extends CompoundNode
     private array $headerNodes = [];
 
     /**
+     * Nodes that can be rendered in a special section of the page like the menu or the footer
+     *
+     * @var array<string, Node[]>
+     */
+    private array $documentPartNodes = [];
+
+    /**
      * Variables are replacements in a document.
      *
      * They easiest example is the replace directive that allows textual replacements in the document. But
@@ -160,5 +167,22 @@ final class DocumentNode extends CompoundNode
         return [
             'rst-file' => $this->getFilePath() . '.rst',
         ];
+    }
+
+    /** @return array<string, Node[]> */
+    public function getDocumentPartNodes(): array
+    {
+        return $this->documentPartNodes;
+    }
+
+    /** @param Node[] $nodes */
+    public function addDocumentPart(string $identifier, array $nodes): void
+    {
+        $this->documentPartNodes[$identifier] = $nodes;
+    }
+
+    public function hasDocumentPart(string $identifier): bool
+    {
+        return isset($this->documentPartNodes[$identifier]);
     }
 }

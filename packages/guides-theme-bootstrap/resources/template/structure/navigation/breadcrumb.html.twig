@@ -1,0 +1,5 @@
+{% if parts.breadcrumb %}
+    {% for child in parts.breadcrumb -%}
+        {{ renderNode(child) }}
+    {%~ endfor -%}
+{% endif %}
