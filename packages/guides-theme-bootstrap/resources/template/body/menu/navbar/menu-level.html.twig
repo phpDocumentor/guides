@@ -2,7 +2,7 @@
     {% for entry in node.entries -%}
 
         <li class="nav-item">
-            <a href="{{ entry.url }}"
+            <a href="{{ renderLink(entry.url) }}"
                class="nav-link {% if entry.options.active %} active {% endif %}"
                     {% if entry.options.active %}  aria-current="page" {% endif %} >
                 {{ renderNode(entry.value.value) }}
