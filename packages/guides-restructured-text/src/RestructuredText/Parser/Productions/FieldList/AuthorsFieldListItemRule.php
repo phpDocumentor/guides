@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorNode;
@@ -12,6 +11,7 @@ use phpDocumentor\Guides\Nodes\Metadata\AuthorsNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function assert;
 use function count;
@@ -26,7 +26,7 @@ class AuthorsFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'authors';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode, DocumentNode $documentNode): MetadataNode
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode
     {
         $authorNodes = [];
         if (count($fieldListItemNode->getChildren()) === 1) {

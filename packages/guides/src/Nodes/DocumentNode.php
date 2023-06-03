@@ -55,16 +55,10 @@ final class DocumentNode extends CompoundNode
     private string|null $metaTitle = null;
 
     public function __construct(
-        private readonly ProjectNode $projectNode,
         private readonly string $hash,
         private readonly string $filePath,
     ) {
         parent::__construct([]);
-    }
-    
-    public function getProjectNode(): ProjectNode
-    {
-        return $this->projectNode;
     }
 
     public function getFilePath(): string

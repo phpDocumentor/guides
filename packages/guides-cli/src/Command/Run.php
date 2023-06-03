@@ -11,13 +11,15 @@ use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
-use phpDocumentor\Guides\Twig\ThemeManager;
+use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -107,8 +109,13 @@ final class Run extends Command
             }
 
             $this->settingsManager->setProjectSettings($settings);
+            $projectNode = new ProjectNode(
+                $settings->getTitle(),
+                $settings->getVersion(),
+            );
         } else {
             $this->settingsManager->setProjectSettings(new ProjectSettings());
+            $projectNode = new ProjectNode();
         }
 
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
@@ -127,6 +134,7 @@ final class Run extends Command
                 $sourceFileSystem,
                 '',
                 $input->getOption('input-format'),
+                $projectNode,
             ),
         );
 
@@ -134,7 +142,7 @@ final class Run extends Command
             $this->themeManager->useTheme($input->getOption('theme') ?? 'default');
         }
 
-        $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
+        $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
 
         $destinationFileSystem = new Filesystem(new Local($outputDir));
 
@@ -148,6 +156,7 @@ final class Run extends Command
                     $this->metas,
                     $sourceFileSystem,
                     $destinationFileSystem,
+                    $projectNode,
                 ),
             );
         }

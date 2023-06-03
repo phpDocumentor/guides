@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Psr\Log\LoggerInterface;
 
 use function sprintf;
@@ -23,9 +23,9 @@ class ProjectFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'project';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode, DocumentNode $documentNode): MetadataNode|null
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode|null
     {
-        $currentTitle = $documentNode->getProjectNode()->getTitle();
+        $currentTitle = $documentParserContext->getProjectNode()->getTitle();
         $newTitle = $fieldListItemNode->getPlaintextContent();
         if (
             $currentTitle !== null
@@ -38,7 +38,7 @@ class ProjectFieldListItemRule implements FieldListItemRule
             ));
         }
 
-        $documentNode->getProjectNode()->setTitle($newTitle);
+        $documentParserContext->getProjectNode()->setTitle($newTitle);
 
         return null;
     }

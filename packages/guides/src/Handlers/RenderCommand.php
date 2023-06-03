@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Handlers;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class RenderCommand
 {
@@ -17,6 +18,7 @@ final class RenderCommand
         private readonly Metas $metas,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
+        private readonly ProjectNode $projectNode,
         private readonly string $destinationPath = '/',
     ) {
     }
@@ -50,5 +52,10 @@ final class RenderCommand
     public function getDestinationPath(): string
     {
         return $this->destinationPath;
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->projectNode;
     }
 }

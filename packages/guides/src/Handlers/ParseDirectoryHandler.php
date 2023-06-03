@@ -41,7 +41,7 @@ final class ParseDirectoryHandler
         $documents = [];
         foreach ($files as $file) {
             $documents[] = $this->commandBus->handle(
-                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1),
+                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode()),
             );
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -26,14 +27,14 @@ final class TransformerPass implements CompilerPass
     }
 
     /** {@inheritDoc} */
-    public function run(array $documents): array
+    public function run(array $documents, CompilerContext $compilerContext): array
     {
         foreach ($documents as $key => $document) {
             if (!($document instanceof DocumentNode)) {
                 continue;
             }
 
-            $documents[$key] = $this->documentNodeTraverser->traverse($document);
+            $documents[$key] = $this->documentNodeTraverser->traverse($document, $compilerContext);
         }
 
         return array_filter($documents, static fn ($document): bool => $document instanceof DocumentNode);

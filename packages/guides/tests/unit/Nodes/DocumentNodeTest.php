@@ -12,7 +12,7 @@ final class DocumentNodeTest extends TestCase
     {
         $expected = new TitleNode(new SpanNode('Test'), 1, 'test');
 
-        $document = new DocumentNode(new ProjectNode(), 'test', 'file');
+        $document = new DocumentNode('test', 'file');
         $document->addChildNode(new SectionNode($expected));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Test 2'), 1, 'test-2')));
 

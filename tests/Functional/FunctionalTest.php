@@ -10,8 +10,10 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGenerator;
@@ -81,7 +83,7 @@ class FunctionalTest extends ApplicationTestCase
 
 
             $compiler = $this->getContainer()->get(Compiler::class);
-            $compiler->run([$document]);
+            $compiler->run([$document], new CompilerContext(new ProjectNode()));
 
             $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
             $context = RenderContext::forDocument(
@@ -92,6 +94,7 @@ class FunctionalTest extends ApplicationTestCase
                 new Metas(),
                 new UrlGenerator(),
                 $format,
+                new ProjectNode(),
             );
 
             $rendered = '';

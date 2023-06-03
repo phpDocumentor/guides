@@ -11,7 +11,6 @@ use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\Metadata\OrganizationNode;
 use phpDocumentor\Guides\Nodes\Metadata\TopicNode;
-use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AbstractFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\AddressFieldListItemRule;
@@ -89,13 +88,13 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode(new ProjectNode(), '', '');
+        $documentNode = new DocumentNode('', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedTitle, $documentNode->getProjectNode()->getTitle());
+        self::assertEquals($expectedTitle, $context->getProjectNode()->getTitle());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
@@ -106,13 +105,13 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode(new ProjectNode(), '', '');
+        $documentNode = new DocumentNode('', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedVersion, $documentNode->getProjectNode()->getVersion());
+        self::assertEquals($expectedVersion, $context->getProjectNode()->getVersion());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
@@ -123,7 +122,7 @@ final class FieldListRuleTest extends RuleTestCase
     {
         $context = $this->createContext($input);
 
-        $documentNode = new DocumentNode(new ProjectNode(), '', '');
+        $documentNode = new DocumentNode('', '');
         $documentNode->setTitleFound(false);
 
         $result = $this->rule->apply($context, $documentNode);

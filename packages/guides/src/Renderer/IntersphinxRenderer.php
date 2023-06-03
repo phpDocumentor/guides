@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function json_encode;
@@ -32,11 +31,7 @@ class IntersphinxRenderer implements TypeRenderer
             'std:doc' => [],
             'std:label' => [],
         ];
-        if (isset($renderCommand->getDocuments()[0])) {
-            $projectNode = $renderCommand->getDocuments()[0]->getProjectNode();
-        } else {
-            $projectNode = new ProjectNode();
-        }
+        $projectNode = $renderCommand->getProjectNode();
 
         foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
             $url = $this->urlGenerator->canonicalUrl(

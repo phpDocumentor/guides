@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -22,7 +23,7 @@ class ClassNodeTransformer implements NodeTransformer
     /** @var string[] */
     private array $classes = [];
 
-    public function enterNode(Node $node, DocumentNode $documentNode): Node
+    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             // unset classes when entering the next document
@@ -42,7 +43,7 @@ class ClassNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof ClassNode) {
             //Remove the class node from the tree.

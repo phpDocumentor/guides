@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
@@ -21,7 +22,7 @@ final class MetasPass implements CompilerPass
     }
 
     /** {@inheritDoc} */
-    public function run(array $documents): array
+    public function run(array $documents, CompilerContext $compilerContext): array
     {
         foreach ($documents as $document) {
             if ($document->getTitle() === null) {

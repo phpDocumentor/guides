@@ -45,7 +45,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
+        $document = new DocumentNode('foo', 'index');
 
         $rule->apply($documentParser, $document);
         self::assertEquals(
@@ -74,7 +74,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
+        $document = new DocumentNode('foo', 'index');
 
         $rule->apply($documentParser, $document);
 
@@ -110,7 +110,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
+        $document = new DocumentNode('foo', 'index');
 
         $rule->apply($documentParser, $document);
 
@@ -159,7 +159,7 @@ RST;
 
         $rule = new SectionRule($titleRule, new RuleContainer());
 
-        $document = new DocumentNode(new ProjectNode(), 'foo', 'index');
+        $document = new DocumentNode('foo', 'index');
 
         $rule->apply($documentParser, $document);
 

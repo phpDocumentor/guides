@@ -24,7 +24,7 @@ final class RenderContextTest extends TestCase
         string $result,
         string|null $anchor = null,
     ): void {
-        $documentNode = new DocumentNode(new ProjectNode(), md5('hash'), $filePath);
+        $documentNode = new DocumentNode(md5('hash'), $filePath);
 
         $context = RenderContext::forDocument(
             $documentNode,
@@ -39,6 +39,7 @@ final class RenderContextTest extends TestCase
             ]),
             new UrlGenerator(),
             'txt',
+            new ProjectNode(),
         );
 
         self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));

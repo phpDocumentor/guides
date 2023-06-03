@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -17,8 +18,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 {
     public function testAllImplicitUniqueSections(): void
     {
-        $document = new DocumentNode(new ProjectNode(), '1', 'index');
-        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
+        $document = new DocumentNode('1', 'index');
+        $expected = new DocumentNode('1', 'index');
         $slugger = new AsciiSlugger();
         foreach (['Document 1', 'Section A', 'Section B'] as $titles) {
             $document->addChildNode(
@@ -34,15 +35,15 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         }
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([clone $document]);
+        $resultDocuments = $pass->run([clone $document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }
 
     public function testImplicitWithConflict(): void
     {
-        $document = new DocumentNode(new ProjectNode(), '1', 'index');
-        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
+        $document = new DocumentNode('1', 'index');
+        $expected = new DocumentNode('1', 'index');
         $slugger = new AsciiSlugger();
 
         foreach (['Document 1', 'Section A', 'Section A'] as $titles) {
@@ -59,7 +60,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         }
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         $section = $expected->getNodes()[2];
         self::assertInstanceOf(SectionNode::class, $section);
@@ -70,8 +71,8 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
 
     public function testExplicit(): void
     {
-        $document = new DocumentNode(new ProjectNode(), '1', 'index');
-        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
+        $document = new DocumentNode('1', 'index');
+        $expected = new DocumentNode('1', 'index');
 
         $document->addChildNode(new SectionNode(
             new TitleNode(new SpanNode('Document 1'), 1, 'document-1'),
@@ -92,15 +93,15 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected->addChildNode(new SectionNode($expectedTitle));
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }
 
     public function testExplicitHasPriorityOverImplicit(): void
     {
-        $document = new DocumentNode(new ProjectNode(), '1', 'index');
-        $expected = new DocumentNode(new ProjectNode(), '1', 'index');
+        $document = new DocumentNode('1', 'index');
+        $expected = new DocumentNode('1', 'index');
 
         $document->addChildNode(
             new SectionNode(new TitleNode(new SpanNode('Document 1'), 1, 'document-1')),
@@ -121,7 +122,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected->addChildNode(new SectionNode($expectedTitle));
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }

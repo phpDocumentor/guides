@@ -37,7 +37,7 @@ final class DocumentNodeRenderer implements NodeRenderer
         $data = [
             'node' => $node,
             'title' => $node->getPageTitle(),
-            'project' => $node->getProjectNode(),
+            'project' => $renderContext->getProjectNode(),
             'parts' => $node->getDocumentPartNodes(),
         ];
 

@@ -15,14 +15,14 @@ interface NodeTransformer
      *
      * @return T
      */
-    public function enterNode(Node $node, DocumentNode $documentNode): Node;
+    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node;
 
     /**
      * @param T $node
      *
      * @return T|null
      */
-    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null;
+    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null;
 
     /** @psalm-assert-if-true T $node */
     public function supports(Node $node): bool;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
@@ -25,12 +26,12 @@ final class MetasPassTest extends TestCase
         $section11 = new SectionNode(new TitleNode(new SpanNode('index-title 1.1'), 2, 'index-title-1-1'));
         $section->addChildNode($section11);
 
-        $document = new DocumentNode(new ProjectNode(), '1', 'index');
+        $document = new DocumentNode('1', 'index');
         $document->addChildNode($section);
 
         $metas = new Metas([]);
         $pass = new MetasPass($metas);
-        $pass->run([$document]);
+        $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         $entries = $metas->getAll();
 

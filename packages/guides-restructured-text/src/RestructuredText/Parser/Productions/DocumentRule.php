@@ -37,7 +37,6 @@ final class DocumentRule implements Rule
     public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $on ??= new DocumentNode(
-            $documentParserContext->getProjectNode(),
             md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),
             $documentParserContext->getContext()->getCurrentFileName(),
         );

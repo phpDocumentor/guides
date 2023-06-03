@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentBlockNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -20,12 +21,12 @@ use function array_merge;
  */
 class DocumentBlockNodeTransformer implements NodeTransformer
 {
-    public function enterNode(Node $node, DocumentNode $documentNode): Node
+    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
     {
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof DocumentBlockNode) {
             $children = [];

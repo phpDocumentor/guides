@@ -13,7 +13,7 @@ interface CompilerPass
      *
      * @return DocumentNode[]
      */
-    public function run(array $documents): array;
+    public function run(array $documents, CompilerContext $compilerContext): array;
 
     public function getPriority(): int;
 }

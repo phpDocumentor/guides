@@ -18,7 +18,7 @@ class PostRenderDocumentTest extends TestCase
 {
     public function testEventCreation(): void
     {
-        $document = new DocumentNode(new ProjectNode(), 'hash', 'path');
+        $document = new DocumentNode('hash', 'path');
         $command = new RenderDocumentCommand(
             $document,
             RenderContext::forDocument(
@@ -29,6 +29,7 @@ class PostRenderDocumentTest extends TestCase
                 new Metas(),
                 $this->createMock(UrlGeneratorInterface::class),
                 'html',
+                new ProjectNode(),
             ),
         );
 

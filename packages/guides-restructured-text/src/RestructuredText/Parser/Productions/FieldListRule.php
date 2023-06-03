@@ -61,7 +61,7 @@ final class FieldListRule implements Rule
             // A field list found before the first title node is considered file wide meta data:
             // https://www.sphinx-doc.org/en/master/usage/restructuredtext/field-lists.html#file-wide-metadata
             // It is not output
-            $this->addMetadata($on, $fieldListItemNodes);
+            $this->addMetadata($on, $fieldListItemNodes, $documentParserContext);
 
             return null;
         }
@@ -70,7 +70,7 @@ final class FieldListRule implements Rule
     }
 
     /** @param FieldListItemNode[] $fieldListItemNodes */
-    private function addMetadata(DocumentNode $documentNode, array $fieldListItemNodes): void
+    private function addMetadata(DocumentNode $documentNode, array $fieldListItemNodes, DocumentParserContext $documentParserContext): void
     {
         foreach ($fieldListItemNodes as $fieldListItemNode) {
             foreach ($this->fieldListItemRules as $fieldListItemRule) {
@@ -78,7 +78,7 @@ final class FieldListRule implements Rule
                     continue;
                 }
 
-                $metaNode = $fieldListItemRule->apply($fieldListItemNode, $documentNode);
+                $metaNode = $fieldListItemRule->apply($fieldListItemNode, $documentParserContext);
                 if ($metaNode === null) {
                     continue;
                 }

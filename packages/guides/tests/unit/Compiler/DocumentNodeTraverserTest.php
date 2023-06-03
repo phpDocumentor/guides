@@ -18,19 +18,19 @@ final class DocumentNodeTraverserTest extends TestCase
 {
     public function testRemoveNodeFromDocument(): void
     {
-        $document = new DocumentNode(new ProjectNode(), 'foo', '/index.rst');
+        $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
             new /** @implements NodeTransformer<Node> */
             class implements NodeTransformer {
-                public function enterNode(Node $node, DocumentNode $documentNode): Node
+                public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
                 {
                     return $node;
                 }
 
-                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+                public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
                 {
                     return null;
                 }
@@ -47,7 +47,7 @@ final class DocumentNodeTraverserTest extends TestCase
             },
         ]), 2000);
 
-        $actual = $traverser->traverse($document);
+        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
@@ -58,7 +58,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
     public function testReplaceNode(): void
     {
-        $document = new DocumentNode(new ProjectNode(), 'foo', '/index.rst');
+        $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(new SpanNode('Foo'), 1, 'foo')));
 
@@ -73,12 +73,12 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                 }
 
-                public function enterNode(Node $node, DocumentNode $documentNode): Node
+                public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
                 {
                     return $this->replacement;
                 }
 
-                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+                public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
                 {
                     return $node;
                 }
@@ -97,7 +97,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
 
-        $actual = $traverser->traverse($document);
+        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(

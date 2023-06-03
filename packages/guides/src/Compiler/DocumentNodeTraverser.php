@@ -17,7 +17,7 @@ final class DocumentNodeTraverser
     ) {
     }
 
-    public function traverse(DocumentNode $node): Node|null
+    public function traverse(DocumentNode $node, CompilerContext $compilerContext): Node|null
     {
         $traversedNode = $node;
         foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
@@ -25,7 +25,7 @@ final class DocumentNodeTraverser
                 continue;
             }
 
-            $traversedNode = $this->traverseForTransformer($transformer, $node, $node);
+            $traversedNode = $this->traverseForTransformer($transformer, $node, $node, $compilerContext);
             if ($traversedNode === null) {
                 return null;
             }
@@ -41,17 +41,21 @@ final class DocumentNodeTraverser
      *
      * @template TNode as Node
      */
-    private function traverseForTransformer(NodeTransformer $transformer, Node $node, DocumentNode $documentNode): Node|null
-    {
+    private function traverseForTransformer(
+        NodeTransformer $transformer,
+        Node $node,
+        DocumentNode $documentNode,
+        CompilerContext $compilerContext,
+    ): Node|null {
         $supports = $transformer->supports($node);
 
         if ($supports) {
-            $node = $transformer->enterNode($node, $documentNode);
+            $node = $transformer->enterNode($node, $documentNode, $compilerContext);
         }
 
         if ($node instanceof CompoundNode) {
             foreach ($node->getChildren() as $key => $childNode) {
-                $transformed = $this->traverseForTransformer($transformer, $childNode, $documentNode);
+                $transformed = $this->traverseForTransformer($transformer, $childNode, $documentNode, $compilerContext);
                 if ($transformed === null) {
                     $node = $node->removeNode($key);
                     continue;
@@ -66,7 +70,7 @@ final class DocumentNodeTraverser
         }
 
         if ($supports) {
-            $node = $transformer->leaveNode($node, $documentNode);
+            $node = $transformer->leaveNode($node, $documentNode, $compilerContext);
         }
 
         return $node;

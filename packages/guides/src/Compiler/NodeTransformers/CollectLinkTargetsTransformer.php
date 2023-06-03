@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Metas;
@@ -30,7 +31,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         $this->documentStack = new SplStack();
     }
 
-    public function enterNode(Node $node, DocumentNode $documentNode): Node
+    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
@@ -59,7 +60,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode): Node
+    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();
