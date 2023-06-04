@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\ShadowTree;
 
+use LogicException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
+use function array_values;
+
 class TreeNode
 {
-    private self|null $parent = null;
-
     /** @param TreeNode[] $children */
     private function __construct(
         private DocumentNode $root,
         private Node $node,
         private array $children,
+        private self|null $parent = null,
     ) {
         foreach ($children as $child) {
             $child->parent = $this;
@@ -28,19 +30,24 @@ class TreeNode
         return new self($document, $document, self::createFromCompoundNode($document, $document));
     }
 
-    private static function createFromCompoundNode(CompoundNode $document, DocumentNode $root): array
+    /** @return TreeNode[] */
+    private static function createFromCompoundNode(CompoundNode $node, DocumentNode $root): array
     {
         $children = [];
-        foreach ($document->getChildren() as $child) {
-            if ($child instanceof CompoundNode) {
-                $children[] = new self($root, $child, self::createFromCompoundNode($child, $root));
-                continue;
-            }
-
-            $children[] = new self($root, $child, []);
+        foreach ($node->getChildren() as $child) {
+            $children[] = self::createFromNode($child, $root);
         }
 
         return $children;
+    }
+
+    private static function createFromNode(Node $node, DocumentNode $root, self|null $parent = null): self
+    {
+        if ($node instanceof CompoundNode) {
+            return new self($root, $node, self::createFromCompoundNode($node, $root), $parent);
+        }
+
+        return new self($root, $node, [], $parent);
     }
 
     public function getRoot(): DocumentNode
@@ -59,8 +66,55 @@ class TreeNode
         return $this->children;
     }
 
+    public function addChild(Node $child): void
+    {
+        if ($this->node instanceof CompoundNode === false) {
+            throw new LogicException('Cannot add a child to a non-compound node');
+        }
+
+        $this->children[] = self::createFromNode($child, $this->root, $this);
+        $this->node->addChildNode($child);
+    }
+
     public function getParent(): TreeNode|null
     {
         return $this->parent;
+    }
+
+    public function removeChild(Node $node): void
+    {
+        if ($this->node instanceof CompoundNode === false) {
+            throw new LogicException('Cannot remove a child from a non-compound node');
+        }
+
+        foreach ($this->children as $key => $child) {
+            if ($child->getNode() === $node) {
+                unset($this->children[$key]);
+                $child->parent = null;
+                $newNode = $this->node->removeNode($key);
+                $this->parent?->replaceNode($this->node, $newNode);
+                $this->node = $newNode;
+                break;
+            }
+        }
+
+        $this->children = array_values($this->children);
+    }
+
+    public function replaceNode(Node $oldChildNode, Node $newChildNode): void
+    {
+        if ($this->node instanceof CompoundNode === false) {
+            throw new LogicException('Cannot remove a child from a non-compound node');
+        }
+
+        foreach ($this->children as $key => $child) {
+            if ($child->getNode() === $oldChildNode) {
+                $child->node = $newChildNode;
+                $newNode = $this->node->replaceNode($key, $newChildNode);
+                $this->parent?->replaceNode($this->node, $newNode);
+                $this->node = $newNode;
+                break;
+            }
+        }
     }
 }
