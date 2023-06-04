@@ -45,6 +45,7 @@ final class AssetsExtension extends AbstractExtension
         return [
             new TwigFunction('asset', $this->asset(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
@@ -102,6 +103,12 @@ final class AssetsExtension extends AbstractExtension
         }
 
         return $text;
+    }
+
+    /** @param array{env: RenderContext} $context */
+    public function renderLink(array $context, string $url): string
+    {
+        return $this->urlGenerator->createFileUrl($url);
     }
 
     private function copyAsset(
