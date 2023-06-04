@@ -1,1 +1,3 @@
-<sup>[<a href="{{ url|raw }}">{{ citation.name }}</a>]</sup>
+{% apply spaceless %}
+<sup>[<a href="{{- node.url -}}">{{- node.value -}}</a>]</sup>
+{% endapply %}

@@ -33,7 +33,9 @@ final class SpanLexer extends AbstractLexer
     public const ANNOTATION_END = 17;
     public const DOUBLE_BACKTICK = 18;
     public const HYPERLINK = 19;
-    public const EMAIL = 10;
+    public const EMAIL = 20;
+    public const EMPHASIS_DELIMITER = 21;
+    public const STRONG_DELIMITER = 22;
 
     /**
      * Map between string position and position in token list.
@@ -62,7 +64,8 @@ final class SpanLexer extends AbstractLexer
             '`',
             '_{2}',
             ':',
-            '#',
+            '\\*\\*',
+            '\\*',
         ];
     }
 
@@ -123,6 +126,12 @@ final class SpanLexer extends AbstractLexer
 
             case '`':
                 return self::BACKTICK;
+
+            case '**':
+                return self::STRONG_DELIMITER;
+
+            case '*':
+                return self::EMPHASIS_DELIMITER;
 
             case '\_':
                 $value = '_';

@@ -1,1 +1,5 @@
-<a href="{{ url|raw }}"{% for key, value in attributes %} {{ key }}="{{ value }}"{% endfor %}>{{ text | raw }}</a>
+{% apply spaceless %}
+<a href="{{- node.url -}}"{% for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor %}>
+{{- node.value -}}
+</a>
+{% endapply %}

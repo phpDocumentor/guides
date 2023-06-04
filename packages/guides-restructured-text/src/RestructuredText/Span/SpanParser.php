@@ -477,7 +477,7 @@ class SpanParser
 
         $id = $this->generateId();
 
-        $this->tokens[$id] = new HyperLinkNode($id, $link, $url ?? '');
+        $this->tokens[$id] = new HyperLinkNode($id, $link, $url ?? $link);
 
         return $id;
     }

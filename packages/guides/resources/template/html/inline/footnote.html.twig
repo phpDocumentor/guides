@@ -1,1 +1,3 @@
-<sup>[<a href="{{ url|raw }}">{{ footnote.number }}</a>]</sup>
+{% apply spaceless %}
+<sup>[<a href="{{- node.url -}}">{{- node.value -}}</a>]</sup>
+{% endapply %}

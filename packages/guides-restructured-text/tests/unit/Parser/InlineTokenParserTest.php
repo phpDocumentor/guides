@@ -6,23 +6,29 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\AnonymousReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NamedReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\InlineToken\StrongEmphasisToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\DefaultTextRoleRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\EmphasisRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InternalReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\LiteralRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\PlainTextRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\StandaloneHyperlinkRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\StrongRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
@@ -61,6 +67,8 @@ final class InlineTokenParserTest extends TestCase
             new LiteralRule(),
             new DefaultTextRoleRule(),
             new StandaloneHyperlinkRule(),
+            new EmphasisRule(),
+            new StrongRule(),
         ]);
     }
 
@@ -93,25 +101,25 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Named Reference' => [
                 'myref_',
-                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+                new InlineNode([new NamedReferenceNode('', 'myref')]),
             ],
             'Named Reference in string' => [
                 'abc: myref_ xyz',
                 new InlineNode([
                     new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref', ''),
+                    new NamedReferenceNode('', 'myref'),
                     new PlainTextToken('', ' xyz'),
                 ]),
             ],
             'Anonymous Reference' => [
                 'myref__',
-                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+                new InlineNode([new AnonymousReferenceNode('', 'myref')]),
             ],
             'Anonymous Reference in string' => [
                 'abc: myref__ xyz',
                 new InlineNode([
                     new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref', ''),
+                    new AnonymousReferenceNode('', 'myref'),
                     new PlainTextToken('', ' xyz'),
                 ]),
             ],
@@ -145,23 +153,23 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Named Reference, Phrased' => [
                 '`myref`_',
-                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+                new InlineNode([new NamedReferenceNode('', 'myref')]),
             ],
             'Named Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`_',
-                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new NamedReferenceNode('', 'myref', 'https://test.com')]),
             ],
             'Named Reference, Phrased, With URL not ended' => [
                 '`myref<https://test.com`_',
-                new InlineNode([new HyperLinkNode('', 'myref<https://test.com', '')]),
+                new InlineNode([new NamedReferenceNode('', 'myref<https://test.com')]),
             ],
             'Anonymous Reference, Phrased' => [
                 '`myref`__',
-                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+                new InlineNode([new AnonymousReferenceNode('', 'myref')]),
             ],
             'Anonymous Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`__',
-                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new AnonymousReferenceNode('', 'myref', 'https://test.com')]),
             ],
             'Footnote' => [
                 '[1]_',
@@ -201,7 +209,15 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Hyperlink' => [
                 'https://example.com',
-                new InlineNode([new HyperLinkNode('', 'https://example.com', '')]),
+                new InlineNode([new HyperLinkNode('', 'https://example.com', 'https://example.com')]),
+            ],
+            'Emphasis' => [
+                '*emphasis*',
+                new InlineNode([new EmphasisToken('', 'emphasis', '')]),
+            ],
+            'Strong' => [
+                '**strong**',
+                new InlineNode([new StrongEmphasisToken('', 'strong', '')]),
             ],
         ];
     }

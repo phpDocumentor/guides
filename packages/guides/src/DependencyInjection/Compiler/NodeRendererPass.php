@@ -17,6 +17,17 @@ use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\AbbreviationToken;
+use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
+use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
+use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\InlineToken\StrongEmphasisToken;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
@@ -70,7 +81,19 @@ final class NodeRendererPass implements CompilerPassInterface
         RubricNode::class => 'body/rubric.html.twig',
         CitationNode::class => 'body/citation.html.twig',
         FootnoteNode::class => 'body/footnote.html.twig',
+        // Inline
         InlineNode::class => 'inline/inline-node.html.twig',
+        AbbreviationToken::class => 'inline/textroles/abbreviation.html.twig',
+        CitationInlineNode::class => 'inline/citation.html.twig',
+        DocReferenceNode::class => 'inline/doc.html.twig',
+        EmphasisToken::class => 'inline/emphasis.html.twig',
+        HyperLinkNode::class => 'inline/link.html.twig',
+        LiteralToken::class => 'inline/literal.html.twig',
+        NbspToken::class => 'inline/nbsp.html.twig',
+        PlainTextToken::class => 'inline/plain-text.html.twig',
+        ReferenceNode::class => 'inline/ref.html.twig',
+        StrongEmphasisToken::class => 'inline/strong.html.twig',
+        GenericTextRoleToken::class => 'inline/textroles/generic.html.twig',
         // Output as Metatags
         AuthorNode::class => 'structure/header/author.html.twig',
         CopyrightNode::class => 'structure/header/copyright.html.twig',
