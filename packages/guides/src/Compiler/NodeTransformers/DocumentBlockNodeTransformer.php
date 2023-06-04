@@ -7,7 +7,6 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentBlockNode;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TocNode;
 
@@ -21,12 +20,12 @@ use function array_merge;
  */
 class DocumentBlockNodeTransformer implements NodeTransformer
 {
-    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof DocumentBlockNode) {
             $children = [];
@@ -40,7 +39,7 @@ class DocumentBlockNodeTransformer implements NodeTransformer
                 $children[] = $child;
             }
 
-            $documentNode->addDocumentPart($node->getIdentifier(), $children);
+            $compilerContext->getDocumentNode()->addDocumentPart($node->getIdentifier(), $children);
 
             // Remove the node as it should not be rendered in the defined place but
             // wherever the theme defines

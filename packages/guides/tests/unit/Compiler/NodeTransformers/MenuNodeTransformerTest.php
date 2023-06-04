@@ -20,13 +20,21 @@ use PHPUnit\Framework\TestCase;
 
 final class MenuNodeTransformerTest extends TestCase
 {
+    private static function getCompilerContext(string $path): CompilerContext
+    {
+        $context = new CompilerContext(new ProjectNode());
+        $context->setDocumentNode(new DocumentNode('123', $path));
+
+        return $context;
+    }
+
     public function testSimpleFlatToc(): void
     {
         $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'), new CompilerContext(new ProjectNode()));
+        $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
         self::assertEquals(
             [
@@ -49,7 +57,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'index'), new CompilerContext(new ProjectNode()));
+        $transformedNode = $transformer->enterNode($node, self::getCompilerContext('index'));
 
         self::assertEquals(
             [
@@ -72,7 +80,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new ContentMenuNode(['index']))->withOptions(['depth' => 1]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'), new CompilerContext(new ProjectNode()));
+        $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
         self::assertEquals(
             [
@@ -91,7 +99,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 2]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'), new CompilerContext(new ProjectNode()));
+        $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
         $entry = new TocEntry(
             'index',
@@ -126,7 +134,7 @@ final class MenuNodeTransformerTest extends TestCase
         $node = (new TocNode(['page3']))->withOptions(['maxdepth' => 3]);
         $transformer = new MenuNodeTransformer($metas);
 
-        $transformedNode = $transformer->enterNode($node, new DocumentNode('123', 'some/path'), new CompilerContext(new ProjectNode()));
+        $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
         $entry = new TocEntry(
             'index',

@@ -34,6 +34,7 @@ final class TransformerPass implements CompilerPass
                 continue;
             }
 
+            $compilerContext->setDocumentNode($document);
             $documents[$key] = $this->documentNodeTraverser->traverse($document, $compilerContext);
         }
 

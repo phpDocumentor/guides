@@ -36,12 +36,12 @@ class ReferenceNodeTransformer implements NodeTransformer
     ) {
     }
 
-    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if (!$node instanceof SpanNode) {
             return $node;
@@ -49,10 +49,10 @@ class ReferenceNodeTransformer implements NodeTransformer
 
         foreach ($node->getTokens() as $token) {
             if ($token instanceof ReferenceNode) {
-                $this->resolveReference($token, $documentNode);
+                $this->resolveReference($token, $compilerContext->getDocumentNode());
             } else {
                 if ($token instanceof DocReferenceNode) {
-                    $this->resolveDocReference($token, $documentNode);
+                    $this->resolveDocReference($token, $compilerContext->getDocumentNode());
                 }
             }
         }

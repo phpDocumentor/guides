@@ -25,7 +25,7 @@ final class DocumentNodeTraverser
                 continue;
             }
 
-            $traversedNode = $this->traverseForTransformer($transformer, $node, $node, $compilerContext);
+            $traversedNode = $this->traverseForTransformer($transformer, $node, $compilerContext);
             if ($traversedNode === null) {
                 return null;
             }
@@ -44,18 +44,17 @@ final class DocumentNodeTraverser
     private function traverseForTransformer(
         NodeTransformer $transformer,
         Node $node,
-        DocumentNode $documentNode,
         CompilerContext $compilerContext,
     ): Node|null {
         $supports = $transformer->supports($node);
 
         if ($supports) {
-            $node = $transformer->enterNode($node, $documentNode, $compilerContext);
+            $node = $transformer->enterNode($node, $compilerContext);
         }
 
         if ($node instanceof CompoundNode) {
             foreach ($node->getChildren() as $key => $childNode) {
-                $transformed = $this->traverseForTransformer($transformer, $childNode, $documentNode, $compilerContext);
+                $transformed = $this->traverseForTransformer($transformer, $childNode, $compilerContext);
                 if ($transformed === null) {
                     $node = $node->removeNode($key);
                     continue;
@@ -70,7 +69,7 @@ final class DocumentNodeTraverser
         }
 
         if ($supports) {
-            $node = $transformer->leaveNode($node, $documentNode, $compilerContext);
+            $node = $transformer->leaveNode($node, $compilerContext);
         }
 
         return $node;

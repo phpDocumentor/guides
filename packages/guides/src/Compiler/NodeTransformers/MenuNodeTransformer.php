@@ -12,7 +12,6 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
@@ -30,7 +29,7 @@ final class MenuNodeTransformer implements NodeTransformer
     {
     }
 
-    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         $entries = [];
 
@@ -41,7 +40,7 @@ final class MenuNodeTransformer implements NodeTransformer
             }
 
             foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node) as $entry) {
-                if ($entry->getUrl() === $documentNode->getFilePath()) {
+                if ($entry->getUrl() === $compilerContext->getDocumentNode()->getFilePath()) {
                     $entry = $entry->withOptions(array_merge($entry->getOptions(), ['active' => true]));
                     assert($entry instanceof Entry);
                 }
@@ -53,7 +52,7 @@ final class MenuNodeTransformer implements NodeTransformer
         return $node->withEntries($entries);
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         return $node;
     }

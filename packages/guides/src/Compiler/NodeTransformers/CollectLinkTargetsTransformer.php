@@ -31,7 +31,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         $this->documentStack = new SplStack();
     }
 
-    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
@@ -60,7 +60,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();

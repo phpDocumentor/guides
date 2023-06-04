@@ -23,7 +23,7 @@ class ClassNodeTransformer implements NodeTransformer
     /** @var string[] */
     private array $classes = [];
 
-    public function enterNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             // unset classes when entering the next document
@@ -43,7 +43,7 @@ class ClassNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof ClassNode) {
             //Remove the class node from the tree.
