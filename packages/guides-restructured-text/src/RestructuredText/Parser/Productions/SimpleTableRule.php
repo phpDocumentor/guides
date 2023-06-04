@@ -128,6 +128,11 @@ final class SimpleTableRule implements Rule
                 continue;
             }
 
+            // if length is null, it means this is the last column and there is no gap after
+            if ($columnDefinition['length'] === null) {
+                continue;
+            }
+
             $gap = mb_substr($line, $columnDefinition['start'] + $columnDefinition['length'], 1);
             if ($gap === ' ') {
                 continue;
