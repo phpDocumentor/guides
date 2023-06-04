@@ -15,7 +15,7 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Twig\ThemeManager;
+use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

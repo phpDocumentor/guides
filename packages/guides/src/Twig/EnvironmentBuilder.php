@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
