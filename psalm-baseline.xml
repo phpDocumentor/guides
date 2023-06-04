@@ -21,4 +21,10 @@
       <code><![CDATA[$result->value]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
+  <file src="packages/guides/tests/unit/Compiler/ShadowTree/TreeNodeTest.php">
+    <UndefinedInterfaceMethod>
+      <code>getChildren</code>
+      <code>getChildren</code>
+    </UndefinedInterfaceMethod>
+  </file>
 </files>

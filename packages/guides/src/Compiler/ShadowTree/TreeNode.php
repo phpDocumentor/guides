@@ -30,7 +30,10 @@ class TreeNode
         return new self($document, $document, self::createFromCompoundNode($document, $document));
     }
 
-    /** @return TreeNode[] */
+    /**
+     * @param CompoundNode<Node> $node
+     * @return TreeNode[]
+     */
     private static function createFromCompoundNode(CompoundNode $node, DocumentNode $root): array
     {
         $children = [];

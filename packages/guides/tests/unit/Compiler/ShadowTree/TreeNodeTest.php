@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\ShadowTree;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
@@ -71,7 +72,9 @@ final class TreeNodeTest extends TestCase
         $treeNode->getChildren()[0]->removeChild($nodeToRemove);
 
         $this->assertCount(0, $treeNode->getChildren()[0]->getChildren());
+        $this->assertInstanceOf(CompoundNode::class, $treeNode->getChildren()[0]->getNode());
         $this->assertCount(0, $treeNode->getChildren()[0]->getNode()->getChildren());
+        $this->assertInstanceOf(CompoundNode::class, $treeNode->getNode());
         $this->assertSame($treeNode->getNode()->getChildren()[0], $treeNode->getChildren()[0]->getNode());
     }
 }
