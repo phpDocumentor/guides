@@ -32,6 +32,7 @@ class TreeNode
 
     /**
      * @param CompoundNode<Node> $node
+     *
      * @return TreeNode[]
      */
     private static function createFromCompoundNode(CompoundNode $node, DocumentNode $root): array
@@ -95,7 +96,7 @@ class TreeNode
                 unset($this->children[$key]);
                 $child->parent = null;
                 $newNode = $this->node->removeNode($key);
-                $this->parent?->replaceNode($this->node, $newNode);
+                $this->parent?->replaceChild($this->node, $newNode);
                 $this->node = $newNode;
                 break;
             }
@@ -104,7 +105,7 @@ class TreeNode
         $this->children = array_values($this->children);
     }
 
-    public function replaceNode(Node $oldChildNode, Node $newChildNode): void
+    public function replaceChild(Node $oldChildNode, Node $newChildNode): void
     {
         if ($this->node instanceof CompoundNode === false) {
             throw new LogicException('Cannot remove a child from a non-compound node');
@@ -114,7 +115,7 @@ class TreeNode
             if ($child->getNode() === $oldChildNode) {
                 $child->node = $newChildNode;
                 $newNode = $this->node->replaceNode($key, $newChildNode);
-                $this->parent?->replaceNode($this->node, $newNode);
+                $this->parent?->replaceChild($this->node, $newNode);
                 $this->node = $newNode;
                 break;
             }

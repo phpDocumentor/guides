@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler;
 
 use Exception;
+use phpDocumentor\Guides\Compiler\ShadowTree\TreeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 class CompilerContext
 {
     private DocumentNode|null $documentNode = null;
+    private TreeNode $shadowTree;
 
     public function __construct(
         private readonly ProjectNode $projectNode,
@@ -33,15 +35,27 @@ class CompilerContext
 
     public function getDocumentNode(): DocumentNode
     {
-        if ($this->documentNode === null) {
+        if (!isset($this->shadowTree)) {
             throw new Exception('DocumentNode must be set in compiler context');
         }
 
-        return $this->documentNode;
+        return $this->shadowTree->getRoot();
     }
 
-    public function setDocumentNode(DocumentNode|null $documentNode): void
+    public function withShadowTree(DocumentNode $documentNode): static
     {
-        $this->documentNode = $documentNode;
+        $that = clone $this;
+        $that->shadowTree = TreeNode::createFromDocument($documentNode);
+
+        return $that;
+    }
+
+    public function getShadowTree(): TreeNode
+    {
+        if (!isset($this->shadowTree)) {
+            throw new Exception('DocumentNode must be set in compiler context');
+        }
+
+        return $this->shadowTree;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Compiler\ShadowTree\TreeNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -25,7 +26,7 @@ final class DocumentNodeTraverser
                 continue;
             }
 
-            $traversedNode = $this->traverseForTransformer($transformer, $node, $compilerContext);
+            $traversedNode = $this->traverseForTransformer($transformer, $compilerContext->getShadowTree(), $compilerContext);
             if ($traversedNode === null) {
                 return null;
             }
@@ -43,35 +44,39 @@ final class DocumentNodeTraverser
      */
     private function traverseForTransformer(
         NodeTransformer $transformer,
-        Node $node,
+        TreeNode $shadowNode,
         CompilerContext $compilerContext,
     ): Node|null {
+        $node = $shadowNode->getNode();
         $supports = $transformer->supports($node);
 
         if ($supports) {
-            $node = $transformer->enterNode($node, $compilerContext);
+            $transformed = $transformer->enterNode($node, $compilerContext);
+            $shadowNode->getParent()?->replaceChild($node, $transformed);
         }
 
-        if ($node instanceof CompoundNode) {
-            foreach ($node->getChildren() as $key => $childNode) {
-                $transformed = $this->traverseForTransformer($transformer, $childNode, $compilerContext);
-                if ($transformed === null) {
-                    $node = $node->removeNode($key);
-                    continue;
-                }
-
-                if ($transformed === $childNode) {
-                    continue;
-                }
-
-                $node = $node->replaceNode($key, $transformed);
+        foreach ($shadowNode->getChildren() as $key => $shadowChild) {
+            $childNode = $shadowChild->getNode();
+            $transformed = $this->traverseForTransformer($transformer, $shadowChild, $compilerContext);
+            if ($transformed === null) {
+                $shadowNode->removeChild($childNode);
+                continue;
             }
+
+            if ($transformed === $childNode) {
+                continue;
+            }
+
+            $shadowNode->replaceChild($childNode, $transformed);
         }
 
         if ($supports) {
-            $node = $transformer->leaveNode($node, $compilerContext);
+            $transformed = $transformer->leaveNode($node, $compilerContext);
+            if ($transformed === null) {
+                $shadowNode->getParent()?->removeChild($node);
+            }
         }
 
-        return $node;
+        return $shadowNode->getNode();
     }
 }

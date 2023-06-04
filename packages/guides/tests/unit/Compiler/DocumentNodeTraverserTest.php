@@ -47,7 +47,7 @@ final class DocumentNodeTraverserTest extends TestCase
             },
         ]), 2000);
 
-        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withShadowTree($document));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
@@ -97,7 +97,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
 
-        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withShadowTree($document));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
