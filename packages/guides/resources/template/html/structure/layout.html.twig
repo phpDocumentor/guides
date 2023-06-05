@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ title }}{% if title!=null and project.getTitle()!=null %} - {% endif %}{% if project.getTitle() %}{{ project.getTitle() }}{% endif %}</title>
+    <title>{{ title }}
+        {%- if title!=null and env.projectNode.title!=null %} - {% endif -%}
+        {%- if env.projectNode.title -%}{{ env.projectNode.title }}{%- endif -%}</title>
     {%~ block head %}
     {%~ endblock %}
 </head>

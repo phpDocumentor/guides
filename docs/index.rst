@@ -1,5 +1,10 @@
 ..  include:: /include.rst.txt
 
+:project:
+    phpDocumentor Guides
+:version:
+    dev-main
+
 ====================
 phpDocumentor Guides
 ====================
