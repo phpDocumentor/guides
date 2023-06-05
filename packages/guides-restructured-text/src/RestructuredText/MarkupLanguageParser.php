@@ -24,8 +24,9 @@ class MarkupLanguageParser implements ParserInterface
     private DocumentParserContext|null $documentParser = null;
 
     /** @param Rule<DocumentNode> $startingRule */
-    public function __construct(private readonly Rule $startingRule)
-    {
+    public function __construct(
+        private readonly Rule $startingRule,
+    ) {
     }
 
     public function supports(string $inputFormat): bool
@@ -70,7 +71,11 @@ class MarkupLanguageParser implements ParserInterface
     {
         $this->parserContext = $parserContext;
 
-        $this->documentParser = new DocumentParserContext($contents, $parserContext, $this);
+        $this->documentParser = new DocumentParserContext(
+            $contents,
+            $parserContext,
+            $this,
+        );
 
         if ($this->startingRule->applies($this->documentParser)) {
             $document = $this->startingRule->apply($this->documentParser);

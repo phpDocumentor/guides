@@ -38,11 +38,11 @@ class Compiler
      *
      * @return DocumentNode[]
      */
-    public function run(array $documents): array
+    public function run(array $documents, CompilerContext $compilerContext): array
     {
         $clonedPasses = clone$this->passes;
         foreach ($clonedPasses as $pass) {
-            $documents = $pass->run($documents);
+            $documents = $pass->run($documents, $compilerContext);
         }
 
         return $documents;

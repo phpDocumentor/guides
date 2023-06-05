@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
-use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use Psr\Log\LoggerInterface;
 
+use function sprintf;
 use function strtolower;
 
 class VersionFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(private readonly ProjectMeta $projectMeta)
+    public function __construct(private readonly LoggerInterface $logger)
     {
     }
 
@@ -21,9 +23,21 @@ class VersionFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'version';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode|null
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode|null
     {
-        $this->projectMeta->setVersion($fieldListItemNode->getPlaintextContent());
+        $currentVersion = $documentParserContext->getProjectNode()->getVersion();
+        if (
+            $currentVersion !== null
+            && $currentVersion !== $fieldListItemNode->getPlaintextContent()
+        ) {
+            $this->logger->warning(sprintf(
+                'Project version was set more then once: %s and %s',
+                $currentVersion,
+                $fieldListItemNode->getPlaintextContent(),
+            ));
+        }
+
+        $documentParserContext->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());
 
         return null;
     }

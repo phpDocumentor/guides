@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Compiler;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -24,12 +25,12 @@ final class DocumentNodeTraverserTest extends TestCase
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
             new /** @implements NodeTransformer<Node> */
             class implements NodeTransformer {
-                public function enterNode(Node $node, DocumentNode $documentNode): Node
+                public function enterNode(Node $node, CompilerContext $compilerContext): Node
                 {
                     return $node;
                 }
 
-                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
                 {
                     return null;
                 }
@@ -46,7 +47,7 @@ final class DocumentNodeTraverserTest extends TestCase
             },
         ]), 2000);
 
-        $actual = $traverser->traverse($document);
+        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
@@ -72,12 +73,12 @@ final class DocumentNodeTraverserTest extends TestCase
                 {
                 }
 
-                public function enterNode(Node $node, DocumentNode $documentNode): Node
+                public function enterNode(Node $node, CompilerContext $compilerContext): Node
                 {
                     return $this->replacement;
                 }
 
-                public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
                 {
                     return $node;
                 }
@@ -96,7 +97,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
 
-        $actual = $traverser->traverse($document);
+        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(

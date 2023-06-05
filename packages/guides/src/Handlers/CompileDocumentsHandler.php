@@ -16,6 +16,6 @@ final class CompileDocumentsHandler
     /** @return DocumentNode[] */
     public function handle(CompileDocumentsCommand $command): array
     {
-        return $this->compiler->run($command->getDocuments());
+        return $this->compiler->run($command->getDocuments(), $command->getCompilerContext());
     }
 }

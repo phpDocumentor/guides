@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class ParseFileCommand
 {
@@ -23,6 +24,7 @@ final class ParseFileCommand
         private readonly string $file,
         private readonly string $extension,
         private readonly int $initialHeaderLevel,
+        private readonly ProjectNode $projectNode,
     ) {
     }
 
@@ -49,5 +51,10 @@ final class ParseFileCommand
     public function getInitialHeaderLevel(): int
     {
         return $this->initialHeaderLevel;
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->projectNode;
     }
 }

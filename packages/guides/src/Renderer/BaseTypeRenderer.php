@@ -31,6 +31,7 @@ abstract class BaseTypeRenderer implements TypeRenderer
                         $renderCommand->getMetas(),
                         new UrlGenerator(),
                         $renderCommand->getOutputFormat(),
+                        $renderCommand->getProjectNode(),
                     ),
                 ),
             );

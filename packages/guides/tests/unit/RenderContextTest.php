@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,7 @@ final class RenderContextTest extends TestCase
             ]),
             new UrlGenerator(),
             'txt',
+            new ProjectNode(),
         );
 
         self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));

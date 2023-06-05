@@ -15,10 +15,11 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 interface FieldListItemRule
 {
     public function applies(FieldListItemNode $fieldListItemNode): bool;
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode|null;
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode|null;
 }

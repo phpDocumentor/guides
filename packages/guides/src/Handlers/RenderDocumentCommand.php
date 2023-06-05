@@ -9,8 +9,10 @@ use phpDocumentor\Guides\RenderContext;
 
 final class RenderDocumentCommand
 {
-    public function __construct(private readonly DocumentNode $document, private readonly RenderContext $renderContext)
-    {
+    public function __construct(
+        private readonly DocumentNode $document,
+        private readonly RenderContext $renderContext,
+    ) {
     }
 
     public function getDocument(): DocumentNode

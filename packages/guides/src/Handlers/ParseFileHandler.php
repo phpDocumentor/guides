@@ -18,6 +18,7 @@ use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Event\PreParseDocument;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -47,6 +48,7 @@ final class ParseFileHandler
             $command->getFile(),
             $command->getExtension(),
             $command->getInitialHeaderLevel(),
+            $command->getProjectNode(),
         );
     }
 
@@ -71,6 +73,7 @@ final class ParseFileHandler
         string $fileName,
         string $extension,
         int $initialHeaderLevel,
+        ProjectNode $projectNode,
     ): DocumentNode|null {
         $path = $this->buildPathOnFileSystem($fileName, $documentFolder, $extension);
         $fileContents = $this->getFileContents($origin, $path);
@@ -79,6 +82,7 @@ final class ParseFileHandler
             $origin,
             $documentFolder,
             $fileName,
+            $projectNode,
             $initialHeaderLevel,
         );
 

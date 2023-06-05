@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -35,12 +36,12 @@ class ReferenceNodeTransformer implements NodeTransformer
     ) {
     }
 
-    public function enterNode(Node $node, DocumentNode $documentNode): Node
+    public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         return $node;
     }
 
-    public function leaveNode(Node $node, DocumentNode $documentNode): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if (!$node instanceof SpanNode) {
             return $node;
@@ -48,10 +49,10 @@ class ReferenceNodeTransformer implements NodeTransformer
 
         foreach ($node->getTokens() as $token) {
             if ($token instanceof ReferenceNode) {
-                $this->resolveReference($token, $documentNode);
+                $this->resolveReference($token, $compilerContext->getDocumentNode());
             } else {
                 if ($token instanceof DocReferenceNode) {
-                    $this->resolveDocReference($token, $documentNode);
+                    $this->resolveDocReference($token, $compilerContext->getDocumentNode());
                 }
             }
         }

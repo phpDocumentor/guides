@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\Metadata\TocDepthNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function strtolower;
 
@@ -17,7 +18,7 @@ class TocDepthFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'tocdepth';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode): MetadataNode
+    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode
     {
         return new TocDepthNode((int) $fieldListItemNode->getPlaintextContent());
     }

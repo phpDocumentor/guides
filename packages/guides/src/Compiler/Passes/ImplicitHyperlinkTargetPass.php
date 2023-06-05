@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
@@ -33,7 +34,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
     }
 
     /** {@inheritDoc} */
-    public function run(array $documents): array
+    public function run(array $documents, CompilerContext $compilerContext): array
     {
         return array_map(function (DocumentNode $document): DocumentNode {
             // implicit references must not conflict with explicit ones

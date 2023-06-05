@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -189,6 +190,7 @@ RST;
     private function getDocumentParserContext(string $content): DocumentParserContext
     {
         $parserContext = new ParserContext(
+            new ProjectNode(),
             'foo',
             'test',
             1,

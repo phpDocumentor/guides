@@ -17,6 +17,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
@@ -56,6 +57,7 @@ final class Parser
         FilesystemInterface|null $origin,
         string $sourcePath,
         string $fileName,
+        ProjectNode $projectNode,
         int $initialHeaderLevel = 1,
     ): void {
         if ($origin === null) {
@@ -69,6 +71,7 @@ final class Parser
             $fileName,
             $origin,
             $initialHeaderLevel,
+            $projectNode,
         );
     }
 
@@ -79,7 +82,7 @@ final class Parser
         if ($this->parserContext === null) {
             // Environment is not set; then the prepare method hasn't been called and we consider
             // this a one-off parse of dynamic RST content.
-            $this->prepare(null, '', 'index');
+            $this->prepare(null, '', 'index', new ProjectNode());
         }
 
         $parser = $this->determineParser($inputFormat);
@@ -108,8 +111,10 @@ final class Parser
         string $file,
         FilesystemInterface $origin,
         int $initialHeaderLevel,
+        ProjectNode $projectNode,
     ): ParserContext {
         return new ParserContext(
+            $projectNode,
             $file,
             $sourcePath,
             $initialHeaderLevel,

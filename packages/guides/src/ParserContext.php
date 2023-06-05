@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 
 use function array_shift;
 use function dirname;
@@ -26,12 +27,18 @@ class ParserContext
     private array $errors = [];
 
     public function __construct(
+        private readonly ProjectNode $projectNode,
         private readonly string $currentFileName,
         private readonly string $currentDirectory,
         private readonly int $initialHeaderLevel,
         private readonly FilesystemInterface $origin,
         private readonly UrlGeneratorInterface $urlGenerator,
     ) {
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->projectNode;
     }
 
     public function getInitialHeaderLevel(): int

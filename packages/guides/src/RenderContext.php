@@ -18,7 +18,8 @@ use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\Node; // phpcs:ignore
+use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 
 use function dirname;
 use function ltrim;
@@ -38,6 +39,7 @@ class RenderContext
         private readonly Metas $metas,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly string $outputFormat,
+        private readonly ProjectNode $projectNode,
     ) {
         $this->destinationPath = trim($outputFolder, '/');
     }
@@ -50,6 +52,7 @@ class RenderContext
         Metas $metas,
         UrlGeneratorInterface $urlGenerator,
         string $ouputFormat,
+        ProjectNode $projectNode,
     ): self {
         $self = new self(
             $destinationPath,
@@ -59,6 +62,7 @@ class RenderContext
             $metas,
             $urlGenerator,
             $ouputFormat,
+            $projectNode,
         );
 
         $self->document = $documentNode;
@@ -174,5 +178,10 @@ class RenderContext
     public function getCurrentFileDestination(): string
     {
         return $this->destinationPath . '/' . $this->currentFileName . '.' . $this->outputFormat;
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->projectNode;
     }
 }

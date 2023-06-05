@@ -11,10 +11,14 @@ use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Metas;
+use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -29,6 +33,7 @@ use function getcwd;
 use function implode;
 use function is_countable;
 use function is_dir;
+use function is_file;
 use function sprintf;
 use function str_starts_with;
 use function strtoupper;
@@ -40,6 +45,7 @@ final class Run extends Command
         private readonly Metas $metas,
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
+        private readonly SettingsManager $settingsManager,
     ) {
         parent::__construct('run');
 
@@ -96,6 +102,22 @@ final class Run extends Command
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
         }
 
+        if (is_file($inputDir . '/settings.php')) {
+            $settings = require $inputDir . '/settings.php';
+            if (!$settings instanceof ProjectSettings) {
+                throw new RuntimeException('settings.php must return an instance of ' . ProjectSettings::class);
+            }
+
+            $this->settingsManager->setProjectSettings($settings);
+            $projectNode = new ProjectNode(
+                $settings->getTitle(),
+                $settings->getVersion(),
+            );
+        } else {
+            $this->settingsManager->setProjectSettings(new ProjectSettings());
+            $projectNode = new ProjectNode();
+        }
+
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
         $sourceFileSystem->addPlugin(new Finder());
@@ -112,6 +134,7 @@ final class Run extends Command
                 $sourceFileSystem,
                 '',
                 $input->getOption('input-format'),
+                $projectNode,
             ),
         );
 
@@ -119,7 +142,7 @@ final class Run extends Command
             $this->themeManager->useTheme($input->getOption('theme') ?? 'default');
         }
 
-        $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents));
+        $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
 
         $destinationFileSystem = new Filesystem(new Local($outputDir));
 
@@ -133,6 +156,7 @@ final class Run extends Command
                     $this->metas,
                     $sourceFileSystem,
                     $destinationFileSystem,
+                    $projectNode,
                 ),
             );
         }

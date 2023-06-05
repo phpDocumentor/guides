@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -33,7 +35,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         }
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([clone $document]);
+        $resultDocuments = $pass->run([clone $document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }
@@ -58,7 +60,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         }
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         $section = $expected->getNodes()[2];
         self::assertInstanceOf(SectionNode::class, $section);
@@ -91,7 +93,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected->addChildNode(new SectionNode($expectedTitle));
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }
@@ -120,7 +122,7 @@ class ImplicitHyperlinkTargetPassTest extends TestCase
         $expected->addChildNode(new SectionNode($expectedTitle));
 
         $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([$document]);
+        $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         self::assertEquals([$expected], $resultDocuments);
     }

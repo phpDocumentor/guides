@@ -9,7 +9,6 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
-use phpDocumentor\Guides\Meta\ProjectMeta;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
@@ -27,6 +26,7 @@ use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
 use phpDocumentor\Guides\Renderer\LatexRenderer;
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
@@ -87,6 +87,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(NodeTransformerFactory::class, CustomNodeTransformerFactory::class)
         ->arg('$transformers', tagged_iterator('phpdoc.guides.compiler.nodeTransformers'))
 
+        ->set(SettingsManager::class)
+
         ->set(DocumentNodeTraverser::class)
 
 
@@ -116,8 +118,6 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(MenuEntryRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
-
-        ->set(ProjectMeta::class)
 
         ->set(InMemoryNodeRendererFactory::class)
         ->args([

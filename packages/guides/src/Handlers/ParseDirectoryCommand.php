@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class ParseDirectoryCommand
 {
@@ -12,6 +13,7 @@ final class ParseDirectoryCommand
         private readonly FilesystemInterface $origin,
         private readonly string $directory,
         private readonly string $inputFormat,
+        private readonly ProjectNode $projectNode,
     ) {
     }
 
@@ -28,5 +30,10 @@ final class ParseDirectoryCommand
     public function getInputFormat(): string
     {
         return $this->inputFormat;
+    }
+
+    public function getProjectNode(): ProjectNode
+    {
+        return $this->projectNode;
     }
 }
