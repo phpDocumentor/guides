@@ -11,7 +11,6 @@ use phpDocumentor\Guides\DependencyInjection\GuidesExtension;
 use phpDocumentor\Guides\RestructuredText\DependencyInjection\ReStructuredTextExtension;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -85,10 +84,6 @@ final class ContainerFactory
     {
         $this->container->registerExtension($extension);
         $this->container->loadFromExtension($extension->getAlias());
-
-        if ($extension instanceof CompilerPassInterface) {
-            $this->container->addCompilerPass($extension);
-        }
 
         $this->registeredExtensions[$extension::class] = $extension->getAlias();
     }
