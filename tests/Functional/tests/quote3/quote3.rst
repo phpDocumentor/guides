@@ -1,4 +1,4 @@
-.. image:: /test.jpg
+.. image:: img/test-image.jpg
 
 Here is some text.
 
