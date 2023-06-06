@@ -21,7 +21,7 @@ class AnonymousPhraseRule extends ReferenceRule
     public function apply(ParserContext $parserContext, SpanLexer $lexer): HyperLinkNode|null
     {
         $text = '';
-        $url = '';
+        $url = null;
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {

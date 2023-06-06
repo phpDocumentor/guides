@@ -21,13 +21,16 @@ class NamedPhraseRule extends ReferenceRule
     public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
     {
         $text = '';
-        $url = '';
+        $url = null;
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
                 case SpanLexer::NAMED_REFERENCE_END:
                     $lexer->moveNext();
+                    if ($text === '') {
+                        $text = $url ?? '';
+                    }
 
                     return $this->createReference($parserContext, $text, $url);
 

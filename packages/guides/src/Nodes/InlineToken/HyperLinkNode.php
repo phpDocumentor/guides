@@ -9,8 +9,12 @@ namespace phpDocumentor\Guides\Nodes\InlineToken;
  */
 class HyperLinkNode extends InlineMarkupToken
 {
-    public function __construct(string $id, string $value, private readonly string $url)
+    private string $url;
+
+    public function __construct(string $id, string $value, string|null $url = null)
     {
+        $this->url = $url ?? $value;
+
         parent::__construct('link', $id, $value);
     }
 
@@ -22,5 +26,10 @@ class HyperLinkNode extends InlineMarkupToken
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 }

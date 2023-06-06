@@ -6,14 +6,12 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\InlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\AnonymousReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
-use phpDocumentor\Guides\Nodes\InlineToken\NamedReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\Nodes\InlineToken\StrongEmphasisToken;
 use phpDocumentor\Guides\ParserContext;
@@ -101,37 +99,37 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Named Reference' => [
                 'myref_',
-                new InlineNode([new NamedReferenceNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('', 'myref')]),
             ],
             'Named Reference in string' => [
                 'abc: myref_ xyz',
                 new InlineNode([
                     new PlainTextToken('', 'abc: '),
-                    new NamedReferenceNode('', 'myref'),
+                    new HyperLinkNode('', 'myref'),
                     new PlainTextToken('', ' xyz'),
                 ]),
             ],
             'Anonymous Reference' => [
                 'myref__',
-                new InlineNode([new AnonymousReferenceNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('', 'myref')]),
             ],
             'Anonymous Reference in string' => [
                 'abc: myref__ xyz',
                 new InlineNode([
                     new PlainTextToken('', 'abc: '),
-                    new AnonymousReferenceNode('', 'myref'),
+                    new HyperLinkNode('', 'myref'),
                     new PlainTextToken('', ' xyz'),
                 ]),
             ],
             'Internal Reference' => [
                 '_`myref`',
-                new InlineNode([new HyperLinkNode('', 'myref', '')]),
+                new InlineNode([new HyperLinkNode('', 'myref')]),
             ],
             'Internal Reference in string' => [
                 'abc: _`myref` xyz',
                 new InlineNode([
                     new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref', ''),
+                    new HyperLinkNode('', 'myref'),
                     new PlainTextToken('', ' xyz'),
                 ]),
             ],
@@ -153,23 +151,23 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Named Reference, Phrased' => [
                 '`myref`_',
-                new InlineNode([new NamedReferenceNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('', 'myref', 'myref')]),
             ],
             'Named Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`_',
-                new InlineNode([new NamedReferenceNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
             ],
             'Named Reference, Phrased, With URL not ended' => [
                 '`myref<https://test.com`_',
-                new InlineNode([new NamedReferenceNode('', 'myref<https://test.com')]),
+                new InlineNode([new HyperLinkNode('', 'myref<https://test.com', 'myref<https://test.com')]),
             ],
             'Anonymous Reference, Phrased' => [
                 '`myref`__',
-                new InlineNode([new AnonymousReferenceNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('', 'myref', 'myref')]),
             ],
             'Anonymous Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`__',
-                new InlineNode([new AnonymousReferenceNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
             ],
             'Footnote' => [
                 '[1]_',
