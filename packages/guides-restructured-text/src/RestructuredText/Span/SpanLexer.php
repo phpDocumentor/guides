@@ -36,6 +36,7 @@ final class SpanLexer extends AbstractLexer
     public const EMAIL = 20;
     public const EMPHASIS_DELIMITER = 21;
     public const STRONG_DELIMITER = 22;
+    public const NBSP = 23;
 
     /**
      * Map between string position and position in token list.
@@ -57,6 +58,7 @@ final class SpanLexer extends AbstractLexer
             '``',
             '`__',
             '`_',
+            '`~',
             '<',
             '>',
             '\\\\_', // Escaping hell... needs escaped slash in regex, but also in php.
@@ -168,6 +170,9 @@ final class SpanLexer extends AbstractLexer
 
             case ']':
                 return self::ANNOTATION_END;
+
+            case '~':
+                return self::NBSP;
 
             default:
                 return self::WORD;
