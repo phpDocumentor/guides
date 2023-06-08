@@ -1,5 +1,7 @@
-{% apply spaceless %}
-<a href="{{- node.url -}}"{% for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor %}>
-{{- node.value -}}
-</a>
-{% endapply %}
+{%- if node.url -%}
+    <a href="{{- node.url -}}"{% for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor %}>
+    {{- node.value -}}
+    </a>
+{%- else -%}
+    {{- node.value -}}
+{%- endif -%}

@@ -1,3 +1,5 @@
-{% apply spaceless %}
-<sup>[<a href="{{- node.url -}}">{{- node.value -}}</a>]</sup>
-{% endapply %}
+{%- if node.url -%}
+    <sup>[<a href="{{- node.url -}}">{{- node.value -}}</a>]</sup>
+{%- else -%}
+    <sup>[{{- node.value -}}]</sup>
+{%- endif -%}
