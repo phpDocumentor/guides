@@ -57,13 +57,7 @@ final class InlineMarkupRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    /**
-     * @param TParent|null $on
-     *
-     * @return ($on is null ? InlineNode: TParent<Node>|InlineNode|null)
-     *
-     * @template TParent as CompoundNode
-     */
+    /** @return ($on is null ? InlineNode: CompoundNode<Node>|InlineNode|null) */
     public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();

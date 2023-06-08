@@ -37,6 +37,8 @@ final class SpanLexer extends AbstractLexer
     public const EMPHASIS_DELIMITER = 21;
     public const STRONG_DELIMITER = 22;
     public const NBSP = 23;
+    public const VARIABLE_DELIMITER = 24;
+    public const ESCAPED_SIGN = 25;
 
     /**
      * Map between string position and position in token list.
@@ -51,6 +53,7 @@ final class SpanLexer extends AbstractLexer
     protected function getCatchablePatterns(): array
     {
         return [
+            '\\\\[\s\S]', // Escaping hell... needs escaped slash in regex, but also in php.
             'https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)',
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
@@ -61,11 +64,11 @@ final class SpanLexer extends AbstractLexer
             '`~',
             '<',
             '>',
-            '\\\\_', // Escaping hell... needs escaped slash in regex, but also in php.
             '_`',
             '`',
             '_{2}',
             ':',
+            '|',
             '\\*\\*',
             '\\*',
         ];
@@ -102,6 +105,10 @@ final class SpanLexer extends AbstractLexer
     /** @inheritDoc */
     protected function getType(&$value)
     {
+        if (preg_match('/\\\\[\s\S]/i', $value)) {
+            return self::ESCAPED_SIGN;
+        }
+
         if (preg_match('/https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)/i', $value)) {
             return self::HYPERLINK;
         }
@@ -135,9 +142,9 @@ final class SpanLexer extends AbstractLexer
             case '*':
                 return self::EMPHASIS_DELIMITER;
 
-            case '\_':
-                $value = '_';
-                break;
+            case '|':
+                return self::VARIABLE_DELIMITER;
+
             case '<':
                 return self::EMBEDED_URL_START;
 

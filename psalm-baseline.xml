@@ -11,9 +11,6 @@
       <code>$listConfig</code>
     </InvalidArgument>
   </file>
-  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
-    <UndefinedDocblockClass/>
-  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/SectionRule.php">
     <MoreSpecificImplementedParamType>
       <code>$on</code>

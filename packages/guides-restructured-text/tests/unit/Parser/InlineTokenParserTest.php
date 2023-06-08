@@ -12,14 +12,18 @@ use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
 use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NewlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\Nodes\InlineToken\StrongEmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\VariableInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\DefaultTextRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\EmphasisRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\EscapeRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InternalReferenceRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\LiteralRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\NamedPhraseRule;
@@ -28,6 +32,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\PlainTe
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\StandaloneHyperlinkRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\StrongRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\VariableInlineRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
@@ -67,6 +72,8 @@ final class InlineTokenParserTest extends TestCase
             new StandaloneHyperlinkRule(),
             new EmphasisRule(),
             new StrongRule(),
+            new VariableInlineRule(),
+            new EscapeRule(),
         ]);
     }
 
@@ -211,11 +218,19 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Emphasis' => [
                 '*emphasis*',
-                new InlineNode([new EmphasisToken('', 'emphasis', '')]),
+                new InlineNode([new EmphasisToken('', 'emphasis')]),
             ],
             'Strong' => [
                 '**strong**',
-                new InlineNode([new StrongEmphasisToken('', 'strong', '')]),
+                new InlineNode([new StrongEmphasisToken('', 'strong')]),
+            ],
+            'Variable' => [
+                '|variable|',
+                new InlineNode([new VariableInlineNode('variable')]),
+            ],
+            'Escape' => [
+                "\\x\\`\\ \\\n",
+                new InlineNode([new PlainTextToken('', 'x`'), new NbspToken(''), new NewlineNode()]),
             ],
         ];
     }

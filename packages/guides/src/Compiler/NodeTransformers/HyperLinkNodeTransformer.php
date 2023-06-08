@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -16,11 +15,10 @@ use function preg_match;
 use function str_starts_with;
 use function trim;
 
-/** @implements NodeTransformer<HyperLinkNode> */
+/** @implements NodeTransformer<Node> */
 class HyperLinkNodeTransformer implements NodeTransformer
 {
     public function __construct(
-        private readonly Metas $metas,
         private readonly LoggerInterface $logger,
     ) {
     }

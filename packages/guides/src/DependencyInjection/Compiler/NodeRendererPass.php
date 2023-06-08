@@ -25,9 +25,11 @@ use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
+use phpDocumentor\Guides\Nodes\InlineToken\NewlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\StrongEmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
@@ -89,10 +91,12 @@ final class NodeRendererPass implements CompilerPassInterface
         EmphasisToken::class => 'inline/emphasis.html.twig',
         HyperLinkNode::class => 'inline/link.html.twig',
         LiteralToken::class => 'inline/literal.html.twig',
+        NewlineNode::class => 'inline/newline.html.twig',
         NbspToken::class => 'inline/nbsp.html.twig',
         PlainTextToken::class => 'inline/plain-text.html.twig',
         ReferenceNode::class => 'inline/ref.html.twig',
         StrongEmphasisToken::class => 'inline/strong.html.twig',
+        VariableInlineNode::class => 'inline/variable.html.twig',
         GenericTextRoleToken::class => 'inline/textroles/generic.html.twig',
         // Output as Metatags
         AuthorNode::class => 'structure/header/author.html.twig',
