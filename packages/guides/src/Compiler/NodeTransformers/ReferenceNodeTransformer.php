@@ -20,12 +20,7 @@ use function implode;
 use function sprintf;
 use function str_contains;
 
-/**
- * @implements NodeTransformer<Node>
- *
- * The "class" directive sets the "classes" attribute value on its content or on the first immediately following
- * non-comment element. https://docutils.sourceforge.io/docs/ref/rst/directives.html#class
- */
+/** @implements NodeTransformer<Node> */
 class ReferenceNodeTransformer implements NodeTransformer
 {
     public function __construct(

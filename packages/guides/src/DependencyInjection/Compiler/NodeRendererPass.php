@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Nodes\InlineToken\AbbreviationToken;
 use phpDocumentor\Guides\Nodes\InlineToken\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\EmphasisToken;
+use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
 use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
@@ -89,6 +90,7 @@ final class NodeRendererPass implements CompilerPassInterface
         CitationInlineNode::class => 'inline/citation.html.twig',
         DocReferenceNode::class => 'inline/doc.html.twig',
         EmphasisToken::class => 'inline/emphasis.html.twig',
+        FootnoteInlineNode::class => 'inline/footnote.html.twig',
         HyperLinkNode::class => 'inline/link.html.twig',
         LiteralToken::class => 'inline/literal.html.twig',
         NewlineNode::class => 'inline/newline.html.twig',

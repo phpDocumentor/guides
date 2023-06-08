@@ -15,8 +15,6 @@ use phpDocumentor\Guides\Meta\DocumentEntry;
  * :doc:`foo/subdoc#anchor`
  * :doc:`custom text <foo>`
  * :doc:`custom text <domain:foo/subdoc#anchor>`
- *
- * Cross references are resolved during rendering? -> Should be compiler.
  */
 class DocReferenceNode extends AbstractLinkToken
 {
