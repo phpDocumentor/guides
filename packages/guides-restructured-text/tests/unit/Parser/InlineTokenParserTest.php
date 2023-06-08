@@ -204,6 +204,18 @@ final class InlineTokenParserTest extends TestCase
                 '``**nothing** is` interpreted in here``',
                 new InlineNode([new LiteralToken('', '**nothing** is` interpreted in here')]),
             ],
+            /*
+            'Literal Not to eager' => [
+                '``:doc:`lorem``` and ``:code:`what``` sit `amet <https://consectetur.org>`_',
+                new InlineNode([
+                    new LiteralToken('', ':doc:`lorem`'),
+                    new PlainTextToken('', ' and '),
+                    new LiteralToken('', ':code:`what`'),
+                    new PlainTextToken('', ' sit '),
+                    new HyperLinkNode('', 'amet', 'https://consectetur.org')
+                ]),
+            ],
+            */
             'Literal not ended' => [
                 '``end is missing',
                 new InlineNode([new PlainTextToken('', '``end is missing')]),

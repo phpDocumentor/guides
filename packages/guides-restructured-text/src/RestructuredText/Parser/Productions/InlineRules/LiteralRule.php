@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
 use phpDocumentor\Guides\Nodes\InlineToken\LiteralToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+
+use function strlen;
+use function substr;
 
 /**
  * Rule for literals such as ``something``
@@ -16,40 +18,19 @@ class LiteralRule extends AbstractInlineRule
 {
     public function applies(SpanLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::DOUBLE_BACKTICK;
+        return $lexer->token?->type === SpanLexer::LITERAL;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): LiteralToken
     {
-        $text = '';
-
-        $initialPosition = $lexer->token?->position;
-        $lexer->moveNext();
-
-        while ($lexer->token !== null) {
-            $token = $lexer->token;
-            switch ($token->type) {
-                case $token->type === SpanLexer::DOUBLE_BACKTICK:
-                    if ($text === '') {
-                        break 2;
-                    }
-
-                    $lexer->moveNext();
-
-                    return new LiteralToken('', $text);
-
-                default:
-                    $text .= $token->value;
-            }
-
-            if ($lexer->moveNext() === false && $lexer->token === null) {
-                break;
-            }
+        $literal = $lexer->token?->value;
+        if (strlen($literal) > 4) {
+            $literal = substr($literal, 2, strlen($literal) - 4);
         }
 
-        $this->rollback($lexer, $initialPosition ?? 0);
+        $lexer->moveNext();
 
-        return null;
+        return new LiteralToken('', $literal);
     }
 
     public function getPriority(): int

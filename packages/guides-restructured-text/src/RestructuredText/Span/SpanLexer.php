@@ -58,7 +58,7 @@ final class SpanLexer extends AbstractLexer
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
-            '``',
+            '``.+``(?!`)',
             '`__',
             '`_',
             '`~',
@@ -109,6 +109,10 @@ final class SpanLexer extends AbstractLexer
             return self::ESCAPED_SIGN;
         }
 
+        if (preg_match('/``.+``(?!`)/i', $value)) {
+            return self::LITERAL;
+        }
+
         if (preg_match('/https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)/i', $value)) {
             return self::HYPERLINK;
         }
@@ -130,9 +134,6 @@ final class SpanLexer extends AbstractLexer
         }
 
         switch ($value) {
-            case '``':
-                return self::DOUBLE_BACKTICK;
-
             case '`':
                 return self::BACKTICK;
 
@@ -184,7 +185,5 @@ final class SpanLexer extends AbstractLexer
             default:
                 return self::WORD;
         }
-
-        return null;
     }
 }
