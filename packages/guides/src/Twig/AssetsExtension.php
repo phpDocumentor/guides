@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Twig;
 
 use League\Flysystem\Exception;
 use LogicException;
+use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -46,6 +47,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('asset', $this->asset(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderInternalTarget', $this->renderInternalTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
@@ -106,9 +108,15 @@ final class AssetsExtension extends AbstractExtension
     }
 
     /** @param array{env: RenderContext} $context */
-    public function renderLink(array $context, string $url): string
+    public function renderInternalTarget(array $context, InternalTarget $internalTarget): string
     {
-        return $this->urlGenerator->createFileUrl($url);
+        return $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor());
+    }
+
+    /** @param array{env: RenderContext} $context */
+    public function renderLink(array $context, string $url, string|null $anchor = null): string
+    {
+        return $this->urlGenerator->createFileUrl($url, 'html', $anchor);
     }
 
     private function copyAsset(

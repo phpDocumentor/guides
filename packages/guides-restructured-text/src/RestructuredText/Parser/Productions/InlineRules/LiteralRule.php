@@ -23,7 +23,7 @@ class LiteralRule extends AbstractInlineRule
 
     public function apply(ParserContext $parserContext, SpanLexer $lexer): LiteralToken
     {
-        $literal = $lexer->token?->value;
+        $literal = $lexer->token?->value ?? '';
         if (strlen($literal) > 4) {
             $literal = substr($literal, 2, strlen($literal) - 4);
         }

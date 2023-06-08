@@ -1,5 +1,5 @@
-{%- if node.url -%}
-    <sup>[<a href="{{- node.url -}}">{{- node.value -}}</a>]</sup>
+{%- if node.internalTarget -%}
+    <sup>[<a href="{{- renderInternalTarget(node.internalTarget) -}}">{{- node.value -}}</a>]</sup>
 {%- else -%}
     <sup>[{{- node.value -}}]</sup>
 {%- endif -%}

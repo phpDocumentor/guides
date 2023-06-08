@@ -24,7 +24,7 @@ class EscapeRule extends ReferenceRule
 
     public function apply(ParserContext $parserContext, SpanLexer $lexer): NewlineNode|NbspToken|PlainTextToken
     {
-        $char = $lexer->token?->value;
+        $char = $lexer->token?->value ?? '';
         $char = substr($char, 1, 1);
         $lexer->moveNext();
 

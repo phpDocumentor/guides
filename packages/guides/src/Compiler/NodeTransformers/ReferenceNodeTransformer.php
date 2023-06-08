@@ -11,7 +11,6 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 
@@ -43,17 +42,11 @@ class ReferenceNodeTransformer implements NodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
-        if (!$node instanceof SpanNode) {
-            return $node;
-        }
-
-        foreach ($node->getTokens() as $token) {
-            if ($token instanceof ReferenceNode) {
-                $this->resolveReference($token, $compilerContext->getDocumentNode());
-            } else {
-                if ($token instanceof DocReferenceNode) {
-                    $this->resolveDocReference($token, $compilerContext->getDocumentNode());
-                }
+        if ($node instanceof ReferenceNode) {
+            $this->resolveReference($node, $compilerContext->getDocumentNode());
+        } else {
+            if ($node instanceof DocReferenceNode) {
+                $this->resolveDocReference($node, $compilerContext->getDocumentNode());
             }
         }
 
@@ -62,7 +55,7 @@ class ReferenceNodeTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof SpanNode;
+        return $node instanceof ReferenceNode || $node instanceof DocReferenceNode;
     }
 
     private function resolveReference(ReferenceNode $referenceNode, DocumentNode $document): void
