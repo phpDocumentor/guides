@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 
 /** @extends CompoundNode<InlineNode> */
 class TitleNode extends CompoundNode

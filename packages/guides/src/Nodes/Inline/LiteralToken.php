@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Nodes\InlineToken;
+namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class EmphasisToken extends InlineMarkupToken
+final class LiteralToken extends InlineMarkupToken
 {
-    public const TYPE = 'emphasis';
+    public const TYPE = 'literal';
 
     public function __construct(string $value)
     {

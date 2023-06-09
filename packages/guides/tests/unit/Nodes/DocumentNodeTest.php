@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 use PHPUnit\Framework\TestCase;
 
 final class DocumentNodeTest extends TestCase

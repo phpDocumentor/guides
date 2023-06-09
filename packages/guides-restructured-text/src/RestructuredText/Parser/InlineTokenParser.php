@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Exception;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 use phpDocumentor\Guides\Nodes\InlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;

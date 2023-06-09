@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Metas;
-use phpDocumentor\Guides\Nodes\InlineToken\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */

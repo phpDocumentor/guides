@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use Monolog\Logger;
-use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\ParserContext;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;

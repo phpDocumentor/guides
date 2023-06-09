@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use Psr\Log\LoggerInterface;

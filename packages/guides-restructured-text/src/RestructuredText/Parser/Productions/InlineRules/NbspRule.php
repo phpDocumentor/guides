@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\InlineToken\NbspToken;
+use phpDocumentor\Guides\Nodes\Inline\NbspToken;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
 use phpDocumentor\Guides\ParserContext;
 
 interface TextRole

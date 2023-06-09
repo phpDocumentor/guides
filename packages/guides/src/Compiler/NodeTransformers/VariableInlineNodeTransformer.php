@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
-use phpDocumentor\Guides\Nodes\InlineToken\VariableInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
 

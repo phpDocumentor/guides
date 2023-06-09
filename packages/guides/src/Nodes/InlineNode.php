@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 
 /** @extends CompoundNode<InlineMarkupToken> */
 class InlineNode extends CompoundNode

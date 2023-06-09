@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Nodes\InlineToken\HyperLinkNode;
-use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
 

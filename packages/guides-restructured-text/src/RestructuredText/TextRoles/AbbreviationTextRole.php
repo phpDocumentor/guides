@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\AbbreviationToken;
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\AbbreviationToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
 use phpDocumentor\Guides\ParserContext;
 use Psr\Log\LoggerInterface;
 

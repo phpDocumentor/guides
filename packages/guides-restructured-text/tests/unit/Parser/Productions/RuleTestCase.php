@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 use phpDocumentor\Guides\Nodes\InlineNode;
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;

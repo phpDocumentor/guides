@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
 use phpDocumentor\Guides\ParserContext;
 
 class GenericTextRole implements TextRole

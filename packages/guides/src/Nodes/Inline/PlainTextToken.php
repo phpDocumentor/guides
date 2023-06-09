@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Nodes\InlineToken;
+namespace phpDocumentor\Guides\Nodes\Inline;
 
 final class PlainTextToken extends InlineMarkupToken
 {

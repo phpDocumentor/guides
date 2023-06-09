@@ -13,7 +13,7 @@ namespace phpDocumentor\Guides\Nodes;
  * @link https://phpdoc.org
  */
 
-use phpDocumentor\Guides\Nodes\InlineToken\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
 use PHPUnit\Framework\TestCase;
 
 final class TitleNodeTest extends TestCase
