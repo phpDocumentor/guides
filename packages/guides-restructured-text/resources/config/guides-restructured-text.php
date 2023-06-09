@@ -81,7 +81,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
@@ -291,7 +290,6 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('phpdoc.guides.parser.markupLanguageParser')
         ->set(DocumentRule::class)
-        ->set(SpanParser::class)
         ->set(InlineTokenParser::class)
         ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
         ->set(GlobSearcher::class)

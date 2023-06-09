@@ -33,10 +33,10 @@ class EscapeRule extends ReferenceRule
         }
 
         if ($char === ' ') {
-            return new NbspToken('');
+            return new NbspToken();
         }
 
-        return new PlainTextToken('', $char);
+        return new PlainTextToken($char);
     }
 
     public function getPriority(): int

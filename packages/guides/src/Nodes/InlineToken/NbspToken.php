@@ -8,8 +8,8 @@ final class NbspToken extends InlineMarkupToken
 {
     public const TYPE = 'nbsp';
 
-    public function __construct(string $id)
+    public function __construct()
     {
-        parent::__construct(self::TYPE, $id);
+        parent::__construct(self::TYPE);
     }
 }

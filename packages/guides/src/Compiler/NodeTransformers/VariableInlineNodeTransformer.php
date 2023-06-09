@@ -45,7 +45,7 @@ class VariableInlineNodeTransformer implements NodeTransformer
                 'No replacement was found for variable |' . $node->getValue() . '|',
                 ['document', $compilerContext->getDocumentNode()->getFilePath()],
             );
-            $node->setChild(new PlainTextToken('', '|' . $node->getValue() . '|'));
+            $node->setChild(new PlainTextToken('|' . $node->getValue() . '|'));
         }
 
         return $node;

@@ -22,7 +22,7 @@ class NbspRule extends ReferenceRule
     {
         $lexer->moveNext();
 
-        return new NbspToken('');
+        return new NbspToken();
     }
 
     public function getPriority(): int

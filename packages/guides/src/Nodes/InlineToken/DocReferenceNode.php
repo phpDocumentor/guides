@@ -25,18 +25,12 @@ class DocReferenceNode extends AbstractLinkToken
     private DocumentEntry|null $documentEntry = null;
 
     public function __construct(
-        private readonly string $id,
         string $documentLink,
         private readonly string|null $anchor = null,
         private readonly string|null $domain = null,
         private readonly string|null $text = null,
     ) {
-        parent::__construct(self::TYPE, $id, $documentLink);
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
+        parent::__construct(self::TYPE, $documentLink);
     }
 
     public function getDocumentLink(): string

@@ -36,7 +36,7 @@ class EmphasisRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new EmphasisToken('', $text);
+                    return new EmphasisToken($text);
 
                 default:
                     $text .= $token->value;

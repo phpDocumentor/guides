@@ -8,8 +8,8 @@ final class LiteralToken extends InlineMarkupToken
 {
     public const TYPE = 'literal';
 
-    public function __construct(string $id, string $value)
+    public function __construct(string $value)
     {
-        parent::__construct(self::TYPE, $id, $value);
+        parent::__construct(self::TYPE, $value);
     }
 }

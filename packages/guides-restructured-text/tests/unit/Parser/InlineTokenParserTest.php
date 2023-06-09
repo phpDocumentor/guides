@@ -94,147 +94,147 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Alphanumeric Char' => [
                 'x',
-                new InlineNode([new PlainTextToken('', 'x')]),
+                new InlineNode([new PlainTextToken('x')]),
             ],
             'Special Char' => [
                 '`',
-                new InlineNode([new PlainTextToken('', '`')]),
+                new InlineNode([new PlainTextToken('`')]),
             ],
             'Alphanumeric Chars' => [
                 'Lorem Ipsum',
-                new InlineNode([new PlainTextToken('', 'Lorem Ipsum')]),
+                new InlineNode([new PlainTextToken('Lorem Ipsum')]),
             ],
             'Named Reference' => [
                 'myref_',
-                new InlineNode([new HyperLinkNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('myref')]),
             ],
             'Named Reference in string' => [
                 'abc: myref_ xyz',
                 new InlineNode([
-                    new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref'),
-                    new PlainTextToken('', ' xyz'),
+                    new PlainTextToken('abc: '),
+                    new HyperLinkNode('myref'),
+                    new PlainTextToken(' xyz'),
                 ]),
             ],
             'Anonymous Reference' => [
                 'myref__',
-                new InlineNode([new HyperLinkNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('myref')]),
             ],
             'Anonymous Reference in string' => [
                 'abc: myref__ xyz',
                 new InlineNode([
-                    new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref'),
-                    new PlainTextToken('', ' xyz'),
+                    new PlainTextToken('abc: '),
+                    new HyperLinkNode('myref'),
+                    new PlainTextToken(' xyz'),
                 ]),
             ],
             'Internal Reference' => [
                 '_`myref`',
-                new InlineNode([new HyperLinkNode('', 'myref')]),
+                new InlineNode([new HyperLinkNode('myref')]),
             ],
             'Internal Reference in string' => [
                 'abc: _`myref` xyz',
                 new InlineNode([
-                    new PlainTextToken('', 'abc: '),
-                    new HyperLinkNode('', 'myref'),
-                    new PlainTextToken('', ' xyz'),
+                    new PlainTextToken('abc: '),
+                    new HyperLinkNode('myref'),
+                    new PlainTextToken(' xyz'),
                 ]),
             ],
             'No Internal Reference' => [
                 '_`myref',
-                new InlineNode([new PlainTextToken('', '_`myref')]),
+                new InlineNode([new PlainTextToken('_`myref')]),
             ],
             'Textrole' => [
                 ':doc:`path/to/document`',
-                new InlineNode([new DocReferenceNode('', 'path/to/document')]),
+                new InlineNode([new DocReferenceNode('path/to/document')]),
             ],
             'Textrole in string' => [
                 'abc: :doc:`path/to/document` xyz',
                 new InlineNode([
-                    new PlainTextToken('', 'abc: '),
-                    new DocReferenceNode('', 'path/to/document'),
-                    new PlainTextToken('', ' xyz'),
+                    new PlainTextToken('abc: '),
+                    new DocReferenceNode('path/to/document'),
+                    new PlainTextToken(' xyz'),
                 ]),
             ],
             'Named Reference, Phrased' => [
                 '`myref`_',
-                new InlineNode([new HyperLinkNode('', 'myref', 'myref')]),
+                new InlineNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Named Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`_',
-                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new HyperLinkNode('myref', 'https://test.com')]),
             ],
             'Named Reference, Phrased, With URL not ended' => [
                 '`myref<https://test.com`_',
-                new InlineNode([new HyperLinkNode('', 'myref<https://test.com', 'myref<https://test.com')]),
+                new InlineNode([new HyperLinkNode('myref<https://test.com', 'myref<https://test.com')]),
             ],
             'Anonymous Reference, Phrased' => [
                 '`myref`__',
-                new InlineNode([new HyperLinkNode('', 'myref', 'myref')]),
+                new InlineNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Anonymous Reference, Phrased, With URL' => [
                 '`myref<https://test.com>`__',
-                new InlineNode([new HyperLinkNode('', 'myref', 'https://test.com')]),
+                new InlineNode([new HyperLinkNode('myref', 'https://test.com')]),
             ],
             'Footnote' => [
                 '[1]_',
-                new InlineNode([new FootnoteInlineNode('', '1', '', 1)]),
+                new InlineNode([new FootnoteInlineNode('1', '', 1)]),
             ],
             'Named Footnote' => [
                 '[#f1]_',
-                new InlineNode([new FootnoteInlineNode('', '#f1', '#f1', 0)]),
+                new InlineNode([new FootnoteInlineNode('#f1', '#f1', 0)]),
             ],
             'Footnote in text' => [
                 'Please RTFM [#f1]_.',
                 new InlineNode([
-                    new PlainTextToken('', 'Please RTFM '),
-                    new FootnoteInlineNode('', '#f1', '#f1', 0),
-                    new PlainTextToken('', '.'),
+                    new PlainTextToken('Please RTFM '),
+                    new FootnoteInlineNode('#f1', '#f1', 0),
+                    new PlainTextToken('.'),
                 ]),
             ],
             'Citation' => [
                 '[f1]_',
-                new InlineNode([new CitationInlineNode('', 'f1', 'f1')]),
+                new InlineNode([new CitationInlineNode('f1', 'f1')]),
             ],
             'Literal' => [
                 '``simple``',
-                new InlineNode([new LiteralToken('', 'simple')]),
+                new InlineNode([new LiteralToken('simple')]),
             ],
             'Literal complex' => [
                 '``**nothing** is` interpreted in here``',
-                new InlineNode([new LiteralToken('', '**nothing** is` interpreted in here')]),
+                new InlineNode([new LiteralToken('**nothing** is` interpreted in here')]),
             ],
             /*
             'Literal Not to eager' => [
                 '``:doc:`lorem``` and ``:code:`what``` sit `amet <https://consectetur.org>`_',
                 new InlineNode([
-                    new LiteralToken('', ':doc:`lorem`'),
-                    new PlainTextToken('', ' and '),
-                    new LiteralToken('', ':code:`what`'),
-                    new PlainTextToken('', ' sit '),
-                    new HyperLinkNode('', 'amet', 'https://consectetur.org')
+                    new LiteralToken(':doc:`lorem`'),
+                    new PlainTextToken(' and '),
+                    new LiteralToken(':code:`what`'),
+                    new PlainTextToken(' sit '),
+                    new HyperLinkNode('amet', 'https://consectetur.org')
                 ]),
             ],
             */
             'Literal not ended' => [
                 '``end is missing',
-                new InlineNode([new PlainTextToken('', '``end is missing')]),
+                new InlineNode([new PlainTextToken('``end is missing')]),
             ],
             'Default Textrole' => [
                 '`simple`',
-                new InlineNode([new LiteralToken('', 'simple')]),
+                new InlineNode([new LiteralToken('simple')]),
             ],
             'Hyperlink' => [
                 'https://example.com',
-                new InlineNode([new HyperLinkNode('', 'https://example.com', 'https://example.com')]),
+                new InlineNode([new HyperLinkNode('https://example.com', 'https://example.com')]),
             ],
             'Emphasis' => [
                 '*emphasis*',
-                new InlineNode([new EmphasisToken('', 'emphasis')]),
+                new InlineNode([new EmphasisToken('emphasis')]),
             ],
             'Strong' => [
                 '**strong**',
-                new InlineNode([new StrongEmphasisToken('', 'strong')]),
+                new InlineNode([new StrongEmphasisToken('strong')]),
             ],
             'Variable' => [
                 '|variable|',
@@ -242,7 +242,7 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Escape' => [
                 "\\x\\`\\ \\\n",
-                new InlineNode([new PlainTextToken('', 'x`'), new NbspToken(''), new NewlineNode()]),
+                new InlineNode([new PlainTextToken('x`'), new NbspToken(), new NewlineNode()]),
             ],
         ];
     }

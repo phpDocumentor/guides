@@ -10,6 +10,6 @@ final class NewlineNode extends InlineMarkupToken
 
     public function __construct()
     {
-        parent::__construct(self::TYPE, '');
+        parent::__construct(self::TYPE);
     }
 }

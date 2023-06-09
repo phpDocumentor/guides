@@ -26,9 +26,9 @@ class ProjectNode extends CompoundNode
         private string|null $title = null,
         private string|null $version = null,
     ) {
-        $this->addVariable('project', new PlainTextToken('', $title ?? ''));
-        $this->addVariable('version', new PlainTextToken('', $version ?? ''));
-        $this->addVariable('last_rendered', new PlainTextToken('', date(DATE_RFC2822)));
+        $this->addVariable('project', new PlainTextToken($title ?? ''));
+        $this->addVariable('version', new PlainTextToken($version ?? ''));
+        $this->addVariable('last_rendered', new PlainTextToken(date(DATE_RFC2822)));
 
         parent::__construct();
     }

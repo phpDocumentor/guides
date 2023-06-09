@@ -8,9 +8,9 @@ class GenericTextRoleToken extends InlineMarkupToken
 {
     public const TYPE = 'role';
 
-    public function __construct(string $id, private readonly string $role, private readonly string $content)
+    public function __construct(private readonly string $role, private readonly string $content)
     {
-        parent::__construct($role, $id, $content);
+        parent::__construct($role, $content);
     }
 
     public function getRole(): string

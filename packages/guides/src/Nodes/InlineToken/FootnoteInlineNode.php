@@ -24,9 +24,9 @@ class FootnoteInlineNode extends AnnotationInlineNode
 {
     public const TYPE = 'footnote';
 
-    public function __construct(string $id, string $value, private string $name, private int $number)
+    public function __construct(string $value, private string $name, private int $number)
     {
-        parent::__construct(self::TYPE, $id, $value);
+        parent::__construct(self::TYPE, $value);
     }
 
     public function getName(): string

@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
 /** @extends AbstractNode<String> */
 abstract class InlineMarkupToken extends AbstractNode
 {
-    public function __construct(private readonly string $type, private readonly string $id, string $value = '')
+    public function __construct(private readonly string $type, string $value = '')
     {
         $this->value = $value;
     }
@@ -17,11 +17,6 @@ abstract class InlineMarkupToken extends AbstractNode
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     public function toString(): string

@@ -43,14 +43,12 @@ class AnnotationRoleRule extends AbstractInlineRule
                             $number = AnnotationUtility::getFootnoteNumber($annotationName);
                             $name = AnnotationUtility::getFootnoteName($annotationName);
                             $node = new FootnoteInlineNode(
-                                '',
                                 $annotationName,
                                 $name ?? '',
                                 $number ?? 0,
                             );
                         } else {
                             $node = new CitationInlineNode(
-                                '',
                                 $annotationName,
                                 $annotationName,
                             );

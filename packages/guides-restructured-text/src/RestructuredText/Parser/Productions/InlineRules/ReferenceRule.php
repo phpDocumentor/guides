@@ -25,7 +25,7 @@ abstract class ReferenceRule extends AbstractInlineRule
             $parserContext->setLink($link, $url);
         }
 
-        return new HyperLinkNode('', $link, $url);
+        return new HyperLinkNode($link, $url);
     }
 
     protected function parseEmbeddedUrl(SpanLexer $lexer): string|null

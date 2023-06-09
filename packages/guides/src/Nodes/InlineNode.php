@@ -31,6 +31,6 @@ class InlineNode extends CompoundNode
 
     public static function getPlainTextInlineNode(string $content): self
     {
-        return new InlineNode([new PlainTextToken('', $content)]);
+        return new InlineNode([new PlainTextToken($content)]);
     }
 }

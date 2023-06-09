@@ -18,7 +18,7 @@ class PlainTextRule implements InlineRule
 
     public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
     {
-        $node = new PlainTextToken('', $lexer->token?->value ?? '');
+        $node = new PlainTextToken($lexer->token?->value ?? '');
         $lexer->moveNext();
 
         return $node;

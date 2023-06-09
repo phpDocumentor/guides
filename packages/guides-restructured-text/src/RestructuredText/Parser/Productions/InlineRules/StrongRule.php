@@ -36,7 +36,7 @@ class StrongRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new StrongEmphasisToken('', $text);
+                    return new StrongEmphasisToken($text);
 
                 default:
                     $text .= $token->value;

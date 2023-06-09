@@ -52,7 +52,7 @@ abstract class RuleTestCase extends TestCase
         $inlineTokenParser = $this->createMock(InlineTokenParser::class);
         $inlineTokenParser->method('parse')->willReturnCallback(
             static fn (string $arg): InlineNode => new InlineNode([
-                new PlainTextToken('', $arg),
+                new PlainTextToken($arg),
             ])
         );
 

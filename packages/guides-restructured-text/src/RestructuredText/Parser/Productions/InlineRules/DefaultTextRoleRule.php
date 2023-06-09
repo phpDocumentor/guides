@@ -36,7 +36,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new LiteralToken('', $text);
+                    return new LiteralToken($text);
 
                 default:
                     $text .= $token->value;

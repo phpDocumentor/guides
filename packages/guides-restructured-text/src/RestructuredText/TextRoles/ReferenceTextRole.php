@@ -80,7 +80,6 @@ class ReferenceTextRole implements TextRole
         }
 
         return new ReferenceNode(
-            id: $id,
             referenceName: trim($part),
             domain: $domain,
             text: $text,

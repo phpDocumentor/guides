@@ -40,7 +40,7 @@ class AbbreviationTextRole implements TextRole
         string $content,
     ): InlineMarkupToken {
         if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
-            return new AbbreviationToken($id, trim($matches[1]), trim($matches[2]));
+            return new AbbreviationToken(trim($matches[1]), trim($matches[2]));
         }
 
         $this->logger->warning(
@@ -48,6 +48,6 @@ class AbbreviationTextRole implements TextRole
             $parserContext->getLoggerInformation(),
         );
 
-        return new AbbreviationToken($id, $content, '');
+        return new AbbreviationToken($content, '');
     }
 }

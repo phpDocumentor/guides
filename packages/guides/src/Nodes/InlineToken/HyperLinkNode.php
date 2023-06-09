@@ -11,11 +11,11 @@ class HyperLinkNode extends InlineMarkupToken
 {
     private string $url;
 
-    public function __construct(string $id, string $value, string|null $url = null)
+    public function __construct(string $value, string|null $url = null)
     {
         $this->url = $url ?? $value;
 
-        parent::__construct('link', $id, $value);
+        parent::__construct('link', $value);
     }
 
     public function getLink(): string

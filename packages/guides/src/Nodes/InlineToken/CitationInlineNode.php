@@ -17,9 +17,9 @@ class CitationInlineNode extends AnnotationInlineNode
 {
     public const TYPE = 'citation_inline';
 
-    public function __construct(string $id, string $value, private string $name)
+    public function __construct(string $value, private string $name)
     {
-        parent::__construct(self::TYPE, $id, $value);
+        parent::__construct(self::TYPE, $value);
     }
 
     public function getName(): string

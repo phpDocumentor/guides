@@ -30,6 +30,6 @@ class GenericTextRole implements TextRole
         string $role,
         string $content,
     ): InlineMarkupToken {
-        return new GenericTextRoleToken($id, $role, $content);
+        return new GenericTextRoleToken($role, $content);
     }
 }

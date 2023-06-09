@@ -30,17 +30,11 @@ class ReferenceNode extends AbstractLinkToken
     private InternalTarget|null $internalTarget = null;
 
     public function __construct(
-        private readonly string $id,
         string $referenceName,
         private readonly string|null $domain = null,
         private readonly string|null $text = null,
     ) {
-        parent::__construct(self::TYPE, $id, $referenceName);
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
+        parent::__construct(self::TYPE, $referenceName);
     }
 
     public function getReferenceName(): string

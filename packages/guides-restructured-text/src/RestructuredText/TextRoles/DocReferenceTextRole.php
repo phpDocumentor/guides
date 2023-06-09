@@ -85,7 +85,6 @@ class DocReferenceTextRole implements TextRole
         }
 
         return new DocReferenceNode(
-            id: $id,
             documentLink: trim($part),
             anchor: $anchor,
             domain: $domain,

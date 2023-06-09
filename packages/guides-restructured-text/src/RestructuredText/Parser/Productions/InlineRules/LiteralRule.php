@@ -30,7 +30,7 @@ class LiteralRule extends AbstractInlineRule
 
         $lexer->moveNext();
 
-        return new LiteralToken('', $literal);
+        return new LiteralToken($literal);
     }
 
     public function getPriority(): int

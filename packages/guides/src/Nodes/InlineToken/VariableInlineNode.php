@@ -14,7 +14,7 @@ class VariableInlineNode extends InlineMarkupToken
 
     public function __construct(string $value)
     {
-        parent::__construct(self::TYPE, '', $value);
+        parent::__construct(self::TYPE, $value);
     }
 
     public function getChild(): Node
