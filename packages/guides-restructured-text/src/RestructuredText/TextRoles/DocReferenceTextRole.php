@@ -39,7 +39,6 @@ class DocReferenceTextRole implements TextRole
     /** @return DocReferenceNode */
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
     ): InlineMarkupToken {

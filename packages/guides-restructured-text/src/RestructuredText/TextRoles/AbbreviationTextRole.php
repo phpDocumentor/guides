@@ -35,7 +35,6 @@ class AbbreviationTextRole implements TextRole
     /** @return AbbreviationToken */
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
     ): InlineMarkupToken {

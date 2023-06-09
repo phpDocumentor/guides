@@ -16,7 +16,6 @@ interface TextRole
 
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
     ): InlineMarkupToken;

@@ -26,7 +26,6 @@ class GenericTextRole implements TextRole
     /** @return GenericTextRoleToken */
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
     ): InlineMarkupToken {
