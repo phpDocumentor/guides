@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
@@ -19,7 +19,7 @@ class VariableInlineRule extends AbstractInlineRule
         return $lexer->token?->type === SpanLexer::VARIABLE_DELIMITER;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
     {
         $text = '';
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Exception;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
@@ -27,7 +27,7 @@ class InlineTokenParser
         });
     }
 
-    public function parse(string $content, ParserContext $parserContext): InlineNode
+    public function parse(string $content, ParserContext $parserContext): InlineCompoundNode
     {
         $lexer = new SpanLexer();
         $lexer->setInput($content);
@@ -46,7 +46,7 @@ class InlineTokenParser
                     continue;
                 }
 
-                if ($previous instanceof PlainTextToken && $node instanceof PlainTextToken) {
+                if ($previous instanceof PlainTextInlineNode && $node instanceof PlainTextInlineNode) {
                     $previous->append($node);
                 } else {
                     $nodes[] = $node;
@@ -59,6 +59,6 @@ class InlineTokenParser
             throw new Exception('No inline token rule applied.');
         }
 
-        return new InlineNode($nodes);
+        return new InlineCompoundNode($nodes);
     }
 }

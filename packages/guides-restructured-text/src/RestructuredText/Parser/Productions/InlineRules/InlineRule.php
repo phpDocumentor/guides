@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -21,7 +21,7 @@ interface InlineRule
 {
     public function applies(SpanLexer $lexer): bool;
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null;
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null;
 
     public function getPriority(): int;
 }

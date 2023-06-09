@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 /**
  * Represents a link to an external source or email
  */
-class HyperLinkNode extends InlineMarkupToken
+class HyperLinkNode extends InlineNode
 {
     private string $url;
 

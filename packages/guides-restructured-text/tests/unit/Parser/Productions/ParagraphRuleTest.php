@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -48,7 +48,7 @@ final class ParagraphRuleTest extends RuleTestCase
         return [
             [
                 'input' => 'some text.',
-                'output' => new ParagraphNode([InlineNode::getPlainTextInlineNode('some text.')]),
+                'output' => new ParagraphNode([InlineCompoundNode::getPlainTextInlineNode('some text.')]),
                 'remaining' => null,
             ],
             [
@@ -59,7 +59,7 @@ RST
 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(<<<'RST'
+                        InlineCompoundNode::getPlainTextInlineNode(<<<'RST'
 some multiline
 paragraph
 RST),
@@ -77,7 +77,7 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(<<<'RST'
+                        InlineCompoundNode::getPlainTextInlineNode(<<<'RST'
 some multiline
 paragraph
 RST),
@@ -95,7 +95,7 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 paragraph
@@ -115,7 +115,7 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
@@ -136,7 +136,7 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
@@ -157,7 +157,7 @@ RST
                 ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
@@ -180,7 +180,7 @@ RST
             ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline next paragraph is a literal block
 paragraph:
@@ -200,7 +200,7 @@ RST
     ,
                 'output' => new ParagraphNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 This is a top-level paragraph.
 RST,

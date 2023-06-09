@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\Inline\StrongEmphasisToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -19,7 +19,7 @@ class StrongRule extends AbstractInlineRule
         return $lexer->token?->type === SpanLexer::STRONG_DELIMITER;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
     {
         $text = '';
 
@@ -36,7 +36,7 @@ class StrongRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new StrongEmphasisToken($text);
+                    return new StrongInlineNode($text);
 
                 default:
                     $text .= $token->value;

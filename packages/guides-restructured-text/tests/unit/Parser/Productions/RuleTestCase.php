@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use League\Flysystem\FilesystemInterface;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -51,8 +51,8 @@ abstract class RuleTestCase extends TestCase
     {
         $inlineTokenParser = $this->createMock(InlineTokenParser::class);
         $inlineTokenParser->method('parse')->willReturnCallback(
-            static fn (string $arg): InlineNode => new InlineNode([
-                new PlainTextToken($arg),
+            static fn (string $arg): InlineCompoundNode => new InlineCompoundNode([
+                new PlainTextInlineNode($arg),
             ])
         );
 

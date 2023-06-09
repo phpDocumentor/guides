@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-abstract class AbstractLinkToken extends InlineMarkupToken
+abstract class AbstractLinkInlineNode extends InlineNode
 {
     abstract public function getUrl(): string;
 

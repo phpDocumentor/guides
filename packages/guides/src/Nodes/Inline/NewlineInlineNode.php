@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class NewlineNode extends InlineMarkupToken
+final class NewlineInlineNode extends InlineNode
 {
     public const TYPE = 'newline';
 

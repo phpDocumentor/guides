@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
-/** @extends CompoundNode<InlineMarkupToken> */
-class InlineNode extends CompoundNode
+/** @extends CompoundNode<InlineNode> */
+class InlineCompoundNode extends CompoundNode
 {
     public function toString(): string
     {
@@ -31,6 +31,6 @@ class InlineNode extends CompoundNode
 
     public static function getPlainTextInlineNode(string $content): self
     {
-        return new InlineNode([new PlainTextToken($content)]);
+        return new InlineCompoundNode([new PlainTextInlineNode($content)]);
     }
 }

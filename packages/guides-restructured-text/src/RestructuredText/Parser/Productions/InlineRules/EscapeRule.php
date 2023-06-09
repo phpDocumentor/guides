@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\NbspToken;
-use phpDocumentor\Guides\Nodes\Inline\NewlineNode;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -22,21 +22,21 @@ class EscapeRule extends ReferenceRule
         return $lexer->token?->type === SpanLexer::ESCAPED_SIGN;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): NewlineNode|NbspToken|PlainTextToken
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): NewlineInlineNode|WhitespaceInlineNode|PlainTextInlineNode
     {
         $char = $lexer->token?->value ?? '';
         $char = substr($char, 1, 1);
         $lexer->moveNext();
 
         if ($char === "\n") {
-            return new NewlineNode();
+            return new NewlineInlineNode();
         }
 
         if ($char === ' ') {
-            return new NbspToken();
+            return new WhitespaceInlineNode();
         }
 
-        return new PlainTextToken($char);
+        return new PlainTextInlineNode($char);
     }
 
     public function getPriority(): int

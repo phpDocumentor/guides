@@ -16,21 +16,21 @@ use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
-use phpDocumentor\Guides\Nodes\Inline\AbbreviationToken;
+use phpDocumentor\Guides\Nodes\Inline\AbbreviationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
-use phpDocumentor\Guides\Nodes\Inline\EmphasisToken;
+use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleToken;
+use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
-use phpDocumentor\Guides\Nodes\Inline\LiteralToken;
-use phpDocumentor\Guides\Nodes\Inline\NbspToken;
-use phpDocumentor\Guides\Nodes\Inline\NewlineNode;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
-use phpDocumentor\Guides\Nodes\Inline\StrongEmphasisToken;
+use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
@@ -85,21 +85,21 @@ final class NodeRendererPass implements CompilerPassInterface
         CitationNode::class => 'body/citation.html.twig',
         FootnoteNode::class => 'body/footnote.html.twig',
         // Inline
-        InlineNode::class => 'inline/inline-node.html.twig',
-        AbbreviationToken::class => 'inline/textroles/abbreviation.html.twig',
+        InlineCompoundNode::class => 'inline/inline-node.html.twig',
+        AbbreviationInlineNode::class => 'inline/textroles/abbreviation.html.twig',
         CitationInlineNode::class => 'inline/citation.html.twig',
         DocReferenceNode::class => 'inline/doc.html.twig',
-        EmphasisToken::class => 'inline/emphasis.html.twig',
+        EmphasisInlineNode::class => 'inline/emphasis.html.twig',
         FootnoteInlineNode::class => 'inline/footnote.html.twig',
         HyperLinkNode::class => 'inline/link.html.twig',
-        LiteralToken::class => 'inline/literal.html.twig',
-        NewlineNode::class => 'inline/newline.html.twig',
-        NbspToken::class => 'inline/nbsp.html.twig',
-        PlainTextToken::class => 'inline/plain-text.html.twig',
+        LiteralInlineNode::class => 'inline/literal.html.twig',
+        NewlineInlineNode::class => 'inline/newline.html.twig',
+        WhitespaceInlineNode::class => 'inline/nbsp.html.twig',
+        PlainTextInlineNode::class => 'inline/plain-text.html.twig',
         ReferenceNode::class => 'inline/ref.html.twig',
-        StrongEmphasisToken::class => 'inline/strong.html.twig',
+        StrongInlineNode::class => 'inline/strong.html.twig',
         VariableInlineNode::class => 'inline/variable.html.twig',
-        GenericTextRoleToken::class => 'inline/textroles/generic.html.twig',
+        GenericTextRoleInlineNode::class => 'inline/textroles/generic.html.twig',
         // Output as Metatags
         AuthorNode::class => 'structure/header/author.html.twig',
         CopyrightNode::class => 'structure/header/copyright.html.twig',

@@ -13,14 +13,14 @@ namespace phpDocumentor\Guides\Nodes;
  * @link https://phpdoc.org
  */
 
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use PHPUnit\Framework\TestCase;
 
 final class TitleNodeTest extends TestCase
 {
     public function test_it_can_be_created_with_a_title_slug_and_depth(): void
     {
-        $titleNode = new InlineNode([new PlainTextToken('Raw String')]);
+        $titleNode = new InlineCompoundNode([new PlainTextInlineNode('Raw String')]);
         $node = new TitleNode($titleNode, 1, 'raw-string');
         $node->setTarget('target');
 

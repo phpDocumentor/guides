@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use PHPUnit\Framework\TestCase;
 
 /** @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode */
@@ -25,7 +25,7 @@ final class DefinitionListTermTest extends TestCase
      */
     public function testTheDefinitionTermTextIsAvailable(): void
     {
-        $term = $this->createStub(InlineNode::class);
+        $term = $this->createStub(InlineCompoundNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [], []);
 
@@ -38,8 +38,8 @@ final class DefinitionListTermTest extends TestCase
      */
     public function testClassifiersAreMadeAvailable(): void
     {
-        $term = $this->createStub(InlineNode::class);
-        $classifier = $this->createStub(InlineNode::class);
+        $term = $this->createStub(InlineCompoundNode::class);
+        $classifier = $this->createStub(InlineCompoundNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [$classifier], []);
 
@@ -49,7 +49,7 @@ final class DefinitionListTermTest extends TestCase
     /** @covers ::__construct */
     public function testDefinitionsAreMadeAvailable(): void
     {
-        $term = $this->createStub(InlineNode::class);
+        $term = $this->createStub(InlineCompoundNode::class);
         $definition1 = new DefinitionNode([]);
         $definition2 = new DefinitionNode([]);
 

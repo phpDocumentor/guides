@@ -21,7 +21,7 @@ use phpDocumentor\Guides\Meta\InternalTarget;
  *
  * Cross references are resolved during rendering? -> Should be compiler.
  */
-class ReferenceNode extends AbstractLinkToken
+class ReferenceNode extends AbstractLinkInlineNode
 {
     public const TYPE = 'ref';
     // URL can only be resolved during rendering as it contains file endings for html / latex etc

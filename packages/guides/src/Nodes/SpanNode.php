@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
-
 class SpanNode extends TextNode
 {
-    /** @param InlineMarkupToken[] $tokens */
+    /** @param InlineCompoundNode[] $tokens */
     public function __construct(string $content, protected array $tokens = [])
     {
         parent::__construct($content);
     }
 
-    /** @return InlineMarkupToken[] */
+    /** @return InlineCompoundNode[] */
     public function getTokens(): array
     {
         return $this->tokens;

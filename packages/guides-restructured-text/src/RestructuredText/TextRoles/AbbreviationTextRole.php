@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\Inline\AbbreviationToken;
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\AbbreviationInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
 use Psr\Log\LoggerInterface;
 
@@ -32,14 +32,14 @@ class AbbreviationTextRole implements TextRole
         return [];
     }
 
-    /** @return AbbreviationToken */
+    /** @return AbbreviationInlineNode */
     public function processNode(
         ParserContext $parserContext,
         string $role,
         string $content,
-    ): InlineMarkupToken {
+    ): InlineNode {
         if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
-            return new AbbreviationToken(trim($matches[1]), trim($matches[2]));
+            return new AbbreviationInlineNode(trim($matches[1]), trim($matches[2]));
         }
 
         $this->logger->warning(
@@ -47,6 +47,6 @@ class AbbreviationTextRole implements TextRole
             $parserContext->getLoggerInformation(),
         );
 
-        return new AbbreviationToken($content, '');
+        return new AbbreviationInlineNode($content, '');
     }
 }

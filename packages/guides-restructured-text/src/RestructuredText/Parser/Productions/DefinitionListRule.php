@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
@@ -82,7 +82,7 @@ final class DefinitionListRule implements Rule
         $definitionListItem = new DefinitionListItemNode(
             $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
             array_map(
-                fn ($classification): InlineNode => $this->inlineMarkupRule->apply(
+                fn ($classification): InlineCompoundNode => $this->inlineMarkupRule->apply(
                     $documentParserContext->withContents($classification),
                 ),
                 $parts,

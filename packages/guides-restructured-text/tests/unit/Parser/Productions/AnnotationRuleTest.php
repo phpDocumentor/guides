@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\AnnotationNode;
 use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class AnnotationRuleTest extends RuleTestCase
@@ -84,19 +84,19 @@ final class AnnotationRuleTest extends RuleTestCase
         return [
             'single line citation' => [
                 'input' => '..  [name] Some Citation',
-                'output' => new CitationNode([InlineNode::getPlainTextInlineNode('Some Citation')], 'name'),
+                'output' => new CitationNode([InlineCompoundNode::getPlainTextInlineNode('Some Citation')], 'name'),
             ],
             'single line Anonymous numbered footnote' => [
                 'input' => '..  [#] Anonymous numbered footnote',
-                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Anonymous numbered footnote')], '#', 0),
+                'output' => new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Anonymous numbered footnote')], '#', 0),
             ],
             'single line Numbered footnote' => [
                 'input' => '..  [42] Numbered footnote',
-                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Numbered footnote')], '', 42),
+                'output' => new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Numbered footnote')], '', 42),
             ],
             'single line named footnote' => [
                 'input' => '..  [#somename] Named footnote',
-                'output' => new FootnoteNode([InlineNode::getPlainTextInlineNode('Named footnote')], '#somename', 0),
+                'output' => new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Named footnote')], '#somename', 0),
             ],
             'multi line citation' => [
                 'input' => <<<'RST'
@@ -106,7 +106,7 @@ RST
                 ,
                 'output' => new CitationNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
@@ -127,7 +127,7 @@ RST
                 ,
                 'output' => new CitationNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
@@ -148,7 +148,7 @@ RST
                 ,
                 'output' => new FootnoteNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation
@@ -170,7 +170,7 @@ RST
                 ,
                 'output' => new FootnoteNode(
                     [
-                        InlineNode::getPlainTextInlineNode(
+                        InlineCompoundNode::getPlainTextInlineNode(
                             <<<'RST'
 some multiline
 annotation

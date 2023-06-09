@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class EmphasisToken extends InlineMarkupToken
+final class StrongInlineNode extends InlineNode
 {
-    public const TYPE = 'emphasis';
+    public const TYPE = 'strong';
 
     public function __construct(string $value)
     {

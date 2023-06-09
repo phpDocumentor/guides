@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class LiteralToken extends InlineMarkupToken
+final class LiteralInlineNode extends InlineNode
 {
     public const TYPE = 'literal';
 

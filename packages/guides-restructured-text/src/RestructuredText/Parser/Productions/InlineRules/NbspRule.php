@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\NbspToken;
+use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -18,11 +18,11 @@ class NbspRule extends ReferenceRule
         return $lexer->token?->type === SpanLexer::NBSP;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): NbspToken
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): WhitespaceInlineNode
     {
         $lexer->moveNext();
 
-        return new NbspToken();
+        return new WhitespaceInlineNode();
     }
 
     public function getPriority(): int

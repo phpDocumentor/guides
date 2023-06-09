@@ -16,7 +16,7 @@ use phpDocumentor\Guides\Meta\DocumentEntry;
  * :doc:`custom text <foo>`
  * :doc:`custom text <domain:foo/subdoc#anchor>`
  */
-class DocReferenceNode extends AbstractLinkToken
+class DocReferenceNode extends AbstractLinkInlineNode
 {
     public const TYPE = 'doc';
     // URL can only be resolved during rendering as it contains file endings for html / latex etc

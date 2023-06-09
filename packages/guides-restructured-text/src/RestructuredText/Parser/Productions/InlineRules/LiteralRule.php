@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\LiteralToken;
+use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -21,7 +21,7 @@ class LiteralRule extends AbstractInlineRule
         return $lexer->token?->type === SpanLexer::LITERAL;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): LiteralToken
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): LiteralInlineNode
     {
         $literal = $lexer->token?->value ?? '';
         if (strlen($literal) > 4) {
@@ -30,7 +30,7 @@ class LiteralRule extends AbstractInlineRule
 
         $lexer->moveNext();
 
-        return new LiteralToken($literal);
+        return new LiteralInlineNode($literal);
     }
 
     public function getPriority(): int

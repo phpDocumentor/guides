@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 
 use phpDocumentor\Guides\Nodes\Node;
 
-class VariableInlineNode extends InlineMarkupToken
+class VariableInlineNode extends InlineNode
 {
     public const TYPE = 'variable';
 

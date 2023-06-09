@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
-use phpDocumentor\Guides\Nodes\InlineNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
@@ -44,7 +44,7 @@ use function trim;
  *   $node = $inlineRule->apply($documentParser->withContents($buffer->getLinesString()), new MyNode());
  * ```
  *
- * @implements Rule<InlineNode>
+ * @implements Rule<InlineCompoundNode>
  */
 final class InlineMarkupRule implements Rule
 {
@@ -57,7 +57,7 @@ final class InlineMarkupRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    /** @return ($on is null ? InlineNode: CompoundNode<Node>|InlineNode|null) */
+    /** @return ($on is null ? InlineCompoundNode: CompoundNode<Node>|InlineCompoundNode|null) */
     public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\Inline\LiteralToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
@@ -19,7 +19,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
         return $lexer->token?->type === SpanLexer::BACKTICK;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineMarkupToken|null
+    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
     {
         $text = '';
 
@@ -36,7 +36,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new LiteralToken($text);
+                    return new LiteralInlineNode($text);
 
                 default:
                     $text .= $token->value;

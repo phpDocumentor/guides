@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class PlainTextToken extends InlineMarkupToken
+final class PlainTextInlineNode extends InlineNode
 {
     public const TYPE = 'plain';
 
@@ -13,7 +13,7 @@ final class PlainTextToken extends InlineMarkupToken
         parent::__construct(self::TYPE, $value);
     }
 
-    public function append(PlainTextToken $token): void
+    public function append(PlainTextInlineNode $token): void
     {
         $this->value .= $token->getValue();
     }

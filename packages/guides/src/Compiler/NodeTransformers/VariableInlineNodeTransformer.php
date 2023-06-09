@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
@@ -45,7 +45,7 @@ class VariableInlineNodeTransformer implements NodeTransformer
                 'No replacement was found for variable |' . $node->getValue() . '|',
                 ['document', $compilerContext->getDocumentNode()->getFilePath()],
             );
-            $node->setChild(new PlainTextToken('|' . $node->getValue() . '|'));
+            $node->setChild(new PlainTextInlineNode('|' . $node->getValue() . '|'));
         }
 
         return $node;

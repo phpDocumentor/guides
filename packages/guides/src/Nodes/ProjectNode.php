@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 use function date;
 
@@ -26,9 +26,9 @@ class ProjectNode extends CompoundNode
         private string|null $title = null,
         private string|null $version = null,
     ) {
-        $this->addVariable('project', new PlainTextToken($title ?? ''));
-        $this->addVariable('version', new PlainTextToken($version ?? ''));
-        $this->addVariable('last_rendered', new PlainTextToken(date(DATE_RFC2822)));
+        $this->addVariable('project', new PlainTextInlineNode($title ?? ''));
+        $this->addVariable('version', new PlainTextInlineNode($version ?? ''));
+        $this->addVariable('last_rendered', new PlainTextInlineNode(date(DATE_RFC2822)));
 
         parent::__construct();
     }

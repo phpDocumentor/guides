@@ -25,7 +25,7 @@ namespace phpDocumentor\Guides\Nodes;
  */
 class FootnoteNode extends AnnotationNode
 {
-    /** @param list<InlineNode> $value */
+    /** @param list<InlineCompoundNode> $value */
     public function __construct(array $value, string $name, private int $number)
     {
         parent::__construct($value, $name);

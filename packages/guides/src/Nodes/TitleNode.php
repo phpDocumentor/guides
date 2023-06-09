@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\Inline\PlainTextToken;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
-/** @extends CompoundNode<InlineNode> */
+/** @extends CompoundNode<InlineCompoundNode> */
 class TitleNode extends CompoundNode
 {
     protected string $target = '';
 
-    public function __construct(InlineNode $value, protected int $level, protected string $id)
+    public function __construct(InlineCompoundNode $value, protected int $level, protected string $id)
     {
         parent::__construct([$value]);
     }
 
     public static function emptyNode(): self
     {
-        return new TitleNode(new InlineNode([new PlainTextToken('<Unknown>')]), 0, '');
+        return new TitleNode(new InlineCompoundNode([new PlainTextInlineNode('<Unknown>')]), 0, '');
     }
 
     public function getLevel(): int

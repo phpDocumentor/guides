@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-/** @extends CompoundNode<InlineNode|TextNode> */
+/** @extends CompoundNode<InlineCompoundNode|TextNode> */
 class ParagraphNode extends CompoundNode
 {
 }

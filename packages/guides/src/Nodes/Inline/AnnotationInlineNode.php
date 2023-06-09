@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 /**
  * This node an annotation, for example citation or footnote
  */
-abstract class AnnotationInlineNode extends InlineMarkupToken
+abstract class AnnotationInlineNode extends InlineNode
 {
     protected InternalTarget|null $internalTarget = null;
 

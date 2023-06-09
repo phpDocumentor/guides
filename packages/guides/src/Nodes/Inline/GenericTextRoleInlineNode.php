@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-class GenericTextRoleToken extends InlineMarkupToken
+class GenericTextRoleInlineNode extends InlineNode
 {
     public const TYPE = 'role';
 

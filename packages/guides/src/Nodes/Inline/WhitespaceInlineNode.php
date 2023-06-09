@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class NbspToken extends InlineMarkupToken
+final class WhitespaceInlineNode extends InlineNode
 {
     public const TYPE = 'nbsp';
 

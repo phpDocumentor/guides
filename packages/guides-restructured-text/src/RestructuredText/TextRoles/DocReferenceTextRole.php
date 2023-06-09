@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
-use phpDocumentor\Guides\Nodes\Inline\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 use Psr\Log\LoggerInterface;
@@ -41,7 +41,7 @@ class DocReferenceTextRole implements TextRole
         ParserContext $parserContext,
         string $role,
         string $content,
-    ): InlineMarkupToken {
+    ): InlineNode {
         $anchor = null;
         $text = null;
         $domain = null;
