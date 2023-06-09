@@ -95,7 +95,6 @@ final class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->metas->reset();
         $inputDir = $this->getAbsolutePath((string) ($input->getArgument('input') ?? ''));
         if (!is_dir($inputDir)) {
             throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .

@@ -70,7 +70,8 @@ class FileCollector
             );
         }
 
-        return $this->hasFileBeenUpdated($metas, $filename);
+        // TODO: introduce caching again?
+        return true;
 
 //        $file = $this->fileInfos[$filename];
 //        $documentFilename = $this->getFilenameFromFile($file);
@@ -112,21 +113,6 @@ class FileCollector
 
         // Meta is fresh and no dependencies need parsing
         //return false;
-    }
-
-    private function hasFileBeenUpdated(Metas $metas, string $filename): bool
-    {
-        /** @var array<string> $file */
-        $file = $this->fileInfos[$filename];
-
-        $documentFilename = $this->getFilenameFromFile($file);
-
-        /** @var array<string>|null $entry */
-        $entry = $metas->findDocument($documentFilename);
-
-        // File is new or changed
-        // TODO:: Fix this check, was broken by 457dfcc8112c965cfe645ade3442a563d1c7c0ac
-        return true; //$entry === null; || $entry['timestamp'] < $file['timestamp'];
     }
 
     /**

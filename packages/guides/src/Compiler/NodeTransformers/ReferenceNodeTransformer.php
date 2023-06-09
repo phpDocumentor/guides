@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
@@ -24,7 +23,6 @@ use function str_contains;
 class ReferenceNodeTransformer implements NodeTransformer
 {
     public function __construct(
-        private readonly Metas $metas,
         private readonly UrlGenerator $urlGenerator,
         private readonly LoggerInterface $logger,
     ) {
@@ -75,7 +73,7 @@ class ReferenceNodeTransformer implements NodeTransformer
     {
         $filePath = $this->canonicalUrl($docReferenceNode->getDocumentLink(), $compilerContext->getDocumentNode());
 
-        $documentEntry = $this->metas->findDocument($filePath);
+        $documentEntry = $compilerContext->getProjectNode()->findDocumentEntry($filePath);
         if ($documentEntry === null) {
             $this->logger->warning(
                 sprintf(

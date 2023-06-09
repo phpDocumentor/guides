@@ -26,20 +26,21 @@ final class RenderContextTest extends TestCase
     ): void {
         $documentNode = new DocumentNode(md5('hash'), $filePath);
 
+        $projectNode = new ProjectNode();
+        $projectNode->addDocumentEntry(new DocumentEntry(
+            'getting-started/configuration',
+            TitleNode::emptyNode(),
+        ));
+
         $context = RenderContext::forDocument(
             $documentNode,
             $this->createStub(FilesystemInterface::class),
             $this->createStub(FilesystemInterface::class),
             $destinationPath,
-            new Metas([
-                'getting-started/configuration' => new DocumentEntry(
-                    'getting-started/configuration',
-                    TitleNode::emptyNode(),
-                ),
-            ]),
+            new Metas(),
             new UrlGenerator(),
             'txt',
-            new ProjectNode(),
+            $projectNode,
         );
 
         self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));

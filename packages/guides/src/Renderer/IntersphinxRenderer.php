@@ -33,7 +33,7 @@ class IntersphinxRenderer implements TypeRenderer
         ];
         $projectNode = $renderCommand->getProjectNode();
 
-        foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
+        foreach ($renderCommand->getProjectNode()->getAllDocumentEntries() as $key => $documentEntry) {
             $url = $this->urlGenerator->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),

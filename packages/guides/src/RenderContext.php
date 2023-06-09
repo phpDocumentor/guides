@@ -110,7 +110,7 @@ class RenderContext
 
         $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->destinationPath, $this->getDirName()), '/');
 
-        if ($this->metas->findDocument($filename) !== null) {
+        if ($this->projectNode->findDocumentEntry($filename) !== null) {
             return $this->destinationPath . '/'
                 . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
         }
@@ -155,9 +155,9 @@ class RenderContext
         return $this->metas;
     }
 
-    public function getMetaEntry(): DocumentEntry|null
+    public function getCurrentDocumentEntry(): DocumentEntry|null
     {
-        return $this->metas->findDocument($this->currentFileName);
+        return $this->projectNode->findDocumentEntry($this->currentFileName);
     }
 
     public function getDestinationPath(): string

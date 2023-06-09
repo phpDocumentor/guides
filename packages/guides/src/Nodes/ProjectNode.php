@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Meta\CitationTarget;
+use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
@@ -29,6 +30,9 @@ class ProjectNode extends CompoundNode
 
     /** @var array<string, InternalTarget> */
     private array $internalLinkTargets = [];
+
+    /** @var DocumentEntry[] */
+    private array $documentEntries = [];
 
     public function __construct(
         private string|null $title = null,
@@ -95,5 +99,32 @@ class ProjectNode extends CompoundNode
     public function getAllInternalTargets(): array
     {
         return $this->internalLinkTargets;
+    }
+
+    public function addDocumentEntry(DocumentEntry $documentEntry): void
+    {
+        $this->documentEntries[$documentEntry->getFile()] = $documentEntry;
+    }
+
+    /** @return DocumentEntry[] */
+    public function getAllDocumentEntries(): array
+    {
+        return $this->documentEntries;
+    }
+
+    /** @param DocumentEntry[] $documentEntries */
+    public function setDocumentEntries(array $documentEntries): void
+    {
+        $this->documentEntries = $documentEntries;
+    }
+
+    public function findDocumentEntry(string $filePath): DocumentEntry|null
+    {
+        return $this->documentEntries[$filePath] ?? null;
+    }
+
+    public function reset(): void
+    {
+        $this->documentEntries = [];
     }
 }

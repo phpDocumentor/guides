@@ -33,12 +33,11 @@ final class CachedMetasLoader
         $documents = unserialize($contents);
         Assert::allIsInstanceOf($documents, DocumentEntry::class);
         Assert::isArray($documents);
-        $metas->setMetaEntries($documents);
     }
 
     public function cacheMetaEntries(string $cacheDirectory, Metas $metas): void
     {
-        file_put_contents($this->getMetaCachePath($cacheDirectory), serialize($metas->getAll()));
+        file_put_contents($this->getMetaCachePath($cacheDirectory), serialize([]));
     }
 
     private function getMetaCachePath(string $targetDirectory): string

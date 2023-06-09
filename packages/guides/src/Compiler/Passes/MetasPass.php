@@ -10,17 +10,12 @@ use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Meta\SectionEntry;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TocNode;
 
 final class MetasPass implements CompilerPass
 {
-    public function __construct(private readonly Metas $metas)
-    {
-    }
-
     /** {@inheritDoc} */
     public function run(array $documents, CompilerContext $compilerContext): array
     {
@@ -31,7 +26,7 @@ final class MetasPass implements CompilerPass
 
             $entry = new DocumentEntry($document->getFilePath(), $document->getTitle());
             $this->traverse($document, $entry);
-            $this->metas->addDocument($entry);
+            $compilerContext->getProjectNode()->addDocumentEntry($entry);
         }
 
         return $documents;

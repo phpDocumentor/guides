@@ -13,39 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\Meta\DocumentEntry;
-
 final class Metas
 {
-    /** @param DocumentEntry[] $entries */
-    public function __construct(private array $entries = [])
+    public function __construct()
     {
-    }
-
-    public function addDocument(DocumentEntry $documentEntry): void
-    {
-        $this->entries[$documentEntry->getFile()] = $documentEntry;
-    }
-
-    /** @return DocumentEntry[] */
-    public function getAll(): array
-    {
-        return $this->entries;
-    }
-
-    /** @param DocumentEntry[] $metaEntries */
-    public function setMetaEntries(array $metaEntries): void
-    {
-        $this->entries = $metaEntries;
-    }
-
-    public function findDocument(string $filePath): DocumentEntry|null
-    {
-        return $this->entries[$filePath] ?? null;
-    }
-
-    public function reset(): void
-    {
-        $this->entries = [];
     }
 }
