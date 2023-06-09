@@ -22,6 +22,7 @@ use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
@@ -107,7 +108,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
                 }
 
                 $title = new TitleNode(
-                    new SpanNode($content->getLiteral(), []),
+                    InlineCompoundNode::getPlainTextInlineNode($content->getLiteral()),
                     $node->getLevel(),
                     $this->idGenerator->slug($content->getLiteral())->lower()->toString(),
                 );

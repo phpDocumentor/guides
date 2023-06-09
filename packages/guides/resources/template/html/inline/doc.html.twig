@@ -1,5 +1,5 @@
-{% if linkToken.url != null %}
-    <a href="{{ linkToken.url|raw }}">{{ linkToken.text | raw }}</a>
-{% else %}
-    {{ linkToken.text | raw }}
-{% endif %}
+{%- if node.documentEntry -%}
+    <a href="{{- renderLink(node.documentEntry.file) -}}">{{- node.text -}}</a>
+{%- else -%}
+    {{- node.text -}}
+{%- endif -%}

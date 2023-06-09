@@ -50,8 +50,10 @@ final class DirectiveRule implements Rule
     private array $directives;
 
     /** @param iterable<DirectiveHandler> $directives */
-    public function __construct(iterable $directives = [])
-    {
+    public function __construct(
+        private readonly InlineMarkupRule $inlineMarkupRule,
+        iterable $directives = [],
+    ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
         }
@@ -84,6 +86,8 @@ final class DirectiveRule implements Rule
         if ($directive === null) {
             return null;
         }
+
+        $this->parseDirectiveContent($directive, $documentParserContext);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
         if ($directiveHandler === null) {
@@ -140,6 +144,19 @@ final class DirectiveRule implements Rule
         }
 
         return null;
+    }
+
+    private function parseDirectiveContent(Directive $directive, DocumentParserContext $documentParserContext): void
+    {
+        if ($directive->getData() === '') {
+            return;
+        }
+
+        $inlineNode = $this->inlineMarkupRule->apply(
+            $documentParserContext->withContents($directive->getData()),
+            null,
+        );
+        $directive->setDataNode($inlineNode);
     }
 
     /**

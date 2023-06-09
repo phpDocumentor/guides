@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+
 /**
  * Represents the data contained in an arbitrary directive
  *
@@ -17,6 +19,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
  */
 class Directive
 {
+    private InlineCompoundNode|null $dataNode = null;
+
     /** @param DirectiveOption[] $options */
     public function __construct(private readonly string $variable, private readonly string $name, private readonly string $data, private array $options = [])
     {
@@ -51,5 +55,15 @@ class Directive
     public function getOption(string $name): DirectiveOption
     {
         return $this->options[$name] ?? new DirectiveOption($name, null);
+    }
+
+    public function getDataNode(): InlineCompoundNode|null
+    {
+        return $this->dataNode;
+    }
+
+    public function setDataNode(InlineCompoundNode|null $dataNode): void
+    {
+        $this->dataNode = $dataNode;
     }
 }

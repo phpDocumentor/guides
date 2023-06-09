@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 
 use function trim;
 
@@ -44,11 +44,11 @@ use function trim;
  *   $node = $inlineRule->apply($documentParser->withContents($buffer->getLinesString()), new MyNode());
  * ```
  *
- * @implements Rule<SpanNode>
+ * @implements Rule<InlineCompoundNode>
  */
 final class InlineMarkupRule implements Rule
 {
-    public function __construct(private readonly SpanParser $spanParser)
+    public function __construct(private readonly InlineParser $inlineTokenParser)
     {
     }
 
@@ -57,21 +57,13 @@ final class InlineMarkupRule implements Rule
         return trim($documentParser->getDocumentIterator()->current()) !== '';
     }
 
-    /**
-     * @param TParent|null $on
-     *
-     * @return ($on is null ? SpanNode: TParent<Node>|SpanNode|null)
-     *
-     * @template TParent as CompoundNode
-     */
+    /** @return ($on is null ? InlineCompoundNode: CompoundNode<Node>|InlineCompoundNode|null) */
     public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = $this->collectContent($documentIterator);
 
-        //TODO replace this parser by a rule set that can return an array of nodes which we can add
-        // as child nodes to the parent.
-        $node = $this->spanParser->parse($buffer->getLines(), $documentParserContext->getContext());
+        $node = $this->inlineTokenParser->parse($buffer->getLinesString(), $documentParserContext->getContext());
 
         if ($on !== null) {
             $on->setValue([$node]);

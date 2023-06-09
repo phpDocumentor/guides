@@ -1,1 +1,3 @@
-<em>{{ text|raw }}</em>
+{% apply spaceless %}
+<em>{{- node.value -}}</em>
+{% endapply %}

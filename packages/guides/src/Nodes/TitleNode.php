@@ -13,19 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-/** @extends CompoundNode<TextNode> */
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+
+/** @extends CompoundNode<InlineCompoundNode> */
 class TitleNode extends CompoundNode
 {
     protected string $target = '';
 
-    public function __construct(SpanNode $value, protected int $level, protected string $id)
+    public function __construct(InlineCompoundNode $value, protected int $level, protected string $id)
     {
         parent::__construct([$value]);
     }
 
     public static function emptyNode(): self
     {
-        return new TitleNode(new SpanNode('<Unknown>'), 0, '');
+        return new TitleNode(new InlineCompoundNode([new PlainTextInlineNode('<Unknown>')]), 0, '');
     }
 
     public function getLevel(): int

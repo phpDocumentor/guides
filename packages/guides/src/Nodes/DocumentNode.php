@@ -38,9 +38,9 @@ final class DocumentNode extends CompoundNode
     private array $documentPartNodes = [];
 
     /**
-     * Variables are replacements in a document.
+     * Variables are replacements in a document or project.
      *
-     * They easiest example is the replace directive that allows textual replacements in the document. But
+     * The easiest example is the replace-directive that allows textual replacements in the document. But
      * also other directives may be prefixed with a name to replace a certain value in the text.
      *
      * @var array<(string | Node)>

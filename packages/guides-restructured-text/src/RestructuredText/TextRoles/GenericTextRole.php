@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\GenericTextRoleToken;
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
+use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\ParserContext;
 
 class GenericTextRole implements TextRole
@@ -25,10 +24,9 @@ class GenericTextRole implements TextRole
 
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
-    ): InlineMarkupToken {
-        return new GenericTextRoleToken($id, $role, $content);
+    ): GenericTextRoleInlineNode {
+        return new GenericTextRoleInlineNode($role, $content);
     }
 }

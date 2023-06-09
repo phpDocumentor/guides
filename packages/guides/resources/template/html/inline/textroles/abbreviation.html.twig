@@ -1,1 +1,3 @@
-<abbr title="{{ textrole.definition }}">{{ textrole.term }}</abbr>
+{% apply spaceless %}
+<abbr title="{{ node.definition }}">{{ node.term }}</abbr>
+{% endapply %}

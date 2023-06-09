@@ -8,10 +8,9 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\InlineToken\DocReferenceNode;
-use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\UrlGenerator;
 use Psr\Log\LoggerInterface;
 
@@ -21,12 +20,7 @@ use function implode;
 use function sprintf;
 use function str_contains;
 
-/**
- * @implements NodeTransformer<Node>
- *
- * The "class" directive sets the "classes" attribute value on its content or on the first immediately following
- * non-comment element. https://docutils.sourceforge.io/docs/ref/rst/directives.html#class
- */
+/** @implements NodeTransformer<Node> */
 class ReferenceNodeTransformer implements NodeTransformer
 {
     public function __construct(
@@ -43,17 +37,11 @@ class ReferenceNodeTransformer implements NodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
-        if (!$node instanceof SpanNode) {
-            return $node;
-        }
-
-        foreach ($node->getTokens() as $token) {
-            if ($token instanceof ReferenceNode) {
-                $this->resolveReference($token, $compilerContext->getDocumentNode());
-            } else {
-                if ($token instanceof DocReferenceNode) {
-                    $this->resolveDocReference($token, $compilerContext->getDocumentNode());
-                }
+        if ($node instanceof ReferenceNode) {
+            $this->resolveReference($node, $compilerContext->getDocumentNode());
+        } else {
+            if ($node instanceof DocReferenceNode) {
+                $this->resolveDocReference($node, $compilerContext->getDocumentNode());
             }
         }
 
@@ -62,7 +50,7 @@ class ReferenceNodeTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof SpanNode;
+        return $node instanceof ReferenceNode || $node instanceof DocReferenceNode;
     }
 
     private function resolveReference(ReferenceNode $referenceNode, DocumentNode $document): void

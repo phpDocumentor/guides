@@ -1,1 +1,3 @@
-<a id="{{ node.value }}"></a>
+{% apply spaceless %}
+<a id="{{- node.value -}}"></a>
+{% endapply %}

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use Monolog\Logger;
-use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\ParserContext;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,7 +31,7 @@ class ReferenceTextRoleTest extends TestCase
         string|null $domain = null,
         string|null $text = null,
     ): void {
-        $result = $this->referenceTextRole->processNode($this->parserContext, 'id', 'doc', $span);
+        $result = $this->referenceTextRole->processNode($this->parserContext, 'doc', $span);
 
         self::assertInstanceOf(ReferenceNode::class, $result);
         self::assertEquals($url, $result->getReferenceName(), 'ReferenceNames are different');

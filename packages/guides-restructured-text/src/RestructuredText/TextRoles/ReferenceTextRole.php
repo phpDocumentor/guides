@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use phpDocumentor\Guides\Nodes\InlineToken\InlineMarkupToken;
-use phpDocumentor\Guides\Nodes\InlineToken\ReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use Psr\Log\LoggerInterface;
 
 use function sprintf;
@@ -16,13 +16,13 @@ use function trim;
 class ReferenceTextRole implements TextRole
 {
     final public const NAME = 'ref';
-    private SpanLexer $lexer;
+    private InlineLexer $lexer;
 
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
         // Do not inject the $lexer. It contains a state.
-        $this->lexer = new SpanLexer();
+        $this->lexer = new InlineLexer();
     }
 
     public function getName(): string
@@ -36,12 +36,12 @@ class ReferenceTextRole implements TextRole
         return [];
     }
 
+    /** @return ReferenceNode */
     public function processNode(
         ParserContext $parserContext,
-        string $id,
         string $role,
         string $content,
-    ): InlineMarkupToken {
+    ): InlineNode {
         $domain = null;
         $text = null;
         $part = '';
@@ -51,11 +51,11 @@ class ReferenceTextRole implements TextRole
         while ($this->lexer->token !== null) {
             $token = $this->lexer->token;
             switch ($token->type) {
-                case SpanLexer::EMBEDED_URL_START:
+                case InlineLexer::EMBEDED_URL_START:
                     $text = trim(($domain ? $domain . ':' : '') . $part);
                     $part = '';
                     break;
-                case SpanLexer::EMBEDED_URL_END:
+                case InlineLexer::EMBEDED_URL_END:
                     if ($this->lexer->peek() !== null) {
                         $this->logger->warning(
                             sprintf(
@@ -67,7 +67,7 @@ class ReferenceTextRole implements TextRole
                     }
 
                     break 2;
-                case SpanLexer::COLON:
+                case InlineLexer::COLON:
                     $domain = $part;
                     $part = '';
                     break;
@@ -79,7 +79,6 @@ class ReferenceTextRole implements TextRole
         }
 
         return new ReferenceNode(
-            id: $id,
             referenceName: trim($part),
             domain: $domain,
             text: $text,

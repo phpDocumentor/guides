@@ -43,6 +43,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
@@ -70,6 +71,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFi
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\GridTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\LinkRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\ListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\LiteralBlockRule;
@@ -79,7 +81,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
@@ -107,8 +108,15 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.directive')
         ->instanceof(FieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
+        ->instanceof(InlineRule::class)
+        ->tag('phpdoc.guides.parser.rst.inline_rule')
         ->instanceof(NodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
+
+        ->load(
+            'phpDocumentor\\Guides\RestructuredText\\Parser\\Productions\\InlineRules\\',
+            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules',
+        )
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
@@ -282,7 +290,8 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('phpdoc.guides.parser.markupLanguageParser')
         ->set(DocumentRule::class)
-        ->set(SpanParser::class)
+        ->set(InlineParser::class)
+        ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
         ->set(CodeNodeOptionMapper::class);

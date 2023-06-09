@@ -15,7 +15,6 @@ use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\Html\SpanNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
@@ -109,8 +108,6 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.renderer.typerenderer')
 
         ->set(DocumentNodeRenderer::class)
-        ->tag('phpdoc.guides.noderenderer.html')
-        ->set(SpanNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(TableNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')

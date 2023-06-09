@@ -1,1 +1,3 @@
-<code>{{ node.value }}</code>
+{% apply spaceless %}
+<code>{{- node.value -}}</code>
+{% endapply %}

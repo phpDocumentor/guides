@@ -1,1 +1,1 @@
-ERROR: Invalid link: @Anchor Section
+WARNING: Reference @Anchor Section could not be resolved in index
