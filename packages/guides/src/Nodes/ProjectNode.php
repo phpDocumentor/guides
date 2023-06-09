@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 use function date;
@@ -21,6 +22,9 @@ class ProjectNode extends CompoundNode
      * @var array<Node>
      */
     private array $variables = [];
+
+    /** @var array<string, CitationTarget> */
+    private array $citationTargets = [];
 
     public function __construct(
         private string|null $title = null,
@@ -61,5 +65,15 @@ class ProjectNode extends CompoundNode
     public function addVariable(string $name, Node $value): void
     {
         $this->variables[$name] = $value;
+    }
+
+    public function addCitationTarget(CitationTarget $target): void
+    {
+        $this->citationTargets[$target->getName()] = $target;
+    }
+
+    public function getCitationTarget(string $name): CitationTarget|null
+    {
+        return $this->citationTargets[$name] ?? null;
     }
 }

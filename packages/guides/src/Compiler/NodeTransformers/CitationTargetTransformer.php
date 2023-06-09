@@ -7,22 +7,16 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\CitationTarget;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */
 class CitationTargetTransformer implements NodeTransformer
 {
-    public function __construct(
-        private readonly Metas $metas,
-    ) {
-    }
-
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof CitationNode) {
-            $this->metas->addCitationTarget(
+            $compilerContext->getProjectNode()->addCitationTarget(
                 new CitationTarget(
                     $compilerContext->getDocumentNode()->getFilePath(),
                     $node->getAnchor(),
