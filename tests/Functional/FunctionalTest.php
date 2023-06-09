@@ -8,6 +8,8 @@ use Exception;
 use Gajus\Dindent\Indenter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -22,9 +24,12 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
+use function array_filter;
 use function array_map;
 use function array_shift;
+use function assert;
 use function explode;
+use function file;
 use function file_exists;
 use function file_get_contents;
 use function implode;
@@ -48,6 +53,7 @@ class FunctionalTest extends ApplicationTestCase
         setlocale(LC_ALL, 'en_US.utf8');
     }
 
+    /** @param list<string> $expectedLogs */
     #[DataProvider('getFunctionalTests')]
     public function testFunctional(
         string $file,
@@ -55,6 +61,7 @@ class FunctionalTest extends ApplicationTestCase
         string $rst,
         string $expected,
         bool $useIndenter = true,
+        array $expectedLogs = [],
     ): void {
         $expectedLines = explode("\n", $expected);
         $firstLine     = $expectedLines[0];
@@ -81,14 +88,16 @@ class FunctionalTest extends ApplicationTestCase
             $parser = $this->getContainer()->get(Parser::class);
             $document = $parser->parse($rst);
 
-
             $compiler = $this->getContainer()->get(Compiler::class);
             $compiler->run([$document], new CompilerContext(new ProjectNode()));
+
+            $inputFilesystem = new Filesystem(new MemoryAdapter());
+            $inputFilesystem->write('img/test-image.jpg', 'Some image');
 
             $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
             $context = RenderContext::forDocument(
                 $document,
-                new Filesystem(new MemoryAdapter()),
+                $inputFilesystem,
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',
                 new Metas(),
@@ -119,6 +128,15 @@ class FunctionalTest extends ApplicationTestCase
                 $this->trimTrailingWhitespace($expected),
                 $this->trimTrailingWhitespace($rendered),
             );
+
+            $logHandler = $this->getContainer()->get(TestHandler::class);
+            assert($logHandler instanceof TestHandler);
+
+            $logRecords = array_map(
+                static fn (array $log) => $log['level_name'] . ': ' . $log['message'],
+                array_filter($logHandler->getRecords(), static fn (array $log) => $log['level'] >= Logger::WARNING),
+            );
+            self::assertEquals($expectedLogs, $logRecords);
         } catch (ExpectationFailedException $e) {
             if ($skip) {
                 $this->markTestIncomplete(substr($firstLine, 5) ?: '');
@@ -172,7 +190,10 @@ class FunctionalTest extends ApplicationTestCase
 
                 $useIndenter = !in_array($basename, self::SKIP_INDENTER_FILES, true);
 
-                $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $useIndenter];
+                $logFile = $file->getPath() . '/' . $file->getFilenameWithoutExtension() . '.log';
+                $logs = file_exists($logFile) ? array_map(trim(...), file($logFile)) : [];
+
+                $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $useIndenter, $logs];
             }
         }
 

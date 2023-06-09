@@ -1,3 +1,3 @@
 Test
 
-.. image:: /img/test.jpg
+.. image:: /img/test-image.jpg

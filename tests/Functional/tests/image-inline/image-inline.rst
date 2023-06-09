@@ -1,3 +1,3 @@
 This is an |inline| image!
 
-.. |inline| image:: test.jpg
+.. |inline| image:: img/test-image.jpg
