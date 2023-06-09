@@ -7,19 +7,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for inline variables such as |replace_me|
  */
 class VariableInlineRule extends AbstractInlineRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::VARIABLE_DELIMITER;
+        return $lexer->token?->type === InlineLexer::VARIABLE_DELIMITER;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
 
@@ -29,7 +29,7 @@ class VariableInlineRule extends AbstractInlineRule
         while ($lexer->token !== null) {
             $token = $lexer->token;
             switch ($token->type) {
-                case $token->type === SpanLexer::VARIABLE_DELIMITER:
+                case $token->type === InlineLexer::VARIABLE_DELIMITER:
                     if ($text === '') {
                         break 2;
                     }

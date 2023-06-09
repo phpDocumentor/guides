@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function trim;
@@ -48,7 +48,7 @@ use function trim;
  */
 final class InlineMarkupRule implements Rule
 {
-    public function __construct(private readonly InlineTokenParser $inlineTokenParser)
+    public function __construct(private readonly InlineParser $inlineTokenParser)
     {
     }
 

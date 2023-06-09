@@ -6,19 +6,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for simple named references, such as `myref_`
  */
 class NamedPhraseRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::BACKTICK;
+        return $lexer->token?->type === InlineLexer::BACKTICK;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
         $url = null;
@@ -26,7 +26,7 @@ class NamedPhraseRule extends ReferenceRule
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
-                case SpanLexer::NAMED_REFERENCE_END:
+                case InlineLexer::NAMED_REFERENCE_END:
                     $lexer->moveNext();
                     if ($text === '') {
                         $text = $url ?? '';
@@ -34,7 +34,7 @@ class NamedPhraseRule extends ReferenceRule
 
                     return $this->createReference($parserContext, $text, $url);
 
-                case SpanLexer::EMBEDED_URL_START:
+                case InlineLexer::EMBEDED_URL_START:
                     $url = $this->parseEmbeddedUrl($lexer);
                     if ($url === null) {
                         $text .= '<';

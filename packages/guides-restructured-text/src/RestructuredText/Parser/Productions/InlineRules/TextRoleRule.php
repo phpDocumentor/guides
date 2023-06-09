@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
 /**
@@ -18,12 +18,12 @@ class TextRoleRule extends AbstractInlineRule
     {
     }
 
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::COLON;
+        return $lexer->token?->type === InlineLexer::COLON;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $domain = null;
         $role = null;
@@ -36,7 +36,7 @@ class TextRoleRule extends AbstractInlineRule
         while ($lexer->token !== null) {
             $token = $lexer->token;
             switch ($token->type) {
-                case $token->type === SpanLexer::COLON && $inText === false:
+                case $token->type === InlineLexer::COLON && $inText === false:
                     if ($role !== null) {
                         $domain = $role;
                         $role = $part;
@@ -47,7 +47,7 @@ class TextRoleRule extends AbstractInlineRule
                     $role = $part;
                     $part = '';
                     break;
-                case SpanLexer::BACKTICK:
+                case InlineLexer::BACKTICK:
                     if ($role === null) {
                         break 2;
                     }
@@ -62,7 +62,7 @@ class TextRoleRule extends AbstractInlineRule
 
                     $inText = true;
                     break;
-                case SpanLexer::WHITESPACE:
+                case InlineLexer::WHITESPACE:
                     if (!$inText) {
                         // textrole names may not contain whitespace, we are not in a textrole
                         break 2;

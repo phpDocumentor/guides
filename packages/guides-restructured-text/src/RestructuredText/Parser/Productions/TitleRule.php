@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -35,7 +35,7 @@ class TitleRule implements Rule
 {
     private const TITLE_LENGTH_MIN = 2;
 
-    public function __construct(private readonly InlineTokenParser $inlineTokenParser)
+    public function __construct(private readonly InlineParser $inlineTokenParser)
     {
     }
 

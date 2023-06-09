@@ -45,7 +45,7 @@ final class InlineTokenParserTest extends TestCase
 {
     public Logger $logger;
     private ParserContext&MockObject $parserContext;
-    private InlineTokenParser $inlineTokenParser;
+    private InlineParser $inlineTokenParser;
 
     public function setUp(): void
     {
@@ -58,7 +58,7 @@ final class InlineTokenParserTest extends TestCase
                 new DocReferenceTextRole($this->logger),
             ],
         );
-        $this->inlineTokenParser = new InlineTokenParser([
+        $this->inlineTokenParser = new InlineParser([
             new NamedReferenceRule(),
             new AnonymousReferenceRule(),
             new PlainTextRule(),

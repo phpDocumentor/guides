@@ -6,23 +6,23 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 class InternalReferenceRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::INTERNAL_REFERENCE_START;
+        return $lexer->token?->type === InlineLexer::INTERNAL_REFERENCE_START;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
-                case SpanLexer::BACKTICK:
+                case InlineLexer::BACKTICK:
                     $lexer->moveNext();
 
                     return $this->createReference($parserContext, $text);

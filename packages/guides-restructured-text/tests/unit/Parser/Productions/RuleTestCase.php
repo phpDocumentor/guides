@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +49,7 @@ abstract class RuleTestCase extends TestCase
 
     protected function givenInlineMarkupRule(): InlineMarkupRule
     {
-        $inlineTokenParser = $this->createMock(InlineTokenParser::class);
+        $inlineTokenParser = $this->createMock(InlineParser::class);
         $inlineTokenParser->method('parse')->willReturnCallback(
             static fn (string $arg): InlineCompoundNode => new InlineCompoundNode([
                 new PlainTextInlineNode($arg),

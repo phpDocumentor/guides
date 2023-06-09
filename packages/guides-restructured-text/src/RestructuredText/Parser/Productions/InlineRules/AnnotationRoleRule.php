@@ -9,19 +9,19 @@ use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for text roles such as ``:ref:`something` `
  */
 class AnnotationRoleRule extends AbstractInlineRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::ANNOTATION_START;
+        return $lexer->token?->type === InlineLexer::ANNOTATION_START;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $startPosition = $lexer->token?->position;
         $annotationName = '';
@@ -31,14 +31,14 @@ class AnnotationRoleRule extends AbstractInlineRule
         while ($lexer->token !== null) {
             $token = $lexer->token;
             switch ($token->type) {
-                case SpanLexer::ANNOTATION_END:
+                case InlineLexer::ANNOTATION_END:
                     // `]`  found, look for `_`
                     if (!$lexer->moveNext() && $lexer->token === null) {
                         break 2;
                     }
 
                     $token = $lexer->token;
-                    if ($token->type === SpanLexer::UNDERSCORE) {
+                    if ($token->type === InlineLexer::UNDERSCORE) {
                         if (AnnotationUtility::isFootnoteKey($annotationName)) {
                             $number = AnnotationUtility::getFootnoteNumber($annotationName);
                             $name = AnnotationUtility::getFootnoteName($annotationName);
@@ -60,7 +60,7 @@ class AnnotationRoleRule extends AbstractInlineRule
                     }
 
                     break 2;
-                case SpanLexer::WHITESPACE:
+                case InlineLexer::WHITESPACE:
                     // Annotation keys may not contain whitespace
                     break 2;
                 default:

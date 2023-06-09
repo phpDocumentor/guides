@@ -6,19 +6,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for simple anonymous references, such as `myref__`
  */
 class StandaloneHyperlinkRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::HYPERLINK;
+        return $lexer->token?->type === InlineLexer::HYPERLINK;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): HyperLinkNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
     {
         $node = $this->createReference(
             $parserContext,

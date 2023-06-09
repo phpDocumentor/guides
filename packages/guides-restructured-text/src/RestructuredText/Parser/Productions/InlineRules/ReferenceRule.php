@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function preg_replace;
 use function str_replace;
@@ -28,7 +28,7 @@ abstract class ReferenceRule extends AbstractInlineRule
         return new HyperLinkNode($link, $url);
     }
 
-    protected function parseEmbeddedUrl(SpanLexer $lexer): string|null
+    protected function parseEmbeddedUrl(InlineLexer $lexer): string|null
     {
         if ($lexer->token === null) {
             return null;
@@ -40,13 +40,13 @@ abstract class ReferenceRule extends AbstractInlineRule
         while ($lexer->moveNext()) {
             $token = $lexer->token;
             switch ($token->type) {
-                case SpanLexer::NAMED_REFERENCE_END:
+                case InlineLexer::NAMED_REFERENCE_END:
                     //We did not find the expected SpanLexer::EMBEDED_URL_END
                     $this->rollback($lexer, $startPosition);
 
                     return null;
 
-                case SpanLexer::EMBEDED_URL_END:
+                case InlineLexer::EMBEDED_URL_END:
                     return $text;
 
                 default:

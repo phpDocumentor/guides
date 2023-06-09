@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\RestructuredText\Span;
+namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Doctrine\Common\Lexer\AbstractLexer;
 use ReflectionClass;
@@ -12,7 +12,7 @@ use function array_flip;
 use function preg_match;
 
 /** @extends AbstractLexer<int, string> */
-final class SpanLexer extends AbstractLexer
+final class InlineLexer extends AbstractLexer
 {
     public const WORD = 1;
     public const UNDERSCORE = 2;

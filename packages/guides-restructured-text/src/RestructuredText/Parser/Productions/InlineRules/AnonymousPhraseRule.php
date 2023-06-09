@@ -6,19 +6,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for simple anonymous references, such as `myref__`
  */
 class AnonymousPhraseRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::BACKTICK;
+        return $lexer->token?->type === InlineLexer::BACKTICK;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): HyperLinkNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
     {
         $text = '';
         $url = null;
@@ -26,12 +26,12 @@ class AnonymousPhraseRule extends ReferenceRule
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
-                case SpanLexer::PHRASE_ANONYMOUS_END:
+                case InlineLexer::PHRASE_ANONYMOUS_END:
                     $lexer->moveNext();
 
                     return $this->createReference($parserContext, $text, $url, false);
 
-                case SpanLexer::EMBEDED_URL_START:
+                case InlineLexer::EMBEDED_URL_START:
                     $url = $this->parseEmbeddedUrl($lexer);
                     if ($url === null) {
                         $text .= '<';

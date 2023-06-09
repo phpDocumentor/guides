@@ -43,7 +43,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
@@ -290,7 +290,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('phpdoc.guides.parser.markupLanguageParser')
         ->set(DocumentRule::class)
-        ->set(InlineTokenParser::class)
+        ->set(InlineParser::class)
         ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)

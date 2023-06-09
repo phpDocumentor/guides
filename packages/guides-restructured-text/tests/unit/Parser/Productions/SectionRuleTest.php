@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineTokenParser;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 final class SectionRuleTest extends RuleTestCase
@@ -176,9 +176,9 @@ RST;
         );
     }
 
-    private function getInlineTokenParserMock(): InlineTokenParser
+    private function getInlineTokenParserMock(): InlineParser
     {
-        $inlineTokenParser = $this->createMock(InlineTokenParser::class);
+        $inlineTokenParser = $this->createMock(InlineParser::class);
         $inlineTokenParser->method('parse')->willReturnCallback(
             static fn (string $arg): InlineCompoundNode => InlineCompoundNode::getPlainTextInlineNode($arg)
         );

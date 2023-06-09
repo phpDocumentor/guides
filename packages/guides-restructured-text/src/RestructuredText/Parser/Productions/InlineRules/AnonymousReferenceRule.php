@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function trim;
 
@@ -15,12 +15,12 @@ use function trim;
  */
 class AnonymousReferenceRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::ANONYMOUSE_REFERENCE;
+        return $lexer->token?->type === InlineLexer::ANONYMOUSE_REFERENCE;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): HyperLinkNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
     {
         $node = $this->createAnonymousReference(
             $parserContext,

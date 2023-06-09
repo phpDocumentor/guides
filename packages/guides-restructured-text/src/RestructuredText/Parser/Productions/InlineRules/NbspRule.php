@@ -6,19 +6,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for non-breaking spaces: a~b
  */
 class NbspRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::NBSP;
+        return $lexer->token?->type === InlineLexer::NBSP;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): WhitespaceInlineNode
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): WhitespaceInlineNode
     {
         $lexer->moveNext();
 

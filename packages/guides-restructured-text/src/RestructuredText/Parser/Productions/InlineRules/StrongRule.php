@@ -7,19 +7,19 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
  * Rule to parse for default text roles such as `something`
  */
 class StrongRule extends AbstractInlineRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::STRONG_DELIMITER;
+        return $lexer->token?->type === InlineLexer::STRONG_DELIMITER;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): InlineNode|null
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
 
@@ -29,7 +29,7 @@ class StrongRule extends AbstractInlineRule
         while ($lexer->token !== null) {
             $token = $lexer->token;
             switch ($token->type) {
-                case $token->type === SpanLexer::STRONG_DELIMITER:
+                case $token->type === InlineLexer::STRONG_DELIMITER:
                     if ($text === '') {
                         break 2;
                     }

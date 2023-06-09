@@ -9,11 +9,10 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
 
 use function usort;
 
-class InlineTokenParser
+class InlineParser
 {
     /** @var InlineRule[] */
     private array $rules;
@@ -29,7 +28,7 @@ class InlineTokenParser
 
     public function parse(string $content, ParserContext $parserContext): InlineCompoundNode
     {
-        $lexer = new SpanLexer();
+        $lexer = new InlineLexer();
         $lexer->setInput($content);
         $lexer->moveNext();
         $lexer->moveNext();

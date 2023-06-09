@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function substr;
 
@@ -17,12 +17,12 @@ use function substr;
  */
 class EscapeRule extends ReferenceRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::ESCAPED_SIGN;
+        return $lexer->token?->type === InlineLexer::ESCAPED_SIGN;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): NewlineInlineNode|WhitespaceInlineNode|PlainTextInlineNode
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): NewlineInlineNode|WhitespaceInlineNode|PlainTextInlineNode
     {
         $char = $lexer->token?->value ?? '';
         $char = substr($char, 1, 1);

@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Span\SpanLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function strlen;
 use function substr;
@@ -16,12 +16,12 @@ use function substr;
  */
 class LiteralRule extends AbstractInlineRule
 {
-    public function applies(SpanLexer $lexer): bool
+    public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === SpanLexer::LITERAL;
+        return $lexer->token?->type === InlineLexer::LITERAL;
     }
 
-    public function apply(ParserContext $parserContext, SpanLexer $lexer): LiteralInlineNode
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): LiteralInlineNode
     {
         $literal = $lexer->token?->value ?? '';
         if (strlen($literal) > 4) {
