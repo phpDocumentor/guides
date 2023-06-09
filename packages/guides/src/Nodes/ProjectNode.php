@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Meta\CitationTarget;
+use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 use function date;
@@ -25,6 +26,9 @@ class ProjectNode extends CompoundNode
 
     /** @var array<string, CitationTarget> */
     private array $citationTargets = [];
+
+    /** @var array<string, InternalTarget> */
+    private array $internalLinkTargets = [];
 
     public function __construct(
         private string|null $title = null,
@@ -75,5 +79,21 @@ class ProjectNode extends CompoundNode
     public function getCitationTarget(string $name): CitationTarget|null
     {
         return $this->citationTargets[$name] ?? null;
+    }
+
+    public function addLinkTarget(string $anchorName, InternalTarget $target): void
+    {
+        $this->internalLinkTargets[$anchorName] = $target;
+    }
+
+    public function getInternalTarget(string $anchorName): InternalTarget|null
+    {
+        return $this->internalLinkTargets[$anchorName] ?? null;
+    }
+
+    /** @return array<string, InternalTarget> */
+    public function getAllInternalTargets(): array
+    {
+        return $this->internalLinkTargets;
     }
 }

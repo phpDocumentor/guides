@@ -46,7 +46,7 @@ class IntersphinxRenderer implements TypeRenderer
             ];
         }
 
-        foreach ($renderCommand->getMetas()->getAllInternalTargets() as $key => $internalTarget) {
+        foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $key => $internalTarget) {
             $url = $this->urlGenerator->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
