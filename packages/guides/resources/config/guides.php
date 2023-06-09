@@ -9,7 +9,6 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
@@ -74,7 +73,6 @@ return static function (ContainerConfigurator $container): void {
             '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers',
         )
 
-        ->set(Metas::class)
         ->set(UrlGeneratorInterface::class, UrlGenerator::class)
 
         ->set(Parser::class)

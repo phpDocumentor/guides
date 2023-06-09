@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Event;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -26,7 +25,6 @@ class PreRenderDocumentTest extends TestCase
                 $this->createMock(FilesystemInterface::class),
                 $this->createMock(FilesystemInterface::class),
                 '/path',
-                new Metas(),
                 $this->createMock(UrlGeneratorInterface::class),
                 'html',
                 new ProjectNode(),

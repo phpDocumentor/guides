@@ -15,7 +15,6 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
@@ -42,7 +41,6 @@ final class Run extends Command
 {
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly Metas $metas,
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
@@ -152,7 +150,6 @@ final class Run extends Command
                 new RenderCommand(
                     $format,
                     $documents,
-                    $this->metas,
                     $sourceFileSystem,
                     $destinationFileSystem,
                     $projectNode,

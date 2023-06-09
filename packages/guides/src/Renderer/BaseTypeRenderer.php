@@ -28,7 +28,6 @@ abstract class BaseTypeRenderer implements TypeRenderer
                         $renderCommand->getOrigin(),
                         $renderCommand->getDestination(),
                         $renderCommand->getDestinationPath(),
-                        $renderCommand->getMetas(),
                         new UrlGenerator(),
                         $renderCommand->getOutputFormat(),
                         $renderCommand->getProjectNode(),

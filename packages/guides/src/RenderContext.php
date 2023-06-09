@@ -36,7 +36,6 @@ class RenderContext
         private readonly string $currentFileName,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
-        private readonly Metas $metas,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
@@ -49,7 +48,6 @@ class RenderContext
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         string $destinationPath,
-        Metas $metas,
         UrlGeneratorInterface $urlGenerator,
         string $ouputFormat,
         ProjectNode $projectNode,
@@ -59,7 +57,6 @@ class RenderContext
             $documentNode->getFilePath(),
             $origin,
             $destination,
-            $metas,
             $urlGenerator,
             $ouputFormat,
             $projectNode,
@@ -148,11 +145,6 @@ class RenderContext
     public function getOrigin(): FilesystemInterface
     {
         return $this->origin;
-    }
-
-    public function getMetas(): Metas
-    {
-        return $this->metas;
     }
 
     public function getCurrentDocumentEntry(): DocumentEntry|null

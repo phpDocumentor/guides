@@ -37,7 +37,6 @@ final class RenderContextTest extends TestCase
             $this->createStub(FilesystemInterface::class),
             $this->createStub(FilesystemInterface::class),
             $destinationPath,
-            new Metas(),
             new UrlGenerator(),
             'txt',
             $projectNode,

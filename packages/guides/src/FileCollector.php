@@ -28,7 +28,7 @@ class FileCollector
      * objects, and avoids adding files to the parse queue that have
      * not changed and whose direct dependencies have not changed.
      */
-    public function collect(FilesystemInterface $filesystem, string $directory, string $extension, Metas $metas): Files
+    public function collect(FilesystemInterface $filesystem, string $directory, string $extension): Files
     {
         $directory = trim($directory, '/');
         /** @var array<array<string>> $files */
@@ -52,7 +52,7 @@ class FileCollector
 
         $parseQueue = new Files();
         foreach ($this->fileInfos as $filename => $_fileInfo) {
-            if (!$this->doesFileRequireParsing($metas, $filename)) {
+            if (!$this->doesFileRequireParsing($filename)) {
                 continue;
             }
 
@@ -62,7 +62,7 @@ class FileCollector
         return $parseQueue;
     }
 
-    private function doesFileRequireParsing(Metas $metas, string $filename): bool
+    private function doesFileRequireParsing(string $filename): bool
     {
         if (!isset($this->fileInfos[$filename])) {
             throw new InvalidArgumentException(
