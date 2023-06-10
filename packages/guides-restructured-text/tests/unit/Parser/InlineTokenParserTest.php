@@ -11,11 +11,9 @@ use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
@@ -241,8 +239,8 @@ final class InlineTokenParserTest extends TestCase
                 new InlineCompoundNode([new VariableInlineNode('variable')]),
             ],
             'Escape' => [
-                "\\x\\`\\ \\\n",
-                new InlineCompoundNode([new PlainTextInlineNode('x`'), new WhitespaceInlineNode(), new NewlineInlineNode()]),
+                '\x\`\ \\n',
+                new InlineCompoundNode([new PlainTextInlineNode('x`\\n')]),
             ],
         ];
     }

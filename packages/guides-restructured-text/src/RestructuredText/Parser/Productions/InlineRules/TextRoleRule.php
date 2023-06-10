@@ -9,6 +9,8 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
+use function substr;
+
 /**
  * Rule to parse for text roles such as ``:ref:`something` `
  */
@@ -27,7 +29,7 @@ class TextRoleRule extends AbstractInlineRule
     {
         $domain = null;
         $role = null;
-        $part = '';
+        $rawPart = $part = '';
         $inText = false;
 
         $initialPosition = $lexer->token?->position;
@@ -45,7 +47,7 @@ class TextRoleRule extends AbstractInlineRule
                     }
 
                     $role = $part;
-                    $part = '';
+                    $rawPart = $part = '';
                     break;
                 case InlineLexer::BACKTICK:
                     if ($role === null) {
@@ -57,7 +59,7 @@ class TextRoleRule extends AbstractInlineRule
                         $fullRole = ($domain ? $domain . ':' : '') . $role;
                         $lexer->moveNext();
 
-                        return $textRole->processNode($parserContext, $fullRole, $part);
+                        return $textRole->processNode($parserContext, $fullRole, $part, $rawPart);
                     }
 
                     $inText = true;
@@ -69,10 +71,21 @@ class TextRoleRule extends AbstractInlineRule
                     }
 
                     $part .= $token->value;
+                    $rawPart .= $token->value;
+
+                    break;
+                case InlineLexer::ESCAPED_SIGN:
+                    $part .= substr($token->value, 1);
+                    if ($token->value === '\`') {
+                        $rawPart .= '`';
+                    } else {
+                        $rawPart .= $token->value;
+                    }
 
                     break;
                 default:
                     $part .= $token->value;
+                    $rawPart .= $token->value;
             }
 
             if ($lexer->moveNext() === false && $lexer->token === null) {

@@ -37,6 +37,7 @@ class AbbreviationTextRole implements TextRole
         ParserContext $parserContext,
         string $role,
         string $content,
+        string $rawContent,
     ): InlineNode {
         if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
             return new AbbreviationInlineNode(trim($matches[1]), trim($matches[2]));
