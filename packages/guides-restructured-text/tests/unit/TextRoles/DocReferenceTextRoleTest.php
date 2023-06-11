@@ -32,7 +32,7 @@ class DocReferenceTextRoleTest extends TestCase
         string|null $anchor = null,
         string|null $text = null,
     ): void {
-        $result = $this->docReferenceTextRole->processNode($this->parserContext, 'doc', $span);
+        $result = $this->docReferenceTextRole->processNode($this->parserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(DocReferenceNode::class, $result);
         self::assertEquals($url, $result->getDocumentLink(), 'DocumentLinks are different');

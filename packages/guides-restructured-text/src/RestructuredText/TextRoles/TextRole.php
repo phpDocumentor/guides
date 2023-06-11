@@ -14,9 +14,14 @@ interface TextRole
     /** @return string[] */
     public function getAliases(): array;
 
+    /**
+     * @param string $content the content with backslash escapes removed per spec
+     * @param string $rawContent the raw content, including backslash escapes
+     */
     public function processNode(
         ParserContext $parserContext,
         string $role,
         string $content,
+        string $rawContent,
     ): InlineNode;
 }

@@ -7,9 +7,9 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\ParserContext;
 
-class GenericTextRole implements TextRole
+class LiteralTextRole implements TextRole
 {
-    final public const NAME = 'default';
+    final public const NAME = 'literal';
 
     public function getName(): string
     {
@@ -28,6 +28,6 @@ class GenericTextRole implements TextRole
         string $content,
         string $rawContent,
     ): GenericTextRoleInlineNode {
-        return new GenericTextRoleInlineNode($role, $content);
+        return new GenericTextRoleInlineNode('literal', $rawContent);
     }
 }

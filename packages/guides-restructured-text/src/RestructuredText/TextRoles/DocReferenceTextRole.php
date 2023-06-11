@@ -41,6 +41,7 @@ class DocReferenceTextRole implements TextRole
         ParserContext $parserContext,
         string $role,
         string $content,
+        string $rawContent,
     ): InlineNode {
         $anchor = null;
         $text = null;

@@ -85,7 +85,10 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\MathTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
@@ -112,6 +115,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.inline_rule')
         ->instanceof(NodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
+        ->instanceof(TextRole::class)
+        ->tag('phpdoc.guides.parser.rst.text_role')
 
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\Parser\\Productions\\InlineRules\\',
@@ -124,11 +129,10 @@ return static function (ContainerConfigurator $container): void {
 
 
         ->set(DocReferenceTextRole::class)
-        ->tag('phpdoc.guides.parser.rst.text_role')
         ->set(ReferenceTextRole::class)
-        ->tag('phpdoc.guides.parser.rst.text_role')
         ->set(AbbreviationTextRole::class)
-        ->tag('phpdoc.guides.parser.rst.text_role')
+        ->set(MathTextRole::class)
+        ->set(LiteralTextRole::class)
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)

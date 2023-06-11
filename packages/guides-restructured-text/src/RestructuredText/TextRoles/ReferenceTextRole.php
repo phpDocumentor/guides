@@ -41,6 +41,7 @@ class ReferenceTextRole implements TextRole
         ParserContext $parserContext,
         string $role,
         string $content,
+        string $rawContent,
     ): InlineNode {
         $domain = null;
         $text = null;
