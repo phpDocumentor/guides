@@ -58,7 +58,7 @@ final class InlineLexer extends AbstractLexer
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
-            '``.+``(?!`)',
+            '``.+?``(?!`)',
             '`__',
             '`_',
             '`~',
