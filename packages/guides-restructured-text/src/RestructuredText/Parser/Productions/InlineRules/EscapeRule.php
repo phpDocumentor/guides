@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
+use function preg_match;
 use function substr;
 
 /**
@@ -22,18 +21,14 @@ class EscapeRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::ESCAPED_SIGN;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): NewlineInlineNode|WhitespaceInlineNode|PlainTextInlineNode
+    public function apply(ParserContext $parserContext, InlineLexer $lexer): PlainTextInlineNode|null
     {
         $char = $lexer->token?->value ?? '';
-        $char = substr($char, 1, 1);
+        $char = substr($char, 1);
         $lexer->moveNext();
 
-        if ($char === "\n") {
-            return new NewlineInlineNode();
-        }
-
-        if ($char === ' ') {
-            return new WhitespaceInlineNode();
+        if (preg_match('/^\s$/', $char)) {
+            return null;
         }
 
         return new PlainTextInlineNode($char);

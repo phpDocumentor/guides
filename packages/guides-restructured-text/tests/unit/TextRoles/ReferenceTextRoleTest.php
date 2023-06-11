@@ -31,7 +31,7 @@ class ReferenceTextRoleTest extends TestCase
         string|null $domain = null,
         string|null $text = null,
     ): void {
-        $result = $this->referenceTextRole->processNode($this->parserContext, 'doc', $span);
+        $result = $this->referenceTextRole->processNode($this->parserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(ReferenceNode::class, $result);
         self::assertEquals($url, $result->getReferenceName(), 'ReferenceNames are different');

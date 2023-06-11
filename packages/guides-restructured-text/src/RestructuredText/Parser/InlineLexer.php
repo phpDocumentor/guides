@@ -53,12 +53,13 @@ final class InlineLexer extends AbstractLexer
     protected function getCatchablePatterns(): array
     {
         return [
+            '\\\\``', // must be a separate case, as the next pattern would split in "\`" + "`", causing it to become a intepreted text
             '\\\\[\s\S]', // Escaping hell... needs escaped slash in regex, but also in php.
             'https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)',
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
-            '``.+``(?!`)',
+            '``.+?``(?!`)',
             '`__',
             '`_',
             '`~',
@@ -105,7 +106,7 @@ final class InlineLexer extends AbstractLexer
     /** @inheritDoc */
     protected function getType(&$value)
     {
-        if (preg_match('/\\\\[\s\S]/i', $value)) {
+        if (preg_match('/^\\\\[\s\S]/i', $value)) {
             return self::ESCAPED_SIGN;
         }
 
