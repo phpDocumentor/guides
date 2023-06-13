@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -29,11 +28,11 @@ final class MetasPassTest extends TestCase
         $document = new DocumentNode('1', 'index');
         $document->addChildNode($section);
 
-        $metas = new Metas([]);
-        $pass = new MetasPass($metas);
-        $pass->run([$document], new CompilerContext(new ProjectNode()));
+        $pass = new MetasPass();
+        $compilerContext = new CompilerContext(new ProjectNode());
+        $pass->run([$document], $compilerContext);
 
-        $entries = $metas->getAll();
+        $entries = $compilerContext->getProjectNode()->getAllDocumentEntries();
 
         $expected = new DocumentEntry('index', new TitleNode(InlineCompoundNode::getPlainTextInlineNode('index-title 1'), 1, 'index-title-1'));
         $s1 = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('index-title 1'), 1, 'index-title-1'));

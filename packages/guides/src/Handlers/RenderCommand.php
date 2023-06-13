@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
@@ -15,7 +14,6 @@ final class RenderCommand
     public function __construct(
         private readonly string $outputFormat,
         private readonly array $documents,
-        private readonly Metas $metas,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
         private readonly ProjectNode $projectNode,
@@ -32,11 +30,6 @@ final class RenderCommand
     public function getDocuments(): array
     {
         return $this->documents;
-    }
-
-    public function getMetas(): Metas
-    {
-        return $this->metas;
     }
 
     public function getOrigin(): FilesystemInterface

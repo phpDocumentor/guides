@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
@@ -24,7 +23,6 @@ use function str_contains;
 class ReferenceNodeTransformer implements NodeTransformer
 {
     public function __construct(
-        private readonly Metas $metas,
         private readonly UrlGenerator $urlGenerator,
         private readonly LoggerInterface $logger,
     ) {
@@ -38,10 +36,10 @@ class ReferenceNodeTransformer implements NodeTransformer
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof ReferenceNode) {
-            $this->resolveReference($node, $compilerContext->getDocumentNode());
+            $this->resolveReference($node, $compilerContext);
         } else {
             if ($node instanceof DocReferenceNode) {
-                $this->resolveDocReference($node, $compilerContext->getDocumentNode());
+                $this->resolveDocReference($node, $compilerContext);
             }
         }
 
@@ -53,16 +51,16 @@ class ReferenceNodeTransformer implements NodeTransformer
         return $node instanceof ReferenceNode || $node instanceof DocReferenceNode;
     }
 
-    private function resolveReference(ReferenceNode $referenceNode, DocumentNode $document): void
+    private function resolveReference(ReferenceNode $referenceNode, CompilerContext $compilerContext): void
     {
-        $target = $this->metas->getInternalTarget($referenceNode->getReferenceName());
+        $target = $compilerContext->getProjectNode()->getInternalTarget($referenceNode->getReferenceName());
         if ($target === null) {
             $this->logger->warning(
                 sprintf(
                     'Reference "%s" could not be resolved',
                     $referenceNode->getReferenceName(),
                 ),
-                $document->getLoggerInformation(),
+                $compilerContext->getDocumentNode()->getLoggerInformation(),
             );
 
             return;
@@ -71,18 +69,18 @@ class ReferenceNodeTransformer implements NodeTransformer
         $referenceNode->setInternalTarget($target);
     }
 
-    private function resolveDocReference(DocReferenceNode $docReferenceNode, DocumentNode $document): void
+    private function resolveDocReference(DocReferenceNode $docReferenceNode, CompilerContext $compilerContext): void
     {
-        $filePath = $this->canonicalUrl($docReferenceNode->getDocumentLink(), $document);
+        $filePath = $this->canonicalUrl($docReferenceNode->getDocumentLink(), $compilerContext->getDocumentNode());
 
-        $documentEntry = $this->metas->findDocument($filePath);
+        $documentEntry = $compilerContext->getProjectNode()->findDocumentEntry($filePath);
         if ($documentEntry === null) {
             $this->logger->warning(
                 sprintf(
                     'Link to document "%s" could not be resolved',
                     $docReferenceNode->getDocumentLink(),
                 ),
-                $document->getLoggerInformation(),
+                $compilerContext->getDocumentNode()->getLoggerInformation(),
             );
 
             return;

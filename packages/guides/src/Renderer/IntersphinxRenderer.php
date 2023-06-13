@@ -33,7 +33,7 @@ class IntersphinxRenderer implements TypeRenderer
         ];
         $projectNode = $renderCommand->getProjectNode();
 
-        foreach ($renderCommand->getMetas()->getAll() as $key => $documentEntry) {
+        foreach ($renderCommand->getProjectNode()->getAllDocumentEntries() as $key => $documentEntry) {
             $url = $this->urlGenerator->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
@@ -46,7 +46,7 @@ class IntersphinxRenderer implements TypeRenderer
             ];
         }
 
-        foreach ($renderCommand->getMetas()->getAllInternalTargets() as $key => $internalTarget) {
+        foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $key => $internalTarget) {
             $url = $this->urlGenerator->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 
 use function array_filter;
+use function max;
 use function strtolower;
 use function trim;
 
@@ -36,6 +38,12 @@ final class DocumentNode extends CompoundNode
      * @var array<string, Node[]>
      */
     private array $documentPartNodes = [];
+
+    /** @var array<int, FootnoteTarget> */
+    private array $footnoteTargets = [];
+
+    private int $maxFootnoteNumber = 0;
+    private int $lastReturnedAnonymousFootnoteNumber = -1;
 
     /**
      * Variables are replacements in a document or project.
@@ -184,5 +192,52 @@ final class DocumentNode extends CompoundNode
     public function hasDocumentPart(string $identifier): bool
     {
         return isset($this->documentPartNodes[$identifier]);
+    }
+
+    public function addFootnoteTarget(FootnoteTarget $target): int
+    {
+        if ($target->getNumber() > 0) {
+            $this->maxFootnoteNumber = max($this->maxFootnoteNumber, $target->getNumber());
+            $this->footnoteTargets[$target->getNumber()] = $target;
+        } else {
+            $this->maxFootnoteNumber++;
+            $target->setNumber($this->maxFootnoteNumber);
+            $target->setAnchorName('footnote-' . $this->maxFootnoteNumber);
+            $this->footnoteTargets[$target->getNumber()] = $target;
+        }
+
+        return $target->getNumber();
+    }
+
+    public function getFootnoteTarget(int $number): FootnoteTarget|null
+    {
+        return $this->footnoteTargets[$number] ?? null;
+    }
+
+    public function getFootnoteTargetByName(string $name): FootnoteTarget|null
+    {
+        foreach ($this->footnoteTargets as $footnoteTarget) {
+            if ($footnoteTarget->getName() === $name) {
+                return $footnoteTarget;
+            }
+        }
+
+        return null;
+    }
+
+    public function getFootnoteTargetAnonymous(): FootnoteTarget|null
+    {
+        foreach ($this->footnoteTargets as $footnoteTarget) {
+            if (
+                $footnoteTarget->getNumber() > $this->lastReturnedAnonymousFootnoteNumber
+                && $footnoteTarget->getName() === ''
+            ) {
+                $this->lastReturnedAnonymousFootnoteNumber = $footnoteTarget->getNumber();
+
+                return $footnoteTarget;
+            }
+        }
+
+        return null;
     }
 }

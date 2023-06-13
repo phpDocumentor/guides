@@ -13,7 +13,6 @@ use Monolog\Logger;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
@@ -100,7 +99,6 @@ class FunctionalTest extends ApplicationTestCase
                 $inputFilesystem,
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',
-                new Metas(),
                 new UrlGenerator(),
                 $format,
                 new ProjectNode(),

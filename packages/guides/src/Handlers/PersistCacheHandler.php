@@ -13,21 +13,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Handlers;
 
-use phpDocumentor\Guides\Meta\CachedMetasLoader;
-use phpDocumentor\Guides\Metas;
-
 final class PersistCacheHandler
 {
-    public function __construct(private readonly CachedMetasLoader $cachedMetasLoader, private readonly Metas $metas)
-    {
-    }
-
     public function handle(PersistCacheCommand $command): void
     {
         if (!$command->useCache()) {
             return;
         }
 
-        $this->cachedMetasLoader->cacheMetaEntries($command->getCacheDirectory(), $this->metas);
+        // TODO: Introduce Caching
     }
 }

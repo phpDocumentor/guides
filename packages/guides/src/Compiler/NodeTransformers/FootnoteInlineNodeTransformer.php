@@ -6,27 +6,21 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */
 class FootnoteInlineNodeTransformer implements NodeTransformer
 {
-    public function __construct(
-        private readonly Metas $metas,
-    ) {
-    }
-
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof FootnoteInlineNode) {
             if ($node->getNumber() > 0) {
-                $internalTarget = $this->metas->getFootnoteTarget($node->getNumber());
+                $internalTarget = $compilerContext->getDocumentNode()->getFootnoteTarget($node->getNumber());
             } elseif ($node->getName() !== '') {
-                $internalTarget = $this->metas->getFootnoteTargetByName($node->getName());
+                $internalTarget = $compilerContext->getDocumentNode()->getFootnoteTargetByName($node->getName());
             } else {
-                $internalTarget = $this->metas->getFootnoteTargetAnonymous();
+                $internalTarget = $compilerContext->getDocumentNode()->getFootnoteTargetAnonymous();
             }
 
             $node->setInternalTarget($internalTarget);

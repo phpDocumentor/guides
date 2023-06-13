@@ -7,7 +7,6 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\InternalTarget;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -21,7 +20,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     /** @var SplStack<DocumentNode> */
     private readonly SplStack $documentStack;
 
-    public function __construct(private readonly Metas $metas)
+    public function __construct()
     {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are
@@ -39,7 +38,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
 
-            $this->metas->addLinkTarget(
+            $compilerContext->getProjectNode()->addLinkTarget(
                 $node->toString(),
                 new InternalTarget($currentDocument->getFilePath(), $node->toString()),
             );
@@ -47,7 +46,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchor = $node->getTitle()->getId();
-            $this->metas->addLinkTarget(
+            $compilerContext->getProjectNode()->addLinkTarget(
                 $anchor,
                 new InternalTarget(
                     $currentDocument->getFilePath(),

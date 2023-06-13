@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
-use phpDocumentor\Guides\Metas;
 use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
@@ -22,7 +21,7 @@ final class MenuNodeTransformerTest extends TestCase
 {
     private static function getCompilerContext(string $path): CompilerContext
     {
-        $context = new CompilerContext(new ProjectNode());
+        $context = new CompilerContext(self::givenProjectNode());
         $context->setDocumentNode(new DocumentNode('123', $path));
 
         return $context;
@@ -30,9 +29,8 @@ final class MenuNodeTransformerTest extends TestCase
 
     public function testSimpleFlatToc(): void
     {
-        $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
-        $transformer = new MenuNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer();
 
         $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
@@ -53,9 +51,8 @@ final class MenuNodeTransformerTest extends TestCase
 
     public function testTocEntryIsActive(): void
     {
-        $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 1]);
-        $transformer = new MenuNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer();
 
         $transformedNode = $transformer->enterNode($node, self::getCompilerContext('index'));
 
@@ -76,9 +73,8 @@ final class MenuNodeTransformerTest extends TestCase
 
     public function testSimpleContents(): void
     {
-        $metas = $this->givenMetas();
         $node = (new ContentMenuNode(['index']))->withOptions(['depth' => 1]);
-        $transformer = new MenuNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer();
 
         $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
@@ -95,9 +91,8 @@ final class MenuNodeTransformerTest extends TestCase
 
     public function testTocWithChildNodes(): void
     {
-        $metas = $this->givenMetas();
         $node = (new TocNode(['index', 'page2']))->withOptions(['maxdepth' => 2]);
-        $transformer = new MenuNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer();
 
         $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
@@ -130,9 +125,8 @@ final class MenuNodeTransformerTest extends TestCase
 
     public function testTocWithDocumentReferences(): void
     {
-        $metas = $this->givenMetas();
         $node = (new TocNode(['page3']))->withOptions(['maxdepth' => 3]);
-        $transformer = new MenuNodeTransformer($metas);
+        $transformer = new MenuNodeTransformer();
 
         $transformedNode = $transformer->enterNode($node, self::getCompilerContext('some/path'));
 
@@ -163,7 +157,7 @@ final class MenuNodeTransformerTest extends TestCase
         );
     }
 
-    private function givenMetas(): Metas
+    private static function givenProjectNode(): ProjectNode
     {
         $indexDoc = new DocumentEntry('index', TitleNode::emptyNode());
         $section = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'));
@@ -179,12 +173,13 @@ final class MenuNodeTransformerTest extends TestCase
         $page3->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 3'), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 
-        return new Metas(
-            [
-                'index' => $indexDoc,
-                'page2' => $page2,
-                'page3' => $page3,
-            ],
-        );
+        $projectNode = new ProjectNode();
+        $projectNode->setDocumentEntries([
+            'index' => $indexDoc,
+            'page2' => $page2,
+            'page3' => $page3,
+        ]);
+
+        return $projectNode;
     }
 }
