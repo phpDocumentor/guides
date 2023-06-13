@@ -1,3 +1,6 @@
+=====
+Index
+=====
 
 .. toctree::
     :titlesonly:

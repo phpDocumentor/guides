@@ -35,6 +35,7 @@ class VersionFieldListItemRule implements FieldListItemRule
                 $currentVersion,
                 $fieldListItemNode->getPlaintextContent(),
             ));
+            return null;
         }
 
         $documentParserContext->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());

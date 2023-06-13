@@ -1,5 +1,17 @@
-<ul class="phpdocumentor-list">
-    {% for entry in node.entries -%}
-        {{ renderNode(entry) }}
+<ul>
+    {% for documentEntry in node.entries -%}
+        <li class="toc-item">
+            <a href="{{ renderLink(documentEntry.file) }}">{{ documentEntry.title }}</a>
+            {% if node.options.titlesonly!=true %}
+                {% if documentEntry.documentNode.rootSectionEntry and documentEntry.documentNode.rootSectionEntry.children %}
+                    <ul>
+                        {% for sectionEntry in documentEntry.documentNode.rootSectionEntry.children -%}
+                            {% include "body/menu/menu-section.html.twig" %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endif -%}
+        </li>
+
     {% endfor %}
 </ul>

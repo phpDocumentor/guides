@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
+use phpDocumentor\Guides\Nodes\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
@@ -73,6 +74,7 @@ final class NodeRendererPass implements CompilerPassInterface
         TitleNode::class => 'structure/header-title.html.twig',
         SectionNode::class => 'structure/section.html.twig',
         DocumentNode::class => 'structure/document.html.twig',
+        DocumentEntryNode::class => 'body/menu/menu-item.html.twig',
         ImageNode::class => 'body/image.html.twig',
         CodeNode::class => 'body/code.html.twig',
         DefinitionListNode::class => 'body/definition-list.html.twig',

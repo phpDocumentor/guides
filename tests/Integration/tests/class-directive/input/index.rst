@@ -1,3 +1,7 @@
+=========
+Some File
+=========
+
 .. class:: special-paragraph2
 
     Test special-paragraph 1.

@@ -42,7 +42,7 @@ class IntersphinxRenderer implements TypeRenderer
                 $projectNode->getTitle(),
                 $projectNode->getVersion(),
                 $url,
-                $documentEntry->getTitle()->toString(),
+                $documentEntry->getTitle()??'',
             ];
         }
 

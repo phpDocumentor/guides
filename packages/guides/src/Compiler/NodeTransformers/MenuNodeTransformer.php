@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use ArrayIterator;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
-use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Nodes\DocumentEntryNode;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry as MetaEntry;
 use phpDocumentor\Guides\Meta\SectionEntry;
@@ -29,12 +29,13 @@ final class MenuNodeTransformer implements NodeTransformer
         $entries = [];
 
         foreach ($node->getFiles() as $file) {
-            $metaEntry = $compilerContext->getProjectNode()->findDocumentEntry(ltrim($file, '/'));
-            if (!($metaEntry instanceof DocumentEntry)) {
+            $documentEntry = $compilerContext->getProjectNode()->findDocumentEntry(ltrim($file, '/'));
+            if (!($documentEntry instanceof DocumentEntryNode)) {
                 continue;
             }
-
-            foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node, $compilerContext) as $entry) {
+            $entries[] = $documentEntry;
+            /*
+            foreach ($this->buildFromDocumentEntry($documentEntry, 1, $node, $compilerContext) as $entry) {
                 if ($entry->getUrl() === $compilerContext->getDocumentNode()->getFilePath()) {
                     $entry = $entry->withOptions(array_merge($entry->getOptions(), ['active' => true]));
                     assert($entry instanceof Entry);
@@ -42,6 +43,7 @@ final class MenuNodeTransformer implements NodeTransformer
 
                 $entries[] = $entry;
             }
+            */
         }
 
         return $node->withEntries($entries);
@@ -58,7 +60,7 @@ final class MenuNodeTransformer implements NodeTransformer
     }
 
     /** @return iterable<Entry> */
-    private function buildFromDocumentEntry(DocumentEntry $document, int $depth, MenuNode $node, CompilerContext $compilerContext): iterable
+    private function buildFromDocumentEntry(DocumentEntryNode $document, int $depth, MenuNode $node, CompilerContext $compilerContext): iterable
     {
         if ($depth > $node->getDepth()) {
             return new ArrayIterator([]);
@@ -75,7 +77,7 @@ final class MenuNodeTransformer implements NodeTransformer
 
     /** @return Traversable<Entry> */
     private function buildFromSection(
-        DocumentEntry $document,
+        DocumentEntryNode $document,
         SectionEntry $entry,
         int $depth,
         MenuNode $node,
@@ -93,7 +95,7 @@ final class MenuNodeTransformer implements NodeTransformer
     /** @return Traversable<Entry> */
     private function buildLevel(
         MetaEntry $child,
-        DocumentEntry $document,
+        DocumentEntryNode $document,
         int $depth,
         MenuNode $node,
         CompilerContext $compilerContext,
@@ -113,7 +115,7 @@ final class MenuNodeTransformer implements NodeTransformer
         }
 
         $subDocument = $compilerContext->getProjectNode()->findDocumentEntry($child->getFile());
-        if (!($subDocument instanceof DocumentEntry)) {
+        if (!($subDocument instanceof DocumentEntryNode)) {
             return;
         }
 

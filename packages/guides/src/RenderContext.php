@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
-use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Nodes\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -39,6 +39,7 @@ class RenderContext
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
+        private readonly string $absolutePathPrefix = '/',
     ) {
         $this->destinationPath = trim($outputFolder, '/');
     }
@@ -51,6 +52,7 @@ class RenderContext
         UrlGeneratorInterface $urlGenerator,
         string $ouputFormat,
         ProjectNode $projectNode,
+        string $absolutePathPrefix = '/',
     ): self {
         $self = new self(
             $destinationPath,
@@ -60,6 +62,7 @@ class RenderContext
             $urlGenerator,
             $ouputFormat,
             $projectNode,
+            $absolutePathPrefix
         );
 
         $self->document = $documentNode;
@@ -147,7 +150,7 @@ class RenderContext
         return $this->origin;
     }
 
-    public function getCurrentDocumentEntry(): DocumentEntry|null
+    public function getCurrentDocumentEntry(): DocumentEntryNode|null
     {
         return $this->projectNode->findDocumentEntry($this->currentFileName);
     }
@@ -176,4 +179,15 @@ class RenderContext
     {
         return $this->projectNode;
     }
+
+    public function getOutputFormat(): string
+    {
+        return $this->outputFormat;
+    }
+
+    public function getAbsolutePathPrefix(): string
+    {
+        return $this->absolutePathPrefix;
+    }
+
 }

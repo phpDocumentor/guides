@@ -36,6 +36,7 @@ class ProjectFieldListItemRule implements FieldListItemRule
                 $currentTitle,
                 $newTitle,
             ));
+            return null;
         }
 
         $documentParserContext->getProjectNode()->setTitle($newTitle);

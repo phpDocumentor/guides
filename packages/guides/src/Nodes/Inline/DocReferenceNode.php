@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-use phpDocumentor\Guides\Meta\DocumentEntry;
+use phpDocumentor\Guides\Nodes\DocumentEntryNode;
 
 /**
  * Represents a link to document
@@ -22,7 +22,7 @@ class DocReferenceNode extends AbstractLinkInlineNode
     // URL can only be resolved during rendering as it contains file endings for html / latex etc
     private string $url = '';
     // Is resolved in the compiler
-    private DocumentEntry|null $documentEntry = null;
+    private DocumentEntryNode|null $documentEntry = null;
 
     public function __construct(
         string $documentLink,
@@ -55,11 +55,7 @@ class DocReferenceNode extends AbstractLinkInlineNode
 
     private function getTextFromDocumentEntry(): string|null
     {
-        if ($this->documentEntry !== null) {
-            return $this->documentEntry->getTitle()->toString();
-        }
-
-        return null;
+        return $this->documentEntry?->getTitle();
     }
 
     public function getUrl(): string
@@ -72,12 +68,12 @@ class DocReferenceNode extends AbstractLinkInlineNode
         $this->url = $url;
     }
 
-    public function getDocumentEntry(): DocumentEntry|null
+    public function getDocumentEntry(): DocumentEntryNode|null
     {
         return $this->documentEntry;
     }
 
-    public function setDocumentEntry(DocumentEntry $documentEntry): void
+    public function setDocumentEntry(DocumentEntryNode $documentEntry): void
     {
         $this->documentEntry = $documentEntry;
     }

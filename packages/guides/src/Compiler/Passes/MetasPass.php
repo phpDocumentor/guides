@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Meta\Entry;
 use phpDocumentor\Guides\Meta\SectionEntry;
@@ -19,6 +18,7 @@ final class MetasPass implements CompilerPass
     /** {@inheritDoc} */
     public function run(array $documents, CompilerContext $compilerContext): array
     {
+        /*
         foreach ($documents as $document) {
             if ($document->getTitle() === null) {
                 continue;
@@ -28,6 +28,7 @@ final class MetasPass implements CompilerPass
             $this->traverse($document, $entry);
             $compilerContext->getProjectNode()->addDocumentEntry($entry);
         }
+        */
 
         return $documents;
     }

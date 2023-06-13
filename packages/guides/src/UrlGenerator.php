@@ -114,7 +114,17 @@ final class UrlGenerator implements UrlGeneratorInterface
 
     public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string
     {
-        return $filename . '.' . $outputFormat .
-            ($anchor !== null ? '#' . $anchor : '');
+        return $filename . '.' . $outputFormat . ($anchor !== null ? '#' . $anchor : '');
+    }
+
+    public function createRelativeFileUrl(RenderContext $renderContext, string $filename, string|null $anchor = null): string
+    {
+        // todo: create true relative paths
+        return $this->createFileUrl($filename, $renderContext->getOutputFormat(), $anchor);
+    }
+
+    public function createAbsoluteFileUrl(RenderContext $renderContext, string $filename, string|null $anchor = null): string
+    {
+        return $renderContext->getAbsolutePathPrefix() . $this->createFileUrl($filename, $renderContext->getOutputFormat(), $anchor);
     }
 }

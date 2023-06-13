@@ -1,8 +1,8 @@
-<li class="toc-item"><a href="{{ url }}">{{ renderNode(node.value.value) }}</a>
+<li class="toc-item"><a href="{{ renderLink(node.file) }}">{{ node.title }}</a>
 
     {%- if node.children|length %}
         {% include "body/menu/menu-level.html.twig" with {
             tocItems:tocItem.children
         } %}
-    {%- endif -%}
+    {%- endif %}
 </li>

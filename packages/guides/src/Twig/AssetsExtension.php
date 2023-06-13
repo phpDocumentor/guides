@@ -28,6 +28,7 @@ use Twig\TwigTest;
 use Webmozart\Assert\Assert;
 
 use function sprintf;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function trim;
 
 final class AssetsExtension extends AbstractExtension

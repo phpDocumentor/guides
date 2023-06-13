@@ -1,3 +1,7 @@
+=========
+Some File
+=========
+
 .. class:: special
 
 This is a "special" paragraph.

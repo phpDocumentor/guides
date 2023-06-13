@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use SplStack;
 use Webmozart\Assert\Assert;
@@ -20,6 +21,9 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     /** @var SplStack<DocumentNode> */
     private readonly SplStack $documentStack;
 
+    /** @var SplStack<SectionEntryNode> */
+    private readonly SplStack $sectionStack;
+
     public function __construct()
     {
         /*
@@ -28,6 +32,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
          *       as this works right now in isolation includes do not work as they should.
          */
         $this->documentStack = new SplStack();
+        $this->sectionStack = new SplStack();
     }
 
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
@@ -46,14 +51,24 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchor = $node->getTitle()->getId();
+            $internalTarget = new InternalTarget(
+                $currentDocument->getFilePath(),
+                $anchor,
+                $node->getTitle()->toString(),
+            );
             $compilerContext->getProjectNode()->addLinkTarget(
                 $anchor,
-                new InternalTarget(
-                    $currentDocument->getFilePath(),
-                    $anchor,
-                    $node->getTitle()->toString(),
-                ),
+                $internalTarget,
             );
+            $sectionEntryNode = new SectionEntryNode($node->getTitle()->toString(), $internalTarget);
+            if ($this->sectionStack->isEmpty()) {
+                $compilerContext->getDocumentNode()->setRootSectionEntry($sectionEntryNode);
+            } else {
+                /** @var $sectionEntryNode $parent */
+                $parent = $this->sectionStack->top();
+                $parent->addChild($sectionEntryNode);
+            }
+            $this->sectionStack->push($sectionEntryNode);
         }
 
         return $node;
@@ -63,6 +78,8 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();
+        } elseif ($node instanceof SectionNode) {
+            $this->sectionStack->pop();
         }
 
         return $node;

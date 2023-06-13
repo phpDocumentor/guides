@@ -1,0 +1,10 @@
+<li class="toc-item">
+    <a href="{{- renderInternalTarget(sectionEntry.internalTarget) -}}">{{ sectionEntry.title }}</a>
+    {% if sectionEntry.children %}
+            <ul>
+            {% for subSectionEntry in sectionEntry.children %}
+                    {% include "body/menu/menu-section.html.twig" with {'sectionEntry': subSectionEntry}  %}
+            {% endfor %}
+        </ul>
+    {% endif -%}
+</li>

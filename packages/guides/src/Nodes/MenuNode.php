@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Nodes\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 
 use const PHP_INT_MAX;
@@ -26,7 +27,7 @@ abstract class MenuNode extends CompoundNode
 {
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
-    /** @var Entry[] */
+    /** @var DocumentEntryNode[] */
     private array $entries = [];
 
     /** @param string[] $files */
@@ -43,7 +44,7 @@ abstract class MenuNode extends CompoundNode
 
     abstract public function getDepth(): int;
 
-    /** @param Entry[] $entries */
+    /** @param DocumentEntryNode[] $entries */
     public function withEntries(array $entries): self
     {
         $that = clone $this;
@@ -52,7 +53,7 @@ abstract class MenuNode extends CompoundNode
         return $that;
     }
 
-    /** @return Entry[] */
+    /** @return DocumentEntryNode[] */
     public function getEntries(): array
     {
         return $this->entries;

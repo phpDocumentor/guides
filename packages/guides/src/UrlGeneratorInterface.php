@@ -37,4 +37,14 @@ interface UrlGeneratorInterface
      * Create a url with a file ending derived from the output format
      */
     public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string;
+
+    /**
+     * Create a URL relative to the current document
+     */
+    public function createRelativeFileUrl(RenderContext $renderContext, string $filename, string|null $anchor = null): string;
+
+    /**
+     * Create a URL relative to the current document
+     */
+    public function createAbsoluteFileUrl(RenderContext $renderContext, string $filename, string|null $anchor = null): string;
 }
