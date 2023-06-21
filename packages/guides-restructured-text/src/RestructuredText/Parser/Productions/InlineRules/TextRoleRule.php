@@ -34,7 +34,6 @@ class TextRoleRule extends AbstractInlineRule
 
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
-
         while ($lexer->token !== null) {
             $token = $lexer->token;
             switch ($token->type) {
@@ -42,7 +41,7 @@ class TextRoleRule extends AbstractInlineRule
                     if ($role !== null) {
                         $domain = $role;
                         $role = $part;
-                        $part = '';
+                        $rawPart = $part = '';
                         break;
                     }
 
