@@ -1,10 +1,10 @@
 # Example
 # https://gitpod.io/#https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-TSconfig/tree/main
 
-image: gitpod/workspace-full
+image: "gitpod/workspace-full"
 
 tasks:
-  - name: RenderRstGuides
+  - name: "RenderRstGuides"
     init: |
       git clone git@github.com:phpDocumentor/guides.git guides
     command: |
@@ -17,5 +17,5 @@ tasks:
 
 ports:
   - port: 8001
-    name: t3docspreview
-    onOpen: ignore
+    name: "guidespreview"
+    onOpen: "ignore"
