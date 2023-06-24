@@ -1,0 +1,21 @@
+# Example
+# https://gitpod.io/#https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-TSconfig/tree/main
+
+image: gitpod/workspace-full
+
+tasks:
+  - name: RenderRstGuides
+    init: |
+      git clone git@github.com:linawolf/guides.git guides
+    command: |
+      echo "Run 'bash ./render.sh' to generate all docs."
+
+# gp open ./Documentation-GENERATED-temp/Result/project/0.0.0/_buildinfo/warnings.txt
+# cd ./Documentation-GENERATED-temp/Result/project/0.0.0/
+# nohup php -S localhost:8001 &
+# gp preview "$(gp url 8001)/Index.html" --external
+
+ports:
+  - port: 8001
+    name: t3docspreview
+    onOpen: ignore
