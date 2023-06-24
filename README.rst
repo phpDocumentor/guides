@@ -32,6 +32,12 @@ such as Restructured Text, and output formats, such as HTML.
 :Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides
 
+You can try out this reposistory convieniently in GitPod by clicking this button:
+
+..  image::https://gitpod.io/button/open-in-gitpod.svg
+    :alt: Try out in GitPod
+    :target: http://gitpod.io/#/https://github.com/phpDocumentor/guides
+
 Attribution
 ===========
 
