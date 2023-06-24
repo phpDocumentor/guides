@@ -34,7 +34,7 @@ such as Restructured Text, and output formats, such as HTML.
 
 You can try out this reposistory convieniently in GitPod by clicking this button:
 
-..  image::https://gitpod.io/button/open-in-gitpod.svg
+..  image:: https://gitpod.io/button/open-in-gitpod.svg
     :alt: Try out in GitPod
     :target: http://gitpod.io/#/https://github.com/phpDocumentor/guides
 
