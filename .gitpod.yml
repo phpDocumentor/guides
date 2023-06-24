@@ -6,7 +6,7 @@ image: gitpod/workspace-full
 tasks:
   - name: RenderRstGuides
     init: |
-      git clone git@github.com:linawolf/guides.git guides
+      git clone git@github.com:phpDocumentor/guides.git guides
     command: |
       echo "Run 'bash ./render.sh' to generate all docs."
 
