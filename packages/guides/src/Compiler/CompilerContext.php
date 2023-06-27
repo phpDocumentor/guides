@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 
 class CompilerContext
 {
-    private DocumentNode|null $documentNode = null;
+    /** @var TreeNode<DocumentNode> */
     private TreeNode $shadowTree;
 
     public function __construct(
@@ -39,7 +39,7 @@ class CompilerContext
             throw new Exception('DocumentNode must be set in compiler context');
         }
 
-        return $this->shadowTree->getRoot();
+        return $this->shadowTree->getRoot()->getNode();
     }
 
     public function withShadowTree(DocumentNode $documentNode): static
@@ -50,6 +50,7 @@ class CompilerContext
         return $that;
     }
 
+    /** @return TreeNode<DocumentNode> */
     public function getShadowTree(): TreeNode
     {
         if (!isset($this->shadowTree)) {

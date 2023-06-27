@@ -11,60 +11,101 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function array_values;
 
-class TreeNode
+/** @template TNode of Node */
+final class TreeNode
 {
-    /** @param TreeNode[] $children */
+    /** @var TreeNode<DocumentNode> */
+    private TreeNode $root;
+
+    /** @var self<Node>[] */
+    private array $children = [];
+
     private function __construct(
-        private DocumentNode $root,
+        /** @var TNode */
         private Node $node,
-        private array $children,
+        /** @var self<Node>|self<DocumentNode>|null */
         private self|null $parent = null,
     ) {
-        foreach ($children as $child) {
-            $child->parent = $this;
-        }
     }
 
+    /** @return TreeNode<DocumentNode> */
     public static function createFromDocument(DocumentNode $document): self
     {
-        return new self($document, $document, self::createFromCompoundNode($document, $document));
+        $node = new self($document);
+        $node->setChildren(self::createFromCompoundNode($document, $node));
+        $node->setRoot($node);
+
+        return $node;
     }
 
     /**
      * @param CompoundNode<Node> $node
+     * @param self<Node>|self<DocumentNode>|null $parent
      *
-     * @return TreeNode[]
+     * @return TreeNode<Node>[]
      */
-    private static function createFromCompoundNode(CompoundNode $node, DocumentNode $root): array
+    private static function createFromCompoundNode(CompoundNode $node, self|null $parent): array
     {
         $children = [];
         foreach ($node->getChildren() as $child) {
-            $children[] = self::createFromNode($child, $root);
+            $children[] = self::createFromNode($child, $parent);
         }
 
         return $children;
     }
 
-    private static function createFromNode(Node $node, DocumentNode $root, self|null $parent = null): self
+    /**
+     * @param TValue $node
+     * @param self<Node>|self<DocumentNode>|null $parent
+     *
+     * @return TreeNode<TValue>
+     *
+     * @template TValue of Node
+     */
+    private static function createFromNode(Node $node, self|null $parent = null): self
     {
-        if ($node instanceof CompoundNode) {
-            return new self($root, $node, self::createFromCompoundNode($node, $root), $parent);
+        $treeNode = new self($node, $parent);
+        if ($node instanceof CompoundNode === false) {
+            return $treeNode;
         }
 
-        return new self($root, $node, [], $parent);
+        $treeNode->setChildren(self::createFromCompoundNode($node, $treeNode));
+
+        return $treeNode;
     }
 
-    public function getRoot(): DocumentNode
+    /** @param self<Node>[] $children */
+    private function setChildren(array $children): void
+    {
+        foreach ($children as $child) {
+            $child->parent = $this;
+        }
+
+        $this->children = $children;
+    }
+
+    /** @return self<DocumentNode> */
+    public function getRoot(): self
     {
         return $this->root;
     }
 
+    /** @param self<DocumentNode> $root */
+    private function setRoot(self $root): void
+    {
+        $this->root = $root;
+        foreach ($this->children as $child) {
+            $child->setRoot($root);
+        }
+    }
+
+    /** @return TNode */
     public function getNode(): Node
     {
         return $this->node;
     }
 
-    /** @return TreeNode[] */
+    /** @return  TreeNode<Node>[] */
     public function getChildren(): array
     {
         return $this->children;
@@ -76,10 +117,13 @@ class TreeNode
             throw new LogicException('Cannot add a child to a non-compound node');
         }
 
-        $this->children[] = self::createFromNode($child, $this->root, $this);
+        $shadowNode = self::createFromNode($child, $this);
+        $shadowNode->setRoot($this->root);
+        $this->children[] = $shadowNode;
         $this->node->addChildNode($child);
     }
 
+    /** @return self<Node>|self<DocumentNode>|null */
     public function getParent(): TreeNode|null
     {
         return $this->parent;

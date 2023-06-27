@@ -51,7 +51,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
-            [1 => new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo'))],
+            [new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo'))],
             $actual->getChildren(),
         );
     }
@@ -62,7 +62,7 @@ final class DocumentNodeTraverserTest extends TestCase
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
-        $replacement = new TocNode(['/readme.rst']);
+        $replacement = new TocNode(['/foo.rst']);
 
 
         /** @var iterable<NodeTransformer<Node>> $transformers */
