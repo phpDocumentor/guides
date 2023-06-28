@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function array_values;
+
 /**
  * @template TValue as Node
  * @extends AbstractNode<TValue[]>
@@ -42,6 +44,7 @@ abstract class CompoundNode extends AbstractNode
     {
         $result = clone $this;
         unset($result->value[$key]);
+        $result->value = array_values($result->value);
 
         return $result;
     }

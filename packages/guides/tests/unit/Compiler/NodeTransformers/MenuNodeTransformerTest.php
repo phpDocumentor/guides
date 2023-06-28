@@ -21,10 +21,7 @@ final class MenuNodeTransformerTest extends TestCase
 {
     private static function getCompilerContext(string $path): CompilerContext
     {
-        $context = new CompilerContext(self::givenProjectNode());
-        $context->setDocumentNode(new DocumentNode('123', $path));
-
-        return $context;
+        return (new CompilerContext(self::givenProjectNode()))->withShadowTree(new DocumentNode('123', $path));
     }
 
     public function testSimpleFlatToc(): void

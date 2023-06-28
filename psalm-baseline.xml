@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
+<files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/DocumentRule.php">
     <MoreSpecificImplementedParamType>
       <code>$on</code>
@@ -15,6 +15,12 @@
     <MoreSpecificImplementedParamType>
       <code>$on</code>
     </MoreSpecificImplementedParamType>
+  </file>
+  <file src="packages/guides/src/Compiler/ShadowTree/TreeNode.php">
+    <InvalidPropertyAssignmentValue>
+      <code>$newNode</code>
+      <code>$newNode</code>
+    </InvalidPropertyAssignmentValue>
   </file>
   <file src="packages/guides/src/Nodes/CompoundNode.php">
     <InvalidPropertyAssignmentValue>

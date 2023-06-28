@@ -47,11 +47,11 @@ final class DocumentNodeTraverserTest extends TestCase
             },
         ]), 2000);
 
-        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withShadowTree($document));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
-            [1 => new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo'))],
+            [new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo'))],
             $actual->getChildren(),
         );
     }
@@ -62,7 +62,7 @@ final class DocumentNodeTraverserTest extends TestCase
         $document->addChildNode(new TocNode(['/readme.rst']));
         $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
-        $replacement = new TocNode(['/readme.rst']);
+        $replacement = new TocNode(['/foo.rst']);
 
 
         /** @var iterable<NodeTransformer<Node>> $transformers */
@@ -97,7 +97,7 @@ final class DocumentNodeTraverserTest extends TestCase
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
 
-        $actual = $traverser->traverse($document, new CompilerContext(new ProjectNode()));
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withShadowTree($document));
 
         self::assertInstanceOf(DocumentNode::class, $actual);
         self::assertEquals(
