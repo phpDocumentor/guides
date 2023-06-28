@@ -3,4 +3,4 @@ Anchors
 
 ..  _lists:
 
-`go to lists <#lists>`_
+`go to lists <lists>`_
