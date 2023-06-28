@@ -110,13 +110,13 @@ final class AssetsExtension extends AbstractExtension
     /** @param array{env: RenderContext} $context */
     public function renderInternalTarget(array $context, InternalTarget $internalTarget): string
     {
-        return $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor());
+        return $context['env']->relativeDocUrl($internalTarget->getDocumentPath(), $internalTarget->getAnchor());
     }
 
     /** @param array{env: RenderContext} $context */
     public function renderLink(array $context, string $url, string|null $anchor = null): string
     {
-        return $this->urlGenerator->createFileUrl($url, 'html', $anchor);
+        return $context['env']->relativeDocUrl($url, $anchor);
     }
 
     private function copyAsset(
