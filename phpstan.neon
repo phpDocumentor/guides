@@ -5,7 +5,7 @@ parameters:
   ignoreErrors:
     # FlyFinder plugin adds a find method to FlySystem's Filesystem
     - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
-    - '#Method phpDocumentor\\Guides\\Handlers\\ParseDirectoryHandler::handle\(\) should return array<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns array<int<0, max>, mixed>#'
+    - '#Method phpDocumentor\\Guides\\Handlers\\ParseDirectoryHandler::handle\(\) should return array<phpDocumentor\\Guides\\Nodes\\DocumentNode> but returns array<int, mixed>#'
 
     - '#Cannot call method end\(\) on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface\|null.#'
 

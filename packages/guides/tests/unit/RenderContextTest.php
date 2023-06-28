@@ -29,7 +29,7 @@ final class RenderContextTest extends TestCase
         $projectNode = new ProjectNode();
         $projectNode->addDocumentEntry(new DocumentEntryNode(
             'getting-started/configuration',
-            TitleNode::emptyNode(),
+            '',
         ));
 
         $context = RenderContext::forDocument(

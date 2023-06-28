@@ -34,7 +34,7 @@ class SectionEntryNode extends AbstractNode
         $this->children[] = $child;
     }
 
-    /** {@inheritDoc} */
+    /** @return SectionEntryNode[] */
     public function getChildren(): array
     {
         return $this->children;

@@ -156,17 +156,18 @@ final class MenuNodeTransformerTest extends TestCase
 
     private static function givenProjectNode(): ProjectNode
     {
-        $indexDoc = new DocumentEntryNode('index', TitleNode::emptyNode());
+        $indexDoc = new DocumentEntryNode('index', '');
         $section = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'));
         $subSection = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'));
         $section->addChild($subSection);
         $section->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2')));
         $indexDoc->addChild($section);
 
-        $page2 = new DocumentEntryNode('page2', TitleNode::emptyNode());
+        $page2 = new DocumentEntryNode('page2', '');
         $page2->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 2'), 1, 'title-2')));
 
-        $page3 = new DocumentEntryNode('page3', TitleNode::emptyNode());
+        
+        $page3 = new DocumentEntryNode('page3', '');
         $page3->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 3'), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 

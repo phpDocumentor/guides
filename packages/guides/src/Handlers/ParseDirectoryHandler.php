@@ -38,6 +38,7 @@ final class ParseDirectoryHandler
         $files = $this->fileCollector->collect($origin, $currentDirectory, $extension);
         $documents = [];
         // handle index file first, so that the document tree is build from there
+        /** @var DocumentNode|null $rootDocument */
         $rootDocument = $this->commandBus->handle(
             new ParseFileCommand($origin, $currentDirectory, $indexFileName, $extension, 1, $command->getProjectNode()),
         );

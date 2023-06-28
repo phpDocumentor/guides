@@ -6,8 +6,8 @@
     .. toctree::
         :titlesonly:
 
-        /index
-        /somePage
+        index
+        somePage
 
 ..  documentblock::
     :identifier: navbar
@@ -15,8 +15,8 @@
     .. toctree::
         :titlesonly:
 
-        /index
-        /somePage
+        index
+        somePage
 
 ..  documentblock::
     :identifier: footer

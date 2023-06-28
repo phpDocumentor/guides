@@ -64,7 +64,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             if ($this->sectionStack->isEmpty()) {
                 $compilerContext->getDocumentNode()->setRootSectionEntry($sectionEntryNode);
             } else {
-                /** @var $sectionEntryNode $parent */
+                /** @var SectionEntryNode $parent */
                 $parent = $this->sectionStack->top();
                 $parent->addChild($sectionEntryNode);
             }

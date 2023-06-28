@@ -29,7 +29,7 @@ class DocumentEntryNode extends AbstractNode
         $this->entries[] = $child;
     }
 
-    /** {@inheritDoc} */
+    /** @return ChildEntry[] */
     public function getChildren(): array
     {
         return $this->entries;
