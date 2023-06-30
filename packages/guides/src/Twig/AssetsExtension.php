@@ -114,9 +114,9 @@ final class AssetsExtension extends AbstractExtension
     }
 
     /** @param array{env: RenderContext} $context */
-    public function renderLink(array $context, string $url, string|null $anchor = null): string
+    public function renderLink(array $context, string|null $url, string|null $anchor = null): string
     {
-        return $context['env']->relativeDocUrl($url, $anchor);
+        return $context['env']->relativeDocUrl($url??'', $anchor);
     }
 
     private function copyAsset(
