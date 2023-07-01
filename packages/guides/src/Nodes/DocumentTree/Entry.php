@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Meta;
+namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
 interface Entry
 {
-    public function addChild(ChildEntry $child): void;
+    public function addChild(Entry $child): void;
 
     /** @return Entry[] */
     public function getChildren(): array;

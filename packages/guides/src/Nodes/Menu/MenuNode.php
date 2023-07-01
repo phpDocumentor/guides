@@ -11,9 +11,10 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Menu;
 
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
 
 use const PHP_INT_MAX;
 

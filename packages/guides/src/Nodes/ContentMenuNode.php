@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Nodes\Menu\MenuNode;
+
 use function is_scalar;
 
 /** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */

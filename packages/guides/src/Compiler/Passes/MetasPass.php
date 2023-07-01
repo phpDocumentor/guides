@@ -6,13 +6,13 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
-use phpDocumentor\Guides\Meta\Entry;
-use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\Entry;
+use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
-use phpDocumentor\Guides\Nodes\TocNode;
 
 final class MetasPass implements CompilerPass
 {
@@ -24,7 +24,7 @@ final class MetasPass implements CompilerPass
                 continue;
             }
 
-            $entry = new DocumentEntry($document->getFilePath(), $document->getTitle());
+            $entry = new DocumentEntryNode($document->getFilePath(), $document->getTitle());
             $this->traverse($document, $entry);
             $compilerContext->getProjectNode()->addDocumentEntry($entry);
         }
@@ -41,7 +41,7 @@ final class MetasPass implements CompilerPass
     {
         foreach ($node->getChildren() as $child) {
             if ($child instanceof SectionNode) {
-                $entry = new SectionEntry($child->getTitle());
+                $entry = new SectionEntryNode($child->getTitle());
                 $currentSection->addChild($entry);
                 $this->traverse($child, $entry);
             }

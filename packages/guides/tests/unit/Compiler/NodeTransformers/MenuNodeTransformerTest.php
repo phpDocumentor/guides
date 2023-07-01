@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
-use phpDocumentor\Guides\Meta\SectionEntry;
 use phpDocumentor\Guides\Nodes\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\Nodes\Menu\Entry as TocEntry;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry as TocEntry;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\Nodes\TocNode;
 use PHPUnit\Framework\TestCase;
 
 final class MenuNodeTransformerTest extends TestCase
@@ -156,18 +156,18 @@ final class MenuNodeTransformerTest extends TestCase
 
     private static function givenProjectNode(): ProjectNode
     {
-        $indexDoc = new DocumentEntry('index', TitleNode::emptyNode());
-        $section = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'));
-        $subSection = new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'));
+        $indexDoc = new DocumentEntryNode('index', TitleNode::emptyNode());
+        $section = new SectionEntryNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1'), 1, 'title-1'));
+        $subSection = new SectionEntryNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.1'), 2, 'title-1-1'));
         $section->addChild($subSection);
-        $section->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2')));
+        $section->addChild(new SectionEntryNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 1.2'), 2, 'title-1-2')));
         $indexDoc->addChild($section);
 
-        $page2 = new DocumentEntry('page2', TitleNode::emptyNode());
-        $page2->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 2'), 1, 'title-2')));
+        $page2 = new DocumentEntryNode('page2', TitleNode::emptyNode());
+        $page2->addChild(new SectionEntryNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 2'), 1, 'title-2')));
 
-        $page3 = new DocumentEntry('page3', TitleNode::emptyNode());
-        $page3->addChild(new SectionEntry(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 3'), 1, 'title-3')));
+        $page3 = new DocumentEntryNode('page3', TitleNode::emptyNode());
+        $page3->addChild(new SectionEntryNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Title 3'), 1, 'title-3')));
         $page3->addChild(new DocumentReferenceEntry('index'));
 
         $projectNode = new ProjectNode();

@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Meta;
+namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
+use phpDocumentor\Guides\Nodes\AbstractNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-class DocumentEntry implements Entry
+/** @extends AbstractNode<DocumentNode> */
+class DocumentEntryNode extends AbstractNode implements Entry
 {
-    /** @var ChildEntry[] */
+    /** @var Entry[] */
     private array $entries = [];
 
     public function __construct(private readonly string $file, private readonly TitleNode $titleNode)
@@ -20,7 +23,7 @@ class DocumentEntry implements Entry
         return $this->titleNode;
     }
 
-    public function addChild(ChildEntry $child): void
+    public function addChild(Entry $child): void
     {
         $this->entries[] = $child;
     }

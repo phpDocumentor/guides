@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use League\Flysystem\FilesystemInterface;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -27,7 +27,7 @@ final class RenderContextTest extends TestCase
         $documentNode = new DocumentNode(md5('hash'), $filePath);
 
         $projectNode = new ProjectNode();
-        $projectNode->addDocumentEntry(new DocumentEntry(
+        $projectNode->addDocumentEntry(new DocumentEntryNode(
             'getting-started/configuration',
             TitleNode::emptyNode(),
         ));

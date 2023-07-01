@@ -16,8 +16,8 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
@@ -147,7 +147,7 @@ class RenderContext
         return $this->origin;
     }
 
-    public function getCurrentDocumentEntry(): DocumentEntry|null
+    public function getCurrentDocumentEntry(): DocumentEntryNode|null
     {
         return $this->projectNode->findDocumentEntry($this->currentFileName);
     }

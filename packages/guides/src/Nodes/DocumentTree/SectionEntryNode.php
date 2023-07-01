@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Meta;
+namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-class SectionEntry implements ChildEntry
+class SectionEntryNode implements Entry
 {
-    /** @var ChildEntry[] */
+    /** @var Entry[] */
     private array $children = [];
 
     public function __construct(private readonly TitleNode $title)
@@ -25,7 +25,7 @@ class SectionEntry implements ChildEntry
         return $this->title;
     }
 
-    public function addChild(ChildEntry $child): void
+    public function addChild(Entry $child): void
     {
         $this->children[] = $child;
     }
