@@ -38,9 +38,20 @@ test-functional: ## Runs functional tests with phpunit/phpunit
 test-integration: ## Runs integration tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
 
+.PHONY: cleanup
+cleanup: cleanup-tests cleanup-build cleanup-cache
+
 .PHONY: cleanup-tests
 cleanup-tests: ## Cleans up temp directories created by test-integration
-	$(PHP_BIN) find ./tests -type d -name 'temp' -exec rm -rf {} \;
+	@find ./tests -type d -name 'temp' -exec sudo rm -rf {} \;
+
+.PHONY: cleanup-build
+cleanup-build:
+	@sudo rm -rf .build
+
+.PHONY: cleanup-cache
+cleanup-cache:
+	@sudo rm -rf .phpunit.cache
 
 .PHONY: test-architecture
 test-architecture: vendor ## Runs deptrac to enfore architecural rules
