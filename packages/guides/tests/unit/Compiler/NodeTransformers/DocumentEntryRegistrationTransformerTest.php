@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use PHPUnit\Framework\MockObject\Invocation;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
