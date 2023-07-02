@@ -1,4 +1,8 @@
 
+==============
+Document title
+==============
+
 .. note::
     :class: highlights
 

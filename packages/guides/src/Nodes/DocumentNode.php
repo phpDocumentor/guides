@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Meta\FootnoteTarget;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 
 use function array_filter;
@@ -61,6 +63,8 @@ final class DocumentNode extends CompoundNode
     private bool $titleFound = false;
 
     private string|null $metaTitle = null;
+    private DocumentEntryNode|null $documentEntry = null;
+    private SectionEntryNode|null $rootSectionEntry = null;
 
     public function __construct(
         private readonly string $hash,
@@ -240,4 +244,29 @@ final class DocumentNode extends CompoundNode
 
         return null;
     }
+    public function getDocumentEntry(): DocumentEntryNode|null
+    {
+        return $this->documentEntry;
+    }
+
+    public function withDocumentEntry(DocumentEntryNode $documentEntry): DocumentNode
+    {
+        $node = clone($this);
+        $node->documentEntry = $documentEntry;
+        return $node;
+    }
+
+    /**
+     * @return SectionEntryNode|null
+     */
+    public function getRootSectionEntry(): ?SectionEntryNode
+    {
+        return $this->rootSectionEntry;
+    }
+
+    public function setRootSectionEntry(?SectionEntryNode $rootSectionEntry): void
+    {
+        $this->rootSectionEntry = $rootSectionEntry;
+    }
+
 }

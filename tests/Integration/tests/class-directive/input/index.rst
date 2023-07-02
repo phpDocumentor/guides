@@ -1,3 +1,8 @@
+
+==============
+Document title
+==============
+
 .. class:: special-paragraph2
 
     Test special-paragraph 1.

@@ -32,29 +32,7 @@ class ToctreeBuilder
         $toctreeFiles = [];
 
         foreach ($this->parseToctreeFiles($lines) as $file) {
-            if ($this->isGlob($options, $file)) {
-                $globPattern = $file;
-
-                $globFiles = $this->globSearcher
-                    ->globSearch($parserContext, $globPattern);
-
-                foreach ($globFiles as $globFile) {
-                    // if glob finds a file already explicitly defined
-                    // don't duplicate it in the toctree again
-                    if (in_array($globFile, $toctreeFiles, true)) {
-                        continue;
-                    }
-
-                    $toctreeFiles[] = $globFile;
-                }
-            } else {
-                $absoluteUrl = $this->urlGenerator->absoluteUrl(
-                    $parserContext->getDirName(),
-                    $file,
-                );
-
-                $toctreeFiles[] = $absoluteUrl;
-            }
+            $toctreeFiles[] = $file;
         }
 
         return $toctreeFiles;

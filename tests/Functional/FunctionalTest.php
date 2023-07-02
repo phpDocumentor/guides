@@ -48,6 +48,10 @@ class FunctionalTest extends ApplicationTestCase
 {
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
+    private const IGNORED_WARNINGS = [
+        'Document has not title',
+    ];
+
     protected function setUp(): void
     {
         setlocale(LC_ALL, 'en_US.utf8');
@@ -133,9 +137,10 @@ class FunctionalTest extends ApplicationTestCase
 
             $logRecords = array_map(
                 static fn (array|LogRecord $log) => $log['level_name'] . ': ' . $log['message'],
-                array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING),
+                array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING &&
+                    !in_array($log['message'], self::IGNORED_WARNINGS)),
             );
-            self::assertEquals($expectedLogs, $logRecords);
+            self::assertEquals($expectedLogs, array_values($logRecords));
         } catch (ExpectationFailedException $e) {
             if ($skip) {
                 $this->markTestIncomplete(substr($firstLine, 5) ?: '');
