@@ -22,6 +22,18 @@ class ClassDirective extends SubDirective
         return 'class';
     }
 
+    /**
+     * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
+     *
+     * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
+     *
+     * @return string[]
+     */
+    public function getAliases(): array
+    {
+        return ['rst-class'];
+    }
+
     /** {@inheritDoc}
      *
      * @param Directive $directive
