@@ -8,6 +8,11 @@
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
         beStrictAboutChangesToGlobalState="true"
+        failOnNotice="true"
+        failOnWarning="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
         cacheDirectory=".phpunit.cache"
         requireCoverageMetadata="false"
 >
