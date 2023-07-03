@@ -21,9 +21,11 @@ use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_pop;
@@ -89,6 +91,14 @@ final class Run extends Command
             'The theme used for rendering.',
             'default',
         );
+
+        $this->addOption(
+            'progress',
+            null,
+            InputOption::VALUE_NEGATABLE,
+            'Whether to show a progress bar',
+            true,
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -146,10 +156,16 @@ final class Run extends Command
         $outputFormats = $input->getOption('output-format');
 
         foreach ($outputFormats as $format) {
+            $progressBar = null;
+
+            if ($output instanceof ConsoleOutputInterface && $input->getOption('progress')) {
+                $progressBar = new ProgressBar($output->section());
+            }
+
             $this->commandBus->handle(
                 new RenderCommand(
                     $format,
-                    $documents,
+                    $progressBar === null ? $documents : $progressBar->iterate($documents),
                     $sourceFileSystem,
                     $destinationFileSystem,
                     $projectNode,

@@ -10,10 +10,10 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class RenderCommand
 {
-    /** @param DocumentNode[] $documents */
+    /** @param iterable<DocumentNode> $documents */
     public function __construct(
         private readonly string $outputFormat,
-        private readonly array $documents,
+        private readonly iterable $documents,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
         private readonly ProjectNode $projectNode,
@@ -26,8 +26,8 @@ final class RenderCommand
         return $this->outputFormat;
     }
 
-    /** @return DocumentNode[] */
-    public function getDocuments(): array
+    /** @return iterable<DocumentNode> */
+    public function getDocuments(): iterable
     {
         return $this->documents;
     }
