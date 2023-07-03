@@ -2,6 +2,7 @@
 <psalm
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
+    cacheDirectory=".psalm/cache"
     errorLevel="5"
     errorBaseline="psalm-baseline.xml"
     findUnusedBaselineEntry="true"
