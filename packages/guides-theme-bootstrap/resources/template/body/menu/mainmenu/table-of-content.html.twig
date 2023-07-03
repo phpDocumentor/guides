@@ -1,9 +1,9 @@
 
 <nav class="nav flex-column">
-    {% for entry in node.entries -%}
+    {% for entry in node.menuEntries -%}
         <a href="{{ renderLink(entry.url) }}"
            class="nav-link {% if entry.options.active %} active {% endif %}"
-                {% if entry.options.active %}  aria-current="page" {% endif %} >
+                {%- if entry.options.active %}  aria-current="page" {% endif -%} >
             {{ renderNode(entry.value.value) }}
         </a>
 

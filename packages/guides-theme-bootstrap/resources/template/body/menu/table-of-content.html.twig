@@ -4,7 +4,7 @@
     {% include "body/menu/navbar/table-of-content.html.twig" %}
 {% else %}
 <div class="toc">
-    {% for entry in node.entries -%}
+    {% for entry in node.menuEntries -%}
         {{ renderNode(entry) }}
     {% endfor %}
 </div>
