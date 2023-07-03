@@ -2,5 +2,6 @@
 /.build
 .phpunit.cache
 .deptrac.cache
+/.psalm
 /**/temp
 /output/
