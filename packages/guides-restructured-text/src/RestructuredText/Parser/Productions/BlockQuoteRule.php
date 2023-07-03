@@ -26,8 +26,6 @@ use function max;
 use function mb_strlen;
 use function str_repeat;
 use function str_starts_with;
-use function strlen;
-use function substr;
 use function trim;
 
 /**
@@ -65,7 +63,7 @@ final class BlockQuoteRule implements Rule
             $buffer->push($documentIterator->current());
         }
 
-        $lines = $this->normalizeLines($this->removeLeadingWhitelines($buffer->getLines()));
+        $lines = $this->removeLeadingWhitelines($buffer->getLines());
         if (count($lines) === 0) {
             return null;
         }
@@ -119,31 +117,5 @@ final class BlockQuoteRule implements Rule
         }
 
         return array_values($lines);
-    }
-
-    /**
-     * @param string[] $lines
-     *
-     * @return string[]
-     */
-    private function normalizeLines(array $lines): array
-    {
-        if ($lines !== []) {
-            $firstLine = $lines[0];
-
-            $length = strlen($firstLine);
-            $offset = 0;
-            for (; $offset < $length; $offset++) {
-                if (trim($firstLine[$offset]) !== '') {
-                    break;
-                }
-            }
-
-            foreach ($lines as &$line) {
-                $line = substr($line, $offset);
-            }
-        }
-
-        return $lines;
     }
 }

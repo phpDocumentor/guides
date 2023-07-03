@@ -22,21 +22,17 @@ use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\UnindentStrategy;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
 use function array_merge;
 use function explode;
 use function is_string;
-use function ltrim;
-use function mb_strlen;
-use function min;
 use function preg_match;
 use function sprintf;
 use function strtolower;
 use function trim;
-
-use const PHP_INT_MAX;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#directives
@@ -282,20 +278,12 @@ final class DirectiveRule implements Rule
 
     private function collectDirectiveContents(LinesIterator $documentIterator): Buffer
     {
-        $buffer = new Buffer();
-        $minIndenting = PHP_INT_MAX;
+        $buffer = new Buffer(unindentStrategy: UnindentStrategy::ALL);
         while (LinesIterator::isBlockLine($documentIterator->getNextLine())) {
             $documentIterator->next();
             $line = $documentIterator->current();
-            if (LinesIterator::isEmptyLine($line) === false) {
-                $indenting = mb_strlen($line) - mb_strlen(ltrim($line));
-                $minIndenting = min($minIndenting, $indenting);
-            }
-
             $buffer->push($line);
         }
-
-        $buffer->unIndent($minIndenting);
 
         return $buffer;
     }

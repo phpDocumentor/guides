@@ -8,15 +8,22 @@ use function array_pop;
 use function array_walk;
 use function count;
 use function implode;
+use function ltrim;
+use function mb_strlen;
+use function min;
 use function strlen;
 use function substr;
 use function trim;
 
+use const PHP_INT_MAX;
+
 class Buffer
 {
     /** @param string[] $lines */
-    public function __construct(private array $lines = [])
-    {
+    public function __construct(
+        private array $lines = [],
+        private UnindentStrategy $unindentStrategy = UnindentStrategy::ALL,
+    ) {
     }
 
     public function isEmpty(): bool
@@ -52,11 +59,15 @@ class Buffer
     /** @return string[] */
     public function getLines(): array
     {
+        $this->unIndent();
+
         return $this->lines;
     }
 
     public function getLinesString(): string
     {
+        $this->unIndent();
+
         return implode("\n", $this->lines);
     }
 
@@ -88,8 +99,9 @@ class Buffer
         });
     }
 
-    public function unIndent(int $indentation): void
+    private function unIndent(): void
     {
+        $indentation = $this->detectIndentation();
         array_walk($this->lines, static function (&$value) use ($indentation): void {
             if (strlen($value) < $indentation) {
                 return;
@@ -97,5 +109,28 @@ class Buffer
 
             $value = substr($value, $indentation);
         });
+    }
+
+    private function detectIndentation(): int
+    {
+        if ($this->unindentStrategy === UnindentStrategy::NONE) {
+            return 0;
+        }
+
+        if ($this->unindentStrategy === UnindentStrategy::FIRST) {
+            return mb_strlen($this->lines[0]) - mb_strlen(ltrim($this->lines[0]));
+        }
+
+        $indent = PHP_INT_MAX;
+
+        foreach ($this->lines as $line) {
+            if (trim($line) === '') {
+                continue;
+            }
+
+            $indent = min($indent, mb_strlen($line) - mb_strlen(ltrim($line)));
+        }
+
+        return $indent;
     }
 }
