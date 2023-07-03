@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use Monolog\Logger;
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use PHPUnit\Framework\MockObject\Invocation;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 

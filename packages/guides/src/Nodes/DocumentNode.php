@@ -246,7 +246,7 @@ final class DocumentNode extends CompoundNode
         return null;
     }
 
-    public function getDocumentEntry(): DocumentEntryNode
+    public function getDocumentEntry(): DocumentEntryNode|null
     {
         if ($this->documentEntry === null) {
             throw new Exception('DocumentEntry may not be accessed before initialization');
