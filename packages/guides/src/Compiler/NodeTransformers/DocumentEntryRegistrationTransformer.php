@@ -35,7 +35,7 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
             $this->logger->warning('Document has not title', $node->getLoggerInformation());
         }
 
-        $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle()??TitleNode::emptyNode());
+        $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle() ?? TitleNode::emptyNode());
         $compilerContext->getProjectNode()->addDocumentEntry($entry);
 
         return $node->withDocumentEntry($entry);

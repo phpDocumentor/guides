@@ -252,17 +252,18 @@ final class DocumentNode extends CompoundNode
 
     public function withDocumentEntry(DocumentEntryNode $documentEntry): DocumentNode
     {
-        $node = clone($this);
+        $node = clone$this;
         $node->documentEntry = $documentEntry;
+
         return $node;
     }
 
-    public function getRootSectionEntry(): ?SectionEntryNode
+    public function getRootSectionEntry(): SectionEntryNode|null
     {
         return $this->rootSectionEntry;
     }
 
-    public function setRootSectionEntry(?SectionEntryNode $rootSectionEntry): void
+    public function setRootSectionEntry(SectionEntryNode|null $rootSectionEntry): void
     {
         $this->rootSectionEntry = $rootSectionEntry;
     }
