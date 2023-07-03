@@ -27,8 +27,8 @@ abstract class MenuNode extends CompoundNode
 {
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
-    /** @var Entry[] */
-    private array $entries = [];
+    /** @var MenuEntry[] */
+    private array $menuEntries = [];
 
     /** @param string[] $files */
     public function __construct(private readonly array $files)
@@ -44,19 +44,19 @@ abstract class MenuNode extends CompoundNode
 
     abstract public function getDepth(): int;
 
-    /** @param Entry[] $entries */
-    public function withEntries(array $entries): self
+    /** @param MenuEntry[] $menuEntries */
+    public function withMenuEntries(array $menuEntries): self
     {
         $that = clone $this;
-        $that->entries = $entries;
+        $that->menuEntries = $menuEntries;
 
         return $that;
     }
 
-    /** @return Entry[] */
-    public function getEntries(): array
+    /** @return MenuEntry[] */
+    public function getMenuEntries(): array
     {
-        return $this->entries;
+        return $this->menuEntries;
     }
 
     abstract public function isPageLevelOnly(): bool;

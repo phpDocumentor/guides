@@ -8,11 +8,16 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends AbstractNode<TitleNode> */
-final class Entry extends AbstractNode
+final class MenuEntry extends AbstractNode
 {
-    /** @param Entry[] $children */
-    public function __construct(private readonly string $url, TitleNode $title, private readonly array $children = [], private readonly bool $isDocumentRoot = false)
-    {
+    /** @param MenuEntry[] $children */
+    public function __construct(
+        private readonly string $url,
+        TitleNode $title,
+        private readonly array $children = [],
+        private readonly bool $isDocumentRoot = false,
+        private readonly int $level = 1,
+    ) {
         $this->value = $title;
     }
 
@@ -21,13 +26,13 @@ final class Entry extends AbstractNode
         return $this->url;
     }
 
-    /** @return Entry[] */
+    /** @return MenuEntry[] */
     public function getChildren(): array
     {
         return $this->children;
     }
 
-    /** @return Entry[] */
+    /** @return MenuEntry[] */
     public function getEntries(): array
     {
         return $this->children;
@@ -36,5 +41,10 @@ final class Entry extends AbstractNode
     public function isDocumentRoot(): bool
     {
         return $this->isDocumentRoot;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
     }
 }

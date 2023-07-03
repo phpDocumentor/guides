@@ -27,6 +27,7 @@ use Throwable;
 use function array_filter;
 use function array_map;
 use function array_shift;
+use function array_values;
 use function assert;
 use function explode;
 use function file;
@@ -48,9 +49,7 @@ class FunctionalTest extends ApplicationTestCase
 {
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
-    private const IGNORED_WARNINGS = [
-        'Document has not title',
-    ];
+    private const IGNORED_WARNINGS = ['Document has not title'];
 
     protected function setUp(): void
     {

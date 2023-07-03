@@ -12,10 +12,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use Psr\Log\LoggerInterface;
 
-/**
- * @implements NodeTransformer<Node>
- *
- */
+/** @implements NodeTransformer<Node> */
 class DocumentEntryRegistrationTransformer implements NodeTransformer
 {
     public function __construct(
@@ -38,7 +35,7 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
             $this->logger->warning('Document has not title', $node->getLoggerInformation());
         }
 
-        $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle()??TitleNode::emptyNode());
+        $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle() ?? TitleNode::emptyNode());
         $compilerContext->getProjectNode()->addDocumentEntry($entry);
 
         return $node->withDocumentEntry($entry);

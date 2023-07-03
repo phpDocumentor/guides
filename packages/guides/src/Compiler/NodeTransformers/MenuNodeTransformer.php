@@ -1,4 +1,3 @@
-
 <?php
 
 declare(strict_types=1);
@@ -12,7 +11,7 @@ use phpDocumentor\Guides\Meta\DocumentReferenceEntry;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\Entry as MetaEntry;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\Entry;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntry;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Traversable;
@@ -38,14 +37,14 @@ final class MenuNodeTransformer implements NodeTransformer
             foreach ($this->buildFromDocumentEntry($metaEntry, 1, $node, $compilerContext) as $entry) {
                 if ($entry->getUrl() === $compilerContext->getDocumentNode()->getFilePath()) {
                     $entry = $entry->withOptions(array_merge($entry->getOptions(), ['active' => true]));
-                    assert($entry instanceof Entry);
+                    assert($entry instanceof MenuEntry);
                 }
 
                 $entries[] = $entry;
             }
         }
 
-        return $node->withEntries($entries);
+        return $node->withMenuEntries($entries);
     }
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
@@ -58,7 +57,7 @@ final class MenuNodeTransformer implements NodeTransformer
         return $node instanceof MenuNode;
     }
 
-    /** @return iterable<Entry> */
+    /** @return iterable<MenuEntry> */
     private function buildFromDocumentEntry(DocumentEntryNode $document, int $depth, MenuNode $node, CompilerContext $compilerContext): iterable
     {
         if ($depth > $node->getDepth()) {
@@ -74,7 +73,7 @@ final class MenuNodeTransformer implements NodeTransformer
         }
     }
 
-    /** @return Traversable<Entry> */
+    /** @return Traversable<MenuEntry> */
     private function buildFromSection(
         DocumentEntryNode $document,
         SectionEntryNode $entry,
@@ -91,7 +90,7 @@ final class MenuNodeTransformer implements NodeTransformer
         }
     }
 
-    /** @return Traversable<Entry> */
+    /** @return Traversable<MenuEntry> */
     private function buildLevel(
         MetaEntry $child,
         DocumentEntryNode $document,
@@ -101,7 +100,7 @@ final class MenuNodeTransformer implements NodeTransformer
     ): Traversable {
         if ($child instanceof SectionEntryNode) {
             if (!$node->isPageLevelOnly() || $depth === 1) {
-                yield new Entry(
+                yield new MenuEntry(
                     $document->getFile(),
                     $child->getTitle(),
                     iterator_to_array($this->buildFromSection($document, $child, ++$depth, $node, $compilerContext), false),

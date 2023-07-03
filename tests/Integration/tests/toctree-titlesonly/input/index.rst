@@ -1,3 +1,5 @@
+Document Title
+==============
 
 .. toctree::
     :titlesonly:

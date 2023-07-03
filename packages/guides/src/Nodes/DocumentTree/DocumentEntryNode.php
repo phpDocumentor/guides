@@ -13,6 +13,7 @@ class DocumentEntryNode extends AbstractNode implements Entry
 {
     /** @var Entry[] */
     private array $entries = [];
+    private DocumentEntryNode|null $parent = null;
 
     public function __construct(private readonly string $file, private readonly TitleNode $titleNode)
     {
@@ -32,6 +33,16 @@ class DocumentEntryNode extends AbstractNode implements Entry
     public function getChildren(): array
     {
         return $this->entries;
+    }
+
+    public function getParent(): DocumentEntryNode|null
+    {
+        return $this->parent;
+    }
+
+    public function setParent(DocumentEntryNode|null $parent): void
+    {
+        $this->parent = $parent;
     }
 
     public function getFile(): string
