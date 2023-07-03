@@ -8,15 +8,19 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends AbstractNode<TitleNode> */
-final class MenuEntry extends AbstractNode
+final class MenuEntryNode extends AbstractNode
 {
-    /** @param MenuEntry[] $children */
+    /** @var MenuEntryNode[] */
+    private array $sections = [];
+
+    /** @param MenuEntryNode[] $children */
     public function __construct(
         private readonly string $url,
         TitleNode $title,
         private readonly array $children = [],
         private readonly bool $isDocumentRoot = false,
         private readonly int $level = 1,
+        private readonly string $anchor = '',
     ) {
         $this->value = $title;
     }
@@ -26,13 +30,18 @@ final class MenuEntry extends AbstractNode
         return $this->url;
     }
 
-    /** @return MenuEntry[] */
+    public function getAnchor(): string
+    {
+        return $this->anchor;
+    }
+
+    /** @return MenuEntryNode[] */
     public function getChildren(): array
     {
         return $this->children;
     }
 
-    /** @return MenuEntry[] */
+    /** @return MenuEntryNode[] */
     public function getEntries(): array
     {
         return $this->children;
@@ -46,5 +55,16 @@ final class MenuEntry extends AbstractNode
     public function getLevel(): int
     {
         return $this->level;
+    }
+
+    /** @return MenuEntryNode[] */
+    public function getSections(): array
+    {
+        return $this->sections;
+    }
+
+    public function addSection(MenuEntryNode $section): void
+    {
+        $this->sections[] = $section;
     }
 }

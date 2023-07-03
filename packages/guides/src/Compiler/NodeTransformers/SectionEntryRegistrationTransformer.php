@@ -12,13 +12,13 @@ use phpDocumentor\Guides\Nodes\SectionNode;
 
 use function array_pop;
 use function assert;
+use function count;
 use function end;
-use function sizeof;
 
 /** @implements NodeTransformer<Node> */
 class SectionEntryRegistrationTransformer implements NodeTransformer
 {
-    /** @var SectionEntryNode $sectionStack */
+    /** @var SectionEntryNode[] $sectionStack */
     private array $sectionStack = [];
 
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
@@ -28,8 +28,8 @@ class SectionEntryRegistrationTransformer implements NodeTransformer
         }
 
         $sectionEntryNode = new SectionEntryNode($node->getTitle());
-        if (sizeof($this->sectionStack) === 0) {
-            $compilerContext->getDocumentNode()->getDocumentEntry()->addSection($sectionEntryNode);
+        if (count($this->sectionStack) === 0) {
+            $compilerContext->getDocumentNode()->getDocumentEntry()?->addSection($sectionEntryNode);
         } else {
             $parentSection = end($this->sectionStack);
             assert($parentSection instanceof SectionEntryNode);

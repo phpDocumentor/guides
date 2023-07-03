@@ -9,9 +9,9 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends AbstractNode<DocumentNode> */
-class DocumentEntryNode extends AbstractNode implements Entry
+class DocumentEntryNode extends AbstractNode
 {
-    /** @var Entry[] */
+    /** @var DocumentEntryNode[] */
     private array $entries = [];
     /** @var SectionEntryNode[]  */
     private array $sections = [];
@@ -26,12 +26,12 @@ class DocumentEntryNode extends AbstractNode implements Entry
         return $this->titleNode;
     }
 
-    public function addChild(Entry $child): void
+    public function addChild(DocumentEntryNode $child): void
     {
         $this->entries[] = $child;
     }
 
-    /** {@inheritDoc} */
+    /** @return DocumentEntryNode[] */
     public function getChildren(): array
     {
         return $this->entries;

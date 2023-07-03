@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-class SectionEntryNode implements Entry
+class SectionEntryNode
 {
-    /** @var Entry[] */
+    /** @var SectionEntryNode[] */
     private array $children = [];
 
     public function __construct(private readonly TitleNode $title)
@@ -25,12 +25,12 @@ class SectionEntryNode implements Entry
         return $this->title;
     }
 
-    public function addChild(Entry $child): void
+    public function addChild(SectionEntryNode $child): void
     {
         $this->children[] = $child;
     }
 
-    /** {@inheritDoc} */
+    /** @return SectionEntryNode[] */
     public function getChildren(): array
     {
         return $this->children;

@@ -7,12 +7,15 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\MenuEntry;
+use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function array_pop;
+use function assert;
+use function count;
 use function explode;
 use function implode;
 use function preg_match;
@@ -43,22 +46,33 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
 
         foreach ($files as $file) {
             foreach ($documentEntries as $documentEntry) {
-                if ($this->isEqualAbsolutePath($documentEntry, $file, $currentPath, $glob)) {
-                    $documentEntriesInTree[] = $documentEntry;
-                    $menuEntry = new MenuEntry($documentEntry->getFile(), $documentEntry->getTitle(), [], false);
-                    $menuEntries[] = $menuEntry;
-                    if (!$glob) {
-                        // If blob is not set, there may only be one result per listed file
-                        break;
+                if (!$this->isEqualAbsolutePath($documentEntry, $file, $currentPath, $glob) && !$this->isEqualRelativePath($documentEntry, $file, $currentPath, $glob)) {
+                    continue;
+                }
+
+                $documentEntriesInTree[] = $documentEntry;
+                $menuEntry = new MenuEntryNode($documentEntry->getFile(), $documentEntry->getTitle(), [], false, 1);
+                if (!$node->hasOption('titlesonly') && count($documentEntry->getSections()) > 0) {
+                    foreach ($documentEntry->getSections() as $section) {
+                        // We do not add the main section as it repeats the document title
+                        if (count($section->getChildren()) <= 0) {
+                            continue;
+                        }
+
+                        foreach ($section->getChildren() as $subSectionEntryNode) {
+                            assert($subSectionEntryNode instanceof SectionEntryNode);
+                            $currentLevel = $menuEntry->getLevel() + 1;
+                            $sectionMenuEntry = new MenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel, $subSectionEntryNode->getId());
+                            $menuEntry->addSection($sectionMenuEntry);
+                            $this->addSubSections($sectionMenuEntry, $subSectionEntryNode, $documentEntry, $currentLevel);
+                        }
                     }
-                } elseif ($this->isEqualRelativePath($documentEntry, $file, $currentPath, $glob)) {
-                    $documentEntriesInTree[] = $documentEntry;
-                    $menuEntry = new MenuEntry($documentEntry->getFile(), $documentEntry->getTitle(), [], false, 1);
-                    $menuEntries[] = $menuEntry;
-                    if (!$glob) {
-                        // If blob is not set, there may only be one result per listed file
-                        break;
-                    }
+                }
+
+                $menuEntries[] = $menuEntry;
+                if (!$glob) {
+                    // If glob is not set, there may only be one result per listed file
+                    break;
                 }
             }
         }
@@ -66,6 +80,14 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
         $node = $node->withMenuEntries($menuEntries);
 
         return $node;
+    }
+
+    private function addSubSections(MenuEntryNode $sectionMenuEntry, SectionEntryNode $sectionEntryNode, DocumentEntryNode $documentEntry, int $currentLevel): void
+    {
+        foreach ($sectionEntryNode->getChildren() as $subSectionEntryNode) {
+            $sectionMenuEntry = new MenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel, $subSectionEntryNode->getId());
+            $sectionMenuEntry->addSection($sectionMenuEntry);
+        }
     }
 
     public function supports(Node $node): bool

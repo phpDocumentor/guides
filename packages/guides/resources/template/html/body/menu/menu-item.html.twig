@@ -1,8 +1,16 @@
 <li class="toc-item"><a href="{{ url }}">{{ renderNode(node.value.value) }}</a>
-
     {%- if node.children|length %}
-        {% include "body/menu/menu-level.html.twig" with {
-            tocItems:tocItem.children
-        } %}
+        <ul class="menu-level-{{ node.level }}">
+            {% for child in node.children -%}
+                {{ renderNode(child) }}
+            {% endfor %}
+        </ul>
+    {%- endif -%}
+    {%- if node.sections|length %}
+        <ul class="section-level-{{ node.level }}">
+            {% for subsection in node.sections -%}
+                {{ renderNode(subsection) }}
+            {% endfor %}
+        </ul>
     {%- endif -%}
 </li>
