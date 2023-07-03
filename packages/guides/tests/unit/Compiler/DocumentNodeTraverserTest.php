@@ -56,7 +56,7 @@ final class DocumentNodeTraverserTest extends TestCase
         );
     }
 
-    public function testReplaceNode(): void
+    public function testReplaceInEnterNode(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
         $document->addChildNode(new TocNode(['/readme.rst']));
@@ -81,6 +81,59 @@ final class DocumentNodeTraverserTest extends TestCase
                 public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
                 {
                     return $node;
+                }
+
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof TocNode;
+                }
+
+                public function getPriority(): int
+                {
+                    return 2000;
+                }
+            },
+        ];
+
+        $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
+
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withShadowTree($document));
+
+        self::assertInstanceOf(DocumentNode::class, $actual);
+        self::assertEquals(
+            [
+                $replacement,
+                new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')),
+            ],
+            $actual->getChildren(),
+        );
+    }
+
+    public function testReplaceInLeaveNode(): void
+    {
+        $document = new DocumentNode('foo', '/index.rst');
+        $document->addChildNode(new TocNode(['/readme.rst']));
+        $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
+
+        $replacement = new TocNode(['/foo.rst']);
+
+
+        /** @var iterable<NodeTransformer<Node>> $transformers */
+        $transformers = [
+            new /** @implements NodeTransformer<TocNode> */
+            class ($replacement) implements NodeTransformer {
+                public function __construct(private readonly TocNode $replacement)
+                {
+                }
+
+                public function enterNode(Node $node, CompilerContext $compilerContext): Node
+                {
+                    return $node;
+                }
+
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+                {
+                    return $this->replacement;
                 }
 
                 public function supports(Node $node): bool
