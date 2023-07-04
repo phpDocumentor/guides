@@ -25,6 +25,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\RefReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -100,8 +101,12 @@ return static function (ContainerConfigurator $container): void {
         ->set(UrlGenerator::class)
 
         ->set(ExternalReferenceResolver::class)
+
         ->set(InternalReferenceResolver::class)
+
         ->set(DocReferenceResolver::class)
+
+        ->set(RefReferenceResolver::class)
 
         ->set(DelegatingReferenceResolver::class)
         ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference_resolver', defaultPriorityMethod: 'getPriority'))

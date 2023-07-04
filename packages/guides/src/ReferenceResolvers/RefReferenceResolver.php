@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\RenderContext;
 
-class DocReferenceResolver implements ReferenceResolver
+class RefReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 1000;
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
-        if (!$node instanceof DocReferenceNode) {
+        if (!$node instanceof ReferenceNode) {
             return false;
         }
 
-        $document = $renderContext->getProjectNode()->findDocumentEntry($node->getTargetReference());
-        if ($document === null) {
+        $target = $renderContext->getProjectNode()->getInternalTarget($node->getTargetReference());
+        if ($target === null) {
             return false;
         }
 
-        $node->setUrl($renderContext->relativeDocUrl($document->getFile()));
+        $node->setUrl($renderContext->relativeDocUrl($target->getDocumentPath(), $target->getAnchor()));
         if ($node->getValue() === '') {
-            $node->setValue($document->getTitle()->toString());
+            $node->setValue($target->getTitle() ?? '');
         }
 
         return true;

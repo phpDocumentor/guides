@@ -1,5 +1,1 @@
-{%- if node.internalTarget -%}
-    <a href="{{- renderInternalTarget(node.internalTarget) -}}">{{- node.text -}}</a>
-{%- else -%}
-    {{- node.text -}}
-{%- endif -%}
+{{ include('inline/link.html.twig') }}

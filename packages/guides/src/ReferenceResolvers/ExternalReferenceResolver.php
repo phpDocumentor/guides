@@ -23,7 +23,7 @@ use const PHP_URL_SCHEME;
  */
 class ExternalReferenceResolver implements ReferenceResolver
 {
-    public final const PRIORITY = 1000;
+    public final const PRIORITY = -100;
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {

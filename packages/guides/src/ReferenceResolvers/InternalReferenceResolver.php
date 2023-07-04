@@ -9,7 +9,7 @@ use phpDocumentor\Guides\RenderContext;
 
 class InternalReferenceResolver implements ReferenceResolver
 {
-    public final const PRIORITY = -100;
+    public final const PRIORITY = 100;
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
