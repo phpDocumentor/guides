@@ -104,7 +104,7 @@ final class InlineLexer extends AbstractLexer
     }
 
     /** @inheritDoc */
-    protected function getType(&$value)
+    protected function getType(string &$value)
     {
         if (preg_match('/^\\\\[\s\S]/i', $value)) {
             return self::ESCAPED_SIGN;
