@@ -8,10 +8,16 @@ use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
-use function trim;
+use function rtrim;
 
 /**
- * Rule to parse for simple named references, such as `myref_`
+ * Rule to parse for simple named references
+ *
+ * Syntax examples:
+ *
+ *     Sample reference_
+ *
+ * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-references
  */
 class NamedReferenceRule extends ReferenceRule
 {
@@ -22,7 +28,9 @@ class NamedReferenceRule extends ReferenceRule
 
     public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
-        $node = $this->createReference($parserContext, trim($lexer->token?->value ?? '', '_'));
+        $value = rtrim($lexer->token?->value ?? '', '_');
+        $node = $this->createReference($parserContext, $value);
+
         $lexer->moveNext();
 
         return $node;

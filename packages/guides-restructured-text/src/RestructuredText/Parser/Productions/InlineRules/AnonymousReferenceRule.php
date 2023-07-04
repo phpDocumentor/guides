@@ -11,7 +11,13 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use function trim;
 
 /**
- * Rule to parse for simple anonymous references, such as `myref__`
+ * Rule to parse for simple anonymous references
+ *
+ * Syntax example:
+ *
+ *     Example reference__
+ *
+ * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#anonymous-hyperlinks
  */
 class AnonymousReferenceRule extends ReferenceRule
 {
@@ -34,7 +40,7 @@ class AnonymousReferenceRule extends ReferenceRule
     private function createAnonymousReference(ParserContext $parserContext, string $link): HyperLinkNode
     {
         $parserContext->resetAnonymousStack();
-        $node = $this->createReference($parserContext, $link);
+        $node = $this->createReference($parserContext, $link, null, false);
         $parserContext->pushAnonymous($link);
 
         return $node;

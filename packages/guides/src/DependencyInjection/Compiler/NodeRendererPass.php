@@ -129,7 +129,7 @@ final class NodeRendererPass implements CompilerPassInterface
             $definition->clearTag('phpdoc.guides.noderendererfactoryaware');
         }
 
-         $htmlRendererDefinitions = [];
+        $htmlRendererDefinitions = [];
         foreach (self::HTML as $node => $template) {
             $definition = new Definition(
                 TemplateNodeRenderer::class,
