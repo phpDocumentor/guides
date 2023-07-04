@@ -1,5 +1,1 @@
-{%- if node.documentEntry -%}
-    <a href="{{- renderLink(node.documentEntry.file) -}}">{{- node.text -}}</a>
-{%- else -%}
-    {{- node.text -}}
-{%- endif -%}
+{{ include('inline/link.html.twig') }}

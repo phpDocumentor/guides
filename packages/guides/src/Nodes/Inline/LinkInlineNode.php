@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-interface LinkInlineNode
+use phpDocumentor\Guides\Nodes\Node;
+
+interface LinkInlineNode extends Node
 {
     public function getTargetReference(): string;
 

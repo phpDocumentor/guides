@@ -25,18 +25,16 @@ class ReferenceTextRoleTest extends TestCase
     }
 
     #[DataProvider('referenceProvider')]
-    public function testReferenceIsParsedIntoDocReferenceNode(
+    public function testReferenceIsParsedIntoRefReferenceNode(
         string $span,
         string $url,
-        string|null $domain = null,
         string|null $text = null,
     ): void {
         $result = $this->referenceTextRole->processNode($this->parserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(ReferenceNode::class, $result);
-        self::assertEquals($url, $result->getReferenceName(), 'ReferenceNames are different');
-        self::assertEquals($domain, $result->getDomain(), 'Domains are different');
-        self::assertEquals($text ?? $url, $result->getText());
+        self::assertEquals($url, $result->getTargetReference(), 'ReferenceNames are different');
+        self::assertEquals($text ?? '', $result->toString());
     }
 
     /** @return array<string, array<string, string|null>> */
@@ -51,22 +49,10 @@ class ReferenceTextRoleTest extends TestCase
                 'span' => 'title ref',
                 'referenceName' => 'title ref',
             ],
-            'ref role with domain' => [
-                'span' => 'mydomain:title ref',
-                'referenceName' => 'title ref',
-                'domain' => 'mydomain',
-            ],
-            'ref role with domain and custom text' => [
-                'span' => 'link <mydomain:something>',
+            'ref role withcustom text' => [
+                'span' => 'link <something>',
                 'referenceName' => 'something',
-                'domain' => 'mydomain',
                 'text' => 'link',
-            ],
-            'ref role colon in text' => [
-                'span' => 'Text: with colon <mydomain:something>',
-                'referenceName' => 'something',
-                'domain' => 'mydomain',
-                'text' => 'Text: with colon',
             ],
         ];
     }

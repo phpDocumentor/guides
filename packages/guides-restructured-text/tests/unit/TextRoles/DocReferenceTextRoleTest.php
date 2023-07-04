@@ -28,17 +28,13 @@ class DocReferenceTextRoleTest extends TestCase
     public function testDocReferenceIsParsedIntoDocReferenceNode(
         string $span,
         string $url,
-        string|null $domain = null,
-        string|null $anchor = null,
         string|null $text = null,
     ): void {
         $result = $this->docReferenceTextRole->processNode($this->parserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(DocReferenceNode::class, $result);
-        self::assertEquals($url, $result->getDocumentLink(), 'DocumentLinks are different');
-        self::assertEquals($domain, $result->getDomain(), 'Domains are different');
-        self::assertEquals($anchor, $result->getAnchor(), 'Anchors are different');
-        self::assertEquals($text ?? $url, $result->getText());
+        self::assertEquals($url, $result->getTargetReference(), 'DocumentLinks are different');
+        self::assertEquals($text ?? '', $result->toString());
     }
 
     /** @return array<string, array<string, string|null>> */
@@ -59,34 +55,17 @@ class DocReferenceTextRoleTest extends TestCase
             ],
             'doc with domain' => [
                 'span' => 'mydomain:path/to/document',
-                'url' => 'path/to/document',
-                'domain' => 'mydomain',
-            ],
-            'doc with anchor' => [
-                'span' => 'foo/subdoc#anchor',
-                'url' => 'foo/subdoc',
-                'domain' => null,
-                'anchor' => 'anchor',
-            ],
-            'doc with domain, role and anchor' => [
-                'span' => 'mydomain:foo/subdoc#anchor',
-                'url' => 'foo/subdoc',
-                'domain' => 'mydomain',
-                'anchor' => 'anchor',
+                'url' => 'mydomain:path/to/document',
             ],
             'doc role, anchor and custom text' => [
                 'span' => 'link <mydomain:foo/subdoc#anchor>',
-                'url' => 'foo/subdoc',
-                'domain' => 'mydomain',
-                'anchor' => 'anchor',
+                'url' => 'mydomain:foo/subdoc#anchor',
                 'text' => 'link',
             ],
-            'doc role, with double point in text' => [
-                'span' => 'text: sometext <mydomain:foo/subdoc#anchor>',
-                'url' => 'foo/subdoc',
-                'domain' => 'mydomain',
-                'anchor' => 'anchor',
-                'text' => 'text: sometext',
+            'doc role, with greater-than character in text' => [
+                'span' => 'text->sometext <subdoc>',
+                'url' => 'subdoc',
+                'text' => 'text->sometext',
             ],
         ];
     }
