@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\Nodes\ContentMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;

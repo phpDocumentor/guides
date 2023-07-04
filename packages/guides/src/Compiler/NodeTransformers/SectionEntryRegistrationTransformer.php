@@ -29,7 +29,7 @@ class SectionEntryRegistrationTransformer implements NodeTransformer
 
         $sectionEntryNode = new SectionEntryNode($node->getTitle());
         if (count($this->sectionStack) === 0) {
-            $compilerContext->getDocumentNode()->getDocumentEntry()?->addSection($sectionEntryNode);
+            $compilerContext->getDocumentNode()->getDocumentEntry()->addSection($sectionEntryNode);
         } else {
             $parentSection = end($this->sectionStack);
             assert($parentSection instanceof SectionEntryNode);

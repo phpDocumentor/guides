@@ -80,14 +80,14 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
     private function addSubSections(MenuEntryNode $sectionMenuEntry, SectionEntryNode $sectionEntryNode, DocumentEntryNode $documentEntry, int $currentLevel): void
     {
         foreach ($sectionEntryNode->getChildren() as $subSectionEntryNode) {
-            $sectionMenuEntry = new MenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel, $subSectionEntryNode->getId());
-            $sectionMenuEntry->addSection($sectionMenuEntry);
+            $subSectionMenuEntry = new MenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel + 1, $subSectionEntryNode->getId());
+            $sectionMenuEntry->addSection($subSectionMenuEntry);
         }
     }
 
     public function supports(Node $node): bool
     {
-        return $node instanceof MenuNode;
+        return $node instanceof TocNode;
     }
 
     public function getPriority(): int

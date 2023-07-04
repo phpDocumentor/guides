@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use Exception;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
@@ -245,17 +246,20 @@ final class DocumentNode extends CompoundNode
         return null;
     }
 
-    public function getDocumentEntry(): DocumentEntryNode|null
+    public function getDocumentEntry(): DocumentEntryNode
     {
+        if ($this->documentEntry === null) {
+            throw new Exception('DocumentEntry may not be accessed before initialization');
+        }
+
         return $this->documentEntry;
     }
 
-    public function withDocumentEntry(DocumentEntryNode $documentEntry): DocumentNode
+    public function setDocumentEntry(DocumentEntryNode $documentEntry): DocumentNode
     {
-        $node = clone$this;
-        $node->documentEntry = $documentEntry;
+        $this->documentEntry = $documentEntry;
 
-        return $node;
+        return $this;
     }
 
     public function getRootSectionEntry(): SectionEntryNode|null
