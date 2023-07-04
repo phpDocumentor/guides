@@ -14,6 +14,7 @@ use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function assert;
+use function count;
 
 use const PHP_INT_MAX;
 
