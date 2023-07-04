@@ -14,18 +14,18 @@ use function trim;
 
 abstract class ReferenceRule extends AbstractInlineRule
 {
-    protected function createReference(ParserContext $parserContext, string $link, string|null $url = null, bool $registerLink = true): HyperLinkNode
+    protected function createReference(ParserContext $parserContext, string $link, string|null $embeddedUrl = null, bool $registerLink = true): HyperLinkNode
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
         $link = str_replace("\n", ' ', $link);
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
-        if ($registerLink && $url !== null) {
-            $parserContext->setLink($link, $url);
+        if ($registerLink && $embeddedUrl !== null) {
+            $parserContext->setLink($link, $embeddedUrl);
         }
 
-        return new HyperLinkNode($link, $url);
+        return new HyperLinkNode($link, $embeddedUrl ?? $link);
     }
 
     protected function parseEmbeddedUrl(InlineLexer $lexer): string|null

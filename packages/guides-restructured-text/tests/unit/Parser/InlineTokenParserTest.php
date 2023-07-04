@@ -104,37 +104,37 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Named Reference' => [
                 'myref_',
-                new InlineCompoundNode([new HyperLinkNode('myref')]),
+                new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Named Reference in string' => [
                 'abc: myref_ xyz',
                 new InlineCompoundNode([
                     new PlainTextInlineNode('abc: '),
-                    new HyperLinkNode('myref'),
+                    new HyperLinkNode('myref', 'myref'),
                     new PlainTextInlineNode(' xyz'),
                 ]),
             ],
             'Anonymous Reference' => [
                 'myref__',
-                new InlineCompoundNode([new HyperLinkNode('myref')]),
+                new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Anonymous Reference in string' => [
                 'abc: myref__ xyz',
                 new InlineCompoundNode([
                     new PlainTextInlineNode('abc: '),
-                    new HyperLinkNode('myref'),
+                    new HyperLinkNode('myref', 'myref'),
                     new PlainTextInlineNode(' xyz'),
                 ]),
             ],
             'Internal Reference' => [
                 '_`myref`',
-                new InlineCompoundNode([new HyperLinkNode('myref')]),
+                new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Internal Reference in string' => [
                 'abc: _`myref` xyz',
                 new InlineCompoundNode([
                     new PlainTextInlineNode('abc: '),
-                    new HyperLinkNode('myref'),
+                    new HyperLinkNode('myref', 'myref'),
                     new PlainTextInlineNode(' xyz'),
                 ]),
             ],

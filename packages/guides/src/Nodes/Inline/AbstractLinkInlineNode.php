@@ -4,9 +4,27 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-abstract class AbstractLinkInlineNode extends InlineNode
+abstract class AbstractLinkInlineNode extends InlineNode implements LinkInlineNode
 {
-    abstract public function getUrl(): string;
+    private string $url = '';
 
-    abstract public function getText(): string;
+    public function __construct(string $type, private string $targetReference, string $value = '')
+    {
+        parent::__construct($type, $value);
+    }
+
+    public function getTargetReference(): string
+    {
+        return $this->targetReference;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
 }

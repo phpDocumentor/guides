@@ -9,7 +9,14 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
- * Rule to parse for simple named references, such as `myref_`
+ * Rule to parse for named references
+ *
+ * Syntax examples:
+ *
+ *     `Sample reference`_
+ *     `Another example <https://phpdoc.org>`_
+ *
+ * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-references
  */
 class NamedPhraseRule extends ReferenceRule
 {
@@ -21,7 +28,7 @@ class NamedPhraseRule extends ReferenceRule
     public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
-        $url = null;
+        $embeddedUrl = null;
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {
@@ -29,16 +36,20 @@ class NamedPhraseRule extends ReferenceRule
                 case InlineLexer::NAMED_REFERENCE_END:
                     $lexer->moveNext();
                     if ($text === '') {
-                        $text = $url ?? '';
+                        $text = $embeddedUrl ?? '';
                     }
 
-                    return $this->createReference($parserContext, $text, $url);
+                    return $this->createReference($parserContext, $text, $embeddedUrl);
 
                 case InlineLexer::EMBEDED_URL_START:
-                    $url = $this->parseEmbeddedUrl($lexer);
-                    if ($url === null) {
+                    $embeddedUrl = $this->parseEmbeddedUrl($lexer);
+                    if ($embeddedUrl === null) {
                         $text .= '<';
                     }
+
+                    break;
+                case InlineLexer::WHITESPACE:
+                    $text .= ' ';
 
                     break;
                 default:
