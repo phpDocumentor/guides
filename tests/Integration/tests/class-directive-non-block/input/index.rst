@@ -1,3 +1,8 @@
+Class directives
+================
+
+Class directives are applied to the next node if they have not content.
+
 .. class:: special-paragraph1
 
 Test special-paragraph1 1.
