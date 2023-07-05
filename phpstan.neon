@@ -13,6 +13,17 @@ parameters:
       message: '#Unreachable statement - code above always terminates\.#'
       path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
 
+    # https://github.com/doctrine/lexer/pull/109
+    -
+      message: '#^Result of && is always false.|Strict comparison using \=\=\= between Doctrine\\Common\\Lexer\\Token and null will always evaluate to false\.$#'
+      paths:
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnnotationRoleRule.php
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/DefaultTextRoleRule.php
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/EmphasisRule.php
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/StrongRule.php
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/TextRoleRule.php
+        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
+
   paths:
     - packages/guides/src
     - packages/guides-markdown/src
