@@ -20,8 +20,8 @@
     "require": {
         "php": "^8.1",
         "monolog/monolog": "^2.9",
-        "phpdocumentor/guides": "dev-main@dev",
-        "phpdocumentor/guides-restructured-text": "dev-main@dev",
+        "phpdocumentor/guides": "self.version",
+        "phpdocumentor/guides-restructured-text": "self.version",
         "symfony/config": "^5.4",
         "symfony/console": "^5.4",
         "symfony/dependency-injection": "^5.4",
