@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\NullLogger;
 
 final class ListRuleTest extends RuleTestCase
 {
@@ -16,7 +17,7 @@ final class ListRuleTest extends RuleTestCase
     protected function setUp(): void
     {
         $ruleContainer = $this->givenCollectAllRuleContainer();
-        $this->rule = new ListRule($ruleContainer);
+        $this->rule = new ListRule($ruleContainer, new NullLogger());
     }
 
     #[DataProvider('startChars')]

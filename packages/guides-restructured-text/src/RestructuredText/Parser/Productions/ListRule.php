@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use Psr\Log\LoggerInterface;
 
 use function count;
 use function ltrim;
@@ -55,8 +56,10 @@ final class ListRule implements Rule
          # (or eol, if text starts on a new line)
         /ux';
 
-    public function __construct(private readonly RuleContainer $productions)
-    {
+    public function __construct(
+        private readonly RuleContainer $productions,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -165,6 +168,12 @@ final class ListRule implements Rule
 
         $nodes = $listItem->getChildren();
         if (count($nodes) > 1) {
+            return $listItem;
+        }
+
+        if (!isset($nodes[0])) {
+            $this->logger->warning('List item without content');
+
             return $listItem;
         }
 
