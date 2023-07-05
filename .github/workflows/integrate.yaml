@@ -76,7 +76,7 @@ jobs:
     with:
       php-versions: "['8.1', '8.2']"
 
-  funtional-tests:
+  functional-tests:
     name: "Functional test"
     uses: "phpDocumentor/.github/.github/workflows/continues-integration.yml@v0.3.0"
     needs: "unit-tests"
