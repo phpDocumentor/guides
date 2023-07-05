@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @extends CompoundNode<Node> */
 class AdmonitionNode extends CompoundNode
 {
-    /** {@inheritDoc} */
-    public function __construct(private readonly string $name, private readonly string $text, array $value)
+    /** @param Node[] $value */
+    public function __construct(private readonly string $name, private readonly InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)
     {
         parent::__construct($value);
     }
@@ -30,8 +31,18 @@ class AdmonitionNode extends CompoundNode
         return $this->name;
     }
 
+    public function getTitle(): InlineCompoundNode|null
+    {
+        return $this->title;
+    }
+
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function isTitled(): bool
+    {
+        return $this->isTitled;
     }
 }
