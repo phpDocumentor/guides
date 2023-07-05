@@ -1076,7 +1076,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "0307a5b03b8ee13c16e1d71a255de9f5768c2a1d"
+                "reference": "24c7a491aaf842817b71ad94edab6be9a276860c"
             },
             "require": {
                 "monolog/monolog": "^2.9",
@@ -1095,6 +1095,13 @@
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\Cli\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
                 }
             },
             "license": [
