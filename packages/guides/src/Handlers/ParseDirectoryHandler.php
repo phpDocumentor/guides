@@ -29,7 +29,7 @@ final class ParseDirectoryHandler
         $currentDirectory = $command->getDirectory();
         $extension = $command->getInputFormat();
 
-        $this->guardThatAnIndexFileExists(
+        $indexName = $this->getDirectoryIndexFile(
             $origin,
             $currentDirectory,
             $extension,
@@ -39,34 +39,31 @@ final class ParseDirectoryHandler
         $documents = [];
         foreach ($files as $file) {
             $documents[] = $this->commandBus->handle(
-                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode()),
+                new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode(), $indexName === $file),
             );
         }
 
         return $documents;
     }
 
-    private function guardThatAnIndexFileExists(
+    private function getDirectoryIndexFile(
         FilesystemInterface $filesystem,
         string $directory,
         string $sourceFormat,
-    ): void {
+    ): string {
         $extension = $sourceFormat;
         $hasIndexFile = false;
         foreach (self::INDEX_FILE_NAMES as $indexName) {
             $indexFilename = sprintf('%s.%s', $indexName, $extension);
             if ($filesystem->has($directory . '/' . $indexFilename)) {
-                $hasIndexFile = true;
-                break;
+                return $indexName;
             }
         }
 
-        if (!$hasIndexFile) {
-            $indexFilename = sprintf('%s.%s', self::INDEX_FILE_NAMES[0], $extension);
+        $indexFilename = sprintf('%s.%s', self::INDEX_FILE_NAMES[0], $extension);
 
-            throw new InvalidArgumentException(
-                sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory),
-            );
-        }
+        throw new InvalidArgumentException(
+            sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory),
+        );
     }
 }

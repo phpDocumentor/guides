@@ -14,13 +14,13 @@ use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function assert;
-use function count;
-
-use const PHP_INT_MAX;
 
 /** @implements NodeTransformer<TocNode> */
 class ContentMenuNodeWithSectionEntryTransformer implements NodeTransformer
 {
+    // Setting a default level prevents PHP errors in case of circular references
+    private const DEFAULT_MAX_LEVELS = 10;
+
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         return $node;
@@ -32,7 +32,7 @@ class ContentMenuNodeWithSectionEntryTransformer implements NodeTransformer
             return $node;
         }
 
-        $depth = (int) $node->getOption('depth', PHP_INT_MAX);
+        $depth = (int) $node->getOption('depth', self::DEFAULT_MAX_LEVELS);
         $documentEntry = $compilerContext->getDocumentNode()->getDocumentEntry();
 
         $menuEntries = [];

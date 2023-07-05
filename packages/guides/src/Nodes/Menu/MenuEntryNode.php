@@ -17,7 +17,7 @@ final class MenuEntryNode extends AbstractNode
     public function __construct(
         private readonly string $url,
         TitleNode $title,
-        private readonly array $children = [],
+        private array $children = [],
         private readonly bool $isDocumentRoot = false,
         private readonly int $level = 1,
         private readonly string $anchor = '',
@@ -45,6 +45,11 @@ final class MenuEntryNode extends AbstractNode
     public function getEntries(): array
     {
         return $this->children;
+    }
+
+    public function addMenuEntry(MenuEntryNode $menuEntryNode): void
+    {
+        $this->children[] = $menuEntryNode;
     }
 
     public function isDocumentRoot(): bool

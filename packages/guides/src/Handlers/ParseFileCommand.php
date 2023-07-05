@@ -25,6 +25,7 @@ final class ParseFileCommand
         private readonly string $extension,
         private readonly int $initialHeaderLevel,
         private readonly ProjectNode $projectNode,
+        private readonly bool $isRoot,
     ) {
     }
 
@@ -56,5 +57,10 @@ final class ParseFileCommand
     public function getProjectNode(): ProjectNode
     {
         return $this->projectNode;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 }

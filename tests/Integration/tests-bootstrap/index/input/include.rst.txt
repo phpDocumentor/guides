@@ -5,18 +5,18 @@
 
     .. toctree::
         :titlesonly:
+        :glob:
 
-        /index
-        /somePage
+        *
 
 ..  documentblock::
     :identifier: navbar
 
     .. toctree::
         :titlesonly:
+        :glob:
 
-        /index
-        /somePage
+        *
 
 ..  documentblock::
     :identifier: footer

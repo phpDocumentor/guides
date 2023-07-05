@@ -12,6 +12,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class TocNodeWithDocumentEntryTransformerTest extends TestCase
 {
@@ -27,7 +28,10 @@ class TocNodeWithDocumentEntryTransformerTest extends TestCase
         $projectNode->setDocumentEntries($documentEntries);
         $context = new CompilerContext($projectNode);
 
-        return $context->withShadowTree(new DocumentNode('123', $currentPath));
+        $documentNode = new DocumentNode('123', $currentPath);
+        $documentNode->setDocumentEntry(new DocumentEntryNode($currentPath, TitleNode::emptyNode()));
+
+        return $context->withShadowTree($documentNode);
     }
 
     /**
@@ -44,7 +48,10 @@ class TocNodeWithDocumentEntryTransformerTest extends TestCase
             $node = $node->withOptions(['glob' => true]);
         }
 
-        $transformer = new TocNodeWithDocumentEntryTransformer();
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        $mockLogger->expects($this->never())->method('warning');
+        $mockLogger->expects($this->never())->method('error');
+        $transformer = new TocNodeWithDocumentEntryTransformer($mockLogger);
 
         $result = $transformer->leaveNode($node, $context);
         self::assertInstanceOf(TocNode::class, $result);

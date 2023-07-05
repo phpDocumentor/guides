@@ -1,11 +1,11 @@
 <div class="level-x">
     {% for entry in node.menuEntries -%}
-        {% spaceless %}
+        {% apply spaceless %}
         <a href="{{ renderLink(entry.url) }}"
            class="nav-link {% if entry.options.active %} active {% endif %}"
                 {% if entry.options.active %}  aria-current="page" {% endif %} >
             {{ renderNode(entry.value.value) }}
         </a>
-        {% endspaceless %}
+        {% endapply %}
     {% endfor %}
 </div>

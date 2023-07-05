@@ -49,6 +49,7 @@ final class ParseFileHandler
             $command->getExtension(),
             $command->getInitialHeaderLevel(),
             $command->getProjectNode(),
+            $command->isRoot(),
         );
     }
 
@@ -74,6 +75,7 @@ final class ParseFileHandler
         string $extension,
         int $initialHeaderLevel,
         ProjectNode $projectNode,
+        bool $isRoot,
     ): DocumentNode|null {
         $path = $this->buildPathOnFileSystem($fileName, $documentFolder, $extension);
         $fileContents = $this->getFileContents($origin, $path);
@@ -93,7 +95,7 @@ final class ParseFileHandler
 
         $document = null;
         try {
-            $document = $this->parser->parse($preParseDocumentEvent->getContents(), $extension);
+            $document = $this->parser->parse($preParseDocumentEvent->getContents(), $extension)->withIsRoot($isRoot);
         } catch (RuntimeException) {
             $this->logger->error(
                 sprintf('Unable to parse %s, input format was not recognized', $path),
