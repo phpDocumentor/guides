@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends AbstractNode<DocumentNode> */
-class DocumentEntryNode extends AbstractNode
+final class DocumentEntryNode extends AbstractNode
 {
     /** @var DocumentEntryNode[] */
     private array $entries = [];

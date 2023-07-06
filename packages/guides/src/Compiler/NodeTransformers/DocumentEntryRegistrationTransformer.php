@@ -49,7 +49,7 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
 
     public function getPriority(): int
     {
-        // Before MenuNodeTransformer
+        // Before TocNodeWithDocumentEntryTransformer and SectionEntryRegistrationTransformer
         return 5000;
     }
 }
