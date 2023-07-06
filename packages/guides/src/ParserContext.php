@@ -23,9 +23,6 @@ class ParserContext
     /** @var string[] */
     private array $anonymous = [];
 
-    /** @var string[] */
-    private array $errors = [];
-
     public function __construct(
         private readonly ProjectNode $projectNode,
         private readonly string $currentFileName,
@@ -127,11 +124,6 @@ class ParserContext
         return $this->currentFileName;
     }
 
-    public function addError(string $message): void
-    {
-        $this->errors[] = $message;
-    }
-
     /**
      * Return the current file's absolute path on the Origin file system.
      *
@@ -144,11 +136,5 @@ class ParserContext
     public function getCurrentAbsolutePath(): string
     {
         return $this->urlGenerator->absoluteUrl($this->currentDirectory, $this->currentFileName);
-    }
-
-    /** @return string[] */
-    public function getErrors(): array
-    {
-        return $this->errors;
     }
 }

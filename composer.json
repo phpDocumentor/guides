@@ -17,6 +17,7 @@
     "autoload-dev": {
         "psr-4": {
             "phpDocumentor\\Guides\\": ["packages/guides/tests/unit/", "tests/"],
+            "phpDocumentor\\Guides\\Cli\\": "packages/guides-cli/tests/unit",
             "phpDocumentor\\Guides\\Graphs\\": "packages/guides-graphs/tests/unit",
             "phpDocumentor\\Guides\\RestructuredText\\": "packages/guides-restructured-text/tests/unit",
             "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit"
@@ -52,6 +53,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "doctrine/coding-standard": "^12.0",
         "fakerphp/faker": "^1.23",
+        "fig/log-test": "^1.0",
         "gajus/dindent": "^2.0.1",
         "jangregor/phpstan-prophecy": "^1.0",
         "league/flysystem-memory": "^1.0",

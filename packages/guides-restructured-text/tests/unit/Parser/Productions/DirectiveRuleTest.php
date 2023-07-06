@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
@@ -22,7 +23,7 @@ final class DirectiveRuleTest extends RuleTestCase
     public function setUp(): void
     {
         $this->directiveHandler = new DummyBaseDirective();
-        $this->rule = new DirectiveRule($this->givenInlineMarkupRule(), [$this->directiveHandler]);
+        $this->rule = new DirectiveRule($this->givenInlineMarkupRule(), new Logger('test'), [$this->directiveHandler]);
     }
 
     #[DataProvider('simpleDirectiveProvider')]
@@ -92,7 +93,7 @@ NOWDOC);
     #[DataProvider('codeBlockValueProvider')]
     public function testCodeBlockValue(string $input, string $expectedValue): void
     {
-        $this->rule = new DirectiveRule($this->givenInlineMarkupRule(), [$this->directiveHandler, new CodeBlockDirective(new CodeNodeOptionMapper())]);
+        $this->rule = new DirectiveRule($this->givenInlineMarkupRule(), new Logger('test'), [$this->directiveHandler, new CodeBlockDirective(new CodeNodeOptionMapper())]);
         $context = $this->createContext($input);
         $node = $this->rule->apply($context);
         self::assertInstanceOf(CodeNode::class, $node);

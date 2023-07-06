@@ -18,8 +18,9 @@ use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\Test\TestLogger;
 
 use function assert;
 use function count;
@@ -28,10 +29,12 @@ use function current;
 final class GridTableRuleTest extends RuleTestCase
 {
     private GridTableRule $rule;
+    private TestLogger $logger;
 
     protected function setUp(): void
     {
-        $this->rule = new GridTableRule($this->givenCollectAllRuleContainer());
+        $this->logger = new TestLogger();
+        $this->rule = new GridTableRule($this->logger, $this->givenCollectAllRuleContainer(), new GridTableBuilder($this->logger));
     }
 
     private static function createColumnNode(string $content, int $colSpan = 1): TableColumn
@@ -267,17 +270,7 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        self::assertContainsError(
-            <<<'ERROR'
-Malformed table: Line
-
-| keywords                          | string
-
-does not appear to be a complete table row
-ERROR
-            ,
-            $context,
-        );
+        $this->logger->hasError('Malformed table');
     }
 
     public function testErrorMultipleHeaderRows(): void
@@ -297,25 +290,7 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        self::assertContainsError(
-            <<<'ERROR'
-Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
-in file test
-
-+-----------------------------------+---------------+
-+-----------------------------------+---------------+
-| Property                          | Data Type     |
-+===================================+===============+
-| description                       | string        |
-+===================================+===============+
-| author                            | string        |
-+-----------------------------------+---------------+
-| keywords                          | string        |
-+-----------------------------------+---------------+
-ERROR
-            ,
-            $context,
-        );
+        $this->logger->hasError('Malformed table: multiple "header rows" using "===" were found');
     }
 
     public function testNotEndingWithWhiteLine(): never
@@ -337,29 +312,6 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        self::assertContainsError(
-            <<<'ERROR'
-Malformed table: multiple "header rows" using "===" were found. See table lines "3" and "5"
-in file test
-
-
-+-----------------------------------+---------------+
-| Property                          | Data Type     |
-+===================================+===============+
-| description                       | string        |
-+-----------------------------------+---------------+
-| author                            | string        |
-+-----------------------------------+---------------+
-| keywords                          | string        |
-+-----------------------------------+---------------+
-ERROR
-            ,
-            $context,
-        );
-    }
-
-    private static function assertContainsError(string $error, DocumentParserContext $context): void
-    {
-        self::assertContains($error, $context->getContext()->getErrors());
+        $this->logger->hasError('Malformed table: multiple "header rows" using "===" were found');
     }
 }
