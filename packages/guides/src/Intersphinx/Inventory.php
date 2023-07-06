@@ -14,6 +14,8 @@ final class Inventory
     /** @var InventoryGroup[]  */
     private array $groups = [];
 
+    private bool $isLoaded = false;
+
     public function __construct(private readonly string $baseUrl)
     {
     }
@@ -58,5 +60,17 @@ final class Inventory
         $lowerCaseKey = strtolower($key);
 
         return array_key_exists($lowerCaseKey, $this->groups);
+    }
+
+    public function isLoaded(): bool
+    {
+        return $this->isLoaded;
+    }
+
+    public function setIsLoaded(bool $isLoaded): Inventory
+    {
+        $this->isLoaded = $isLoaded;
+
+        return $this;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-use phpDocumentor\Guides\Meta\InternalTarget;
+use phpDocumentor\Guides\Meta\Target;
 
 /**
  * This class should be moved into Nodes, but right now the span parser is producing this.
@@ -27,7 +27,7 @@ class ReferenceNode extends AbstractLinkInlineNode
     // URL can only be resolved during rendering as it contains file endings for html / latex etc
     private string $url = '';
     // Is resolved in the compiler
-    private InternalTarget|null $internalTarget = null;
+    private Target|null $target = null;
 
     public function __construct(
         string $referenceName,
@@ -49,7 +49,7 @@ class ReferenceNode extends AbstractLinkInlineNode
 
     public function getText(string|null $default = null): string
     {
-        return $this->text ?? $this->internalTarget?->getTitle() ?? $this->value;
+        return $this->text ?? $this->target?->getTitle() ?? $this->value;
     }
 
     public function getUrl(): string
@@ -62,13 +62,13 @@ class ReferenceNode extends AbstractLinkInlineNode
         $this->url = $url;
     }
 
-    public function getInternalTarget(): InternalTarget|null
+    public function getTarget(): Target|null
     {
-        return $this->internalTarget;
+        return $this->target;
     }
 
-    public function setInternalTarget(InternalTarget $internalTarget): void
+    public function setTarget(Target $target): void
     {
-        $this->internalTarget = $internalTarget;
+        $this->target = $target;
     }
 }

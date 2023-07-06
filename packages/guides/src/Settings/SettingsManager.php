@@ -10,7 +10,7 @@ class SettingsManager
 
     public function __construct(ProjectSettings|null $projectSettings = null)
     {
-        $this->projectSettings = $projectSettings ?? new ProjectSettings();
+        $this->projectSettings = $projectSettings ?? new ProjectSettings([]);
     }
 
     public function getProjectSettings(): ProjectSettings

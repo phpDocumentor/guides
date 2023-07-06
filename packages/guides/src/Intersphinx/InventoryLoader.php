@@ -9,21 +9,14 @@ use function is_array;
 final class InventoryLoader
 {
     public function __construct(
-        private readonly InventoryRepository $inventoryRepository,
         private readonly JsonLoader $jsonLoader,
         private readonly string $pathToJson = 'objects.inv.json',
     ) {
     }
 
-    public function getInventoryRepository(): InventoryRepository
-    {
-        return $this->inventoryRepository;
-    }
-
     /** @param array<String, mixed> $json */
-    public function loadInventoryFromJson(string $key, string $baseUrl, array $json): void
+    public function loadInventoryFromJson(Inventory $inventory, array $json): void
     {
-        $newInventory = new Inventory($baseUrl);
         foreach ($json as $groupKey => $groupArray) {
             $group = new InventoryGroup();
             if (is_array($groupArray)) {
@@ -37,16 +30,20 @@ final class InventoryLoader
                 }
             }
 
-            $newInventory->addGroup($groupKey, $group);
+            $inventory->addGroup($groupKey, $group);
         }
 
-        $this->inventoryRepository->addInventory($key, $newInventory);
+        $inventory->setIsLoaded(true);
     }
 
-    public function loadInventoryFromUrl(string $key, string $url): void
+    public function loadInventory(Inventory $inventory): void
     {
-        $json = $this->jsonLoader->loadJsonFromUrl($url . $this->pathToJson);
+        if ($inventory->isLoaded()) {
+            return;
+        }
 
-        $this->loadInventoryFromJson($key, $url, $json);
+        $json = $this->jsonLoader->loadJsonFromUrl($inventory->getBaseUrl() . $this->pathToJson);
+
+        $this->loadInventoryFromJson($inventory, $json);
     }
 }
