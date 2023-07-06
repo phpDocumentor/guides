@@ -8,7 +8,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class VariableInlineNode extends InlineNode
 {
-    public const TYPE = 'variable';
+    final public const TYPE = 'variable';
 
     private Node $child;
 

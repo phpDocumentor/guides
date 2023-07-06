@@ -27,8 +27,8 @@ use function substr;
 
 final class ContainerFactory
 {
-    private ContainerBuilder $container;
-    private XmlFileLoader $configLoader;
+    private readonly ContainerBuilder $container;
+    private readonly XmlFileLoader $configLoader;
 
     /** @var array<string, string> */
     private array $registeredExtensions = [];
@@ -42,7 +42,7 @@ final class ContainerFactory
         $this->container = new ContainerBuilder();
         $this->configLoader = new XmlFileLoader(new FileLocator());
 
-        foreach (array_merge([new GuidesExtension(), new ReStructuredTextExtension()], $defaultExtensions) as $extension) {
+        foreach ([new GuidesExtension(), new ReStructuredTextExtension(), ...$defaultExtensions] as $extension) {
             $this->registerExtension($extension);
         }
     }
@@ -54,7 +54,7 @@ final class ContainerFactory
 
         $extensionAlias = $this->registeredExtensions[$extensionFqcn] ?? false;
         if (!$extensionAlias) {
-            $this->registerExtension(new $extensionFqcn(), $config);
+            $this->registerExtension(new $extensionFqcn());
 
             return;
         }
@@ -72,15 +72,14 @@ final class ContainerFactory
         $this->processConfig();
 
         $this->container->setParameter('vendor_dir', $vendorDir);
-        $this->container->setParameter('working_directory', $workingDirectory = rtrim(getcwd(), '/'));
+        $this->container->setParameter('working_directory', rtrim(getcwd(), '/'));
 
         $this->container->compile(true);
 
         return $this->container;
     }
 
-    /** @param array<mixed> $config */
-    private function registerExtension(ExtensionInterface $extension, array $config = []): void
+    private function registerExtension(ExtensionInterface $extension): void
     {
         $this->container->registerExtension($extension);
         $this->container->loadFromExtension($extension->getAlias());

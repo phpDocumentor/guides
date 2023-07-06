@@ -23,7 +23,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector::class);
     $rectorConfig->rule(Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector::class);
     $rectorConfig->rule(Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector::class);
-    $rectorConfig->rule(Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector::class);
     $rectorConfig->rule(Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector::class);
     $rectorConfig->rule(Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector::class);
     $rectorConfig->rule(Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector::class);

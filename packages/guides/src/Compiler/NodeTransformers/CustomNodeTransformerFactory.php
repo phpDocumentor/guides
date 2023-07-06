@@ -29,9 +29,7 @@ final class CustomNodeTransformerFactory implements NodeTransformerFactory
     {
         $transformers = [...$this->transformers];
         $priorites = array_map(
-            static function (NodeTransformer $transformer) {
-                return $transformer->getPriority();
-            },
+            static fn(NodeTransformer $transformer): int => $transformer->getPriority(),
             $transformers,
         );
         sort($priorites);

@@ -22,9 +22,9 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 class FootnoteInlineNode extends AnnotationInlineNode
 {
-    public const TYPE = 'footnote';
+    final public const TYPE = 'footnote';
 
-    public function __construct(string $value, private string $name, private int $number)
+    public function __construct(string $value, private readonly string $name, private readonly int $number)
     {
         parent::__construct(self::TYPE, $value);
     }

@@ -43,6 +43,6 @@ class FootnoteNode extends AnnotationNode
 
     public function getAnchor(): string
     {
-        return 'footnote-' . $this->getNumber();
+        return 'footnote-' . $this->number;
     }
 }
