@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.14.1@b9d355e0829c397b9b3b47d0c0ed042a8a70284d">
-  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/DocumentRule.php">
-    <MoreSpecificImplementedParamType>
-      <code>$on</code>
-    </MoreSpecificImplementedParamType>
-  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
     <InvalidArgument>
       <code>$listConfig</code>
       <code>$listConfig</code>
     </InvalidArgument>
   </file>
-  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/SectionRule.php">
+  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
     <MoreSpecificImplementedParamType>
       <code>$on</code>
     </MoreSpecificImplementedParamType>

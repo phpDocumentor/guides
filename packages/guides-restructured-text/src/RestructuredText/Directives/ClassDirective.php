@@ -51,7 +51,7 @@ class ClassDirective extends SubDirective
 
         $document->setClasses($normalizedClasses);
 
-        if (!$document instanceof DocumentNode || $document->getNodes() === []) {
+        if ($document->getNodes() === []) {
             $classNode = new ClassNode($directive->getData());
             $classNode->setClasses($classes);
 

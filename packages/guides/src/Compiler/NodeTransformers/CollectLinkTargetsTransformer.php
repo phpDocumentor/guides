@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 
 use function assert;
 
-/** @implements NodeTransformer<DocumentNode|AnchorNode> */
+/** @implements NodeTransformer<DocumentNode|AnchorNode|SectionNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
 {
     /** @var SplStack<DocumentNode> */
@@ -66,7 +66,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node
+    public function leaveNode(Node $node, CompilerContext $compilerContext): DocumentNode|AnchorNode|SectionNode
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();

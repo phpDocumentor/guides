@@ -24,14 +24,15 @@ abstract class TextNode extends AbstractNode
             $firstLine = $lines[0];
 
             $length = strlen($firstLine);
-            for ($k = 0; $k < $length; $k++) {
-                if (trim($firstLine[$k]) !== '') {
+            $offset = 0;
+            for (; $offset < $length; $offset++) {
+                if (trim($firstLine[$offset]) !== '') {
                     break;
                 }
             }
 
             foreach ($lines as &$line) {
-                $line = substr($line, $k);
+                $line = substr($line, $offset);
             }
         }
 

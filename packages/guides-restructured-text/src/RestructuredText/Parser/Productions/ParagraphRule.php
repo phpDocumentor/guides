@@ -46,7 +46,7 @@ final class ParagraphRule implements Rule
         return trim($blockContext->getDocumentIterator()->current()) !== '';
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): ParagraphNode|null
     {
         $documentIterator = $blockContext->getDocumentIterator();
 
@@ -87,13 +87,9 @@ final class ParagraphRule implements Rule
             return null;
         }
 
-        $node = new ParagraphNode();
-
-        $this->inlineMarkupRule->apply(
+        return $this->inlineMarkupRule->apply(
             new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key()),
-            $node,
+            new ParagraphNode(),
         );
-
-        return $node;
     }
 }

@@ -27,8 +27,7 @@ final class SectionRule implements Rule
         return $this->titleRule->applies($blockContext);
     }
 
-    /** @param DocumentNode|SectionNode $on */
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): SectionNode|null
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();

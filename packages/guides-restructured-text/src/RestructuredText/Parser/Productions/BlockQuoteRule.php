@@ -91,7 +91,7 @@ final class BlockQuoteRule implements Rule
      */
     private function isIndented(string $line, int $minIndent): bool
     {
-        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
+        return str_starts_with($line, str_repeat(' ', max(1, $minIndent)));
     }
 
     /**
@@ -123,14 +123,15 @@ final class BlockQuoteRule implements Rule
             $firstLine = $lines[0];
 
             $length = strlen($firstLine);
-            for ($k = 0; $k < $length; $k++) {
-                if (trim($firstLine[$k]) !== '') {
+            $offset = 0;
+            for (; $offset < $length; $offset++) {
+                if (trim($firstLine[$offset]) !== '') {
                     break;
                 }
             }
 
             foreach ($lines as &$line) {
-                $line = substr($line, $k);
+                $line = substr($line, $offset);
             }
         }
 
