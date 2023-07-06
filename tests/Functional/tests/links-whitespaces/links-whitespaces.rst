@@ -2,10 +2,6 @@ This is a link to `xkcd`_ spacy
 
 This is another link to something_
 
-This is an `anonymous link`__
-
-__  http://anonymous.com/
-
 I love GitHub__
 
 ..  __: http://www.github.com/
