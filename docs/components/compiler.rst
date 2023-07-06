@@ -9,7 +9,7 @@ than a regular compiler. But its following the same semantics.
 
 Lexing and Parsing
 
-A typical compiler will have separate lexing, syntax analisys. However the parser
+A typical compiler will have separate lexing, syntax analysis. However the parser
 was designed to do part of the lexing because of all context dependend logic of most Markup languages.
 We call this the parsing phase. This will result into an AST that is mostly close to the original source. It
 might contain some optimizations for later use.
