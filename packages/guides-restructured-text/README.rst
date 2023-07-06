@@ -23,7 +23,7 @@ This repository is part of `phpDocumentor's Guides library <https://github.com/p
 designed to take hand-written documentation in code repositories and create an AST (abstract syntax tree) from it.
 This AST is then fed to a renderer, which produces the desired output, such as HTML.
 
-The package `phpdocumentor/guides-markdown <https://packagist.org/packages/phpdocumentor/guides-restructured-text>`__ adds
+The package `phpdocumentor/guides-restructured-text <https://packagist.org/packages/phpdocumentor/guides-restructured-text>`__ adds
 `reStructuredText Markup <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`__ support to the
 phpDocumentor's Guides library.
 

@@ -97,12 +97,12 @@ final class ContainerFactory
 
             $fqcn = implode('\\', [$fqcn, 'DependencyInjection', $package . 'Extension']);
             if (!class_exists($fqcn)) {
-                throw new LogicException(sprintf('Extension "%s" does not exists.', $fqcn));
+                throw new LogicException(sprintf('Extension "%s" does not exist.', $fqcn));
             }
         }
 
         if (!is_a($fqcn, ExtensionInterface::class, true)) {
-            throw new LogicException(sprintf('Extension "%s" does not exists.', $fqcn));
+            throw new LogicException(sprintf('Extension "%s" does not exist.', $fqcn));
         }
 
         return $fqcn;
