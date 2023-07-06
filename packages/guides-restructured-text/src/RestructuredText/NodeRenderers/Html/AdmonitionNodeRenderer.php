@@ -48,6 +48,8 @@ class AdmonitionNodeRenderer implements NodeRenderer
             [
                 'name' => $node->getName(),
                 'text' => $node->getText(),
+                'title' => $node->getTitle(),
+                'isTitled' => $node->isTitled(),
                 'class' => implode(' ', $classes),
                 'node' => $node->getValue(),
             ],
