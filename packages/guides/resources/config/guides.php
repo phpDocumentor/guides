@@ -9,6 +9,9 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Intersphinx\InventoryLoader;
+use phpDocumentor\Guides\Intersphinx\InventoryRepository;
+use phpDocumentor\Guides\Intersphinx\JsonLoader;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
@@ -24,6 +27,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\IntersphinxReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\RefReferenceResolver;
@@ -42,6 +46,8 @@ use phpDocumentor\Guides\UrlGenerator;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Loader\FilesystemLoader;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -99,6 +105,16 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeTraverser::class)
 
+        ->set(InventoryRepository::class)
+
+        ->set(InventoryLoader::class)
+
+        ->set(JsonLoader::class)
+
+
+        ->set(HttpClientInterface::class)
+        ->factory([HttpClient::class, 'create'])
+
         ->set(UrlGenerator::class)
 
         ->set(ExternalReferenceResolver::class)
@@ -108,6 +124,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(DocReferenceResolver::class)
 
         ->set(RefReferenceResolver::class)
+
+        ->set(IntersphinxReferenceResolver::class)
 
         ->set(DelegatingReferenceResolver::class)
         ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference_resolver', defaultPriorityMethod: 'getPriority'))

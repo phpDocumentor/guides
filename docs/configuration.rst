@@ -19,16 +19,15 @@ you can do so by creating a ``settings.php`` file in the input directory
 of the manual you are building (that is the directory you would specify
 as a first argument to the CLI).
 
-That file needs to return a ``ProjectSettings``, and typically looks as
+That file needs to return an `array`, and typically looks as
 follows:
 
-.. code-block:: php
+..  code-block:: php
 
-   <?php
+    <?php
 
-   use phpDocumentor\Guides\Settings\ProjectSettings;
-
-   return new ProjectSettings(
-       title: 'My Documentation',
-       version:'42.12.7'
-   );
+    return [
+        'title' => 'My Project',
+        'version' => '3.1.4',
+        'inventories' =>  ['t3coreapi' => 'https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/'],
+    ];

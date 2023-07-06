@@ -25,39 +25,34 @@ final class InventoryLoaderTest extends TestCase
     protected function setUp(): void
     {
         $this->jsonLoader = $this->createMock(JsonLoader::class);
-        $this->inventoryRepository = new InventoryRepository([]);
-        $this->inventoryLoader = new InventoryLoader($this->inventoryRepository, $this->jsonLoader);
+        $this->inventoryLoader = new InventoryLoader($this->jsonLoader);
+        $this->inventoryRepository = new InventoryRepository($this->inventoryLoader);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
-        $this->inventoryLoader->loadInventoryFromJson('somekey', 'https://example.com/', $this->json);
+        $inventory = new Inventory('https://example.com/');
+        $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
+        $this->inventoryRepository->addInventory('somekey', $inventory);
     }
 
     public function testInventoryLoaderLoadsInventory(): void
     {
-        $inventory = $this->inventoryLoader->getInventoryRepository()->getInventory('somekey');
+        $inventory = $this->inventoryRepository->getInventory('somekey');
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
-    public function testLoadInventoryFromUrl(): void
+    public function testInventoryIsLoadedExactlyOnce(): void
     {
-        $this->jsonLoader->expects(self::atLeastOnce())->method('loadJsonFromUrl')->willReturn($this->json);
-        $this->inventoryLoader->loadInventoryFromUrl('somekey', 'https://example.com/');
-        $inventory = $this->inventoryLoader->getInventoryRepository()->getInventory('somekey');
+        $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn($this->json);
+        $inventory = new Inventory('https://example.com/');
+        $this->inventoryLoader->loadInventory($inventory);
+        $this->inventoryLoader->loadInventory($inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
     public function testInventoryLoaderGetInventoryIsCaseInsensitive(): void
     {
-        $inventory = $this->inventoryLoader->getInventoryRepository()->getInventory('SomeKey');
-        self::assertGreaterThan(1, count($inventory->getGroups()));
-    }
-
-    public function testInventoryKeyIsCaseInsensitive(): void
-    {
-        $inventoryLoaderWithCamelCaseKey = new InventoryLoader($this->inventoryRepository, $this->jsonLoader);
-        $inventoryLoaderWithCamelCaseKey->loadInventoryFromJson('CamelCaseKey', 'https://example.com/', $this->json);
-        $inventory = $inventoryLoaderWithCamelCaseKey->getInventoryRepository()->getInventory('camelcasekey');
+        $inventory = $this->inventoryRepository->getInventory('SomeKey');
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 }
