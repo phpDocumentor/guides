@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
-/** @implements NodeRenderer<Entry> */
+/** @implements NodeRenderer<MenuEntryNode> */
 final class MenuEntryRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
@@ -19,7 +19,7 @@ final class MenuEntryRenderer implements NodeRenderer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof Entry;
+        return $node instanceof MenuEntryNode;
     }
 
     public function render(Node $node, RenderContext $renderContext): string

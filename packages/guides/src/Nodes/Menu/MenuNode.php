@@ -11,9 +11,10 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Menu;
 
-use phpDocumentor\Guides\Nodes\TableOfContents\Entry;
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
 
 use const PHP_INT_MAX;
 
@@ -26,8 +27,8 @@ abstract class MenuNode extends CompoundNode
 {
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
-    /** @var Entry[] */
-    private array $entries = [];
+    /** @var MenuEntryNode[] */
+    private array $menuEntries = [];
 
     /** @param string[] $files */
     public function __construct(private readonly array $files)
@@ -43,19 +44,19 @@ abstract class MenuNode extends CompoundNode
 
     abstract public function getDepth(): int;
 
-    /** @param Entry[] $entries */
-    public function withEntries(array $entries): self
+    /** @param MenuEntryNode[] $menuEntries */
+    public function withMenuEntries(array $menuEntries): self
     {
         $that = clone $this;
-        $that->entries = $entries;
+        $that->menuEntries = $menuEntries;
 
         return $that;
     }
 
-    /** @return Entry[] */
-    public function getEntries(): array
+    /** @return MenuEntryNode[] */
+    public function getMenuEntries(): array
     {
-        return $this->entries;
+        return $this->menuEntries;
     }
 
     abstract public function isPageLevelOnly(): bool;

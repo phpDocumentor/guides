@@ -1,3 +1,6 @@
+Some Document
+=============
+
 ..  rst-class:: bignums
 
 1.  First Item

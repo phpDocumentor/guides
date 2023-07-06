@@ -1,10 +1,9 @@
 
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    {% for entry in node.entries -%}
+    {% for entry in node.menuEntries -%}
         <li class="nav-item">
-                <a href="{{ renderLink(entry.url) }}"
-           class="nav-link {% if entry.options.active %} active {% endif %}"
-                {% if entry.options.active %}  aria-current="page" {% endif %} >
+                <a href="{{ renderLink(entry.url) }}" class="nav-link {% if entry.options.active %} active {% endif %}"
+                {%- if entry.options.active %}  aria-current="page" {% endif %} >
             {{ renderNode(entry.value.value) }}
         </a>
         </li>

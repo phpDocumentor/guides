@@ -15,8 +15,8 @@ namespace phpDocumentor\Guides\RestructuredText\NodeRenderers\Html;
 
 use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 use phpDocumentor\Guides\TemplateRenderer;

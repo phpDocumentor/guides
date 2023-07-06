@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;

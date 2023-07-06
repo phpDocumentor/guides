@@ -15,9 +15,9 @@ namespace phpDocumentor\Guides\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\ContentMenuNode;
-use phpDocumentor\Guides\Nodes\MenuNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TocNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;

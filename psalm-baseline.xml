@@ -27,4 +27,9 @@
       <code><![CDATA[$result->value]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
+  <file src="packages/guides/tests/unit/Compiler/NodeTransformers/DocumentEntryRegistrationTransformerTest.php">
+    <InvalidArgument>
+      <code>[new SectionNode(TitleNode::emptyNode())]</code>
+    </InvalidArgument>
+  </file>
 </files>

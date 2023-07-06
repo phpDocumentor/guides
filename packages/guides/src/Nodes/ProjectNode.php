@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Meta\CitationTarget;
-use phpDocumentor\Guides\Meta\DocumentEntry;
 use phpDocumentor\Guides\Meta\InternalTarget;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 use function date;
@@ -31,7 +31,7 @@ class ProjectNode extends CompoundNode
     /** @var array<string, InternalTarget> */
     private array $internalLinkTargets = [];
 
-    /** @var DocumentEntry[] */
+    /** @var DocumentEntryNode[] */
     private array $documentEntries = [];
 
     public function __construct(
@@ -103,24 +103,24 @@ class ProjectNode extends CompoundNode
         return $this->internalLinkTargets;
     }
 
-    public function addDocumentEntry(DocumentEntry $documentEntry): void
+    public function addDocumentEntry(DocumentEntryNode $documentEntry): void
     {
         $this->documentEntries[$documentEntry->getFile()] = $documentEntry;
     }
 
-    /** @return DocumentEntry[] */
+    /** @return DocumentEntryNode[] */
     public function getAllDocumentEntries(): array
     {
         return $this->documentEntries;
     }
 
-    /** @param DocumentEntry[] $documentEntries */
+    /** @param DocumentEntryNode[] $documentEntries */
     public function setDocumentEntries(array $documentEntries): void
     {
         $this->documentEntries = $documentEntries;
     }
 
-    public function findDocumentEntry(string $filePath): DocumentEntry|null
+    public function findDocumentEntry(string $filePath): DocumentEntryNode|null
     {
         return $this->documentEntries[$filePath] ?? null;
     }

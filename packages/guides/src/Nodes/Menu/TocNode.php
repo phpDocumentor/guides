@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Nodes;
+namespace phpDocumentor\Guides\Nodes\Menu;
 
 use function is_scalar;
 

@@ -27,7 +27,7 @@ class TitleNode extends CompoundNode
 
     public static function emptyNode(): self
     {
-        return new TitleNode(new InlineCompoundNode([new PlainTextInlineNode('<Unknown>')]), 0, '');
+        return new TitleNode(new InlineCompoundNode([new PlainTextInlineNode('<Unknown>')]), 1, '');
     }
 
     public function getLevel(): int

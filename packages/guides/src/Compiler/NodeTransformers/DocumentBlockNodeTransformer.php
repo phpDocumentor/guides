@@ -7,8 +7,8 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentBlockNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TocNode;
 
 use function array_merge;
 
