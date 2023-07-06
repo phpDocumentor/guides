@@ -11,6 +11,7 @@ use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
@@ -83,6 +84,12 @@ final class Run extends Command
             'Write log to this path',
             'php://stder',
         );
+        $this->addOption(
+            'fail-on-log',
+            null,
+            InputOption::VALUE_NONE,
+            'Use a non-zero exit code as soon as any log is written',
+        );
 
         $this->addOption(
             'theme',
@@ -136,6 +143,13 @@ final class Run extends Command
             $this->logger->pushHandler(new StreamHandler($logPath . '/error.log', Logger::ERROR));
         }
 
+        $failOnLog = $input->getOption('fail-on-log') ?? false;
+
+        if ($failOnLog) {
+            $spyProcessor = new SpyProcessor();
+            $this->logger->pushProcessor($spyProcessor);
+        }
+
         $documents = $this->commandBus->handle(
             new ParseDirectoryCommand(
                 $sourceFileSystem,
@@ -185,7 +199,11 @@ final class Run extends Command
             'Successfully placed ' . (is_countable($documents) ? count($documents) : 0) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
         );
 
-        return 0;
+        if ($failOnLog && $spyProcessor->hasBeenCalled()) {
+            return Command::FAILURE;
+        }
+
+        return Command::SUCCESS;
     }
 
     private function getAbsolutePath(string $path): string
