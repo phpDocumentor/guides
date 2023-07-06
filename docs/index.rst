@@ -28,5 +28,6 @@ You will then find the rendered documentation in the directory output
 .. toctree::
     about
     usage
+    configuration
     extension/index
     rst-reference/index
