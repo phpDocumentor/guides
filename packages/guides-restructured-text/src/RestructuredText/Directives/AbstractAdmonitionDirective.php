@@ -34,6 +34,7 @@ abstract class AbstractAdmonitionDirective extends SubDirective
     ): Node|null {
         return new AdmonitionNode(
             $this->name,
+            $directive->getDataNode(),
             $this->text,
             $document->getChildren(),
         );

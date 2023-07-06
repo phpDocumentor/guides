@@ -17,6 +17,7 @@
     "autoload-dev": {
         "psr-4": {
             "phpDocumentor\\Guides\\": ["packages/guides/tests/unit/", "tests/"],
+            "phpDocumentor\\Guides\\Cli\\": "packages/guides-cli/tests/unit",
             "phpDocumentor\\Guides\\Graphs\\": "packages/guides-graphs/tests/unit",
             "phpDocumentor\\Guides\\RestructuredText\\": "packages/guides-restructured-text/tests/unit",
             "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit"
