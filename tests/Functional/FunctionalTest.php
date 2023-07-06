@@ -10,6 +10,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Monolog\LogRecord;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -131,8 +132,8 @@ class FunctionalTest extends ApplicationTestCase
             assert($logHandler instanceof TestHandler);
 
             $logRecords = array_map(
-                static fn (array $log) => $log['level_name'] . ': ' . $log['message'],
-                array_filter($logHandler->getRecords(), static fn (array $log) => $log['level'] >= Logger::WARNING),
+                static fn (array|LogRecord $log) => $log['level_name'] . ': ' . $log['message'],
+                array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING),
             );
             self::assertEquals($expectedLogs, $logRecords);
         } catch (ExpectationFailedException $e) {
