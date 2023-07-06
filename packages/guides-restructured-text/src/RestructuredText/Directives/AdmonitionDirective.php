@@ -53,8 +53,10 @@ class AdmonitionDirective extends SubDirective
 
         return new AdmonitionNode(
             $name,
+            $directive->getDataNode(),
             $directive->getData(),
             $document->getChildren(),
+            true,
         );
     }
 }
