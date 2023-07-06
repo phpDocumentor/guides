@@ -13,4 +13,5 @@
     <project title="phpDocumentor Guides"/>
 
     <extension class="phpDocumentor\Guides\Bootstrap"/>
+    <extension class="phpDocumentor\Guides\Code"/>
 </guides>
