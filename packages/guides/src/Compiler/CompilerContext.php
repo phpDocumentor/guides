@@ -75,6 +75,6 @@ class CompilerContext
     /** @return array<string, string> */
     public function getLoggerInformation(): array
     {
-        return array_merge($this->getDocumentNode()->getLoggerInformation());
+        return [...$this->getDocumentNode()->getLoggerInformation()];
     }
 }

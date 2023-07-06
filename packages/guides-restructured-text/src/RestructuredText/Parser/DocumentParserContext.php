@@ -31,12 +31,12 @@ class DocumentParserContext
     public bool $nextIndentedBlockShouldBeALiteralBlock = false;
 
     public DocumentNode|null $document = null;
-    
+
     private int $currentTitleLevel;
     /* Each Document has its own text role factory as text roles can be changed on a per document base
         by directives */
-    private TextRoleFactory $textRoleFactoryForDocument;
-    
+    private readonly TextRoleFactory $textRoleFactoryForDocument;
+
     private string $codeBlockDefaultLanguage = '';
 
     /** @var string[] */
@@ -79,7 +79,7 @@ class DocumentParserContext
     {
         $this->document = $document;
     }
-    
+
     public function getLevel(string $overlineLetter, string $underlineLetter): int
     {
         $letter = $overlineLetter . ':' . $underlineLetter;
@@ -99,7 +99,7 @@ class DocumentParserContext
     {
         return $this->textRoleFactoryForDocument;
     }
-    
+
     public function getCodeBlockDefaultLanguage(): string
     {
         return $this->codeBlockDefaultLanguage;
@@ -109,7 +109,7 @@ class DocumentParserContext
     {
         $this->codeBlockDefaultLanguage = $codeBlockDefaultLanguage;
     }
-    
+
     /** @return array<string, string> */
     public function getLoggerInformation(): array
     {
@@ -120,6 +120,6 @@ class DocumentParserContext
             $info['documentNode'] = 'null';
         }
 
-        return array_merge($this->getContext()->getLoggerInformation(), $info);
+        return [...$this->context->getLoggerInformation(), ...$info];
     }
 }

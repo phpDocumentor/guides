@@ -20,7 +20,7 @@ class InlineParser
     public function __construct(iterable $inlineRules)
     {
         $this->rules = [...$inlineRules];
-        usort($this->rules, static fn(InlineRule $a, InlineRule $b): int => $a->getPriority() > $b->getPriority() ? -1 : 1);
+        usort($this->rules, static fn (InlineRule $a, InlineRule $b): int => $a->getPriority() > $b->getPriority() ? -1 : 1);
     }
 
     public function parse(string $content, BlockContext $blockContext): InlineCompoundNode

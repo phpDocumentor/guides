@@ -5,7 +5,7 @@ parameters:
 
   strictRules:
     allRules: false
-    strictCalls: false
+    strictCalls: true
     requireParentConstructorCall: true
 
   inferPrivatePropertyTypeFromConstructor: true

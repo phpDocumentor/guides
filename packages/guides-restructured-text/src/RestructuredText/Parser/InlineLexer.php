@@ -132,48 +132,21 @@ final class InlineLexer extends AbstractLexer
             return self::WHITESPACE;
         }
 
-        switch ($value) {
-            case '`':
-                return self::BACKTICK;
-
-            case '**':
-                return self::STRONG_DELIMITER;
-
-            case '*':
-                return self::EMPHASIS_DELIMITER;
-
-            case '|':
-                return self::VARIABLE_DELIMITER;
-
-            case '<':
-                return self::EMBEDED_URL_START;
-
-            case '>':
-                return self::EMBEDED_URL_END;
-
-            case '_':
-                return self::UNDERSCORE;
-
-            case '__':
-                return self::ANONYMOUS_END;
-
-            case ':':
-                return self::COLON;
-
-            case '#':
-                return self::OCTOTHORPE;
-
-            case '[':
-                return self::ANNOTATION_START;
-
-            case ']':
-                return self::ANNOTATION_END;
-
-            case '~':
-                return self::NBSP;
-
-            default:
-                return self::WORD;
-        }
+        return match ($value) {
+            '`' => self::BACKTICK,
+            '**' => self::STRONG_DELIMITER,
+            '*' => self::EMPHASIS_DELIMITER,
+            '|' => self::VARIABLE_DELIMITER,
+            '<' => self::EMBEDED_URL_START,
+            '>' => self::EMBEDED_URL_END,
+            '_' => self::UNDERSCORE,
+            '__' => self::ANONYMOUS_END,
+            ':' => self::COLON,
+            '#' => self::OCTOTHORPE,
+            '[' => self::ANNOTATION_START,
+            ']' => self::ANNOTATION_END,
+            '~' => self::NBSP,
+            default => self::WORD,
+        };
     }
 }

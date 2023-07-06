@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use phpDocumentor\Guides\Nodes\Lists\ListItem;
-
 use function in_array;
 use function mb_strlen;
-use function preg_match;
-use function strlen;
-use function trim;
 
 class LineChecker
 {
@@ -60,6 +55,7 @@ class LineChecker
         if (!in_array($letter, self::HEADER_LETTERS, true)) {
             return null;
         }
+
         $max = mb_strlen($line);
         for ($i = 1; $i < $max; $i++) {
             if ($line[$i] !== $letter) {

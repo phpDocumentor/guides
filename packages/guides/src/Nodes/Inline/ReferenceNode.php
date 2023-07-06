@@ -20,7 +20,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
 {
-    public const TYPE = 'ref';
+    final public const TYPE = 'ref';
 
     public function __construct(
         string $targetReference,

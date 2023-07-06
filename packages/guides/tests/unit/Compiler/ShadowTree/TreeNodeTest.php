@@ -34,13 +34,13 @@ final class TreeNodeTest extends TestCase
     {
         $treeNode = TreeNode::createFromDocument($this->documentNode);
 
-        $this->assertSame($this->documentNode, $treeNode->getNode());
-        $this->assertCount(2, $treeNode->getChildren());
-        $this->assertSame($this->sectionNode1, $treeNode->getChildren()[0]->getNode());
-        $this->assertSame($this->sectionNode2, $treeNode->getChildren()[1]->getNode());
-        $this->assertSame($treeNode, $treeNode->getChildren()[0]->getParent());
-        $this->assertSame($treeNode, $treeNode->getChildren()[1]->getParent());
-        $this->assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
+        self::assertSame($this->documentNode, $treeNode->getNode());
+        self::assertCount(2, $treeNode->getChildren());
+        self::assertSame($this->sectionNode1, $treeNode->getChildren()[0]->getNode());
+        self::assertSame($this->sectionNode2, $treeNode->getChildren()[1]->getNode());
+        self::assertSame($treeNode, $treeNode->getChildren()[0]->getParent());
+        self::assertSame($treeNode, $treeNode->getChildren()[1]->getParent());
+        self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
     }
 
     public function testAddChild(): void
@@ -50,10 +50,10 @@ final class TreeNodeTest extends TestCase
 
         $treeNode->addChild($sectionNode3);
 
-        $this->assertCount(3, $treeNode->getChildren());
-        $this->assertSame($sectionNode3, $treeNode->getChildren()[2]->getNode());
-        $this->assertSame($treeNode, $treeNode->getChildren()[2]->getParent());
-        $this->assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
+        self::assertCount(3, $treeNode->getChildren());
+        self::assertSame($sectionNode3, $treeNode->getChildren()[2]->getNode());
+        self::assertSame($treeNode, $treeNode->getChildren()[2]->getParent());
+        self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
     }
 
     public function testRemoveChild(): void
@@ -62,10 +62,10 @@ final class TreeNodeTest extends TestCase
 
         $treeNode->removeChild($this->sectionNode1);
 
-        $this->assertCount(1, $treeNode->getChildren());
-        $this->assertSame($this->sectionNode2, $treeNode->getChildren()[0]->getNode());
-        $this->assertSame($treeNode, $treeNode->getChildren()[0]->getParent());
-        $this->assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
+        self::assertCount(1, $treeNode->getChildren());
+        self::assertSame($this->sectionNode2, $treeNode->getChildren()[0]->getNode());
+        self::assertSame($treeNode, $treeNode->getChildren()[0]->getParent());
+        self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
     }
 
     public function testRemoveChildFromChild(): void
@@ -75,11 +75,11 @@ final class TreeNodeTest extends TestCase
 
         $treeNode->getChildren()[0]->removeChild($nodeToRemove);
 
-        $this->assertCount(0, $treeNode->getChildren()[0]->getChildren());
-        $this->assertInstanceOf(CompoundNode::class, $treeNode->getChildren()[0]->getNode());
-        $this->assertCount(0, $treeNode->getChildren()[0]->getNode()->getChildren());
-        $this->assertInstanceOf(CompoundNode::class, $treeNode->getNode());
-        $this->assertSame($treeNode->getNode()->getChildren()[0], $treeNode->getChildren()[0]->getNode());
-        $this->assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
+        self::assertCount(0, $treeNode->getChildren()[0]->getChildren());
+        self::assertInstanceOf(CompoundNode::class, $treeNode->getChildren()[0]->getNode());
+        self::assertCount(0, $treeNode->getChildren()[0]->getNode()->getChildren());
+        self::assertInstanceOf(CompoundNode::class, $treeNode->getNode());
+        self::assertSame($treeNode->getNode()->getChildren()[0], $treeNode->getChildren()[0]->getNode());
+        self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
     }
 }

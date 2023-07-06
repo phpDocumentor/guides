@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Rector\Class_\PreferPHPUnitSelfCallRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/src'
+        __DIR__ . '/packages',
     ]);
 
+    //$rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
     $rectorConfig->rule(Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector::class);
-    $rectorConfig->rule(Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector::class);
-    $rectorConfig->rule(Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector::class);
     $rectorConfig->rule(Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector::class);
     $rectorConfig->rule(Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector::class);
     $rectorConfig->rule(Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector::class);
@@ -29,11 +30,13 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector::class);
     $rectorConfig->rule(Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector::class);
     $rectorConfig->rule(Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector::class);
+    $rectorConfig->rule(PreferPHPUnitSelfCallRector::class);
+    $rectorConfig->rule(Rector\PHPUnit\PHPUnit100\Rector\Class_\AddProphecyTraitRector::class);
     $rectorConfig->importNames();
 
 
     // define sets of rules
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81
+        LevelSetList::UP_TO_PHP_81,
     ]);
 };

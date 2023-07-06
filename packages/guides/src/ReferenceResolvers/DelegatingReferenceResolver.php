@@ -16,7 +16,7 @@ use function sprintf;
 final class DelegatingReferenceResolver
 {
     /** @param iterable<ReferenceResolver> $resolvers */
-    public function __construct(private readonly iterable $resolvers, private LoggerInterface $logger)
+    public function __construct(private readonly iterable $resolvers, private readonly LoggerInterface $logger)
     {
     }
 

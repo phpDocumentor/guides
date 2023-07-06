@@ -20,7 +20,7 @@ use function array_merge;
  */
 class BlockContext
 {
-    private LinesIterator $documentIterator;
+    private readonly LinesIterator $documentIterator;
     
     public function __construct(
         private readonly DocumentParserContext $documentParserContext,
@@ -50,6 +50,6 @@ class BlockContext
             'currentLineNumber' => $this->lineOffset + $this->documentIterator->key(),
         ];
 
-        return array_merge($this->getDocumentParserContext()->getLoggerInformation(), $info);
+        return [...$this->documentParserContext->getLoggerInformation(), ...$info];
     }
 }

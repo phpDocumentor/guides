@@ -10,8 +10,6 @@ use phpDocumentor\Guides\Nodes\DocumentBlockNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-use function array_merge;
-
 /**
  * @implements NodeTransformer<Node>
  *

@@ -17,7 +17,7 @@ class IntersphinxReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 50;
 
-    public function __construct(private InventoryRepository $inventoryRepository)
+    public function __construct(private readonly InventoryRepository $inventoryRepository)
     {
     }
 

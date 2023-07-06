@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
 {
-    public const TYPE = 'doc';
+    final public const TYPE = 'doc';
 
     public function __construct(
         string $targetDocument,

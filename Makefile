@@ -71,7 +71,7 @@ vendor: composer.json composer.lock
 
 .PHONY: rector
 rector: ## Refactor code using rector
-	$(PHP_BIN) vendor/bin/rector process packages
+	$(PHP_BIN) vendor/bin/rector process
 
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style static-code-analysis

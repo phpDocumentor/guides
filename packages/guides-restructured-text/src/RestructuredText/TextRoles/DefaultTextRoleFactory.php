@@ -19,7 +19,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
         private readonly TextRole $genericTextRole,
         private TextRole $defaultTextRole,
         iterable $textRoles = [],
-        private array $domains = [],
+        private readonly array $domains = [],
     ) {
         $this->textRoles = [...$textRoles];
     }
@@ -71,7 +71,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
 
         // Textrole name takes precedence over alias
         foreach ($textRoles as $textRole) {
-            if (in_array($name, $textRole->getAliases())) {
+            if (in_array($name, $textRole->getAliases(), true)) {
                 return $textRole;
             }
         }

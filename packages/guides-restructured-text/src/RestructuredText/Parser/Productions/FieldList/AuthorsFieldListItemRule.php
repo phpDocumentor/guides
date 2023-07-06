@@ -13,7 +13,6 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
-use function assert;
 use function count;
 use function explode;
 use function str_contains;
@@ -49,7 +48,6 @@ class AuthorsFieldListItemRule implements FieldListItemRule
                     $authorNodes[] = new AuthorNode($fieldListItemNode->getPlaintextContent(), $fieldListItemNode->getChildren());
                 }
             }
-
 
             if ($firstChild instanceof ListNode) {
                 // A bullet list whose elements each contain a single paragraph per author.

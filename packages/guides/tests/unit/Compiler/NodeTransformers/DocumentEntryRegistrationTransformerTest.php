@@ -34,8 +34,8 @@ class DocumentEntryRegistrationTransformerTest extends TestCase
         $node = new DocumentNode('', '');
         $node->setValue([new SectionNode(TitleNode::emptyNode())]);
         $mockLogger = $this->createMock(LoggerInterface::class);
-        $mockLogger->expects($this->never())->method('warning');
-        $mockLogger->expects($this->never())->method('error');
+        $mockLogger->expects(self::never())->method('warning');
+        $mockLogger->expects(self::never())->method('error');
 
         $transformer = new DocumentEntryRegistrationTransformer($mockLogger);
 
@@ -48,7 +48,7 @@ class DocumentEntryRegistrationTransformerTest extends TestCase
     {
         $node = new DocumentNode('', '');
         $mockLogger = $this->createMock(LoggerInterface::class);
-        $mockLogger->expects($this->once())->method('warning');
+        $mockLogger->expects(self::once())->method('warning');
 
         $transformer = new DocumentEntryRegistrationTransformer($mockLogger);
 

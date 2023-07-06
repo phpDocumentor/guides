@@ -15,7 +15,7 @@ use function trim;
 /** @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#embedded-uris-and-aliases */
 abstract class AbstractReferenceTextRole implements TextRole
 {
-    private InlineLexer $lexer;
+    private readonly InlineLexer $lexer;
 
     public function __construct(
         private readonly LoggerInterface $logger,

@@ -18,10 +18,10 @@ use Psr\Log\LoggerInterface;
 use function array_reverse;
 use function count;
 use function mb_strlen;
-use function mb_strpos;
 use function mb_substr;
 use function preg_match;
 use function sprintf;
+use function str_contains;
 use function str_repeat;
 use function trim;
 

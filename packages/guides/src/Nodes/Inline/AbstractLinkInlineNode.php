@@ -8,7 +8,7 @@ abstract class AbstractLinkInlineNode extends InlineNode implements LinkInlineNo
 {
     private string $url = '';
 
-    public function __construct(string $type, private string $targetReference, string $value = '')
+    public function __construct(string $type, private readonly string $targetReference, string $value = '')
     {
         parent::__construct($type, $value);
     }
