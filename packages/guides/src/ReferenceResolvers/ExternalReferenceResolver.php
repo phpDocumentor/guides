@@ -28,7 +28,7 @@ class ExternalReferenceResolver implements ReferenceResolver
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
         $url = parse_url($node->getTargetReference(), PHP_URL_SCHEME);
-        if ($url !== null && $url !== false && preg_match('/^' . InlineLexer::SUPPORTED_TLDS . '$/', $url)) {
+        if ($url !== null && $url !== false && preg_match('/^' . InlineLexer::SUPPORTED_SCHEMAS . '$/', $url)) {
             $node->setUrl($node->getTargetReference());
 
             return true;
