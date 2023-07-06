@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
+use phpDocumentor\Guides\Nodes\AbstractNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-class SectionEntryNode
+/** @extends AbstractNode<DocumentNode> */
+final class SectionEntryNode extends AbstractNode
 {
     /** @var SectionEntryNode[] */
     private array $children = [];

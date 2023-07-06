@@ -15,7 +15,6 @@ use phpDocumentor\Guides\Nodes\Node;
 
 use function array_pop;
 use function assert;
-use function count;
 use function explode;
 use function implode;
 use function preg_match;
@@ -52,13 +51,9 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
 
                 $documentEntriesInTree[] = $documentEntry;
                 $menuEntry = new MenuEntryNode($documentEntry->getFile(), $documentEntry->getTitle(), [], false, 1);
-                if (!$node->hasOption('titlesonly') && count($documentEntry->getSections()) > 0) {
+                if (!$node->hasOption('titlesonly')) {
                     foreach ($documentEntry->getSections() as $section) {
                         // We do not add the main section as it repeats the document title
-                        if (count($section->getChildren()) <= 0) {
-                            continue;
-                        }
-
                         foreach ($section->getChildren() as $subSectionEntryNode) {
                             assert($subSectionEntryNode instanceof SectionEntryNode);
                             $currentLevel = $menuEntry->getLevel() + 1;
@@ -107,14 +102,7 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
             return true;
         }
 
-        if ($glob && $documentEntry->getFile() !== $currentPath) {
-            $file = str_replace('*', '[a-zA-Z0-9]*', $file);
-            $pattern = '`^' . $file . '$`';
-
-            return preg_match($pattern, '/' . $documentEntry->getFile()) > 0;
-        }
-
-        return false;
+        return $this->isGlob($glob, $documentEntry->getFile(), $currentPath, $file, '/');
     }
 
     private function isEqualRelativePath(DocumentEntryNode $documentEntry, string $file, string $currentPath, bool $glob): bool
@@ -132,11 +120,16 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
             return true;
         }
 
-        if ($glob && $documentEntry->getFile() !== $currentPath) {
+        return $this->isGlob($glob, $documentEntry->getFile(), $currentPath, $file, '');
+    }
+
+    private function isGlob(bool $glob, string $documentEntryFile, string $currentPath, string $file, string $prefix): bool
+    {
+        if ($glob && $documentEntryFile !== $currentPath) {
             $file = str_replace('*', '[a-zA-Z0-9]*', $file);
             $pattern = '`^' . $file . '$`';
 
-            return preg_match($pattern, $documentEntry->getFile()) > 0;
+            return preg_match($pattern, $prefix . $documentEntryFile) > 0;
         }
 
         return false;
