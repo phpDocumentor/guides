@@ -40,7 +40,9 @@ class ProjectNode extends CompoundNode
     ) {
         $this->addVariable('project', new PlainTextInlineNode($title ?? ''));
         $this->addVariable('version', new PlainTextInlineNode($version ?? ''));
+        $this->addVariable('release', new PlainTextInlineNode($version ?? ''));
         $this->addVariable('last_rendered', new PlainTextInlineNode(date(DATE_RFC2822)));
+        $this->addVariable('today', new PlainTextInlineNode(date(DATE_RFC2822)));
 
         parent::__construct();
     }
