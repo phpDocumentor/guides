@@ -10,6 +10,7 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
 use function dirname;
@@ -34,6 +35,10 @@ use function str_replace;
  */
 final class UmlDirective extends BaseDirective
 {
+    public function __construct(private readonly LoggerInterface $logger)
+    {
+    }
+
     public function getName(): string
     {
         return 'uml';
@@ -72,9 +77,11 @@ final class UmlDirective extends BaseDirective
         );
 
         if (!$parserContext->getOrigin()->has($fileName)) {
-            $parserContext->addError(
-                sprintf('Tried to include "%s" as a diagram but the file could not be found', $fileName),
-            );
+            $message =
+                sprintf('Tried to include "%s" as a diagram but the file could not be found', $fileName);
+
+
+            $this->logger->error($message, $parserContext->getLoggerInformation());
 
             return null;
         }

@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
+use Psr\Log\LoggerInterface;
 
 use function mb_strlen;
 use function preg_match;
@@ -37,11 +38,8 @@ final class GridTableRule implements Rule
 {
     public const PRIORITY = 50;
 
-    private readonly GridTableBuilder $builder;
-
-    public function __construct(private readonly RuleContainer $productions)
+    public function __construct(private readonly LoggerInterface $logger, private readonly RuleContainer $productions, private readonly GridTableBuilder $builder)
     {
-        $this->builder = new GridTableBuilder();
     }
 
     public function applies(DocumentParserContext $documentParser): bool
@@ -68,10 +66,12 @@ final class GridTableRule implements Rule
             $documentIterator->next();
 
             if ($lineLength !== mb_strlen($documentIterator->current())) {
-                $documentParserContext->getContext()->addError(sprintf(
+                $message = sprintf(
                     "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
                     $documentIterator->current(),
-                ));
+                );
+
+                $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
             }
 
             if ($this->isHeaderDefinitionLine($documentIterator->current())) {

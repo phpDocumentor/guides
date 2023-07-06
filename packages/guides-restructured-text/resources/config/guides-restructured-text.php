@@ -79,6 +79,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\ParagraphRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\SimpleTableRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
@@ -214,6 +215,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(GridTableRule::class)
         ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => GridTableRule::PRIORITY])
+        ->set(GridTableBuilder::class)
         ->set(SimpleTableRule::class)
         ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => SimpleTableRule::PRIORITY])

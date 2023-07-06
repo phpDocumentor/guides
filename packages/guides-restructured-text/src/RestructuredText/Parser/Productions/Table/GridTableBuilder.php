@@ -13,6 +13,7 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
+use Psr\Log\LoggerInterface;
 
 use function array_reverse;
 use function count;
@@ -26,6 +27,10 @@ use function trim;
 
 class GridTableBuilder
 {
+    public function __construct(private readonly LoggerInterface $logger)
+    {
+    }
+
     protected function compile(ParserContext $context): TableNode
     {
         $columnRanges = $context->getColumnRanges();
@@ -153,7 +158,7 @@ class GridTableBuilder
                 try {
                     $row->absorbRowContent($targetRow);
                 } catch (InvalidTableStructure $e) {
-                    $context->addError($e->getMessage());
+                    $this->logger->error($e->getMessage());
                 }
 
                 $nextRowCounter++;
@@ -207,13 +212,13 @@ class GridTableBuilder
         if ($tableParserContext->hasErrors()) {
             $tableAsString = $tableParserContext->getTableAsString();
             foreach ($tableParserContext->getErrors() as $error) {
-                $documentParserContext->getContext()
-                    ->addError(sprintf(
-                        "%s\nin file %s\n\n%s",
-                        $error,
-                        $documentParserContext->getContext()->getCurrentFileName(),
-                        $tableAsString,
-                    ));
+                $message = sprintf(
+                    "%s\nin file %s\n\n%s",
+                    $error,
+                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $tableAsString,
+                );
+                $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
             }
 
             return null;

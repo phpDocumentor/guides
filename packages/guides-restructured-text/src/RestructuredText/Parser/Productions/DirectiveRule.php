@@ -22,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 use function array_merge;
@@ -52,6 +53,7 @@ final class DirectiveRule implements Rule
     /** @param iterable<DirectiveHandler> $directives */
     public function __construct(
         private readonly InlineMarkupRule $inlineMarkupRule,
+        private readonly LoggerInterface $logger,
         iterable $directives = [],
     ) {
         foreach ($directives as $directive) {
@@ -101,7 +103,7 @@ final class DirectiveRule implements Rule
                 $openingLine,
             );
 
-            $documentParserContext->getContext()->addError($message);
+            $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
 
             return null;
         }
@@ -140,7 +142,8 @@ final class DirectiveRule implements Rule
                 $e->getMessage(),
             );
 
-            $documentParserContext->getContext()->addError($message);
+
+            $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
         }
 
         return null;

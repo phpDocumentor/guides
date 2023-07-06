@@ -52,6 +52,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "doctrine/coding-standard": "^12.0",
         "fakerphp/faker": "^1.23",
+        "fig/log-test": "^1.0",
         "gajus/dindent": "^2.0.1",
         "jangregor/phpstan-prophecy": "^1.0",
         "league/flysystem-memory": "^1.0",
