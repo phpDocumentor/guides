@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea82cf922ecc464148e00ff6fe655ae2",
+    "content-hash": "947cde1a561b182e7d2861896ff7bd66",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -724,42 +724,41 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.9.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "f259e2b15fb95494c83f52d3caad003bbf5ffaa1"
+                "reference": "e2392369686d420ca32df3803de28b5d6f76867d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f259e2b15fb95494c83f52d3caad003bbf5ffaa1",
-                "reference": "f259e2b15fb95494c83f52d3caad003bbf5ffaa1",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e2392369686d420ca32df3803de28b5d6f76867d",
+                "reference": "e2392369686d420ca32df3803de28b5d6f76867d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2",
-                "psr/log": "^1.0.1 || ^2.0 || ^3.0"
+                "php": ">=8.1",
+                "psr/log": "^2.0 || ^3.0"
             },
             "provide": {
-                "psr/log-implementation": "1.0.0 || 2.0.0 || 3.0.0"
+                "psr/log-implementation": "3.0.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "^2.4.9 || ^3.0",
+                "aws/aws-sdk-php": "^3.0",
                 "doctrine/couchdb": "~1.0@dev",
                 "elasticsearch/elasticsearch": "^7 || ^8",
                 "ext-json": "*",
-                "graylog2/gelf-php": "^1.4.2 || ^2@dev",
-                "guzzlehttp/guzzle": "^7.4",
+                "graylog2/gelf-php": "^1.4.2 || ^2.0",
+                "guzzlehttp/guzzle": "^7.4.5",
                 "guzzlehttp/psr7": "^2.2",
                 "mongodb/mongodb": "^1.8",
                 "php-amqplib/php-amqplib": "~2.4 || ^3",
-                "phpspec/prophecy": "^1.15",
-                "phpstan/phpstan": "^0.12.91",
-                "phpunit/phpunit": "^8.5.14",
-                "predis/predis": "^1.1 || ^2.0",
-                "rollbar/rollbar": "^1.3 || ^2 || ^3",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.4",
+                "phpunit/phpunit": "^10.1",
+                "predis/predis": "^1.1 || ^2",
                 "ruflin/elastica": "^7",
-                "swiftmailer/swiftmailer": "^5.3|^6.0",
                 "symfony/mailer": "^5.4 || ^6",
                 "symfony/mime": "^5.4 || ^6"
             },
@@ -782,7 +781,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "3.x-dev"
                 }
             },
             "autoload": {
@@ -810,7 +809,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.9.1"
+                "source": "https://github.com/Seldaek/monolog/tree/3.4.0"
             },
             "funding": [
                 {
@@ -822,7 +821,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-06T13:44:46+00:00"
+            "time": "2023-06-21T08:46:11+00:00"
         },
         {
             "name": "nette/schema",
@@ -1026,11 +1025,11 @@
         },
         {
             "name": "phpdocumentor/guides",
-            "version": "dev-error-handling",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "2db29c9ec6f83e9eb2ca5ab950a70222c1b9dd8a"
+                "reference": "b425cd949c20b6b5a0dac1a0f6fae2663d3f36e2"
             },
             "require": {
                 "ext-json": "*",
@@ -1046,7 +1045,7 @@
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
-                "psr/log": "^1.0"
+                "psr/log": "^2.0 || ^3.0"
             },
             "type": "library",
             "autoload": {
@@ -1072,14 +1071,14 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-error-handling",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "24c7a491aaf842817b71ad94edab6be9a276860c"
+                "reference": "175390348e0a440adde9bedf778731d1b2c6d5be"
             },
             "require": {
-                "monolog/monolog": "^2.9",
+                "monolog/monolog": "^2.9 || ^3.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "self.version",
                 "phpdocumentor/guides-restructured-text": "self.version",
@@ -1120,7 +1119,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-error-handling",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1157,7 +1156,7 @@
         },
         {
             "name": "phpdocumentor/guides-restructured-text",
-            "version": "dev-error-handling",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
@@ -1193,7 +1192,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-error-handling",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -1426,30 +1425,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=8.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
+                    "Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1470,9 +1469,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.4"
+                "source": "https://github.com/php-fig/log/tree/3.0.0"
             },
-            "time": "2021-05-03T11:20:27+00:00"
+            "time": "2021-07-14T16:46:02+00:00"
         },
         {
             "name": "symfony/config",
@@ -3806,27 +3805,32 @@
         },
         {
             "name": "fig/log-test",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log-test.git",
-                "reference": "a8976008d71a00d76f53b818fed9f3483cf55c00"
+                "reference": "02d6eaf8b09784b7adacf57a3c951bad95229a7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log-test/zipball/a8976008d71a00d76f53b818fed9f3483cf55c00",
-                "reference": "a8976008d71a00d76f53b818fed9f3483cf55c00",
+                "url": "https://api.github.com/repos/php-fig/log-test/zipball/02d6eaf8b09784b7adacf57a3c951bad95229a7f",
+                "reference": "02d6eaf8b09784b7adacf57a3c951bad95229a7f",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4 | ^8.0",
-                "psr/log": "^1.1.1"
+                "php": "^8.0",
+                "psr/log": "^2.0 | ^3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.0 | ^9.0",
                 "squizlabs/php_codesniffer": "^3.6"
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "src"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -3841,9 +3845,9 @@
             "description": "Test utilities for the psr/log package that backs the PSR-3 specification.",
             "support": {
                 "issues": "https://github.com/php-fig/log-test/issues",
-                "source": "https://github.com/php-fig/log-test/tree/1.0.0"
+                "source": "https://github.com/php-fig/log-test/tree/1.1.0"
             },
-            "time": "2022-09-07T04:36:07+00:00"
+            "time": "2022-10-18T05:33:27+00:00"
         },
         {
             "name": "gajus/dindent",
@@ -4552,16 +4556,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.24",
+            "version": "1.10.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "360ecc90569e9a60c2954ee209ec04fa0d958e14"
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/360ecc90569e9a60c2954ee209ec04fa0d958e14",
-                "reference": "360ecc90569e9a60c2954ee209ec04fa0d958e14",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578f4e70d117f9a90699324c555922800ac38d8c",
+                "reference": "578f4e70d117f9a90699324c555922800ac38d8c",
                 "shasum": ""
             },
             "require": {
@@ -4610,7 +4614,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-05T12:32:13+00:00"
+            "time": "2023-07-06T12:11:37+00:00"
         },
         {
             "name": "phpstan/phpstan-webmozart-assert",

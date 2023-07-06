@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Cli\Logger;
 
+use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 
 /**
@@ -20,8 +21,7 @@ final class SpyProcessor implements ProcessorInterface
         return $this->hasBeenCalled;
     }
 
-    /** @inheritDoc */
-    public function __invoke(array $record): array
+    public function __invoke(array|LogRecord $record): array|LogRecord
     {
         $this->hasBeenCalled = true;
 
