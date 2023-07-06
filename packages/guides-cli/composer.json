@@ -11,6 +11,13 @@
             "phpDocumentor\\Guides\\Cli\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": [
+                "tests/unit/"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "jaapio",
