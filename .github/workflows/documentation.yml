@@ -3,7 +3,7 @@ name: "Documentation"
 on:
   pull_request:
     branches:
-      - "*.x"
+      - "main"
     paths:
       - .github/workflows/documentation.yml
       - docs/**
