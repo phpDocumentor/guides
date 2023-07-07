@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Doctrine\Common\Lexer\AbstractLexer;
+use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use ReflectionClass;
 
 use function array_column;
 use function array_flip;
+use function parse_url;
 use function preg_match;
+
+use const PHP_URL_SCHEME;
 
 /** @extends AbstractLexer<int, string> */
 final class InlineLexer extends AbstractLexer
@@ -55,7 +59,7 @@ final class InlineLexer extends AbstractLexer
         return [
             '\\\\``', // must be a separate case, as the next pattern would split in "\`" + "`", causing it to become a intepreted text
             '\\\\[\s\S]', // Escaping hell... needs escaped slash in regex, but also in php.
-            'https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)',
+            ExternalReferenceResolver::SUPPORTED_SCHEMAS . ':[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
@@ -114,7 +118,7 @@ final class InlineLexer extends AbstractLexer
             return self::LITERAL;
         }
 
-        if (preg_match('/https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)/i', $value)) {
+        if (preg_match('/' . ExternalReferenceResolver::SUPPORTED_SCHEMAS . ':[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]/', $value) && parse_url($value, PHP_URL_SCHEME) !== null) {
             return self::HYPERLINK;
         }
 

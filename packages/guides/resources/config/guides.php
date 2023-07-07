@@ -18,7 +18,15 @@ use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
+use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererFactory;
 use phpDocumentor\Guides\Parser;
+use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
+use phpDocumentor\Guides\ReferenceResolvers\RefReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -58,6 +66,9 @@ return static function (ContainerConfigurator $container): void {
         ->instanceof(NodeTransformer::class)
         ->tag('phpdoc.guides.compiler.nodeTransformers')
 
+        ->instanceof(ReferenceResolver::class)
+        ->tag('phpdoc.guides.reference_resolver')
+
         ->load(
             'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\',
             '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php',
@@ -88,8 +99,18 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeTraverser::class)
 
-
         ->set(UrlGenerator::class)
+
+        ->set(ExternalReferenceResolver::class)
+
+        ->set(InternalReferenceResolver::class)
+
+        ->set(DocReferenceResolver::class)
+
+        ->set(RefReferenceResolver::class)
+
+        ->set(DelegatingReferenceResolver::class)
+        ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference_resolver', defaultPriorityMethod: 'getPriority'))
 
         ->set(HtmlRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
@@ -121,7 +142,15 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->alias(NodeRendererFactory::class, InMemoryNodeRendererFactory::class)
 
-         ->set(InMemoryRendererFactory::class)
+        ->set(PreNodeRendererFactory::class)
+        ->decorate(NodeRendererFactory::class)
+        ->arg('$innerFactory', service('.inner'))
+        ->arg('$preRenderers', tagged_iterator('phpdoc.guides.prerenderer'))
+
+        ->set(ReferenceResolverPreRender::class)
+        ->tag('phpdoc.guides.prerenderer')
+
+        ->set(InMemoryRendererFactory::class)
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer'))
         ->alias(TypeRendererFactory::class, InMemoryRendererFactory::class)
 

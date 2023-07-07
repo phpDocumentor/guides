@@ -9,7 +9,13 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
- * Rule to parse for simple anonymous references, such as `myref__`
+ * Rule for standalone hyperlinks
+ *
+ * Syntax example:
+ *
+ *     https://phpdoc.org/
+ *
+ * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#standalone-hyperlinks
  */
 class StandaloneHyperlinkRule extends ReferenceRule
 {
@@ -20,12 +26,9 @@ class StandaloneHyperlinkRule extends ReferenceRule
 
     public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
     {
-        $node = $this->createReference(
-            $parserContext,
-            $lexer->token?->value ?? '',
-            null,
-            false,
-        );
+        $value = $lexer->token?->value ?? '';
+        $node = $this->createReference($parserContext, $value, $value, false);
+
         $lexer->moveNext();
 
         return $node;

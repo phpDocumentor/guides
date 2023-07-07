@@ -7,29 +7,10 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 /**
  * Represents a link to an external source or email
  */
-class HyperLinkNode extends InlineNode
+class HyperLinkNode extends AbstractLinkInlineNode
 {
-    private string $url;
-
-    public function __construct(string $value, string|null $url = null)
+    public function __construct(string $value, string $targetReference)
     {
-        $this->url = $url ?? $value;
-
-        parent::__construct('link', $value);
-    }
-
-    public function getLink(): string
-    {
-        return $this->value;
-    }
-
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
+        parent::__construct('link', $targetReference, $value);
     }
 }
