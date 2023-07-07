@@ -173,6 +173,36 @@ REST,
         );
     }
 
+    public function testNestedList(): void
+    {
+        $input = <<<'INPUT'
+* This is an item with sub items
+
+  * A valid
+  * subitem
+  * list
+
+INPUT;
+        $context = $this->createContext($input);
+
+        $result = $this->rule->apply($context);
+
+        self::assertEquals(
+            new ListNode(
+                [
+                    new ListItemNode('*', false, [
+                        new RawNode('This is an item with sub items
+
+* A valid
+* subitem
+* list'),
+                    ]),
+                ],
+            ),
+            $result,
+        );
+    }
+
     public function testListWithOddIndenting(): void
     {
         $input = <<<'INPUT'
