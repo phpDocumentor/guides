@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->fixXmlConfig('extension')
+            ->ignoreExtraKeys(false)
             ->children()
                 ->arrayNode('extensions')
                     ->prototype('array')
@@ -27,6 +28,7 @@ class Configuration implements ConfigurationInterface
                             ->ifString()
                             ->then(static fn ($n) => ['class' => $n])
                         ->end()
+                        ->ignoreExtraKeys(false)
                         ->children()
                             ->scalarNode('class')
                                 ->isRequired()

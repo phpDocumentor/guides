@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="https://www.phpdoc.org/guides"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    version="3.0"
+>
+    <xsd:element name="guides" type="guides"/>
+
+    <xsd:complexType name="guides">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="project" type="project" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="base-template-path" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="theme" type="theme" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="extension" type="extension" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+
+        <xsd:attribute name="html-theme" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="extension">
+        <xsd:choice maxOccurs="unbounded">
+            <!-- allow extensions to use dynamic elements -->
+            <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+
+        <xsd:attribute name="class" type="xsd:string" use="required"/>
+        <!-- allow extensions to use dynamic elements -->
+        <xsd:anyAttribute processContents="lax" />
+    </xsd:complexType>
+
+    <xsd:complexType name="project">
+        <xsd:attribute name="title" type="xsd:string"/>
+        <xsd:attribute name="version" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="theme">
+        <xsd:sequence>
+            <xsd:element name="template" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+
+        <xsd:attribute name="extends" type="xsd:string"/>
+    </xsd:complexType>
+</xsd:schema>

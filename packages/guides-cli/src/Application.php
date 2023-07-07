@@ -6,6 +6,10 @@ namespace phpDocumentor\Guides\Cli;
 
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
+
+use function getcwd;
 
 final class Application extends BaseApplication
 {
@@ -19,5 +23,19 @@ final class Application extends BaseApplication
         }
 
         $this->setDefaultCommand($defaultCommand, true);
+    }
+
+    protected function getDefaultInputDefinition(): InputDefinition
+    {
+        $definition = parent::getDefaultInputDefinition();
+        $definition->addOption(new InputOption(
+            'config',
+            'c',
+            InputOption::VALUE_REQUIRED,
+            'The path to a "guides.xml" config file, if needed',
+            getcwd(),
+        ));
+
+        return $definition;
     }
 }

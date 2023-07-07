@@ -6,6 +6,8 @@ namespace phpDocumentor\Guides\DependencyInjection;
 
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -31,6 +33,13 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         $rootNode
             ->children()
+                ->arrayNode('project')
+                    ->children()
+                        ->scalarNode('title')->end()
+                        ->scalarNode('version')->end()
+                    ->end()
+                ->end()
+                ->scalarNode('html_theme')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -69,6 +78,20 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         $loader->load('command_bus.php');
         $loader->load('guides.php');
+
+        if (isset($config['project'])) {
+            if (isset($config['project']['version'])) {
+                $config['project']['version'] = (string) $config['project']['version'];
+            }
+
+            $container->getDefinition(SettingsManager::class)
+                ->addMethodCall('setProjectSettings', [new ProjectSettings($config['project']['title'] ?? null, $config['project']['version'] ?? null)]);
+        }
+
+        if (isset($config['html_theme'])) {
+            $container->getDefinition(ThemeManager::class)
+                ->addMethodCall('useTheme', [$config['html_theme']]);
+        }
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
