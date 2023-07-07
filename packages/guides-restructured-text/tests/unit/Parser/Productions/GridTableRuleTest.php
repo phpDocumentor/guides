@@ -270,7 +270,7 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        $this->logger->hasError('Malformed table');
+        self::assertTrue($this->logger->hasErrorThatContains('Malformed table'));
     }
 
     public function testErrorMultipleHeaderRows(): void
@@ -290,7 +290,7 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        $this->logger->hasError('Malformed table: multiple "header rows" using "===" were found');
+        self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
     }
 
     public function testNotEndingWithWhiteLine(): never
@@ -312,6 +312,6 @@ RST;
         $context = $this->createContext($input);
         $this->rule->apply($context);
 
-        $this->logger->hasError('Malformed table: multiple "header rows" using "===" were found');
+        self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
     }
 }
