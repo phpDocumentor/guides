@@ -37,9 +37,8 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
 
         $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle() ?? TitleNode::emptyNode());
         $compilerContext->getProjectNode()->addDocumentEntry($entry);
-        $node->setDocumentEntry($entry);
 
-        return $node;
+        return $node->setDocumentEntry($entry);
     }
 
     public function supports(Node $node): bool

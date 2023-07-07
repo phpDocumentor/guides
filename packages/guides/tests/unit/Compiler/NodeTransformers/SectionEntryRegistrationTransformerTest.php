@@ -26,7 +26,7 @@ class SectionEntryRegistrationTransformerTest extends TestCase
     {
         $context = new CompilerContext(new ProjectNode());
         $document = new DocumentNode('123', $path);
-        $document->setDocumentEntry(new DocumentEntryNode($path, TitleNode::emptyNode()));
+        $document = $document->setDocumentEntry(new DocumentEntryNode($path, TitleNode::emptyNode()));
 
         return $context->withShadowTree($document);
     }
@@ -42,7 +42,7 @@ class SectionEntryRegistrationTransformerTest extends TestCase
         $transformer->enterNode($node2, $this->context);
         $transformer->leaveNode($node2, $this->context);
         $transformer->leaveNode($node, $this->context);
-        self::assertCount(1, $this->context->getDocumentNode()->getDocumentEntry()?->getSections() ?? []);
-        self::assertInstanceOf(SectionEntryNode::class, $this->context->getDocumentNode()->getDocumentEntry()?->getSections()[0]);
+        self::assertCount(1, $this->context->getDocumentNode()->getDocumentEntry()->getSections());
+        self::assertInstanceOf(SectionEntryNode::class, $this->context->getDocumentNode()->getDocumentEntry()->getSections()[0]);
     }
 }
