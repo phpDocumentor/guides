@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function parse_url;
 use function preg_match;

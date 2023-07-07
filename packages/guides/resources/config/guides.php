@@ -18,13 +18,14 @@ use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
-use phpDocumentor\Guides\NodeRenderers\ReferenceResolvingNodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererFactory;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\RefReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
@@ -141,10 +142,13 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->alias(NodeRendererFactory::class, InMemoryNodeRendererFactory::class)
 
-        ->set(ReferenceResolvingNodeRendererFactory::class)
+        ->set(PreNodeRendererFactory::class)
         ->decorate(NodeRendererFactory::class)
         ->arg('$innerFactory', service('.inner'))
-        ->arg('$referenceResolver', service(DelegatingReferenceResolver::class))
+        ->arg('$preRenderers', tagged_iterator('phpdoc.guides.prerenderer'))
+
+        ->set(ReferenceResolverPreRender::class)
+        ->tag('phpdoc.guides.prerenderer')
 
         ->set(InMemoryRendererFactory::class)
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer'))

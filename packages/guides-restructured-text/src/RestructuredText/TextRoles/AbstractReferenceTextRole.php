@@ -83,5 +83,5 @@ abstract class AbstractReferenceTextRole implements TextRole
         return $this->createNode($referenceTarget, $value);
     }
 
-    abstract protected function createNode(string $referenceName, string $referenceTarget): AbstractLinkInlineNode;
+    abstract protected function createNode(string $referenceTarget, string|null $referenceName): AbstractLinkInlineNode;
 }
