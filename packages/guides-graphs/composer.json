@@ -25,6 +25,6 @@
         "phpdocumentor/guides": "self.version",
         "phpdocumentor/guides-restructured-text": "self.version",
         "symfony/process": "^5.4 || ^6.3",
-        "twig/twig": "~2.0"
+        "twig/twig": "~2.0 || ^3.0"
     }
 }
