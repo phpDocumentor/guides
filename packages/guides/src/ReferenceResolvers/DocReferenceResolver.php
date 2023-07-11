@@ -18,7 +18,9 @@ class DocReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $document = $renderContext->getProjectNode()->findDocumentEntry($node->getTargetReference());
+        $document = $renderContext->getProjectNode()->findDocumentEntry(
+            $renderContext->canonicalUrl($node->getTargetReference()),
+        );
         if ($document === null) {
             return false;
         }
