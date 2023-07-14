@@ -1,6 +1,6 @@
 <ul class="level-{{ node.level }}">
     {% for entry in node.menuEntries -%}
-    {% spaceless %}
+    {% apply spaceless %}
         <li class="nav-item">
             <a href="{{ renderLink(entry.url) }}"
                class="nav-link {% if entry.options.active %} active {% endif %}"
@@ -8,6 +8,6 @@
                 {{ renderNode(entry.value.value) }}
             </a>
         </li>
-        {% endspaceless %}
+        {% endapply %}
     {%- endfor %}
 </ul>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use Exception;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
@@ -112,6 +113,17 @@ class ProjectNode extends CompoundNode
     public function getAllDocumentEntries(): array
     {
         return $this->documentEntries;
+    }
+
+    public function getDocumentEntry(string $file): DocumentEntryNode
+    {
+        foreach ($this->documentEntries as $documentEntry) {
+            if ($documentEntry->getFile() === $file) {
+                return $documentEntry;
+            }
+        }
+
+        throw new Exception('No document Entry found for file ' . $file);
     }
 
     /** @param DocumentEntryNode[] $documentEntries */

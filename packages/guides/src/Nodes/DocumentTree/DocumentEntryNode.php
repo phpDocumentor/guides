@@ -17,8 +17,11 @@ final class DocumentEntryNode extends AbstractNode
     private array $sections = [];
     private DocumentEntryNode|null $parent = null;
 
-    public function __construct(private readonly string $file, private readonly TitleNode $titleNode)
-    {
+    public function __construct(
+        private readonly string $file,
+        private readonly TitleNode $titleNode,
+        private readonly bool $isRoot = false,
+    ) {
     }
 
     public function getTitle(): TitleNode
@@ -61,5 +64,10 @@ final class DocumentEntryNode extends AbstractNode
     public function getFile(): string
     {
         return $this->file;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 }

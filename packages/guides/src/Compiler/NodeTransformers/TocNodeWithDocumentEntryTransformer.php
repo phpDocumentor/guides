@@ -12,18 +12,25 @@ use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use Psr\Log\LoggerInterface;
 
 use function array_pop;
 use function assert;
 use function explode;
 use function implode;
 use function preg_match;
+use function sprintf;
 use function str_replace;
 use function str_starts_with;
 
 /** @implements NodeTransformer<MenuNode> */
 class TocNodeWithDocumentEntryTransformer implements NodeTransformer
 {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {
+    }
+
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         return $node;
@@ -45,7 +52,10 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
 
         foreach ($files as $file) {
             foreach ($documentEntries as $documentEntry) {
-                if (!$this->isEqualAbsolutePath($documentEntry, $file, $currentPath, $glob) && !$this->isEqualRelativePath($documentEntry, $file, $currentPath, $glob)) {
+                if (
+                    !self::isEqualAbsolutePath($documentEntry->getFile(), $file, $currentPath, $glob)
+                    && !self::isEqualRelativePath($documentEntry->getFile(), $file, $currentPath, $glob)
+                ) {
                     continue;
                 }
 
@@ -62,6 +72,29 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
                             $this->addSubSections($sectionMenuEntry, $subSectionEntryNode, $documentEntry, $currentLevel);
                         }
                     }
+                }
+
+                foreach ($documentEntriesInTree as $documentEntryInToc) {
+                    if ($documentEntryInToc->isRoot()) {
+                        // The root page may not be attached to any other
+                        continue;
+                    }
+
+                    if ($documentEntryInToc->getParent() !== null && $documentEntryInToc->getParent() !== $compilerContext->getDocumentNode()->getDocumentEntry()) {
+                        $this->logger->warning(sprintf(
+                            'Document %s has been added to parents %s and %s',
+                            $documentEntryInToc->getFile(),
+                            $documentEntryInToc->getParent()->getFile(),
+                            $compilerContext->getDocumentNode()->getDocumentEntry()->getFile(),
+                        ));
+                    }
+
+                    if ($documentEntryInToc->getParent() !== null) {
+                        continue;
+                    }
+
+                    $documentEntryInToc->setParent($compilerContext->getDocumentNode()->getDocumentEntry());
+                    $compilerContext->getDocumentNode()->getDocumentEntry()->addChild($documentEntryInToc);
                 }
 
                 $menuEntries[] = $menuEntry;
@@ -96,42 +129,59 @@ class TocNodeWithDocumentEntryTransformer implements NodeTransformer
         return 4500;
     }
 
-    private function isEqualAbsolutePath(DocumentEntryNode $documentEntry, string $file, string $currentPath, bool $glob): bool
+    private static function isEqualAbsolutePath(string $actualFile, string $expectedFile, string $currentFile, bool $glob): bool
     {
-        if ($file === '/' . $documentEntry->getFile()) {
-            return true;
-        }
-
-        return $this->isGlob($glob, $documentEntry->getFile(), $currentPath, $file, '/');
-    }
-
-    private function isEqualRelativePath(DocumentEntryNode $documentEntry, string $file, string $currentPath, bool $glob): bool
-    {
-        if (str_starts_with($file, '/')) {
+        if (!self::isAbsoluteFile($expectedFile)) {
             return false;
         }
 
-        $current = explode('/', $currentPath);
-        array_pop($current);
-        $current[] = $file;
-        $absolute = implode('/', $current);
-
-        if ($absolute === $documentEntry->getFile()) {
+        if ($expectedFile === '/' . $actualFile) {
             return true;
         }
 
-        return $this->isGlob($glob, $documentEntry->getFile(), $currentPath, $file, '');
+        return self::isGlob($glob, $actualFile, $currentFile, $expectedFile, '/');
     }
 
-    private function isGlob(bool $glob, string $documentEntryFile, string $currentPath, string $file, string $prefix): bool
+    private static function isEqualRelativePath(string $actualFile, string $expectedFile, string $currentFile, bool $glob): bool
+    {
+        if (self::isAbsoluteFile($expectedFile)) {
+            return false;
+        }
+
+        $current = explode('/', $currentFile);
+        array_pop($current);
+        $current[] = $expectedFile;
+        $absoluteExpectedFile = implode('/', $current);
+
+        if ($absoluteExpectedFile === $actualFile) {
+            return true;
+        }
+
+        return self::isGlob($glob, $actualFile, $currentFile, $absoluteExpectedFile, '');
+    }
+
+    private static function isGlob(bool $glob, string $documentEntryFile, string $currentPath, string $file, string $prefix): bool
     {
         if ($glob && $documentEntryFile !== $currentPath) {
-            $file = str_replace('*', '[a-zA-Z0-9]*', $file);
+            $file = str_replace('*', '[^\/]*', $file);
             $pattern = '`^' . $file . '$`';
 
             return preg_match($pattern, $prefix . $documentEntryFile) > 0;
         }
 
         return false;
+    }
+
+    public static function isPatternMatchingFile(string $absoluteExpectedFile, string $actualFile): bool
+    {
+        $pattern = str_replace('*', '[a-zA-Z0-9-_]*', $absoluteExpectedFile);
+        $pattern = '`^' . $pattern . '$`';
+
+        return preg_match($pattern, $actualFile) > 0;
+    }
+
+    public static function isAbsoluteFile(string $expectedFile): bool
+    {
+        return str_starts_with($expectedFile, '/');
     }
 }

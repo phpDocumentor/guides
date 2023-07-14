@@ -66,6 +66,7 @@ final class DocumentNode extends CompoundNode
     private string|null $metaTitle = null;
     private DocumentEntryNode|null $documentEntry = null;
     private SectionEntryNode|null $rootSectionEntry = null;
+    private bool $isRoot = false;
 
     public function __construct(
         private readonly string $hash,
@@ -270,5 +271,18 @@ final class DocumentNode extends CompoundNode
     public function setRootSectionEntry(SectionEntryNode|null $rootSectionEntry): void
     {
         $this->rootSectionEntry = $rootSectionEntry;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
+    }
+
+    public function withIsRoot(bool $isRoot): DocumentNode
+    {
+        $node = clone$this;
+        $node->isRoot = $isRoot;
+
+        return $node;
     }
 }
