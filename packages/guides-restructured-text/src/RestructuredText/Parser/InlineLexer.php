@@ -59,7 +59,6 @@ final class InlineLexer extends AbstractLexer
         return [
             '\\\\``', // must be a separate case, as the next pattern would split in "\`" + "`", causing it to become a intepreted text
             '\\\\[\s\S]', // Escaping hell... needs escaped slash in regex, but also in php.
-            ExternalReferenceResolver::SUPPORTED_SCHEMAS . ':[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
             '\\S+@\\S+\\.\\S+',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
@@ -76,6 +75,7 @@ final class InlineLexer extends AbstractLexer
             '|',
             '\\*\\*',
             '\\*',
+            '\b(?<!:)[a-z0-9\\.\-+]{2,}:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
         ];
     }
 
