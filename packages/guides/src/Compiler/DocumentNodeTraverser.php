@@ -50,7 +50,7 @@ final class DocumentNodeTraverser
         }
 
         foreach ($shadowNode->getChildren() as $shadowChild) {
-            $this->traverseForTransformer($transformer, $shadowChild, $compilerContext->withShadowTree($shadowNode));
+            $this->traverseForTransformer($transformer, $shadowChild, $compilerContext->withShadowTree($shadowChild));
         }
 
         if (!$supports) {
