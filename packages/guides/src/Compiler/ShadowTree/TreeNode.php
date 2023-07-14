@@ -9,9 +9,10 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
+use function array_unshift;
 use function array_values;
 
-/** @template TNode of Node */
+/** @template-covariant TNode of Node */
 final class TreeNode
 {
     /** @var TreeNode<DocumentNode> */
@@ -178,7 +179,7 @@ final class TreeNode
         }
     }
 
-    public function findPosition(Node $node): ?int
+    public function findPosition(Node $node): int|null
     {
         foreach ($this->children as $key => $child) {
             if ($child->getNode() === $node) {

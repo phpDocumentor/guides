@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
+use ArrayIterator;
 use LogicException;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
@@ -10,8 +13,12 @@ use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 
+use function spl_object_hash;
+
+/** @implements NodeTransformer<AnchorNode> */
 final class MoveAnchorTransformer implements NodeTransformer
 {
+    /** @var array<string, string> */
     private array $seen = [];
 
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
@@ -46,7 +53,8 @@ final class MoveAnchorTransformer implements NodeTransformer
         return 30000;
     }
 
-    private function attemptMoveToNeighbour(TreeNode $parent, int $position, Node $node): ?Node
+    /** @param TreeNode<Node> $parent */
+    private function attemptMoveToNeighbour(TreeNode $parent, int $position, AnchorNode $node): AnchorNode|null
     {
         $current = $this->findNextSection($parent, $position);
         if ($current === null) {
@@ -55,20 +63,30 @@ final class MoveAnchorTransformer implements NodeTransformer
             }
 
             $position = $parent->getParent()->findPosition($parent->getNode());
+            if ($position === null) {
+                throw new LogicException('Node not found in shadow tree');
+            }
+
             return $this->attemptMoveToNeighbour($parent->getParent(), $position, $node);
         }
 
         if ($current->getNode() instanceof SectionNode) {
             $current->pushChild($node);
+
             return null;
         }
 
         return $node;
     }
 
-    private function findNextSection($parent, $position): TreeNode|null
+    /**
+     * @param TreeNode<Node> $parent
+     *
+     * @return TreeNode<Node>|null
+     */
+    private function findNextSection(TreeNode $parent, int $position): TreeNode|null
     {
-        $children = new \ArrayIterator($parent->getChildren());
+        $children = new ArrayIterator($parent->getChildren());
         if ($children->count() <= $position + 1) {
             return null;
         }

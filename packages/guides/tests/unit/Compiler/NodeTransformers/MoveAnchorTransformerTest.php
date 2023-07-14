@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -19,13 +21,13 @@ final class MoveAnchorTransformerTest extends TestCase
     protected function setUp(): void
     {
         $this->documentNodeTraverser = new DocumentNodeTraverser(new class implements NodeTransformerFactory {
+            /** @return iterable<MoveAnchorTransformer> */
             public function getTransformers(): iterable
             {
-                return [
-                    new MoveAnchorTransformer()
-                ];
+                yield new MoveAnchorTransformer();
             }
 
+            /** @return array<string, int> */
             public function getPriorities(): array
             {
                 return [];
@@ -141,7 +143,6 @@ final class MoveAnchorTransformerTest extends TestCase
         self::assertCount(0, $context->getDocumentNode()->getChildren()[0]->getChildren());
         self::assertCount(2, $context->getDocumentNode()->getChildren()[1]->getChildren());
     }
-
 
     public function testMoveAnchorsAtTheEndOfSectionToNextParentNeighbourSection(): void
     {

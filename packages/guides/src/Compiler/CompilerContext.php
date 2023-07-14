@@ -16,11 +16,12 @@ namespace phpDocumentor\Guides\Compiler;
 use Exception;
 use phpDocumentor\Guides\Compiler\ShadowTree\TreeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 class CompilerContext
 {
-    /** @var TreeNode<DocumentNode> */
+    /** @var TreeNode<Node> */
     private TreeNode $shadowTree;
 
     public function __construct(
@@ -50,6 +51,7 @@ class CompilerContext
         return $that;
     }
 
+    /** @param TreeNode<Node> $shadowTree */
     public function withShadowTree(TreeNode $shadowTree): static
     {
         $that = clone $this;
@@ -58,7 +60,7 @@ class CompilerContext
         return $that;
     }
 
-    /** @return TreeNode<DocumentNode> */
+    /** @return TreeNode<Node> */
     public function getShadowTree(): TreeNode
     {
         if (!isset($this->shadowTree)) {
