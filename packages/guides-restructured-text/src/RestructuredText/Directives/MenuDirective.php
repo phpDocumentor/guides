@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\Menu\TocNode;
+use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
+use function count;
+
 /**
- * Sphinx based Toctree directive.
+ * A menu directives displays a menu in the page. In opposition to a toctree directive the menu
+ * is for display only. It does not change the position of document in the document tree and can therefore be included
+ * all pages as navigation.
  *
- * This directive has an issue, as the related documents are resolved on parse, but during the rendering
- * we are using the {@see Metas} to collect the titles of those documents. There is some step missing in our process
- * which could be resolved by using https://github.com/phpDocumentor/guides/pull/21?
- *
- * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+ * By default it displays a menu of the pages on level 1 up to level 2.
  */
-class ToctreeDirective extends BaseDirective
+class MenuDirective extends BaseDirective
 {
     public function __construct(private readonly ToctreeBuilder $toctreeBuilder)
     {
@@ -28,7 +28,7 @@ class ToctreeDirective extends BaseDirective
 
     public function getName(): string
     {
-        return 'toctree';
+        return 'menu';
     }
 
     /** {@inheritDoc} */
@@ -38,6 +38,8 @@ class ToctreeDirective extends BaseDirective
     ): Node|null {
         $parserContext = $documentParserContext->getParser()->getParserContext();
         $options = $directive->getOptions();
+        $options['glob'] = new DirectiveOption('glob', true);
+        $options['titlesonly'] = new DirectiveOption('titlesonly', false);
         $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
@@ -45,7 +47,10 @@ class ToctreeDirective extends BaseDirective
             $documentParserContext->getDocumentIterator(),
             $options,
         );
+        if (count($toctreeFiles) === 0) {
+            $toctreeFiles[] = '/*';
+        }
 
-        return (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
+        return (new NavMenuNode($toctreeFiles))->withOptions($this->optionsToArray($options));
     }
 }

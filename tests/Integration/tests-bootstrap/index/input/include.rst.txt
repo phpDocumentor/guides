@@ -3,20 +3,14 @@
 
     ..  rubric:: Main Menu
 
-    .. toctree::
-        :titlesonly:
-        :glob:
-
-        *
+    .. menu::
+        :menu: mainmenu
 
 ..  documentblock::
     :identifier: navbar
 
-    .. toctree::
-        :titlesonly:
-        :glob:
-
-        *
+    .. menu::
+        :menu: navbar
 
 ..  documentblock::
     :identifier: footer

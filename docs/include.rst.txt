@@ -3,24 +3,21 @@
 
     ..  rubric:: My Header
 
-    .. toctree::
-        :titlesonly:
+    ..  menu::
+        :menu: mainmenu
 
-        /about
-        /usage
-        /extension/index
-        /rst-reference/index
+        /*
+        /*/index
 
 ..  documentblock::
     :identifier: navbar
 
-    .. toctree::
-        :titlesonly:
+    .. menu::
+        :menu: navbar
 
         /about
         /usage
-        /extension/index
-        /rst-reference/index
+        /configuration
 
 ..  documentblock::
     :identifier: footer

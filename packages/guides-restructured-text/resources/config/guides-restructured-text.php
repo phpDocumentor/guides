@@ -24,6 +24,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\IncludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
 use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\MenuDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
@@ -176,6 +177,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(TipDirective::class)
         ->set(TitleDirective::class)
         ->set(ToctreeDirective::class)
+        ->set(MenuDirective::class)
         ->set(TodoDirective::class)
         ->set(TopicDirective::class)
         ->set(UmlDirective::class)

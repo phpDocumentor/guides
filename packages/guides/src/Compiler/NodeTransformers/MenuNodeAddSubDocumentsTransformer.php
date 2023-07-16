@@ -9,11 +9,12 @@ use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
+use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<MenuNode> */
-class TocNodeSubLevelTransformer implements NodeTransformer
+class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
 {
     // Setting a default level prevents PHP errors in case of circular references
     private const DEFAULT_MAX_LEVELS = 10;
@@ -25,7 +26,7 @@ class TocNodeSubLevelTransformer implements NodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
-        if (!$node instanceof TocNode) {
+        if (!$node instanceof TocNode && !$node instanceof NavMenuNode) {
             return $node;
         }
 
@@ -65,7 +66,7 @@ class TocNodeSubLevelTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof TocNode;
+        return $node instanceof TocNode || $node instanceof NavMenuNode;
     }
 
     public function getPriority(): int
