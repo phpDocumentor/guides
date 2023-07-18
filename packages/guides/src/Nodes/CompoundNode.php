@@ -40,6 +40,7 @@ abstract class CompoundNode extends AbstractNode
         $this->value[] = $node;
     }
 
+    /** @param TValue $node */
     public function pushChildNode(Node $node): void
     {
         array_unshift($this->value, $node);

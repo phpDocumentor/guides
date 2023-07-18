@@ -35,6 +35,10 @@ final class MoveAnchorTransformer implements NodeTransformer
 
         $this->seen[spl_object_hash($node)] = spl_object_hash($node);
         $parent = $compilerContext->getShadowTree()->getParent();
+        if ($parent === null) {
+            throw new LogicException('Node not found in shadow tree');
+        }
+
         $position = $parent->findPosition($node);
         if ($position === null) {
             throw new LogicException('Node not found in shadow tree');

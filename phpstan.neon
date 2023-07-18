@@ -24,6 +24,10 @@ parameters:
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/TextRoleRule.php
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
 
+    -
+       message: '#^Return type \(iterable<phpDocumentor\\Guides\\Compiler\\NodeTransformers\\MoveAnchorTransformer>\) of method class@anonymous\/guides\/tests\/unit\/Compiler\/.*#'
+       paths:
+         - packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
   paths:
     - packages/guides/src
     - packages/guides-markdown/src
