@@ -59,6 +59,6 @@ class VariableInlineNodeTransformer implements NodeTransformer
     public function getPriority(): int
     {
         // Late, other replacements should already have happened
-        return 30000;
+        return 30_000;
     }
 }

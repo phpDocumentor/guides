@@ -30,7 +30,7 @@ class ImplicitHyperlinkTargetPass implements CompilerPass
 {
     public function getPriority(): int
     {
-        return 20000; // must be run *before* MetasPass
+        return 20_000; // must be run *before* MetasPass
     }
 
     /** {@inheritDoc} */

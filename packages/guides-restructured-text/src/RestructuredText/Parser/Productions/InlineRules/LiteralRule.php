@@ -36,6 +36,6 @@ class LiteralRule extends AbstractInlineRule
     public function getPriority(): int
     {
         // Should be executed first as any other rules within may not be interpreted
-        return 10000;
+        return 10_000;
     }
 }

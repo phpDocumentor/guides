@@ -33,7 +33,7 @@ final class MoveAnchorTransformerTest extends TestCase
             {
                 return [];
             }
-        }, 30000);
+        }, 30_000);
     }
 
     public function testAnchorNodeShouldBeMovedToNextSectionNodeWhenPositionedAboveSection(): void

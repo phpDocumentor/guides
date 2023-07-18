@@ -61,6 +61,6 @@ class ClassNodeTransformer implements NodeTransformer
 
     public function getPriority(): int
     {
-        return 40000;
+        return 40_000;
     }
 }

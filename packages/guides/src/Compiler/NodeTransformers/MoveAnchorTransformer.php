@@ -58,7 +58,7 @@ final class MoveAnchorTransformer implements NodeTransformer
 
     public function getPriority(): int
     {
-        return 30000;
+        return 30_000;
     }
 
     /** @param TreeNode<Node> $parent */
