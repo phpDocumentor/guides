@@ -12,14 +12,18 @@ use phpDocumentor\Guides\Compiler\ShadowTree\TreeNode;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
-
-use function spl_object_hash;
+use WeakMap;
 
 /** @implements NodeTransformer<AnchorNode> */
 final class MoveAnchorTransformer implements NodeTransformer
 {
-    /** @var array<string, string> */
-    private array $seen = [];
+    /** @var WeakMap<AnchorNode, true> */
+    private WeakMap $seen;
+
+    public function __construct()
+    {
+        $this->seen = new WeakMap();
+    }
 
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
@@ -29,11 +33,11 @@ final class MoveAnchorTransformer implements NodeTransformer
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         //When exists in seen, it means that the node has already been processed. Ignore it.
-        if (isset($this->seen[spl_object_hash($node)])) {
+        if (isset($this->seen[$node])) {
             return $node;
         }
 
-        $this->seen[spl_object_hash($node)] = spl_object_hash($node);
+        $this->seen[$node] = true;
         $parent = $compilerContext->getShadowTree()->getParent();
         if ($parent === null) {
             throw new LogicException('Node not found in shadow tree');
