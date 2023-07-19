@@ -18,6 +18,7 @@ use Symfony\Component\Process\Process;
 
 use function file_get_contents;
 use function file_put_contents;
+use function sys_get_temp_dir;
 use function tempnam;
 
 class PlantumlRenderer implements DiagramRenderer
@@ -41,7 +42,7 @@ $diagram
 @enduml
 PUML;
 
-        $pumlFileLocation = tempnam('phpdocumentor', 'pu_');
+        $pumlFileLocation = tempnam(sys_get_temp_dir() . '/phpdocumentor', 'pu_');
         file_put_contents($pumlFileLocation, $output);
 
         $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);
