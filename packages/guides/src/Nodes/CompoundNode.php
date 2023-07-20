@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function array_unshift;
 use function array_values;
 
 /**
@@ -37,6 +38,12 @@ abstract class CompoundNode extends AbstractNode
     public function addChildNode(Node $node): void
     {
         $this->value[] = $node;
+    }
+
+    /** @param TValue $node */
+    public function pushChildNode(Node $node): void
+    {
+        array_unshift($this->value, $node);
     }
 
     /** @return $this<TValue> */

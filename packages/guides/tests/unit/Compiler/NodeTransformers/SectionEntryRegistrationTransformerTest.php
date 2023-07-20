@@ -28,7 +28,7 @@ class SectionEntryRegistrationTransformerTest extends TestCase
         $document = new DocumentNode('123', $path);
         $document = $document->setDocumentEntry(new DocumentEntryNode($path, TitleNode::emptyNode()));
 
-        return $context->withShadowTree($document);
+        return $context->withDocumentShadowTree($document);
     }
 
     public function testSectionGetsRegistered(): void

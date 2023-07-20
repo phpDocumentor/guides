@@ -38,11 +38,23 @@
         ]
     },
     "std:label": {
+        "document-title": [
+            "My Project",
+            "3.1.4",
+            "index.html#document-title",
+            "Document Title"
+        ],
         "my_index": [
             "My Project",
             "3.1.4",
             "index.html#my_index",
             "Document Title"
+        ],
+        "page-1": [
+        "My Project",
+        "3.1.4",
+        "page1.html#page-1",
+        "Page 1"
         ],
         "my_cool_page": [
             "My Project",
@@ -61,6 +73,12 @@
             "3.1.4",
             "subfolder\/index.html#subfolder-index",
             "Subfolder Index"
+        ],
+        "subpage-1": [
+        "My Project",
+        "3.1.4",
+        "subfolder\/subpage1.html#subpage-1",
+        "Subpage 1"
         ],
         "another_cool_page": [
             "My Project",

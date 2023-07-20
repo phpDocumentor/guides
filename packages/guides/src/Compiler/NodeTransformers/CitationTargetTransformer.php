@@ -40,6 +40,6 @@ class CitationTargetTransformer implements NodeTransformer
 
     public function getPriority(): int
     {
-        return 20000;
+        return 20_000;
     }
 }

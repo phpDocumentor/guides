@@ -31,6 +31,12 @@
         <exclude-pattern>packages/guides/src/Setup/QuickStart.php</exclude-pattern>
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
+        <properties>
+            <property name="minDigitsBeforeDecimalPoint" value="5"/>
+        </properties>
+    </rule>
+
     <rule ref="PSR2">
         <include-pattern>*\.php</include-pattern>
     </rule>

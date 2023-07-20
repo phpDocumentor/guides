@@ -40,6 +40,6 @@ class FootNodeNumberedTransformer implements NodeTransformer
     public function getPriority(): int
     {
         // must be run *before* FootNodeNamedTransformer
-        return 30000;
+        return 30_000;
     }
 }

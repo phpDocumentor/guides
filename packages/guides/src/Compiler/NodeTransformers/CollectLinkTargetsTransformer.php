@@ -14,6 +14,8 @@ use phpDocumentor\Guides\Nodes\SectionNode;
 use SplStack;
 use Webmozart\Assert\Assert;
 
+use function assert;
+
 /** @implements NodeTransformer<DocumentNode|AnchorNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
 {
@@ -35,12 +37,17 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
         } elseif ($node instanceof AnchorNode) {
-            $currentDocument = $this->documentStack->top();
-            Assert::notNull($currentDocument);
+            $currentDocument = $compilerContext->getDocumentNode();
+            $parentSection = $compilerContext->getShadowTree()->getParent()?->getNode();
+            assert($parentSection instanceof SectionNode);
 
             $compilerContext->getProjectNode()->addLinkTarget(
                 $node->toString(),
-                new InternalTarget($currentDocument->getFilePath(), $node->toString()),
+                new InternalTarget(
+                    $currentDocument->getFilePath(),
+                    $node->toString(),
+                    $parentSection->getTitle()->toString(),
+                ),
             );
         } elseif ($node instanceof SectionNode) {
             $currentDocument = $this->documentStack->top();
