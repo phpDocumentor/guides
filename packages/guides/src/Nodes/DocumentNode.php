@@ -67,6 +67,7 @@ final class DocumentNode extends CompoundNode
     private DocumentEntryNode|null $documentEntry = null;
     private SectionEntryNode|null $rootSectionEntry = null;
     private bool $isRoot = false;
+    private bool $orphan = false;
 
     public function __construct(
         private readonly string $hash,
@@ -284,5 +285,17 @@ final class DocumentNode extends CompoundNode
         $node->isRoot = $isRoot;
 
         return $node;
+    }
+
+    public function isOrphan(): bool
+    {
+        return $this->orphan;
+    }
+
+    public function setOrphan(bool $orphan): DocumentNode
+    {
+        $this->orphan = $orphan;
+
+        return $this;
     }
 }
