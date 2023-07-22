@@ -8,7 +8,6 @@ use JsonException;
 use RuntimeException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function implode;
 use function is_array;
 use function json_decode;
 
@@ -27,9 +26,8 @@ class JsonLoader
             'GET',
             $url,
         );
-        $jsonString = implode("\n", $response->toArray());
 
-        return $this->loadJsonFromString($jsonString, $url);
+        return $response->toArray();
     }
 
     /** @return array<mixed> */

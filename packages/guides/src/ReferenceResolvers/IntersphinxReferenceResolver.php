@@ -50,7 +50,7 @@ class IntersphinxReferenceResolver implements ReferenceResolver
             $node->setValue($link->getTitle());
         }
 
-        return false;
+        return true;
     }
 
     public static function getPriority(): int

@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
-class InternalTarget
+class InternalTarget implements Target
 {
+    private string $url;
+
     public function __construct(
         private readonly string $documentPath,
         protected string $anchorName,
@@ -40,5 +42,17 @@ class InternalTarget
     public function getTitle(): string|null
     {
         return $this->title;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): InternalTarget
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

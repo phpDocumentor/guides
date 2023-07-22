@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Twig;
 use League\Flysystem\Exception;
 use LogicException;
 use phpDocumentor\Guides\Meta\InternalTarget;
+use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -47,7 +48,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('asset', $this->asset(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
-            new TwigFunction('renderInternalTarget', $this->renderInternalTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
@@ -108,9 +109,13 @@ final class AssetsExtension extends AbstractExtension
     }
 
     /** @param array{env: RenderContext} $context */
-    public function renderInternalTarget(array $context, InternalTarget $internalTarget): string
+    public function renderTarget(array $context, Target $target): string
     {
-        return $context['env']->relativeDocUrl($internalTarget->getDocumentPath(), $internalTarget->getAnchor());
+        if ($target instanceof InternalTarget) {
+            return $context['env']->relativeDocUrl($target->getDocumentPath(), $target->getAnchor());
+        }
+
+        return $target->getUrl();
     }
 
     /** @param array{env: RenderContext} $context */

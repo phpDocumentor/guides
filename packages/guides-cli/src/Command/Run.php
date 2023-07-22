@@ -16,6 +16,7 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Intersphinx\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
@@ -33,6 +34,7 @@ use function array_pop;
 use function count;
 use function getcwd;
 use function implode;
+use function is_array;
 use function is_countable;
 use function is_dir;
 use function is_file;
@@ -47,6 +49,7 @@ final class Run extends Command
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
+        private readonly InventoryRepository $inventoryRepository,
     ) {
         parent::__construct('run');
 
@@ -117,18 +120,20 @@ final class Run extends Command
         }
 
         if (is_file($inputDir . '/settings.php')) {
-            $settings = require $inputDir . '/settings.php';
-            if (!$settings instanceof ProjectSettings) {
-                throw new RuntimeException('settings.php must return an instance of ' . ProjectSettings::class);
+            $settingsArray = require $inputDir . '/settings.php';
+            if (!is_array($settingsArray)) {
+                throw new RuntimeException('settings.php must return an array!');
             }
 
+            $settings = new ProjectSettings($settingsArray);
             $this->settingsManager->setProjectSettings($settings);
             $projectNode = new ProjectNode(
                 $settings->getTitle(),
                 $settings->getVersion(),
             );
+            $this->inventoryRepository->initialize($settings->getInventories());
         } else {
-            $this->settingsManager->setProjectSettings(new ProjectSettings());
+            $this->settingsManager->setProjectSettings(new ProjectSettings([]));
             $projectNode = new ProjectNode();
         }
 
