@@ -10,3 +10,10 @@ Document Title
 ==============
 
 Lorem Ipsum Dolor.
+
+..  toctree::
+    :hidden:
+    :glob:
+    :titlesonly:
+
+    *
