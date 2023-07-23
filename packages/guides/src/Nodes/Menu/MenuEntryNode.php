@@ -72,4 +72,9 @@ final class MenuEntryNode extends AbstractNode
     {
         $this->sections[] = $section;
     }
+
+    public function __toString(): string
+    {
+        return $this->url . '#' . $this->anchor;
+    }
 }

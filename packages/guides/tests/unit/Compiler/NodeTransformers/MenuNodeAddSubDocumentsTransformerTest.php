@@ -79,8 +79,14 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
             'testRelativeTocUrlInSubdir' => [
                 'current' => 'doc1/index',
                 'paths' =>  ['index', 'doc1', 'doc2','doc1/index' , 'doc1/subdoc1', 'doc1/subdoc2', 'doc1/subdoc3', 'doc3/index'],
-                'tocFiles' => ['subdoc1', 'subdoc1'],
+                'tocFiles' => ['subdoc1', 'subdoc2'],
                 'expectedCount' => 2,
+            ],
+            'testMultipleGetRemoved' => [
+                'current' => 'doc1/index',
+                'paths' =>  ['index', 'doc1', 'doc2','doc1/index' , 'doc1/subdoc1', 'doc1/subdoc2', 'doc1/subdoc3', 'doc3/index'],
+                'tocFiles' => ['subdoc1', 'subdoc1'],
+                'expectedCount' => 1,
             ],
             'testTocTreeAbsoluteGlobDoesNotAddIndex' => [
                 'current' => 'index',
@@ -100,6 +106,13 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
                 'current' => 'index',
                 'paths' =>  ['index', 'doc1', 'doc2', 'doc1/subdoc', 'doc3/doc1'],
                 'tocFiles' => ['*'],
+                'expectedCount' => 2,
+                'glob' => true,
+            ],
+            'testRelativeGlobDoesNotAddDuplicates' => [
+                'current' => 'index',
+                'paths' =>  ['index', 'doc1', 'doc2', 'doc1/subdoc', 'doc3/doc1'],
+                'tocFiles' => ['doc1','*'],
                 'expectedCount' => 2,
                 'glob' => true,
             ],

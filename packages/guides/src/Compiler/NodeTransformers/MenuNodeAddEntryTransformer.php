@@ -16,6 +16,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
 
 use function array_pop;
+use function array_unique;
 use function assert;
 use function explode;
 use function implode;
@@ -84,6 +85,8 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                 }
             }
         }
+
+        $menuEntries = array_unique($menuEntries);
 
         $node = $node->withMenuEntries($menuEntries);
 
