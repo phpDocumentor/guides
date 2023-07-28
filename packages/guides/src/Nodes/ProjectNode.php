@@ -55,6 +55,8 @@ class ProjectNode extends CompoundNode
 
     public function setVersion(string $version): void
     {
+        $this->addVariable('version', new PlainTextInlineNode($version));
+        $this->addVariable('release', new PlainTextInlineNode($version));
         $this->version = $version;
     }
 
@@ -65,6 +67,7 @@ class ProjectNode extends CompoundNode
 
     public function setTitle(string $title): void
     {
+        $this->addVariable('project', new PlainTextInlineNode($title));
         $this->title = $title;
     }
 
