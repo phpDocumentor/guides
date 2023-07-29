@@ -153,6 +153,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(MenuEntryRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
 
+        ->set(DefaultNodeRenderer::class)
+
         ->set(InMemoryNodeRendererFactory::class)
         ->args([
             '$nodeRenderers' => tagged_iterator('phpdoc.guides.noderenderer.html'),
