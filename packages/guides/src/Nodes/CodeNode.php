@@ -17,15 +17,13 @@ use function implode;
 
 class CodeNode extends TextNode
 {
-    protected string|null $language = null;
-
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;
 
     private string|null $caption = null;
 
     /** @param string[] $lines */
-    public function __construct(array $lines)
+    public function __construct(array $lines, protected string|null $language = null)
     {
         parent::__construct(implode("\n", $lines));
     }

@@ -18,6 +18,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DocumentBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\FigureDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\HighlightDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImageDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImportantDirective;
@@ -158,6 +159,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(DocumentBlockDirective::class)
         ->set(ErrorDirective::class)
         ->set(FigureDirective::class)
+        ->set(HighlightDirective::class)
         ->set(HintDirective::class)
         ->set(ImageDirective::class)
         ->set(ImportantDirective::class)
