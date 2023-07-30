@@ -5,15 +5,21 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
+use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 
 /**
  * Rule to parse for default text roles such as `something`
  */
 class DefaultTextRoleRule extends AbstractInlineRule
 {
+    public function __construct(private readonly DefaultTextRoleFactory $textRoleFactory)
+    {
+    }
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::BACKTICK;
@@ -36,7 +42,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new LiteralInlineNode($text);
+                    return $this->textRoleFactory->getDefaultTextRole()->processNode($parserContext, '', $text, $text);
 
                 default:
                     $text .= $token->value;

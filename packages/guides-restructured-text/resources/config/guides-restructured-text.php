@@ -193,6 +193,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DefaultTextRoleFactory::class, DefaultTextRoleFactory::class)
         ->arg('$genericTextRole', inline_service(GenericTextRole::class))
+        ->arg('$defaultTextRole', inline_service(LiteralTextRole::class))
         ->arg('$textRoles', tagged_iterator('phpdoc.guides.parser.rst.text_role'))
         ->alias(TextRoleFactory::class, DefaultTextRoleFactory::class)
 

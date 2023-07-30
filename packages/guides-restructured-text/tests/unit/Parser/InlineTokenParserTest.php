@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
@@ -33,6 +34,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\Variabl
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -50,6 +52,7 @@ final class InlineTokenParserTest extends TestCase
         $this->documentParserContext = $this->createMock(DocumentParserContext::class);
         $defaultTextRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
+            new LiteralTextRole(),
             [
                 new ReferenceTextRole($this->logger),
                 new DocReferenceTextRole($this->logger),
@@ -65,7 +68,7 @@ final class InlineTokenParserTest extends TestCase
             new AnonymousPhraseRule(),
             new AnnotationRoleRule(),
             new LiteralRule(),
-            new DefaultTextRoleRule(),
+            new DefaultTextRoleRule($defaultTextRoleFactory),
             new StandaloneHyperlinkRule(),
             new EmphasisRule(),
             new StrongRule(),
@@ -219,7 +222,7 @@ final class InlineTokenParserTest extends TestCase
             ],
             'Default Textrole' => [
                 '`simple`',
-                new InlineCompoundNode([new LiteralInlineNode('simple')]),
+                new InlineCompoundNode([new GenericTextRoleInlineNode('literal', 'simple')]),
             ],
             'Hyperlink' => [
                 'https://example.com',

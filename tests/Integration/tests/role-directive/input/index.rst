@@ -18,3 +18,11 @@ An example of using :custom:`interpreted text`
    :class: special
 
 :custom:`interpreted text`
+
+.. default-role:: subscript
+
+An example of a `default` role.
+
+.. default-role:: custom
+
+An example of a `custom default` role.

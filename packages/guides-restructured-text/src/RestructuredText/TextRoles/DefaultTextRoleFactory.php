@@ -17,6 +17,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
      */
     public function __construct(
         private readonly TextRole $genericTextRole,
+        private TextRole $defaultTextRole,
         iterable $textRoles = [],
         private array $domains = [],
     ) {
@@ -43,6 +44,10 @@ class DefaultTextRoleFactory implements TextRoleFactory
 
     public function getTextRole(string $name, string|null $domain = null): TextRole
     {
+        if ($name === 'default') {
+            return $this->defaultTextRole;
+        }
+
         if ($domain === null) {
             return $this->findTextRole($this->textRoles, $name);
         }
@@ -72,5 +77,20 @@ class DefaultTextRoleFactory implements TextRoleFactory
         }
 
         return $this->genericTextRole;
+    }
+
+    public function setDefaultTextRole(string $roleName): void
+    {
+        $newDefault = $this->getTextRole($roleName);
+        if ($newDefault instanceof GenericTextRole) {
+            $newDefault->setBaseRole($roleName);
+        }
+
+        $this->defaultTextRole = $this->getTextRole($roleName);
+    }
+
+    public function getDefaultTextRole(): TextRole
+    {
+        return $this->defaultTextRole;
     }
 }

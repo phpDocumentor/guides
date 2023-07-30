@@ -17,6 +17,7 @@ class DefaultTextRoleFactoryTest extends TestCase
         $this->logger = new Logger('test');
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
+            new LiteralTextRole(),
             [],
             [],
         );
