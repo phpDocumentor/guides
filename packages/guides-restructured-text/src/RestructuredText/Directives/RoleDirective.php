@@ -17,8 +17,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
-use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use Psr\Log\LoggerInterface;
 
 use function is_string;
@@ -34,7 +34,7 @@ class RoleDirective extends BaseDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly DefaultTextRoleFactory $textRoleFactory,
+        private readonly TextRoleFactory $textRoleFactory,
     ) {
     }
 

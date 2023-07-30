@@ -9,14 +9,14 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
-use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
 /**
  * Rule to parse for default text roles such as `something`
  */
 class DefaultTextRoleRule extends AbstractInlineRule
 {
-    public function __construct(private readonly DefaultTextRoleFactory $textRoleFactory)
+    public function __construct(private readonly TextRoleFactory $textRoleFactory)
     {
     }
 
