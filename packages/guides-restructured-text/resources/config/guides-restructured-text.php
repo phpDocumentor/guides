@@ -13,6 +13,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\DefaultRoleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DocumentBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
@@ -90,6 +91,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\MathTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\SpanTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
@@ -135,6 +137,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(AbbreviationTextRole::class)
         ->set(MathTextRole::class)
         ->set(LiteralTextRole::class)
+        ->set(SpanTextRole::class)
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
@@ -150,6 +153,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ContentsDirective::class)
         ->arg('$urlGenerator', service(UrlGeneratorInterface::class))
         ->set(DangerDirective::class)
+        ->set(DefaultRoleDirective::class)
         ->set(DeprecatedDirective::class)
         ->set(DocumentBlockDirective::class)
         ->set(ErrorDirective::class)

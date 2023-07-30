@@ -1,3 +1,3 @@
 {% apply spaceless %}
-<em class="mailheader">{{ node.value }}</em>
+<em class="mailheader{%- if node.class %} {{ node.class }}{% endif %}">{{ node.value }}</em>
 {% endapply %}

@@ -23,9 +23,22 @@ class DefaultTextRoleFactory implements TextRoleFactory
         $this->textRoles = [...$textRoles];
     }
 
-    public function registerTextRole(TextRole $textRoles): void
+    public function registerTextRole(TextRole $textRole): void
     {
-        $this->textRoles[] = $textRoles;
+        $this->textRoles[] = $textRole;
+    }
+
+    public function replaceTextRole(TextRole $newTextRole): void
+    {
+        foreach ($this->textRoles as &$textRole) {
+            if ($textRole->getName() !== $newTextRole->getName()) {
+                continue;
+            }
+
+            $textRole = $newTextRole;
+        }
+
+        $this->textRoles[] = $newTextRole;
     }
 
     public function getTextRole(string $name, string|null $domain = null): TextRole

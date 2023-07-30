@@ -12,24 +12,13 @@ use Psr\Log\LoggerInterface;
 use function preg_match;
 use function trim;
 
-class AbbreviationTextRole implements TextRole
+class AbbreviationTextRole extends BaseTextRole
 {
-    final public const NAME = 'abbreviation';
+    protected string $name = 'abbreviation';
 
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return self::NAME;
-    }
-
-    /** @inheritDoc */
-    public function getAliases(): array
-    {
-        return [];
     }
 
     /** @return AbbreviationInlineNode */

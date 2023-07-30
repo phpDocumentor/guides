@@ -1,3 +1,3 @@
 {% apply spaceless %}
-<code>{{ node.value }}</code>
+<code{%- if node.class %} class="{{ node.class }}"{% endif %}>{{ node.value }}</code>
 {% endapply %}

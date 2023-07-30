@@ -1,4 +1,4 @@
 {% apply spaceless %}
-<span class="pre file">{{ node.value }}</span>
+<span class="pre file{%- if node.class %} {{ node.class }}{% endif %}">{{ node.value }}</span>
 
 {% endapply %}

@@ -1,0 +1,3 @@
+{% apply spaceless %}
+<span{%- if node.class %} class="{{ node.class }}"{% endif %}>{{- node.value -}}</span>
+{% endapply %}
