@@ -229,6 +229,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => FieldListRule::PRIORITY])
         ->set(ParagraphRule::class)
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => ParagraphRule::PRIORITY])
+        ->set(TransitionRule::class)
+        ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => TransitionRule::PRIORITY])
         ->set(InlineMarkupRule::class)
         ->set(TitleRule::class)
 
@@ -287,8 +289,6 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
-        ->set(TransitionRule::class)
-        ->tag('phpdoc.guides.parser.rst.structural_element', ['priority' => TransitionRule::PRIORITY])
         ->set(SectionRule::class)
         ->tag('phpdoc.guides.parser.rst.structural_element', ['priority' => SectionRule::PRIORITY])
 
