@@ -31,7 +31,7 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
             return $node;
         }
 
-        if ($node->getTitle() === null) {
+        if ($node->getTitle() === null && !$node->isOrphan()) {
             $this->logger->warning('Document has not title', $node->getLoggerInformation());
         }
 

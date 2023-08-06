@@ -20,6 +20,8 @@ class OrphanFieldListItemRule implements FieldListItemRule
 
     public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode
     {
+        $documentParserContext->getDocument()->setOrphan(true);
+
         return new OrphanNode();
     }
 }
