@@ -14,7 +14,8 @@ which you invoke the CLI.
 
 It should look like this::
 
-.. code-block:: xml
+..  code-block:: xml
+    :caption: your_project/guides.xml
 
     <?xml version="1.0" encoding="UTF-8" ?>
     <guides>
@@ -30,4 +31,6 @@ Some ways to extend the guides:
 
 .. toctree::
 
+    structure
+    templates
     text-roles
