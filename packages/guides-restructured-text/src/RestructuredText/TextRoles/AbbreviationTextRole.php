@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbbreviationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Psr\Log\LoggerInterface;
 
 use function preg_match;
@@ -34,7 +34,7 @@ class AbbreviationTextRole implements TextRole
 
     /** @return AbbreviationInlineNode */
     public function processNode(
-        ParserContext $parserContext,
+        DocumentParserContext $documentParserContext,
         string $role,
         string $content,
         string $rawContent,
@@ -45,7 +45,7 @@ class AbbreviationTextRole implements TextRole
 
         $this->logger->warning(
             'Abbreviation has no definition. Usage: :abbreviation:`term (some term definition)`',
-            $parserContext->getLoggerInformation(),
+            $documentParserContext->getContext()->getLoggerInformation(),
         );
 
         return new AbbreviationInlineNode($content, '');

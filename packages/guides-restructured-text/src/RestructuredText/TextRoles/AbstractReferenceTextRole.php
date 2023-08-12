@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use Psr\Log\LoggerInterface;
 
@@ -25,7 +25,7 @@ abstract class AbstractReferenceTextRole implements TextRole
     }
 
     public function processNode(
-        ParserContext $parserContext,
+        DocumentParserContext $documentParserContext,
         string $role,
         string $content,
         string $rawContent,
@@ -58,7 +58,7 @@ abstract class AbstractReferenceTextRole implements TextRole
                                 'Reference contains unexpected content after closing `>`: "%s"',
                                 $content,
                             ),
-                            $parserContext->getLoggerInformation(),
+                            $documentParserContext->getContext()->getLoggerInformation(),
                         );
                     }
 

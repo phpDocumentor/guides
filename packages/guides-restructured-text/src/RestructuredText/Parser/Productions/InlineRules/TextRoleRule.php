@@ -58,7 +58,7 @@ class TextRoleRule extends AbstractInlineRule
                         $fullRole = ($domain ? $domain . ':' : '') . $role;
                         $lexer->moveNext();
 
-                        return $textRole->processNode($documentParserContext->getContext(), $fullRole, $part, $rawPart);
+                        return $textRole->processNode($documentParserContext, $fullRole, $part, $rawPart);
                     }
 
                     $inText = true;
