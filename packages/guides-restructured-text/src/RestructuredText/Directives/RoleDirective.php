@@ -17,7 +17,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
-use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use Psr\Log\LoggerInterface;
 
 use function is_string;
@@ -33,7 +32,6 @@ class RoleDirective extends ActionDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly TextRoleFactory $textRoleFactory,
     ) {
     }
 
@@ -53,7 +51,7 @@ class RoleDirective extends ActionDirective
             $role = $match[2];
         }
 
-        $baseRole = $this->textRoleFactory->getTextRole($role);
+        $baseRole = $documentParserContext->getTextRoleFactoryForDocument()->getTextRole($role);
         if (!$baseRole instanceof BaseTextRole) {
             $this->logger->error('Text role "' . $role . '", class ' . $baseRole::class . ' cannot be extended. ');
 
@@ -71,6 +69,6 @@ class RoleDirective extends ActionDirective
             $customRole->setBaseRole($role);
         }
 
-        $this->textRoleFactory->replaceTextRole($customRole);
+        $documentParserContext->getTextRoleFactoryForDocument()->replaceTextRole($customRole);
     }
 }

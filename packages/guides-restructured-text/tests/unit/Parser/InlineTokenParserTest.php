@@ -16,6 +16,8 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
@@ -37,20 +39,19 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class InlineTokenParserTest extends TestCase
 {
     public Logger $logger;
-    private DocumentParserContext&MockObject $documentParserContext;
+    private DocumentParserContext $documentParserContext;
     private InlineParser $inlineTokenParser;
+    private DefaultTextRoleFactory $textRoleFactory;
 
     public function setUp(): void
     {
         $this->logger = new Logger('test');
-        $this->documentParserContext = $this->createMock(DocumentParserContext::class);
-        $defaultTextRoleFactory = new DefaultTextRoleFactory(
+        $this->textRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
             new LiteralTextRole(),
             [
@@ -58,17 +59,23 @@ final class InlineTokenParserTest extends TestCase
                 new DocReferenceTextRole($this->logger),
             ],
         );
+        $this->documentParserContext = new DocumentParserContext(
+            '',
+            $this->createStub(ParserContext::class),
+            $this->textRoleFactory,
+            $this->createStub(MarkupLanguageParser::class),
+        );
         $this->inlineTokenParser = new InlineParser([
             new NamedReferenceRule(),
             new AnonymousReferenceRule(),
             new PlainTextRule(),
             new InternalReferenceRule(),
-            new TextRoleRule($defaultTextRoleFactory),
+            new TextRoleRule(),
             new NamedPhraseRule(),
             new AnonymousPhraseRule(),
             new AnnotationRoleRule(),
             new LiteralRule(),
-            new DefaultTextRoleRule($defaultTextRoleFactory),
+            new DefaultTextRoleRule(),
             new StandaloneHyperlinkRule(),
             new EmphasisRule(),
             new StrongRule(),

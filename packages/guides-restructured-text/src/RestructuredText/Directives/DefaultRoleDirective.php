@@ -15,7 +15,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
 /**
  * sets the default interpreted text role, the role that is used for interpreted text without an explicit role.
@@ -24,11 +23,6 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
  */
 class DefaultRoleDirective extends ActionDirective
 {
-    public function __construct(
-        private readonly TextRoleFactory $textRoleFactory,
-    ) {
-    }
-
     public function getName(): string
     {
         return 'default-role';
@@ -39,6 +33,6 @@ class DefaultRoleDirective extends ActionDirective
         Directive $directive,
     ): void {
         $name = $directive->getData();
-        $this->textRoleFactory->setDefaultTextRole($name);
+        $documentParserContext->getTextRoleFactoryForDocument()->setDefaultTextRole($name);
     }
 }
