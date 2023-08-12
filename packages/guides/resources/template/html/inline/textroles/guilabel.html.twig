@@ -1,3 +1,3 @@
 {% apply spaceless %}
-<span class="guilabel">{{ node.value }}</span>
+<span class="guilabel{%- if node.class %} {{ node.class }}{% endif %}">{{ node.value }}</span>
 {% endapply %}

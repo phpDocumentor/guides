@@ -1,4 +1,4 @@
 {% apply spaceless %}
-<em class="dfn">{{ node.value }}</em>
+<em class="dfn{%- if node.class %} {{ node.class }}{% endif %}">{{ node.value }}</em>
 
 {% endapply %}

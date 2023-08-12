@@ -13,6 +13,7 @@ use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -43,6 +44,7 @@ abstract class RuleTestCase extends TestCase
                 $this->createStub(FilesystemInterface::class),
                 new UrlGenerator(),
             ),
+            $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),
         );
     }

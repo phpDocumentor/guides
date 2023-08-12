@@ -77,22 +77,6 @@ abstract class BaseDirective
     }
 
     /**
-     * This can be overloaded to write a directive that just do an action without changing
-     * the nodes of the document
-     *
-     * The arguments are the same that process
-     *
-     * @param mixed[] $options
-     */
-    public function processAction(
-        DocumentParserContext $documentParserContext,
-        string $variable,
-        string $data,
-        array $options,
-    ): void {
-    }
-
-    /**
      * @param DirectiveOption[] $options
      *
      * @return array<string, scalar|null>

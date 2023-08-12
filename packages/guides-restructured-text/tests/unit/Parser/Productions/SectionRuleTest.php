@@ -23,6 +23,7 @@ use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 final class SectionRuleTest extends RuleTestCase
@@ -200,6 +201,7 @@ RST;
         return new DocumentParserContext(
             $content,
             $parserContext,
+            $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),
         );
     }

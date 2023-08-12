@@ -13,10 +13,62 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-class RoleDirective extends SubDirective
+use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use Psr\Log\LoggerInterface;
+
+use function is_string;
+use function preg_match;
+use function trim;
+
+/**
+ * The "role" directive dynamically creates a custom interpreted text role and registers it with the parser.
+ *
+ * https://docutils.sourceforge.io/docs/ref/rst/directives.html#role
+ */
+class RoleDirective extends ActionDirective
 {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {
+    }
+
     public function getName(): string
     {
         return 'role';
+    }
+
+    public function processAction(
+        DocumentParserContext $documentParserContext,
+        Directive $directive,
+    ): void {
+        $name = $directive->getData();
+        $role = 'span';
+        if (preg_match('/^([A-Za-z-]*)\(([A-Za-z-]*)\)$/', trim($name), $match) > 0) {
+            $name = $match[1];
+            $role = $match[2];
+        }
+
+        $baseRole = $documentParserContext->getTextRoleFactoryForDocument()->getTextRole($role);
+        if (!$baseRole instanceof BaseTextRole) {
+            $this->logger->error('Text role "' . $role . '", class ' . $baseRole::class . ' cannot be extended. ');
+
+            return;
+        }
+
+        $customRole = $baseRole->withName($name);
+        if (is_string($directive->getOption('class')->getValue())) {
+            $customRole->setClass($directive->getOption('class')->getValue());
+        } else {
+            $customRole->setClass($name);
+        }
+
+        if ($customRole instanceof GenericTextRole) {
+            $customRole->setBaseRole($role);
+        }
+
+        $documentParserContext->getTextRoleFactoryForDocument()->replaceTextRole($customRole);
     }
 }

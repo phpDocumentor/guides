@@ -7,10 +7,20 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
-class GenericTextRole extends BaseTextRole
+/**
+ * This text role is extended by custom text roles that do not feature a base text role:
+ *
+ * ```
+ * .. role:: custom
+ *    :class: special
+ *
+ *    :custom:`interpreted text`
+ *
+ * ```
+ */
+class SpanTextRole extends BaseTextRole
 {
-    protected string $name = 'default';
-    protected string|null $baseRole = null;
+    protected string $name = 'span';
 
     public function processNode(
         DocumentParserContext $documentParserContext,
@@ -18,16 +28,6 @@ class GenericTextRole extends BaseTextRole
         string $content,
         string $rawContent,
     ): GenericTextRoleInlineNode {
-        return new GenericTextRoleInlineNode($this->baseRole ?? $role, $content, $this->getClass());
-    }
-
-    public function getBaseRole(): string|null
-    {
-        return $this->baseRole;
-    }
-
-    public function setBaseRole(string|null $baseRole): void
-    {
-        $this->baseRole = $baseRole;
+        return new GenericTextRoleInlineNode('span', $rawContent, $this->getClass());
     }
 }

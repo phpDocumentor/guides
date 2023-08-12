@@ -6,6 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use Generator;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
@@ -87,10 +89,15 @@ final class TextRoleRuleTest extends TestCase
         $lexer->moveNext();
         $lexer->moveNext();
 
-        $textRoleRule = new TextRoleRule($textRoleFactory);
+        $textRoleRule = new TextRoleRule();
         self::assertTrue($textRoleRule->applies($lexer));
         $node = $textRoleRule->apply(
-            $this->createStub(DocumentParserContext::class),
+            new DocumentParserContext(
+                '',
+                $this->createStub(ParserContext::class),
+                $textRoleFactory,
+                $this->createStub(MarkupLanguageParser::class),
+            ),
             $lexer,
         );
 
