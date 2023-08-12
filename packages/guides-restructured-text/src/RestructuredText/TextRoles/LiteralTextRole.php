@@ -11,6 +11,12 @@ class LiteralTextRole extends BaseTextRole
 {
     protected string $name = 'literal';
 
+    /** @return string[] */
+    public function getAliases(): array
+    {
+        return ['code'];
+    }
+
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $role,
