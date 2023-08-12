@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
@@ -26,6 +27,7 @@ class MarkupLanguageParser implements ParserInterface
     /** @param Rule<DocumentNode> $startingRule */
     public function __construct(
         private readonly Rule $startingRule,
+        private readonly TextRoleFactory $textRoleFactory,
     ) {
     }
 
@@ -39,6 +41,7 @@ class MarkupLanguageParser implements ParserInterface
     {
         return new MarkupLanguageParser(
             $this->startingRule,
+            $this->textRoleFactory,
         );
     }
 
@@ -74,6 +77,7 @@ class MarkupLanguageParser implements ParserInterface
         $this->documentParser = new DocumentParserContext(
             $contents,
             $parserContext,
+            $this->textRoleFactory,
             $this,
         );
 

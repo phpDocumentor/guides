@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use RuntimeException;
 
 /**
@@ -31,6 +32,9 @@ class DocumentParserContext
 
     private LinesIterator $documentIterator;
     private int $currentTitleLevel;
+    /* Each Document has its own text role factory as text roles can be changed on a per document base
+        by directives */
+    private TextRoleFactory $textRoleFactoryForDocument;
 
     /** @var string[] */
     private array $titleLetters = [];
@@ -38,9 +42,11 @@ class DocumentParserContext
     public function __construct(
         string $content,
         private readonly ParserContext $context,
+        TextRoleFactory $textRoleFactory,
         private readonly MarkupLanguageParser $markupLanguageParser,
     ) {
         $this->documentIterator = new LinesIterator();
+        $this->textRoleFactoryForDocument = clone $textRoleFactory;
         $this->documentIterator->load($content);
         $this->currentTitleLevel = $context->getInitialHeaderLevel() - 1;
     }
@@ -114,5 +120,10 @@ class DocumentParserContext
         $that->documentIterator->load($contents, true);
 
         return $that;
+    }
+
+    public function getTextRoleFactoryForDocument(): TextRoleFactory
+    {
+        return $this->textRoleFactoryForDocument;
     }
 }
