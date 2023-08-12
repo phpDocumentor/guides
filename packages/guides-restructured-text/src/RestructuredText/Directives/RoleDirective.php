@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
@@ -30,7 +29,7 @@ use function trim;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#role
  */
-class RoleDirective extends BaseDirective
+class RoleDirective extends ActionDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -43,10 +42,10 @@ class RoleDirective extends BaseDirective
         return 'role';
     }
 
-    public function process(
+    public function processAction(
         DocumentParserContext $documentParserContext,
         Directive $directive,
-    ): Node|null {
+    ): void {
         $name = $directive->getData();
         $role = 'span';
         if (preg_match('/^([A-Za-z-]*)\(([A-Za-z-]*)\)$/', trim($name), $match) > 0) {
@@ -58,7 +57,7 @@ class RoleDirective extends BaseDirective
         if (!$baseRole instanceof BaseTextRole) {
             $this->logger->error('Text role "' . $role . '", class ' . $baseRole::class . ' cannot be extended. ');
 
-            return null;
+            return;
         }
 
         $customRole = $baseRole->withName($name);
@@ -73,7 +72,5 @@ class RoleDirective extends BaseDirective
         }
 
         $this->textRoleFactory->replaceTextRole($customRole);
-
-        return null;
     }
 }

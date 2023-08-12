@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
@@ -42,7 +40,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return $this->textRoleFactory->getDefaultTextRole()->processNode($parserContext, '', $text, $text);
+                    return $this->textRoleFactory->getDefaultTextRole()->processNode($documentParserContext, '', $text, $text);
 
                 default:
                     $text .= $token->value;

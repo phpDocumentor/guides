@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
@@ -23,7 +22,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#default-role
  */
-class DefaultRoleDirective extends BaseDirective
+class DefaultRoleDirective extends ActionDirective
 {
     public function __construct(
         private readonly TextRoleFactory $textRoleFactory,
@@ -35,13 +34,11 @@ class DefaultRoleDirective extends BaseDirective
         return 'default-role';
     }
 
-    public function process(
+    public function processAction(
         DocumentParserContext $documentParserContext,
         Directive $directive,
-    ): Node|null {
+    ): void {
         $name = $directive->getData();
         $this->textRoleFactory->setDefaultTextRole($name);
-
-        return null;
     }
 }

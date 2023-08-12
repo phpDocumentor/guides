@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * This text role is extended by custom text roles that do not feature a base text role:
@@ -23,7 +23,7 @@ class SpanTextRole extends BaseTextRole
     protected string $name = 'span';
 
     public function processNode(
-        ParserContext $parserContext,
+        DocumentParserContext $documentParserContext,
         string $role,
         string $content,
         string $rawContent,
