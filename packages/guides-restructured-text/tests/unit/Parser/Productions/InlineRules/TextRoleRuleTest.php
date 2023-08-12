@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\Parser\Productions\InlineRules;
 
 use Generator;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
@@ -65,7 +64,7 @@ final class TextRoleRuleTest extends TestCase
                 return [];
             }
 
-            public function processNode(ParserContext $parserContext, string $role, string $content, string $rawContent): InlineNode
+            public function processNode(DocumentParserContext $documentParserContext, string $role, string $content, string $rawContent): InlineNode
             {
                 return new class ($role, $content, $rawContent) extends InlineNode {
                     public function __construct(

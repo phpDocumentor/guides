@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,12 +15,12 @@ class DocReferenceTextRoleTest extends TestCase
 {
     private Logger $logger;
     private DocReferenceTextRole $docReferenceTextRole;
-    private ParserContext&MockObject $parserContext;
+    private DocumentParserContext&MockObject $documentParserContext;
 
     public function setUp(): void
     {
         $this->logger = new Logger('test');
-        $this->parserContext = $this->createMock(ParserContext::class);
+        $this->documentParserContext = $this->createMock(DocumentParserContext::class);
         $this->docReferenceTextRole = new DocReferenceTextRole($this->logger);
     }
 
@@ -30,7 +30,7 @@ class DocReferenceTextRoleTest extends TestCase
         string $url,
         string|null $text = null,
     ): void {
-        $result = $this->docReferenceTextRole->processNode($this->parserContext, 'doc', $span, $span);
+        $result = $this->docReferenceTextRole->processNode($this->documentParserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(DocReferenceNode::class, $result);
         self::assertEquals($url, $result->getTargetReference(), 'DocumentLinks are different');

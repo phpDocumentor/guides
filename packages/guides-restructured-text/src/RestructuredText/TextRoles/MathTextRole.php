@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 class MathTextRole implements TextRole
 {
@@ -23,7 +23,7 @@ class MathTextRole implements TextRole
     }
 
     public function processNode(
-        ParserContext $parserContext,
+        DocumentParserContext $documentParserContext,
         string $role,
         string $content,
         string $rawContent,
