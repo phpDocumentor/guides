@@ -7,7 +7,6 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 use Exception;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 
 use function usort;
@@ -26,7 +25,7 @@ class InlineParser
         });
     }
 
-    public function parse(string $content, ParserContext $parserContext): InlineCompoundNode
+    public function parse(string $content, DocumentParserContext $documentParserContext): InlineCompoundNode
     {
         $lexer = new InlineLexer();
         $lexer->setInput($content);
@@ -38,7 +37,7 @@ class InlineParser
             foreach ($this->rules as $inlineRule) {
                 $node = null;
                 if ($inlineRule->applies($lexer)) {
-                    $node = $inlineRule->apply($parserContext, $lexer);
+                    $node = $inlineRule->apply($documentParserContext, $lexer);
                 }
 
                 if ($node === null) {

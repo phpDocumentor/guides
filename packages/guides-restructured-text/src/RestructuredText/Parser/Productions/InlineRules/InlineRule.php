@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 interface InlineRule
 {
     public function applies(InlineLexer $lexer): bool;
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null;
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null;
 
     public function getPriority(): int;
 }

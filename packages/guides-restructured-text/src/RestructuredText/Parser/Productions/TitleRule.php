@@ -74,13 +74,11 @@ class TitleRule implements Rule
         $documentIterator->next();
         $documentIterator->next();
 
-        $context = $documentParserContext->getContext();
-
         $letter = $overlineLetter ?: $underlineLetter;
         $level = $documentParserContext->getLevel($overlineLetter, $underlineLetter);
 
         return new TitleNode(
-            $this->inlineTokenParser->parse($title, $context),
+            $this->inlineTokenParser->parse($title, $documentParserContext),
             $level,
             (new AsciiSlugger())->slug($title)->lower()->toString(),
         );

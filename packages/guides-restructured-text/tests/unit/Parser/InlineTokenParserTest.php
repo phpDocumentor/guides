@@ -15,7 +15,6 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
@@ -42,13 +41,13 @@ use PHPUnit\Framework\TestCase;
 final class InlineTokenParserTest extends TestCase
 {
     public Logger $logger;
-    private ParserContext&MockObject $parserContext;
+    private DocumentParserContext&MockObject $documentParserContext;
     private InlineParser $inlineTokenParser;
 
     public function setUp(): void
     {
         $this->logger = new Logger('test');
-        $this->parserContext = $this->createMock(ParserContext::class);
+        $this->documentParserContext = $this->createMock(DocumentParserContext::class);
         $defaultTextRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
             [
@@ -78,7 +77,7 @@ final class InlineTokenParserTest extends TestCase
     #[DataProvider('inlineNodeProvider')]
     public function testString(string $content, InlineCompoundNode $expected): void
     {
-        $result = $this->inlineTokenParser->parse($content, $this->parserContext);
+        $result = $this->inlineTokenParser->parse($content, $this->documentParserContext);
         self::assertEquals($expected, $result);
     }
 
