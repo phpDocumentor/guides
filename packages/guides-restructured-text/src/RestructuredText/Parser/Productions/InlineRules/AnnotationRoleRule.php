@@ -7,8 +7,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -21,7 +21,7 @@ class AnnotationRoleRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::ANNOTATION_START;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
     {
         $startPosition = $lexer->token?->position;
         $annotationName = '';

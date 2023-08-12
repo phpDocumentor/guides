@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -25,7 +25,7 @@ class NamedPhraseRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::BACKTICK;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
         $embeddedUrl = null;
@@ -39,7 +39,7 @@ class NamedPhraseRule extends ReferenceRule
                         $text = $embeddedUrl ?? '';
                     }
 
-                    return $this->createReference($parserContext, $text, $embeddedUrl);
+                    return $this->createReference($documentParserContext, $text, $embeddedUrl);
 
                 case InlineLexer::EMBEDED_URL_START:
                     $embeddedUrl = $this->parseEmbeddedUrl($lexer);

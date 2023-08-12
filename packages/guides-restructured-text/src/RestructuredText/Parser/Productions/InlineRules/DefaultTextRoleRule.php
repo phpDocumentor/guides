@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -19,7 +19,7 @@ class DefaultTextRoleRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::BACKTICK;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
 

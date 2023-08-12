@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 
@@ -25,7 +25,7 @@ class TextRoleRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::COLON;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
     {
         $domain = null;
         $role = null;
@@ -58,7 +58,7 @@ class TextRoleRule extends AbstractInlineRule
                         $fullRole = ($domain ? $domain . ':' : '') . $role;
                         $lexer->moveNext();
 
-                        return $textRole->processNode($parserContext, $fullRole, $part, $rawPart);
+                        return $textRole->processNode($documentParserContext->getContext(), $fullRole, $part, $rawPart);
                     }
 
                     $inText = true;

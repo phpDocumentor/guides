@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function strlen;
@@ -21,7 +21,7 @@ class LiteralRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::LITERAL;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): LiteralInlineNode
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): LiteralInlineNode
     {
         $literal = $lexer->token?->value ?? '';
         if (strlen($literal) > 4) {

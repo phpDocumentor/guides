@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function rtrim;
@@ -26,10 +26,10 @@ class NamedReferenceRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::NAMED_REFERENCE;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
     {
         $value = rtrim($lexer->token?->value ?? '', '_');
-        $node = $this->createReference($parserContext, $value);
+        $node = $this->createReference($documentParserContext, $value);
 
         $lexer->moveNext();
 

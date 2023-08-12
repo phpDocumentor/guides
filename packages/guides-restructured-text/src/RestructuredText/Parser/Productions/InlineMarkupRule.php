@@ -63,7 +63,7 @@ final class InlineMarkupRule implements Rule
         $documentIterator = $documentParserContext->getDocumentIterator();
         $buffer = $this->collectContent($documentIterator);
 
-        $node = $this->inlineTokenParser->parse($buffer->getLinesString(), $documentParserContext->getContext());
+        $node = $this->inlineTokenParser->parse($buffer->getLinesString(), $documentParserContext);
 
         if ($on !== null) {
             $on->setValue([$node]);

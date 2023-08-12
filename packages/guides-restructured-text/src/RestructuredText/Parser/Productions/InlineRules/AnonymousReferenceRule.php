@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function trim;
@@ -26,10 +26,10 @@ class AnonymousReferenceRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::ANONYMOUSE_REFERENCE;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): HyperLinkNode|null
     {
         $node = $this->createAnonymousReference(
-            $parserContext,
+            $documentParserContext,
             trim((string) $lexer->token?->value, '_'),
         );
         $lexer->moveNext();
@@ -37,11 +37,11 @@ class AnonymousReferenceRule extends ReferenceRule
         return $node;
     }
 
-    private function createAnonymousReference(ParserContext $parserContext, string $link): HyperLinkNode
+    private function createAnonymousReference(DocumentParserContext $documentParserContext, string $link): HyperLinkNode
     {
-        $parserContext->resetAnonymousStack();
-        $node = $this->createReference($parserContext, $link, null, false);
-        $parserContext->pushAnonymous($link);
+        $documentParserContext->getContext()->resetAnonymousStack();
+        $node = $this->createReference($documentParserContext, $link, null, false);
+        $documentParserContext->getContext()->pushAnonymous($link);
 
         return $node;
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
-use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -24,10 +24,10 @@ class StandaloneEmailRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::EMAIL;
     }
 
-    public function apply(ParserContext $parserContext, InlineLexer $lexer): HyperLinkNode|null
+    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): HyperLinkNode|null
     {
         $value = $lexer->token?->value ?? '';
-        $node = $this->createReference($parserContext, $value, $value, false);
+        $node = $this->createReference($documentParserContext, $value, $value, false);
 
         $lexer->moveNext();
 
