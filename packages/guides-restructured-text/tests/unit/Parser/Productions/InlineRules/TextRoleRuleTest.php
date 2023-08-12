@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Parser\Productions\InlineRules;
+namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use Generator;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\TextRoleRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
