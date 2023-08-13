@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Add a meta title to the document
@@ -22,10 +22,10 @@ class TitleDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $document = $documentParserContext->getDocument();
+        $document = $blockContext->getDocumentParserContext()->getDocument();
         $document->setMetaTitle($directive->getData());
 
         return null;

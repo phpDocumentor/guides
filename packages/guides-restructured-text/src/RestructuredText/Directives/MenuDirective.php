@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
 use function count;
@@ -33,10 +33,10 @@ class MenuDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $parserContext = $documentParserContext->getParser()->getParserContext();
+        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['glob'] = new DirectiveOption('glob', true);
         $options['titlesonly'] = new DirectiveOption('titlesonly', false);
@@ -44,7 +44,7 @@ class MenuDirective extends BaseDirective
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
             $parserContext,
-            $documentParserContext->getDocumentIterator(),
+            $blockContext->getDocumentIterator(),
             $options,
         );
         if (count($toctreeFiles) === 0) {

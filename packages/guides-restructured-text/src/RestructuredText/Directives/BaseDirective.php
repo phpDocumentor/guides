@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function array_map;
 
@@ -50,15 +50,15 @@ abstract class BaseDirective
      *
      * The node that directly follows the directive is also passed to it
      *
-     * @param DocumentParserContext $documentParserContext the current document context with the content
+     * @param BlockContext $blockContext the current document context with the content
      *    of the directive
      * @param Directive $directive parsed directive containing options and variable
      */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        return $this->processNode($documentParserContext, $directive)
+        return $this->processNode($blockContext, $directive)
             // Ensure options are always available
             ->withOptions($this->optionsToArray($directive->getOptions()));
     }
@@ -70,7 +70,7 @@ abstract class BaseDirective
      * The arguments are the same that process
      */
     public function processNode(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node {
         return new GenericNode($directive->getVariable(), $directive->getData());

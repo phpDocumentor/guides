@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\MainNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Marks the document as LaTeX main
@@ -21,7 +21,7 @@ class LaTeXMain extends BaseDirective
 
     /** {@inheritDoc} */
     public function processNode(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node {
         return new MainNode($directive->getData());

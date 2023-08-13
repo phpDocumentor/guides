@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 /**
@@ -28,13 +28,13 @@ class ContentsDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
         $options = $directive->getOptions();
         $absoluteUrl = $this->urlGenerator->absoluteUrl(
-            $documentParserContext->getContext()->getDirName(),
-            $documentParserContext->getContext()->getCurrentFileName(),
+            $blockContext->getDocumentParserContext()->getContext()->getDirName(),
+            $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
         );
 
         return (new ContentMenuNode([$absoluteUrl]))

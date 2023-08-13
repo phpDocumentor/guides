@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\RubricNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * The "rubric" directive inserts a "rubric" node into the document tree. A rubric is like an informal heading
@@ -23,7 +23,7 @@ class RubricDirective extends BaseDirective
     }
 
     public function processNode(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node {
         return new RubricNode($directive->getData());

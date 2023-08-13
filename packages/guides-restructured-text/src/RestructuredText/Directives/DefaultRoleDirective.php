@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * sets the default interpreted text role, the role that is used for interpreted text without an explicit role.
@@ -29,10 +29,10 @@ class DefaultRoleDirective extends ActionDirective
     }
 
     public function processAction(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): void {
         $name = $directive->getData();
-        $documentParserContext->getTextRoleFactoryForDocument()->setDefaultTextRole($name);
+        $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->setDefaultTextRole($name);
     }
 }

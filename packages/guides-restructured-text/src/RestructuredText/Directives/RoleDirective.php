@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use Psr\Log\LoggerInterface;
@@ -41,7 +41,7 @@ class RoleDirective extends ActionDirective
     }
 
     public function processAction(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): void {
         $name = $directive->getData();
@@ -51,7 +51,7 @@ class RoleDirective extends ActionDirective
             $role = $match[2];
         }
 
-        $baseRole = $documentParserContext->getTextRoleFactoryForDocument()->getTextRole($role);
+        $baseRole = $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->getTextRole($role);
         if (!$baseRole instanceof BaseTextRole) {
             $this->logger->error('Text role "' . $role . '", class ' . $baseRole::class . ' cannot be extended. ');
 
@@ -69,6 +69,6 @@ class RoleDirective extends ActionDirective
             $customRole->setBaseRole($role);
         }
 
-        $documentParserContext->getTextRoleFactoryForDocument()->replaceTextRole($customRole);
+        $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->replaceTextRole($customRole);
     }
 }

@@ -7,9 +7,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function trim;
 
@@ -43,11 +43,11 @@ class CodeBlockDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
         $node = new CodeNode(
-            $documentParserContext->getDocumentIterator()->toArray(),
+            $blockContext->getDocumentIterator()->toArray(),
         );
 
         $node->setLanguage(trim($directive->getData()));
@@ -56,7 +56,7 @@ class CodeBlockDirective extends BaseDirective
         $this->codeNodeOptionMapper->apply($node, $directive->getOptions());
 
         if ($directive->getVariable() !== '') {
-            $document = $documentParserContext->getDocument();
+            $document = $blockContext->getDocumentParserContext()->getDocument();
             $document->addVariable($directive->getVariable(), $node);
 
             return null;

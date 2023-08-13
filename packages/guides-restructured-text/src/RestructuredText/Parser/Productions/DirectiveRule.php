@@ -114,7 +114,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             $node = $directiveHandler->process(
-                $blockContext->getDocumentParserContext()->withContentsPreserveSpace($buffer->getLinesString()),
+                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true),
                 $directive,
             );
 

@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\RawNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
 
@@ -29,9 +29,9 @@ class RawDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        return new RawNode(implode("\n", $documentParserContext->getDocumentIterator()->toArray()));
+        return new RawNode(implode("\n", $blockContext->getDocumentIterator()->toArray()));
     }
 }

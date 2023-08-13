@@ -16,8 +16,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use RuntimeException;
 
 use function explode;
@@ -36,10 +36,10 @@ final class LiteralincludeDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function processNode(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node {
-        $parser = $documentParserContext->getParser();
+        $parser = $blockContext->getDocumentParserContext()->getParser();
         $parserContext = $parser->getParserContext();
         $path = $parserContext->absoluteRelativePath($directive->getData());
 
