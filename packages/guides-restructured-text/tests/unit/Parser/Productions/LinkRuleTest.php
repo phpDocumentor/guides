@@ -24,12 +24,12 @@ class LinkRuleTest extends RuleTestCase
         string $expectedUrl,
         AnchorNode|null $expectedNode,
     ): void {
-        $context = $this->createContext($line);
+        $blockContext = $this->createContext($line);
 
-        self::assertTrue($this->rule->applies($context));
-        self::assertEquals($expectedNode, $this->rule->apply($context));
+        self::assertTrue($this->rule->applies($blockContext));
+        self::assertEquals($expectedNode, $this->rule->apply($blockContext));
 
-        self::assertSame([$expectedLabel => $expectedUrl], $context->getContext()->getLinks());
+        self::assertSame([$expectedLabel => $expectedUrl], $blockContext->getDocumentParserContext()->getContext()->getLinks());
     }
 
     /** @return Generator<string, array{string, string, string, AnchorNode|null}> */

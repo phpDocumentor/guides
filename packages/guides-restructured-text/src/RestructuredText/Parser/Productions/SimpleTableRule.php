@@ -10,7 +10,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Psr\Log\LoggerInterface;
 
@@ -32,15 +32,15 @@ final class SimpleTableRule implements Rule
     ) {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
+        return $this->isColumnDefinitionLine($blockContext->getDocumentIterator()->current());
     }
 
     /** {@inheritDoc} */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $columnDefinition = $this->getColumnDefinition($documentIterator->current());
         $documentIterator->next();
 
@@ -64,7 +64,7 @@ final class SimpleTableRule implements Rule
             }
 
             if ($this->isColumnDefinitionLine($documentIterator->current()) === false) {
-                $rows[] = $this->tryParseRow($documentParserContext, $columnDefinition);
+                $rows[] = $this->tryParseRow($blockContext, $columnDefinition);
             }
 
             $documentIterator->next();
@@ -117,9 +117,9 @@ final class SimpleTableRule implements Rule
     }
 
     /** @param array<array-key, array{start: int, length:int|null}> $columnDefinitions */
-    private function tryParseRow(DocumentParserContext $documentParserContext, array $columnDefinitions): TableRow
+    private function tryParseRow(BlockContext $blockContext, array $columnDefinitions): TableRow
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $cellContents = [];
         $line = $documentIterator->current();
         foreach ($columnDefinitions as $column => $columnDefinition) {
@@ -141,7 +141,7 @@ final class SimpleTableRule implements Rule
             $this->logger->error(
                 sprintf(
                     'File "%s"; Malformed table: content "%s" appears in the "gap" on row "%s"',
-                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                     $gap,
                     $line,
                 ),
@@ -171,7 +171,7 @@ final class SimpleTableRule implements Rule
 
         $row = new TableRow();
         foreach ($cellContents as $content) {
-            $row->addColumn($this->createColumn($content, $documentParserContext, 1));
+            $row->addColumn($this->createColumn($content, $blockContext, 1));
         }
 
         return $row;
@@ -179,7 +179,7 @@ final class SimpleTableRule implements Rule
 
     private function createColumn(
         string $content,
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         int $colspan,
     ): TableColumn {
         if (trim($content) === '\\') {
@@ -187,9 +187,9 @@ final class SimpleTableRule implements Rule
         }
 
         $column = new TableColumn(trim($content), $colspan);
-        $context = $documentParserContext->withContents($content);
-        while ($context->getDocumentIterator()->valid()) {
-            $this->productions->apply($context, $column);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content);
+        while ($subContext->getDocumentIterator()->valid()) {
+            $this->productions->apply($subContext, $column);
         }
 
         $nodes = $column->getChildren();

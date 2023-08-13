@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
@@ -39,18 +39,18 @@ class TitleRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $line = $documentParser->getDocumentIterator()->current();
-        $nextLine = $documentParser->getDocumentIterator()->getNextLine();
+        $line = $blockContext->getDocumentIterator()->current();
+        $nextLine = $blockContext->getDocumentIterator()->getNextLine();
 
         return $this->currentLineIsAnOverline($line, $nextLine)
             || $this->nextLineIsAnUnderline($line, $nextLine);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $title = '';
         $overlineLetter = $this->currentLineIsAnOverline(
             $documentIterator->current(),
@@ -75,10 +75,10 @@ class TitleRule implements Rule
         $documentIterator->next();
 
         $letter = $overlineLetter ?: $underlineLetter;
-        $level = $documentParserContext->getLevel($overlineLetter, $underlineLetter);
+        $level = $blockContext->getDocumentParserContext()->getLevel($overlineLetter, $underlineLetter);
 
         return new TitleNode(
-            $this->inlineTokenParser->parse($title, $documentParserContext),
+            $this->inlineTokenParser->parse($title, $blockContext),
             $level,
             (new AsciiSlugger())->slug($title)->lower()->toString(),
         );

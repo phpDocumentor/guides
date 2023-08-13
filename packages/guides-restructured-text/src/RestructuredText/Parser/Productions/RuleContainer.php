@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 final class RuleContainer
 {
@@ -36,16 +36,16 @@ final class RuleContainer
     }
 
     /** @param CompoundNode<Node> $on */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode $on): void
+    public function apply(BlockContext $blockContext, CompoundNode $on): void
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         foreach ($this->productions as $production) {
-            if (!$production->applies($documentParserContext)) {
+            if (!$production->applies($blockContext)) {
                 continue;
             }
 
-            $newNode = $production->apply($documentParserContext, $on);
+            $newNode = $production->apply($blockContext, $on);
             if ($newNode !== null) {
                 $on->addChildNode($newNode);
             }

@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use SplStack;
 use Webmozart\Assert\Assert;
 
@@ -22,30 +22,30 @@ final class SectionRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->titleRule->applies($documentParser);
+        return $this->titleRule->applies($blockContext);
     }
 
     /** @param DocumentNode|SectionNode $on */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();
-        $documentIterator = $documentParserContext->getDocumentIterator();
-        $section = $this->createSection($documentParserContext);
+        $documentIterator = $blockContext->getDocumentIterator();
+        $section = $this->createSection($blockContext);
         Assert::isInstanceOfAny($on, [DocumentNode::class, SectionNode::class]);
         $on->addChildNode($section);
 
         $stack->push($on);
         while ($documentIterator->valid()) {
-            $this->fillSection($documentParserContext, $section);
+            $this->fillSection($blockContext, $section);
 
             if (!$documentIterator->getNextLine()) {
                 continue;
             }
 
-            $new = $this->createSection($documentParserContext);
+            $new = $this->createSection($blockContext);
             if ($new->getTitle()->getLevel() === $section->getTitle()->getLevel()) {
                 $stack->top()->addChildNode($new);
                 $section = $new;
@@ -78,26 +78,26 @@ final class SectionRule implements Rule
         return null;
     }
 
-    private function fillSection(DocumentParserContext $documentParserContext, SectionNode $on): SectionNode
+    private function fillSection(BlockContext $blockContext, SectionNode $on): SectionNode
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
         // this is done because we are transitioning to a method where a Substate can take the current
         // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
-            if ($this->applies($documentParserContext)) {
+            if ($this->applies($blockContext)) {
                 return $on;
             }
 
-            $this->bodyElements->apply($documentParserContext, $on);
+            $this->bodyElements->apply($blockContext, $on);
         }
 
         return $on;
     }
 
-    private function createSection(DocumentParserContext $documentParserContext): SectionNode
+    private function createSection(BlockContext $blockContext): SectionNode
     {
-        $title = $this->titleRule->apply($documentParserContext);
+        $title = $this->titleRule->apply($blockContext);
         Assert::isInstanceOf($title, TitleNode::class, 'Cannot create section without title');
 
         return new SectionNode($title);

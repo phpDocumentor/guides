@@ -94,7 +94,7 @@ final class FieldListRuleTest extends RuleTestCase
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedTitle, $context->getProjectNode()->getTitle());
+        self::assertEquals($expectedTitle, $context->getDocumentParserContext()->getProjectNode()->getTitle());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }
@@ -111,7 +111,7 @@ final class FieldListRuleTest extends RuleTestCase
         $result = $this->rule->apply($context, $documentNode);
 
         self::assertNull($result);
-        self::assertEquals($expectedVersion, $context->getProjectNode()->getVersion());
+        self::assertEquals($expectedVersion, $context->getDocumentParserContext()->getProjectNode()->getVersion());
         self::assertEquals($expectedNodesArray, $documentNode->getHeaderNodes());
         self::assertRemainingEquals($nextLine ?? '', $context->getDocumentIterator());
     }

@@ -65,17 +65,17 @@ final class AnnotationRuleTest extends RuleTestCase
         string|null $nextLine = null,
         bool $nextLiteral = false,
     ): void {
-        $documentParser = $this->createContext($input);
+        $blockParser = $this->createContext($input);
 
-        self::assertTrue($this->rule->applies($documentParser));
-        $result = $this->rule->apply($documentParser);
+        self::assertTrue($this->rule->applies($blockParser));
+        $result = $this->rule->apply($blockParser);
         self::assertEquals(
             $node,
             $result,
         );
 
-        self::assertSame($nextLine, $documentParser->getDocumentIterator()->getNextLine());
-        self::assertSame($nextLiteral, $documentParser->nextIndentedBlockShouldBeALiteralBlock);
+        self::assertSame($nextLine, $blockParser->getDocumentIterator()->getNextLine());
+        self::assertSame($nextLiteral, $blockParser->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock);
     }
 
     /** @return array<string, array<string, string|AnnotationNode|null>> */

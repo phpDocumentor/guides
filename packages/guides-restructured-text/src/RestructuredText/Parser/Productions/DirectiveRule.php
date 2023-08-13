@@ -17,10 +17,10 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -69,9 +69,9 @@ final class DirectiveRule implements Rule
         }
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isDirective($documentParser->getDocumentIterator()->current());
+        return $this->isDirective($blockContext->getDocumentIterator()->current());
     }
 
     private function isDirective(string $line): bool
@@ -79,9 +79,9 @@ final class DirectiveRule implements Rule
         return preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
         $directive = $this->parseDirective($openingLine);
 
@@ -89,21 +89,21 @@ final class DirectiveRule implements Rule
             return null;
         }
 
-        $this->parseDirectiveContent($directive, $documentParserContext);
+        $this->parseDirectiveContent($directive, $blockContext);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
         if ($directiveHandler === null) {
             $message = sprintf(
                 'Unknown directive: "%s" %sfor line "%s"',
                 $directive->getName(),
-                $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
+                $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName() !== '' ? sprintf(
                     'in "%s" ',
-                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                 ) : '',
                 $openingLine,
             );
 
-            $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
+            $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
 
             return null;
         }
@@ -114,7 +114,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             $node = $directiveHandler->process(
-                $documentParserContext->withContentsPreserveSpace($buffer->getLinesString()),
+                $blockContext->getDocumentParserContext()->withContentsPreserveSpace($buffer->getLinesString()),
                 $directive,
             );
 
@@ -125,7 +125,7 @@ final class DirectiveRule implements Rule
             $node = $this->postProcessNode($node, $directive->getOptions());
 
             if ($directive->getVariable() !== '') {
-                $documentParserContext->getDocument()->addVariable($directive->getVariable(), $node);
+                $blockContext->getDocumentParserContext()->getDocument()->addVariable($directive->getVariable(), $node);
 
                 return null;
             }
@@ -135,28 +135,29 @@ final class DirectiveRule implements Rule
             $message = sprintf(
                 'Error while processing "%s" directive%s: %s',
                 $directiveHandler->getName(),
-                $documentParserContext->getContext()->getCurrentFileName() !== '' ? sprintf(
+                $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName() !== '' ? sprintf(
                     ' in "%s"',
-                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                 ) : '',
                 $e->getMessage(),
             );
 
 
-            $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
+            $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
         }
 
         return null;
     }
 
-    private function parseDirectiveContent(Directive $directive, DocumentParserContext $documentParserContext): void
+    private function parseDirectiveContent(Directive $directive, BlockContext $blockContext): void
     {
         if ($directive->getData() === '') {
             return;
         }
 
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData());
         $inlineNode = $this->inlineMarkupRule->apply(
-            $documentParserContext->withContents($directive->getData()),
+            $subContext,
             null,
         );
         $directive->setDataNode($inlineNode);

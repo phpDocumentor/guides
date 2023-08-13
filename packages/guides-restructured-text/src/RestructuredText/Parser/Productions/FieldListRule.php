@@ -18,8 +18,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
 use RuntimeException;
@@ -43,17 +43,17 @@ final class FieldListRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isFieldLine($documentParser->getDocumentIterator()->current());
+        return $this->isFieldLine($blockContext->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $iterator = $documentParserContext->getDocumentIterator();
+        $iterator = $blockContext->getDocumentIterator();
         $fieldListItemNodes = [];
         while ($iterator->valid() && $this->isFieldLine($iterator->current())) {
-            $fieldListItemNodes[] = $this->createListItem($documentParserContext);
+            $fieldListItemNodes[] = $this->createListItem($blockContext);
             $iterator->next();
         }
 
@@ -61,7 +61,7 @@ final class FieldListRule implements Rule
             // A field list found before the first title node is considered file wide meta data:
             // https://www.sphinx-doc.org/en/master/usage/restructuredtext/field-lists.html#file-wide-metadata
             // It is not output
-            $this->addMetadata($on, $fieldListItemNodes, $documentParserContext);
+            $this->addMetadata($on, $fieldListItemNodes, $blockContext);
 
             return null;
         }
@@ -70,7 +70,7 @@ final class FieldListRule implements Rule
     }
 
     /** @param FieldListItemNode[] $fieldListItemNodes */
-    private function addMetadata(DocumentNode $documentNode, array $fieldListItemNodes, DocumentParserContext $documentParserContext): void
+    private function addMetadata(DocumentNode $documentNode, array $fieldListItemNodes, BlockContext $blockContext): void
     {
         foreach ($fieldListItemNodes as $fieldListItemNode) {
             foreach ($this->fieldListItemRules as $fieldListItemRule) {
@@ -78,7 +78,7 @@ final class FieldListRule implements Rule
                     continue;
                 }
 
-                $metaNode = $fieldListItemRule->apply($fieldListItemNode, $documentParserContext);
+                $metaNode = $fieldListItemRule->apply($fieldListItemNode, $blockContext);
                 if ($metaNode === null) {
                     continue;
                 }
@@ -103,27 +103,27 @@ final class FieldListRule implements Rule
         throw new RuntimeException('No field definition found in line ' . $line);
     }
 
-    private function createListItem(DocumentParserContext $documentParserContext): FieldListItemNode
+    private function createListItem(BlockContext $blockContext): FieldListItemNode
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         [$term, $content] = $this->parseField($documentIterator->current());
         $fieldListItemNode = new FieldListItemNode(
             $term,
             trim($content),
         );
 
-        $this->createDefinition($documentParserContext, $content, $fieldListItemNode);
+        $this->createDefinition($blockContext, $content, $fieldListItemNode);
 
         return $fieldListItemNode;
     }
 
     private function createDefinition(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         string $firstLine,
         FieldListItemNode $fieldListItemNode,
     ): void {
         $buffer = new Buffer();
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $nextLine = $documentIterator->getNextLine();
         if ($nextLine !== null && !$this->isFieldLine($nextLine)) {
             $indenting = mb_strlen($nextLine) - mb_strlen(trim($nextLine));
@@ -162,9 +162,12 @@ final class FieldListRule implements Rule
             $fieldListItemNode->addPlaintextContentLine($line);
         }
 
-        $nodeContext = $documentParserContext->withContents($firstLine . "\n" . $buffer->getLinesString());
-        while ($nodeContext->getDocumentIterator()->valid()) {
-            $this->productions->apply($nodeContext, $fieldListItemNode);
+        $subContext = new BlockContext(
+            $blockContext->getDocumentParserContext(),
+            $firstLine . "\n" . $buffer->getLinesString(),
+        );
+        while ($subContext->getDocumentIterator()->valid()) {
+            $this->productions->apply($subContext, $fieldListItemNode);
         }
     }
 

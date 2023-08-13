@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
@@ -187,7 +188,7 @@ RST;
         return $inlineTokenParser;
     }
 
-    private function getDocumentParserContext(string $content): DocumentParserContext
+    private function getDocumentParserContext(string $content): BlockContext
     {
         $parserContext = new ParserContext(
             new ProjectNode(),
@@ -197,12 +198,14 @@ RST;
             $this->createStub(FilesystemInterface::class),
             $this->createStub(UrlGeneratorInterface::class),
         );
-
-        return new DocumentParserContext(
+        
+        $documentParserContext = new DocumentParserContext(
             $content,
             $parserContext,
             $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),
         );
+
+        return new BlockContext($documentParserContext, $content);
     }
 }

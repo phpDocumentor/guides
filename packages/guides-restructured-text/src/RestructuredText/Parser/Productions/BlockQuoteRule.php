@@ -16,8 +16,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function array_values;
 use function count;
@@ -38,17 +38,17 @@ final class BlockQuoteRule implements Rule
 {
     public const PRIORITY = 100;
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $isWhiteSpace = trim($documentParser->getDocumentIterator()->current()) === '';
-        $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->getNextLine());
+        $isWhiteSpace = trim($blockContext->getDocumentIterator()->current()) === '';
+        $isBlockLine = $this->isBlockLine($blockContext->getDocumentIterator()->getNextLine());
 
-        return $isWhiteSpace && $isBlockLine && $documentParser->nextIndentedBlockShouldBeALiteralBlock === false;
+        return $isWhiteSpace && $isBlockLine && $blockContext->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock === false;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $buffer = new Buffer();
         $documentIterator->next();
         $indent = mb_strlen($documentIterator->current()) - mb_strlen(trim($documentIterator->current()));
@@ -65,8 +65,8 @@ final class BlockQuoteRule implements Rule
         }
 
         return new QuoteNode(
-            $documentParserContext->getParser()->getSubParser()->parse(
-                $documentParserContext->getContext(),
+            $blockContext->getDocumentParserContext()->getParser()->getSubParser()->parse(
+                $blockContext->getDocumentParserContext()->getContext(),
                 (new Buffer($lines))->getLinesString(),
             )->getChildren(),
         );

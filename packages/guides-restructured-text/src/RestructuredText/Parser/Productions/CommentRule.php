@@ -15,8 +15,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function preg_match;
 use function trim;
@@ -30,14 +30,14 @@ final class CommentRule implements Rule
 {
     public const PRIORITY = 60;
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isComment($documentParser->getDocumentIterator()->current());
+        return $this->isComment($blockContext->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
 

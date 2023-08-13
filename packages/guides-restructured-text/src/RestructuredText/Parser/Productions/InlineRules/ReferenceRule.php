@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function preg_replace;
@@ -14,7 +14,7 @@ use function trim;
 
 abstract class ReferenceRule extends AbstractInlineRule
 {
-    protected function createReference(DocumentParserContext $documentParserContext, string $link, string|null $embeddedUrl = null, bool $registerLink = true): HyperLinkNode
+    protected function createReference(BlockContext $blockContext, string $link, string|null $embeddedUrl = null, bool $registerLink = true): HyperLinkNode
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
@@ -22,7 +22,7 @@ abstract class ReferenceRule extends AbstractInlineRule
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         if ($registerLink && $embeddedUrl !== null) {
-            $documentParserContext->getContext()->setLink($link, $embeddedUrl);
+            $blockContext->getDocumentParserContext()->getContext()->setLink($link, $embeddedUrl);
         }
 
         return new HyperLinkNode($link, $embeddedUrl ?? $link);

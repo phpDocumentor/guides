@@ -25,21 +25,21 @@ final class ParagraphRuleTest extends RuleTestCase
         string|null $nextLine,
         bool $nextLiteral = false,
     ): void {
-        $documentParser = $this->createContext($input);
+        $blockParser = $this->createContext($input);
 
         $markupRule = $this->givenInlineMarkupRule();
 
         $rule = new ParagraphRule($markupRule);
 
-        self::assertTrue($rule->applies($documentParser));
-        $result = $rule->apply($documentParser);
+        self::assertTrue($rule->applies($blockParser));
+        $result = $rule->apply($blockParser);
         self::assertEquals(
             $node,
             $result,
         );
 
-        self::assertSame($nextLine, $documentParser->getDocumentIterator()->getNextLine());
-        self::assertSame($nextLiteral, $documentParser->nextIndentedBlockShouldBeALiteralBlock);
+        self::assertSame($nextLine, $blockParser->getDocumentIterator()->getNextLine());
+        self::assertSame($nextLiteral, $blockParser->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock);
     }
 
     /** @return mixed[][] */

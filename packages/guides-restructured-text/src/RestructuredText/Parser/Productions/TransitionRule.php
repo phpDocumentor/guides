@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
@@ -30,17 +30,17 @@ final class TransitionRule implements Rule
     public const PRIORITY = 20;
     public const SEPERATOR_LENGTH_MIN = 4;
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $line = $documentParser->getDocumentIterator()->current();
-        $nextLine = $documentParser->getDocumentIterator()->getNextLine();
+        $line = $blockContext->getDocumentIterator()->current();
+        $nextLine = $blockContext->getDocumentIterator()->getNextLine();
 
         return $this->currentLineIsASeparator($line, $nextLine) !== null;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         $overlineLetter = $this->currentLineIsASeparator(
             $documentIterator->current(),

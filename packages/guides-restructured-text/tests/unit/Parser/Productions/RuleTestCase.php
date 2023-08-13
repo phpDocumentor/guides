@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
@@ -32,21 +33,24 @@ abstract class RuleTestCase extends TestCase
         self::assertEquals($expected, $rest);
     }
 
-    protected function createContext(string $input): DocumentParserContext
+    protected function createContext(string $input): BlockContext
     {
-        return new DocumentParserContext(
+        $parserContext = new ParserContext(
+            new ProjectNode(),
+            'test',
+            'test',
+            1,
+            $this->createStub(FilesystemInterface::class),
+            new UrlGenerator(),
+        );
+        $documentParserContext = new DocumentParserContext(
             $input,
-            new ParserContext(
-                new ProjectNode(),
-                'test',
-                'test',
-                1,
-                $this->createStub(FilesystemInterface::class),
-                new UrlGenerator(),
-            ),
+            $parserContext,
             $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),
         );
+
+        return new BlockContext($documentParserContext, $input);
     }
 
     protected function givenInlineMarkupRule(): InlineMarkupRule

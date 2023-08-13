@@ -16,8 +16,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function str_ends_with;
@@ -38,17 +38,17 @@ final class ParagraphRule implements Rule
     ) {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
         // Should be last in the series of rules; basically: if it ain't anything else, it is a paragraph.
         // This could prove to be wrong when we pull up the spec, but the existing implementation applies this concept
         // and we roll with it for now.
-        return trim($documentParser->getDocumentIterator()->current()) !== '';
+        return trim($blockContext->getDocumentIterator()->current()) !== '';
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
@@ -74,7 +74,7 @@ final class ParagraphRule implements Rule
                 $lastLine .= ':';
             }
 
-            $documentParserContext->nextIndentedBlockShouldBeALiteralBlock = true;
+            $blockContext->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock = true;
 
             if ($lastLine !== '') {
                 $buffer->push($lastLine);
@@ -90,7 +90,7 @@ final class ParagraphRule implements Rule
         $node = new ParagraphNode();
 
         $this->inlineMarkupRule->apply(
-            $documentParserContext->withContents($buffer->getLinesString()),
+            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString()),
             $node,
         );
 

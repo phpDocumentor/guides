@@ -15,12 +15,12 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 /** @template-covariant TNode as Node */
 interface Rule
 {
-    public function applies(DocumentParserContext $documentParser): bool;
+    public function applies(BlockContext $blockContext): bool;
 
     /**
      * Enters this state and loops through all relevant lines until a Node is produced.
@@ -39,5 +39,5 @@ interface Rule
      *
      * @template TParent as CompoundNode
      */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null;
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null;
 }

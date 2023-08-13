@@ -25,7 +25,7 @@ class InlineParser
         });
     }
 
-    public function parse(string $content, DocumentParserContext $documentParserContext): InlineCompoundNode
+    public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
     {
         $lexer = new InlineLexer();
         $lexer->setInput($content);
@@ -37,7 +37,7 @@ class InlineParser
             foreach ($this->rules as $inlineRule) {
                 $node = null;
                 if ($inlineRule->applies($lexer)) {
-                    $node = $inlineRule->apply($documentParserContext, $lexer);
+                    $node = $inlineRule->apply($blockContext, $lexer);
                 }
 
                 if ($node === null) {

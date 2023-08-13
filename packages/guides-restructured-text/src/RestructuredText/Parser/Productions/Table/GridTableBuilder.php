@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 use Psr\Log\LoggerInterface;
 
@@ -204,7 +204,7 @@ class GridTableBuilder
 
     public function buildNode(
         ParserContext $tableParserContext,
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         RuleContainer $productions,
     ): TableNode|null {
         $tableNode = $this->compile($tableParserContext);
@@ -215,10 +215,10 @@ class GridTableBuilder
                 $message = sprintf(
                     "%s\nin file %s\n\n%s",
                     $error,
-                    $documentParserContext->getContext()->getCurrentFileName(),
+                    $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                     $tableAsString,
                 );
-                $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
+                $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
             }
 
             return null;
@@ -226,12 +226,12 @@ class GridTableBuilder
 
         $headers = [];
         foreach ($tableNode->getHeaders() as $row) {
-            $headers[] = $this->buildRow($row, $documentParserContext, $productions);
+            $headers[] = $this->buildRow($row, $blockContext, $productions);
         }
 
         $rows = [];
         foreach ($tableNode->getData() as $row) {
-            $rows[] = $this->buildRow($row, $documentParserContext, $productions);
+            $rows[] = $this->buildRow($row, $blockContext, $productions);
         }
 
         return new TableNode($rows, $headers);
@@ -239,12 +239,12 @@ class GridTableBuilder
 
     private function buildRow(
         TableRow $row,
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         RuleContainer $productions,
     ): TableRow {
         $newRow = new TableRow();
         foreach ($row->getColumns() as $col) {
-            $newRow->addColumn($this->buildColumn($col, $documentParserContext, $productions));
+            $newRow->addColumn($this->buildColumn($col, $blockContext, $productions));
         }
 
         return $newRow;
@@ -252,13 +252,13 @@ class GridTableBuilder
 
     private function buildColumn(
         TableColumn $col,
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         RuleContainer $productions,
     ): TableColumn {
         $content = $col->getContent();
-        $context = $documentParserContext->withContents($content);
-        while ($context->getDocumentIterator()->valid()) {
-            $productions->apply($context, $col);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content);
+        while ($subContext->getDocumentIterator()->valid()) {
+            $productions->apply($subContext, $col);
         }
 
         $nodes = $col->getChildren();

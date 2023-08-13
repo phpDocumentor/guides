@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -19,7 +19,7 @@ class VariableInlineRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::VARIABLE_DELIMITER;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
 
