@@ -21,6 +21,8 @@ final class MenuEntryNode extends AbstractNode
         private readonly bool $isDocumentRoot = false,
         private readonly int $level = 1,
         private readonly string $anchor = '',
+        private readonly bool $isInRootline = false,
+        private readonly bool $isCurrent = false,
     ) {
         $this->value = $title;
     }
@@ -71,6 +73,16 @@ final class MenuEntryNode extends AbstractNode
     public function addSection(MenuEntryNode $section): void
     {
         $this->sections[] = $section;
+    }
+    
+    public function isInRootline(): bool
+    {
+        return $this->isInRootline;
+    }
+
+    public function isCurrent(): bool
+    {
+        return $this->isCurrent;
     }
 
     public function __toString(): string

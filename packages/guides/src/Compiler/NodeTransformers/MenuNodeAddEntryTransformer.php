@@ -69,7 +69,16 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                 }
 
                 $documentEntriesInTree[] = $documentEntry;
-                $menuEntry = new MenuEntryNode($documentEntry->getFile(), $documentEntry->getTitle(), [], false, 1);
+                $menuEntry = new MenuEntryNode(
+                    $documentEntry->getFile(),
+                    $documentEntry->getTitle(),
+                    [],
+                    false,
+                    1,
+                    '',
+                    self::isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
+                    self::isCurrent($documentEntry, $currentPath),
+                );
                 if (!$node->hasOption('titlesonly')) {
                     $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry);
                 }
@@ -93,9 +102,16 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         return $node;
     }
 
-    private function isCurrent(DocumentEntryNode $documentEntry, string $currentPath): bool
+    private function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode $currentDoc): bool
     {
-        return $documentEntry->getFile() === $currentPath;
+        return $menuEntry->getFile() === $currentDoc->getFile()
+            || ($currentDoc->getParent() !== null
+                && self::isInRootline($menuEntry, $currentDoc->getParent()));
+    }
+
+    private function isCurrent(DocumentEntryNode $menuEntry, string $currentPath): bool
+    {
+        return $menuEntry->getFile() === $currentPath;
     }
 
     private function addSubSections(MenuEntryNode $sectionMenuEntry, SectionEntryNode $sectionEntryNode, DocumentEntryNode $documentEntry, int $currentLevel): void

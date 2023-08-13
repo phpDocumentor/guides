@@ -35,13 +35,14 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
 
         foreach ($node->getMenuEntries() as $menuEntry) {
             $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($menuEntry->getUrl());
-            $this->addSubEntries($menuEntry, $documentEntryOfMenuEntry, $menuEntry->getLevel() + 1, $maxDepth);
+            $this->addSubEntries($compilerContext, $menuEntry, $documentEntryOfMenuEntry, $menuEntry->getLevel() + 1, $maxDepth);
         }
 
         return $node;
     }
 
     private function addSubEntries(
+        CompilerContext $compilerContext,
         MenuEntryNode $sectionMenuEntry,
         DocumentEntryNode $documentEntry,
         int $currentLevel,
@@ -50,7 +51,7 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
         if ($maxDepth < $currentLevel) {
             return;
         }
-
+        
         foreach ($documentEntry->getChildren() as $subDocumentEntryNode) {
             $subMenuEntry = new MenuEntryNode(
                 $subDocumentEntryNode->getFile(),
@@ -58,15 +59,33 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
                 [],
                 false,
                 $currentLevel,
+                '',
+                self::isInRootline($subDocumentEntryNode, $compilerContext->getDocumentNode()->getDocumentEntry()),
+                self::isCurrent($subDocumentEntryNode, $compilerContext->getDocumentNode()->getFilePath()),
             );
             $sectionMenuEntry->addMenuEntry($subMenuEntry);
-            $this->addSubEntries($subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
+            $this->addSubEntries($compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
         }
     }
 
     public function supports(Node $node): bool
     {
         return $node instanceof TocNode || $node instanceof NavMenuNode;
+    }
+
+    private function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode|null $currentDoc): bool
+    {
+        if ($currentDoc === null) {
+            return false;
+        }
+
+        return $menuEntry->getFile() === $currentDoc->getFile()
+            || self::isInRootline($menuEntry, $currentDoc->getParent());
+    }
+
+    private function isCurrent(DocumentEntryNode $menuEntry, string $currentPath): bool
+    {
+        return $menuEntry->getFile() === $currentPath;
     }
 
     public function getPriority(): int
