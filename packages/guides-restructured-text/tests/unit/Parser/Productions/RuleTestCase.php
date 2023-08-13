@@ -44,7 +44,6 @@ abstract class RuleTestCase extends TestCase
             new UrlGenerator(),
         );
         $documentParserContext = new DocumentParserContext(
-            $input,
             $parserContext,
             $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),

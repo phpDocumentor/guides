@@ -76,7 +76,6 @@ class MarkupLanguageParser implements ParserInterface
         $this->parserContext = $parserContext;
 
         $this->documentParser = new DocumentParserContext(
-            $contents,
             $parserContext,
             $this->textRoleFactory,
             $this,

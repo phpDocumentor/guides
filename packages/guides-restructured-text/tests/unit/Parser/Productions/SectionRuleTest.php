@@ -200,7 +200,6 @@ RST;
         );
         
         $documentParserContext = new DocumentParserContext(
-            $content,
             $parserContext,
             $this->createStub(TextRoleFactory::class),
             $this->createStub(MarkupLanguageParser::class),

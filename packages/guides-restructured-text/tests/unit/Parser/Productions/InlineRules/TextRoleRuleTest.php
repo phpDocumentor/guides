@@ -93,7 +93,6 @@ final class TextRoleRuleTest extends TestCase
         $textRoleRule = new TextRoleRule();
         self::assertTrue($textRoleRule->applies($lexer));
         $documentParserContext = new DocumentParserContext(
-            '',
             $this->createStub(ParserContext::class),
             $textRoleFactory,
             $this->createStub(MarkupLanguageParser::class),
