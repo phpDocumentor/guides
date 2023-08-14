@@ -63,7 +63,7 @@
         "phpunit/phpunit": "^10.3",
         "psalm/plugin-phpunit": "^0.18.4",
         "qossmic/deptrac-shim": "^1.0.2",
-        "rector/rector": "^0.17.12",
+        "rector/rector": "^0.17.13",
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/finder": "^6.3.3",
         "vimeo/psalm": "^5.14"
