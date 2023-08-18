@@ -1,0 +1,15 @@
+{
+  "name": "t3docs/typo3-docs-theme",
+  "description": "A theme for use in the phpdocumentor",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://docs.typo3.org",
+  "autoload": {
+    "psr-4": {
+      "T3Docs\\Typo3DocsTheme\\": "src/"
+    }
+  },
+  "require": {
+    "phpdocumentor/guides-theme-bootstrap": "dev-main"
+  }
+}
