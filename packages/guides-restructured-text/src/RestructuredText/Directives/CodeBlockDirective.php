@@ -50,7 +50,12 @@ class CodeBlockDirective extends BaseDirective
             $blockContext->getDocumentIterator()->toArray(),
         );
 
-        $node->setLanguage(trim($directive->getData()));
+        if (trim($directive->getData()) !== '') {
+            $node->setLanguage(trim($directive->getData()));
+        } else {
+            $node->setLanguage($blockContext->getDocumentParserContext()->getCodeBlockDefaultLanguage());
+        }
+
         $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
         $this->setCaptionBasedOnOptions($directive->getOptions(), $node);
         $this->codeNodeOptionMapper->apply($node, $directive->getOptions());

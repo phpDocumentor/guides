@@ -34,6 +34,8 @@ class DocumentParserContext
     /* Each Document has its own text role factory as text roles can be changed on a per document base
         by directives */
     private TextRoleFactory $textRoleFactoryForDocument;
+    
+    private string $codeBlockDefaultLanguage = '';
 
     /** @var string[] */
     private array $titleLetters = [];
@@ -94,5 +96,15 @@ class DocumentParserContext
     public function getTextRoleFactoryForDocument(): TextRoleFactory
     {
         return $this->textRoleFactoryForDocument;
+    }
+    
+    public function getCodeBlockDefaultLanguage(): string
+    {
+        return $this->codeBlockDefaultLanguage;
+    }
+
+    public function setCodeBlockDefaultLanguage(string $codeBlockDefaultLanguage): void
+    {
+        $this->codeBlockDefaultLanguage = $codeBlockDefaultLanguage;
     }
 }
