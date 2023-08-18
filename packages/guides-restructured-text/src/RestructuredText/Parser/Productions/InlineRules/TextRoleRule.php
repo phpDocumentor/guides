@@ -70,11 +70,7 @@ class TextRoleRule extends AbstractInlineRule
                     break;
                 case InlineLexer::ESCAPED_SIGN:
                     $part .= substr($token->value, 1);
-                    if ($token->value === '\`') {
-                        $rawPart .= '`';
-                    } else {
-                        $rawPart .= $token->value;
-                    }
+                    $rawPart .= $token->value;
 
                     break;
                 default:

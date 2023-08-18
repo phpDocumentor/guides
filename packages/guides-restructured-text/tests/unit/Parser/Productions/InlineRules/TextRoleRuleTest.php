@@ -39,7 +39,7 @@ final class TextRoleRuleTest extends TestCase
             ':role:`con\`tent`',
             'role',
             'con`tent',
-            'con`tent',
+            'con\`tent',
         ];
     }
 
