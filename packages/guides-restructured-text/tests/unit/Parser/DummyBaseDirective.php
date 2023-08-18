@@ -17,7 +17,7 @@ class DummyBaseDirective extends DirectiveHandler
     }
 
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
         return new DummyNode($directive->getVariable(), $directive->getData(), $directive->getOptions());

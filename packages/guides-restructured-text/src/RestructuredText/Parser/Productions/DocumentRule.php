@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function implode;
 use function md5;
@@ -28,27 +28,27 @@ final class DocumentRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $documentParser->getDocumentIterator()->atStart();
+        return $blockContext->getDocumentIterator()->atStart();
     }
 
     /** @param DocumentNode|null $on */
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
         $on ??= new DocumentNode(
-            md5(implode("\n", $documentParserContext->getDocumentIterator()->toArray())),
-            $documentParserContext->getContext()->getCurrentFileName(),
+            md5(implode("\n", $blockContext->getDocumentIterator()->toArray())),
+            $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
         );
 
-        $documentParserContext->setDocument($on);
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $blockContext->getDocumentParserContext()->setDocument($on);
+        $documentIterator = $blockContext->getDocumentIterator();
 
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
         // this is done because we are transitioning to a method where a Substate can take the current
         // cursor as starting point and loop through the cursor
         while ($documentIterator->valid()) {
-            $this->structuralElements->apply($documentParserContext, $on);
+            $this->structuralElements->apply($blockContext, $on);
         }
 
         return $on;

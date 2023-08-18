@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Links\Link as LinkParser;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function preg_match;
 use function trim;
@@ -32,16 +32,16 @@ final class LinkRule implements Rule
 {
     public const PRIORITY = 120;
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $link = $this->parseLink($documentParser->getDocumentIterator()->current());
+        $link = $this->parseLink($blockContext->getDocumentIterator()->current());
 
         return $link !== null;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $link = $this->parseLink($documentIterator->current());
         if ($link === null) {
             throw new InvalidArgumentException();
@@ -53,7 +53,7 @@ final class LinkRule implements Rule
         }
 
         //TODO: pass link object to setLink
-        $documentParserContext->getContext()->setLink($link->getName(), $link->getUrl());
+        $blockContext->getDocumentParserContext()->getContext()->setLink($link->getName(), $link->getUrl());
 
         return $node;
     }

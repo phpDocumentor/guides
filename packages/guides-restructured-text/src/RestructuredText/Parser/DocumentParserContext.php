@@ -29,8 +29,7 @@ class DocumentParserContext
     public bool $nextIndentedBlockShouldBeALiteralBlock = false;
 
     public DocumentNode|null $document = null;
-
-    private LinesIterator $documentIterator;
+    
     private int $currentTitleLevel;
     /* Each Document has its own text role factory as text roles can be changed on a per document base
         by directives */
@@ -40,14 +39,11 @@ class DocumentParserContext
     private array $titleLetters = [];
 
     public function __construct(
-        string $content,
         private readonly ParserContext $context,
         TextRoleFactory $textRoleFactory,
         private readonly MarkupLanguageParser $markupLanguageParser,
     ) {
-        $this->documentIterator = new LinesIterator();
         $this->textRoleFactoryForDocument = clone $textRoleFactory;
-        $this->documentIterator->load($content);
         $this->currentTitleLevel = $context->getInitialHeaderLevel() - 1;
     }
 
@@ -79,12 +75,7 @@ class DocumentParserContext
     {
         $this->document = $document;
     }
-
-    public function getDocumentIterator(): LinesIterator
-    {
-        return $this->documentIterator;
-    }
-
+    
     public function getLevel(string $overlineLetter, string $underlineLetter): int
     {
         $letter = $overlineLetter . ':' . $underlineLetter;
@@ -98,28 +89,6 @@ class DocumentParserContext
         $this->titleLetters[$this->currentTitleLevel] = $letter;
 
         return $this->currentTitleLevel;
-    }
-
-    public function withContents(string $contents): self
-    {
-        $that = clone $this;
-        $that->documentIterator = new LinesIterator();
-        $that->documentIterator->load($contents);
-
-        return $that;
-    }
-
-    /**
-     * can be used to set the content to the document iterator while preserving space
-     * code-block directives have to preserve space
-     */
-    public function withContentsPreserveSpace(string $contents): self
-    {
-        $that = clone $this;
-        $that->documentIterator = new LinesIterator();
-        $that->documentIterator->load($contents, true);
-
-        return $that;
     }
 
     public function getTextRoleFactoryForDocument(): TextRoleFactory

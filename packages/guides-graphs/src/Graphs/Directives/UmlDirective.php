@@ -8,8 +8,8 @@ use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
@@ -46,13 +46,13 @@ final class UmlDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $parser = $documentParserContext->getParser();
+        $parser = $blockContext->getDocumentParserContext()->getParser();
         $parserContext = $parser->getParserContext();
 
-        $value = implode("\n", $documentParserContext->getDocumentIterator()->toArray());
+        $value = implode("\n", $blockContext->getDocumentIterator()->toArray());
 
         if (empty($value)) {
             $value = $this->loadExternalUmlFile($parserContext, $directive->getData());

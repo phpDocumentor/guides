@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\MarkupLanguageParser as ParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
@@ -75,28 +76,14 @@ class MarkupLanguageParser implements ParserInterface
         $this->parserContext = $parserContext;
 
         $this->documentParser = new DocumentParserContext(
-            $contents,
             $parserContext,
             $this->textRoleFactory,
             $this,
         );
 
-        if ($this->startingRule->applies($this->documentParser)) {
-            $document = $this->startingRule->apply($this->documentParser);
-            Assert::isInstanceOf($document, DocumentNode::class);
-
-            return $document;
-        }
-
-        throw new InvalidArgumentException('Content is not a valid document content');
-    }
-
-    /** @deprecated this should be replaced by proper usage of productions in other productions, by now this is a hack. */
-    public function parseFragment(DocumentParserContext $documentParserContext, string $contents): DocumentNode
-    {
-        $documentParserContext = $documentParserContext->withContents($contents);
-        if ($this->startingRule->applies($documentParserContext)) {
-            $document = $this->startingRule->apply($documentParserContext);
+        $blockContext = new BlockContext($this->documentParser, $contents);
+        if ($this->startingRule->applies($blockContext)) {
+            $document = $this->startingRule->apply($blockContext);
             Assert::isInstanceOf($document, DocumentNode::class);
 
             return $document;

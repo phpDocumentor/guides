@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function preg_match;
@@ -21,7 +21,7 @@ class EscapeRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::ESCAPED_SIGN;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): PlainTextInlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): PlainTextInlineNode|null
     {
         $char = $lexer->token?->value ?? '';
         $char = substr($char, 1);

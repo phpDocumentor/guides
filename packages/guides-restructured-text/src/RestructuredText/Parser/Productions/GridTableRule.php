@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
@@ -42,14 +42,14 @@ final class GridTableRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isColumnDefinitionLine($documentParser->getDocumentIterator()->current());
+        return $this->isColumnDefinitionLine($blockContext->getDocumentIterator()->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $line = $documentIterator->current();
 
         $tableSeparatorLineConfig = $this->tableLineConfig($line, '-');
@@ -71,7 +71,7 @@ final class GridTableRule implements Rule
                     $documentIterator->current(),
                 );
 
-                $this->logger->error($message, $documentParserContext->getContext()->getLoggerInformation());
+                $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
             }
 
             if ($this->isHeaderDefinitionLine($documentIterator->current())) {
@@ -106,7 +106,7 @@ final class GridTableRule implements Rule
             $context->pushContentLine($documentIterator->current());
         }
 
-        return $this->builder->buildNode($context, $documentParserContext, $this->productions);
+        return $this->builder->buildNode($context, $blockContext, $this->productions);
     }
 
     private function tableLineConfig(string $line, string $char): TableSeparatorLineConfig

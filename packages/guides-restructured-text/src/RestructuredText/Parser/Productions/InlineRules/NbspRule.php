@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\WhitespaceInlineNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -18,7 +18,7 @@ class NbspRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::NBSP;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): WhitespaceInlineNode
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): WhitespaceInlineNode
     {
         $lexer->moveNext();
 

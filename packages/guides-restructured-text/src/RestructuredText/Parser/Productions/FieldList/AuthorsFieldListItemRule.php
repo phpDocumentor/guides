@@ -11,7 +11,7 @@ use phpDocumentor\Guides\Nodes\Metadata\AuthorsNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function assert;
 use function count;
@@ -26,7 +26,7 @@ class AuthorsFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'authors';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode
+    public function apply(FieldListItemNode $fieldListItemNode, BlockContext $blockContext): MetadataNode
     {
         $authorNodes = [];
         if (count($fieldListItemNode->getChildren()) === 1) {

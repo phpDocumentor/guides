@@ -18,8 +18,8 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function is_string;
@@ -39,9 +39,9 @@ final class AnnotationRule implements Rule
     ) {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        return $this->isAnnotation($documentParser->getDocumentIterator()->current());
+        return $this->isAnnotation($blockContext->getDocumentIterator()->current());
     }
 
     private function isAnnotation(string $line): bool
@@ -49,9 +49,9 @@ final class AnnotationRule implements Rule
         return preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $line) > 0;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
         preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $openingLine, $matches);
         $annotationKey = $matches[1] ?? null;
@@ -84,7 +84,7 @@ final class AnnotationRule implements Rule
 
         $buffer->trimLines();
         $this->inlineMarkupRule->apply(
-            $documentParserContext->withContents($buffer->getLinesString()),
+            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString()),
             $node,
         );
 

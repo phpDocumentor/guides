@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function implode;
 
@@ -25,13 +25,13 @@ abstract class SubDirective extends BaseDirective
 {
     /** {@inheritDoc} */
     final public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $subParser = $documentParserContext->getParser()->getSubParser();
+        $subParser = $blockContext->getDocumentParserContext()->getParser()->getSubParser();
         $document = $subParser->parse(
-            $documentParserContext->getContext(),
-            implode("\n", $documentParserContext->getDocumentIterator()->toArray()),
+            $blockContext->getDocumentParserContext()->getContext(),
+            implode("\n", $blockContext->getDocumentIterator()->toArray()),
         );
 
         $node = $this->processSub($document, $directive);

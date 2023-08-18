@@ -20,8 +20,8 @@ use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Webmozart\Assert\Assert;
 
@@ -48,20 +48,20 @@ final class DefinitionListRule implements Rule
     {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
         return $this->isDefinitionTerm(
-            $documentParser->getDocumentIterator()->current(),
-            $documentParser->getDocumentIterator()->getNextLine(),
+            $blockContext->getDocumentIterator()->current(),
+            $blockContext->getDocumentIterator()->getNextLine(),
         );
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $iterator = $documentParserContext->getDocumentIterator();
+        $iterator = $blockContext->getDocumentIterator();
         $definitionListItems = [];
         while ($iterator->valid() && $this->isDefinitionTerm($iterator->current(), $iterator->peek())) {
-            $definitionListItems[] = $this->createListItem($documentParserContext);
+            $definitionListItems[] = $this->createListItem($blockContext);
             $iterator->next();
         }
 
@@ -73,17 +73,17 @@ final class DefinitionListRule implements Rule
         return new DefinitionListNode(...$definitionListItems);
     }
 
-    private function createListItem(DocumentParserContext $documentParserContext): DefinitionListItemNode
+    private function createListItem(BlockContext $blockContext): DefinitionListItemNode
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         $term = $documentIterator->current();
         $parts = explode(' : ', $term);
         $term = ltrim(array_shift($parts), '\\');
         $definitionListItem = new DefinitionListItemNode(
-            $this->inlineMarkupRule->apply($documentParserContext->withContents($term)),
+            $this->inlineMarkupRule->apply(new BlockContext($blockContext->getDocumentParserContext(), $term)),
             array_map(
                 fn ($classification): InlineCompoundNode => $this->inlineMarkupRule->apply(
-                    $documentParserContext->withContents($classification),
+                    new BlockContext($blockContext->getDocumentParserContext(), $classification),
                 ),
                 $parts,
             ),
@@ -98,16 +98,16 @@ final class DefinitionListRule implements Rule
                 continue;
             }
 
-            $definitionListItem->addChildNode($this->createDefinition($documentParserContext, $indenting));
+            $definitionListItem->addChildNode($this->createDefinition($blockContext, $indenting));
         }
 
         return $definitionListItem;
     }
 
-    private function createDefinition(DocumentParserContext $documentParserContext, int $indenting): DefinitionNode
+    private function createDefinition(BlockContext $blockContext, int $indenting): DefinitionNode
     {
         $buffer = new Buffer();
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
             $documentIterator->next();
             $emptyLinesBelongToDefinition = false;
@@ -128,9 +128,9 @@ final class DefinitionListRule implements Rule
         }
 
         $node = new DefinitionNode([]);
-        $nodeContext = $documentParserContext->withContents($buffer->getLinesString());
-        while ($nodeContext->getDocumentIterator()->valid()) {
-            $this->bodyElements->apply($nodeContext, $node);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        while ($subContext->getDocumentIterator()->valid()) {
+            $this->bodyElements->apply($subContext, $node);
         }
 
         if (count($node->getChildren()) > 1) {

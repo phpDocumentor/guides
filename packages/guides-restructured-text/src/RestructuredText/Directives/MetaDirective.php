@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Metadata\MetaNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Add a meta information:
@@ -24,10 +24,10 @@ class MetaDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $document = $documentParserContext->getDocument();
+        $document = $blockContext->getDocumentParserContext()->getDocument();
 
         foreach ($directive->getOptions() as $option) {
             $document->addHeaderNode(new MetaNode($option->getName(), (string) $option->getValue()));

@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 
 /**
@@ -33,16 +33,16 @@ class ToctreeDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $parserContext = $documentParserContext->getParser()->getParserContext();
+        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
             $parserContext,
-            $documentParserContext->getDocumentIterator(),
+            $blockContext->getDocumentIterator(),
             $options,
         );
 

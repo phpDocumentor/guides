@@ -19,8 +19,8 @@ use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Psr\Log\LoggerInterface;
 
@@ -62,16 +62,16 @@ final class ListRule implements Rule
     ) {
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $documentIterator = $documentParser->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         return $this->isListLine($documentIterator->current());
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         $buffer = new Buffer();
         //First line sets the listmarker of the list, and the indentation of the current item.
@@ -90,7 +90,7 @@ final class ListRule implements Rule
 
             if ($this->isListItemStart($documentIterator->current())) {
                 $listConfig = $this->getItemConfig($documentIterator->current());
-                $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
                 $buffer = new Buffer();
             }
 
@@ -109,7 +109,7 @@ final class ListRule implements Rule
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
-        $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
 
         return new ListNode($items, false);
     }
@@ -158,12 +158,12 @@ final class ListRule implements Rule
     }
 
     /** @param array{marker: string, indenting: int} $listConfig */
-    private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
+    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext): ListItemNode
     {
         $listItem = new ListItemNode($listConfig['marker'], false, []);
-        $context = $context->withContents($buffer->getLinesString());
-        while ($context->getDocumentIterator()->valid()) {
-            $this->productions->apply($context, $listItem);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        while ($subContext->getDocumentIterator()->valid()) {
+            $this->productions->apply($subContext, $listItem);
         }
 
         $nodes = $listItem->getChildren();

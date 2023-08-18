@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 class InternalReferenceRule extends ReferenceRule
@@ -15,7 +15,7 @@ class InternalReferenceRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::INTERNAL_REFERENCE_START;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
         $initialPosition = $lexer->token?->position;
@@ -25,7 +25,7 @@ class InternalReferenceRule extends ReferenceRule
                 case InlineLexer::BACKTICK:
                     $lexer->moveNext();
 
-                    return $this->createReference($documentParserContext, $text);
+                    return $this->createReference($blockContext, $text);
 
                 default:
                     $text .= $lexer->token->value;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 /**
  * Extend this class to create a directive that does some actions, for example on the parser context, without
@@ -15,21 +15,21 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 abstract class ActionDirective extends BaseDirective
 {
     public function process(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $this->processAction($documentParserContext, $directive);
+        $this->processAction($blockContext, $directive);
 
         return null;
     }
 
     /**
-     * @param DocumentParserContext $documentParserContext the current document context with the content
+     * @param BlockContext $blockContext the current document context with the content
      *    of the directive
      * @param Directive $directive parsed directive containing options and variable
      */
     abstract public function processAction(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): void;
 }

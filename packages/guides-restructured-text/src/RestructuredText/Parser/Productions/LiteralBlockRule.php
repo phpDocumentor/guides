@@ -16,8 +16,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
 use function array_values;
 use function count;
@@ -32,22 +32,22 @@ final class LiteralBlockRule implements Rule
 {
     public const PRIORITY = 120;
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $nextIndentedBlockShouldBeALiteralBlock = $documentParser->nextIndentedBlockShouldBeALiteralBlock;
+        $nextIndentedBlockShouldBeALiteralBlock = $blockContext->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock;
 
         // always reset the `nextIndentedBlockShouldBeALiteralBlock` state; because if this isn't a block line, you
         // do not want the indented block somewhere else in the document to suddenly become a code block
-        $documentParser->nextIndentedBlockShouldBeALiteralBlock = false;
+        $blockContext->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock = false;
 
-        $isBlockLine = $this->isBlockLine($documentParser->getDocumentIterator()->current());
+        $isBlockLine = $this->isBlockLine($blockContext->getDocumentIterator()->current());
 
         return $isBlockLine && $nextIndentedBlockShouldBeALiteralBlock;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());

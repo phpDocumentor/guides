@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function dirname;
@@ -32,12 +32,12 @@ class ImageDirective extends BaseDirective
 
     /** {@inheritDoc} */
     public function processNode(
-        DocumentParserContext $documentParserContext,
+        BlockContext $blockContext,
         Directive $directive,
     ): Node {
         return new ImageNode(
             $this->urlGenerator->absoluteUrl(
-                dirname($documentParserContext->getContext()->getCurrentAbsolutePath()),
+                dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath()),
                 $directive->getData(),
             ),
         );

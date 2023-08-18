@@ -60,7 +60,6 @@ final class InlineTokenParserTest extends TestCase
             ],
         );
         $this->documentParserContext = new DocumentParserContext(
-            '',
             $this->createStub(ParserContext::class),
             $this->textRoleFactory,
             $this->createStub(MarkupLanguageParser::class),
@@ -87,7 +86,7 @@ final class InlineTokenParserTest extends TestCase
     #[DataProvider('inlineNodeProvider')]
     public function testString(string $content, InlineCompoundNode $expected): void
     {
-        $result = $this->inlineTokenParser->parse($content, $this->documentParserContext);
+        $result = $this->inlineTokenParser->parse($content, new BlockContext($this->documentParserContext, ''));
         self::assertEquals($expected, $result);
     }
 

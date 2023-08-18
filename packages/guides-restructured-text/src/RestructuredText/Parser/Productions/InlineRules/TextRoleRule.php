@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function substr;
@@ -20,7 +20,7 @@ class TextRoleRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::COLON;
     }
 
-    public function apply(DocumentParserContext $documentParserContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
     {
         $domain = null;
         $role = null;
@@ -49,11 +49,11 @@ class TextRoleRule extends AbstractInlineRule
                     }
 
                     if ($inText) {
-                        $textRole = $documentParserContext->getTextRoleFactoryForDocument()->getTextRole($role, $domain);
+                        $textRole = $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->getTextRole($role, $domain);
                         $fullRole = ($domain ? $domain . ':' : '') . $role;
                         $lexer->moveNext();
 
-                        return $textRole->processNode($documentParserContext, $fullRole, $part, $rawPart);
+                        return $textRole->processNode($blockContext->getDocumentParserContext(), $fullRole, $part, $rawPart);
                     }
 
                     $inText = true;

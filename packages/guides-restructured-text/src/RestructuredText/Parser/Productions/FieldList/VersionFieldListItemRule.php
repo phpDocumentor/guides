@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use Psr\Log\LoggerInterface;
 
 use function sprintf;
@@ -23,9 +23,9 @@ class VersionFieldListItemRule implements FieldListItemRule
         return strtolower($fieldListItemNode->getTerm()) === 'version';
     }
 
-    public function apply(FieldListItemNode $fieldListItemNode, DocumentParserContext $documentParserContext): MetadataNode|null
+    public function apply(FieldListItemNode $fieldListItemNode, BlockContext $blockContext): MetadataNode|null
     {
-        $currentVersion = $documentParserContext->getProjectNode()->getVersion();
+        $currentVersion = $blockContext->getDocumentParserContext()->getProjectNode()->getVersion();
         if (
             $currentVersion !== null
             && $currentVersion !== $fieldListItemNode->getPlaintextContent()
@@ -37,7 +37,7 @@ class VersionFieldListItemRule implements FieldListItemRule
             ));
         }
 
-        $documentParserContext->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());
+        $blockContext->getDocumentParserContext()->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());
 
         return null;
     }

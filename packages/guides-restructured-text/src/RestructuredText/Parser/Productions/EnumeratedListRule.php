@@ -19,8 +19,8 @@ use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
-use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function count;
@@ -61,9 +61,9 @@ final class EnumeratedListRule implements Rule
         $this->expression = '/' . $expression . '/i';
     }
 
-    public function applies(DocumentParserContext $documentParser): bool
+    public function applies(BlockContext $blockContext): bool
     {
-        $documentIterator = $documentParser->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
         if ($this->isListLine($documentIterator->current()) === false) {
             return false;
         }
@@ -75,9 +75,9 @@ final class EnumeratedListRule implements Rule
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
     }
 
-    public function apply(DocumentParserContext $documentParserContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
-        $documentIterator = $documentParserContext->getDocumentIterator();
+        $documentIterator = $blockContext->getDocumentIterator();
 
         $buffer = new Buffer();
         //First line sets the listmarker of the list, and the indentation of the current item.
@@ -95,7 +95,7 @@ final class EnumeratedListRule implements Rule
             $documentIterator->next();
 
             if ($this->isListItemStart($documentIterator->current())) {
-                $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
                 $listConfig = $this->getItemConfig($documentIterator->current());
                 $buffer = new Buffer();
             }
@@ -115,7 +115,7 @@ final class EnumeratedListRule implements Rule
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
-        $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
+        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
 
         return new ListNode($items, true);
     }
@@ -169,13 +169,13 @@ final class EnumeratedListRule implements Rule
     }
 
     /** @param array{marker: string, indenting: int} $listConfig */
-    private function parseListItem(array $listConfig, Buffer $buffer, DocumentParserContext $context): ListItemNode
+    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext): ListItemNode
     {
         $marker = trim($listConfig['marker'], '.()');
         $listItem = new ListItemNode($marker, false, []);
-        $context = $context->withContents($buffer->getLinesString());
-        while ($context->getDocumentIterator()->valid()) {
-            $this->productions->apply($context, $listItem);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        while ($subContext->getDocumentIterator()->valid()) {
+            $this->productions->apply($subContext, $listItem);
         }
 
         $nodes = $listItem->getChildren();
