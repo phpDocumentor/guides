@@ -40,7 +40,7 @@ abstract class ReferenceRule extends AbstractInlineRule
         while ($lexer->moveNext()) {
             $token = $lexer->token;
             switch ($token->type) {
-                case InlineLexer::NAMED_REFERENCE_END:
+                case InlineLexer::BACKTICK:
                     //We did not find the expected SpanLexer::EMBEDED_URL_END
                     $this->rollback($lexer, $startPosition);
 

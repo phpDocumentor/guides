@@ -33,7 +33,14 @@ class NamedPhraseRule extends ReferenceRule
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
-                case InlineLexer::NAMED_REFERENCE_END:
+                case InlineLexer::BACKTICK:
+                    $lexer->moveNext();
+                    if ($lexer->token?->type !== InlineLexer::UNDERSCORE) {
+                        $this->rollback($lexer, $initialPosition ?? 0);
+
+                        return null;
+                    }
+
                     $lexer->moveNext();
                     if ($text === '') {
                         $text = $embeddedUrl ?? '';

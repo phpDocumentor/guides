@@ -15,6 +15,10 @@ fix-code-style:
 .PHONY: static-code-analysis
 static-code-analysis: vendor phpstan psalm test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
 
+.PHONY: phpstan-baseline
+phpstan-baseline:
+	$(PHP_BIN) -d memory_limit=1024M vendor/bin/phpstan --configuration=phpstan.neon --generate-baseline
+
 .PHONY: phpstan
 phpstan:
 	$(PHP_BIN) -d memory_limit=1024M vendor/bin/phpstan --configuration=phpstan.neon
