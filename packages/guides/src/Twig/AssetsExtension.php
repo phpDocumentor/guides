@@ -141,24 +141,36 @@ final class AssetsExtension extends AbstractExtension
 
         try {
             if ($renderContext->getOrigin()->has($sourcePath) === false) {
-                $this->logger->error(sprintf('Image reference not found "%s"', $sourcePath));
+                $this->logger->error(
+                    sprintf('Image reference not found "%s"', $sourcePath),
+                    $renderContext->getLoggerInformation(),
+                );
 
                 return $outputPath;
             }
 
             $fileContents = $renderContext->getOrigin()->read($sourcePath);
             if ($fileContents === false) {
-                $this->logger->error(sprintf('Could not read image file "%s"', $sourcePath));
+                $this->logger->error(
+                    sprintf('Could not read image file "%s"', $sourcePath),
+                    $renderContext->getLoggerInformation(),
+                );
 
                 return $outputPath;
             }
 
             $result = $renderContext->getDestination()->put($outputPath, $fileContents);
             if ($result === false) {
-                $this->logger->error(sprintf('Unable to write file "%s"', $outputPath));
+                $this->logger->error(
+                    sprintf('Unable to write file "%s"', $outputPath),
+                    $renderContext->getLoggerInformation(),
+                );
             }
         } catch (LogicException | Exception $e) {
-            $this->logger->error(sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()));
+            $this->logger->error(
+                sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()),
+                $renderContext->getLoggerInformation(),
+            );
         }
 
         return $outputPath;

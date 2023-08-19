@@ -20,6 +20,8 @@ use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use RuntimeException;
 
+use function array_merge;
+
 /**
  * Our document parser contains
  */
@@ -106,5 +108,18 @@ class DocumentParserContext
     public function setCodeBlockDefaultLanguage(string $codeBlockDefaultLanguage): void
     {
         $this->codeBlockDefaultLanguage = $codeBlockDefaultLanguage;
+    }
+    
+    /** @return array<string, string> */
+    public function getLoggerInformation(): array
+    {
+        $info = [];
+        if ($this->document !== null) {
+            $info = array_merge($this->document->getLoggerInformation(), $info);
+        } else {
+            $info['documentNode'] = 'null';
+        }
+
+        return array_merge($this->getContext()->getLoggerInformation(), $info);
     }
 }

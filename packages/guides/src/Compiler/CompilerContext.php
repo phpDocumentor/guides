@@ -19,6 +19,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
+use function array_merge;
+
 class CompilerContext
 {
     /** @var TreeNode<Node> */
@@ -68,5 +70,11 @@ class CompilerContext
         }
 
         return $this->shadowTree;
+    }
+
+    /** @return array<string, string> */
+    public function getLoggerInformation(): array
+    {
+        return array_merge($this->getDocumentNode()->getLoggerInformation());
     }
 }

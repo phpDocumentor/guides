@@ -211,7 +211,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                     $documentEntryInToc->getFile(),
                     $documentEntryInToc->getParent()->getFile(),
                     $compilerContext->getDocumentNode()->getDocumentEntry()->getFile(),
-                ));
+                ), $compilerContext->getLoggerInformation());
             }
 
             if ($documentEntryInToc->getParent() !== null) {

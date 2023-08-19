@@ -58,7 +58,7 @@ abstract class AbstractReferenceTextRole implements TextRole
                                 'Reference contains unexpected content after closing `>`: "%s"',
                                 $content,
                             ),
-                            $documentParserContext->getContext()->getLoggerInformation(),
+                            $documentParserContext->getLoggerInformation(),
                         );
                     }
 

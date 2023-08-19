@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use function assert;
 use function is_array;
 use function is_string;
+use function sprintf;
 
 /** @implements NodeRenderer<Node> */
 class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
@@ -51,7 +52,10 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
                 if ($child instanceof Node) {
                     $returnValue .= $this->render($child, $renderContext);
                 } else {
-                    $this->logger->error('The default renderer cannot be applied to node ' . $node::class);
+                    $this->logger->error(
+                        sprintf('The default renderer cannot be applied to node %s', $node::class),
+                        $renderContext->getLoggerInformation(),
+                    );
                 }
             }
 
@@ -62,7 +66,10 @@ class DefaultNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
             return $value;
         }
 
-        $this->logger->error('The default renderer cannot be applied to node ' . $node::class);
+        $this->logger->error(
+            sprintf('The default renderer cannot be applied to node %s', $node::class),
+            $renderContext->getLoggerInformation(),
+        );
 
         return '';
     }
