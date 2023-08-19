@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 
 use function is_string;
 use function preg_match;
+use function sprintf;
 use function trim;
 
 /**
@@ -53,7 +54,10 @@ class RoleDirective extends ActionDirective
 
         $baseRole = $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->getTextRole($role);
         if (!$baseRole instanceof BaseTextRole) {
-            $this->logger->error('Text role "' . $role . '", class ' . $baseRole::class . ' cannot be extended. ');
+            $this->logger->error(
+                sprintf('Text role "%s", class %s cannot be extended. ', $role, $baseRole::class),
+                $blockContext->getLoggerInformation(),
+            );
 
             return;
         }

@@ -71,7 +71,7 @@ final class GridTableRule implements Rule
                     $documentIterator->current(),
                 );
 
-                $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
+                $this->logger->error($message, $blockContext->getLoggerInformation());
             }
 
             if ($this->isHeaderDefinitionLine($documentIterator->current())) {

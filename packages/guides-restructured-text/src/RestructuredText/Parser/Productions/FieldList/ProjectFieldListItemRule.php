@@ -35,7 +35,7 @@ class ProjectFieldListItemRule implements FieldListItemRule
                 'Project title was set more then once: %s and %s',
                 $currentTitle,
                 $newTitle,
-            ));
+            ), $blockContext->getLoggerInformation());
         }
 
         $blockContext->getDocumentParserContext()->getProjectNode()->setTitle($newTitle);

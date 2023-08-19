@@ -43,7 +43,7 @@ class VariableInlineNodeTransformer implements NodeTransformer
         } else {
             $this->logger->warning(
                 'No replacement was found for variable |' . $node->getValue() . '|',
-                ['document', $compilerContext->getDocumentNode()->getFilePath()],
+                $compilerContext->getLoggerInformation(),
             );
             $node->setChild(new PlainTextInlineNode('|' . $node->getValue() . '|'));
         }

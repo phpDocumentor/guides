@@ -165,6 +165,8 @@ final class FieldListRule implements Rule
         $subContext = new BlockContext(
             $blockContext->getDocumentParserContext(),
             $firstLine . "\n" . $buffer->getLinesString(),
+            false,
+            $documentIterator->key(),
         );
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $fieldListItemNode);

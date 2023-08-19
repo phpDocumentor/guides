@@ -218,7 +218,7 @@ class GridTableBuilder
                     $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                     $tableAsString,
                 );
-                $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
+                $this->logger->error($message, $blockContext->getLoggerInformation());
             }
 
             return null;
@@ -256,7 +256,7 @@ class GridTableBuilder
         RuleContainer $productions,
     ): TableColumn {
         $content = $col->getContent();
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getDocumentIterator()->key());
         while ($subContext->getDocumentIterator()->valid()) {
             $productions->apply($subContext, $col);
         }

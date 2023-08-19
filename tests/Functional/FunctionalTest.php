@@ -49,7 +49,7 @@ class FunctionalTest extends ApplicationTestCase
 {
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
 
-    private const IGNORED_WARNINGS = ['Document has not title'];
+    private const IGNORED_WARNINGS = ['Document has no title'];
 
     protected function setUp(): void
     {

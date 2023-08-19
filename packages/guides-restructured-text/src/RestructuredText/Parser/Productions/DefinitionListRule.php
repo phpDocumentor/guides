@@ -80,10 +80,10 @@ final class DefinitionListRule implements Rule
         $parts = explode(' : ', $term);
         $term = ltrim(array_shift($parts), '\\');
         $definitionListItem = new DefinitionListItemNode(
-            $this->inlineMarkupRule->apply(new BlockContext($blockContext->getDocumentParserContext(), $term)),
+            $this->inlineMarkupRule->apply(new BlockContext($blockContext->getDocumentParserContext(), $term, false, $documentIterator->key())),
             array_map(
                 fn ($classification): InlineCompoundNode => $this->inlineMarkupRule->apply(
-                    new BlockContext($blockContext->getDocumentParserContext(), $classification),
+                    new BlockContext($blockContext->getDocumentParserContext(), $classification, false, $documentIterator->key()),
                 ),
                 $parts,
             ),
@@ -128,7 +128,7 @@ final class DefinitionListRule implements Rule
         }
 
         $node = new DefinitionNode([]);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key());
         while ($subContext->getDocumentIterator()->valid()) {
             $this->bodyElements->apply($subContext, $node);
         }
