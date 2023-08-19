@@ -130,7 +130,7 @@ final class InlineLexer extends AbstractLexer
             return self::ANONYMOUSE_REFERENCE;
         }
 
-        if (preg_match('/[a-z0-9-]+_{1}/i', $value)) {
+        if (preg_match('/[a-z0-9-]+_{1}(?=\s|$)/i', $value)) {
             return self::NAMED_REFERENCE;
         }
 
