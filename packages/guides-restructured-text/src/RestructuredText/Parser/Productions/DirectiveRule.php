@@ -103,7 +103,7 @@ final class DirectiveRule implements Rule
                 $openingLine,
             );
 
-            $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
+            $this->logger->error($message, $blockContext->getLoggerInformation());
 
             return null;
         }
@@ -114,7 +114,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             $node = $directiveHandler->process(
-                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true),
+                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
                 $directive,
             );
 
@@ -143,7 +143,7 @@ final class DirectiveRule implements Rule
             );
 
 
-            $this->logger->error($message, $blockContext->getDocumentParserContext()->getContext()->getLoggerInformation());
+            $this->logger->error($message, $blockContext->getLoggerInformation());
         }
 
         return null;
@@ -155,7 +155,7 @@ final class DirectiveRule implements Rule
             return;
         }
 
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData(), false, $blockContext->getDocumentIterator()->key());
         $inlineNode = $this->inlineMarkupRule->apply(
             $subContext,
             null,

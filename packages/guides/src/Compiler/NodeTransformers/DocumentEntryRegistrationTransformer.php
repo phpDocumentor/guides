@@ -32,7 +32,7 @@ class DocumentEntryRegistrationTransformer implements NodeTransformer
         }
 
         if ($node->getTitle() === null && !$node->isOrphan()) {
-            $this->logger->warning('Document has not title', $node->getLoggerInformation());
+            $this->logger->warning('Document has no title', $compilerContext->getLoggerInformation());
         }
 
         $entry = new DocumentEntryNode($node->getFilePath(), $node->getTitle() ?? TitleNode::emptyNode(), $node->isRoot());

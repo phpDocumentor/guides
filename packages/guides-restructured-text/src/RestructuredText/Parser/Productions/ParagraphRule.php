@@ -90,7 +90,7 @@ final class ParagraphRule implements Rule
         $node = new ParagraphNode();
 
         $this->inlineMarkupRule->apply(
-            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString()),
+            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key()),
             $node,
         );
 

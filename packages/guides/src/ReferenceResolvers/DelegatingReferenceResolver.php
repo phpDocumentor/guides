@@ -8,6 +8,8 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use Psr\Log\LoggerInterface;
 
+use function sprintf;
+
 /**
  * Resolves the URL for all inline link nodes using reference resolvers.
  */
@@ -26,6 +28,13 @@ final class DelegatingReferenceResolver
             }
         }
 
-        $this->logger->warning('Reference ' . $node->getTargetReference() . ' could not be resolved in ' . $renderContext->getCurrentFileName());
+        $this->logger->warning(
+            sprintf(
+                'Reference %s could not be resolved in %s',
+                $node->getTargetReference(),
+                $renderContext->getCurrentFileName(),
+            ),
+            $renderContext->getLoggerInformation(),
+        );
     }
 }

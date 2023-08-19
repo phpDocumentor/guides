@@ -145,6 +145,7 @@ final class SimpleTableRule implements Rule
                     $gap,
                     $line,
                 ),
+                $blockContext->getLoggerInformation(),
             );
         }
 
@@ -187,7 +188,7 @@ final class SimpleTableRule implements Rule
         }
 
         $column = new TableColumn(trim($content), $colspan);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content);
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getDocumentIterator()->key());
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $column);
         }

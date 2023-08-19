@@ -173,7 +173,7 @@ final class EnumeratedListRule implements Rule
     {
         $marker = trim($listConfig['marker'], '.()');
         $listItem = new ListItemNode($marker, false, []);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $blockContext->getDocumentIterator()->key());
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $listItem);
         }

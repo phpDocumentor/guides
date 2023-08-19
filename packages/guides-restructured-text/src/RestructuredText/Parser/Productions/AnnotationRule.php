@@ -84,7 +84,7 @@ final class AnnotationRule implements Rule
 
         $buffer->trimLines();
         $this->inlineMarkupRule->apply(
-            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString()),
+            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key()),
             $node,
         );
 

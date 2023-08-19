@@ -34,7 +34,7 @@ class VersionFieldListItemRule implements FieldListItemRule
                 'Project version was set more then once: %s and %s',
                 $currentVersion,
                 $fieldListItemNode->getPlaintextContent(),
-            ));
+            ), $blockContext->getLoggerInformation());
         }
 
         $blockContext->getDocumentParserContext()->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());
