@@ -33,7 +33,14 @@ class AnonymousPhraseRule extends ReferenceRule
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
-                case InlineLexer::PHRASE_ANONYMOUS_END:
+                case InlineLexer::BACKTICK:
+                    $lexer->moveNext();
+                    if ($lexer->token?->type !== InlineLexer::ANONYMOUS_END) {
+                        $this->rollback($lexer, $initialPosition ?? 0);
+
+                        return null;
+                    }
+
                     $lexer->moveNext();
 
                     return $this->createAnonymousReference($blockContext, $text, $embeddedUrl);
