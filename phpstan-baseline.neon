@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnonymousPhraseRule.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/NamedPhraseRule.php

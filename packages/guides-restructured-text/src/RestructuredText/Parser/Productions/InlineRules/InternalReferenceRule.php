@@ -12,13 +12,20 @@ class InternalReferenceRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {
-        return $lexer->token?->type === InlineLexer::INTERNAL_REFERENCE_START;
+        return $lexer->token?->type === InlineLexer::UNDERSCORE;
     }
 
     public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
     {
         $text = '';
         $initialPosition = $lexer->token?->position;
+        $lexer->moveNext();
+        if ($lexer->token?->type !== InlineLexer::BACKTICK) {
+            $this->rollback($lexer, $initialPosition ?? 0);
+
+            return null;
+        }
+
         $lexer->moveNext();
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {

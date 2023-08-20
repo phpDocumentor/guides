@@ -21,11 +21,8 @@ final class InlineLexer extends AbstractLexer
     public const WORD = 1;
     public const UNDERSCORE = 2;
     public const ANONYMOUS_END = 3;
-    public const PHRASE_ANONYMOUS_END = 4;
     public const LITERAL = 5;
     public const BACKTICK = 6;
-    public const NAMED_REFERENCE_END = 7;
-    public const INTERNAL_REFERENCE_START = 8;
     public const EMBEDED_URL_START = 9;
     public const EMBEDED_URL_END = 10;
     public const NAMED_REFERENCE = 11;
@@ -63,14 +60,11 @@ final class InlineLexer extends AbstractLexer
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
             '``.+?``(?!`)',
-            '`__',
-            '`_',
-            '`~',
+            '_{2}',
+            '_',
             '<',
             '>',
-            '_`',
             '`',
-            '_{2}',
             ':',
             '|',
             '\\*\\*',
@@ -160,17 +154,8 @@ final class InlineLexer extends AbstractLexer
             case '_':
                 return self::UNDERSCORE;
 
-            case '`_':
-                return self::NAMED_REFERENCE_END;
-
-            case '_`':
-                return self::INTERNAL_REFERENCE_START;
-
             case '__':
                 return self::ANONYMOUS_END;
-
-            case '`__':
-                return self::PHRASE_ANONYMOUS_END;
 
             case ':':
                 return self::COLON;
