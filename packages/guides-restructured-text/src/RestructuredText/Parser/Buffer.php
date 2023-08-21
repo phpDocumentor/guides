@@ -113,6 +113,10 @@ class Buffer
 
     private function detectIndentation(): int
     {
+        if (!isset($this->lines[0])) {
+            return 0;
+        }
+
         if ($this->unindentStrategy === UnindentStrategy::NONE) {
             return 0;
         }
