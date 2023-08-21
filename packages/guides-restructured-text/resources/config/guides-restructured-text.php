@@ -12,6 +12,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\CsvTableDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DefaultRoleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
@@ -153,6 +154,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(ContainerDirective::class)
         ->set(ContentsDirective::class)
         ->arg('$urlGenerator', service(UrlGeneratorInterface::class))
+        ->set(CsvTableDirective::class)
+        ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
         ->set(DangerDirective::class)
         ->set(DefaultRoleDirective::class)
         ->set(DeprecatedDirective::class)
