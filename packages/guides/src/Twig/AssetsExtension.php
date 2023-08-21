@@ -18,6 +18,7 @@ use LogicException;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -48,6 +49,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('asset', $this->asset(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderBreadcrumb', $this->renderBreadcrumb(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
@@ -91,10 +93,7 @@ final class AssetsExtension extends AbstractExtension
             return '';
         }
 
-        $renderContext = $context['env'] ?? null;
-        if (!$renderContext instanceof RenderContext) {
-            throw new RuntimeException('Render context must be set in the twig global state to render nodes');
-        }
+        $renderContext = $this->getRenderContext($context);
 
         if ($node instanceof Node) {
             return $this->nodeRenderer->render($node, $renderContext);
@@ -112,16 +111,22 @@ final class AssetsExtension extends AbstractExtension
     public function renderTarget(array $context, Target $target): string
     {
         if ($target instanceof InternalTarget) {
-            return $context['env']->relativeDocUrl($target->getDocumentPath(), $target->getAnchor());
+            return $this->getRenderContext($context)->relativeDocUrl($target->getDocumentPath(), $target->getAnchor());
         }
 
         return $target->getUrl();
     }
 
     /** @param array{env: RenderContext} $context */
+    public function renderBreadcrumb(array $context): string
+    {
+        return $this->nodeRenderer->render(new BreadCrumbNode(), $this->getRenderContext($context));
+    }
+
+    /** @param array{env: RenderContext} $context */
     public function renderLink(array $context, string $url, string|null $anchor = null): string
     {
-        return $context['env']->relativeDocUrl($url, $anchor);
+        return $this->getRenderContext($context)->relativeDocUrl($url, $anchor);
     }
 
     private function copyAsset(
@@ -174,5 +179,16 @@ final class AssetsExtension extends AbstractExtension
         }
 
         return $outputPath;
+    }
+
+    /** @param array{env: RenderContext} $context */
+    private function getRenderContext(array $context): RenderContext
+    {
+        $renderContext = $context['env'] ?? null;
+        if (!$renderContext instanceof RenderContext) {
+            throw new RuntimeException('Render context must be set in the twig global state to render nodes');
+        }
+
+        return $renderContext;
     }
 }

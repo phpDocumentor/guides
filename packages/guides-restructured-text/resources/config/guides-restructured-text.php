@@ -7,6 +7,7 @@ use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\BreadcrumbDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
@@ -142,6 +143,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
+        ->set(BreadcrumbDirective::class)
         ->set(CautionDirective::class)
         ->set(ClassDirective::class)
         ->set(CodeBlockDirective::class)
