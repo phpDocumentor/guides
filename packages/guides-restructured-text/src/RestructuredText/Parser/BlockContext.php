@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use function array_merge;
-
 /**
  * Our document parser contains
  */

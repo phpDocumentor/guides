@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Menu;
 
-use Stringable;
 use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use Stringable;
 
 /** @extends AbstractNode<TitleNode> */
 final class MenuEntryNode extends AbstractNode implements Stringable

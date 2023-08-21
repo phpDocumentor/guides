@@ -19,8 +19,6 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
-use function array_merge;
-
 class CompilerContext
 {
     /** @var TreeNode<Node> */
