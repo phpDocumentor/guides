@@ -50,8 +50,8 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
         }
 
         $mockLogger = $this->createMock(LoggerInterface::class);
-        $mockLogger->expects($this->never())->method('warning');
-        $mockLogger->expects($this->never())->method('error');
+        $mockLogger->expects(self::never())->method('warning');
+        $mockLogger->expects(self::never())->method('error');
         $transformer = new MenuNodeAddEntryTransformer($mockLogger);
 
         $result = $transformer->leaveNode($node, $context);
@@ -155,8 +155,8 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
         }
 
         $mockLogger = $this->createMock(LoggerInterface::class);
-        $mockLogger->expects($this->never())->method('warning');
-        $mockLogger->expects($this->never())->method('error');
+        $mockLogger->expects(self::never())->method('warning');
+        $mockLogger->expects(self::never())->method('error');
         $transformer = new MenuNodeAddEntryTransformer($mockLogger);
 
         $result = $transformer->leaveNode($node, $context);

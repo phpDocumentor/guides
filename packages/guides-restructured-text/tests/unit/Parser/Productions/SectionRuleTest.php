@@ -195,14 +195,14 @@ RST;
             'foo',
             'test',
             1,
-            $this->createStub(FilesystemInterface::class),
-            $this->createStub(UrlGeneratorInterface::class),
+            self::createStub(FilesystemInterface::class),
+            self::createStub(UrlGeneratorInterface::class),
         );
         
         $documentParserContext = new DocumentParserContext(
             $parserContext,
-            $this->createStub(TextRoleFactory::class),
-            $this->createStub(MarkupLanguageParser::class),
+            self::createStub(TextRoleFactory::class),
+            self::createStub(MarkupLanguageParser::class),
         );
 
         return new BlockContext($documentParserContext, $content);

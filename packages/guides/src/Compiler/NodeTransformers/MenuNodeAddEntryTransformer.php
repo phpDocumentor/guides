@@ -76,8 +76,8 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                     false,
                     1,
                     '',
-                    self::isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
-                    self::isCurrent($documentEntry, $currentPath),
+                    $this->isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
+                    $this->isCurrent($documentEntry, $currentPath),
                 );
                 if (!$node->hasOption('titlesonly')) {
                     $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry);
@@ -97,9 +97,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
 
         $menuEntries = array_unique($menuEntries);
 
-        $node = $node->withMenuEntries($menuEntries);
-
-        return $node;
+        return $node->withMenuEntries($menuEntries);
     }
 
     private function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode $currentDoc): bool
@@ -169,7 +167,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
     /** @param String[] $globExclude */
     private static function isGlob(bool $glob, string $documentEntryFile, string $currentPath, string $file, string $prefix, array $globExclude): bool
     {
-        if ($glob && !in_array($documentEntryFile, $globExclude)) {
+        if ($glob && !in_array($documentEntryFile, $globExclude, true)) {
             $file = str_replace('*', '[^\/]*', $file);
             $pattern = '`^' . $file . '$`';
 

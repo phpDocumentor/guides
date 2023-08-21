@@ -27,7 +27,6 @@ use RuntimeException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
-use Webmozart\Assert\Assert;
 
 use function sprintf;
 use function trim;
@@ -138,7 +137,6 @@ final class AssetsExtension extends AbstractExtension
         }
 
         $canonicalUrl = $renderContext->canonicalUrl($sourcePath);
-        Assert::string($canonicalUrl);
         $outputPath = $this->urlGenerator->absoluteUrl(
             $renderContext->getDestinationPath(),
             $canonicalUrl,

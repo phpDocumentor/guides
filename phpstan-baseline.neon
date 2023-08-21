@@ -6,6 +6,11 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnonymousPhraseRule.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between Doctrine\\\\Common\\\\Lexer\\\\Token and null will always evaluate to true\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
+
+		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php

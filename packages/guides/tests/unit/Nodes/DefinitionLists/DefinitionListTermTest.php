@@ -25,7 +25,7 @@ final class DefinitionListTermTest extends TestCase
      */
     public function testTheDefinitionTermTextIsAvailable(): void
     {
-        $term = $this->createStub(InlineCompoundNode::class);
+        $term = self::createStub(InlineCompoundNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [], []);
 
@@ -38,8 +38,8 @@ final class DefinitionListTermTest extends TestCase
      */
     public function testClassifiersAreMadeAvailable(): void
     {
-        $term = $this->createStub(InlineCompoundNode::class);
-        $classifier = $this->createStub(InlineCompoundNode::class);
+        $term = self::createStub(InlineCompoundNode::class);
+        $classifier = self::createStub(InlineCompoundNode::class);
 
         $definitionListTerm = new DefinitionListItemNode($term, [$classifier], []);
 
@@ -49,7 +49,7 @@ final class DefinitionListTermTest extends TestCase
     /** @covers ::__construct */
     public function testDefinitionsAreMadeAvailable(): void
     {
-        $term = $this->createStub(InlineCompoundNode::class);
+        $term = self::createStub(InlineCompoundNode::class);
         $definition1 = new DefinitionNode([]);
         $definition2 = new DefinitionNode([]);
 

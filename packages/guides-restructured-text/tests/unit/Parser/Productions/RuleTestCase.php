@@ -40,13 +40,13 @@ abstract class RuleTestCase extends TestCase
             'test',
             'test',
             1,
-            $this->createStub(FilesystemInterface::class),
+            self::createStub(FilesystemInterface::class),
             new UrlGenerator(),
         );
         $documentParserContext = new DocumentParserContext(
             $parserContext,
-            $this->createStub(TextRoleFactory::class),
-            $this->createStub(MarkupLanguageParser::class),
+            self::createStub(TextRoleFactory::class),
+            self::createStub(MarkupLanguageParser::class),
         );
 
         return new BlockContext($documentParserContext, $input);

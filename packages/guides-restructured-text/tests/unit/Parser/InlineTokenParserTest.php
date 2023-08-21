@@ -60,9 +60,9 @@ final class InlineTokenParserTest extends TestCase
             ],
         );
         $this->documentParserContext = new DocumentParserContext(
-            $this->createStub(ParserContext::class),
+            self::createStub(ParserContext::class),
             $this->textRoleFactory,
-            $this->createStub(MarkupLanguageParser::class),
+            self::createStub(MarkupLanguageParser::class),
         );
         $this->inlineTokenParser = new InlineParser([
             new NamedReferenceRule(),
