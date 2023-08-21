@@ -14,6 +14,7 @@ use phpDocumentor\Guides\Intersphinx\InventoryRepository;
 use phpDocumentor\Guides\Intersphinx\JsonLoader;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
@@ -151,6 +152,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(MenuNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(MenuEntryRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(BreadCrumbNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
 
         ->set(DefaultNodeRenderer::class)

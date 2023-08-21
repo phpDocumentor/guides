@@ -1,0 +1,10 @@
+<nav aria-label="breadcrumb">
+    {% for entry in rootline -%}
+        {%- if entry.current %}
+            <span class="breadcrumb active level-{{ entry.level }}">{{ entry.value.toString }}</span>
+        {% else -%}
+            <a href="{{ renderLink(entry.url) }}"
+               class="breadcrumb level-{{ entry.level }}">{{ entry.value.toString }}</a> &gt;
+        {% endif -%}
+    {% endfor %}
+</nav>
