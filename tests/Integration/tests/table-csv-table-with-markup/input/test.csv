@@ -1,0 +1,4 @@
+col 1, col 2
+**a**, "quoted column is unquoted"
+c, d
+, first column is empty
