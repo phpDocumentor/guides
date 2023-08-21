@@ -6,7 +6,6 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -27,8 +26,7 @@ final class SectionRule implements Rule
         return $this->titleRule->applies($blockContext);
     }
 
-    /** @param DocumentNode|SectionNode $on */
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): SectionNode|null
     {
         /** @var SplStack<DocumentNode|SectionNode> $stack */
         $stack = new SplStack();

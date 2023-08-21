@@ -57,8 +57,14 @@ final class InlineMarkupRule implements Rule
         return trim($blockContext->getDocumentIterator()->current()) !== '';
     }
 
-    /** @return ($on is null ? InlineCompoundNode: CompoundNode<Node>|InlineCompoundNode|null) */
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    /**
+     * @param TParent|null $on
+     *
+     * @return ($on is null ? InlineCompoundNode: TParent)
+     *
+     * @template TParent of CompoundNode
+     */
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): CompoundNode|InlineCompoundNode
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $buffer = $this->collectContent($documentIterator);

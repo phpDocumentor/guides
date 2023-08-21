@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Menu;
 
+use Stringable;
 use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends AbstractNode<TitleNode> */
-final class MenuEntryNode extends AbstractNode
+final class MenuEntryNode extends AbstractNode implements Stringable
 {
     /** @var MenuEntryNode[] */
     private array $sections = [];

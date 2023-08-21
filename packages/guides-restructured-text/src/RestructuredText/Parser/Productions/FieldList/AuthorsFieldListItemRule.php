@@ -13,7 +13,6 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
-use function assert;
 use function count;
 use function explode;
 use function str_contains;
@@ -30,7 +29,9 @@ class AuthorsFieldListItemRule implements FieldListItemRule
     {
         $authorNodes = [];
         if (count($fieldListItemNode->getChildren()) === 1) {
-            if ($fieldListItemNode->getChildren()[0] instanceof ParagraphNode) {
+            $firstChild = $fieldListItemNode->getChildren()[0];
+
+            if ($firstChild instanceof ParagraphNode) {
                 // The "Authors" field may contain either: a single paragraph consisting of a list of authors,
                 // separated by ";" or "," (";" is checked first, so "Doe, Jane; Doe, John" will work.)
                 if (str_contains($fieldListItemNode->getPlaintextContent(), ';')) {
@@ -46,11 +47,11 @@ class AuthorsFieldListItemRule implements FieldListItemRule
                 } else {
                     $authorNodes[] = new AuthorNode($fieldListItemNode->getPlaintextContent(), $fieldListItemNode->getChildren());
                 }
-            } elseif ($fieldListItemNode->getChildren()[0] instanceof ListNode) {
-                $listNode = $fieldListItemNode->getChildren()[0];
-                assert($listNode instanceof ListNode);
+            }
+
+            if ($firstChild instanceof ListNode) {
                 // A bullet list whose elements each contain a single paragraph per author.
-                foreach ($listNode->getChildren() as $listItemNode) {
+                foreach ($firstChild->getChildren() as $listItemNode) {
                     if (count($listItemNode->getChildren()) <= 0) {
                         continue;
                     }

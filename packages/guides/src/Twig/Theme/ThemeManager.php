@@ -28,7 +28,7 @@ class ThemeManager
 
     /** @param string[] $defaultPaths */
     public function __construct(
-        private FilesystemLoader $filesystemLoader,
+        private readonly FilesystemLoader $filesystemLoader,
         array $defaultPaths,
     ) {
         $filesystemLoader->setPaths($defaultPaths);

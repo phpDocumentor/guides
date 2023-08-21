@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Meta;
 
 class AnnotationTarget extends InternalTarget
 {
-    public function __construct(string $documentPath, string $anchorName, private string $name)
+    public function __construct(string $documentPath, string $anchorName, private readonly string $name)
     {
         parent::__construct($documentPath, $anchorName);
     }

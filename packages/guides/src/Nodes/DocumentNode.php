@@ -180,7 +180,7 @@ final class DocumentNode extends CompoundNode
     public function getLoggerInformation(): array
     {
         return [
-            'rst-file' => $this->getFilePath() . '.rst',
+            'rst-file' => $this->filePath . '.rst',
         ];
     }
 

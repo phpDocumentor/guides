@@ -105,7 +105,7 @@ class ParserContext
     public function getLoggerInformation(): array
     {
         return [
-            'rst-file' => $this->getCurrentFileName(),
+            'rst-file' => $this->currentFileName,
         ];
     }
 

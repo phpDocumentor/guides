@@ -15,9 +15,9 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 class CitationInlineNode extends AnnotationInlineNode
 {
-    public const TYPE = 'citation_inline';
+    final public const TYPE = 'citation_inline';
 
-    public function __construct(string $value, private string $name)
+    public function __construct(string $value, private readonly string $name)
     {
         parent::__construct(self::TYPE, $value);
     }

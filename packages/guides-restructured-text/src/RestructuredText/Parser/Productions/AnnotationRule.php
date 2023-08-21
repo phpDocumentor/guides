@@ -28,7 +28,7 @@ use function preg_match;
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#directives
  *
- * @implements Rule<Node>
+ * @implements Rule<CitationNode|FootnoteNode>
  */
 final class AnnotationRule implements Rule
 {

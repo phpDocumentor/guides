@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-class AbbreviationInlineNode extends GenericTextRoleInlineNode
+final class AbbreviationInlineNode extends GenericTextRoleInlineNode
 {
     public const TYPE = 'abbreviation';
 

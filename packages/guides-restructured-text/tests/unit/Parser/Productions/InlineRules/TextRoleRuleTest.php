@@ -80,7 +80,7 @@ final class TextRoleRuleTest extends TestCase
             }
         };
 
-        $textRoleFactory->expects($this->once())
+        $textRoleFactory->expects(self::once())
             ->method('getTextRole')
             ->with('role', $expectedDomain)
             ->willReturn($collectingRole);
@@ -106,16 +106,16 @@ final class TextRoleRuleTest extends TestCase
          * @psalm-suppress UndefinedPropertyFetch
          * @phpstan-ignore-next-line
          */
-        $this->assertSame($expectedRole, $node->role);
+        self::assertSame($expectedRole, $node->role);
         /**
          * @psalm-suppress UndefinedPropertyFetch
          * @phpstan-ignore-next-line
          */
-        $this->assertSame($expectedContent, $node->content);
+        self::assertSame($expectedContent, $node->content);
         /**
          * @psalm-suppress UndefinedPropertyFetch
          * @phpstan-ignore-next-line
          */
-        $this->assertSame($expectedRawContent, $node->rawContent);
+        self::assertSame($expectedRawContent, $node->rawContent);
     }
 }

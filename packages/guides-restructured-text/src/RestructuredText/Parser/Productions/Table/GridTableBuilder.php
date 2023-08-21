@@ -18,10 +18,10 @@ use Psr\Log\LoggerInterface;
 use function array_reverse;
 use function count;
 use function mb_strlen;
-use function mb_strpos;
 use function mb_substr;
 use function preg_match;
 use function sprintf;
+use function str_contains;
 use function str_repeat;
 use function trim;
 
@@ -50,7 +50,7 @@ class GridTableBuilder
 
                 if ($currentColumnStart !== null) {
                     $cellText = mb_substr($line, $previousColumnEnd, $start - $previousColumnEnd);
-                    if (mb_strpos($cellText, '|') === false && mb_strpos($cellText, '+') === false) {
+                    if (!str_contains($cellText, '|') && !str_contains($cellText, '+')) {
                         // text continued through the "gap". This is a colspan
                         // "+" is an odd character - it's usually "|", but "+" can
                         // happen in row-span situations
@@ -68,11 +68,9 @@ class GridTableBuilder
                 }
 
                 // if the current column start is null, then set it
-                // other wise, leave it - this is a colspan, and eventually
+                // otherwise, leave it - this is a colspan, and eventually
                 // we want to get all the text starting here
-                if ($currentColumnStart === null) {
-                    $currentColumnStart = $start;
-                }
+                $currentColumnStart = $start;
 
                 $previousColumnEnd = $end;
             }

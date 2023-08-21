@@ -13,6 +13,6 @@ final class InvalidLinkTest extends TestCase
     {
         $invalidLink = new InvalidLink('name');
 
-        $this->assertSame('name', $invalidLink->getName());
+        self::assertSame('name', $invalidLink->getName());
     }
 }

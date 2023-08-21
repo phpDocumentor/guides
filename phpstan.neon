@@ -2,6 +2,12 @@ includes:
 	- phpstan-baseline.neon
 parameters:
   level: max
+
+  strictRules:
+    allRules: false
+    strictCalls: true
+    requireParentConstructorCall: true
+
   inferPrivatePropertyTypeFromConstructor: true
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
@@ -14,6 +20,8 @@ parameters:
     -
       message: '#Unreachable statement - code above always terminates\.#'
       path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
+
+    - message: '#Return type .* of method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\InlineMarkupRule::apply\(\) should be covariant with return type .*#'
 
     # https://github.com/doctrine/lexer/pull/109
     -

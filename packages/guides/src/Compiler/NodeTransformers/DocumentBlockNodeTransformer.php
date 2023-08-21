@@ -10,8 +10,6 @@ use phpDocumentor\Guides\Nodes\DocumentBlockNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-use function array_merge;
-
 /**
  * @implements NodeTransformer<Node>
  *
@@ -31,10 +29,10 @@ class DocumentBlockNodeTransformer implements NodeTransformer
             $children = [];
             foreach ($node->getValue() as $child) {
                 if ($child instanceof TocNode) {
-                    $child = $child->withOptions(array_merge($child->getOptions(), ['menu' => $node->getIdentifier()]));
+                    $child = $child->withOptions([...$child->getOptions(), 'menu' => $node->getIdentifier()]);
                 }
 
-                $child = $child->withOptions(array_merge($child->getOptions(), ['documentBlock' => $node->getIdentifier()]));
+                $child = $child->withOptions([...$child->getOptions(), 'documentBlock' => $node->getIdentifier()]);
 
                 $children[] = $child;
             }

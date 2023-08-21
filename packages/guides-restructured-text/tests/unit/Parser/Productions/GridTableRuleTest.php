@@ -295,7 +295,7 @@ RST;
 
     public function testNotEndingWithWhiteLine(): never
     {
-        $this->markTestSkipped('Not correct yet');
+        self::markTestSkipped('Not correct yet');
         $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |

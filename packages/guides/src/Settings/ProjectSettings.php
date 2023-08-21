@@ -10,9 +10,9 @@ use function is_string;
 class ProjectSettings
 {
     /** @var array<string, string> */
-    private array $inventories = [];
-    private string $title = '';
-    private string $version = '';
+    private readonly array $inventories;
+    private readonly string $title;
+    private readonly string $version;
 
     /** @param array<string, string|array<string, string>> $settingsArray */
     public function __construct(array $settingsArray)

@@ -12,7 +12,7 @@ class SpyProcessorTest extends TestCase
     {
         $spyProcessor = new SpyProcessor();
 
-        $this->assertFalse($spyProcessor->hasBeenCalled());
+        self::assertFalse($spyProcessor->hasBeenCalled());
     }
 
     public function testItKnowsWhenALogIsEmitted(): void

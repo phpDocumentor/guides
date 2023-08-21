@@ -35,7 +35,7 @@ interface Rule
      *
      * @param TParent|null $on
      *
-     * @return Node|($on is null ? TNode|null : TParent|TNode|null)
+     * @return TNode|null
      *
      * @template TParent as CompoundNode
      */

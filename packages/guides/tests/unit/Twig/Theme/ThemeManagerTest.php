@@ -15,7 +15,7 @@ final class ThemeManagerTest extends TestCase
 
         $manager = new ThemeManager($loader, ['default-one', 'default-two']);
 
-        $this->assertEquals(['default-one', 'default-two'], $loader->getPaths());
+        self::assertEquals(['default-one', 'default-two'], $loader->getPaths());
     }
 
     public function testSingleTheme(): void
@@ -27,7 +27,7 @@ final class ThemeManagerTest extends TestCase
 
         $manager->useTheme('custom');
 
-        $this->assertEquals(['custom-theme', 'default-one', 'default-two'], $loader->getPaths());
+        self::assertEquals(['custom-theme', 'default-one', 'default-two'], $loader->getPaths());
     }
 
     public function testSingleThemeWithMultiplePaths(): void
@@ -39,7 +39,7 @@ final class ThemeManagerTest extends TestCase
 
         $manager->useTheme('custom');
 
-        $this->assertEquals(['custom-theme', 'child-theme', 'default-one', 'default-two'], $loader->getPaths());
+        self::assertEquals(['custom-theme', 'child-theme', 'default-one', 'default-two'], $loader->getPaths());
     }
 
     public function testThemeInheritance(): void
@@ -52,6 +52,6 @@ final class ThemeManagerTest extends TestCase
 
         $manager->useTheme('child');
 
-        $this->assertEquals(['child-theme', 'custom-theme', 'default-one', 'default-two'], $loader->getPaths());
+        self::assertEquals(['child-theme', 'custom-theme', 'default-one', 'default-two'], $loader->getPaths());
     }
 }

@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
+use Webmozart\Assert\Assert;
 use function implode;
 use function md5;
 
@@ -33,9 +34,10 @@ final class DocumentRule implements Rule
         return $blockContext->getDocumentIterator()->atStart();
     }
 
-    /** @param DocumentNode|null $on */
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): DocumentNode|null
     {
+        Assert::nullOrIsInstanceOf($on, DocumentNode::class);
+
         $on ??= new DocumentNode(
             md5(implode("\n", $blockContext->getDocumentIterator()->toArray())),
             $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),

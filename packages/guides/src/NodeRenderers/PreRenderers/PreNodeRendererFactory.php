@@ -16,9 +16,9 @@ use function count;
 final class PreNodeRendererFactory implements NodeRendererFactory
 {
     public function __construct(
-        private NodeRendererFactory $innerFactory,
+        private readonly NodeRendererFactory $innerFactory,
         /** @var iterable<PreNodeRenderer> */
-        private iterable $preRenderers,
+        private readonly iterable $preRenderers,
     ) {
     }
 
