@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\DependencyInjection\Compiler;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\Nodes\AnchorNode;
+use phpDocumentor\Guides\Nodes\AnnotationListNode;
 use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
@@ -84,6 +85,7 @@ final class NodeRendererPass implements CompilerPassInterface
         RubricNode::class => 'body/rubric.html.twig',
         CitationNode::class => 'body/citation.html.twig',
         FootnoteNode::class => 'body/footnote.html.twig',
+        AnnotationListNode::class => 'body/annotation-list.html.twig',
         // Inline
         InlineCompoundNode::class => 'inline/inline-node.html.twig',
         AbbreviationInlineNode::class => 'inline/textroles/abbreviation.html.twig',
