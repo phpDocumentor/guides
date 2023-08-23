@@ -38,6 +38,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RubricDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TitleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ToctreeDirective;
@@ -53,6 +54,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DefinitionListRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveContentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\EnumeratedListRule;
@@ -124,6 +126,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
         ->instanceof(TextRole::class)
         ->tag('phpdoc.guides.parser.rst.text_role')
+        ->instanceof(SubDirective::class)
+        ->bind('$startingRule', service(DirectiveContentRule::class))
 
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\Parser\\Productions\\InlineRules\\',
@@ -135,6 +139,7 @@ return static function (ContainerConfigurator $container): void {
         )
 
 
+        ->set(DirectiveContentRule::class)
         ->set(DocReferenceTextRole::class)
         ->set(ReferenceTextRole::class)
         ->set(AbbreviationTextRole::class)

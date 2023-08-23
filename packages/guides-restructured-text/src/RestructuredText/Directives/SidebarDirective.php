@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -35,12 +35,12 @@ class SidebarDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         return new SidebarNode(
             $directive->getData(),
-            $document->getChildren(),
+            $collectionNode->getChildren(),
         );
     }
 }

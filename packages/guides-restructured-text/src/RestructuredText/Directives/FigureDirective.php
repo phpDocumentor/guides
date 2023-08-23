@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 
 /**
@@ -23,8 +23,9 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
  */
 class FigureDirective extends SubDirective
 {
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
+    public function __construct(protected Rule $startingRule, private readonly UrlGeneratorInterface $urlGenerator)
     {
+        parent::__construct($startingRule);
     }
 
     public function getName(): string
@@ -37,7 +38,7 @@ class FigureDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         $image = new ImageNode($this->urlGenerator->relativeUrl($directive->getData()));
@@ -52,6 +53,6 @@ class FigureDirective extends SubDirective
             'name' => $scalarOptions['name'] ?? null,
         ]);
 
-        return new FigureNode($image, new CollectionNode($document->getChildren()));
+        return new FigureNode($image, new CollectionNode($collectionNode->getChildren()));
     }
 }

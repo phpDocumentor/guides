@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-
-use function implode;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
 /**
  * A directive that parses the sub block and call the processSub that can
@@ -23,18 +22,23 @@ use function implode;
  */
 abstract class SubDirective extends BaseDirective
 {
+    /** @param Rule<CollectionNode> $startingRule */
+    public function __construct(protected Rule $startingRule)
+    {
+    }
+    
     /** {@inheritDoc} */
     final public function process(
         BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        $subParser = $blockContext->getDocumentParserContext()->getParser()->getSubParser();
-        $document = $subParser->parse(
-            $blockContext->getDocumentParserContext()->getContext(),
-            implode("\n", $blockContext->getDocumentIterator()->toArray()),
-        );
+        $collectionNode = $this->getStartingRule()->apply($blockContext);
 
-        $node = $this->processSub($document, $directive);
+        if ($collectionNode === null) {
+            return null;
+        }
+
+        $node = $this->processSub($collectionNode, $directive);
 
         if ($node === null) {
             return null;
@@ -43,8 +47,14 @@ abstract class SubDirective extends BaseDirective
         return $node->withOptions($this->optionsToArray($directive->getOptions()));
     }
 
+    /** @return Rule<CollectionNode> */
+    protected function getStartingRule(): Rule
+    {
+        return $this->startingRule;
+    }
+
     protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         return null;

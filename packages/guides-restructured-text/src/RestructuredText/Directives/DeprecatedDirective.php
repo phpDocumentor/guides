@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+
 class DeprecatedDirective extends AbstractVersionChangeDirective
 {
-    public function __construct()
+    public function __construct(protected Rule $startingRule)
     {
-        parent::__construct('deprecated', 'Deprecated since version %s');
+        parent::__construct($startingRule, 'deprecated', 'Deprecated since version %s');
     }
 }

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+
 class AttentionDirective extends AbstractAdmonitionDirective
 {
-    public function __construct()
+    public function __construct(protected Rule $startingRule)
     {
-        parent::__construct('attention', 'Attention');
+        parent::__construct($startingRule, 'attention', 'Attention');
     }
 }
