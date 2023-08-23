@@ -219,6 +219,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(LiteralBlockRule::class)
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => LiteralBlockRule::PRIORITY])
         ->set(BlockQuoteRule::class)
+        ->arg('$startingRule', service(DirectiveContentRule::class))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => BlockQuoteRule::PRIORITY])
         ->set(ListRule::class)
         ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
