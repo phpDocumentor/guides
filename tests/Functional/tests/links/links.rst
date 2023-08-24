@@ -22,5 +22,8 @@ http://www.ics.uci.edu/pub/ietf/uri/historical.html#WARNING.
 You can read more on the features of Embeddables objects `in the documentation
 <http://docs.doctrine-project.org/en/latest/tutorials/embeddables.html>`_.
 
+Doctrine has a few links that are between brackets (`such as here
+<https://www.doctrine-project.org/projects/doctrine-orm/en/2.16/reference/dql-doctrine-query-language.html#query-hints>`_)
+
 .. _`xkcd`: http://xkcd.com/
 .. _something: http://something.com/
