@@ -68,7 +68,7 @@
         "rector/rector": "^0.18.0",
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/finder": "^6.3.3",
-        "vimeo/psalm": "^5.14"
+        "vimeo/psalm": "^5.15"
     },
     "suggest": {
         "league/csv:": "To use the CSV tables"
