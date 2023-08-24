@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 
@@ -37,6 +38,11 @@ use function trim;
 final class BlockQuoteRule implements Rule
 {
     public const PRIORITY = 100;
+
+    /** @param Rule<CollectionNode> $startingRule */
+    public function __construct(private readonly Rule $startingRule)
+    {
+    }
 
     public function applies(BlockContext $blockContext): bool
     {
@@ -64,12 +70,15 @@ final class BlockQuoteRule implements Rule
             return null;
         }
 
-        return new QuoteNode(
-            $blockContext->getDocumentParserContext()->getParser()->getSubParser()->parse(
-                $blockContext->getDocumentParserContext()->getContext(),
-                (new Buffer($lines))->getLinesString(),
-            )->getChildren(),
-        );
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), (new Buffer($lines))->getLinesString());
+
+        $collectionNode = $this->startingRule->apply($subContext);
+
+        if ($collectionNode === null) {
+            return null;
+        }
+
+        return new QuoteNode($collectionNode->getChildren());
     }
 
     private function isBlockLine(string|null $line, int $minIndent = 1): bool

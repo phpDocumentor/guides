@@ -39,7 +39,7 @@ class ClassDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         $classes = explode(' ', $directive->getData());
@@ -49,18 +49,18 @@ class ClassDirective extends SubDirective
             $classes,
         );
 
-        $document->setClasses($normalizedClasses);
+        $collectionNode->setClasses($normalizedClasses);
 
-        if ($document->getNodes() === []) {
+        if ($collectionNode->getChildren() === []) {
             $classNode = new ClassNode($directive->getData());
             $classNode->setClasses($classes);
 
             return $classNode;
         }
 
-        $this->setNodesClasses($document->getNodes(), $classes);
+        $this->setNodesClasses($collectionNode->getChildren(), $classes);
 
-        return new CollectionNode($document->getNodes());
+        return new CollectionNode($collectionNode->getChildren());
     }
 
     /**

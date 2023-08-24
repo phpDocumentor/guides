@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
-    public function __construct(private readonly string $type, private readonly string $label)
+    public function __construct(protected Rule $startingRule, private readonly string $type, private readonly string $label)
     {
+        parent::__construct($startingRule);
     }
 
     /** {@inheritDoc}
@@ -30,14 +32,14 @@ abstract class AbstractVersionChangeDirective extends SubDirective
      * @param Directive $directive
      */
     final protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         return new VersionChangeNode(
             $this->type,
             $this->label,
             $directive->getData(),
-            $document->getChildren(),
+            $collectionNode->getChildren(),
         );
     }
 

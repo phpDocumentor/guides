@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    public function __construct(private readonly string $name, private readonly string $text)
+    public function __construct(protected Rule $startingRule, private readonly string $name, private readonly string $text)
     {
+        parent::__construct($startingRule);
     }
 
     /** {@inheritDoc}
@@ -29,14 +31,14 @@ abstract class AbstractAdmonitionDirective extends SubDirective
      * @param Directive $directive
      */
     final protected function processSub(
-        DocumentNode $document,
+        CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
         return new AdmonitionNode(
             $this->name,
             $directive->getDataNode(),
             $this->text,
-            $document->getChildren(),
+            $collectionNode->getChildren(),
         );
     }
 
