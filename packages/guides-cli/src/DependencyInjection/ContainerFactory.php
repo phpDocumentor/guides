@@ -82,7 +82,7 @@ final class ContainerFactory
     private function registerExtension(ExtensionInterface $extension): void
     {
         $this->container->registerExtension($extension);
-        $this->container->loadFromExtension($extension->getAlias(), $config);
+        $this->container->loadFromExtension($extension->getAlias());
 
         $this->registeredExtensions[$extension::class] = $extension->getAlias();
     }
@@ -121,6 +121,7 @@ final class ContainerFactory
             $guidesConfig[$key] = $value;
             unset($config[$key]);
         }
+
         $config['extensions'][] = ['class' => GuidesExtension::class] + $guidesConfig;
 
         foreach ($config['extensions'] as $extension) {

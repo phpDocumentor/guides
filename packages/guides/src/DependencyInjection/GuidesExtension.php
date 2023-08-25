@@ -85,7 +85,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             }
 
             $container->getDefinition(SettingsManager::class)
-                ->addMethodCall('setProjectSettings', [new ProjectSettings($config['project']['title'] ?? null, $config['project']['version'] ?? null)]);
+                ->addMethodCall('setProjectSettings', [new ProjectSettings($config['project'])]);
         }
 
         if (isset($config['html_theme'])) {
