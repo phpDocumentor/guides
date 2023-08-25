@@ -16,9 +16,12 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SectionNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
 use RuntimeException;
 
 use function array_key_exists;
@@ -28,6 +31,10 @@ use function str_replace;
 
 final class IncludeDirective extends BaseDirective
 {
+    public function __construct(private readonly SectionRule $startingRule)
+    {
+    }
+    
     public function getName(): string
     {
         return 'include';
@@ -38,9 +45,7 @@ final class IncludeDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node {
-        $parser = $blockContext->getDocumentParserContext()->getParser();
-        $subParser = $parser->getSubParser();
-        $parserContext = $parser->getParserContext();
+        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $path = $parserContext->absoluteRelativePath($directive->getData());
 
         $origin = $parserContext->getOrigin();
@@ -72,6 +77,10 @@ final class IncludeDirective extends BaseDirective
             return $codeNode;
         }
 
-        return new CollectionNode($subParser->parse($parser->getParserContext(), $contents)->getChildren());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $contents);
+        $sectionNode = new SectionNode(TitleNode::emptyNode());
+        $this->startingRule->apply($subContext, $sectionNode);
+
+        return new CollectionNode($sectionNode->getChildren());
     }
 }
