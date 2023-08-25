@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
+use Twig\Error\LoaderError;
 
 final class TwigTemplateRenderer implements TemplateRenderer
 {
@@ -29,5 +30,18 @@ final class TwigTemplateRenderer implements TemplateRenderer
         $twig->addGlobal('env', $context);
 
         return $twig->render($template, $params);
+    }
+
+    public function isTemplateFound(RenderContext $context, string $template): bool
+    {
+        try {
+            $twig = $this->environmentBuilder->getTwigEnvironment();
+            $twig->load($template);
+
+            return true;
+        } catch (LoaderError) {
+        }
+
+        return false;
     }
 }

@@ -17,4 +17,6 @@ interface TemplateRenderer
 {
     /** @param array<string, mixed> $params */
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string;
+
+    public function isTemplateFound(RenderContext $context, string $template): bool;
 }

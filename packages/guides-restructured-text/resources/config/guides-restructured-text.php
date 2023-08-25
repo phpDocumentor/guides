@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DocumentBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\FigureDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HighlightDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImageDirective;
@@ -35,7 +36,6 @@ use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOption
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ReplaceDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\RubricDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
@@ -147,6 +147,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(LiteralTextRole::class)
         ->set(SpanTextRole::class)
 
+        ->set(GeneralDirective::class)
         ->set(AdmonitionDirective::class)
         ->set(AttentionDirective::class)
         ->set(BreadcrumbDirective::class)
@@ -187,7 +188,6 @@ return static function (ContainerConfigurator $container): void {
         ->set(RawDirective::class)
         ->set(ReplaceDirective::class)
         ->set(RoleDirective::class)
-        ->set(RubricDirective::class)
         ->set(SeeAlsoDirective::class)
         ->set(SidebarDirective::class)
         ->set(TipDirective::class)

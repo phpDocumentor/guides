@@ -52,7 +52,6 @@ use phpDocumentor\Guides\Nodes\Metadata\TopicNode;
 use phpDocumentor\Guides\Nodes\Metadata\VersionNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\QuoteNode;
-use phpDocumentor\Guides\Nodes\RubricNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -82,7 +81,6 @@ final class NodeRendererPass implements CompilerPassInterface
         ListNode::class => 'body/list/list.html.twig',
         ListItemNode::class => 'body/list/list-item.html.twig',
         LiteralBlockNode::class => 'body/literal-block.html.twig',
-        RubricNode::class => 'body/rubric.html.twig',
         CitationNode::class => 'body/citation.html.twig',
         FootnoteNode::class => 'body/footnote.html.twig',
         AnnotationListNode::class => 'body/annotation-list.html.twig',
