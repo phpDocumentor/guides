@@ -16,4 +16,14 @@ namespace phpDocumentor\Guides\Nodes;
 /** @extends CompoundNode<Node> */
 class QuoteNode extends CompoundNode
 {
+    /**
+     * @param list<Node> $value
+     * @param string[] $classes
+     */
+    public function __construct(array $value = [], array $classes = [])
+    {
+        parent::__construct($value);
+
+        $this->classes = $classes;
+    }
 }

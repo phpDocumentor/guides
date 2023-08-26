@@ -18,9 +18,11 @@ use phpDocumentor\Guides\RestructuredText\Directives\DangerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DefaultRoleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DeprecatedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\DocumentBlockDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\EpigraphDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\FigureDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HighlightDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\HighlightsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImageDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImportantDirective;
@@ -32,6 +34,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\MenuDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Directives\PullQuoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ReplaceDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
@@ -167,9 +170,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(DefaultRoleDirective::class)
         ->set(DeprecatedDirective::class)
         ->set(DocumentBlockDirective::class)
+        ->set(EpigraphDirective::class)
         ->set(ErrorDirective::class)
         ->set(FigureDirective::class)
         ->set(HighlightDirective::class)
+        ->set(HighlightsDirective::class)
         ->set(HintDirective::class)
         ->set(ImageDirective::class)
         ->set(ImportantDirective::class)
@@ -184,6 +189,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->set(MetaDirective::class)
         ->set(NoteDirective::class)
+        ->set(PullQuoteDirective::class)
         ->set(RawDirective::class)
         ->set(ReplaceDirective::class)
         ->set(RoleDirective::class)
