@@ -10,7 +10,7 @@ class VariableInlineNode extends InlineNode
 {
     final public const TYPE = 'variable';
 
-    private Node $child;
+    private Node|null $child = null;
 
     public function __construct(string $value)
     {
@@ -19,6 +19,10 @@ class VariableInlineNode extends InlineNode
 
     public function getChild(): Node
     {
+        if ($this->child === null) {
+            return new PlainTextInlineNode('|' . $this->value . '|');
+        }
+
         return $this->child;
     }
 
