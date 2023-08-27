@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Intersphinx;
 
 use function is_array;
+use function strval;
 
 final class InventoryLoader
 {
@@ -26,7 +27,7 @@ final class InventoryLoader
                     }
 
                     $link = new InventoryLink($linkArray[0], $linkArray[1], $linkArray[2], $linkArray[3]);
-                    $group->addLink($linkKey, $link);
+                    $group->addLink(strval($linkKey), $link);
                 }
             }
 
