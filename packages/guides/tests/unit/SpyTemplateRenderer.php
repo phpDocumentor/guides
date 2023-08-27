@@ -36,4 +36,9 @@ class SpyTemplateRenderer implements TemplateRenderer
     {
         return '';
     }
+
+    public function isTemplateFound(RenderContext $context, string $template): bool
+    {
+        return true;
+    }
 }
