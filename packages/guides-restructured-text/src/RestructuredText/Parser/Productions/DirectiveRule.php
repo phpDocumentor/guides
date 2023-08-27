@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -50,6 +51,7 @@ final class DirectiveRule implements Rule
     public function __construct(
         private readonly InlineMarkupRule $inlineMarkupRule,
         private readonly LoggerInterface $logger,
+        private readonly GeneralDirective $generalDirective,
         iterable $directives = [],
     ) {
         foreach ($directives as $directive) {
@@ -88,21 +90,6 @@ final class DirectiveRule implements Rule
         $this->parseDirectiveContent($directive, $blockContext);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
-        if ($directiveHandler === null) {
-            $message = sprintf(
-                'Unknown directive: "%s" %sfor line "%s"',
-                $directive->getName(),
-                $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName() !== '' ? sprintf(
-                    'in "%s" ',
-                    $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
-                ) : '',
-                $openingLine,
-            );
-
-            $this->logger->error($message, $blockContext->getLoggerInformation());
-
-            return null;
-        }
 
         $this->interpretDirectiveOptions($documentIterator, $directive);
         $buffer = $this->collectDirectiveContents($documentIterator);
@@ -190,9 +177,9 @@ final class DirectiveRule implements Rule
         return null;
     }
 
-    private function getDirectiveHandler(Directive $directive): DirectiveHandler|null
+    private function getDirectiveHandler(Directive $directive): DirectiveHandler
     {
-        return $this->directives[strtolower($directive->getName())] ?? null;
+        return $this->directives[strtolower($directive->getName())] ?? $this->generalDirective;
     }
 
     private function interpretDirectiveOptions(LinesIterator $documentIterator, Directive $directive): void

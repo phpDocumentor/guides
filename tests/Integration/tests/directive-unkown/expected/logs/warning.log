@@ -1,1 +1,1 @@
-Unknown directive
+app.WARNING: No template found for rendering directive "some-unknown-directive". Expected template "body/directive/some-unknown-directive.html.twig" [] []
