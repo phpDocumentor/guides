@@ -1,0 +1,16 @@
+<div class="tabs-container {% if node.classes %} {{ node.classesString }}{% endif %}">
+    <ul class="nav nav-tabs" id="{{ node.key }}" role="tablist">
+        {% for tab in node.tabs -%}
+            {% include "body/directive/tabs/tabs-button.html.twig" with {
+                tab:tab
+            } %}
+        {%- endfor %}
+    </ul>
+    <div class="tab-content" id="{{ node.key }}-content">
+        {% for tab in node.tabs -%}
+            {% include "body/directive/tabs/tabs-body.html.twig" with {
+                tab:tab
+            } %}
+        {%- endfor %}
+    </div>
+</div>

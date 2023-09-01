@@ -1,4 +1,6 @@
 Test
 ====
 
-.. some-unknown-directive::
+.. some-unknown-directive:: with Content
+
+    And sub-content.

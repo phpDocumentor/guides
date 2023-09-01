@@ -4,4 +4,4 @@
 Some Page
 =========
 
-Lorem Ipsum Dolor.
+Lorem Ipsum :custom:`Dolor`.

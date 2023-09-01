@@ -33,7 +33,7 @@ final class DocumentRule implements Rule
         return $blockContext->getDocumentIterator()->atStart();
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): DocumentNode|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): DocumentNode
     {
         Assert::nullOrIsInstanceOf($on, DocumentNode::class);
 
