@@ -16,12 +16,10 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\SectionNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\SectionRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use RuntimeException;
 
 use function array_key_exists;
@@ -31,10 +29,10 @@ use function str_replace;
 
 final class IncludeDirective extends BaseDirective
 {
-    public function __construct(private readonly SectionRule $startingRule)
+    public function __construct(private readonly DocumentRule $startingRule)
     {
     }
-    
+
     public function getName(): string
     {
         return 'include';
@@ -77,10 +75,13 @@ final class IncludeDirective extends BaseDirective
             return $codeNode;
         }
 
+        $currentDocument = $blockContext->getDocumentParserContext()->getDocument();
         $subContext = new BlockContext($blockContext->getDocumentParserContext(), $contents);
-        $sectionNode = new SectionNode(TitleNode::emptyNode());
-        $this->startingRule->apply($subContext, $sectionNode);
+        $document = $this->startingRule->apply($subContext);
 
-        return new CollectionNode($sectionNode->getChildren());
+        //Reset the document, as it was changed by the apply method.
+        $blockContext->getDocumentParserContext()->setDocument($currentDocument);
+
+        return new CollectionNode($document->getChildren());
     }
 }
