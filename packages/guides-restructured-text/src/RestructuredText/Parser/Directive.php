@@ -51,6 +51,11 @@ class Directive
     {
         $this->options[$value->getName()] = $value;
     }
+    
+    public function hasOption(string $name): bool
+    {
+        return isset($this->options[$name]);
+    }
 
     public function getOption(string $name): DirectiveOption
     {
