@@ -175,6 +175,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ImageDirective::class)
         ->set(ImportantDirective::class)
         ->set(IncludeDirective::class)
+        ->arg('$startingRule', service(DocumentRule::class))
         ->set(IndexDirective::class)
         ->set(LaTeXMain::class)
         ->set(LiteralincludeDirective::class)

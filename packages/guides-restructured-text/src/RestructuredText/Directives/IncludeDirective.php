@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use RuntimeException;
 
 use function array_key_exists;
@@ -28,6 +29,10 @@ use function str_replace;
 
 final class IncludeDirective extends BaseDirective
 {
+    public function __construct(private readonly DocumentRule $startingRule)
+    {
+    }
+
     public function getName(): string
     {
         return 'include';
@@ -38,9 +43,7 @@ final class IncludeDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node {
-        $parser = $blockContext->getDocumentParserContext()->getParser();
-        $subParser = $parser->getSubParser();
-        $parserContext = $parser->getParserContext();
+        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $path = $parserContext->absoluteRelativePath($directive->getData());
 
         $origin = $parserContext->getOrigin();
@@ -72,6 +75,13 @@ final class IncludeDirective extends BaseDirective
             return $codeNode;
         }
 
-        return new CollectionNode($subParser->parse($parser->getParserContext(), $contents)->getChildren());
+        $currentDocument = $blockContext->getDocumentParserContext()->getDocument();
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $contents);
+        $document = $this->startingRule->apply($subContext);
+
+        //Reset the document, as it was changed by the apply method.
+        $blockContext->getDocumentParserContext()->setDocument($currentDocument);
+
+        return new CollectionNode($document->getChildren());
     }
 }
