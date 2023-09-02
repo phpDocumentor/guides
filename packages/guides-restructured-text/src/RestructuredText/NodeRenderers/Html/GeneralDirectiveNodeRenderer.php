@@ -21,7 +21,9 @@ use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 use phpDocumentor\Guides\TemplateRenderer;
 use Psr\Log\LoggerInterface;
 
+use function preg_replace;
 use function sprintf;
+use function str_replace;
 
 /** @implements NodeRenderer<GeneralDirectiveNode> */
 class GeneralDirectiveNodeRenderer implements NodeRenderer
@@ -43,7 +45,7 @@ class GeneralDirectiveNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . GeneralDirectiveNode::class);
         }
 
-        $template = 'body/directive/' . $node->getName() . '.html.twig';
+        $template = 'body/directive/' . $this->getTemplateName($node->getName()) . '.html.twig';
         $data = ['node' => $node];
         if ($this->renderer->isTemplateFound($renderContext, $template)) {
             return $this->renderer->renderTemplate($renderContext, $template, $data);
@@ -57,5 +59,13 @@ class GeneralDirectiveNodeRenderer implements NodeRenderer
         $template = 'body/directive/not-found.html.twig';
 
         return $this->renderer->renderTemplate($renderContext, $template, $data);
+    }
+    
+    private function getTemplateName(string $directiveName): string
+    {
+        $directiveName = str_replace(':', '/', $directiveName);
+        $directiveName = preg_replace('/[^a-zA-Z0-9-_\/]/', '_', $directiveName);
+
+        return '' . $directiveName;
     }
 }
