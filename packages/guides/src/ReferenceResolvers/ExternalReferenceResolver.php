@@ -9,6 +9,7 @@ use phpDocumentor\Guides\RenderContext;
 
 use function parse_url;
 use function preg_match;
+use function str_starts_with;
 
 use const PHP_URL_SCHEME;
 
@@ -27,6 +28,12 @@ class ExternalReferenceResolver implements ReferenceResolver
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
+        if (str_starts_with($node->getTargetReference(), '#')) {
+            $node->setUrl($node->getTargetReference());
+
+            return true;
+        }
+
         $url = parse_url($node->getTargetReference(), PHP_URL_SCHEME);
         if ($url !== null && $url !== false && preg_match('/^' . self::SUPPORTED_SCHEMAS . '$/', $url)) {
             $node->setUrl($node->getTargetReference());
