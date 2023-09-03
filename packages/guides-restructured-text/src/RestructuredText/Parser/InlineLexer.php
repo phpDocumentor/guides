@@ -56,7 +56,7 @@ final class InlineLexer extends AbstractLexer
         return [
             '\\\\``', // must be a separate case, as the next pattern would split in "\`" + "`", causing it to become a intepreted text
             '\\\\[\s\S]', // Escaping hell... needs escaped slash in regex, but also in php.
-            '\\S+@\\S+\\.\\S+',
+            '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
             '[a-z0-9-]+_{2}', //Inline href.
             '[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
             '``.+?``(?!`)',
@@ -116,7 +116,7 @@ final class InlineLexer extends AbstractLexer
             return self::HYPERLINK;
         }
 
-        if (preg_match('/\\S+@\\S+\\.\\S+/i', $value)) {
+        if (preg_match('/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/i', $value)) {
             return self::EMAIL;
         }
 
