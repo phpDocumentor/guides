@@ -100,6 +100,7 @@ class FunctionalTest extends ApplicationTestCase
             $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
             $context = RenderContext::forDocument(
                 $document,
+                [$document],
                 $inputFilesystem,
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',

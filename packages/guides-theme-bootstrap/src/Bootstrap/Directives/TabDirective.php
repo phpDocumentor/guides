@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Bootstrap\Directives;
 
 use phpDocumentor\Guides\Bootstrap\Nodes\TabNode;
+use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
-use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function is_string;

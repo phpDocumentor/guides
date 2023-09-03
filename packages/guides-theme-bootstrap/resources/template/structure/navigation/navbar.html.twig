@@ -1,4 +1,4 @@
-{% if parts.navbar %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
 
@@ -8,11 +8,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-
-            {% for child in parts.navbar -%}
-                {{ renderNode(child) }}
-            {%~ endfor -%}
+            {% if parts.navbar %}
+                {% for child in parts.navbar -%}
+                    {{ renderNode(child) }}
+                {%~ endfor -%}
+            {% else %}
+                {{ renderMenu('navbar', 1) }}
+            {% endif %}
         </div>
     </div>
 </nav>
-{% endif %}

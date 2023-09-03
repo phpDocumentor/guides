@@ -22,6 +22,7 @@ class PreRenderDocumentTest extends TestCase
             $document,
             RenderContext::forDocument(
                 $document,
+                [$document],
                 $this->createMock(FilesystemInterface::class),
                 $this->createMock(FilesystemInterface::class),
                 '/path',

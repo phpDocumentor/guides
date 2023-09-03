@@ -1,5 +1,8 @@
 
 <nav class="nav flex-column">
+        {% if node.options.caption %}
+            <h2>{{ node.options.caption }}</h2>
+        {% endif %}
         <ul class="level-1">
     {% for entry in node.menuEntries -%}
         <li><a href="{{ renderLink(entry.url) }}"

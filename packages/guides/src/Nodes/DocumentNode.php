@@ -17,6 +17,7 @@ use Exception;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 
 use function array_filter;
@@ -44,6 +45,9 @@ final class DocumentNode extends CompoundNode
 
     /** @var array<int, FootnoteTarget> */
     private array $footnoteTargets = [];
+
+    /** @var TocNode[] */
+    private array $tocNodes = [];
 
     private int $maxFootnoteNumber = 0;
     private int $lastReturnedAnonymousFootnoteNumber = -1;
@@ -199,6 +203,17 @@ final class DocumentNode extends CompoundNode
     public function hasDocumentPart(string $identifier): bool
     {
         return isset($this->documentPartNodes[$identifier]);
+    }
+
+    public function addTocNode(TocNode $tocNode): void
+    {
+        $this->tocNodes[] = $tocNode;
+    }
+
+    /** @return TocNode[] */
+    public function getTocNodes(): array
+    {
+        return $this->tocNodes;
     }
 
     public function addFootnoteTarget(FootnoteTarget $target): int

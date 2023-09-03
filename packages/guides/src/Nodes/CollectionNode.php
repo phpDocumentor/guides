@@ -11,10 +11,7 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\RestructuredText\Nodes;
-
-use phpDocumentor\Guides\Nodes\CompoundNode;
-use phpDocumentor\Guides\Nodes\Node;
+namespace phpDocumentor\Guides\Nodes;
 
 /**
  * A collection node is a node that renders all its children without adding
