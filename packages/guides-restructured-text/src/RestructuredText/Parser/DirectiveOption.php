@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use function strval;
+
 class DirectiveOption
 {
     public function __construct(private readonly string $name, private string|int|float|bool|null $value = null)
@@ -18,6 +20,11 @@ class DirectiveOption
     public function getValue(): string|int|float|bool|null
     {
         return $this->value;
+    }
+
+    public function toString(): string
+    {
+        return strval($this->value);
     }
 
     public function appendValue(string $append): void

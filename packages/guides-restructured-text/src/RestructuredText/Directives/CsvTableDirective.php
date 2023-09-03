@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 
 use function array_filter;
 use function count;
+use function implode;
 use function trim;
 
 /**
@@ -46,24 +47,37 @@ final class CsvTableDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node {
-        $csvStream = $blockContext->getDocumentParserContext()
-            ->getContext()
-            ->getOrigin()
-            ->readStream((string) $directive->getOption('file')->getValue());
+        if ($directive->hasOption('file')) {
+            $csvStream = $blockContext->getDocumentParserContext()
+                ->getContext()
+                ->getOrigin()
+                ->readStream((string) $directive->getOption('file')->getValue());
 
-        if ($csvStream === false) {
-            $this->logger->error('Unable to read CSV file {file}', ['file' => $directive->getOption('file')->getValue()]);
+            if ($csvStream === false) {
+                $this->logger->error('Unable to read CSV file {file}', ['file' => $directive->getOption('file')->getValue()]);
 
-            return new GenericNode('csv-table');
+                return new GenericNode('csv-table');
+            }
+
+            $csv = Reader::createFromStream($csvStream);
+        } else {
+            $lines = $blockContext->getDocumentIterator()->toArray();
+            $csv = Reader::createFromString(implode("\n", $lines));
         }
 
-        $csv = Reader::createFromStream($csvStream);
         if ($directive->getOption('header-rows')->getValue() !== null) {
             $csv->setHeaderOffset((int) ($directive->getOption('header-rows')->getValue()) - 1);
         }
 
         $header = null;
-        if (empty($csv->getHeader()) === false) {
+        if ($directive->hasOption('header')) {
+            $headerCsv = Reader::createFromString($directive->getOption('header')->toString());
+            $header = new TableRow();
+            foreach ($headerCsv->first() as $column) {
+                $columnNode = new TableColumn($column, 1, []);
+                $header->addColumn($this->buildColumn($columnNode, $blockContext, $this->productions));
+            }
+        } elseif (empty($csv->getHeader()) === false) {
             $header = new TableRow();
             foreach ($csv->getHeader() as $column) {
                 $columnNode = new TableColumn($column, 1, []);
