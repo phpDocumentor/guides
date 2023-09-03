@@ -44,7 +44,7 @@ abstract class SubDirective extends BaseDirective
             return null;
         }
 
-        return $node->withOptions($this->optionsToArray($directive->getOptions()));
+        return $node->withDefaultOptions($this->optionsToArray($directive->getOptions()));
     }
 
     /** @return Rule<CollectionNode> */

@@ -89,6 +89,21 @@ abstract class AbstractNode implements Node
         return $result;
     }
 
+    /**
+     * Adds $options as default options without overriding any options already set.
+     *
+     * @param array<string, scalar|null> $options
+     *
+     * @return static
+     */
+    public function withDefaultOptions(array $options): Node
+    {
+        $result = clone $this;
+        $result->options = [...$options, ...$result->options];
+
+        return $result;
+    }
+
     public function hasOption(string $name): bool
     {
         return isset($this->options[$name]);

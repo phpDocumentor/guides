@@ -24,8 +24,9 @@ class TableNode extends CompoundNode
     /**
      * @param TableRow[] $data
      * @param TableRow[] $headers
+     * @param int[] $columnWidth
      */
-    public function __construct(protected array $data, protected array $headers = [])
+    public function __construct(protected array $data, protected array $headers = [], protected array $columnWidth = [])
     {
         parent::__construct();
     }
@@ -55,5 +56,20 @@ class TableNode extends CompoundNode
     public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    /** @return int[] */
+    public function getColumnWidth(): array
+    {
+        return $this->columnWidth;
+    }
+
+    /** @param int[] $columnWidth */
+    public function withColumnWidth(array $columnWidth): TableNode
+    {
+        $table = clone $this;
+        $table->columnWidth = $columnWidth;
+
+        return $table;
     }
 }

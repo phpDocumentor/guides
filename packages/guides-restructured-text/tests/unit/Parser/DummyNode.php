@@ -36,6 +36,12 @@ class DummyNode implements Node
         return $this;
     }
 
+    /** {@inheritDoc} */
+    public function withDefaultOptions(array $options): Node
+    {
+        return $this;
+    }
+
     public function hasOption(string $name): bool
     {
         return false;

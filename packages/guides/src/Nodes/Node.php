@@ -21,6 +21,9 @@ interface Node
     /** @param array<string, scalar|null> $options */
     public function withOptions(array $options): Node;
 
+    /** @param array<string, scalar|null> $options */
+    public function withDefaultOptions(array $options): Node;
+
     public function hasOption(string $name): bool;
 
     public function setValue(mixed $value): void;

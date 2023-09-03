@@ -42,6 +42,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\TableDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TitleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ToctreeDirective;
@@ -197,6 +198,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(RoleDirective::class)
         ->set(SeeAlsoDirective::class)
         ->set(SidebarDirective::class)
+        ->set(TableDirective::class)
         ->set(TipDirective::class)
         ->set(TitleDirective::class)
         ->set(ToctreeDirective::class)
