@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <guides>
-    <extension class="phpDocumentor\Guides\Bootstrap"/>
+    <extensions>
+        <bootstrap>
+            <class>\phpDocumentor\Guides\Bootstrap\DependencyInjection\BootstrapExtension</class>
+        </bootstrap>
+        <graphs>
+            <class>\phpDocumentor\Guides\Graphs\DependencyInjection\GraphsExtension</class>
+        </graphs>
+    </extensions>
 </guides>

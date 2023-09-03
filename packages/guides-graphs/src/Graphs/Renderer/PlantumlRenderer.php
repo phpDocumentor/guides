@@ -20,6 +20,7 @@ use function file_get_contents;
 use function file_put_contents;
 use function sys_get_temp_dir;
 use function tempnam;
+use function Jawira\PlantUml\encodep;
 
 class PlantumlRenderer implements DiagramRenderer
 {
