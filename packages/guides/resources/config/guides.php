@@ -24,8 +24,10 @@ use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
 use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererFactory;
 use phpDocumentor\Guides\Parser;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\IntersphinxReferenceResolver;
@@ -119,6 +121,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(UrlGenerator::class)
 
         ->set(ExternalReferenceResolver::class)
+
+        ->set(EmailReferenceResolver::class)
+
+        ->set(AnchorReferenceResolver::class)
 
         ->set(InternalReferenceResolver::class)
 

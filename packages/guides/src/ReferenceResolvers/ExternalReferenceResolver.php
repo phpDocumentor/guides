@@ -7,10 +7,12 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 
+use function filter_var;
 use function parse_url;
 use function preg_match;
 use function str_starts_with;
 
+use const FILTER_VALIDATE_EMAIL;
 use const PHP_URL_SCHEME;
 
 /**
@@ -30,6 +32,12 @@ class ExternalReferenceResolver implements ReferenceResolver
     {
         if (str_starts_with($node->getTargetReference(), '#')) {
             $node->setUrl($node->getTargetReference());
+
+            return true;
+        }
+
+        if (filter_var($node->getTargetReference(), FILTER_VALIDATE_EMAIL)) {
+            $node->setUrl('mailto:' . $node->getTargetReference());
 
             return true;
         }
