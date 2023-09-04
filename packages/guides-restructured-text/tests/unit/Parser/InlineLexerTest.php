@@ -52,6 +52,14 @@ class InlineLexerTest extends TestCase
                 'css_ and something',
                 [InlineLexer::NAMED_REFERENCE],
             ],
+            'Email' => [
+                'git@github.com',
+                [InlineLexer::EMAIL],
+            ],
+            'Email in backticks' => [
+                '`git@github.com`',
+                [InlineLexer::BACKTICK],
+            ],
         ];
     }
 }
