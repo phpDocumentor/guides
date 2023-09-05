@@ -17,6 +17,11 @@
       <code>$newNode</code>
     </InvalidPropertyAssignmentValue>
   </file>
+  <file src="packages/guides/src/DependencyInjection/GuidesExtension.php">
+    <UndefinedInterfaceMethod>
+      <code>scalarNode</code>
+    </UndefinedInterfaceMethod>
+  </file>
   <file src="packages/guides/src/Nodes/CompoundNode.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$result->value]]></code>

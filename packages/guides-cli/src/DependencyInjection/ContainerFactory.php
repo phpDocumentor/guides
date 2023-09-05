@@ -112,10 +112,23 @@ final class ContainerFactory
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $this->configs);
 
+        $guidesConfig = [];
+        foreach ($config as $key => $value) {
+            if ($key === 'extensions') {
+                continue;
+            }
+
+            $guidesConfig[$key] = $value;
+            unset($config[$key]);
+        }
+
+        $config['extensions'][] = ['class' => GuidesExtension::class] + $guidesConfig;
+
         foreach ($config['extensions'] as $extension) {
             $extensionFqcn = $this->resolveExtensionClass($extension['class']);
+            unset($extension['class']);
 
-            $this->registerExtension(new $extensionFqcn());
+            $this->loadExtensionConfig($extensionFqcn, $extension);
         }
     }
 }

@@ -49,10 +49,15 @@ class IntegrationTest extends ApplicationTestCase
         self::assertNotEmpty($compareFiles);
 
         $skip = file_exists($inputPath . '/skip');
+        $configurationFile = null;
+        if (file_exists($inputPath . '/guides.xml')) {
+            $configurationFile = $inputPath . '/guides.xml';
+        }
 
         try {
             system('mkdir ' . escapeshellarg($outputPath));
 
+            $this->prepareContainer($configurationFile);
             $command = $this->getContainer()->get(Run::class);
             assert($command instanceof Run);
 

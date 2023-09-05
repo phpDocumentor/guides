@@ -38,6 +38,7 @@ use function is_array;
 use function is_countable;
 use function is_dir;
 use function is_file;
+use function realpath;
 use function sprintf;
 use function str_starts_with;
 use function strtoupper;
@@ -69,21 +70,21 @@ final class Run extends Command
         $this->addOption(
             'input-format',
             null,
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_REQUIRED,
             'Format of the input can be RST, or Markdown',
             'rst',
         );
         $this->addOption(
             'output-format',
             null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'Format of the input can be html',
             ['html'],
         );
         $this->addOption(
             'log-path',
             null,
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_REQUIRED,
             'Write log to this path',
             'php://stder',
         );
@@ -97,7 +98,7 @@ final class Run extends Command
         $this->addOption(
             'theme',
             null,
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_REQUIRED,
             'The theme used for rendering.',
             'default',
         );
@@ -127,15 +128,15 @@ final class Run extends Command
 
             $settings = new ProjectSettings($settingsArray);
             $this->settingsManager->setProjectSettings($settings);
-            $projectNode = new ProjectNode(
-                $settings->getTitle(),
-                $settings->getVersion(),
-            );
-            $this->inventoryRepository->initialize($settings->getInventories());
         } else {
-            $this->settingsManager->setProjectSettings(new ProjectSettings([]));
-            $projectNode = new ProjectNode();
+            $settings = $this->settingsManager->getProjectSettings();
         }
+
+        $projectNode = new ProjectNode(
+            $settings->getTitle() === '' ? null : $settings->getTitle(),
+            $settings->getVersion() === '' ? null : $settings->getVersion(),
+        );
+        $this->inventoryRepository->initialize($settings->getInventories());
 
         $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
         $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
@@ -164,8 +165,9 @@ final class Run extends Command
             ),
         );
 
-        if ($input->hasOption('theme')) {
-            $this->themeManager->useTheme($input->getOption('theme') ?? 'default');
+        $theme = $input->getOption('theme');
+        if ($theme) {
+            $this->themeManager->useTheme($theme);
         }
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
@@ -213,14 +215,18 @@ final class Run extends Command
 
     private function getAbsolutePath(string $path): string
     {
-        if (!str_starts_with($path, '/')) {
+        $absolutePath = $path;
+        if (!str_starts_with($absolutePath, '/')) {
             if (getcwd() === false) {
                 throw new RuntimeException('Cannot find current working directory, use absolute paths.');
             }
 
-            $path = getcwd() . '/' . $path;
+            $absolutePath = realpath(getcwd() . '/' . $absolutePath);
+            if ($absolutePath === false) {
+                throw new RuntimeException('Cannot find path "' . $path . '".');
+            }
         }
 
-        return $path;
+        return $absolutePath;
     }
 }

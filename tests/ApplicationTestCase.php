@@ -32,7 +32,7 @@ class ApplicationTestCase extends TestCase
      *
      * @phpstan-assert Container $this->container
      */
-    protected function prepareContainer(array $configuration = [], array $extraExtensions = []): void
+    protected function prepareContainer(string|null $configurationFile = null, array $configuration = [], array $extraExtensions = []): void
     {
         $containerFactory = new ContainerFactory([
             new ApplicationExtension(),
@@ -42,6 +42,10 @@ class ApplicationTestCase extends TestCase
 
         foreach ($configuration as $extension => $extensionConfig) {
             $containerFactory->loadExtensionConfig($extension, $extensionConfig);
+        }
+
+        if ($configurationFile !== null) {
+            $containerFactory->addConfigFile($configurationFile);
         }
 
         $this->container = $containerFactory->create(dirname(__DIR__) . '/vendor');

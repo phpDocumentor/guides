@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use Symfony\Component\Console\Input\ArgvInput;
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
 use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
@@ -29,8 +30,10 @@ if (file_exists($autoloadDirectory)){
     require $vendorDir . '/autoload.php';
 }
 
+$input = new ArgvInput();
+
 $containerFactory = new ContainerFactory([new ApplicationExtension()]);
-if (is_file(getcwd().'/guides.xml')) {
+if (is_file($input->getParameterOption('--config', getcwd(), true).'/guides.xml')) {
     $containerFactory->addConfigFile('guides.xml');
 }
 $container = $containerFactory->create($vendorDir);
