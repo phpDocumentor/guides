@@ -1,0 +1,17 @@
+{%- set tableClasses = '' -%}
+
+{# Check and add classes conditionally #}
+{%- if tableNode.classes -%}
+    {%- set tableClasses = tableClasses ~ tableNode.classesString ~ ' ' -%}
+{%- endif -%}
+{%- if tableNode.hasOption('align') -%}
+    {%- set tableClasses = tableClasses ~ 'align-' ~ tableNode.option('align') ~ ' ' -%}
+{%- endif -%}
+{%- if tableNode.hasOption('widths') -%}
+    {%- set tableClasses = tableClasses ~ 'colwidths-' ~ tableNode.option('widths') ~ ' ' -%}
+{%- endif -%}
+{%- if tableNode.hasOption('grid') == 'grid' -%}
+    {%- set tableClasses = tableClasses ~ 'grid-' ~ tableNode.option('grid') ~ ' ' -%}
+{%- endif -%}
+
+{%- if tableClasses|trim %} class="{{ tableClasses|trim }}"{% endif -%}

@@ -1,0 +1,5 @@
+{%- set tableStyle = '' -%}
+{%- if tableNode.hasOption('width') -%}
+    {%- set tableStyle = tableStyle ~ 'width: ' ~ tableNode.option('width') ~ '; ' -%}
+{%- endif -%}
+{%- if tableStyle|trim %} style="{{ tableStyle|trim }}"{% endif -%}

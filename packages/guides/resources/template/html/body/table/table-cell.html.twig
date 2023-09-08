@@ -1,0 +1,4 @@
+<td{% if column.colSpan > 1 %} colspan="{{ column.colSpan }}"{% endif %}{% if column.rowSpan > 1 %} rowspan="{{ column.rowSpan }}"{% endif %}>
+    {%- for child in column.children -%}
+        {{- renderNode(child) -}}
+    {%- else %}&nbsp;{% endfor %}</td>
