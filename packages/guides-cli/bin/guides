@@ -33,8 +33,13 @@ if (file_exists($autoloadDirectory)){
 $input = new ArgvInput();
 
 $containerFactory = new ContainerFactory([new ApplicationExtension()]);
+
+if (is_file($vendorDir . '/../guides.xml')) {
+    // vendor folder was placed directly into the project directory
+    $containerFactory->addConfigFile($vendorDir . '/../guides.xml');
+}
 if (is_file($input->getParameterOption('--config', getcwd(), true).'/guides.xml')) {
-    $containerFactory->addConfigFile('guides.xml');
+    $containerFactory->addConfigFile($input->getParameterOption('--config', getcwd(), true).'/guides.xml');
 }
 $container = $containerFactory->create($vendorDir);
 
