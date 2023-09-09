@@ -18,7 +18,6 @@ use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Intersphinx\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
@@ -34,10 +33,8 @@ use function array_pop;
 use function count;
 use function getcwd;
 use function implode;
-use function is_array;
 use function is_countable;
 use function is_dir;
-use function is_file;
 use function realpath;
 use function sprintf;
 use function str_starts_with;
@@ -120,17 +117,7 @@ final class Run extends Command
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
         }
 
-        if (is_file($inputDir . '/settings.php')) {
-            $settingsArray = require $inputDir . '/settings.php';
-            if (!is_array($settingsArray)) {
-                throw new RuntimeException('settings.php must return an array!');
-            }
-
-            $settings = new ProjectSettings($settingsArray);
-            $this->settingsManager->setProjectSettings($settings);
-        } else {
-            $settings = $this->settingsManager->getProjectSettings();
-        }
+        $settings = $this->settingsManager->getProjectSettings();
 
         $projectNode = new ProjectNode(
             $settings->getTitle() === '' ? null : $settings->getTitle(),

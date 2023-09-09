@@ -39,6 +39,18 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                         ->scalarNode('version')->end()
                     ->end()
                 ->end()
+                ->arrayNode('inventories')
+                    ->children()
+                        ->arrayNode('inventory')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('id')->end()
+                                    ->scalarNode('url')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->scalarNode('html_theme')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
@@ -79,13 +91,22 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $loader->load('command_bus.php');
         $loader->load('guides.php');
 
+        $projectSettings = [];
         if (isset($config['project'])) {
             if (isset($config['project']['version'])) {
                 $config['project']['version'] = (string) $config['project']['version'];
             }
 
+            $projectSettings = $config['project'];
+        }
+
+        if (isset($config['inventories'])) {
+            $projectSettings['inventories'] = $config['inventories']['inventory'];
+        }
+
+        if ($projectSettings) {
             $container->getDefinition(SettingsManager::class)
-                ->addMethodCall('setProjectSettings', [new ProjectSettings($config['project'])]);
+                ->addMethodCall('setProjectSettings', [new ProjectSettings($projectSettings)]);
         }
 
         if (isset($config['html_theme'])) {
