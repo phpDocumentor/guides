@@ -96,7 +96,7 @@ abstract class AbstractNode implements Node
      *
      * @return static
      */
-    public function withDefaultOptions(array $options): Node
+    public function withKeepExistingOptions(array $options): Node
     {
         $result = clone $this;
         $result->options = [...$options, ...$result->options];

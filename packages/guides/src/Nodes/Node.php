@@ -22,7 +22,7 @@ interface Node
     public function withOptions(array $options): Node;
 
     /** @param array<string, scalar|null> $options */
-    public function withDefaultOptions(array $options): Node;
+    public function withKeepExistingOptions(array $options): Node;
 
     public function hasOption(string $name): bool;
 

@@ -37,7 +37,7 @@ class DummyNode implements Node
     }
 
     /** {@inheritDoc} */
-    public function withDefaultOptions(array $options): Node
+    public function withKeepExistingOptions(array $options): Node
     {
         return $this;
     }

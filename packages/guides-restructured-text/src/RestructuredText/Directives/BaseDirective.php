@@ -60,7 +60,7 @@ abstract class BaseDirective
     ): Node|null {
         return $this->processNode($blockContext, $directive)
             // Ensure options are always available
-            ->withDefaultOptions($this->optionsToArray($directive->getOptions()));
+            ->withKeepExistingOptions($this->optionsToArray($directive->getOptions()));
     }
 
     /**
