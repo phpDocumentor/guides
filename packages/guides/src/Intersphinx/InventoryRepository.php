@@ -18,12 +18,12 @@ class InventoryRepository
     {
     }
 
-    /** @param array<string, string> $inventoryConfigs */
+    /** @param array<int, array<string, string>> $inventoryConfigs */
     public function initialize(array $inventoryConfigs): void
     {
         $this->inventories = [];
-        foreach ($inventoryConfigs as $key => $url) {
-            $this->inventories[$key] = new Inventory($url);
+        foreach ($inventoryConfigs as $inventory) {
+            $this->inventories[$inventory['id']] = new Inventory($inventory['url']);
         }
     }
 
