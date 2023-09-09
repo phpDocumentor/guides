@@ -6,7 +6,7 @@ Go to the mono-repository
 =========================
 
 This project is developed in the mono-repository `phpDocumentor Guides <https://github.com/phpDocumentor/guides>`__.
-The repository you are currently in gets auto-created by splitting the mono-respository. You **must not** contribute
+The repository you are currently in gets auto-created by splitting the mono-repository. You **must not** contribute
 to this repository directly but always to the mono-repository linked above.
 
 Create Issues
