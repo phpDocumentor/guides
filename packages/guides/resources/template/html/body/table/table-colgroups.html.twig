@@ -1,0 +1,11 @@
+{% if tableNode.columnWidth %}
+    <colgroup>
+        {% for width in tableNode.columnWidth %}
+            {% if width<=0 %}
+                <col style="width: auto">
+            {% else %}
+                <col style="width: {{ width }}%">
+            {% endif %}
+        {% endfor %}
+    </colgroup>
+{% endif %}

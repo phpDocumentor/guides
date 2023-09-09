@@ -17,8 +17,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 use Psr\Log\LoggerInterface;
 
 use function array_filter;
+use function array_map;
 use function count;
+use function explode;
 use function implode;
+use function strval;
 use function trim;
 
 /**
@@ -47,6 +50,7 @@ final class CsvTableDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node {
+        $options = $this->optionsToArray($directive->getOptions());
         if ($directive->hasOption('file')) {
             $csvStream = $blockContext->getDocumentParserContext()
                 ->getContext()
@@ -96,7 +100,17 @@ final class CsvTableDirective extends BaseDirective
             $rows[] = $tableRow;
         }
 
-        return new TableNode($rows, array_filter([$header]));
+        $tableNode = new TableNode($rows, array_filter([$header]));
+        if (isset($options['widths']) && $options['widths'] !== 'auto' && $options['widths'] !== 'grid') {
+            $colWidths = array_map('intval', explode(',', strval($options['widths'])));
+            // A list of integers is used instead of the input column widths. Implies "grid".
+            $options['widths'] = 'grid';
+            $tableNode = $tableNode->withColumnWidth($colWidths);
+        }
+
+        $tableNode = $tableNode->withOptions($options);
+
+        return $tableNode;
     }
 
     private function buildColumn(

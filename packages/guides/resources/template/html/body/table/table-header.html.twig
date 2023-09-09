@@ -1,0 +1,14 @@
+{% if tableHeaderRows is not empty %}
+    <thead>
+    {% for tableHeaderRow in tableHeaderRows %}
+        <tr>
+            {% for column in tableHeaderRow.columns %}
+                <th{% if column.colspan > 1 %} colspan="{{ column.colspan }}"{% endif %}>
+                    {%- for child in column.children -%}
+                        {{- renderNode(child) -}}
+                    {% endfor %}</th>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </thead>
+{% endif %}
