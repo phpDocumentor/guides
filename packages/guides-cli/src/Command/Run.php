@@ -97,7 +97,6 @@ final class Run extends Command
             null,
             InputOption::VALUE_REQUIRED,
             'The theme used for rendering.',
-            'default',
         );
 
         $this->addOption(
@@ -154,8 +153,10 @@ final class Run extends Command
 
         $theme = $input->getOption('theme');
         if ($theme) {
-            $this->themeManager->useTheme($theme);
+            $settings->setHtmlTheme($theme);
         }
+
+        $this->themeManager->useTheme($settings->getHtmlTheme());
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
 

@@ -104,14 +104,13 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             $projectSettings['inventories'] = $config['inventories']['inventory'];
         }
 
+        if (isset($config['html_theme'])) {
+            $projectSettings['html_theme'] = (string) $config['html_theme'];
+        }
+
         if ($projectSettings) {
             $container->getDefinition(SettingsManager::class)
                 ->addMethodCall('setProjectSettings', [new ProjectSettings($projectSettings)]);
-        }
-
-        if (isset($config['html_theme'])) {
-            $container->getDefinition(ThemeManager::class)
-                ->addMethodCall('useTheme', [$config['html_theme']]);
         }
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
