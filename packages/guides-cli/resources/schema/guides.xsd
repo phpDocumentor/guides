@@ -12,8 +12,15 @@
             <xsd:element name="base-template-path" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="theme" type="theme" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="extension" type="extension" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="output-format" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
 
+        <xsd:attribute name="input" type="xsd:string"/>
+        <xsd:attribute name="output" type="xsd:string"/>
+        <xsd:attribute name="input-format" type="xsd:string"/>
+        <xsd:attribute name="log-path" type="xsd:string"/>
+        <xsd:attribute name="fail-on-log" type="xsd:string"/>
+        <xsd:attribute name="show-progress" type="xsd:string"/>
         <xsd:attribute name="theme" type="xsd:string"/>
     </xsd:complexType>
 
