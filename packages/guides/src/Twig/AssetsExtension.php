@@ -19,6 +19,8 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
+use phpDocumentor\Guides\Nodes\CollectionNode;
+use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
@@ -28,6 +30,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
+use function count;
 use function sprintf;
 use function trim;
 
@@ -49,6 +52,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderBreadcrumb', $this->renderBreadcrumb(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderMenu', $this->renderMenu(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
@@ -120,6 +124,23 @@ final class AssetsExtension extends AbstractExtension
     public function renderBreadcrumb(array $context): string
     {
         return $this->nodeRenderer->render(new BreadCrumbNode(), $this->getRenderContext($context));
+    }
+
+    /** @param array{env: RenderContext} $context */
+    public function renderMenu(array $context, string $menuType, int $maxMenuCount = 0): string
+    {
+        $renderContext = $this->getRenderContext($context);
+        $rootDocument = $renderContext->getRootDocumentNode();
+        $menuNodes = [];
+        foreach ($rootDocument->getTocNodes() as $tocNode) {
+            $menuNode = NavMenuNode::fromTocNode($tocNode, $menuType);
+            $menuNodes[] = $menuNode;
+            if ($maxMenuCount > 0 && $maxMenuCount <= count($menuNodes)) {
+                break;
+            }
+        }
+
+        return $this->nodeRenderer->render(new CollectionNode($menuNodes), $renderContext);
     }
 
     /** @param array{env: RenderContext} $context */

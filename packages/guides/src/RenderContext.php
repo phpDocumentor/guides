@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use Exception;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
@@ -30,6 +31,8 @@ class RenderContext
     private string $destinationPath;
 
     private DocumentNode $document;
+    /** @var DocumentNode[] */
+    private array $allDocuments;
 
     private function __construct(
         string $outputFolder,
@@ -43,8 +46,10 @@ class RenderContext
         $this->destinationPath = trim($outputFolder, '/');
     }
 
+    /** @param DocumentNode[] $allDocumentNodes */
     public static function forDocument(
         DocumentNode $documentNode,
+        array $allDocumentNodes,
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         string $destinationPath,
@@ -63,6 +68,7 @@ class RenderContext
         );
 
         $self->document = $documentNode;
+        $self->allDocuments = $allDocumentNodes;
 
         return $self;
     }
@@ -175,5 +181,21 @@ class RenderContext
     public function getProjectNode(): ProjectNode
     {
         return $this->projectNode;
+    }
+
+    public function getDocumentNodeForEntry(DocumentEntryNode $entryNode): DocumentNode
+    {
+        foreach ($this->allDocuments as $child) {
+            if ($child->getDocumentEntry() === $entryNode) {
+                return $child;
+            }
+        }
+
+        throw new Exception('No document was found for document entry ' . $entryNode->getFile());
+    }
+
+    public function getRootDocumentNode(): DocumentNode
+    {
+        return $this->getDocumentNodeForEntry($this->getProjectNode()->getRootDocumentEntry());
     }
 }

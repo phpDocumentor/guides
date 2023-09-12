@@ -34,6 +34,7 @@ final class RenderContextTest extends TestCase
 
         $context = RenderContext::forDocument(
             $documentNode,
+            [$documentNode],
             self::createStub(FilesystemInterface::class),
             self::createStub(FilesystemInterface::class),
             $destinationPath,

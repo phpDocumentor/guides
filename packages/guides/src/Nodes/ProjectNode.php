@@ -118,6 +118,17 @@ class ProjectNode extends CompoundNode
         return $this->documentEntries;
     }
 
+    public function getRootDocumentEntry(): DocumentEntryNode
+    {
+        foreach ($this->documentEntries as $documentEntry) {
+            if ($documentEntry->isRoot()) {
+                return $documentEntry;
+            }
+        }
+
+        throw new Exception('No root document entry was found');
+    }
+
     public function getDocumentEntry(string $file): DocumentEntryNode
     {
         foreach ($this->documentEntries as $documentEntry) {

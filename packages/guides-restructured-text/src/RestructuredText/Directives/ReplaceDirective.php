@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\ReplacementNode;
-use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function count;

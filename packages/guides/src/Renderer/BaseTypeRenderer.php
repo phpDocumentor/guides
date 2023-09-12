@@ -25,6 +25,7 @@ abstract class BaseTypeRenderer implements TypeRenderer
                     $document,
                     RenderContext::forDocument(
                         $document,
+                        (array) $renderCommand->getDocuments(),
                         $renderCommand->getOrigin(),
                         $renderCommand->getDestination(),
                         $renderCommand->getDestinationPath(),

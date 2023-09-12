@@ -15,10 +15,10 @@ namespace phpDocumentor\Guides\Bootstrap\Directives;
 
 use phpDocumentor\Guides\Bootstrap\Nodes\TabNode;
 use phpDocumentor\Guides\Bootstrap\Nodes\TabsNode;
+use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
-use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;

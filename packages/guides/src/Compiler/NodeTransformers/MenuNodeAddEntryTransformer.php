@@ -96,8 +96,12 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         }
 
         $menuEntries = array_unique($menuEntries);
+        $node = $node->withMenuEntries($menuEntries);
+        if ($node instanceof TocNode) {
+            $compilerContext->getDocumentNode()->addTocNode($node);
+        }
 
-        return $node->withMenuEntries($menuEntries);
+        return $node;
     }
 
     private function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode $currentDoc): bool

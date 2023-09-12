@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Nodes\CollectionNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 /** @implements Rule<CollectionNode> */

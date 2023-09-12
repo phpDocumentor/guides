@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Menu;
 
+use function assert;
 use function is_scalar;
 
 class NavMenuNode extends MenuNode
@@ -33,5 +34,23 @@ class NavMenuNode extends MenuNode
     public function isPageLevelOnly(): bool
     {
         return true;
+    }
+
+    public static function fromTocNode(TocNode $tocNode, string|null $menuType = null): NavMenuNode
+    {
+        $node = new NavMenuNode($tocNode->getFiles());
+        $node = $node->withMenuEntries($tocNode->getMenuEntries());
+        $options = $tocNode->getOptions();
+        unset($options['hidden']);
+        unset($options['titlesonly']);
+        unset($options['maxdepth']);
+        if ($menuType !== null) {
+            $options['menu'] = $menuType;
+        }
+
+        $node = $node->withOptions($options);
+        assert($node instanceof NavMenuNode);
+
+        return $node;
     }
 }

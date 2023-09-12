@@ -2,4 +2,6 @@
     {% for child in parts.mainmenu -%}
         {{ renderNode(child) }}
     {%~ endfor -%}
+{% else %}
+    {{ renderMenu('mainmenu') }}
 {% endif %}
