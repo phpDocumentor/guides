@@ -29,7 +29,7 @@ class ProjectNode extends CompoundNode
     /** @var array<string, CitationTarget> */
     private array $citationTargets = [];
 
-    /** @var array<string, InternalTarget> */
+    /** @var array<string, array<string, InternalTarget>> */
     private array $internalLinkTargets = [];
 
     /** @var DocumentEntryNode[] */
@@ -91,17 +91,21 @@ class ProjectNode extends CompoundNode
         return $this->citationTargets[$name] ?? null;
     }
 
-    public function addLinkTarget(string $anchorName, InternalTarget $target): void
+    public function addLinkTarget(string $anchorName, InternalTarget $target, string $linkType = SectionNode::STD_LABEL): void
     {
-        $this->internalLinkTargets[$anchorName] = $target;
+        if (!isset($this->internalLinkTargets[$linkType])) {
+            $this->internalLinkTargets[$linkType] = [];
+        }
+
+        $this->internalLinkTargets[$linkType][$anchorName] = $target;
     }
 
-    public function getInternalTarget(string $anchorName): InternalTarget|null
+    public function getInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): InternalTarget|null
     {
-        return $this->internalLinkTargets[$anchorName] ?? null;
+        return $this->internalLinkTargets[$linkType][$anchorName] ?? null;
     }
 
-    /** @return array<string, InternalTarget> */
+    /** @return array<string, array<string, InternalTarget>> */
     public function getAllInternalTargets(): array
     {
         return $this->internalLinkTargets;

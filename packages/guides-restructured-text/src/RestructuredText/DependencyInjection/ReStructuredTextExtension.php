@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\DependencyInjection\Compiler\TextRolePass;
+use phpDocumentor\Guides\RestructuredText\Nodes\OptionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use phpDocumentor\Guides\TemplateRenderer;
 use Symfony\Component\Config\FileLocator;
@@ -23,7 +24,10 @@ use function substr;
 
 class ReStructuredTextExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
 {
-    private const HTML = [VersionChangeNode::class => 'body/version-change.html.twig'];
+    private const HTML = [
+        VersionChangeNode::class => 'body/version-change.html.twig',
+        OptionNode::class => 'body/directive/option.html.twig',
+    ];
 
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

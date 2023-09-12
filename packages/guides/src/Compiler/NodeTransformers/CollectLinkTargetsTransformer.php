@@ -9,6 +9,8 @@ use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\LinkTargetNode;
+use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
@@ -53,24 +55,38 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                     $title,
                 ),
             );
-        } elseif ($node instanceof SectionNode) {
+        } elseif ($node instanceof LinkTargetNode) {
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
-            $anchor = $node->getTitle()->getId();
+            $anchor = $node->getId();
             $compilerContext->getProjectNode()->addLinkTarget(
                 $anchor,
                 new InternalTarget(
                     $currentDocument->getFilePath(),
                     $anchor,
-                    $node->getTitle()->toString(),
+                    $node->getLinkText(),
                 ),
+                $node->getLinkType(),
             );
+            if ($node instanceof MultipleLinkTargetsNode) {
+                foreach ($node->getAdditionalIds() as $id) {
+                    $compilerContext->getProjectNode()->addLinkTarget(
+                        $id,
+                        new InternalTarget(
+                            $currentDocument->getFilePath(),
+                            $id,
+                            $node->getLinkText(),
+                        ),
+                        $node->getLinkType(),
+                    );
+                }
+            }
         }
 
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): DocumentNode|AnchorNode|SectionNode
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();
@@ -81,7 +97,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof DocumentNode || $node instanceof AnchorNode || $node instanceof SectionNode;
+        return $node instanceof DocumentNode || $node instanceof AnchorNode || $node instanceof LinkTargetNode;
     }
 
     public function getPriority(): int

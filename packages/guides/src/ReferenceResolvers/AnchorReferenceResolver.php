@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
@@ -26,7 +27,12 @@ class AnchorReferenceResolver implements ReferenceResolver
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        if ($node instanceof ReferenceNode) {
+            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
+        } else {
+            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        }
+
         if ($target === null) {
             return false;
         }

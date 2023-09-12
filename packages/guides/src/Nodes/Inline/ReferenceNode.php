@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
+use phpDocumentor\Guides\Nodes\SectionNode;
+
 /**
  * This class should be moved into Nodes, but right now the span parser is producing this.
  * I just want to get started to improve reference handling
@@ -25,7 +27,13 @@ class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
     public function __construct(
         string $targetReference,
         string $value = '',
+        private readonly string $linkType = SectionNode::STD_LABEL,
     ) {
         parent::__construct(self::TYPE, $targetReference, $value);
+    }
+
+    public function getLinkType(): string
+    {
+        return $this->linkType;
     }
 }
