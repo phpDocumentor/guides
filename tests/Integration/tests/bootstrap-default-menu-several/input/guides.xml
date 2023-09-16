@@ -2,7 +2,6 @@
 <guides xmlns="https://www.phpdoc.org/guides"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd">
-    <project title="phpDocumentor Guides"/>
     <theme>bootstrap</theme>
 
     <extension class="phpDocumentor\Guides\Bootstrap"/>

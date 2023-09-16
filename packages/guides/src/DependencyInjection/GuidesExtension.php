@@ -51,7 +51,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                         ->end()
                     ->end()
                 ->end()
-                ->scalarNode('html_theme')->end()
+                ->scalarNode('theme')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -104,8 +104,8 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             $projectSettings['inventories'] = $config['inventories']['inventory'];
         }
 
-        if (isset($config['html_theme'])) {
-            $projectSettings['html_theme'] = (string) $config['html_theme'];
+        if (isset($config['theme'])) {
+            $projectSettings['theme'] = (string) $config['theme'];
         }
 
         if ($projectSettings) {

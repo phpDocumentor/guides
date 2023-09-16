@@ -153,10 +153,10 @@ final class Run extends Command
 
         $theme = $input->getOption('theme');
         if ($theme) {
-            $settings->setHtmlTheme($theme);
+            $settings->setTheme($theme);
         }
 
-        $this->themeManager->useTheme($settings->getHtmlTheme());
+        $this->themeManager->useTheme($settings->getTheme());
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
 

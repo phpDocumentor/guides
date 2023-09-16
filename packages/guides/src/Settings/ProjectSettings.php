@@ -13,7 +13,7 @@ class ProjectSettings
     private array $inventories;
     private string $title;
     private string $version;
-    private string $htmlTheme;
+    private string $theme;
 
     /** @param array<string, string|array<string, string>> $settingsArray */
     public function __construct(array $settingsArray)
@@ -21,7 +21,7 @@ class ProjectSettings
         $this->title = isset($settingsArray['title']) && is_string($settingsArray['title']) ? $settingsArray['title'] : '';
         $this->version = isset($settingsArray['version']) && is_string($settingsArray['version']) ? $settingsArray['version'] : '';
         $this->inventories = isset($settingsArray['inventories']) && is_array($settingsArray['inventories']) ? $settingsArray['inventories'] : [];
-        $this->htmlTheme = isset($settingsArray['html_theme']) && is_string($settingsArray['html_theme']) ? $settingsArray['html_theme'] : 'default';
+        $this->theme = isset($settingsArray['theme']) && is_string($settingsArray['theme']) ? $settingsArray['theme'] : 'default';
     }
 
     public function getTitle(): string
@@ -40,9 +40,9 @@ class ProjectSettings
         return $this->inventories;
     }
 
-    public function getHtmlTheme(): string
+    public function getTheme(): string
     {
-        return $this->htmlTheme;
+        return $this->theme;
     }
 
     /** @param array<string, string> $inventories*/
@@ -61,8 +61,8 @@ class ProjectSettings
         $this->version = $version;
     }
 
-    public function setHtmlTheme(string $htmlTheme): void
+    public function setTheme(string $theme): void
     {
-        $this->htmlTheme = $htmlTheme;
+        $this->theme = $theme;
     }
 }
