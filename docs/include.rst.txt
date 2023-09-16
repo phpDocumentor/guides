@@ -1,15 +1,4 @@
 ..  documentblock::
-    :identifier: mainmenu
-
-    ..  rubric:: My Header
-
-    ..  menu::
-        :menu: mainmenu
-
-        /*
-        /*/index
-
-..  documentblock::
     :identifier: navbar
 
     .. menu::
