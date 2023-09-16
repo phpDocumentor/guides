@@ -173,6 +173,7 @@ final class Run extends Command
             $this->commandBus->handle(
                 new RenderCommand(
                     $format,
+                    $documents,
                     $progressBar === null ? $documents : $progressBar->iterate($documents),
                     $sourceFileSystem,
                     $destinationFileSystem,
