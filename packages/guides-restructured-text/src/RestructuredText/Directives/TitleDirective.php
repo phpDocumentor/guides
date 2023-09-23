@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -13,21 +12,16 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * .. title:: Page title
  */
-class TitleDirective extends BaseDirective
+class TitleDirective extends ActionDirective
 {
     public function getName(): string
     {
         return 'title';
     }
 
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node|null {
+    public function processAction(BlockContext $blockContext, Directive $directive): void
+    {
         $document = $blockContext->getDocumentParserContext()->getDocument();
         $document->setMetaTitle($directive->getData());
-
-        return null;
     }
 }
