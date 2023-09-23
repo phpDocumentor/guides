@@ -25,6 +25,9 @@ final class GeneralDirectiveNodeRendererTest extends TestCase
     public function setUp(): void
     {
         $this->renderContext = $this->createMock(RenderContext::class);
+        $this->renderContext
+            ->method('getOutputFormat')
+            ->willReturn('html');
         $this->renderer = $this->createMock(TemplateRenderer::class);
         $this->generalDirectiveNodeRenderer = new GeneralDirectiveNodeRenderer(
             $this->renderer,

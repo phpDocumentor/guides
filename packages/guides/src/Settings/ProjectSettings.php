@@ -15,7 +15,7 @@ class ProjectSettings
     private string $output = 'output';
     private string $inputFormat = 'rst';
     /** @var string[]  */
-    private array $outputFormats = ['html'];
+    private array $outputFormats = ['html', 'intersphinx'];
     private string $logPath = 'php://stder';
     private bool $failOnError = false;
     private bool $showProgressBar = true;

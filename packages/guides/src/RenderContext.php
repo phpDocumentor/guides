@@ -198,4 +198,9 @@ class RenderContext
     {
         return $this->getDocumentNodeForEntry($this->getProjectNode()->getRootDocumentEntry());
     }
+
+    public function getOutputFormat(): string
+    {
+        return $this->outputFormat;
+    }
 }

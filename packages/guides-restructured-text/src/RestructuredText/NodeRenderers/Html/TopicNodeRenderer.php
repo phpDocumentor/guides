@@ -41,7 +41,7 @@ final class TopicNodeRenderer implements NodeRenderer
 
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/topic.html.twig',
+            'body/topic.%s.twig',
             [
                 'name' => $node->getName(),
                 'node' => $node->getValue(),

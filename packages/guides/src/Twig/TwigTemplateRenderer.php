@@ -17,6 +17,9 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use Twig\Error\LoaderError;
 
+use function sprintf;
+use function strpos;
+
 final class TwigTemplateRenderer implements TemplateRenderer
 {
     public function __construct(private readonly EnvironmentBuilder $environmentBuilder)
@@ -28,6 +31,10 @@ final class TwigTemplateRenderer implements TemplateRenderer
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();
         $twig->addGlobal('env', $context);
+
+        if (strpos($template, '%s') !== false) {
+            $template = sprintf($template, $context->getOutputFormat());
+        }
 
         return $twig->render($template, $params);
     }

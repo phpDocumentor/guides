@@ -47,14 +47,14 @@ final class MenuNodeRenderer implements NodeRenderer
     private function getTemplate(Node $node): string
     {
         if ($node instanceof TocNode) {
-            return 'body/menu/table-of-content.html.twig';
+            return 'body/menu/table-of-content.%s.twig';
         }
 
         if ($node instanceof ContentMenuNode) {
-            return 'body/menu/content-menu.html.twig';
+            return 'body/menu/content-menu.%s.twig';
         }
 
-        return 'body/menu/menu.html.twig';
+        return 'body/menu/menu.%s.twig';
     }
 
     public function supports(Node $node): bool

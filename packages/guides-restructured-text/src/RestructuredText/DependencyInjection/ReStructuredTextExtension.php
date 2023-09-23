@@ -23,7 +23,7 @@ use function substr;
 
 class ReStructuredTextExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
 {
-    private const HTML = [VersionChangeNode::class => 'body/version-change.html.twig'];
+    private const HTML = [VersionChangeNode::class => 'body/version-change.%s.twig'];
 
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

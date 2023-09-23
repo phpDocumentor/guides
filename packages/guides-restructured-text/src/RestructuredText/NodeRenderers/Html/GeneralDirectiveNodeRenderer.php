@@ -45,7 +45,7 @@ class GeneralDirectiveNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . GeneralDirectiveNode::class);
         }
 
-        $template = 'body/directive/' . $this->getTemplateName($node->getName()) . '.html.twig';
+        $template = sprintf('body/directive/%s.%s.twig', $this->getTemplateName($node->getName()), $renderContext->getOutputFormat());
         $data = ['node' => $node];
         if ($this->renderer->isTemplateFound($renderContext, $template)) {
             return $this->renderer->renderTemplate($renderContext, $template, $data);
@@ -56,7 +56,7 @@ class GeneralDirectiveNodeRenderer implements NodeRenderer
             $node->getName(),
             $template,
         ));
-        $template = 'body/directive/not-found.html.twig';
+        $template = 'body/directive/not-found.%s.twig';
 
         return $this->renderer->renderTemplate($renderContext, $template, $data);
     }

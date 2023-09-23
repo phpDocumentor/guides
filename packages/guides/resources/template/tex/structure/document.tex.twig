@@ -1,4 +1,4 @@
-{% if isMain(node) %}
+
 \documentclass[11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -14,9 +14,8 @@
 {{ renderNode(node) }}
 {% endfor %}
 \begin{document}
-{% endif %}
 \label{{ '{' }}{{ document.environment.url}}{{ '}' }}
-{{ body|raw }}
-{% if isMain %}
+{% for child in node.children -%}
+{{ renderNode(child) }}
+{%~ endfor -%}
 \end{document}
-{% endif %}

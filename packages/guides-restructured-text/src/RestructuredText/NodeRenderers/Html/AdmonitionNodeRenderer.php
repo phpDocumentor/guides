@@ -44,7 +44,7 @@ class AdmonitionNodeRenderer implements NodeRenderer
 
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/admonition.html.twig',
+            'body/admonition.%s.twig',
             [
                 'name' => $node->getName(),
                 'text' => $node->getText(),

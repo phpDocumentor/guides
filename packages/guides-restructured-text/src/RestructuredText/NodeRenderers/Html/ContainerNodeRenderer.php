@@ -40,7 +40,7 @@ final class ContainerNodeRenderer implements NodeRenderer
 
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/container.html.twig',
+            'body/container.%s.twig',
             [
                 'class' => $node->getOption('class'),
                 'id' => $node->getOption('name'),

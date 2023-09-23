@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function assert;
+use function count;
 use function dirname;
 use function is_array;
 
@@ -130,7 +131,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             $projectSettings->setInputFormat((string) $config['input_format']);
         }
 
-        if (isset($config['output_format']) && is_array($config['output_format'])) {
+        if (isset($config['output_format']) && is_array($config['output_format']) && count($config['output_format']) > 0) {
             $projectSettings->setOutputFormats($config['output_format']);
         }
 
@@ -146,6 +147,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             ->addMethodCall('setProjectSettings', [$projectSettings]);
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
+        $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/tex';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
 
         foreach ($config['themes'] as $themeName => $themeConfig) {

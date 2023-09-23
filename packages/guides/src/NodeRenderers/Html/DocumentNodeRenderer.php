@@ -18,7 +18,7 @@ use function assert;
  */
 final class DocumentNodeRenderer implements NodeRenderer
 {
-    private string $template = 'structure/document.html.twig';
+    private string $template = 'structure/document.%s.twig';
 
     public function __construct(
         private readonly TemplateRenderer $renderer,

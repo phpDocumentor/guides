@@ -21,7 +21,7 @@ use function assert;
  */
 class BreadCrumbNodeRenderer implements NodeRenderer
 {
-    private string $template = 'body/menu/breadcrumb.html.twig';
+    private string $template = 'body/menu/breadcrumb.%s.twig';
 
     public function __construct(
         private readonly TemplateRenderer $renderer,

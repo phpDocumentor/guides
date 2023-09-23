@@ -25,9 +25,9 @@ final class TemplatedNodeTest extends TestCase
      */
     public function testTemplateNameAndAttributesCanBeInvokedWithThisNode(): void
     {
-        $node = new TemplatedNode('template.html.twig', ['myData' => 1]);
+        $node = new TemplatedNode('template.%s.twig', ['myData' => 1]);
 
-        self::assertSame('template.html.twig', $node->getValue());
+        self::assertSame('template.%s.twig', $node->getValue());
         self::assertSame(['myData' => 1], $node->getData());
     }
 }

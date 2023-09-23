@@ -33,7 +33,7 @@ class TableNodeRenderer implements NodeRenderer
 
         return $this->renderer->renderTemplate(
             $renderContext,
-            'body/table.html.twig',
+            'body/table.%s.twig',
             [
                 'tableNode' => $node,
                 'tableHeaderRows' => $headers,
