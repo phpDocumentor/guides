@@ -1,0 +1,5 @@
+{%- if node.classes %}
+    <div class="{{ node.classesString }}">{{ renderNode(node.value) }}</div>
+{%  else %}
+    {{ renderNode(node.value) }}
+{% endif -%}
