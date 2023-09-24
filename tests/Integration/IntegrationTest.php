@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 
 use function array_filter;
+use function array_merge;
 use function array_walk;
 use function assert;
 use function escapeshellarg;
@@ -151,28 +152,29 @@ class IntegrationTest extends ApplicationTestCase
     /** @return mixed[] */
     public static function getTestsForDirectoryTest(): array
     {
-        return self::getTestsForDirectory();
+        return self::getTestsForDirectory(__DIR__ . '/tests');
     }
 
     /** @return mixed[] */
     public static function getTestsForLatex(): array
     {
-        return self::getTestsForDirectory('/tests-latex');
+        return self::getTestsForDirectory(__DIR__ . '/tests-latex');
     }
 
     /** @return mixed[] */
-    private static function getTestsForDirectory(string $directory = '/tests'): array
+    private static function getTestsForDirectory(string $directory): array
     {
         $finder = new SymfonyFinder();
         $finder
             ->directories()
-            ->in(__DIR__ . $directory)
+            ->in($directory)
             ->depth('== 0');
 
         $tests = [];
 
         foreach ($finder as $dir) {
             if (!file_exists($dir->getPathname() . '/input')) {
+                $tests = array_merge($tests, self::getTestsForDirectory($dir->getPathname()));
                 continue;
             }
 
