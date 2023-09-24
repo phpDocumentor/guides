@@ -15,6 +15,7 @@ use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
+use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Intersphinx\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -36,6 +37,7 @@ use function getcwd;
 use function implode;
 use function is_countable;
 use function is_dir;
+use function pathinfo;
 use function realpath;
 use function sprintf;
 use function str_starts_with;
@@ -61,6 +63,13 @@ final class Run extends Command
             'output',
             InputArgument::OPTIONAL,
             'Directory to read for files',
+        );
+
+        $this->addOption(
+            'input-file',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'If set only this file is parsed.',
         );
 
         $this->addOption(
@@ -114,16 +123,25 @@ final class Run extends Command
             $settings->setOutput((string) $input->getArgument('output'));
         }
 
+        if ($input->getOption('input-file')) {
+            $inputFile = (string) $input->getOption('input-file');
+            $pathInfo = pathinfo($inputFile);
+            $settings->setInputFile($pathInfo['filename']);
+            if (!empty($pathInfo['extension'])) {
+                $settings->setInputFormat($pathInfo['extension']);
+            }
+        }
+
+        if ($input->getOption('input-format')) {
+            $settings->setInputFormat((string) $input->getOption('input-format'));
+        }
+
         if ($input->getOption('log-path')) {
             $settings->setLogPath((string) $input->getOption('log-path'));
         }
 
         if ($input->getOption('fail-on-log')) {
             $settings->setFailOnError(true);
-        }
-
-        if ($input->getOption('input-format')) {
-            $settings->setInputFormat((string) $input->getOption('input-format'));
         }
 
         if (count($input->getOption('output-format')) > 0) {
@@ -168,16 +186,30 @@ final class Run extends Command
             $this->logger->pushProcessor($spyProcessor);
         }
 
-        $documents = $this->commandBus->handle(
-            new ParseDirectoryCommand(
-                $sourceFileSystem,
-                '',
-                $settings->getInputFormat(),
-                $projectNode,
-            ),
-        );
+        $documents = [];
 
-
+        if ($settings->getInputFile() === '') {
+            $documents = $this->commandBus->handle(
+                new ParseDirectoryCommand(
+                    $sourceFileSystem,
+                    '',
+                    $settings->getInputFormat(),
+                    $projectNode,
+                ),
+            );
+        } else {
+            $documents[] = $this->commandBus->handle(
+                new ParseFileCommand(
+                    $sourceFileSystem,
+                    '',
+                    $settings->getInputFile(),
+                    $settings->getInputFormat(),
+                    1,
+                    $projectNode,
+                    true,
+                ),
+            );
+        }
 
         $this->themeManager->useTheme($settings->getTheme());
 
