@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Intersphinx\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use RuntimeException;
@@ -55,13 +56,11 @@ final class Run extends Command
             'input',
             InputArgument::OPTIONAL,
             'Directory to read for files',
-            'docs',
         );
         $this->addArgument(
             'output',
             InputArgument::OPTIONAL,
             'Directory to read for files',
-            'output',
         );
 
         $this->addOption(
@@ -69,21 +68,18 @@ final class Run extends Command
             null,
             InputOption::VALUE_REQUIRED,
             'Format of the input can be RST, or Markdown',
-            'rst',
         );
         $this->addOption(
             'output-format',
             null,
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'Format of the input can be html',
-            ['html'],
+            'Format of the input can be html and or intersphinx',
         );
         $this->addOption(
             'log-path',
             null,
             InputOption::VALUE_REQUIRED,
             'Write log to this path',
-            'php://stder',
         );
         $this->addOption(
             'fail-on-log',
@@ -104,19 +100,51 @@ final class Run extends Command
             null,
             InputOption::VALUE_NEGATABLE,
             'Whether to show a progress bar',
-            true,
         );
+    }
+
+    private function getSettingsOverridenWithInput(InputInterface $input): ProjectSettings
+    {
+        $settings = $this->settingsManager->getProjectSettings();
+        if ($input->getArgument('input')) {
+            $settings->setInput((string) $input->getArgument('input'));
+        }
+
+        if ($input->getArgument('output')) {
+            $settings->setOutput((string) $input->getArgument('output'));
+        }
+
+        if ($input->getOption('log-path')) {
+            $settings->setLogPath((string) $input->getOption('log-path'));
+        }
+
+        if ($input->getOption('fail-on-log')) {
+            $settings->setFailOnError(true);
+        }
+
+        if ($input->getOption('input-format')) {
+            $settings->setInputFormat((string) $input->getOption('input-format'));
+        }
+
+        if (count($input->getOption('output-format')) > 0) {
+            $settings->setOutputFormats($input->getOption('output-format'));
+        }
+
+        if ($input->getOption('theme')) {
+            $settings->setTheme((string) $input->getOption('theme'));
+        }
+
+        return $settings;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inputDir = $this->getAbsolutePath((string) ($input->getArgument('input') ?? ''));
+        $settings = $this->getSettingsOverridenWithInput($input);
+        $inputDir = $this->getAbsolutePath($settings->getInput());
         if (!is_dir($inputDir)) {
             throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
         }
-
-        $settings = $this->settingsManager->getProjectSettings();
 
         $projectNode = new ProjectNode(
             $settings->getTitle() === '' ? null : $settings->getTitle(),
@@ -124,10 +152,10 @@ final class Run extends Command
         );
         $this->inventoryRepository->initialize($settings->getInventories());
 
-        $outputDir = $this->getAbsolutePath((string) ($input->getArgument('output') ?? ''));
-        $sourceFileSystem = new Filesystem(new Local($input->getArgument('input')));
+        $outputDir = $this->getAbsolutePath($settings->getOutput());
+        $sourceFileSystem = new Filesystem(new Local($settings->getInput()));
         $sourceFileSystem->addPlugin(new Finder());
-        $logPath = $input->getOption('log-path') ?? 'php://stder';
+        $logPath = $settings->getLogPath();
         if ($logPath === 'php://stder') {
             $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING));
         } else {
@@ -135,9 +163,7 @@ final class Run extends Command
             $this->logger->pushHandler(new StreamHandler($logPath . '/error.log', Logger::ERROR));
         }
 
-        $failOnLog = $input->getOption('fail-on-log') ?? false;
-
-        if ($failOnLog) {
+        if ($settings->isFailOnError()) {
             $spyProcessor = new SpyProcessor();
             $this->logger->pushProcessor($spyProcessor);
         }
@@ -146,15 +172,12 @@ final class Run extends Command
             new ParseDirectoryCommand(
                 $sourceFileSystem,
                 '',
-                $input->getOption('input-format'),
+                $settings->getInputFormat(),
                 $projectNode,
             ),
         );
 
-        $theme = $input->getOption('theme');
-        if ($theme) {
-            $settings->setTheme($theme);
-        }
+
 
         $this->themeManager->useTheme($settings->getTheme());
 
@@ -162,12 +185,12 @@ final class Run extends Command
 
         $destinationFileSystem = new Filesystem(new Local($outputDir));
 
-        $outputFormats = $input->getOption('output-format');
+        $outputFormats = $settings->getOutputFormats();
 
         foreach ($outputFormats as $format) {
             $progressBar = null;
 
-            if ($output instanceof ConsoleOutputInterface && $input->getOption('progress')) {
+            if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
                 $progressBar = new ProgressBar($output->section());
             }
 
@@ -195,7 +218,7 @@ final class Run extends Command
             'Successfully placed ' . (is_countable($documents) ? count($documents) : 0) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
         );
 
-        if ($failOnLog && $spyProcessor->hasBeenCalled()) {
+        if ($settings->isFailOnError() && $spyProcessor->hasBeenCalled()) {
             return Command::FAILURE;
         }
 

@@ -52,6 +52,16 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                     ->end()
                 ->end()
                 ->scalarNode('theme')->end()
+                ->scalarNode('input')->end()
+                ->scalarNode('output')->end()
+                ->scalarNode('input_format')->end()
+                ->arrayNode('output_format')
+                    ->defaultValue([])
+                    ->scalarPrototype()->end()
+                ->end()
+                ->scalarNode('log_path')->end()
+                ->scalarNode('fail_on_log')->end()
+                ->scalarNode('show_progress')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -91,27 +101,49 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $loader->load('command_bus.php');
         $loader->load('guides.php');
 
-        $projectSettings = [];
+        $projectSettings = new ProjectSettings();
         if (isset($config['project'])) {
             if (isset($config['project']['version'])) {
-                $config['project']['version'] = (string) $config['project']['version'];
+                $projectSettings->setVersion((string) $config['project']['version']);
             }
 
-            $projectSettings = $config['project'];
+            $projectSettings->setTitle((string) $config['project']['title']);
         }
 
         if (isset($config['inventories'])) {
-            $projectSettings['inventories'] = $config['inventories']['inventory'];
+            $projectSettings->setInventories($config['inventories']['inventory']);
         }
 
         if (isset($config['theme'])) {
-            $projectSettings['theme'] = (string) $config['theme'];
+            $projectSettings->setTheme((string) $config['theme']);
         }
 
-        if ($projectSettings) {
-            $container->getDefinition(SettingsManager::class)
-                ->addMethodCall('setProjectSettings', [new ProjectSettings($projectSettings)]);
+        if (isset($config['input'])) {
+            $projectSettings->setInput((string) $config['input']);
         }
+
+        if (isset($config['output'])) {
+            $projectSettings->setOutput((string) $config['output']);
+        }
+
+        if (isset($config['input_format'])) {
+            $projectSettings->setInputFormat((string) $config['input_format']);
+        }
+
+        if (isset($config['output_format']) && is_array($config['output_format'])) {
+            $projectSettings->setOutputFormats($config['output_format']);
+        }
+
+        if (isset($config['show_progress'])) {
+            $projectSettings->setShowProgressBar((bool) $config['show_progress']);
+        }
+
+        if (isset($config['fail_on_log'])) {
+            $projectSettings->setFailOnError((bool) $config['show_progress']);
+        }
+
+        $container->getDefinition(SettingsManager::class)
+            ->addMethodCall('setProjectSettings', [$projectSettings]);
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
