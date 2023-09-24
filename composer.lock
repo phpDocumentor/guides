@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a11c6aa529dc08d696e5cb5e0ea8c134",
+    "content-hash": "90b062fa06ee3fa4fe3e17715ae6c6f8",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1238,6 +1238,41 @@
                 "MIT"
             ],
             "description": "Provides Plantuml support for restructured text rendered by the phpDocumentor's Guides library.",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-markdown",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-markdown",
+                "reference": "70ac6334139fe80a3c394ea58a931ceafaae7b53"
+            },
+            "require": {
+                "league/commonmark": "^2.4",
+                "php": "^8.1",
+                "phpdocumentor/guides": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds Markdown support to the phpDocumentor's Guides library.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -6644,6 +6679,7 @@
         "phpdocumentor/guides": 20,
         "phpdocumentor/guides-cli": 20,
         "phpdocumentor/guides-graphs": 20,
+        "phpdocumentor/guides-markdown": 20,
         "phpdocumentor/guides-restructured-text": 20,
         "phpdocumentor/guides-theme-bootstrap": 20
     },
