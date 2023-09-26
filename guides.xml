@@ -11,8 +11,6 @@
         log-path="php://stder"
 >
     <project title="phpDocumentor Guides"/>
-    <output-format>html</output-format>
-    <output-format>intersphinx</output-format>
 
     <extension class="phpDocumentor\Guides\Bootstrap"/>
 </guides>
