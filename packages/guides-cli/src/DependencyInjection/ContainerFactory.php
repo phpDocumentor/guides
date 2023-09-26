@@ -43,7 +43,7 @@ final class ContainerFactory
         $this->configLoader = new XmlFileLoader(new FileLocator());
 
         foreach ([new GuidesExtension(), new ReStructuredTextExtension(), ...$defaultExtensions] as $extension) {
-            $this->registerExtension($extension);
+            $this->registerExtension($extension, []);
         }
     }
 
@@ -54,7 +54,7 @@ final class ContainerFactory
 
         $extensionAlias = $this->registeredExtensions[$extensionFqcn] ?? false;
         if (!$extensionAlias) {
-            $this->registerExtension(new $extensionFqcn());
+            $this->registerExtension(new $extensionFqcn(), $config);
 
             return;
         }
@@ -79,10 +79,11 @@ final class ContainerFactory
         return $this->container;
     }
 
-    private function registerExtension(ExtensionInterface $extension): void
+    /** @param array<mixed> $config */
+    private function registerExtension(ExtensionInterface $extension, array $config): void
     {
         $this->container->registerExtension($extension);
-        $this->container->loadFromExtension($extension->getAlias());
+        $this->container->loadFromExtension($extension->getAlias(), $config);
 
         $this->registeredExtensions[$extension::class] = $extension->getAlias();
     }

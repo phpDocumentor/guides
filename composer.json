@@ -28,6 +28,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "doctrine/lexer": "^3.0",
+        "jawira/plantuml-encoding": "^1.1",
         "league/commonmark": "^2.4",
         "league/flysystem": "^1.0.5",
         "league/tactician": "^1.1",
