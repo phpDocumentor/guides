@@ -37,6 +37,7 @@
         "phpdocumentor/guides": "@dev",
         "phpdocumentor/guides-cli": "@dev",
         "phpdocumentor/guides-graphs": "@dev",
+        "phpdocumentor/guides-markdown": "@dev",
         "phpdocumentor/guides-restructured-text": "@dev",
         "phpdocumentor/guides-theme-bootstrap": "@dev",
         "psr/event-dispatcher": "^1.0",

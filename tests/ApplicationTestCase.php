@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides;
 use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
 use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
 use phpDocumentor\Guides\DependencyInjection\TestExtension;
+use phpDocumentor\Guides\Markdown\DependencyInjection\MarkdownExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -37,6 +38,7 @@ class ApplicationTestCase extends TestCase
         $containerFactory = new ContainerFactory([
             new ApplicationExtension(),
             new TestExtension(),
+            new MarkdownExtension(),
             ...$extraExtensions,
         ]);
 
