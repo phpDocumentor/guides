@@ -9,6 +9,45 @@ use PHPUnit\Framework\TestCase;
 
 final class UrlGeneratorTest extends TestCase
 {
+    #[DataProvider('generateInternalUrlProvider')]
+    public function testGenerateInternalUrl(string $expected, string $canonicalUrl, string $destinationPath, string $currentDirectory = '', bool $absolute = true): void
+    {
+        $urlGenerator = new UrlGenerator();
+        self::assertSame($expected, $urlGenerator->generateInternalUrl($canonicalUrl, $destinationPath, $currentDirectory, $absolute));
+    }
+
+    /** @return array<string, array<string, string|null>> */
+    public static function generateInternalUrlProvider(): array
+    {
+        return [
+            'Destination path absolute' => [
+                'expected' => '/guides/file.html',
+                'canonicalUrl' => 'file.html',
+                'destinationPath' => '/guides',
+            ],
+            'Destination path relative' => [
+                'expected' => 'guides/dir/file.html',
+                'canonicalUrl' => 'dir/file.html',
+                'destinationPath' => 'guides',
+            ],
+            'Destination path relative slash at end' => [
+                'expected' => 'guides/dir/file.html',
+                'canonicalUrl' => 'dir/file.html',
+                'destinationPath' => 'guides/',
+            ],
+            'Destination Path Empty' => [
+                'expected' => 'dir/file.html',
+                'canonicalUrl' => 'dir/file.html',
+                'destinationPath' => '',
+            ],
+            'Destination Path Slash' => [
+                'expected' => '/dir/file.html',
+                'canonicalUrl' => 'dir/file.html',
+                'destinationPath' => '/',
+            ],
+        ];
+    }
+
     #[DataProvider('fileUrlProvider')]
     public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null, string $skip = ''): void
     {
@@ -141,7 +180,6 @@ final class UrlGeneratorTest extends TestCase
     #[DataProvider('documentPathProvider')]
     public function testRelativeDocUrl(
         string $currentDirectory,
-        string $destinationPath,
         string $linkedDocument,
         string $result,
         string|null $anchor = null,
@@ -149,7 +187,6 @@ final class UrlGeneratorTest extends TestCase
         $urlGenerator = new UrlGenerator();
         self::assertSame($result, $urlGenerator->generateOutputUrlFromDocumentPath(
             $currentDirectory,
-            $destinationPath,
             $linkedDocument,
             'txt',
             $anchor,
@@ -162,58 +199,34 @@ final class UrlGeneratorTest extends TestCase
         return [
             'relative document' => [
                 'currentDirectory' => 'getting-started',
-                'destinationPath' => 'guide',
                 'linkedDocument' => 'installing',
-                'result' => 'guide/getting-started/installing.txt',
+                'result' => 'getting-started/installing.txt',
             ],
             'absolute document path' => [
                 'currentDirectory' => 'getting-started',
-                'destinationPath' => 'guide',
                 'linkedDocument' => '/installing',
-                'result' => 'guide/installing.txt',
+                'result' => 'installing.txt',
             ],
             'absolute document path with anchor' => [
                 'currentDirectory' => 'getting-started',
-                'destinationPath' => 'guide',
                 'linkedDocument' => '/getting-started/configuration',
-                'result' => 'guide/getting-started/configuration.txt#composer',
+                'result' => 'getting-started/configuration.txt#composer',
                 'anchor' => 'composer',
             ],
             'relative document path up in directory' => [
                 'currentDirectory' => 'getting-started',
-                'destinationPath' => 'guide',
                 'linkedDocument' => '../references/installing',
-                'result' => 'guide/references/installing.txt',
+                'result' => 'references/installing.txt',
             ],
             'relative document path up in subdirectory' => [
                 'currentDirectory' => 'getting-started/something',
-                'destinationPath' => 'guide',
                 'linkedDocument' => '../references/installing',
-                'result' => 'guide/getting-started/references/installing.txt',
+                'result' => 'getting-started/references/installing.txt',
             ],
             'relative document path two up in directory' => [
                 'currentDirectory' => 'getting-started/something',
-                'destinationPath' => 'guide',
-                'linkedDocument' => '../../references/installing',
-                'result' => 'guide/references/installing.txt',
-            ],
-            'Empty destination' => [
-                'currentDirectory' => 'getting-started/something',
-                'destinationPath' => '',
                 'linkedDocument' => '../../references/installing',
                 'result' => 'references/installing.txt',
-            ],
-            'Destination is empty absolute path' => [
-                'currentDirectory' => 'getting-started/something',
-                'destinationPath' => '/',
-                'linkedDocument' => '../../references/installing',
-                'result' => '/references/installing.txt',
-            ],
-            'Destination is absolute' => [
-                'currentDirectory' => 'getting-started/something',
-                'destinationPath' => '/guide/',
-                'linkedDocument' => '../../references/installing',
-                'result' => '/guide/references/installing.txt',
             ],
         ];
     }

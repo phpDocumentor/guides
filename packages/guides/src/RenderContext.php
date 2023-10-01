@@ -94,6 +94,11 @@ class RenderContext
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }
 
+    public function generateInternalUrl(string $canonicalUrl): string
+    {
+        return $this->urlGenerator->generateInternalUrl($canonicalUrl, $this->outputFolder, $this->getDirName(), true);
+    }
+
     /**
      * Generate a canonical output URL with the configured file extension and anchor
      */
@@ -104,13 +109,12 @@ class RenderContext
             $linkedDocument = '/' . $linkedDocument;
         }
 
-        return $this->urlGenerator->generateOutputUrlFromDocumentPath(
+        return $this->generateInternalUrl($this->urlGenerator->generateOutputUrlFromDocumentPath(
             $this->getDirName(),
-            $this->outputFolder,
             $linkedDocument,
             $this->outputFormat,
             $anchor,
-        );
+        ));
     }
 
     private function getDirName(): string

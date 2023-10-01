@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use Exception;
 use League\Uri\UriInfo;
 
 use function array_pop;
@@ -20,6 +21,7 @@ use function explode;
 use function implode;
 use function ltrim;
 use function rtrim;
+use function sprintf;
 use function trim;
 
 final class UrlGenerator implements UrlGeneratorInterface
@@ -94,7 +96,6 @@ final class UrlGenerator implements UrlGeneratorInterface
      */
     public function generateOutputUrlFromDocumentPath(
         string $currentDirectory,
-        string $destinationPath,
         string $linkedDocument,
         string $outputFormat,
         string|null $anchor = null,
@@ -104,11 +105,48 @@ final class UrlGenerator implements UrlGeneratorInterface
             $linkedDocument,
         );
 
-        $fileUrl = $this->createFileUrl($canonicalUrl, $outputFormat, $anchor);
-        if ($destinationPath === '') {
-            return $fileUrl;
+        return $this->createFileUrl($canonicalUrl, $outputFormat, $anchor);
+    }
+
+    public function generateInternalUrl(
+        string $canonicalUrl,
+        string $destinationPath,
+        string $currentDirectory,
+        bool $absolute,
+    ): string {
+        if (!$this->isRelativeUrl($canonicalUrl)) {
+            throw new Exception(sprintf('%s::%s may only be applied to relative URLs, %s cannot be handled', self::class, __METHOD__, $canonicalUrl));
         }
 
-        return rtrim($destinationPath, '/') . '/' . $fileUrl;
+        if ($absolute) {
+            return $this->generateAbsoluteInternalUrl($canonicalUrl, $destinationPath);
+        }
+
+        return $this->generateRelativeInternalUrl($canonicalUrl, $currentDirectory);
+    }
+
+    private function generateAbsoluteInternalUrl(
+        string $canonicalOutputUrl,
+        string $destinationPath,
+    ): string {
+        if ($destinationPath === '') {
+            return $canonicalOutputUrl;
+        }
+
+        return rtrim($destinationPath, '/') . '/' . $canonicalOutputUrl;
+    }
+
+    private function generateRelativeInternalUrl(
+        string $canonicalOutputUrl,
+        string $currentDirectory,
+    ): string {
+        return $this->canonicalUrl($currentDirectory, $canonicalOutputUrl);
+    }
+
+    private function isRelativeUrl(string $url): bool
+    {
+        $uri = UriFactory::createUri($url);
+
+        return UriInfo::isRelativePath($uri);
     }
 }

@@ -35,9 +35,15 @@ interface UrlGeneratorInterface
      */
     public function generateOutputUrlFromDocumentPath(
         string $currentDirectory,
-        string $destinationPath,
         string $linkedDocument,
         string $outputFormat,
         string|null $anchor = null,
+    ): string;
+
+    public function generateInternalUrl(
+        string $canonicalUrl,
+        string $destinationPath,
+        string $currentDirectory,
+        bool $absolute,
     ): string;
 }
