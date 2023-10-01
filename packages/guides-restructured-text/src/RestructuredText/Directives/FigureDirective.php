@@ -10,7 +10,6 @@ use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 
 /**
  * Renders an image, example :
@@ -23,7 +22,7 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
  */
 class FigureDirective extends SubDirective
 {
-    public function __construct(protected Rule $startingRule, private readonly UrlGeneratorInterface $urlGenerator)
+    public function __construct(protected Rule $startingRule)
     {
         parent::__construct($startingRule);
     }
@@ -41,7 +40,7 @@ class FigureDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
-        $image = new ImageNode($this->urlGenerator->relativeUrl($directive->getData()));
+        $image = new ImageNode($directive->getData());
         $scalarOptions = $this->optionsToArray($directive->getOptions());
         $image = $image->withOptions([
             'width' => $scalarOptions['width'] ?? null,

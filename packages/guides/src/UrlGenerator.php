@@ -44,24 +44,6 @@ final class UrlGenerator implements UrlGeneratorInterface
     }
 
     /**
-     * Resolves a relative URL.
-     */
-    public function relativeUrl(string $url): string
-    {
-        $uri = UriFactory::createUri($url);
-
-        if (UriInfo::isAbsolutePath($uri)) {
-            return $url;
-        }
-
-        if (UriInfo::isRelativePath($uri)) {
-            return $url;
-        }
-
-        return ltrim($url, '/');
-    }
-
-    /**
      * Returns the Path used in the Metas to find this file.
      *
      * The Metas collection, which is used to build the table of contents, uses these canonical paths as a unique
