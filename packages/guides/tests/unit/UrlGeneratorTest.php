@@ -197,6 +197,24 @@ final class UrlGeneratorTest extends TestCase
                 'linkedDocument' => '../../references/installing',
                 'result' => 'guide/references/installing.txt',
             ],
+            'Empty destination' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '',
+                'linkedDocument' => '../../references/installing',
+                'result' => 'references/installing.txt',
+            ],
+            'Destination is empty absolute path' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '/',
+                'linkedDocument' => '../../references/installing',
+                'result' => '/references/installing.txt',
+            ],
+            'Destination is absolute' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '/guide/',
+                'linkedDocument' => '../../references/installing',
+                'result' => '/guide/references/installing.txt',
+            ],
         ];
     }
 }

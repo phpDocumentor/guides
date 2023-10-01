@@ -32,7 +32,7 @@ class RenderContext
     private array $allDocuments;
 
     private function __construct(
-        string $outputFolder,
+        private readonly string $outputFolder,
         private readonly string $currentFileName,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
@@ -103,7 +103,7 @@ class RenderContext
 
         return $this->urlGenerator->generateOutputUrlFromDocumentPath(
             $this->getDirName(),
-            $this->destinationPath,
+            $this->outputFolder,
             $linkedDocument,
             $this->outputFormat,
             $anchor,

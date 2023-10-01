@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use League\Uri\Uri;
 use League\Uri\UriInfo;
 
 use function array_pop;
 use function explode;
 use function implode;
 use function ltrim;
+use function rtrim;
 use function trim;
 
 final class UrlGenerator implements UrlGeneratorInterface
@@ -93,16 +93,16 @@ final class UrlGenerator implements UrlGeneratorInterface
         string $outputFormat,
         string|null $anchor = null,
     ): string {
-        $fileUrl = $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
-        if (UriInfo::isAbsolutePath(Uri::createFromString($linkedDocument))) {
-            return $destinationPath . $fileUrl;
+        $canonicalUrl = $this->canonicalUrl(
+            $currentDirectory,
+            $linkedDocument,
+        );
+
+        $fileUrl = $this->createFileUrl($canonicalUrl, $outputFormat, $anchor);
+        if ($destinationPath === '') {
+            return $fileUrl;
         }
 
-        $baseUrl = ltrim($this->absoluteUrl($destinationPath, $currentDirectory), '/');
-
-        return $this->canonicalUrl(
-            $baseUrl,
-            $fileUrl,
-        );
+        return rtrim($destinationPath, '/') . '/' . $fileUrl;
     }
 }
