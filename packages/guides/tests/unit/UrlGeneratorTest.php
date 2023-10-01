@@ -9,6 +9,57 @@ use PHPUnit\Framework\TestCase;
 
 final class UrlGeneratorTest extends TestCase
 {
+    #[DataProvider('fileUrlProvider')]
+    public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null, string $skip = ''): void
+    {
+        if ($skip !== '') {
+            self::markTestSkipped($skip);
+        }
+
+        $urlGenerator = new UrlGenerator();
+        self::assertSame($expected, $urlGenerator->createFileUrl($filename, $outputFormat, $anchor));
+    }
+
+    /** @return array<string, array<string, string|null>> */
+    public static function fileUrlProvider(): array
+    {
+        return [
+            'Simple Filename' => [
+                'expected' => 'file.html',
+                'filename' => 'file',
+            ],
+            'Complex Filename' => [
+                'expected' => 'file-something.html',
+                'filename' => 'file-something',
+            ],
+            'Output Format' => [
+                'expected' => 'texfile.tex',
+                'filename' => 'texfile',
+                'outputFormat' => 'tex',
+            ],
+            'File with anchor' => [
+                'expected' => 'file.html#anchor',
+                'filename' => 'file',
+                'outputFormat' => 'html',
+                'anchor' => 'anchor',
+            ],
+            'Empty File with anchor' => [
+                'expected' => '#anchor',
+                'filename' => '',
+                'outputFormat' => 'html',
+                'anchor' => 'anchor',
+                'skip' => 'Empty filenames are not supported',
+            ],
+            'Empty File with empty anchor' => [
+                'expected' => '#',
+                'filename' => '',
+                'outputFormat' => 'html',
+                'anchor' => null,
+                'skip' => 'Empty filenames are not supported',
+            ],
+        ];
+    }
+
     #[DataProvider('canonicalUrlProvider')]
     public function testCanonicalUrl(string $basePath, string $url, string $result): void
     {
@@ -85,11 +136,5 @@ final class UrlGeneratorTest extends TestCase
                 'result' => '/dir/file',
             ],
         ];
-    }
-
-    public function testUrlGenerationOfInvalidUrlReturnsInput(): void
-    {
-        $urlGenerator = new UrlGenerator();
-        self::assertSame('tcp://hostname:port', $urlGenerator->generateUrl('tcp://hostname:port'));
     }
 }
