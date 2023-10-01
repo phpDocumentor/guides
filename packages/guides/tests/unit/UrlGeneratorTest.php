@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace unit;
+namespace phpDocumentor\Guides;
 
-use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
