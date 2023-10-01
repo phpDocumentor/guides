@@ -89,15 +89,10 @@ final class UrlGenerator implements UrlGeneratorInterface
     public function generateOutputUrlFromDocumentPath(
         string $currentDirectory,
         string $destinationPath,
-        bool $validDocumentEntry,
         string $linkedDocument,
         string $outputFormat,
         string|null $anchor = null,
     ): string {
-        if ($validDocumentEntry) {
-            $linkedDocument = '/' . $linkedDocument;
-        }
-
         $fileUrl = $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
         if (UriInfo::isAbsolutePath(Uri::createFromString($linkedDocument))) {
             return $destinationPath . $fileUrl;

@@ -94,14 +94,17 @@ class RenderContext
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }
 
-    public function relativeDocUrl(string $filename, string|null $anchor = null): string
+    public function relativeDocUrl(string $linkedDocument, string|null $anchor = null): string
     {
+        if ($this->projectNode->findDocumentEntry($linkedDocument) !== null) {
+            // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
+            $linkedDocument = '/' . $linkedDocument;
+        }
+
         return $this->urlGenerator->generateOutputUrlFromDocumentPath(
             $this->getDirName(),
             $this->destinationPath,
-            // Todo: it does not really make sense to treat relavtive paths that are found in the project node differently?
-            $this->projectNode->findDocumentEntry($filename) !== null,
-            $filename,
+            $linkedDocument,
             $this->outputFormat,
             $anchor,
         );

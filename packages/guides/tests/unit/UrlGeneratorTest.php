@@ -142,7 +142,6 @@ final class UrlGeneratorTest extends TestCase
     public function testRelativeDocUrl(
         string $currentDirectory,
         string $destinationPath,
-        bool $validDocumentEntry,
         string $linkedDocument,
         string $result,
         string|null $anchor = null,
@@ -151,7 +150,6 @@ final class UrlGeneratorTest extends TestCase
         self::assertSame($result, $urlGenerator->generateOutputUrlFromDocumentPath(
             $currentDirectory,
             $destinationPath,
-            $validDocumentEntry,
             $linkedDocument,
             'txt',
             $anchor,
@@ -165,43 +163,37 @@ final class UrlGeneratorTest extends TestCase
             'relative document' => [
                 'currentDirectory' => 'getting-started',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => false,
                 'linkedDocument' => 'installing',
                 'result' => 'guide/getting-started/installing.txt',
             ],
             'absolute document path' => [
                 'currentDirectory' => 'getting-started',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => false,
                 'linkedDocument' => '/installing',
                 'result' => 'guide/installing.txt',
             ],
-            'relative document path with anchor' => [
+            'absolute document path with anchor' => [
                 'currentDirectory' => 'getting-started',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => true,
-                'linkedDocument' => 'getting-started/configuration',
+                'linkedDocument' => '/getting-started/configuration',
                 'result' => 'guide/getting-started/configuration.txt#composer',
                 'anchor' => 'composer',
             ],
             'relative document path up in directory' => [
                 'currentDirectory' => 'getting-started',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => false,
                 'linkedDocument' => '../references/installing',
                 'result' => 'guide/references/installing.txt',
             ],
             'relative document path up in subdirectory' => [
                 'currentDirectory' => 'getting-started/something',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => false,
                 'linkedDocument' => '../references/installing',
                 'result' => 'guide/getting-started/references/installing.txt',
             ],
             'relative document path two up in directory' => [
                 'currentDirectory' => 'getting-started/something',
                 'destinationPath' => 'guide',
-                'validDocumentEntry' => false,
                 'linkedDocument' => '../../references/installing',
                 'result' => 'guide/references/installing.txt',
             ],

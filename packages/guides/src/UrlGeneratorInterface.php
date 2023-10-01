@@ -34,7 +34,6 @@ interface UrlGeneratorInterface
     public function generateOutputUrlFromDocumentPath(
         string $currentDirectory,
         string $destinationPath,
-        bool $validDocumentEntry,
         string $linkedDocument,
         string $outputFormat,
         string|null $anchor = null,
