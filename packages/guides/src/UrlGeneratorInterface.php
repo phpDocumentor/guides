@@ -6,8 +6,6 @@ namespace phpDocumentor\Guides;
 
 interface UrlGeneratorInterface
 {
-    public function generateUrl(string $path): string;
-
     /**
      * Returns the absolute path, including prefixing '/'.
      *

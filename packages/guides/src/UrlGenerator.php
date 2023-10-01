@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use InvalidArgumentException;
 use League\Uri\UriInfo;
 
 use function array_pop;
@@ -24,20 +23,6 @@ use function trim;
 
 final class UrlGenerator implements UrlGeneratorInterface
 {
-    public function generateUrl(string $path): string
-    {
-        try {
-            $uri = UriFactory::createUri($path);
-            if (UriInfo::isAbsolutePath($uri)) {
-                return $path;
-            }
-
-            return $this->relativeUrl($path);
-        } catch (InvalidArgumentException) {
-            return $path;
-        }
-    }
-
     /**
      * Returns the absolute path, including prefixing '/'.
      *
