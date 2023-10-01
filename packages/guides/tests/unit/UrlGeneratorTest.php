@@ -191,6 +191,20 @@ final class UrlGeneratorTest extends TestCase
                 'linkedDocument' => '../references/installing',
                 'result' => 'guide/references/installing.txt',
             ],
+            'relative document path up in subdirectory' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => false,
+                'linkedDocument' => '../references/installing',
+                'result' => 'guide/getting-started/references/installing.txt',
+            ],
+            'relative document path two up in directory' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => false,
+                'linkedDocument' => '../../references/installing',
+                'result' => 'guide/references/installing.txt',
+            ],
         ];
     }
 }

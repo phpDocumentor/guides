@@ -94,20 +94,20 @@ final class UrlGenerator implements UrlGeneratorInterface
         string $outputFormat,
         string|null $anchor = null,
     ): string {
+        if ($validDocumentEntry) {
+            $linkedDocument = '/' . $linkedDocument;
+        }
+
+        $fileUrl = $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
         if (UriInfo::isAbsolutePath(Uri::createFromString($linkedDocument))) {
-            return $destinationPath . $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
+            return $destinationPath . $fileUrl;
         }
 
         $baseUrl = ltrim($this->absoluteUrl($destinationPath, $currentDirectory), '/');
 
-        if ($validDocumentEntry) {
-            return $destinationPath . '/'
-                . $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
-        }
-
         return $this->canonicalUrl(
             $baseUrl,
-            $this->createFileUrl($linkedDocument, $outputFormat, $anchor),
+            $fileUrl,
         );
     }
 }
