@@ -85,19 +85,11 @@ class RenderContext
         return $this->document->getVariable($variable, $default);
     }
 
-    public function getLink(string $name, bool $relative = true): string
+    public function getLink(string $name): string
     {
         $link = $this->document->getLink($name);
 
-        if ($link !== null) {
-            if ($relative) {
-                return $this->urlGenerator->relativeUrl($link);
-            }
-
-            return $link;
-        }
-
-        return '';
+        return $link ?? '';
     }
 
     public function canonicalUrl(string $url): string

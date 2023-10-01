@@ -70,11 +70,6 @@ class ParserContext
         return $this->links;
     }
 
-    private function relativeUrl(string $url): string
-    {
-        return $this->urlGenerator->relativeUrl($url);
-    }
-
     public function absoluteRelativePath(string $url): string
     {
         $uri = Uri::createFromString($url);
@@ -82,7 +77,7 @@ class ParserContext
             return $this->currentDirectory . '/' . ltrim($url, '/');
         }
 
-        return $this->currentDirectory . '/' . $this->getDirName() . '/' . $this->relativeUrl($url);
+        return $this->currentDirectory . '/' . $this->getDirName() . '/' . ltrim($url, '/');
     }
 
     public function getDirName(): string
