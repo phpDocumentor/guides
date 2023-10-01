@@ -10,15 +10,15 @@ use PHPUnit\Framework\TestCase;
 
 final class UrlGeneratorTest extends TestCase
 {
-    #[DataProvider('cannicalUrlProvider')]
-    public function testCannicalUrl(string $basePath, string $url, string $result): void
+    #[DataProvider('canonicalUrlProvider')]
+    public function testCanonicalUrl(string $basePath, string $url, string $result): void
     {
         $urlGenerator = new UrlGenerator();
         self::assertSame($result, $urlGenerator->canonicalUrl($basePath, $url));
     }
 
     /** @return string[][] */
-    public static function cannicalUrlProvider(): array
+    public static function canonicalUrlProvider(): array
     {
         return [
             [
