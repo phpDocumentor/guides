@@ -15,15 +15,12 @@ namespace phpDocumentor\Guides;
 
 use Exception;
 use League\Flysystem\FilesystemInterface;
-use League\Uri\Uri;
-use League\Uri\UriInfo;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 use function dirname;
-use function ltrim;
 use function trim;
 
 class RenderContext
@@ -99,20 +96,14 @@ class RenderContext
 
     public function relativeDocUrl(string $filename, string|null $anchor = null): string
     {
-        if (UriInfo::isAbsolutePath(Uri::createFromString($filename))) {
-            return $this->destinationPath . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
-        }
-
-        $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->destinationPath, $this->getDirName()), '/');
-
-        if ($this->projectNode->findDocumentEntry($filename) !== null) {
-            return $this->destinationPath . '/'
-                . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
-        }
-
-        return $this->urlGenerator->canonicalUrl(
-            $baseUrl,
-            $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor),
+        return $this->urlGenerator->generateOutputUrlFromDocumentPath(
+            $this->getDirName(),
+            $this->destinationPath,
+            // Todo: it does not really make sense to treat relavtive paths that are found in the project node differently?
+            $this->projectNode->findDocumentEntry($filename) !== null,
+            $filename,
+            $this->outputFormat,
+            $anchor,
         );
     }
 

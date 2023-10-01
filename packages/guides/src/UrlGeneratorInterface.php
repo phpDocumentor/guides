@@ -30,4 +30,13 @@ interface UrlGeneratorInterface
      * Create a url with a file ending derived from the output format
      */
     public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string;
+
+    public function generateOutputUrlFromDocumentPath(
+        string $currentDirectory,
+        string $destinationPath,
+        bool $validDocumentEntry,
+        string $linkedDocument,
+        string $outputFormat,
+        string|null $anchor = null,
+    ): string;
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use League\Uri\Uri;
 use League\Uri\UriInfo;
 
 use function array_pop;
@@ -83,5 +84,30 @@ final class UrlGenerator implements UrlGeneratorInterface
     {
         return $filename . '.' . $outputFormat .
             ($anchor !== null ? '#' . $anchor : '');
+    }
+
+    public function generateOutputUrlFromDocumentPath(
+        string $currentDirectory,
+        string $destinationPath,
+        bool $validDocumentEntry,
+        string $linkedDocument,
+        string $outputFormat,
+        string|null $anchor = null,
+    ): string {
+        if (UriInfo::isAbsolutePath(Uri::createFromString($linkedDocument))) {
+            return $destinationPath . $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
+        }
+
+        $baseUrl = ltrim($this->absoluteUrl($destinationPath, $currentDirectory), '/');
+
+        if ($validDocumentEntry) {
+            return $destinationPath . '/'
+                . $this->createFileUrl($linkedDocument, $outputFormat, $anchor);
+        }
+
+        return $this->canonicalUrl(
+            $baseUrl,
+            $this->createFileUrl($linkedDocument, $outputFormat, $anchor),
+        );
     }
 }

@@ -137,4 +137,60 @@ final class UrlGeneratorTest extends TestCase
             ],
         ];
     }
+
+    #[DataProvider('documentPathProvider')]
+    public function testRelativeDocUrl(
+        string $currentDirectory,
+        string $destinationPath,
+        bool $validDocumentEntry,
+        string $linkedDocument,
+        string $result,
+        string|null $anchor = null,
+    ): void {
+        $urlGenerator = new UrlGenerator();
+        self::assertSame($result, $urlGenerator->generateOutputUrlFromDocumentPath(
+            $currentDirectory,
+            $destinationPath,
+            $validDocumentEntry,
+            $linkedDocument,
+            'txt',
+            $anchor,
+        ));
+    }
+
+    /** @return array<string, array<string, bool|string>> */
+    public static function documentPathProvider(): array
+    {
+        return [
+            'relative document' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => false,
+                'linkedDocument' => 'installing',
+                'result' => 'guide/getting-started/installing.txt',
+            ],
+            'absolute document path' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => false,
+                'linkedDocument' => '/installing',
+                'result' => 'guide/installing.txt',
+            ],
+            'relative document path with anchor' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => true,
+                'linkedDocument' => 'getting-started/configuration',
+                'result' => 'guide/getting-started/configuration.txt#composer',
+                'anchor' => 'composer',
+            ],
+            'relative document path up in directory' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'validDocumentEntry' => false,
+                'linkedDocument' => '../references/installing',
+                'result' => 'guide/references/installing.txt',
+            ],
+        ];
+    }
 }
