@@ -114,7 +114,7 @@ final class AssetsExtension extends AbstractExtension
     public function renderTarget(array $context, Target $target): string
     {
         if ($target instanceof InternalTarget) {
-            return $this->getRenderContext($context)->relativeDocUrl($target->getDocumentPath(), $target->getAnchor());
+            return $this->getRenderContext($context)->generateCanonicalOutputUrl($target->getDocumentPath(), $target->getAnchor());
         }
 
         return $target->getUrl();
@@ -146,7 +146,7 @@ final class AssetsExtension extends AbstractExtension
     /** @param array{env: RenderContext} $context */
     public function renderLink(array $context, string $url, string|null $anchor = null): string
     {
-        return $this->getRenderContext($context)->relativeDocUrl($url, $anchor);
+        return $this->getRenderContext($context)->generateCanonicalOutputUrl($url, $anchor);
     }
 
     private function copyAsset(

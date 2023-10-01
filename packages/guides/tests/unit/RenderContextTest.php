@@ -43,7 +43,7 @@ final class RenderContextTest extends TestCase
             $projectNode,
         );
 
-        self::assertSame($result, $context->relativeDocUrl($linkedDocument, $anchor));
+        self::assertSame($result, $context->generateCanonicalOutputUrl($linkedDocument, $anchor));
     }
 
     /** @return string[][] */

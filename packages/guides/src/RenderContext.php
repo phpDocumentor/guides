@@ -94,7 +94,10 @@ class RenderContext
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }
 
-    public function relativeDocUrl(string $linkedDocument, string|null $anchor = null): string
+    /**
+     * Generate a canonical output URL with the configured file extension and anchor
+     */
+    public function generateCanonicalOutputUrl(string $linkedDocument, string|null $anchor = null): string
     {
         if ($this->projectNode->findDocumentEntry($linkedDocument) !== null) {
             // todo: this is a hack, existing documents are expected to be handled like absolute links in some places

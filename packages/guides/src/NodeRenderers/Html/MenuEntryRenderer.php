@@ -28,7 +28,7 @@ final class MenuEntryRenderer implements NodeRenderer
             $renderContext,
             'body/menu/menu-item.html.twig',
             [
-                'url' => $renderContext->relativeDocUrl($node->getUrl(), $node->getValue()->getId()),
+                'url' => $renderContext->generateCanonicalOutputUrl($node->getUrl(), $node->getValue()->getId()),
                 'node' => $node,
             ],
         );

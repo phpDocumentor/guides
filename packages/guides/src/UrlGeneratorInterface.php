@@ -21,8 +21,6 @@ interface UrlGeneratorInterface
      * identifier to find the metadata for that file. Technically speaking, the canonical URL is the absolute URL
      * without the preceeding slash. But due to the many locations that this method is used; it will do its own
      * resolving.
-     *
-     * @todo simplify this method into the other methods or vice versa
      */
     public function canonicalUrl(string $basePath, string $url): string;
 
@@ -31,6 +29,10 @@ interface UrlGeneratorInterface
      */
     public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string;
 
+    /**
+     * Generate a canonical output URL with file extension, anchor and prefixed by
+     * an absolute or relative path
+     */
     public function generateOutputUrlFromDocumentPath(
         string $currentDirectory,
         string $destinationPath,
