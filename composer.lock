@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f32e73eac99d54da37e0095604dbeb83",
+    "content-hash": "fc999421b82dca9b231c75d8fc5cd065",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1265,7 +1265,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "d1ab7dc42848da693c624a0c3a2cd97155ff492c"
+                "reference": "ef4c774f55fb8217a710b84d5e54b38107087145"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
@@ -1274,6 +1274,9 @@
                 "phpdocumentor/guides-restructured-text": "self.version",
                 "symfony/process": "^5.4 || ^6.3",
                 "twig/twig": "~2.0 || ^3.0"
+            },
+            "suggest": {
+                "jawira/plantuml": "To render graphs locally using plant uml"
             },
             "type": "library",
             "autoload": {
@@ -4650,16 +4653,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.35",
+            "version": "1.10.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e730e5facb75ffe09dfb229795e8c01a459f26c3"
+                "reference": "058ba07e92f744d4dcf6061ae75283d0c6456f2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e730e5facb75ffe09dfb229795e8c01a459f26c3",
-                "reference": "e730e5facb75ffe09dfb229795e8c01a459f26c3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/058ba07e92f744d4dcf6061ae75283d0c6456f2e",
+                "reference": "058ba07e92f744d4dcf6061ae75283d0c6456f2e",
                 "shasum": ""
             },
             "require": {
@@ -4708,7 +4711,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-19T15:27:56+00:00"
+            "time": "2023-10-02T16:18:37+00:00"
         },
         {
             "name": "phpstan/phpstan-strict-rules",
@@ -5349,16 +5352,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.18.3",
+            "version": "0.18.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "ba7988e3e028e68e07191d75b0d5473ac320c5e7"
+                "reference": "d99a91176b7eb7f2b6d509a6486b3661c6dfd370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ba7988e3e028e68e07191d75b0d5473ac320c5e7",
-                "reference": "ba7988e3e028e68e07191d75b0d5473ac320c5e7",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d99a91176b7eb7f2b6d509a6486b3661c6dfd370",
+                "reference": "d99a91176b7eb7f2b6d509a6486b3661c6dfd370",
                 "shasum": ""
             },
             "require": {
@@ -5393,7 +5396,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.18.3"
+                "source": "https://github.com/rectorphp/rector/tree/0.18.4"
             },
             "funding": [
                 {
@@ -5401,7 +5404,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-12T20:18:14+00:00"
+            "time": "2023-09-25T17:07:54+00:00"
         },
         {
             "name": "sebastian/cli-parser",
