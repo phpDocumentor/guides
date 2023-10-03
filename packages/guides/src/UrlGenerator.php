@@ -19,6 +19,7 @@ use function array_pop;
 use function explode;
 use function implode;
 use function ltrim;
+use function rtrim;
 use function trim;
 
 final class UrlGenerator implements UrlGeneratorInterface
@@ -50,8 +51,6 @@ final class UrlGenerator implements UrlGeneratorInterface
      * identifier to find the metadata for that file. Technically speaking, the canonical URL is the absolute URL
      * without the preceeding slash. But due to the many locations that this method is used; it will do its own
      * resolving.
-     *
-     * @todo simplify this method into the other methods or vice versa
      */
     public function canonicalUrl(string $basePath, string $url): string
     {
@@ -83,5 +82,29 @@ final class UrlGenerator implements UrlGeneratorInterface
     {
         return $filename . '.' . $outputFormat .
             ($anchor !== null ? '#' . $anchor : '');
+    }
+
+    /**
+     * Generate a canonical output URL with file extension, anchor and prefixed by
+     * an absolute or relative path
+     */
+    public function generateOutputUrlFromDocumentPath(
+        string $currentDirectory,
+        string $destinationPath,
+        string $linkedDocument,
+        string $outputFormat,
+        string|null $anchor = null,
+    ): string {
+        $canonicalUrl = $this->canonicalUrl(
+            $currentDirectory,
+            $linkedDocument,
+        );
+
+        $fileUrl = $this->createFileUrl($canonicalUrl, $outputFormat, $anchor);
+        if ($destinationPath === '') {
+            return $fileUrl;
+        }
+
+        return rtrim($destinationPath, '/') . '/' . $fileUrl;
     }
 }

@@ -137,4 +137,84 @@ final class UrlGeneratorTest extends TestCase
             ],
         ];
     }
+
+    #[DataProvider('documentPathProvider')]
+    public function testRelativeDocUrl(
+        string $currentDirectory,
+        string $destinationPath,
+        string $linkedDocument,
+        string $result,
+        string|null $anchor = null,
+    ): void {
+        $urlGenerator = new UrlGenerator();
+        self::assertSame($result, $urlGenerator->generateOutputUrlFromDocumentPath(
+            $currentDirectory,
+            $destinationPath,
+            $linkedDocument,
+            'txt',
+            $anchor,
+        ));
+    }
+
+    /** @return array<string, array<string, bool|string>> */
+    public static function documentPathProvider(): array
+    {
+        return [
+            'relative document' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'linkedDocument' => 'installing',
+                'result' => 'guide/getting-started/installing.txt',
+            ],
+            'absolute document path' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'linkedDocument' => '/installing',
+                'result' => 'guide/installing.txt',
+            ],
+            'absolute document path with anchor' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'linkedDocument' => '/getting-started/configuration',
+                'result' => 'guide/getting-started/configuration.txt#composer',
+                'anchor' => 'composer',
+            ],
+            'relative document path up in directory' => [
+                'currentDirectory' => 'getting-started',
+                'destinationPath' => 'guide',
+                'linkedDocument' => '../references/installing',
+                'result' => 'guide/references/installing.txt',
+            ],
+            'relative document path up in subdirectory' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => 'guide',
+                'linkedDocument' => '../references/installing',
+                'result' => 'guide/getting-started/references/installing.txt',
+            ],
+            'relative document path two up in directory' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => 'guide',
+                'linkedDocument' => '../../references/installing',
+                'result' => 'guide/references/installing.txt',
+            ],
+            'Empty destination' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '',
+                'linkedDocument' => '../../references/installing',
+                'result' => 'references/installing.txt',
+            ],
+            'Destination is empty absolute path' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '/',
+                'linkedDocument' => '../../references/installing',
+                'result' => '/references/installing.txt',
+            ],
+            'Destination is absolute' => [
+                'currentDirectory' => 'getting-started/something',
+                'destinationPath' => '/guide/',
+                'linkedDocument' => '../../references/installing',
+                'result' => '/guide/references/installing.txt',
+            ],
+        ];
+    }
 }

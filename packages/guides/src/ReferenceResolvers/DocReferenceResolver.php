@@ -25,7 +25,7 @@ class DocReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($renderContext->relativeDocUrl($document->getFile()));
+        $node->setUrl($renderContext->generateCanonicalOutputUrl($document->getFile()));
         if ($node->getValue() === '') {
             $node->setValue($document->getTitle()->toString());
         }

@@ -15,15 +15,12 @@ namespace phpDocumentor\Guides;
 
 use Exception;
 use League\Flysystem\FilesystemInterface;
-use League\Uri\Uri;
-use League\Uri\UriInfo;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 use function dirname;
-use function ltrim;
 use function trim;
 
 class RenderContext
@@ -35,7 +32,7 @@ class RenderContext
     private array $allDocuments;
 
     private function __construct(
-        string $outputFolder,
+        private readonly string $outputFolder,
         private readonly string $currentFileName,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
@@ -97,22 +94,22 @@ class RenderContext
         return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
     }
 
-    public function relativeDocUrl(string $filename, string|null $anchor = null): string
+    /**
+     * Generate a canonical output URL with the configured file extension and anchor
+     */
+    public function generateCanonicalOutputUrl(string $linkedDocument, string|null $anchor = null): string
     {
-        if (UriInfo::isAbsolutePath(Uri::createFromString($filename))) {
-            return $this->destinationPath . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
+        if ($this->projectNode->findDocumentEntry($linkedDocument) !== null) {
+            // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
+            $linkedDocument = '/' . $linkedDocument;
         }
 
-        $baseUrl = ltrim($this->urlGenerator->absoluteUrl($this->destinationPath, $this->getDirName()), '/');
-
-        if ($this->projectNode->findDocumentEntry($filename) !== null) {
-            return $this->destinationPath . '/'
-                . $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor);
-        }
-
-        return $this->urlGenerator->canonicalUrl(
-            $baseUrl,
-            $this->urlGenerator->createFileUrl($filename, $this->outputFormat, $anchor),
+        return $this->urlGenerator->generateOutputUrlFromDocumentPath(
+            $this->getDirName(),
+            $this->outputFolder,
+            $linkedDocument,
+            $this->outputFormat,
+            $anchor,
         );
     }
 

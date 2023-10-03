@@ -23,7 +23,7 @@ class RefReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($renderContext->relativeDocUrl($target->getDocumentPath(), $target->getAnchor()));
+        $node->setUrl($renderContext->generateCanonicalOutputUrl($target->getDocumentPath(), $target->getAnchor()));
         if ($node->getValue() === '') {
             $node->setValue($target->getTitle() ?? '');
         }
