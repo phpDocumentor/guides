@@ -18,6 +18,8 @@ use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -97,6 +99,13 @@ class FunctionalTest extends ApplicationTestCase
             $inputFilesystem = new Filesystem(new MemoryAdapter());
             $inputFilesystem->write('img/test-image.jpg', 'Some image');
 
+
+            $projectSettings = new ProjectSettings();
+            $projectSettings->setLinksRelative(false);
+
+            $settingsManager = $this->createMock(SettingsManager::class);
+            $settingsManager->method('getProjectSettings')->willReturn($projectSettings);
+
             $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
             $context = RenderContext::forDocument(
                 $document,
@@ -107,6 +116,7 @@ class FunctionalTest extends ApplicationTestCase
                 new UrlGenerator(),
                 $format,
                 new ProjectNode(),
+                $settingsManager,
             );
 
             $rendered = '';

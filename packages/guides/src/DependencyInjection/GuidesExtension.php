@@ -70,6 +70,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->scalarNode('log_path')->end()
                 ->scalarNode('fail_on_log')->end()
                 ->scalarNode('show_progress')->end()
+                ->scalarNode('links_are_relative')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -150,6 +151,10 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         if (isset($config['output_format']) && is_array($config['output_format'])) {
             $projectSettings->setOutputFormats($config['output_format']);
+        }
+
+        if (isset($config['links_are_relative'])) {
+            $projectSettings->setLinksRelative((bool) $config['links_are_relative']);
         }
 
         if (isset($config['show_progress'])) {

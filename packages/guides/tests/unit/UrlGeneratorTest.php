@@ -9,15 +9,69 @@ use PHPUnit\Framework\TestCase;
 
 final class UrlGeneratorTest extends TestCase
 {
-    #[DataProvider('generateInternalUrlProvider')]
-    public function testGenerateInternalUrl(string $expected, string $canonicalUrl, string $destinationPath, string $currentDirectory = '', bool $absolute = true): void
+    #[DataProvider('generateRelativeInternalUrlProvider')]
+    public function testGenerateRelativeInternalUrl(string $expected, string $canonicalUrl, string $currentDirectory): void
     {
         $urlGenerator = new UrlGenerator();
-        self::assertSame($expected, $urlGenerator->generateInternalUrl($canonicalUrl, $destinationPath, $currentDirectory, $absolute));
+        self::assertSame($expected, $urlGenerator->generateInternalUrl($canonicalUrl, '', $currentDirectory, false));
     }
 
     /** @return array<string, array<string, string|null>> */
-    public static function generateInternalUrlProvider(): array
+    public static function generateRelativeInternalUrlProvider(): array
+    {
+        return [
+            'Same File' => [
+                'expected' => '#',
+                'canonicalUrl' => 'directory/file.html',
+                'currentPath' => 'directory/file.html',
+            ],
+            'Same File with anchor' => [
+                'expected' => '#anchor',
+                'canonicalUrl' => 'directory/file.html#anchor',
+                'currentPath' => 'directory/file.html',
+            ],
+            'Same File no anchor' => [
+                'expected' => '#',
+                'canonicalUrl' => 'directory/file.html',
+                'currentPath' => 'directory/file.html#anchor',
+            ],
+            'File in same directory' => [
+                'expected' => 'file.html',
+                'canonicalUrl' => 'directory/file.html',
+                'currentPath' => 'directory/anotherFile.html',
+            ],
+            'File in subdirectory' => [
+                'expected' => 'subdirectory/file.html',
+                'canonicalUrl' => 'directory/subdirectory/file.html',
+                'currentPath' => 'directory/anotherFile.html',
+            ],
+            'File in directory above' => [
+                'expected' => '../file.html',
+                'canonicalUrl' => 'file.html',
+                'currentPath' => 'directory/anotherFile.html',
+            ],
+            'File in two directory above' => [
+                'expected' => '../../file.html',
+                'canonicalUrl' => 'file.html',
+                'currentPath' => 'directory/subdirectory/anotherFile.html',
+            ],
+            'File in other subdirectory above' => [
+                'expected' => '../subdirectory/file.html',
+                'canonicalUrl' => 'directory/subdirectory/file.html',
+                'currentPath' => 'directory/othersubdirectory/anotherFile.html',
+            ],
+        ];
+    }
+
+    #[DataProvider('generateAbsoluteInternalUrlProvider')]
+    public function testGenerateAbsoluteInternalUrl(string $expected, string $canonicalUrl, string $destinationPath): void
+    {
+        $urlGenerator = new UrlGenerator();
+        self::assertSame($expected, $urlGenerator->generateInternalUrl($canonicalUrl, $destinationPath, '', true));
+    }
+
+    /** @return array<string, array<string, string|null>> */
+    public static function generateAbsoluteInternalUrlProvider(): array
     {
         return [
             'Destination path absolute' => [

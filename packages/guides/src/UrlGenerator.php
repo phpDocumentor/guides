@@ -14,14 +14,19 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use Exception;
+use League\Uri\Uri;
 use League\Uri\UriInfo;
 
 use function array_pop;
+use function array_slice;
+use function count;
 use function explode;
 use function implode;
 use function ltrim;
+use function min;
 use function rtrim;
 use function sprintf;
+use function str_repeat;
 use function trim;
 
 final class UrlGenerator implements UrlGeneratorInterface
@@ -137,10 +142,46 @@ final class UrlGenerator implements UrlGeneratorInterface
     }
 
     private function generateRelativeInternalUrl(
-        string $canonicalOutputUrl,
-        string $currentDirectory,
+        string $canonicalUrl,
+        string $currentPath,
     ): string {
-        return $this->canonicalUrl($currentDirectory, $canonicalOutputUrl);
+        $currentPathUri = Uri::createFromString($currentPath);
+        $canonicalUrlUri = Uri::createFromString($canonicalUrl);
+
+        $canonicalAnchor = $canonicalUrlUri->getFragment();
+
+        // If the paths are the same, include the anchor
+        if ($currentPathUri->getPath() === $canonicalUrlUri->getPath()) {
+            return '#' . $canonicalAnchor;
+        }
+
+        // Split paths into arrays
+        $currentPathParts = explode('/', $currentPathUri->getPath());
+        $canonicalPathParts = explode('/', $canonicalUrlUri->getPath());
+
+        // Remove filename from current path
+        array_pop($currentPathParts);
+
+        // Find common path length
+        $commonLength = 0;
+        $minLength = min(count($canonicalPathParts), count($currentPathParts));
+
+        while ($commonLength < $minLength && $canonicalPathParts[$commonLength] === $currentPathParts[$commonLength]) {
+            $commonLength++;
+        }
+
+        // Calculate relative path
+        $relativePath = str_repeat('../', count($currentPathParts) - $commonLength);
+
+        // Append the remaining path from the canonical URL
+        $relativePath .= implode('/', array_slice($canonicalPathParts, $commonLength));
+
+        // Add anchor if present in the canonical URL
+        if (!empty($canonicalAnchor)) {
+            $relativePath .= '#' . $canonicalAnchor;
+        }
+
+        return $relativePath;
     }
 
     private function isRelativeUrl(string $url): bool
