@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides;
+namespace phpDocumentor\Guides\ReferenceResolvers;
 
-interface UrlGeneratorInterface
+interface DocumentNameResolverInterface
 {
     /**
      * Returns the absolute path, including prefixing '/'.
@@ -23,27 +23,4 @@ interface UrlGeneratorInterface
      * resolving.
      */
     public function canonicalUrl(string $basePath, string $url): string;
-
-    /**
-     * Create a url with a file ending derived from the output format
-     */
-    public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string;
-
-    /**
-     * Generate a canonical output URL with file extension, anchor and prefixed by
-     * an absolute or relative path
-     */
-    public function generateOutputUrlFromDocumentPath(
-        string $currentDirectory,
-        string $linkedDocument,
-        string $outputFormat,
-        string|null $anchor = null,
-    ): string;
-
-    public function generateInternalUrl(
-        string $canonicalUrl,
-        string $destinationPath,
-        string $currentDirectory,
-        bool $absolute,
-    ): string;
 }

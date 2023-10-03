@@ -20,12 +20,12 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 
 final class SectionRuleTest extends RuleTestCase
 {
@@ -196,7 +196,7 @@ RST;
             'test',
             1,
             self::createStub(FilesystemInterface::class),
-            self::createStub(UrlGeneratorInterface::class),
+            self::createStub(DocumentNameResolverInterface::class),
         );
         
         $documentParserContext = new DocumentParserContext(

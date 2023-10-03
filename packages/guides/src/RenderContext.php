@@ -19,7 +19,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Settings\SettingsManager;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function dirname;
 use function trim;
@@ -38,9 +39,9 @@ class RenderContext
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
-        private readonly SettingsManager $settingsManager,
     ) {
         $this->destinationPath = trim($outputFolder, '/');
     }
@@ -53,9 +54,9 @@ class RenderContext
         FilesystemInterface $destination,
         string $destinationPath,
         UrlGeneratorInterface $urlGenerator,
+        DocumentNameResolverInterface $documentNameResolver,
         string $ouputFormat,
         ProjectNode $projectNode,
-        SettingsManager $settingsManager,
     ): self {
         $self = new self(
             $destinationPath,
@@ -63,9 +64,9 @@ class RenderContext
             $origin,
             $destination,
             $urlGenerator,
+            $documentNameResolver,
             $ouputFormat,
             $projectNode,
-            $settingsManager,
         );
 
         $self->document = $documentNode;
@@ -95,17 +96,7 @@ class RenderContext
 
     public function canonicalUrl(string $url): string
     {
-        return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
-    }
-
-    public function generateInternalUrl(string $canonicalUrl): string
-    {
-        return $this->urlGenerator->generateInternalUrl(
-            $canonicalUrl,
-            $this->outputFolder,
-            $this->currentFileName,
-            !$this->settingsManager->getProjectSettings()->isLinksRelative(),
-        );
+        return $this->documentNameResolver->canonicalUrl($this->getDirName(), $url);
     }
 
     /**
@@ -118,12 +109,17 @@ class RenderContext
             $linkedDocument = '/' . $linkedDocument;
         }
 
-        return $this->generateInternalUrl($this->urlGenerator->generateOutputUrlFromDocumentPath(
+        $canonicalUrl = $this->documentNameResolver->canonicalUrl(
             $this->getDirName(),
             $linkedDocument,
-            $this->outputFormat,
-            $anchor,
-        ));
+        );
+
+        $fileUrl = $this->urlGenerator->createFileUrl($canonicalUrl, $this->outputFormat, $anchor);
+
+        return $this->urlGenerator->generateInternalUrl(
+            $this,
+            $fileUrl,
+        );
     }
 
     private function getDirName(): string
@@ -199,5 +195,15 @@ class RenderContext
     public function getRootDocumentNode(): DocumentNode
     {
         return $this->getDocumentNodeForEntry($this->getProjectNode()->getRootDocumentEntry());
+    }
+
+    public function getOutputFormat(): string
+    {
+        return $this->outputFormat;
+    }
+
+    public function getOutputFolder(): string
+    {
+        return $this->outputFolder;
     }
 }

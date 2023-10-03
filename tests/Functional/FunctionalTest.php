@@ -17,10 +17,11 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\AbsoluteUrlGenerator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
-use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Finder\Finder;
@@ -113,7 +114,8 @@ class FunctionalTest extends ApplicationTestCase
                 $inputFilesystem,
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',
-                new UrlGenerator(),
+                new AbsoluteUrlGenerator(),
+                new DocumentNameResolver(),
                 $format,
                 new ProjectNode(),
                 $settingsManager,

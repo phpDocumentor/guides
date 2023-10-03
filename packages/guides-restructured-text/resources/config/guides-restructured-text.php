@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
@@ -106,7 +107,6 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -166,7 +166,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->set(ContainerDirective::class)
         ->set(ContentsDirective::class)
-        ->arg('$urlGenerator', service(UrlGeneratorInterface::class))
+        ->arg('$documentNameResolver', service(DocumentNameResolverInterface::class))
         ->set(CsvTableDirective::class)
         ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
         ->set(DangerDirective::class)

@@ -9,13 +9,13 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
-use phpDocumentor\Guides\UrlGenerator;
 use PHPUnit\Framework\TestCase;
 
 abstract class RuleTestCase extends TestCase
@@ -41,7 +41,7 @@ abstract class RuleTestCase extends TestCase
             'test',
             1,
             self::createStub(FilesystemInterface::class),
-            new UrlGenerator(),
+            new DocumentNameResolver(),
         );
         $documentParserContext = new DocumentParserContext(
             $parserContext,
