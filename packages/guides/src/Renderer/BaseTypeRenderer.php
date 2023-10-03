@@ -8,12 +8,14 @@ use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\UrlGenerator;
 
 abstract class BaseTypeRenderer implements TypeRenderer
 {
     public function __construct(
         protected readonly CommandBus $commandBus,
+        private readonly SettingsManager $settingsManager,
     ) {
     }
 
@@ -32,6 +34,7 @@ abstract class BaseTypeRenderer implements TypeRenderer
                         new UrlGenerator(),
                         $renderCommand->getOutputFormat(),
                         $renderCommand->getProjectNode(),
+                        $this->settingsManager,
                     ),
                 ),
             );

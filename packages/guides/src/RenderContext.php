@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 
 use function dirname;
 use function trim;
@@ -39,6 +40,7 @@ class RenderContext
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
+        private readonly SettingsManager $settingsManager,
     ) {
         $this->destinationPath = trim($outputFolder, '/');
     }
@@ -53,6 +55,7 @@ class RenderContext
         UrlGeneratorInterface $urlGenerator,
         string $ouputFormat,
         ProjectNode $projectNode,
+        SettingsManager $settingsManager,
     ): self {
         $self = new self(
             $destinationPath,
@@ -62,6 +65,7 @@ class RenderContext
             $urlGenerator,
             $ouputFormat,
             $projectNode,
+            $settingsManager,
         );
 
         $self->document = $documentNode;
@@ -96,7 +100,12 @@ class RenderContext
 
     public function generateInternalUrl(string $canonicalUrl): string
     {
-        return $this->urlGenerator->generateInternalUrl($canonicalUrl, $this->outputFolder, $this->getDirName(), true);
+        return $this->urlGenerator->generateInternalUrl(
+            $canonicalUrl,
+            $this->outputFolder,
+            $this->currentFileName,
+            !$this->settingsManager->getProjectSettings()->isLinksRelative(),
+        );
     }
 
     /**

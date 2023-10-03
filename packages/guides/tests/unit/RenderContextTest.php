@@ -9,6 +9,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +42,7 @@ final class RenderContextTest extends TestCase
             new UrlGenerator(),
             'txt',
             $projectNode,
+            self::createStub(SettingsManager::class),
         );
 
         self::assertSame($result, $context->generateCanonicalOutputUrl($linkedDocument, $anchor));
