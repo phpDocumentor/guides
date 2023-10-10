@@ -20,6 +20,7 @@ class ProjectSettings
     private string $logPath = 'php://stder';
     private bool $failOnError = false;
     private bool $showProgressBar = true;
+    private string $defaultCodeLanguage = '';
 
     public function getTitle(): string
     {
@@ -133,6 +134,16 @@ class ProjectSettings
     public function setOutputFormats(array $outputFormats): void
     {
         $this->outputFormats = $outputFormats;
+    }
+
+    public function setDefaultCodeLanguage(string $defaultCodeLanguage): void
+    {
+        $this->defaultCodeLanguage = $defaultCodeLanguage;
+    }
+
+    public function getDefaultCodeLanguage(): string
+    {
+        return $this->defaultCodeLanguage;
     }
 
     public function getInputFile(): string

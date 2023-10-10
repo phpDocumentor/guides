@@ -6,11 +6,9 @@ namespace phpDocumentor\Guides\Settings;
 
 class SettingsManager
 {
-    private ProjectSettings $projectSettings;
-
-    public function __construct(ProjectSettings|null $projectSettings = null)
-    {
-        $this->projectSettings = $projectSettings ?? new ProjectSettings();
+    public function __construct(
+        private ProjectSettings $projectSettings = new ProjectSettings(),
+    ) {
     }
 
     public function getProjectSettings(): ProjectSettings

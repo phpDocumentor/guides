@@ -74,6 +74,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                     ->defaultValue([])
                     ->scalarPrototype()->end()
                 ->end()
+                ->scalarNode('default_code_language')->defaultValue('')->end()
                 ->arrayNode('themes')
                     ->defaultValue([])
                     ->arrayPrototype()
@@ -157,6 +158,10 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         if (isset($config['fail_on_log'])) {
             $projectSettings->setFailOnError((bool) $config['show_progress']);
+        }
+
+        if (isset($config['default_code_language'])) {
+            $projectSettings->setDefaultCodeLanguage((string) $config['default_code_language']);
         }
 
         $container->getDefinition(SettingsManager::class)
