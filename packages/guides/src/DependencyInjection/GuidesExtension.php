@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use function assert;
 use function dirname;
 use function is_array;
+use function pathinfo;
 
 class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface
 {
@@ -53,6 +54,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->end()
                 ->scalarNode('theme')->end()
                 ->scalarNode('input')->end()
+                ->scalarNode('input_file')->end()
                 ->scalarNode('output')->end()
                 ->scalarNode('input_format')->end()
                 ->arrayNode('output_format')
@@ -126,6 +128,15 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         if (isset($config['input'])) {
             $projectSettings->setInput((string) $config['input']);
+        }
+
+        if (isset($config['input_file']) && $config['input_file'] !== '') {
+            $inputFile = (string) $config['input_file'];
+            $pathInfo = pathinfo($inputFile);
+            $projectSettings->setInputFile($pathInfo['filename']);
+            if (!empty($pathInfo['extension'])) {
+                $projectSettings->setInputFormat($pathInfo['extension']);
+            }
         }
 
         if (isset($config['output'])) {

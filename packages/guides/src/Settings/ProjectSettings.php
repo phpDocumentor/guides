@@ -12,6 +12,7 @@ class ProjectSettings
     private string $version = '';
     private string $theme = 'default';
     private string $input = 'docs';
+    private string $inputFile = '';
     private string $output = 'output';
     private string $inputFormat = 'rst';
     /** @var string[]  */
@@ -132,5 +133,15 @@ class ProjectSettings
     public function setOutputFormats(array $outputFormats): void
     {
         $this->outputFormats = $outputFormats;
+    }
+
+    public function getInputFile(): string
+    {
+        return $this->inputFile;
+    }
+
+    public function setInputFile(string $inputFile): void
+    {
+        $this->inputFile = $inputFile;
     }
 }
