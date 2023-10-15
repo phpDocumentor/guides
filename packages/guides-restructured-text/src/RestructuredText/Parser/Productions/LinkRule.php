@@ -50,10 +50,10 @@ final class LinkRule implements Rule
         $node = null;
         if ($link->getType() === LinkParser::TYPE_ANCHOR) {
             $node = new AnchorNode($link->getName());
+        } else {
+            //TODO: pass link object to setLink
+            $blockContext->getDocumentParserContext()->getContext()->setLink($link->getName(), $link->getUrl());
         }
-
-        //TODO: pass link object to setLink
-        $blockContext->getDocumentParserContext()->setLink($link->getName(), $link->getUrl());
 
         return $node;
     }

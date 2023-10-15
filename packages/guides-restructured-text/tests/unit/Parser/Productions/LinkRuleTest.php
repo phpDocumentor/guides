@@ -55,20 +55,6 @@ class LinkRuleTest extends RuleTestCase
             'https://example.com',
             null,
         ];
-
-        yield 'Anchor link with quotes' => [
-            '.. _`test`:',
-            'test',
-            '#test',
-            new AnchorNode('test'),
-        ];
-
-        yield 'Anchor link without quotes' => [
-            '.. _test:',
-            'test',
-            '#test',
-            new AnchorNode('test'),
-        ];
     }
 
     #[DataProvider('provideInvalidLinks')]

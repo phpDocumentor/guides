@@ -24,6 +24,7 @@ use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
 use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererFactory;
 use phpDocumentor\Guides\Parser;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
@@ -35,7 +36,7 @@ use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\IntersphinxReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
-use phpDocumentor\Guides\ReferenceResolvers\RefReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\SnakeCaseAnchorReducer;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -138,8 +139,6 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocReferenceResolver::class)
 
-        ->set(RefReferenceResolver::class)
-
         ->set(IntersphinxReferenceResolver::class)
 
         ->set(DelegatingReferenceResolver::class)
@@ -190,6 +189,9 @@ return static function (ContainerConfigurator $container): void {
         ->set(InMemoryRendererFactory::class)
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer'))
         ->alias(TypeRendererFactory::class, InMemoryRendererFactory::class)
+
+        ->set(SnakeCaseAnchorReducer::class)
+        ->alias(AnchorReducer::class, SnakeCaseAnchorReducer::class)
 
 
         ->set(AssetsExtension::class)
