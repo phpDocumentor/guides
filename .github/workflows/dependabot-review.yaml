@@ -12,6 +12,10 @@ jobs:
     runs-on: "ubuntu-latest"
     if: "${{ github.event.pull_request.user.login == 'dependabot[bot]' }}"
     steps:
+      - uses: "actions/checkout@v4"
+        with:
+          fetch-depth: "0"
+          persist-credentials: "false"
       - name: "Dependabot metadata"
         id: "dependabot-metadata"
         uses: "dependabot/fetch-metadata@v1.3.1"
