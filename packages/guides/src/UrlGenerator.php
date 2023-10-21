@@ -33,6 +33,10 @@ final class UrlGenerator implements UrlGeneratorInterface
     public function absoluteUrl(string $basePath, string $url): string
     {
         $uri = UriFactory::createUri($url);
+        if (UriInfo::isAbsolute($uri)) {
+            return $url;
+        }
+
         if (UriInfo::isAbsolutePath($uri)) {
             return $url;
         }

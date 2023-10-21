@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Twig;
 
 use League\Flysystem\Exception;
+use League\Uri\Uri;
+use League\Uri\UriInfo;
 use LogicException;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
@@ -26,6 +28,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Stringable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -65,6 +68,10 @@ final class AssetsExtension extends AbstractExtension
                 'node',
                 /** @param mixed $value */
                 static fn (mixed $value): bool => $value instanceof Node,
+            ),
+            new TwigTest(
+                'external_target',
+                static fn (string|Stringable $value): bool => UriInfo::isAbsolute(Uri::createFromString($value)),
             ),
         ];
     }
