@@ -21,6 +21,9 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use RuntimeException;
 
 use function array_merge;
+use function array_shift;
+use function strtolower;
+use function trim;
 
 /**
  * Our document parser contains
@@ -41,6 +44,12 @@ class DocumentParserContext
 
     /** @var string[] */
     private array $titleLetters = [];
+
+    /** @var array<string, string> */
+    private array $links = [];
+
+    /** @var string[] */
+    private array $anonymous = [];
 
     public function __construct(
         private readonly ParserContext $context,
@@ -108,6 +117,33 @@ class DocumentParserContext
     public function setCodeBlockDefaultLanguage(string $codeBlockDefaultLanguage): void
     {
         $this->codeBlockDefaultLanguage = $codeBlockDefaultLanguage;
+    }
+
+    public function setLink(string $name, string $url): void
+    {
+        $name = strtolower(trim($name));
+
+        if ($name === '_') {
+            $name = array_shift($this->anonymous);
+        }
+
+        $this->links[$name] = trim($url);
+    }
+
+    public function resetAnonymousStack(): void
+    {
+        $this->anonymous = [];
+    }
+
+    public function pushAnonymous(string $name): void
+    {
+        $this->anonymous[] = strtolower(trim($name));
+    }
+
+    /** @return array<string, string> */
+    public function getLinks(): array
+    {
+        return $this->links;
     }
 
     /** @return array<string, string> */

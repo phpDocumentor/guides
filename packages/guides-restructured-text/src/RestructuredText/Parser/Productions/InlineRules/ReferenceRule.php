@@ -22,7 +22,7 @@ abstract class ReferenceRule extends AbstractInlineRule
         $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
 
         if ($registerLink && $embeddedUrl !== null) {
-            $blockContext->getDocumentParserContext()->getContext()->setLink($link, $embeddedUrl);
+            $blockContext->getDocumentParserContext()->setLink($link, $embeddedUrl);
         }
 
         return new HyperLinkNode($link, $embeddedUrl ?? $link);
