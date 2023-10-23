@@ -53,6 +53,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContextFactory;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
@@ -318,6 +319,8 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(SectionRule::class)
         ->tag('phpdoc.guides.parser.rst.structural_element', ['priority' => SectionRule::PRIORITY])
+
+        ->set(DocumentParserContextFactory::class)
 
         ->set(MarkupLanguageParser::class)
         ->args([

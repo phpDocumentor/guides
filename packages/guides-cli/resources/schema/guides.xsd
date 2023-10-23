@@ -23,6 +23,7 @@
         <xsd:attribute name="fail-on-log" type="xsd:string"/>
         <xsd:attribute name="show-progress" type="xsd:string"/>
         <xsd:attribute name="theme" type="xsd:string"/>
+        <xsd:attribute name="default-code-language" type="xsd:string"/>
     </xsd:complexType>
 
     <xsd:complexType name="extension">
