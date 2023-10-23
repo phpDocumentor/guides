@@ -5,7 +5,7 @@
 
 .. deprecated:: 10.2
     The hook shown here is deprecated since TYPO3 10.2 - use a custom
-    :ref:`PSR-15 middleware<request-handling>` instead.
+    PSR-15 middleware instead.
 
 .. versionchanged:: 10.4.34
     The bug ... was **fixed** with version 10.4.23 ...
