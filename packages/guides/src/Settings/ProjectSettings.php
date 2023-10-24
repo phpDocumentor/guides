@@ -20,6 +20,7 @@ class ProjectSettings
     private string $logPath = 'php://stder';
     private bool $failOnError = false;
     private bool $showProgressBar = true;
+    private bool $linksRelative = false;
     private string $defaultCodeLanguage = '';
 
     public function getTitle(): string
@@ -134,6 +135,16 @@ class ProjectSettings
     public function setOutputFormats(array $outputFormats): void
     {
         $this->outputFormats = $outputFormats;
+    }
+
+    public function isLinksRelative(): bool
+    {
+        return $this->linksRelative;
+    }
+
+    public function setLinksRelative(bool $linksRelative): void
+    {
+        $this->linksRelative = $linksRelative;
     }
 
     public function setDefaultCodeLanguage(string $defaultCodeLanguage): void

@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\UrlGeneratorInterface;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function json_encode;
 
@@ -17,6 +18,7 @@ class IntersphinxRenderer implements TypeRenderer
 
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
     }
 
@@ -34,7 +36,7 @@ class IntersphinxRenderer implements TypeRenderer
         $projectNode = $renderCommand->getProjectNode();
 
         foreach ($renderCommand->getProjectNode()->getAllDocumentEntries() as $key => $documentEntry) {
-            $url = $this->urlGenerator->canonicalUrl(
+            $url = $this->documentNameResolver->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
             );
@@ -47,7 +49,7 @@ class IntersphinxRenderer implements TypeRenderer
         }
 
         foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $key => $internalTarget) {
-            $url = $this->urlGenerator->canonicalUrl(
+            $url = $this->documentNameResolver->canonicalUrl(
                 '',
                 $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
             );

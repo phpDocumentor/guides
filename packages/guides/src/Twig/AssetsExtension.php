@@ -24,8 +24,8 @@ use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
@@ -43,7 +43,7 @@ final class AssetsExtension extends AbstractExtension
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly NodeRenderer $nodeRenderer,
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
     }
 
@@ -165,7 +165,7 @@ final class AssetsExtension extends AbstractExtension
         }
 
         $canonicalUrl = $renderContext->canonicalUrl($sourcePath);
-        $outputPath = $this->urlGenerator->absoluteUrl(
+        $outputPath = $this->documentNameResolver->absoluteUrl(
             $renderContext->getDestinationPath(),
             $canonicalUrl,
         );

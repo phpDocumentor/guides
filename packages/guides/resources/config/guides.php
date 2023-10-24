@@ -27,6 +27,8 @@ use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
@@ -39,14 +41,17 @@ use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
 use phpDocumentor\Guides\Renderer\LatexRenderer;
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
+use phpDocumentor\Guides\Renderer\UrlGenerator\AbsoluteUrlGenerator;
+use phpDocumentor\Guides\Renderer\UrlGenerator\AbstractUrlGenerator;
+use phpDocumentor\Guides\Renderer\UrlGenerator\ConfigurableUrlGenerator;
+use phpDocumentor\Guides\Renderer\UrlGenerator\RelativeUrlGenerator;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
-use phpDocumentor\Guides\UrlGenerator;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpClient\HttpClient;
@@ -93,7 +98,10 @@ return static function (ContainerConfigurator $container): void {
             '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers',
         )
 
-        ->set(UrlGeneratorInterface::class, UrlGenerator::class)
+        ->set(AbsoluteUrlGenerator::class)
+        ->set(RelativeUrlGenerator::class)
+        ->set(UrlGeneratorInterface::class, ConfigurableUrlGenerator::class)
+        ->set(DocumentNameResolverInterface::class, DocumentNameResolver::class)
 
         ->set(Parser::class)
         ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))
@@ -118,7 +126,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(HttpClientInterface::class)
         ->factory([HttpClient::class, 'create'])
 
-        ->set(UrlGenerator::class)
+        ->set(AbstractUrlGenerator::class)
 
         ->set(ExternalReferenceResolver::class)
 

@@ -11,18 +11,18 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides;
+namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use League\Uri\UriInfo;
+use phpDocumentor\Guides\UriFactory;
 
 use function array_pop;
 use function explode;
 use function implode;
 use function ltrim;
-use function rtrim;
 use function trim;
 
-final class UrlGenerator implements UrlGeneratorInterface
+final class DocumentNameResolver implements DocumentNameResolverInterface
 {
     /**
      * Returns the absolute path, including prefixing '/'.
@@ -33,6 +33,7 @@ final class UrlGenerator implements UrlGeneratorInterface
     public function absoluteUrl(string $basePath, string $url): string
     {
         $uri = UriFactory::createUri($url);
+
         if (UriInfo::isAbsolute($uri)) {
             return $url;
         }
@@ -80,35 +81,5 @@ final class UrlGenerator implements UrlGeneratorInterface
         }
 
         return ltrim(implode('/', $dirNameParts) . '/' . implode('/', $urlPass1), '/');
-    }
-
-    public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string
-    {
-        return $filename . '.' . $outputFormat .
-            ($anchor !== null ? '#' . $anchor : '');
-    }
-
-    /**
-     * Generate a canonical output URL with file extension, anchor and prefixed by
-     * an absolute or relative path
-     */
-    public function generateOutputUrlFromDocumentPath(
-        string $currentDirectory,
-        string $destinationPath,
-        string $linkedDocument,
-        string $outputFormat,
-        string|null $anchor = null,
-    ): string {
-        $canonicalUrl = $this->canonicalUrl(
-            $currentDirectory,
-            $linkedDocument,
-        );
-
-        $fileUrl = $this->createFileUrl($canonicalUrl, $outputFormat, $anchor);
-        if ($destinationPath === '') {
-            return $fileUrl;
-        }
-
-        return rtrim($destinationPath, '/') . '/' . $fileUrl;
     }
 }

@@ -8,6 +8,7 @@ use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 
 use function dirname;
 use function ltrim;
@@ -20,7 +21,7 @@ class ParserContext
         private readonly string $currentDirectory,
         private readonly int $initialHeaderLevel,
         private readonly FilesystemInterface $origin,
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
     }
 
@@ -94,6 +95,6 @@ class ParserContext
      */
     public function getCurrentAbsolutePath(): string
     {
-        return $this->urlGenerator->absoluteUrl($this->currentDirectory, $this->currentFileName);
+        return $this->documentNameResolver->absoluteUrl($this->currentDirectory, $this->currentFileName);
     }
 }

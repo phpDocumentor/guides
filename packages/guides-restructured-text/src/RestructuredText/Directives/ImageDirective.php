@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 
 use function dirname;
 
@@ -21,8 +21,9 @@ use function dirname;
  */
 class ImageDirective extends BaseDirective
 {
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly DocumentNameResolverInterface $documentNameResolver,
+    ) {
     }
 
     public function getName(): string
@@ -36,7 +37,7 @@ class ImageDirective extends BaseDirective
         Directive $directive,
     ): Node {
         return new ImageNode(
-            $this->urlGenerator->absoluteUrl(
+            $this->documentNameResolver->absoluteUrl(
                 dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath()),
                 $directive->getData(),
             ),
