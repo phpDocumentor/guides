@@ -2,4 +2,4 @@
 Document
 =========================
 
-.. include:: comments.rst
+.. include:: comments.rst.txt
