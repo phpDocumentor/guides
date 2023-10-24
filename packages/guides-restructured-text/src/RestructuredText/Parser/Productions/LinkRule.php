@@ -52,7 +52,7 @@ final class LinkRule implements Rule
             $node = new AnchorNode($link->getName());
         } else {
             //TODO: pass link object to setLink
-            $blockContext->getDocumentParserContext()->getContext()->setLink($link->getName(), $link->getUrl());
+            $blockContext->getDocumentParserContext()->setLink($link->getName(), $link->getUrl());
         }
 
         return $node;

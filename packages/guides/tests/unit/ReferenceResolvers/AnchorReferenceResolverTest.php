@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-use Generator;
 use phpDocumentor\Guides\Meta\InternalTarget;
-use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\RenderContext;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

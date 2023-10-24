@@ -8,9 +8,7 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
-use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +32,7 @@ class CollectLinkTargetsTransformerTest extends TestCase
         $context = new CompilerContext($this->projectNode);
         $document = new DocumentNode('123', $path);
         $document = $document->setDocumentEntry(new DocumentEntryNode($path, TitleNode::emptyNode()));
+        $context = $context->withDocumentShadowTree($document);
 
         return $context->withDocumentShadowTree($document);
     }
