@@ -33,6 +33,11 @@ final class MenuEntryNode extends AbstractNode implements Stringable
         return $this->url;
     }
 
+    public function getDocumentLink(): string
+    {
+        return '/' . $this->url;
+    }
+
     public function getAnchor(): string
     {
         return $this->anchor;

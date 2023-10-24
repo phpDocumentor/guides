@@ -18,6 +18,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
@@ -36,7 +37,7 @@ final class Parser
 
     /** @param iterable<MarkupLanguageParser> $parserStrategies */
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
         iterable $parserStrategies,
     ) {
         foreach ($parserStrategies as $strategy) {
@@ -118,7 +119,7 @@ final class Parser
             $sourcePath,
             $initialHeaderLevel,
             $origin,
-            $this->urlGenerator,
+            $this->documentNameResolver,
         );
     }
 }

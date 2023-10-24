@@ -6,14 +6,15 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 
 use Flyfinder\Specification\Glob;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\UrlGeneratorInterface;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 
 use function rtrim;
 
 class GlobSearcher
 {
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly DocumentNameResolverInterface $documentNameResolver,
+    ) {
     }
 
     /** @return string[] */
@@ -25,7 +26,7 @@ class GlobSearcher
         );
         $allFiles = [];
         foreach ($files as $file) {
-            $allFiles[] = $this->urlGenerator->absoluteUrl($parserContext->getDirName(), $file['filename']);
+            $allFiles[] = $this->documentNameResolver->absoluteUrl($parserContext->getDirName(), $file['filename']);
         }
 
         return $allFiles;

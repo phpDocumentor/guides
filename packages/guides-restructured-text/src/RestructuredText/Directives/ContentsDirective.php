@@ -6,9 +6,9 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\UrlGeneratorInterface;
 
 /**
  * Standarad rst `contents` directive
@@ -17,8 +17,9 @@ use phpDocumentor\Guides\UrlGeneratorInterface;
  */
 class ContentsDirective extends BaseDirective
 {
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly DocumentNameResolverInterface $documentNameResolver,
+    ) {
     }
 
     public function getName(): string
@@ -32,7 +33,7 @@ class ContentsDirective extends BaseDirective
         Directive $directive,
     ): Node|null {
         $options = $directive->getOptions();
-        $absoluteUrl = $this->urlGenerator->absoluteUrl(
+        $absoluteUrl = $this->documentNameResolver->absoluteUrl(
             $blockContext->getDocumentParserContext()->getContext()->getDirName(),
             $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
         );

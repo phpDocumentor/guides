@@ -19,6 +19,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function dirname;
 use function trim;
@@ -37,6 +39,7 @@ class RenderContext
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
     ) {
@@ -51,6 +54,7 @@ class RenderContext
         FilesystemInterface $destination,
         string $destinationPath,
         UrlGeneratorInterface $urlGenerator,
+        DocumentNameResolverInterface $documentNameResolver,
         string $ouputFormat,
         ProjectNode $projectNode,
     ): self {
@@ -60,6 +64,7 @@ class RenderContext
             $origin,
             $destination,
             $urlGenerator,
+            $documentNameResolver,
             $ouputFormat,
             $projectNode,
         );
@@ -91,7 +96,7 @@ class RenderContext
 
     public function canonicalUrl(string $url): string
     {
-        return $this->urlGenerator->canonicalUrl($this->getDirName(), $url);
+        return $this->documentNameResolver->canonicalUrl($this->getDirName(), $url);
     }
 
     /**
@@ -104,12 +109,16 @@ class RenderContext
             $linkedDocument = '/' . $linkedDocument;
         }
 
-        return $this->urlGenerator->generateOutputUrlFromDocumentPath(
+        $canonicalUrl = $this->documentNameResolver->canonicalUrl(
             $this->getDirName(),
-            $this->outputFolder,
             $linkedDocument,
-            $this->outputFormat,
-            $anchor,
+        );
+
+        $fileUrl = $this->urlGenerator->createFileUrl($canonicalUrl, $this->outputFormat, $anchor);
+
+        return $this->urlGenerator->generateInternalUrl(
+            $this,
+            $fileUrl,
         );
     }
 
@@ -186,5 +195,15 @@ class RenderContext
     public function getRootDocumentNode(): DocumentNode
     {
         return $this->getDocumentNodeForEntry($this->getProjectNode()->getRootDocumentEntry());
+    }
+
+    public function getOutputFormat(): string
+    {
+        return $this->outputFormat;
+    }
+
+    public function getOutputFolder(): string
+    {
+        return $this->outputFolder;
     }
 }

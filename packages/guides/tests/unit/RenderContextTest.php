@@ -9,6 +9,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
+use phpDocumentor\Guides\Renderer\UrlGenerator\AbsoluteUrlGenerator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +40,8 @@ final class RenderContextTest extends TestCase
             self::createStub(FilesystemInterface::class),
             self::createStub(FilesystemInterface::class),
             $destinationPath,
-            new UrlGenerator(),
+            new AbsoluteUrlGenerator(),
+            new DocumentNameResolver(),
             'txt',
             $projectNode,
         );
