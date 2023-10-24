@@ -39,9 +39,8 @@ class AnonymousReferenceRule extends ReferenceRule
 
     private function createAnonymousReference(BlockContext $blockContext, string $link): HyperLinkNode
     {
-        $blockContext->getDocumentParserContext()->getContext()->resetAnonymousStack();
         $node = $this->createReference($blockContext, $link, null, false);
-        $blockContext->getDocumentParserContext()->getContext()->pushAnonymous($link);
+        $blockContext->getDocumentParserContext()->pushAnonymous($link);
 
         return $node;
     }

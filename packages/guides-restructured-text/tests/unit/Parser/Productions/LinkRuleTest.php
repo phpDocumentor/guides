@@ -29,7 +29,7 @@ class LinkRuleTest extends RuleTestCase
         self::assertTrue($this->rule->applies($blockContext));
         self::assertEquals($expectedNode, $this->rule->apply($blockContext));
 
-        self::assertSame([$expectedLabel => $expectedUrl], $blockContext->getDocumentParserContext()->getContext()->getLinks());
+        self::assertSame([$expectedLabel => $expectedUrl], $blockContext->getDocumentParserContext()->getLinks());
     }
 
     /** @return Generator<string, array{string, string, string, AnchorNode|null}> */

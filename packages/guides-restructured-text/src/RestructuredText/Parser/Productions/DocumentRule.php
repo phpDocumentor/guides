@@ -52,6 +52,8 @@ final class DocumentRule implements Rule
             $this->structuralElements->apply($blockContext, $on);
         }
 
+        $on->setLinks($blockContext->getDocumentParserContext()->getLinks());
+
         return $on;
     }
 }

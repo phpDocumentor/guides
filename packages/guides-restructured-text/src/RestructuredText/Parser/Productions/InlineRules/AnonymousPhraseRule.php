@@ -66,9 +66,8 @@ class AnonymousPhraseRule extends ReferenceRule
 
     private function createAnonymousReference(BlockContext $blockContext, string $link, string|null $embeddedUrl): HyperLinkNode
     {
-        $blockContext->getDocumentParserContext()->getContext()->resetAnonymousStack();
         $node = $this->createReference($blockContext, $link, $embeddedUrl, false);
-        $blockContext->getDocumentParserContext()->getContext()->pushAnonymous($link);
+        $blockContext->getDocumentParserContext()->pushAnonymous($link);
 
         return $node;
     }

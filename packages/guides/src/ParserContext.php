@@ -9,20 +9,11 @@ use League\Uri\Uri;
 use League\Uri\UriInfo;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
-use function array_shift;
 use function dirname;
 use function ltrim;
-use function strtolower;
-use function trim;
 
 class ParserContext
 {
-    /** @var array<string, string> */
-    private array $links = [];
-
-    /** @var string[] */
-    private array $anonymous = [];
-
     public function __construct(
         private readonly ProjectNode $projectNode,
         private readonly string $currentFileName,
@@ -41,33 +32,6 @@ class ParserContext
     public function getInitialHeaderLevel(): int
     {
         return $this->initialHeaderLevel;
-    }
-
-    public function setLink(string $name, string $url): void
-    {
-        $name = strtolower(trim($name));
-
-        if ($name === '_') {
-            $name = array_shift($this->anonymous);
-        }
-
-        $this->links[$name] = trim($url);
-    }
-
-    public function resetAnonymousStack(): void
-    {
-        $this->anonymous = [];
-    }
-
-    public function pushAnonymous(string $name): void
-    {
-        $this->anonymous[] = strtolower(trim($name));
-    }
-
-    /** @return array<string, string> */
-    public function getLinks(): array
-    {
-        return $this->links;
     }
 
     public function absoluteRelativePath(string $url): string
