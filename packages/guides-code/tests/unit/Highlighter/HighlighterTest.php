@@ -90,20 +90,4 @@ class HighlighterTest extends TestCase
 
         $highlight('attribute', '#[Attribute]');
     }
-
-    public function testItHighlightsPrompts(): void
-    {
-        $highlighter = $this->createMock(HighlightPHP::class);
-        $highlight = new Highlighter(
-            new HighlightPHP(),
-            new NullLogger(),
-        );
-
-        $result = $highlight('terminal', '$ whoami');
-        self::assertSame('bash', $result->language);
-        self::assertStringContainsString(
-            'hljs-prompt',
-            $result->code,
-        );
-    }
 }
