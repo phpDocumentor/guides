@@ -12,12 +12,14 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()
         ->autowire()
         ->autoconfigure()
+
         ->set(HighlightPHP::class)
+
         ->set(Highlighter::class)
         ->args([
-            '$languageAliases' => [], // TODO make this configurable somehow
+            '$languageAliases' => [],
         ])
+
         ->set(TwigExtension::class)
-        ->args(['$defaultLanguage' => 'php']) // TODO make this configurable somehow
         ->tag('twig.extension');
 };
