@@ -36,7 +36,7 @@ use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\IntersphinxReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
-use phpDocumentor\Guides\ReferenceResolvers\SnakeCaseAnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
@@ -190,8 +190,8 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer'))
         ->alias(TypeRendererFactory::class, InMemoryRendererFactory::class)
 
-        ->set(SnakeCaseAnchorReducer::class)
-        ->alias(AnchorReducer::class, SnakeCaseAnchorReducer::class)
+        ->set(SluggerAnchorReducer::class)
+        ->alias(AnchorReducer::class, SluggerAnchorReducer::class)
 
 
         ->set(AssetsExtension::class)

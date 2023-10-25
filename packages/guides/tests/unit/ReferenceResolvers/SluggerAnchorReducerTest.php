@@ -8,13 +8,13 @@ use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-final class SnakeCaseAnchorReducerTest extends TestCase
+final class SluggerAnchorReducerTest extends TestCase
 {
-    private SnakeCaseAnchorReducer $subject;
+    private SluggerAnchorReducer $subject;
 
     protected function setUp(): void
     {
-        $this->subject = new SnakeCaseAnchorReducer();
+        $this->subject = new SluggerAnchorReducer();
     }
 
     #[DataProvider('rawAnchorProvider')]
