@@ -7,10 +7,6 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 
-use function filter_var;
-
-use const FILTER_VALIDATE_EMAIL;
-
 /**
  * Resolves references with an anchor URL.
  *
@@ -20,15 +16,25 @@ class AnchorReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = -100;
 
+    public function __construct(
+        private readonly AnchorReducer $anchorReducer,
+    ) {
+    }
+
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
-        if (filter_var($node->getTargetReference(), FILTER_VALIDATE_EMAIL)) {
-            $node->setUrl('mailto:' . $node->getTargetReference());
-
-            return true;
+        $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
+        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        if ($target === null) {
+            return false;
         }
 
-        return false;
+        $node->setUrl($renderContext->generateCanonicalOutputUrl($target->getDocumentPath(), $target->getAnchor()));
+        if ($node->getValue() === '') {
+            $node->setValue($target->getTitle() ?? '');
+        }
+
+        return true;
     }
 
     public static function getPriority(): int

@@ -11,10 +11,9 @@ use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use SplStack;
 use Webmozart\Assert\Assert;
-
-use function assert;
 
 /** @implements NodeTransformer<DocumentNode|AnchorNode|SectionNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
@@ -22,8 +21,9 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     /** @var SplStack<DocumentNode> */
     private readonly SplStack $documentStack;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly AnchorReducer $anchorReducer,
+    ) {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are
          *       now produced by the {@see \phpDocumentor\Guides\RestructuredText\MarkupLanguageParser::getSubParser}
@@ -39,14 +39,18 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         } elseif ($node instanceof AnchorNode) {
             $currentDocument = $compilerContext->getDocumentNode();
             $parentSection = $compilerContext->getShadowTree()->getParent()?->getNode();
-            assert($parentSection instanceof SectionNode);
+            $title = null;
+            if ($parentSection instanceof SectionNode) {
+                $title = $parentSection->getTitle()->toString();
+            }
 
+            $anchorName = $this->anchorReducer->reduceAnchor($node->toString());
             $compilerContext->getProjectNode()->addLinkTarget(
-                $node->toString(),
+                $anchorName,
                 new InternalTarget(
                     $currentDocument->getFilePath(),
                     $node->toString(),
-                    $parentSection->getTitle()->toString(),
+                    $title,
                 ),
             );
         } elseif ($node instanceof SectionNode) {
