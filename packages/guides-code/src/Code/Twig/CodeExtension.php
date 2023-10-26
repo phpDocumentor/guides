@@ -12,7 +12,6 @@ class CodeExtension extends AbstractExtension
 {
     public function __construct(
         private Highlighter $highlighter,
-        private string $defaultLanguage,
     ) {
     }
 
@@ -26,8 +25,8 @@ class CodeExtension extends AbstractExtension
         ];
     }
 
-    public function highlight(string $code, string|null $language = null): string
+    public function highlight(string $code, string $language = 'text'): string
     {
-        return ($this->highlighter)($language ?? $this->defaultLanguage, $code)->code;
+        return ($this->highlighter)($language, $code)->code;
     }
 }

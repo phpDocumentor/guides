@@ -47,13 +47,6 @@ final class Highlighter
             $highlightValue = $highlight->value;
             $highlightLanguage = $highlight->language;
 
-            if ($language === 'terminal') {
-                $highlightValue = preg_replace('/^\$ /m', '<span class="hljs-prompt">$ </span>', $highlightValue);
-                assert(is_string($highlightValue));
-                $highlightValue = preg_replace('/^C:\\\&gt; /m', '<span class="hljs-prompt">C:\&gt; </span>', $highlightValue);
-                assert(is_string($highlightValue));
-            }
-
             return new HighlightResult($highlightLanguage, $highlightValue);
         } catch (Throwable $e) {
             $this->logger->error(
