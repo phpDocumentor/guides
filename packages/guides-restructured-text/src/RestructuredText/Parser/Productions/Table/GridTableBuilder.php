@@ -127,7 +127,8 @@ class GridTableBuilder
                 $prevTargetColumn = $this->findColumnInPreviousRows($columnIndex, $rows, (int) $rowIndex);
                 $columnInRowspan = $row->getColumn($columnIndex);
                 if ($columnInRowspan === null) {
-                    throw new LogicException('Cannot find column for index "%s"', $columnIndex);
+                    $context->addError(sprintf('Cannot find column for index "%s"', $columnIndex));
+                    continue;
                 }
 
                 $prevTargetColumn->addContent("\n" . $columnInRowspan->getContent());
