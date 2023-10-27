@@ -13,4 +13,5 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 interface CrossReferenceNode extends LinkInlineNode
 {
+    public function getIntersphinxDomain(): string;
 }

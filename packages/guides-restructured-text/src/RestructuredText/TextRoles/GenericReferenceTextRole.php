@@ -10,6 +10,7 @@ use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use Psr\Log\LoggerInterface;
 
 use function array_keys;
+use function preg_match;
 
 class GenericReferenceTextRole extends AbstractReferenceTextRole
 {
@@ -36,8 +37,15 @@ class GenericReferenceTextRole extends AbstractReferenceTextRole
     protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
         $linkType = $this->genericLinkProvider->getLinkType($role);
-        $id = $this->anchorReducer->reduceAnchor($referenceTarget);
+        $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
+        if (preg_match($pattern, $referenceTarget, $matches)) {
+            $interspinxDomain = $matches[1];
+            $id = $this->anchorReducer->reduceAnchor($matches[2]);
+        } else {
+            $interspinxDomain = '';
+            $id = $this->anchorReducer->reduceAnchor($referenceTarget);
+        }
 
-        return new ReferenceNode($id, $referenceName ?? '', $linkType);
+        return new ReferenceNode($id, $referenceName ?? '', $interspinxDomain, $linkType);
     }
 }
