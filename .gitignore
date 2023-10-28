@@ -1,7 +1,4 @@
 /vendor/
-/.build
-.phpunit.cache
-.deptrac.cache
-/.psalm
+/.cache
 /**/temp
 /output/

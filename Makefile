@@ -63,7 +63,7 @@ cleanup-cache:
 
 .PHONY: test-architecture
 test-architecture: vendor ## Runs deptrac to enfore architecural rules
-	$(PHP_BIN) ./vendor/bin/deptrac --config-file deptrac.packages.yaml
+	$(PHP_BIN) ./vendor/bin/deptrac --config-file deptrac.packages.yaml --cache-file=.cache/.deptrac.cache
 
 vendor: composer.json composer.lock
 	composer validate --no-check-publish

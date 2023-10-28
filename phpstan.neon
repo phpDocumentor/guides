@@ -44,4 +44,4 @@ parameters:
 #    - packages/guides-markdown/tests
     - packages/guides-restructured-text/tests
 
-  tmpDir: .build/phpstan/
+  tmpDir: .cache/phpstan/
