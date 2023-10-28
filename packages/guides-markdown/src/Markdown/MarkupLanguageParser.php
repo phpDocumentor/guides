@@ -23,17 +23,17 @@ use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SpanNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function md5;
+use function sprintf;
 use function strtolower;
 
 final class MarkupLanguageParser implements MarkupLanguageParserInterface
@@ -48,15 +48,16 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
     private DocumentNode|null $document = null;
     private readonly AsciiSlugger $idGenerator;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {
         $cmEnvironment = new CommonMarkEnvironment(['html_input' => 'strip']);
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
         $this->idGenerator = new AsciiSlugger();
         $this->parsers = [
-            new Paragraph(),
-            new ListBlock(),
+            new Paragraph($logger),
+            new ListBlock($logger),
             new ThematicBreak(),
         ];
     }
@@ -146,25 +147,10 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
                 continue;
             }
 
-            echo 'DOCUMENT CONTEXT: I am '
-                . 'leaving'
-                . ' a '
-                . $node::class
-                . ' node'
-                . "\n";
+            $this->logger->warning(sprintf('DOCUMENT CONTEXT: I am leaving a %s node', $node::class));
         }
 
         return $document;
-    }
-
-    public function parseParagraph(NodeWalker $walker): ParagraphNode
-    {
-        return (new Paragraph())->parse($this, $walker);
-    }
-
-    public function parseListBlock(NodeWalker $walker): ListNode
-    {
-        return (new ListBlock())->parse($this, $walker);
     }
 
     public function getParserContext(): ParserContext

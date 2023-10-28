@@ -1,0 +1,3 @@
+# Markdown with inline Code
+
+Lorem Ipsum Dolor: `$dolor`...

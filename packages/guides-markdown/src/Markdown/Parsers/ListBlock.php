@@ -10,10 +10,18 @@ use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListNode;
+use Psr\Log\LoggerInterface;
+
+use function sprintf;
 
 /** @extends AbstractBlock<ListNode> */
 final class ListBlock extends AbstractBlock
 {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {
+    }
+
     /** @return ListNode */
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
     {
@@ -30,12 +38,7 @@ final class ListBlock extends AbstractBlock
                 return $context;
             }
 
-            echo 'LIST CONTEXT: I am '
-                . 'leaving'
-                . ' a '
-                . $node::class
-                . ' node'
-                . "\n";
+            $this->logger->warning(sprintf('LIST CONTEXT: I am leaving a %s node', $node::class));
         }
 
         return $context;
