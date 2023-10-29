@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Markdown\MarkupLanguageParser;
+use phpDocumentor\Guides\Markdown\Parsers\BlockQuoteParser;
 use phpDocumentor\Guides\Markdown\Parsers\HeaderParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\EmphasisParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineCodeParser;
@@ -29,19 +30,23 @@ return static function (ContainerConfigurator $container): void {
         ->set(HeaderParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
         ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->set(BlockQuoteParser::class)
+        ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.subParser'))
+        ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->tag('phpdoc.guides.markdown.parser.subParser')
         ->set(ListBlockParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
-        ->tag('phpdoc.guides.markdown.parser.listSubParser')
+        ->tag('phpdoc.guides.markdown.parser.subParser')
         ->set(ListItemParser::class)
-        ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.listSubParser'))
+        ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.subParser'))
         ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->set(ParagraphParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
         ->tag('phpdoc.guides.markdown.parser.blockParser')
-        ->tag('phpdoc.guides.markdown.parser.listSubParser')
+        ->tag('phpdoc.guides.markdown.parser.subParser')
         ->set(SeparatorParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
-        ->tag('phpdoc.guides.markdown.parser.listSubParser')
+        ->tag('phpdoc.guides.markdown.parser.subParser')
 
         ->set(EmphasisParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
