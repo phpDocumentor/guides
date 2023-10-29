@@ -13,7 +13,7 @@
         displayDetailsOnTestsThatTriggerNotices="true"
         displayDetailsOnTestsThatTriggerWarnings="true"
         displayDetailsOnTestsThatTriggerErrors="true"
-        cacheDirectory=".phpunit.cache"
+        cacheDirectory=".cache/.phpunit.cache"
         requireCoverageMetadata="false"
 >
     <testsuites>
