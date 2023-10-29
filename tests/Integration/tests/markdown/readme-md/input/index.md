@@ -15,7 +15,7 @@ one.
 
 ## Installation
 
-![Swing Image](https://example.com/swing-image.jpg)
+![Swing Image](https://upload.wikimedia.org/wikipedia/commons/a/a3/Forgiveness_5.gif)
 
 1. **Choose a Sturdy Location:** Select a location with a sturdy beam or swing
    set structure capable of supporting the weight of the swing and the child.
