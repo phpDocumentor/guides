@@ -6,63 +6,41 @@ namespace phpDocumentor\Guides\Markdown\Parsers\InlineParsers;
 
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Node as CommonMarkNode;
-use League\CommonMark\Node\NodeWalker;
-use League\CommonMark\Node\NodeWalkerEvent;
-use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
-use function count;
-use function sprintf;
+use function assert;
+use function is_string;
 
-/** @extends AbstractInlineParser<HyperLinkNode> */
-final class LinkParser extends AbstractInlineParser
+/** @extends AbstractInlineTextDecoratorParser<HyperLinkNode> */
+final class LinkParser extends AbstractInlineTextDecoratorParser
 {
     /** @param iterable<AbstractInlineParser<InlineNode>> $inlineParsers */
     public function __construct(
-        private readonly iterable $inlineParsers,
-        private readonly LoggerInterface $logger,
+        iterable $inlineParsers,
+        LoggerInterface $logger,
     ) {
+        parent::__construct($inlineParsers, $logger);
     }
 
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNode
+    protected function getType(): string
     {
-        $content = [];
+        return 'Link';
+    }
 
-        while ($event = $walker->next()) {
-            $commonMarkNode = $event->getNode();
-
-            if ($event->isEntering()) {
-                foreach ($this->inlineParsers as $subParser) {
-                    if (!$subParser->supports($event)) {
-                        continue;
-                    }
-
-                    $content[] = $subParser->parse($parser, $walker, $commonMarkNode);
-                }
-
-                continue;
-            }
-
-            if ($commonMarkNode instanceof Link) {
-                if (count($content) > 0 && $content[0] instanceof PlainTextInlineNode) {
-                    return new HyperLinkNode($content[0]->getValue(), $commonMarkNode->getUrl());
-                }
-
-                return new HyperLinkNode($commonMarkNode->getUrl(), $commonMarkNode->getUrl());
-            }
-
-            $this->logger->warning(sprintf('Link CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode
+    {
+        assert($commonMarkNode instanceof Link);
+        if (is_string($content)) {
+            return new HyperLinkNode($content, $commonMarkNode->getUrl());
         }
 
-        throw new RuntimeException('Unexpected end of NodeWalker');
+        return new HyperLinkNode($commonMarkNode->getUrl(), $commonMarkNode->getUrl());
     }
 
-    public function supports(NodeWalkerEvent $event): bool
+    protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool
     {
-        return $event->isEntering() && $event->getNode() instanceof Link;
+        return $commonMarkNode instanceof Link;
     }
 }
