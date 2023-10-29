@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\LinkParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\PlainTextParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\StrongParser;
 use phpDocumentor\Guides\Markdown\Parsers\ListBlockParser;
+use phpDocumentor\Guides\Markdown\Parsers\ListItemParser;
 use phpDocumentor\Guides\Markdown\Parsers\ParagraphParser;
 use phpDocumentor\Guides\Markdown\Parsers\SeparatorParser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -30,11 +31,17 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->set(ListBlockParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->tag('phpdoc.guides.markdown.parser.listSubParser')
+        ->set(ListItemParser::class)
+        ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.listSubParser'))
+        ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->set(ParagraphParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
         ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->tag('phpdoc.guides.markdown.parser.listSubParser')
         ->set(SeparatorParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->tag('phpdoc.guides.markdown.parser.listSubParser')
 
         ->set(EmphasisParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))

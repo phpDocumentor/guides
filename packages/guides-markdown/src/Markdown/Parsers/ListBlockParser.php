@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Markdown\Parsers;
 
-use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock as CommonMarkListBlock;
+use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock;
 use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 use function sprintf;
 
@@ -19,34 +19,38 @@ use function sprintf;
 final class ListBlockParser extends AbstractBlockParser
 {
     public function __construct(
+        private readonly ListItemParser $listItemParser,
         private readonly LoggerInterface $logger,
     ) {
     }
 
-    /** @return ListNode */
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): CompoundNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): ListNode
     {
-        $context = new ListNode([], false);
+        $content = [];
 
         while ($event = $walker->next()) {
             $commonMarkNode = $event->getNode();
 
             if ($event->isEntering()) {
+                if ($this->listItemParser->supports($event)) {
+                    $content[] = $this->listItemParser->parse($parser, $walker, $commonMarkNode);
+                }
+
                 continue;
             }
 
-            if ($commonMarkNode instanceof CommonMarkListBlock) {
-                return $context;
+            if ($commonMarkNode instanceof ListBlock) {
+                return new ListNode($content, $content[0]->isOrdered());
             }
 
-            $this->logger->warning(sprintf('LIST CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('List block CONTEXT: I am leaving a %s node', $commonMarkNode::class));
         }
 
-        return $context;
+        throw new RuntimeException('Unexpected end of NodeWalker in list block');
     }
 
     public function supports(NodeWalkerEvent $event): bool
     {
-        return $event->isEntering() && $event->getNode() instanceof CommonMarkListBlock;
+        return $event->isEntering() && $event->getNode() instanceof ListBlock;
     }
 }
