@@ -5,6 +5,7 @@ declare(strict_types=1);
 use phpDocumentor\Guides\Markdown\MarkupLanguageParser;
 use phpDocumentor\Guides\Markdown\Parsers\HeaderParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\EmphasisParser;
+use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineCodeParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\LinkParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\PlainTextParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\StrongParser;
@@ -45,6 +46,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
         ->set(StrongParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
+        ->tag('phpdoc.guides.markdown.parser.inlineParser')
+        ->set(InlineCodeParser::class)
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
 
         ->set(MarkupLanguageParser::class)
