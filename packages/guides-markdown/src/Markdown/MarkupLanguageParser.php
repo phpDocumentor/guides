@@ -15,9 +15,9 @@ use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Parser\MarkdownParser;
-use phpDocumentor\Guides\Markdown\Parsers\ListBlock;
-use phpDocumentor\Guides\Markdown\Parsers\Paragraph;
-use phpDocumentor\Guides\Markdown\Parsers\ThematicBreak;
+use phpDocumentor\Guides\Markdown\Parsers\ListBlockParser;
+use phpDocumentor\Guides\Markdown\Parsers\ParagraphParser;
+use phpDocumentor\Guides\Markdown\Parsers\SeparatorParser;
 use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
@@ -56,9 +56,9 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         $this->markdownParser = new MarkdownParser($cmEnvironment);
         $this->idGenerator = new AsciiSlugger();
         $this->parsers = [
-            new Paragraph($logger),
-            new ListBlock($logger),
-            new ThematicBreak(),
+            new ParagraphParser($logger),
+            new ListBlockParser($logger),
+            new SeparatorParser(),
         ];
     }
 

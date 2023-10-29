@@ -23,8 +23,8 @@ use Psr\Log\LoggerInterface;
 
 use function sprintf;
 
-/** @extends AbstractBlock<ParagraphNode> */
-final class Paragraph extends AbstractBlock
+/** @extends AbstractBlockParser<ParagraphNode> */
+final class ParagraphParser extends AbstractBlockParser
 {
     public function __construct(
         private readonly LoggerInterface $logger,

@@ -14,8 +14,8 @@ use Psr\Log\LoggerInterface;
 
 use function sprintf;
 
-/** @extends AbstractBlock<ListNode> */
-final class ListBlock extends AbstractBlock
+/** @extends AbstractBlockParser<ListNode> */
+final class ListBlockParser extends AbstractBlockParser
 {
     public function __construct(
         private readonly LoggerInterface $logger,

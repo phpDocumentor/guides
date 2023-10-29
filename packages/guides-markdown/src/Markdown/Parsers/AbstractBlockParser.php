@@ -11,6 +11,6 @@ use phpDocumentor\Guides\Nodes\Node;
  * @template TValue as Node
  * @implements ParserInterface<TValue>
  */
-abstract class AbstractBlock implements ParserInterface
+abstract class AbstractBlockParser implements ParserInterface
 {
 }

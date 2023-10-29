@@ -11,8 +11,8 @@ use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
 
-/** @extends AbstractBlock<SeparatorNode> */
-final class ThematicBreak extends AbstractBlock
+/** @extends AbstractBlockParser<SeparatorNode> */
+final class SeparatorParser extends AbstractBlockParser
 {
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
     {
