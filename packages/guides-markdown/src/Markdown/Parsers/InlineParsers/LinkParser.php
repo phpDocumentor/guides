@@ -2,25 +2,24 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Markdown\Parsers;
+namespace phpDocumentor\Guides\Markdown\Parsers\InlineParsers;
 
-use League\CommonMark\Node\Block\Paragraph as CommonMarkParagraph;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
-use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\AbstractInlineParser;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
-use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+use function count;
 use function sprintf;
 
-/** @extends AbstractBlockParser<ParagraphNode> */
-final class ParagraphParser extends AbstractBlockParser
+/** @extends AbstractInlineParser<HyperLinkNode> */
+final class LinkParser extends AbstractInlineParser
 {
     /** @param iterable<AbstractInlineParser<InlineNode>> $inlineParsers */
     public function __construct(
@@ -29,8 +28,7 @@ final class ParagraphParser extends AbstractBlockParser
     ) {
     }
 
-    /** @return ParagraphNode */
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): CompoundNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNode
     {
         $content = [];
 
@@ -49,11 +47,15 @@ final class ParagraphParser extends AbstractBlockParser
                 continue;
             }
 
-            if ($commonMarkNode instanceof CommonMarkParagraph) {
-                return new ParagraphNode([new InlineCompoundNode($content)]);
+            if ($commonMarkNode instanceof Link) {
+                if (count($content) > 0 && $content[0] instanceof PlainTextInlineNode) {
+                    return new HyperLinkNode($content[0]->getValue(), $commonMarkNode->getUrl());
+                }
+
+                return new HyperLinkNode($commonMarkNode->getUrl(), $commonMarkNode->getUrl());
             }
 
-            $this->logger->warning(sprintf('PARAGRAPH CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('Link CONTEXT: I am leaving a %s node', $commonMarkNode::class));
         }
 
         throw new RuntimeException('Unexpected end of NodeWalker');
@@ -61,6 +63,6 @@ final class ParagraphParser extends AbstractBlockParser
 
     public function supports(NodeWalkerEvent $event): bool
     {
-        return $event->isEntering() && $event->getNode() instanceof CommonMarkParagraph;
+        return $event->isEntering() && $event->getNode() instanceof Link;
     }
 }

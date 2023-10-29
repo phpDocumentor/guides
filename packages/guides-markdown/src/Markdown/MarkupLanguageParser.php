@@ -6,31 +6,15 @@ namespace phpDocumentor\Guides\Markdown;
 
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
-use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
-use League\CommonMark\Extension\CommonMark\Node\Block\HtmlBlock;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Block\Document;
-use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Parser\MarkdownParser;
-use phpDocumentor\Guides\Markdown\Parsers\ListBlockParser;
-use phpDocumentor\Guides\Markdown\Parsers\ParagraphParser;
-use phpDocumentor\Guides\Markdown\Parsers\SeparatorParser;
 use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
-use phpDocumentor\Guides\Nodes\AnchorNode;
-use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\RawNode;
-use phpDocumentor\Guides\Nodes\SpanNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function md5;
 use function sprintf;
@@ -42,24 +26,16 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private ParserContext|null $parserContext = null;
 
-    /** @var ParserInterface<Node>[] */
-    private readonly array $parsers;
-
     private DocumentNode|null $document = null;
-    private readonly AsciiSlugger $idGenerator;
 
+    /** @param iterable<ParserInterface<Node>> $parsers */
     public function __construct(
         private readonly LoggerInterface $logger,
+        private readonly iterable $parsers,
     ) {
         $cmEnvironment = new CommonMarkEnvironment(['html_input' => 'strip']);
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
-        $this->idGenerator = new AsciiSlugger();
-        $this->parsers = [
-            new ParagraphParser($logger),
-            new ListBlockParser($logger),
-            new SeparatorParser(),
-        ];
     }
 
     public function supports(string $inputFormat): bool
@@ -82,72 +58,25 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         $this->document = $document;
 
         while ($event = $walker->next()) {
-            $node = $event->getNode();
+            $commonMarkNode = $event->getNode();
 
-            foreach ($this->parsers as $parser) {
-                if (!$parser->supports($event)) {
-                    continue;
+            if ($event->isEntering()) {
+                // Use entering events for context switching
+                foreach ($this->parsers as $parser) {
+                    if ($parser->supports($event)) {
+                        $document->addChildNode($parser->parse($this, $walker, $commonMarkNode));
+                        break;
+                    }
                 }
 
-                $document->addChildNode($parser->parse($this, $walker));
-            }
-
-            // ignore all Entering events; these are only used to switch to another context and context switching
-            // is defined above
-            if ($event->isEntering()) {
                 continue;
             }
 
-            if ($node instanceof Document) {
+            if ($commonMarkNode instanceof Document) {
                 return $document;
             }
 
-            if ($node instanceof Heading) {
-                $content = $node->firstChild();
-                if ($content instanceof Text === false) {
-                    continue;
-                }
-
-                $title = new TitleNode(
-                    InlineCompoundNode::getPlainTextInlineNode($content->getLiteral()),
-                    $node->getLevel(),
-                    $this->idGenerator->slug($content->getLiteral())->lower()->toString(),
-                );
-                $document->addChildNode($title);
-                continue;
-            }
-
-            if ($node instanceof Text) {
-                $spanNode = new SpanNode($node->getLiteral(), []);
-                $document->addChildNode($spanNode);
-                continue;
-            }
-
-            if ($node instanceof Code) {
-                $spanNode = new CodeNode([$node->getLiteral()]);
-                $document->addChildNode($spanNode);
-                continue;
-            }
-
-            if ($node instanceof Link) {
-                $spanNode = new AnchorNode($node->getUrl());
-                $document->addChildNode($spanNode);
-                continue;
-            }
-
-            if ($node instanceof FencedCode) {
-                $spanNode = new CodeNode([$node->getLiteral()]);
-                $document->addChildNode($spanNode);
-                continue;
-            }
-
-            if ($node instanceof HtmlBlock) {
-                $spanNode = new RawNode($node->getLiteral());
-                $document->addChildNode($spanNode);
-                continue;
-            }
-
-            $this->logger->warning(sprintf('DOCUMENT CONTEXT: I am leaving a %s node', $node::class));
+            $this->logger->warning(sprintf('DOCUMENT CONTEXT: I am leaving a %s node', $commonMarkNode::class));
         }
 
         return $document;

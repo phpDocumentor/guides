@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Markdown\Parsers;
 
 use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock as CommonMarkListBlock;
+use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
@@ -23,22 +24,22 @@ final class ListBlockParser extends AbstractBlockParser
     }
 
     /** @return ListNode */
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker): CompoundNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): CompoundNode
     {
         $context = new ListNode([], false);
 
         while ($event = $walker->next()) {
-            $node = $event->getNode();
+            $commonMarkNode = $event->getNode();
 
             if ($event->isEntering()) {
                 continue;
             }
 
-            if ($node instanceof CommonMarkListBlock) {
+            if ($commonMarkNode instanceof CommonMarkListBlock) {
                 return $context;
             }
 
-            $this->logger->warning(sprintf('LIST CONTEXT: I am leaving a %s node', $node::class));
+            $this->logger->warning(sprintf('LIST CONTEXT: I am leaving a %s node', $commonMarkNode::class));
         }
 
         return $context;

@@ -96,9 +96,10 @@ final class ParseFileHandler
         $document = null;
         try {
             $document = $this->parser->parse($preParseDocumentEvent->getContents(), $extension)->withIsRoot($isRoot);
-        } catch (RuntimeException) {
+        } catch (RuntimeException $e) {
             $this->logger->error(
                 sprintf('Unable to parse %s, input format was not recognized', $path),
+                ['error' => $e],
             );
         }
 
