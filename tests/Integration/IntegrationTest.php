@@ -67,7 +67,6 @@ class IntegrationTest extends ApplicationTestCase
                     'input' => $inputPath,
                     'output' => $outputPath,
                     '--log-path' => $outputPath . '/logs',
-                    '--output-format' => ['html', 'intersphinx'],
                 ],
                 $command->getDefinition(),
             );
