@@ -7,17 +7,12 @@ namespace phpDocumentor\Guides\Renderer;
 use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
-use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 abstract class BaseTypeRenderer implements TypeRenderer
 {
-    public function __construct(
-        protected readonly CommandBus $commandBus,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly DocumentNameResolverInterface $documentNameResolver,
-    ) {
+    public function __construct(protected readonly CommandBus $commandBus)
+    {
     }
 
     public function render(RenderCommand $renderCommand): void
@@ -32,8 +27,6 @@ abstract class BaseTypeRenderer implements TypeRenderer
                         $renderCommand->getOrigin(),
                         $renderCommand->getDestination(),
                         $renderCommand->getDestinationPath(),
-                        $this->urlGenerator,
-                        $this->documentNameResolver,
                         $renderCommand->getOutputFormat(),
                         $renderCommand->getProjectNode(),
                     ),

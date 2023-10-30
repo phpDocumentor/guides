@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Settings\SettingsManager;
 
@@ -22,13 +23,9 @@ final class ConfigurableUrlGenerator extends AbstractUrlGenerator
         private readonly SettingsManager $settingsManager,
         private readonly AbsoluteUrlGenerator $absoluteUrlGenerator,
         private readonly RelativeUrlGenerator $relativeUrlGenerator,
+        DocumentNameResolverInterface $documentNameResolver,
     ) {
-    }
-
-    public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string
-    {
-        return $filename . '.' . $outputFormat .
-            ($anchor !== null ? '#' . $anchor : '');
+        parent::__construct($documentNameResolver);
     }
 
     public function generateInternalPathFromRelativeUrl(

@@ -17,9 +17,7 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
-use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer\UrlGenerator\AbsoluteUrlGenerator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -114,11 +112,8 @@ class FunctionalTest extends ApplicationTestCase
                 $inputFilesystem,
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',
-                new AbsoluteUrlGenerator(),
-                new DocumentNameResolver(),
                 $format,
                 new ProjectNode(),
-                $settingsManager,
             );
 
             $rendered = '';

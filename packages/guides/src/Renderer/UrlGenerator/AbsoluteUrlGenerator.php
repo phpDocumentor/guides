@@ -23,10 +23,10 @@ final class AbsoluteUrlGenerator extends AbstractUrlGenerator
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
-        if ($renderContext->getOutputFolder() === '') {
+        if ($renderContext->getDestinationPath() === '') {
             return $canonicalUrl;
         }
 
-        return rtrim($renderContext->getOutputFolder(), '/') . '/' . $canonicalUrl;
+        return rtrim($renderContext->getDestinationPath(), '/') . '/' . $canonicalUrl;
     }
 }

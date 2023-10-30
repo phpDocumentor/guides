@@ -26,6 +26,7 @@ use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
@@ -44,6 +45,7 @@ final class AssetsExtension extends AbstractExtension
         private readonly LoggerInterface $logger,
         private readonly NodeRenderer $nodeRenderer,
         private readonly DocumentNameResolverInterface $documentNameResolver,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
@@ -121,7 +123,7 @@ final class AssetsExtension extends AbstractExtension
     public function renderTarget(array $context, Target $target): string
     {
         if ($target instanceof InternalTarget) {
-            return $this->getRenderContext($context)->generateCanonicalOutputUrl($target->getDocumentPath(), $target->getAnchor());
+            return $this->urlGenerator->generateCanonicalOutputUrl($this->getRenderContext($context), $target->getDocumentPath(), $target->getAnchor());
         }
 
         return $target->getUrl();
@@ -153,7 +155,7 @@ final class AssetsExtension extends AbstractExtension
     /** @param array{env: RenderContext} $context */
     public function renderLink(array $context, string $url, string|null $anchor = null): string
     {
-        return $this->getRenderContext($context)->generateCanonicalOutputUrl($url, $anchor);
+        return $this->urlGenerator->generateCanonicalOutputUrl($this->getRenderContext($context), $url, $anchor);
     }
 
     private function copyAsset(
@@ -164,7 +166,7 @@ final class AssetsExtension extends AbstractExtension
             return $sourcePath;
         }
 
-        $canonicalUrl = $renderContext->canonicalUrl($sourcePath);
+        $canonicalUrl = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $sourcePath);
         $outputPath = $this->documentNameResolver->absoluteUrl(
             $renderContext->getDestinationPath(),
             $canonicalUrl,

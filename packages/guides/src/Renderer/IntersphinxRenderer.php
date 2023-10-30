@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function json_encode;
@@ -35,10 +36,18 @@ class IntersphinxRenderer implements TypeRenderer
         ];
         $projectNode = $renderCommand->getProjectNode();
 
+        $context = RenderContext::forProject(
+            $projectNode,
+            $renderCommand->getOrigin(),
+            $renderCommand->getDestination(),
+            $renderCommand->getDestinationPath(),
+            'html',
+        );
+
         foreach ($renderCommand->getProjectNode()->getAllDocumentEntries() as $key => $documentEntry) {
             $url = $this->documentNameResolver->canonicalUrl(
                 '',
-                $this->urlGenerator->createFileUrl($documentEntry->getFile(), 'html'),
+                $this->urlGenerator->createFileUrl($context, $documentEntry->getFile()),
             );
             $inventory['std:doc'][$key] = [
                 $projectNode->getTitle(),
@@ -51,7 +60,7 @@ class IntersphinxRenderer implements TypeRenderer
         foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $key => $internalTarget) {
             $url = $this->documentNameResolver->canonicalUrl(
                 '',
-                $this->urlGenerator->createFileUrl($internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
+                $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
             );
             $inventory['std:label'][$key] = [
                 $projectNode->getTitle(),
