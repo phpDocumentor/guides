@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1443b8408f2f1af9de914d1cc733344",
+    "content-hash": "0a8e018c04c5ba0af6a43e3be2804a7b",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -2251,16 +2251,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v6.3.6",
+            "version": "v6.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "ab8446f997efb9913627e9da10fa784d2182fe92"
+                "reference": "cd67fcaf4524ec6ae5d9b2d9497682d7ad3ce57d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/ab8446f997efb9913627e9da10fa784d2182fe92",
-                "reference": "ab8446f997efb9913627e9da10fa784d2182fe92",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/cd67fcaf4524ec6ae5d9b2d9497682d7ad3ce57d",
+                "reference": "cd67fcaf4524ec6ae5d9b2d9497682d7ad3ce57d",
                 "shasum": ""
             },
             "require": {
@@ -2323,7 +2323,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v6.3.6"
+                "source": "https://github.com/symfony/http-client/tree/v6.3.7"
             },
             "funding": [
                 {
@@ -2339,7 +2339,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-06T10:08:56+00:00"
+            "time": "2023-10-29T12:41:36+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
