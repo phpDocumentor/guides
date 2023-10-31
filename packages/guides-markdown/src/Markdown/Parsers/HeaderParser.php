@@ -58,7 +58,7 @@ final class HeaderParser extends AbstractBlockParser
                 );
             }
 
-            $this->logger->warning(sprintf('Header CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'Header'));
         }
 
         throw new RuntimeException('Unexpected end of NodeWalker');

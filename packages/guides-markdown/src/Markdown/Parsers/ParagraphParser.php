@@ -53,7 +53,7 @@ final class ParagraphParser extends AbstractBlockParser
                 return new ParagraphNode([new InlineCompoundNode($content)]);
             }
 
-            $this->logger->warning(sprintf('PARAGRAPH CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'Paragraph'));
         }
 
         throw new RuntimeException('Unexpected end of NodeWalker');

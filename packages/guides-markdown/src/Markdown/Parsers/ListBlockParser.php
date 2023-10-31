@@ -43,7 +43,7 @@ final class ListBlockParser extends AbstractBlockParser
                 return new ListNode($content, $content[0]->isOrdered());
             }
 
-            $this->logger->warning(sprintf('List block CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'List'));
         }
 
         throw new RuntimeException('Unexpected end of NodeWalker in list block');

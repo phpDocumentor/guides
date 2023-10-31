@@ -49,7 +49,7 @@ final class BlockQuoteParser extends AbstractBlockParser
                 return new QuoteNode($content);
             }
 
-            $this->logger->warning(sprintf('BlockQuote CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'BlockQuote'));
         }
 
         throw new RuntimeException('Unexpected end of NodeWalker');

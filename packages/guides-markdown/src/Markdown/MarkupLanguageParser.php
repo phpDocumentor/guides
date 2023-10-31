@@ -76,7 +76,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
                 return $document;
             }
 
-            $this->logger->warning(sprintf('DOCUMENT CONTEXT: I am leaving a %s node', $commonMarkNode::class));
+            $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'Document'));
         }
 
         return $document;
