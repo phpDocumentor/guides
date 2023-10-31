@@ -116,6 +116,10 @@ final class DocumentNode extends CompoundNode
             if ($node instanceof SectionNode && $node->getTitle()->getLevel() === 1) {
                 return $node->getTitle();
             }
+
+            if ($node instanceof TitleNode) {
+                return $node;
+            }
         }
 
         return null;

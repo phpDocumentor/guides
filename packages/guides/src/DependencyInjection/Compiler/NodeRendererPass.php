@@ -24,6 +24,7 @@ use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\ImageInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
@@ -85,6 +86,7 @@ final class NodeRendererPass implements CompilerPassInterface
         FootnoteNode::class => 'body/footnote.html.twig',
         AnnotationListNode::class => 'body/annotation-list.html.twig',
         // Inline
+        ImageInlineNode::class => 'inline/image.html.twig',
         InlineCompoundNode::class => 'inline/inline-node.html.twig',
         AbbreviationInlineNode::class => 'inline/textroles/abbreviation.html.twig',
         CitationInlineNode::class => 'inline/citation.html.twig',
