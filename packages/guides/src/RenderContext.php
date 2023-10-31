@@ -15,35 +15,28 @@ namespace phpDocumentor\Guides;
 
 use Exception;
 use League\Flysystem\FilesystemInterface;
+use LogicException;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
-use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function dirname;
-use function trim;
 
 class RenderContext
 {
-    private string $destinationPath;
-
     private DocumentNode $document;
     /** @var DocumentNode[] */
     private array $allDocuments;
 
     private function __construct(
-        private readonly string $outputFolder,
-        private readonly string $currentFileName,
+        private readonly string $destinationPath,
+        private readonly string|null $currentFileName,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly DocumentNameResolverInterface $documentNameResolver,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
     ) {
-        $this->destinationPath = trim($outputFolder, '/');
     }
 
     /** @param DocumentNode[] $allDocumentNodes */
@@ -53,8 +46,6 @@ class RenderContext
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         string $destinationPath,
-        UrlGeneratorInterface $urlGenerator,
-        DocumentNameResolverInterface $documentNameResolver,
         string $ouputFormat,
         ProjectNode $projectNode,
     ): self {
@@ -63,8 +54,6 @@ class RenderContext
             $documentNode->getFilePath(),
             $origin,
             $destination,
-            $urlGenerator,
-            $documentNameResolver,
             $ouputFormat,
             $projectNode,
         );
@@ -73,6 +62,23 @@ class RenderContext
         $self->allDocuments = $allDocumentNodes;
 
         return $self;
+    }
+
+    public static function forProject(
+        ProjectNode $projectNode,
+        FilesystemInterface $origin,
+        FilesystemInterface $destination,
+        string $destinationPath,
+        string $ouputFormat,
+    ): self {
+        return new self(
+            $destinationPath,
+            null,
+            $origin,
+            $destination,
+            $ouputFormat,
+            $projectNode,
+        );
     }
 
     /**
@@ -94,37 +100,9 @@ class RenderContext
         return $link ?? '';
     }
 
-    public function canonicalUrl(string $url): string
+    public function getDirName(): string
     {
-        return $this->documentNameResolver->canonicalUrl($this->getDirName(), $url);
-    }
-
-    /**
-     * Generate a canonical output URL with the configured file extension and anchor
-     */
-    public function generateCanonicalOutputUrl(string $linkedDocument, string|null $anchor = null): string
-    {
-        if ($this->projectNode->findDocumentEntry($linkedDocument) !== null) {
-            // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
-            $linkedDocument = '/' . $linkedDocument;
-        }
-
-        $canonicalUrl = $this->documentNameResolver->canonicalUrl(
-            $this->getDirName(),
-            $linkedDocument,
-        );
-
-        $fileUrl = $this->urlGenerator->createFileUrl($canonicalUrl, $this->outputFormat, $anchor);
-
-        return $this->urlGenerator->generateInternalUrl(
-            $this,
-            $fileUrl,
-        );
-    }
-
-    private function getDirName(): string
-    {
-        $dirname = dirname($this->currentFileName);
+        $dirname = dirname($this->getCurrentFileName());
 
         if ($dirname === '.') {
             return '';
@@ -135,10 +113,14 @@ class RenderContext
 
     public function getCurrentFileName(): string
     {
+        if ($this->currentFileName === null) {
+            throw new LogicException('Cannot get current file name when not rendering a document');
+        }
+
         return $this->currentFileName;
     }
 
-    /** @return array<string, string> */
+    /** @return array<string, string|null> */
     public function getLoggerInformation(): array
     {
         return [
@@ -153,7 +135,7 @@ class RenderContext
 
     public function getCurrentDocumentEntry(): DocumentEntryNode|null
     {
-        return $this->projectNode->findDocumentEntry($this->currentFileName);
+        return $this->projectNode->findDocumentEntry($this->getCurrentFileName());
     }
 
     public function getDestinationPath(): string
@@ -161,19 +143,9 @@ class RenderContext
         return $this->destinationPath;
     }
 
-    public function setDestinationPath(string $path): void
-    {
-        $this->destinationPath = $path;
-    }
-
     public function getDestination(): FilesystemInterface
     {
         return $this->destination;
-    }
-
-    public function getCurrentFileDestination(): string
-    {
-        return $this->destinationPath . '/' . $this->currentFileName . '.' . $this->outputFormat;
     }
 
     public function getProjectNode(): ProjectNode
@@ -200,10 +172,5 @@ class RenderContext
     public function getOutputFormat(): string
     {
         return $this->outputFormat;
-    }
-
-    public function getOutputFolder(): string
-    {
-        return $this->outputFolder;
     }
 }

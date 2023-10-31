@@ -50,10 +50,7 @@ final class Parser
         $this->parserStrategies[] = $strategy;
     }
 
-    /**
-     * @psalm-assert ParserContext $this->parserContext
-     * @psalm-assert Metas $this->metas
-     */
+    /** @psalm-assert ParserContext $this->parserContext */
     public function prepare(
         FilesystemInterface|null $origin,
         string $sourcePath,

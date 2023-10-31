@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +14,7 @@ final class RelativeUrlGeneratorTest extends TestCase
     #[DataProvider('generateRelativeInternalUrlProvider')]
     public function testGenerateRelativeInternalUrl(string $expected, string $canonicalUrl, string $currentFileName): void
     {
-        $urlGenerator = new RelativeUrlGenerator();
+        $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
         $renderContext = $this->createMock(RenderContext::class);
         $renderContext->method('getCurrentFileName')->willReturn($currentFileName);
         $renderContext->method('getOutputFormat')->willReturn('html');
@@ -69,8 +70,11 @@ final class RelativeUrlGeneratorTest extends TestCase
             self::markTestSkipped($skip);
         }
 
-        $urlGenerator = new RelativeUrlGenerator();
-        self::assertSame($expected, $urlGenerator->createFileUrl($filename, $outputFormat, $anchor));
+        $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
+        $renderContext = $this->createMock(RenderContext::class);
+        $renderContext->method('getCurrentFileName')->willReturn($filename);
+        $renderContext->method('getOutputFormat')->willReturn($outputFormat);
+        self::assertSame($expected, $urlGenerator->createFileUrl($renderContext, $filename, $anchor));
     }
 
     /** @return array<string, array<string, string|null>> */

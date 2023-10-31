@@ -30,7 +30,7 @@ final class RelativeUrlGenerator extends AbstractUrlGenerator
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
-        $currentPathUri = Uri::createFromString($this->createFileUrl($renderContext->getCurrentFileName(), $renderContext->getOutputFormat()));
+        $currentPathUri = Uri::createFromString($this->createFileUrl($renderContext, $renderContext->getCurrentFileName()));
         $canonicalUrlUri = Uri::createFromString($canonicalUrl);
 
         $canonicalAnchor = $canonicalUrlUri->getFragment();

@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
 use Exception;
 use League\Uri\UriInfo;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UriFactory;
 
@@ -22,9 +23,13 @@ use function sprintf;
 
 abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 {
-    public function createFileUrl(string $filename, string $outputFormat = 'html', string|null $anchor = null): string
+    public function __construct(private readonly DocumentNameResolverInterface $documentNameResolver)
     {
-        return $filename . '.' . $outputFormat .
+    }
+
+    public function createFileUrl(RenderContext $context, string $filename, string|null $anchor = null): string
+    {
+        return $filename . '.' . $context->getOutputFormat() .
             ($anchor !== null ? '#' . $anchor : '');
     }
 
@@ -32,6 +37,27 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string;
+
+    /**
+     * Generate a canonical output URL with the configured file extension and anchor
+     */
+    public function generateCanonicalOutputUrl(RenderContext $context, string $linkedDocument, string|null $anchor = null): string
+    {
+        if ($context->getProjectNode()->findDocumentEntry($linkedDocument) !== null) {
+            // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
+            $linkedDocument = '/' . $linkedDocument;
+        }
+
+        $canonicalUrl = $this->documentNameResolver->canonicalUrl(
+            $context->getDirName(),
+            $linkedDocument,
+        );
+
+        return $this->generateInternalUrl(
+            $context,
+            $this->createFileUrl($context, $canonicalUrl, $anchor),
+        );
+    }
 
     public function generateInternalUrl(
         RenderContext $renderContext,
@@ -49,5 +75,10 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
         $uri = UriFactory::createUri($url);
 
         return UriInfo::isRelativePath($uri);
+    }
+
+    public function getCurrentFileUrl(RenderContext $renderContext): string
+    {
+        return $this->createFileUrl($renderContext, $renderContext->getCurrentFileName());
     }
 }

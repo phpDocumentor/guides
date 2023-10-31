@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 /**
  * Resolves references with an anchor URL.
@@ -18,6 +19,7 @@ class AnchorReferenceResolver implements ReferenceResolver
 
     public function __construct(
         private readonly AnchorReducer $anchorReducer,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
@@ -29,7 +31,7 @@ class AnchorReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($renderContext->generateCanonicalOutputUrl($target->getDocumentPath(), $target->getAnchor()));
+        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getAnchor()));
         if ($node->getValue() === '') {
             $node->setValue($target->getTitle() ?? '');
         }

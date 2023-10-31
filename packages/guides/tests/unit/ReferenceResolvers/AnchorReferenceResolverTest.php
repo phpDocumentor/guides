@@ -8,7 +8,9 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 final class AnchorReferenceResolverTest extends TestCase
@@ -17,6 +19,7 @@ final class AnchorReferenceResolverTest extends TestCase
     private RenderContext&MockObject $renderContext;
     private ProjectNode&MockObject $projectNode;
     private AnchorReferenceResolver $subject;
+    private Stub&UrlGeneratorInterface $urlGenerator;
 
     protected function setUp(): void
     {
@@ -26,7 +29,11 @@ final class AnchorReferenceResolverTest extends TestCase
         $this->anchorReducer = $this->createMock(AnchorReducer::class);
         $this->renderContext = $this->createMock(RenderContext::class);
         $this->renderContext->expects(self::once())->method('getProjectNode')->willReturn($this->projectNode);
-        $this->subject = new AnchorReferenceResolver($this->anchorReducer);
+        $this->urlGenerator = self::createStub(UrlGeneratorInterface::class);
+        $this->subject = new AnchorReferenceResolver(
+            $this->anchorReducer,
+            $this->urlGenerator,
+        );
     }
 
     public function testAnchorReducerGetsCalledOndResolvingReference(): void
@@ -38,7 +45,7 @@ final class AnchorReferenceResolverTest extends TestCase
 
     public function testResolvedReferenceReturnsCanonicalUrl(): void
     {
-        $this->renderContext->expects(self::once())->method('generateCanonicalOutputUrl')->willReturn('canonical-url');
+        $this->urlGenerator->method('generateCanonicalOutputUrl')->willReturn('canonical-url');
         $input = new ReferenceNode('lorem-ipsum');
         self::assertTrue($this->subject->resolve($input, $this->renderContext));
         self::assertEquals('canonical-url', $input->getUrl());
