@@ -30,6 +30,7 @@ class AnchorReferenceResolver implements ReferenceResolver
         if ($node instanceof ReferenceNode) {
             $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
         } else {
+            // Todo: move this to a separate resolver?
             $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
         }
 
