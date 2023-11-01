@@ -91,13 +91,13 @@ class ProjectNode extends CompoundNode
         return $this->citationTargets[$name] ?? null;
     }
 
-    public function addLinkTarget(string $anchorName, InternalTarget $target, string $linkType = SectionNode::STD_LABEL): void
+    public function addLinkTarget(string $anchorName, InternalTarget $target): void
     {
-        if (!isset($this->internalLinkTargets[$linkType])) {
-            $this->internalLinkTargets[$linkType] = [];
+        if (!isset($this->internalLinkTargets[$target->getLinkType()])) {
+            $this->internalLinkTargets[$target->getLinkType()] = [];
         }
 
-        $this->internalLinkTargets[$linkType][$anchorName] = $target;
+        $this->internalLinkTargets[$target->getLinkType()][$anchorName] = $target;
     }
 
     public function getInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): InternalTarget|null

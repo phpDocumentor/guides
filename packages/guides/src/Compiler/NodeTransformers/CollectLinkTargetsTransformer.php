@@ -65,8 +65,8 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                     $currentDocument->getFilePath(),
                     $anchor,
                     $node->getLinkText(),
+                    $node->getLinkType(),
                 ),
-                $node->getLinkType(),
             );
             if ($node instanceof MultipleLinkTargetsNode) {
                 foreach ($node->getAdditionalIds() as $id) {
@@ -76,8 +76,8 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                             $currentDocument->getFilePath(),
                             $id,
                             $node->getLinkText(),
+                            $node->getLinkType(),
                         ),
-                        $node->getLinkType(),
                     );
                 }
             }
