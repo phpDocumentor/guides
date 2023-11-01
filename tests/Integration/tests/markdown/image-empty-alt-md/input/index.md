@@ -1,3 +1,5 @@
-# additional_reports
+# Images with and without alt text
 
-![](https://raw.githubusercontent.com/Apen/additional_reports/master/Resources/Public/Images/middlewares.png)
+![with alt Text](https://example.org/example.png)
+
+![](https://example.org/example2.png)
