@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Intersphinx;
+namespace phpDocumentor\Guides\Interlink;
 
 use PHPUnit\Framework\TestCase;
 

@@ -39,13 +39,13 @@ class GenericReferenceTextRole extends AbstractReferenceTextRole
         $linkType = $this->genericLinkProvider->getLinkType($role);
         $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
         if (preg_match($pattern, $referenceTarget, $matches)) {
-            $interspinxDomain = $matches[1];
+            $interlinkDomain = $matches[1];
             $id = $this->anchorReducer->reduceAnchor($matches[2]);
         } else {
-            $interspinxDomain = '';
+            $interlinkDomain = '';
             $id = $this->anchorReducer->reduceAnchor($referenceTarget);
         }
 
-        return new ReferenceNode($id, $referenceName ?? '', $interspinxDomain, $linkType);
+        return new ReferenceNode($id, $referenceName ?? '', $interlinkDomain, $linkType);
     }
 }

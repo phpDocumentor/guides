@@ -3,5 +3,5 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd">
     <output-format>tex</output-format>
-    <output-format>intersphinx</output-format>
+    <output-format>interlink</output-format>
 </guides>

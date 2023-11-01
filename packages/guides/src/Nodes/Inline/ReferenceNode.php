@@ -24,7 +24,7 @@ class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
     public function __construct(
         string $targetReference,
         string $value = '',
-        private readonly string $intersphinxDomain = '',
+        private readonly string $interlinkDomain = '',
         private readonly string $linkType = SectionNode::STD_LABEL,
     ) {
         parent::__construct(self::TYPE, $targetReference, $value);
@@ -35,8 +35,8 @@ class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
         return $this->linkType;
     }
 
-    public function getIntersphinxDomain(): string
+    public function getInterlinkDomain(): string
     {
-        return $this->intersphinxDomain;
+        return $this->interlinkDomain;
     }
 }

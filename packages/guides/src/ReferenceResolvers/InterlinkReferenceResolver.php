@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-use phpDocumentor\Guides\Intersphinx\InventoryRepository;
+use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 
-class IntersphinxReferenceResolver implements ReferenceResolver
+class InterlinkReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 50;
 
@@ -20,11 +20,11 @@ class IntersphinxReferenceResolver implements ReferenceResolver
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
-        if (!$node instanceof CrossReferenceNode || $node->getIntersphinxDomain() === '') {
+        if (!$node instanceof CrossReferenceNode || $node->getInterlinkDomain() === '') {
             return false;
         }
 
-        $domain = $node->getIntersphinxDomain();
+        $domain = $node->getInterlinkDomain();
         $target = $node->getTargetReference();
         if (!$this->inventoryRepository->hasInventory($domain)) {
             return false;

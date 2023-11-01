@@ -9,9 +9,9 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
-use phpDocumentor\Guides\Intersphinx\InventoryLoader;
-use phpDocumentor\Guides\Intersphinx\InventoryRepository;
-use phpDocumentor\Guides\Intersphinx\JsonLoader;
+use phpDocumentor\Guides\Interlink\InventoryLoader;
+use phpDocumentor\Guides\Interlink\InventoryRepository;
+use phpDocumentor\Guides\Interlink\JsonLoader;
 use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
@@ -32,14 +32,14 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\InterlinkReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
-use phpDocumentor\Guides\ReferenceResolvers\IntersphinxReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
-use phpDocumentor\Guides\Renderer\IntersphinxRenderer;
+use phpDocumentor\Guides\Renderer\InterlinkObjectsRenderer;
 use phpDocumentor\Guides\Renderer\LatexRenderer;
 use phpDocumentor\Guides\Renderer\TypeRendererFactory;
 use phpDocumentor\Guides\Renderer\UrlGenerator\AbsoluteUrlGenerator;
@@ -139,7 +139,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocReferenceResolver::class)
 
-        ->set(IntersphinxReferenceResolver::class)
+        ->set(InterlinkReferenceResolver::class)
 
         ->set(DelegatingReferenceResolver::class)
         ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference_resolver', defaultPriorityMethod: 'getPriority'))
@@ -155,7 +155,7 @@ return static function (ContainerConfigurator $container): void {
             ['$commandBus' => service(CommandBus::class)],
         )
 
-        ->set(IntersphinxRenderer::class)
+        ->set(InterlinkObjectsRenderer::class)
         ->tag('phpdoc.renderer.typerenderer')
 
         ->set(DocumentNodeRenderer::class)

@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Intersphinx\InventoryRepository;
+use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
@@ -82,7 +82,7 @@ final class Run extends Command
             'output-format',
             null,
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'Format of the input can be html and or intersphinx',
+            'Format of the input can be html and or interlink',
         );
         $this->addOption(
             'log-path',

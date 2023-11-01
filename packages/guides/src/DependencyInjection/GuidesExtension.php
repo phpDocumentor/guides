@@ -58,7 +58,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->scalarNode('output')->end()
                 ->scalarNode('input_format')->end()
                 ->arrayNode('output_format')
-                    ->defaultValue(['html', 'intersphinx'])
+                    ->defaultValue(['html', 'interlink'])
                     ->beforeNormalization()
                     ->ifString()
                     ->then(static function ($value) {

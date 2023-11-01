@@ -21,13 +21,13 @@ class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceN
     public function __construct(
         string $targetDocument,
         string $value = '',
-        private readonly string $intersphinxDomain = '',
+        private readonly string $interlinkDomain = '',
     ) {
         parent::__construct(self::TYPE, $targetDocument, $value);
     }
 
-    public function getIntersphinxDomain(): string
+    public function getInterlinkDomain(): string
     {
-        return $this->intersphinxDomain;
+        return $this->interlinkDomain;
     }
 }

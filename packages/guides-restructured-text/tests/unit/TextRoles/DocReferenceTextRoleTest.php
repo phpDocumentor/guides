@@ -35,7 +35,7 @@ class DocReferenceTextRoleTest extends TestCase
 
         self::assertInstanceOf(DocReferenceNode::class, $result);
         self::assertEquals($url, $result->getTargetReference(), 'DocumentLinks are different');
-        self::assertEquals($domain, $result->getIntersphinxDomain(), 'Intersphinx domains are different');
+        self::assertEquals($domain, $result->getInterlinkDomain(), 'Interlink domains are different');
         self::assertEquals($text ?? '', $result->toString());
     }
 

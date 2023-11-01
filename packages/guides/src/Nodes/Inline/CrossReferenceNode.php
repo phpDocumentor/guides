@@ -9,9 +9,9 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  * the current document.
  *
  * Examples are external URLs, other documents or sections in the project and
- * other Intersphinx projects.
+ * other Interlink projects.
  */
 interface CrossReferenceNode extends LinkInlineNode
 {
-    public function getIntersphinxDomain(): string;
+    public function getInterlinkDomain(): string;
 }

@@ -13,9 +13,9 @@ use function json_encode;
 
 use const JSON_PRETTY_PRINT;
 
-class IntersphinxRenderer implements TypeRenderer
+class InterlinkObjectsRenderer implements TypeRenderer
 {
-    final public const TYPE = 'intersphinx';
+    final public const TYPE = 'interlink';
 
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
@@ -65,7 +65,7 @@ class IntersphinxRenderer implements TypeRenderer
             foreach ($targets as $key => $internalTarget) {
                 $url = $this->documentNameResolver->canonicalUrl(
                     '',
-                    $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), 'html', $internalTarget->getAnchor()),
+                    $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
                 );
                 $inventory[$linkType][$key] = [
                     $projectNode->getTitle(),

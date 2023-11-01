@@ -36,13 +36,13 @@ class DocReferenceTextRole extends AbstractReferenceTextRole
     {
         $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
         if (preg_match($pattern, $referenceTarget, $matches)) {
-            $interspinxDomain = $matches[1];
+            $interlinkDomain = $matches[1];
             $path = $matches[2];
         } else {
-            $interspinxDomain = '';
+            $interlinkDomain = '';
             $path = $referenceTarget;
         }
 
-        return new DocReferenceNode($path, $referenceName ?? '', $interspinxDomain);
+        return new DocReferenceNode($path, $referenceName ?? '', $interlinkDomain);
     }
 }
