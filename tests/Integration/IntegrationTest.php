@@ -65,7 +65,7 @@ class IntegrationTest extends ApplicationTestCase
             $input = new ArrayInput(
                 [
                     'input' => $inputPath,
-                    'output' => $outputPath,
+                    '--output' => $outputPath,
                     '--log-path' => $outputPath . '/logs',
                 ],
                 $command->getDefinition(),
