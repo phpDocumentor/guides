@@ -23,7 +23,7 @@ class ReferenceTextRole extends AbstractReferenceTextRole
     }
 
     /** @return ReferenceNode */
-    protected function createNode(string $referenceTarget, string|null $referenceName): AbstractLinkInlineNode
+    protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
         return new ReferenceNode($referenceTarget, $referenceName ?? '');
     }

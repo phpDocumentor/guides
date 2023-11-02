@@ -1,0 +1,44 @@
+{
+    "std:doc": {
+        "index": [
+            null,
+            null,
+            "index.html",
+            "Some Title"
+        ]
+    },
+    "std:label": {
+        "some-title": [
+            null,
+            null,
+            "index.html#some-title",
+            "Some Title"
+        ]
+    },
+    "std:option": {
+        "dest-dir": [
+            null,
+            null,
+            "index.html#dest-dir",
+            "dest_dir"
+        ],
+        "m-module-module-module": [
+            null,
+            null,
+            "index.html#m-module-module-module",
+            "-m <module>, --module <module>"
+        ],
+        "m": [
+            null,
+            null,
+            "index.html#m",
+            "-m <module>, --module <module>"
+        ],
+        "module": [
+            null,
+            null,
+            "index.html#module",
+            "-m <module>, --module <module>"
+        ]
+    }
+}

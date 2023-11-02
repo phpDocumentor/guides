@@ -35,6 +35,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MenuDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Directives\PullQuoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
@@ -98,6 +99,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
+use phpDocumentor\Guides\RestructuredText\TextRoles\GenericReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\MathTextRole;
@@ -143,9 +146,11 @@ return static function (ContainerConfigurator $container): void {
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
 
+        ->set(GenericLinkProvider::class)
 
         ->set(DirectiveContentRule::class)
         ->set(DocReferenceTextRole::class)
+        ->set(GenericReferenceTextRole::class)
         ->set(ReferenceTextRole::class)
         ->set(AbbreviationTextRole::class)
         ->set(MathTextRole::class)
@@ -193,6 +198,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->set(MetaDirective::class)
         ->set(NoteDirective::class)
+        ->set(OptionDirective::class)
         ->set(PullQuoteDirective::class)
         ->set(RawDirective::class)
         ->set(ReplaceDirective::class)

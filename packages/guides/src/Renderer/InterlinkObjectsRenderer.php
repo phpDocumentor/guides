@@ -13,9 +13,9 @@ use function json_encode;
 
 use const JSON_PRETTY_PRINT;
 
-class IntersphinxRenderer implements TypeRenderer
+class InterlinkObjectsRenderer implements TypeRenderer
 {
-    final public const TYPE = 'intersphinx';
+    final public const TYPE = 'interlink';
 
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
@@ -57,17 +57,23 @@ class IntersphinxRenderer implements TypeRenderer
             ];
         }
 
-        foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $key => $internalTarget) {
-            $url = $this->documentNameResolver->canonicalUrl(
-                '',
-                $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
-            );
-            $inventory['std:label'][$key] = [
-                $projectNode->getTitle(),
-                $projectNode->getVersion(),
-                $url,
-                $internalTarget->getTitle(),
-            ];
+        foreach ($renderCommand->getProjectNode()->getAllInternalTargets() as $linkType => $targets) {
+            if (isset($inventory[$linkType])) {
+                $inventory[$linkType] = [];
+            }
+
+            foreach ($targets as $key => $internalTarget) {
+                $url = $this->documentNameResolver->canonicalUrl(
+                    '',
+                    $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
+                );
+                $inventory[$linkType][$key] = [
+                    $projectNode->getTitle(),
+                    $projectNode->getVersion(),
+                    $url,
+                    $internalTarget->getTitle(),
+                ];
+            }
         }
 
         $json = (string) json_encode($inventory, JSON_PRETTY_PRINT);

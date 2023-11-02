@@ -7,8 +7,10 @@ namespace phpDocumentor\Guides\Nodes;
 use function array_merge;
 
 /** @extends CompoundNode<Node> */
-final class SectionNode extends CompoundNode
+final class SectionNode extends CompoundNode implements LinkTargetNode
 {
+    public const STD_LABEL = 'std:label';
+
     public function __construct(private readonly TitleNode $title)
     {
         parent::__construct();
@@ -32,5 +34,20 @@ final class SectionNode extends CompoundNode
         }
 
         return $titles;
+    }
+
+    public function getLinkType(): string
+    {
+        return self::STD_LABEL;
+    }
+
+    public function getId(): string
+    {
+        return $this->getTitle()->getId();
+    }
+
+    public function getLinkText(): string
+    {
+        return $this->getTitle()->toString();
     }
 }

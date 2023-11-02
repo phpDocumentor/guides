@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
+use phpDocumentor\Guides\Nodes\SectionNode;
+
 class InternalTarget implements Target
 {
     private string $url;
@@ -21,6 +23,7 @@ class InternalTarget implements Target
         private readonly string $documentPath,
         protected string $anchorName,
         private readonly string|null $title = null,
+        private readonly string $linkType = SectionNode::STD_LABEL,
     ) {
     }
 
@@ -54,5 +57,10 @@ class InternalTarget implements Target
         $this->url = $url;
 
         return $this;
+    }
+
+    public function getLinkType(): string
+    {
+        return $this->linkType;
     }
 }

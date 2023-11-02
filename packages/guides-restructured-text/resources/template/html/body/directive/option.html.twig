@@ -1,0 +1,9 @@
+{%- for id in node.additionalIds %}
+    <a id="{{ id }}"></a>
+{% endfor -%}
+<dl class="domain-default-option">
+    <dt class="domain-default-option-name" id="{{ node.id }}">{{ node.plainContent }}</dt>
+    <dd class="domain-default-option-description">
+        {{ renderNode(node.value) }}
+    </dd>
+</dl>
