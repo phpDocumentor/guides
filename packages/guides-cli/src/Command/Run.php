@@ -109,12 +109,18 @@ final class Run extends Command
             null,
             InputOption::VALUE_NEGATABLE,
             'Whether to show a progress bar',
+            true,
         );
     }
 
     private function getSettingsOverridenWithInput(InputInterface $input): ProjectSettings
     {
         $settings = $this->settingsManager->getProjectSettings();
+
+        if ($settings->isShowProgressBar()) {
+            $settings->setShowProgressBar($input->getOption('progress'));
+        }
+
         if ($input->getArgument('input')) {
             $settings->setInput((string) $input->getArgument('input'));
         }
@@ -219,13 +225,13 @@ final class Run extends Command
 
         $outputFormats = $settings->getOutputFormats();
 
+        $progressBar = null;
+
+        if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
+            $progressBar = new ProgressBar($output->section());
+        }
+
         foreach ($outputFormats as $format) {
-            $progressBar = null;
-
-            if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
-                $progressBar = new ProgressBar($output->section());
-            }
-
             $this->commandBus->handle(
                 new RenderCommand(
                     $format,
@@ -238,17 +244,19 @@ final class Run extends Command
             );
         }
 
-        $lastFormat = '';
+        if ($output->isQuiet() === false) {
+            $lastFormat = '';
 
-        if ((is_countable($outputFormats) ? count($outputFormats) : 0) > 1) {
-            $lastFormat = ((is_countable($outputFormats) ? count($outputFormats) : 0) > 2 ? ',' : '') . ' and ' . strtoupper((string) array_pop($outputFormats));
+            if ((is_countable($outputFormats) ? count($outputFormats) : 0) > 1) {
+                $lastFormat = ((is_countable($outputFormats) ? count($outputFormats) : 0) > 2 ? ',' : '') . ' and ' . strtoupper((string) array_pop($outputFormats));
+            }
+
+            $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;
+
+            $output->writeln(
+                'Successfully placed ' . (is_countable($documents) ? count($documents) : 0) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
+            );
         }
-
-        $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;
-
-        $output->writeln(
-            'Successfully placed ' . (is_countable($documents) ? count($documents) : 0) . ' rendered ' . $formatsText . ' files into ' . $outputDir,
-        );
 
         if ($settings->isFailOnError() && $spyProcessor->hasBeenCalled()) {
             return Command::FAILURE;
