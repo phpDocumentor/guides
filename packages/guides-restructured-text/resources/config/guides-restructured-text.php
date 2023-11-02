@@ -12,6 +12,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\BreadcrumbDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\ConfvalDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CsvTableDirective;
@@ -169,6 +170,7 @@ return static function (ContainerConfigurator $container): void {
                 CodeNodeOptionMapper::class,
             ),
         ])
+        ->set(ConfvalDirective::class)
         ->set(ContainerDirective::class)
         ->set(ContentsDirective::class)
         ->arg('$documentNameResolver', service(DocumentNameResolverInterface::class))

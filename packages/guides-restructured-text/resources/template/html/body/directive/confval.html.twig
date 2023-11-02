@@ -1,0 +1,21 @@
+<dl class="confval">
+    <dt id="{{ node.id }}">
+        <code class="sig-name descname"><span class="pre">{{ node.plainContent }}</span></code></dt>
+    <dd>
+        <div class="line-block">
+            {% if node.type != null %} <div class="line"><strong>Type:</strong>  {{ renderNode(node.type) }}</div>
+            {% endif -%}
+            {%- if node.required %} <div class="line"><strong>Required:</strong> true</div>
+            {% endif -%}
+            {% if node.default != null %} <div class="line"><strong>Type:</strong>  {{ renderNode(node.default) }}</div>
+            {% endif -%}
+            {%- for key, option in node.additionalOptions -%}
+                <div class="line"><strong>{{ key }}:</strong> {{  renderNode(option) }}</div>
+
+            {% endfor -%}
+        </div>
+        <div class="confval-description">
+            {{ renderNode(node.value) }}
+        </div>
+    </dd>
+</dl>

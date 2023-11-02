@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Nodes\ClassNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -39,6 +40,7 @@ class ClassDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
+        BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
