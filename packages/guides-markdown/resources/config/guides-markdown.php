@@ -6,6 +6,7 @@ use phpDocumentor\Guides\Markdown\MarkupLanguageParser;
 use phpDocumentor\Guides\Markdown\Parsers\BlockQuoteParser;
 use phpDocumentor\Guides\Markdown\Parsers\CodeBlockParser;
 use phpDocumentor\Guides\Markdown\Parsers\HeaderParser;
+use phpDocumentor\Guides\Markdown\Parsers\HtmlParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\EmphasisParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineCodeParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineImageParser;
@@ -34,6 +35,9 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->set(BlockQuoteParser::class)
         ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.subParser'))
+        ->tag('phpdoc.guides.markdown.parser.blockParser')
+        ->tag('phpdoc.guides.markdown.parser.subParser')
+        ->set(HtmlParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->tag('phpdoc.guides.markdown.parser.subParser')
         ->set(ListBlockParser::class)
