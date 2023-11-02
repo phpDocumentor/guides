@@ -59,9 +59,10 @@ final class Run extends Command
             InputArgument::OPTIONAL,
             'Directory to read for files',
         );
-        $this->addArgument(
+        $this->addOption(
             'output',
-            InputArgument::OPTIONAL,
+            null,
+            InputOption::VALUE_REQUIRED,
             'Directory to read for files',
         );
 
@@ -125,8 +126,8 @@ final class Run extends Command
             $settings->setInput((string) $input->getArgument('input'));
         }
 
-        if ($input->getArgument('output')) {
-            $settings->setOutput((string) $input->getArgument('output'));
+        if ($input->getOption('output')) {
+            $settings->setOutput((string) $input->getOption('output'));
         }
 
         if ($input->getOption('input-file')) {
