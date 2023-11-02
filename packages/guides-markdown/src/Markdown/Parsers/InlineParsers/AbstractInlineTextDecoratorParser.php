@@ -35,6 +35,11 @@ abstract class AbstractInlineTextDecoratorParser extends AbstractInlineParser
     {
         $content = [];
 
+        if ($current->firstChild() === null) {
+            // Handle inline nodes without content
+            return $this->createInlineNode($current, null);
+        }
+
         while ($event = $walker->next()) {
             $commonMarkNode = $event->getNode();
 
