@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
@@ -27,6 +28,7 @@ class HighlightsDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
+        BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {

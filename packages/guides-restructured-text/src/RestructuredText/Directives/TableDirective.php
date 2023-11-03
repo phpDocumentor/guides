@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
@@ -49,6 +50,7 @@ final class TableDirective extends SubDirective
 
     /** {@inheritDoc} */
     protected function processSub(
+        BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {

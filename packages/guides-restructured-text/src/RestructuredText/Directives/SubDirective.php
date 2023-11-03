@@ -38,7 +38,7 @@ abstract class SubDirective extends BaseDirective
             return null;
         }
 
-        $node = $this->processSub($collectionNode, $directive);
+        $node = $this->processSub($blockContext, $collectionNode, $directive);
 
         if ($node === null) {
             return null;
@@ -54,6 +54,7 @@ abstract class SubDirective extends BaseDirective
     }
 
     protected function processSub(
+        BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {

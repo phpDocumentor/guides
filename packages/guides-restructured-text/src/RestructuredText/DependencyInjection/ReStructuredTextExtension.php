@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\DependencyInjection\Compiler\TextRolePass;
+use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\OptionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use phpDocumentor\Guides\TemplateRenderer;
@@ -27,6 +28,7 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
     private const HTML = [
         VersionChangeNode::class => 'body/version-change.html.twig',
         OptionNode::class => 'body/directive/option.html.twig',
+        ConfvalNode::class => 'body/directive/confval.html.twig',
     ];
 
     /** @param mixed[] $configs */

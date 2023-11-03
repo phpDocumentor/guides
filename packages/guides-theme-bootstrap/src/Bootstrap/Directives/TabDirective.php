@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function is_string;
@@ -38,6 +39,7 @@ class TabDirective extends SubDirective
      * @param Directive $directive
      */
     protected function processSub(
+        BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
