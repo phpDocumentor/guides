@@ -64,14 +64,16 @@ class RenderContext
         return $self;
     }
 
+    /** @param DocumentNode[] $allDocumentNodes */
     public static function forProject(
         ProjectNode $projectNode,
+        array $allDocumentNodes,
         FilesystemInterface $origin,
         FilesystemInterface $destination,
         string $destinationPath,
         string $ouputFormat,
     ): self {
-        return new self(
+        $self = new self(
             $destinationPath,
             null,
             $origin,
@@ -79,6 +81,10 @@ class RenderContext
             $ouputFormat,
             $projectNode,
         );
+
+        $self->allDocuments = $allDocumentNodes;
+
+        return $self;
     }
 
     /**

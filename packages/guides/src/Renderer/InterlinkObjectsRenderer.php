@@ -15,17 +15,10 @@ use const JSON_PRETTY_PRINT;
 
 class InterlinkObjectsRenderer implements TypeRenderer
 {
-    final public const TYPE = 'interlink';
-
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
-    }
-
-    public function supports(string $outputFormat): bool
-    {
-        return $outputFormat === self::TYPE;
     }
 
     public function render(RenderCommand $renderCommand): void
@@ -38,6 +31,7 @@ class InterlinkObjectsRenderer implements TypeRenderer
 
         $context = RenderContext::forProject(
             $projectNode,
+            $renderCommand->getDocumentArray(),
             $renderCommand->getOrigin(),
             $renderCommand->getDestination(),
             $renderCommand->getDestinationPath(),

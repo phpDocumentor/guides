@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
-use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\HtmlNodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\TexNodeRendererPass;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
@@ -173,6 +175,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
             ->addMethodCall('setProjectSettings', [$projectSettings]);
 
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
+        $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/tex';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
 
         foreach ($config['themes'] as $themeName => $themeConfig) {
@@ -183,8 +186,10 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
     public function process(ContainerBuilder $container): void
     {
-        (new NodeRendererPass())->process($container);
         (new ParserRulesPass())->process($container);
+        (new HtmlNodeRendererPass())->process($container);
+        (new TexNodeRendererPass())->process($container);
+        (new RendererPass())->process($container);
     }
 
     /** @param mixed[] $config */

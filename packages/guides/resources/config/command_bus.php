@@ -19,7 +19,6 @@ use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentHandler;
 use phpDocumentor\Guides\Handlers\RenderHandler;
-use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -46,7 +45,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(RenderDocumentHandler::class)
         ->tag('phpdoc.guides.command', ['command' => RenderDocumentCommand::class])
-        ->arg('$renderer', service(DelegatingNodeRenderer::class))
+        ->arg('$renderer', service('phpdoc.guides.output_node_renderer'))
         ->arg('$eventDispatcher', service(EventDispatcherInterface::class))
 
         ->set(CommandBus::class)

@@ -14,7 +14,6 @@ use Monolog\LogRecord;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
@@ -105,7 +104,7 @@ class FunctionalTest extends ApplicationTestCase
             $settingsManager = $this->createMock(SettingsManager::class);
             $settingsManager->method('getProjectSettings')->willReturn($projectSettings);
 
-            $renderer = $this->getContainer()->get(DelegatingNodeRenderer::class);
+            $renderer = $this->getContainer()->get('phpdoc.guides.output_node_renderer');
             $context = RenderContext::forDocument(
                 $document,
                 [$document],

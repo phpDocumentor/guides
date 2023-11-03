@@ -45,6 +45,11 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::end"/>
             </errorLevel>
         </UndefinedInterfaceMethod>
+        <UndefinedFunction>
+            <errorLevel type="suppress">
+                <referencedFunction name="tagged_iterator"/>
+            </errorLevel>
+        </UndefinedFunction>
     </issueHandlers>
 
     <plugins>

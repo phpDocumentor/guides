@@ -4,12 +4,39 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer;
 
-class LatexRenderer extends BaseTypeRenderer
-{
-    final public const TYPE = 'tex';
+use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\TemplateRenderer;
 
-    public function supports(string $outputFormat): bool
+class LatexRenderer implements TypeRenderer
+{
+    public function __construct(private readonly TemplateRenderer $renderer)
     {
-        return $outputFormat === self::TYPE;
+    }
+
+    public function render(RenderCommand $renderCommand): void
+    {
+        $projectNode = $renderCommand->getProjectNode();
+
+        $context = RenderContext::forProject(
+            $projectNode,
+            $renderCommand->getDocumentArray(),
+            $renderCommand->getOrigin(),
+            $renderCommand->getDestination(),
+            $renderCommand->getDestinationPath(),
+            'tex',
+        );
+
+        $context->getDestination()->put(
+            $renderCommand->getDestinationPath() . '/index.tex',
+            $this->renderer->renderTemplate(
+                $context,
+                'structure/project.tex.twig',
+                [
+                    'project' => $projectNode,
+                    'documents' => $renderCommand->getDocumentIterator(),
+                ],
+            ),
+        );
     }
 }

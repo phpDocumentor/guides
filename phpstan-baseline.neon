@@ -131,6 +131,16 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/NamedPhraseRule.php
 
 		-
+			message: "#^Function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
+			count: 2
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: "#^Used function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
 			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
 			count: 1
 			path: packages/guides/src/DependencyInjection/GuidesExtension.php

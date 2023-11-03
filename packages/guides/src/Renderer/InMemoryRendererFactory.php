@@ -17,8 +17,8 @@ class InMemoryRendererFactory implements TypeRendererFactory
 
     public function getRenderSet(string $outputFormat): TypeRenderer
     {
-        foreach ($this->renderSets as $renderSet) {
-            if ($renderSet->supports($outputFormat)) {
+        foreach ($this->renderSets as $format => $renderSet) {
+            if ($format === $outputFormat) {
                 return $renderSet;
             }
         }
