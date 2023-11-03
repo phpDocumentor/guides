@@ -1,6 +1,116 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, iterable\\<Symfony\\\\Component\\\\Console\\\\Command\\\\Command\\> given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Application.php
+
+		-
+			message: "#^Call to function is_countable\\(\\) with array will always evaluate to true\\.$#"
+			count: 2
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 6
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Monolog\\\\Logger\\:\\:pushProcessor\\(\\) expects callable\\(Monolog\\\\LogRecord\\)\\: Monolog\\\\LogRecord, phpDocumentor\\\\Guides\\\\Cli\\\\Logger\\\\SpyProcessor given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$documents of class phpDocumentor\\\\Guides\\\\Handlers\\\\CompileDocumentsCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$inventoryConfigs of method phpDocumentor\\\\Guides\\\\Interlink\\\\InventoryRepository\\:\\:initialize\\(\\) expects array\\<int, array\\<string, string\\>\\>, array\\<string, string\\> given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$iterable of method Symfony\\\\Component\\\\Console\\\\Helper\\\\ProgressBar\\:\\:iterate\\(\\) expects iterable, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$outputFormats of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setOutputFormats\\(\\) expects array\\<string\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$showProgressBar of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setShowProgressBar\\(\\) expects bool, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Parameter \\#3 \\$documentIterator of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects iterable\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:ignoreExtraKeys\\(\\)\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Config/Configuration.php
+
+		-
+			message: "#^Parameter \\#1 \\$configs \\(array\\<string\\>\\) of method phpDocumentor\\\\Guides\\\\Cli\\\\DependencyInjection\\\\ApplicationExtension\\:\\:load\\(\\) should be compatible with parameter \\$configs \\(array\\<array\\>\\) of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\ExtensionInterface\\:\\:load\\(\\)$#"
+			count: 2
+			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function rtrim expects string, string\\|false given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Logger\\\\SpyProcessor\\:\\:__invoke\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Logger/SpyProcessor.php
+
+		-
+			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Logger\\\\SpyProcessor\\:\\:__invoke\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Logger/SpyProcessor.php
+
+		-
+			message: "#^Return type \\(array\\|Monolog\\\\LogRecord\\) of method phpDocumentor\\\\Guides\\\\Cli\\\\Logger\\\\SpyProcessor\\:\\:__invoke\\(\\) should be covariant with return type \\(Monolog\\\\LogRecord\\) of method Monolog\\\\Processor\\\\ProcessorInterface\\:\\:__invoke\\(\\)$#"
+			count: 1
+			path: packages/guides-cli/src/Logger/SpyProcessor.php
+
+		-
+			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: packages/guides-code/src/Code/DependencyInjection/CodeExtension.php
+
+		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: packages/guides-graphs/src/Graphs/DependencyInjection/Configuration.php
+
+		-
+			message: "#^Parameter \\#1 \\$configuration of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\Extension\\:\\:processConfiguration\\(\\) expects Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface, Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface\\|null given\\.$#"
+			count: 1
+			path: packages/guides-graphs/src/Graphs/DependencyInjection/GraphsExtension.php
+
+		-
+			message: "#^Parameter \\#1 \\$filename of function file_put_contents expects string, string\\|false given\\.$#"
+			count: 1
+			path: packages/guides-graphs/src/Graphs/Renderer/PlantumlRenderer.php
+
+		-
 			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnonymousPhraseRule.php
@@ -24,3 +134,63 @@ parameters:
 			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
 			count: 1
 			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:23\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
+			count: 1
+			path: packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:parse\\(\\)\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:render\\(\\)\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:run\\(\\)\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertFalse\\(\\)\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:markTestIncomplete\\(\\)\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/FunctionalTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertFalse\\(\\)\\.$#"
+			count: 1
+			path: tests/Integration/IntegrationTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:markTestIncomplete\\(\\)\\.$#"
+			count: 1
+			path: tests/Integration/IntegrationTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Integration/IntegrationTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of function explode expects string, string\\|false given\\.$#"
+			count: 2
+			path: tests/Integration/IntegrationTest.php
