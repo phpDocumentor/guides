@@ -12,17 +12,13 @@ use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Interlink\InventoryLoader;
 use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Interlink\JsonLoader;
-use phpDocumentor\Guides\NodeRenderers\DefaultNodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\InMemoryNodeRendererFactory;
-use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
-use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererFactory;
+use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
@@ -145,18 +141,30 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$resolvers', tagged_iterator('phpdoc.guides.reference_resolver', defaultPriorityMethod: 'getPriority'))
 
         ->set(HtmlRenderer::class)
-        ->tag('phpdoc.renderer.typerenderer')
+        ->tag(
+            'phpdoc.renderer.typerenderer',
+            [
+                'noderender_tag' => 'phpdoc.guides.noderenderer.html',
+                'format' => 'html',
+            ],
+        )
         ->args(
             ['$commandBus' => service(CommandBus::class)],
         )
         ->set(LatexRenderer::class)
-        ->tag('phpdoc.renderer.typerenderer')
-        ->args(
-            ['$commandBus' => service(CommandBus::class)],
+        ->tag(
+            'phpdoc.renderer.typerenderer',
+            [
+                'noderender_tag' => 'phpdoc.guides.noderenderer.tex',
+                'format' => 'tex',
+            ],
         )
 
         ->set(InterlinkObjectsRenderer::class)
-        ->tag('phpdoc.renderer.typerenderer')
+        ->tag(
+            'phpdoc.renderer.typerenderer',
+            ['format' => 'interlink'],
+        )
 
         ->set(DocumentNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
@@ -169,33 +177,21 @@ return static function (ContainerConfigurator $container): void {
         ->set(BreadCrumbNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
 
-        ->set(DefaultNodeRenderer::class)
-
-        ->set(InMemoryNodeRendererFactory::class)
-        ->args([
-            '$nodeRenderers' => tagged_iterator('phpdoc.guides.noderenderer.html'),
-            '$defaultNodeRenderer' => new Reference(DefaultNodeRenderer::class),
-        ])
-        ->alias(NodeRendererFactory::class, InMemoryNodeRendererFactory::class)
-
-        ->set(PreNodeRendererFactory::class)
-        ->decorate(NodeRendererFactory::class)
-        ->arg('$innerFactory', service('.inner'))
-        ->arg('$preRenderers', tagged_iterator('phpdoc.guides.prerenderer'))
-
         ->set(ReferenceResolverPreRender::class)
         ->tag('phpdoc.guides.prerenderer')
 
         ->set(InMemoryRendererFactory::class)
-        ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer'))
+        ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer', 'format'))
         ->alias(TypeRendererFactory::class, InMemoryRendererFactory::class)
 
         ->set(SluggerAnchorReducer::class)
         ->alias(AnchorReducer::class, SluggerAnchorReducer::class)
 
+        ->set('phpdoc.guides.output_node_renderer', OutputAwareDelegatingNodeRenderer::class)
+        ->arg('$nodeRenderers', tagged_iterator('phpdoc.guides.output_node_renderer', 'format'))
 
         ->set(AssetsExtension::class)
-        ->arg('$nodeRenderer', service(DelegatingNodeRenderer::class))
+        ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
         ->tag('twig.extension')
         ->autowire()
 

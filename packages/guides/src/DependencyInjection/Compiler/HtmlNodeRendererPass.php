@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection\Compiler;
 
-use phpDocumentor\Guides\NodeRenderers\NodeRendererFactory;
 use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\AnnotationListNode;
@@ -62,7 +61,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-final class NodeRendererPass implements CompilerPassInterface
+final class HtmlNodeRendererPass implements CompilerPassInterface
 {
     private const HTML = [
         AnchorNode::class => 'inline/anchor.html.twig',
@@ -122,15 +121,6 @@ final class NodeRendererPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        foreach ($container->findTaggedServiceIds('phpdoc.guides.noderendererfactoryaware') as $id => $tags) {
-            $definition = $container->getDefinition($id);
-            $definition->addMethodCall(
-                'setNodeRendererFactory',
-                [new Reference(NodeRendererFactory::class)],
-            );
-            $definition->clearTag('phpdoc.guides.noderendererfactoryaware');
-        }
-
         $htmlRendererDefinitions = [];
         foreach (self::HTML as $node => $template) {
             $definition = new Definition(

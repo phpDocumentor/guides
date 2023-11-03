@@ -1,4 +1,3 @@
-{% if isMain(node) %}
 \documentclass[11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -10,13 +9,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
-{% for node in document.headerNodes %}
-{{ renderNode(node) }}
-{% endfor %}
 \begin{document}
-{% endif %}
 \label{{ '{' }}{{ document.environment.url}}{{ '}' }}
-{{ body|raw }}
-{% if isMain %}
+{%- for document in documents -%}
+{{ renderNode(document) }}
+{%- endfor -%}
 \end{document}
-{% endif %}
