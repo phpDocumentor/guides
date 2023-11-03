@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
+use function count;
 use function getcwd;
 
 final class Application extends BaseApplication
@@ -20,6 +21,10 @@ final class Application extends BaseApplication
 
         foreach ($commands as $command) {
             $this->add($command);
+        }
+
+        if (count($commands) !== 1) {
+            return;
         }
 
         $this->setDefaultCommand($defaultCommand, true);
