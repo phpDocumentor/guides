@@ -32,16 +32,20 @@ parameters:
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/TextRoleRule.php
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
 
-    -
-       message: '#^Return type \(iterable<phpDocumentor\\Guides\\Compiler\\NodeTransformers\\MoveAnchorTransformer>\) of method class@anonymous\/guides\/tests\/unit\/Compiler\/.*#'
-       paths:
-         - packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
   paths:
     - packages/guides/src
+    - packages/guides-code/src
+    - packages/guides-cli/src
+    - packages/guides-graphs/src
     - packages/guides-markdown/src
     - packages/guides-restructured-text/src
+    - packages/guides-theme-bootstrap/src
     - packages/guides/tests
-#    - packages/guides-markdown/tests
+    - packages/guides-cli/tests
+    - packages/guides-graphs/tests
     - packages/guides-restructured-text/tests
+    - tests/ApplicationTestCase.php
+    - tests/Functional/FunctionalTest.php
+    - tests/Integration/IntegrationTest.php
 
   tmpDir: .cache/phpstan/
