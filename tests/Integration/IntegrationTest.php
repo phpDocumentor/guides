@@ -95,13 +95,13 @@ class IntegrationTest extends ApplicationTestCase
             }
         } catch (ExpectationFailedException $e) {
             if ($skip) {
-                $this->markTestIncomplete(file_get_contents($inputPath . '/skip') ?: '');
+                self::markTestIncomplete(file_get_contents($inputPath . '/skip') ?: '');
             }
 
             throw $e;
         }
 
-        $this->assertFalse($skip, 'Test passes while marked as SKIP.');
+        self::assertFalse($skip, 'Test passes while marked as SKIP.');
     }
 
     /**
@@ -114,8 +114,13 @@ class IntegrationTest extends ApplicationTestCase
         static::assertFileExists($expected);
         static::assertFileExists($actual);
 
-        $lines = explode("\n", file_get_contents($expected));
+        $fileContent = file_get_contents($expected);
+
+        self::assertIsString($fileContent);
+
+        $lines = explode("\n", $fileContent);
         $actualContent =  file_get_contents($actual);
+        self::assertIsString($actualContent);
         foreach ($lines as $line) {
             static::assertStringContainsString($line, $actualContent, 'File "' . $actual . '" does not contain "' . $line . '"');
         }
@@ -137,7 +142,9 @@ class IntegrationTest extends ApplicationTestCase
 
     public static function getTrimmedFileContent(string $file): string
     {
-        $contentArray = explode("\n", file_get_contents($file));
+        $fileContent = file_get_contents($file);
+        self::assertIsString($fileContent);
+        $contentArray = explode("\n", $fileContent);
         array_walk($contentArray, static function (&$value): void {
             $value = trim($value);
         });
