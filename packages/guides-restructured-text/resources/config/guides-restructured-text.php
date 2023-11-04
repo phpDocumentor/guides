@@ -50,11 +50,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TitleDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ToctreeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TodoDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\TopicDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
-use phpDocumentor\Guides\RestructuredText\Directives\WrapDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContextFactory;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
@@ -213,12 +211,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(ToctreeDirective::class)
         ->set(MenuDirective::class)
         ->set(TodoDirective::class)
-        ->set(TopicDirective::class)
         ->set(UmlDirective::class)
         ->set(VersionAddedDirective::class)
         ->set(VersionChangedDirective::class)
         ->set(WarningDirective::class)
-        ->set(WrapDirective::class)
 
 
         ->set(DefaultTextRoleFactory::class, DefaultTextRoleFactory::class)
