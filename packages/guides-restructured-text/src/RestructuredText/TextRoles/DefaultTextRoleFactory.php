@@ -19,7 +19,7 @@ class DefaultTextRoleFactory implements TextRoleFactory
         private readonly TextRole $genericTextRole,
         private TextRole $defaultTextRole,
         iterable $textRoles = [],
-        private readonly array $domains = [],
+        private array $domains = [],
     ) {
         $this->textRoles = [...$textRoles];
     }
@@ -27,6 +27,12 @@ class DefaultTextRoleFactory implements TextRoleFactory
     public function registerTextRole(TextRole $textRole): void
     {
         $this->textRoles[] = $textRole;
+    }
+
+    /** @param TextRole[] $textRoles */
+    public function registerDomain(string $domainName, array $textRoles): void
+    {
+        $this->domains[$domainName] = $textRoles;
     }
 
     public function replaceTextRole(TextRole $newTextRole): void
