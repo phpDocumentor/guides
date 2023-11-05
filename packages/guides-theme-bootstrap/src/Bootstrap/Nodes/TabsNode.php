@@ -9,7 +9,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 
 final class TabsNode extends GeneralDirectiveNode
 {
-    /** @param TabNode[] $tabs */
+    /** @param AbstractTabNode[] $tabs */
     public function __construct(
         protected readonly string $name,
         protected readonly string $plainContent,
@@ -20,7 +20,7 @@ final class TabsNode extends GeneralDirectiveNode
         parent::__construct($name, $plainContent, $content, $tabs);
     }
 
-    /** @return TabNode[] */
+    /** @return AbstractTabNode[] */
     public function getTabs(): array
     {
         return $this->tabs;
