@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
-use phpDocumentor\Guides\DependencyInjection\Compiler\HtmlNodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\TexNodeRendererPass;
@@ -187,7 +186,6 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
     public function process(ContainerBuilder $container): void
     {
         (new ParserRulesPass())->process($container);
-        (new HtmlNodeRendererPass())->process($container);
         (new TexNodeRendererPass())->process($container);
         (new RendererPass())->process($container);
     }

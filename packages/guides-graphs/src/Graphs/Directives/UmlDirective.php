@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Graphs\Directives;
 
 use phpDocumentor\Guides\Graphs\Nodes\UmlNode;
+use phpDocumentor\Guides\NodeRenderers\Html\GeneralNodeHtmlRenderer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
@@ -35,8 +36,11 @@ use function str_replace;
  */
 final class UmlDirective extends BaseDirective
 {
-    public function __construct(private readonly LoggerInterface $logger)
-    {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        GeneralNodeHtmlRenderer $renderer,
+    ) {
+        $renderer->registerNode(UmlNode::class, 'body/uml.html.twig');
     }
 
     public function getName(): string

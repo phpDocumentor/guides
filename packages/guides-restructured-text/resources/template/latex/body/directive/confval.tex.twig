@@ -1,0 +1,16 @@
+\begin{description}
+    \item[\texttt{{ node.plainContent }}]
+    \hfill \\
+    \begin{itemize}
+        \item[\textbf{Type:}] {{ renderNode(node.type) }}
+        \item[\textbf{Required:}] {% if node.required %}true{% else %}false{% endif %}
+        \item[\textbf{Default:}] {% if node.default != null %}{{ renderNode(node.default) }}{% else %}N/A{% endif %}
+        {%- for key, option in node.additionalOptions -%}
+        \item[\textbf{{ key }}:] {{ renderNode(option) }}
+    {% endfor -%}
+    \end{itemize}
+
+    \item[Description]
+    \hfill \\
+{{ renderNode(node.value) }}
+\end{description}

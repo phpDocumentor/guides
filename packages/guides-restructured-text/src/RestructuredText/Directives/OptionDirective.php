@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\NodeRenderers\Html\GeneralNodeHtmlRenderer;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
@@ -31,9 +32,12 @@ final class OptionDirective extends SubDirective
     public function __construct(
         protected Rule $startingRule,
         GenericLinkProvider $genericLinkProvider,
+        GeneralNodeHtmlRenderer $generalNodeRenderer,
         private readonly AnchorReducer $anchorReducer,
     ) {
         parent::__construct($startingRule);
+
+        $generalNodeRenderer->registerNode(OptionNode::class, 'body/directive/option.html.twig');
 
         $genericLinkProvider->addGenericLink(self::NAME, OptionNode::LINK_TYPE);
     }
