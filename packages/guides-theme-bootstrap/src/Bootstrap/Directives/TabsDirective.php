@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Bootstrap\Directives;
 
-use phpDocumentor\Guides\Bootstrap\Nodes\TabNode;
+use phpDocumentor\Guides\Bootstrap\Nodes\AbstractTabNode;
 use phpDocumentor\Guides\Bootstrap\Nodes\TabsNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
@@ -56,7 +56,7 @@ class TabsDirective extends SubDirective
         $tabs = [];
         $hasActive = false;
         foreach ($collectionNode->getChildren() as $child) {
-            if ($child instanceof TabNode) {
+            if ($child instanceof AbstractTabNode) {
                 if ($child->isActive()) {
                     if (!$hasActive) {
                         $hasActive = true;
