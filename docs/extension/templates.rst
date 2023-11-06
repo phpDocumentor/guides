@@ -6,7 +6,7 @@
 Extending Templates
 ===================
 
-Register the templates overrides in your extensions 
+Register the templates overrides in your extension's
 :ref:`Extension class <extension_symfony>`:
 
 ..  literalinclude:: _YourExtension.php
@@ -15,8 +15,8 @@ Register the templates overrides in your extensions
     :lineos:
     :emphasize-lines: 29-35
 
-It is recommended to always extend an existing template so that the base 
-templates twig files can be used as fallback for non-defined specific template 
+It is recommended to always extend an existing template so that the Twig files
+of the base templates can be used as fallback for non-defined specific template
 files.
 
 In order to extend the default bootstrap theme, require the according base 
@@ -46,7 +46,7 @@ To extend the base template (plain HTML) require `phpdocumentor/guides` in your
         'themes' => ['mytheme' => dirname(__DIR__, 3) . '/resources/template'],
     ]);
 
-You can now copy any twig file from the extended extensions and change it with 
+You can now copy any Twig file from the extended extensions and change it with
 the full power of `Twig <https://twig.symfony.com/>`__.
 
 Have a look at the `custom theme for TYPO3 Documentation <https://github.com/TYPO3-Documentation/typo3-docs-theme>`__
