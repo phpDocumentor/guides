@@ -30,6 +30,7 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
         OptionNode::class => 'body/directive/option.html.twig',
         ConfvalNode::class => 'body/directive/confval.html.twig',
     ];
+    private const LATEX = [ConfvalNode::class => 'body/directive/confval.tex.twig'];
 
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void
@@ -50,7 +51,21 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
             );
             $definition->addTag('phpdoc.guides.noderenderer.html');
 
-            $container->setDefinition('phpdoc.guides.rst.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
+            $container->setDefinition('phpdoc.guides.rst.html.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
+        }
+
+        foreach (self::LATEX as $node => $template) {
+            $definition = new Definition(
+                TemplateNodeRenderer::class,
+                [
+                    '$renderer' => new Reference(TemplateRenderer::class),
+                    '$template' => $template,
+                    '$nodeClass' => $node,
+                ],
+            );
+            $definition->addTag('phpdoc.guides.noderenderer.tex');
+
+            $container->setDefinition('phpdoc.guides.rst.tex.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
         }
 
         $loader->load('guides-restructured-text.php');
@@ -59,7 +74,10 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
     public function prepend(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('guides', [
-            'base_template_paths' => [dirname(__DIR__, 3) . '/resources/template/html'],
+            'base_template_paths' => [
+                dirname(__DIR__, 3) . '/resources/template/html',
+                dirname(__DIR__, 3) . '/resources/template/latex',
+            ],
         ]);
     }
 
