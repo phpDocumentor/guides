@@ -17,15 +17,9 @@ namespace phpDocumentor\Guides\Nodes;
 final class ListNode extends CompoundNode
 {
     /** @param ListItemNode[] $items */
-    public function __construct(private readonly array $items, private readonly bool $ordered = false)
+    public function __construct(array $items, private readonly bool $ordered = false)
     {
-        parent::__construct();
-    }
-
-    /** @return ListItemNode[] */
-    public function getChildren(): array
-    {
-        return $this->items;
+        parent::__construct($items);
     }
 
     public function isOrdered(): bool
