@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a8e018c04c5ba0af6a43e3be2804a7b",
+    "content-hash": "0c25e826b5036d8ae4d395a32fd89030",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1169,13 +1169,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "08073cb839895d8d0eaa32ff9324012397053864"
+                "reference": "78a8fb47f80d92a6703cf29006d582140a3315e1"
             },
             "require": {
                 "ext-json": "*",
                 "league/flysystem": "^1.0",
                 "league/tactician": "^1.1",
-                "league/uri": "^6.5",
+                "league/uri": "^6.5 || ^7.0",
                 "php": "^8.1",
                 "phpdocumentor/flyfinder": "^1.1",
                 "psr/event-dispatcher": "^1.0",

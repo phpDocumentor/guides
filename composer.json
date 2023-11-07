@@ -33,7 +33,7 @@
         "league/commonmark": "^2.4",
         "league/flysystem": "^1.0.5",
         "league/tactician": "^1.1",
-        "league/uri": "^6.5",
+        "league/uri": "^6.5 || ^7.0",
         "league/uri-interfaces": "^2.3",
         "phpdocumentor/flyfinder": "^1.1",
         "phpdocumentor/guides": "@dev",
