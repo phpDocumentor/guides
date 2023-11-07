@@ -9,14 +9,8 @@
     findUnusedCode="false"
 >
     <projectFiles>
-        <directory name="packages/guides/src"/>
-        <directory name="packages/guides/tests"/>
-
-        <directory name="packages/guides-markdown/src"/>
-<!--        <directory name="packages/guides-markdown/tests" />-->
-
-        <directory name="packages/guides-restructured-text/src"/>
-        <directory name="packages/guides-restructured-text/tests"/>
+        <directory name="packages/**/src"/>
+        <directory name="packages/**/tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
@@ -48,6 +42,7 @@
         <UndefinedFunction>
             <errorLevel type="suppress">
                 <referencedFunction name="tagged_iterator"/>
+                <referencedFunction name="template"/>
             </errorLevel>
         </UndefinedFunction>
     </issueHandlers>

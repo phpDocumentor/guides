@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+  <file src="packages/guides-cli/src/Command/Run.php">
+    <InvalidArgument>
+      <code><![CDATA[$settings->getInventories()]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="packages/guides-cli/src/Config/Configuration.php">
+    <UndefinedMethod>
+      <code>ignoreExtraKeys</code>
+    </UndefinedMethod>
+  </file>
+  <file src="packages/guides-cli/src/Logger/SpyProcessor.php">
+    <InvalidReturnStatement>
+      <code>$record</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code>array|LogRecord</code>
+    </InvalidReturnType>
+  </file>
+  <file src="packages/guides-graphs/src/Graphs/DependencyInjection/Configuration.php">
+    <UndefinedInterfaceMethod>
+      <code>scalarNode</code>
+    </UndefinedInterfaceMethod>
+  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
     <InvalidArgument>
       <code>$listConfig</code>

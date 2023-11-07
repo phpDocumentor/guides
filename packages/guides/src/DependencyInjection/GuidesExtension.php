@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
-use phpDocumentor\Guides\DependencyInjection\Compiler\HtmlNodeRendererPass;
+use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
-use phpDocumentor\Guides\DependencyInjection\Compiler\TexNodeRendererPass;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
@@ -19,14 +19,19 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_values;
 use function assert;
 use function dirname;
 use function is_array;
 use function pathinfo;
 
-class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface
+class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface, PrependExtensionInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -35,6 +40,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         assert($rootNode instanceof ArrayNodeDefinition);
 
         $rootNode
+            ->fixXmlConfig('template')
             ->children()
                 ->arrayNode('project')
                     ->children()
@@ -76,6 +82,21 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('templates')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('node')
+                                ->isRequired()
+                            ->end()
+                            ->scalarNode('file')
+                                ->isRequired()
+                            ->end()
+                            ->scalarNode('format')
+                                ->defaultValue('html')
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
                 ->scalarNode('default_code_language')->defaultValue('')->end()
                 ->arrayNode('themes')
@@ -177,6 +198,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/html';
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/tex';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
+        $container->setParameter('phpdoc.guides.node_templates', $config['templates']);
 
         foreach ($config['themes'] as $themeName => $themeConfig) {
             $container->getDefinition(ThemeManager::class)
@@ -187,8 +209,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
     public function process(ContainerBuilder $container): void
     {
         (new ParserRulesPass())->process($container);
-        (new HtmlNodeRendererPass())->process($container);
-        (new TexNodeRendererPass())->process($container);
+        (new NodeRendererPass())->process($container);
         (new RendererPass())->process($container);
     }
 
@@ -197,4 +218,59 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
     {
         return $this;
     }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig(
+            'guides',
+            [
+                'templates' => array_merge(
+                    templateArray(
+                        require dirname(__DIR__, 2) . '/resources/template/html/template.php',
+                        'html',
+                    ),
+                    templateArray(
+                        require dirname(__DIR__, 2) . '/resources/template/tex/template.php',
+                        'tex',
+                    ),
+                ),
+            ],
+        );
+    }
+}
+
+/**
+ * Helper function to configure multiple templates.
+ *
+ * This function is used to configure the templates in the configuration file.
+ *
+ * @param array<class-string<Node>, string> $input
+ *
+ * @return array<array-key, array{node: class-string<Node>, file: string, format: string}>
+ */
+function templateArray(array $input, string $format = 'html'): array
+{
+    return array_map(
+        static fn ($node, $template) => template($node, $template, $format),
+        array_keys($input),
+        array_values($input),
+    );
+}
+
+/**
+ * Helper function to configure templates.
+ *
+ * This function is used to configure the templates in the configuration file.
+ *
+ * @param class-string<Node> $node
+ *
+ * @return array{node: class-string<Node>, file: string, format: string}
+ */
+function template(string $node, string $template, string $format = 'html'): array
+{
+    return [
+        'node' => $node,
+        'file' => $template,
+        'format' => $format,
+    ];
 }

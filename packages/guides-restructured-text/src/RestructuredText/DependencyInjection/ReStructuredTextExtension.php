@@ -4,34 +4,22 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 
-use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
 use phpDocumentor\Guides\RestructuredText\DependencyInjection\Compiler\TextRolePass;
 use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\OptionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
-use phpDocumentor\Guides\TemplateRenderer;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 
 use function dirname;
-use function strrchr;
-use function substr;
+use function phpDocumentor\Guides\DependencyInjection\template;
 
 class ReStructuredTextExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
 {
-    private const HTML = [
-        VersionChangeNode::class => 'body/version-change.html.twig',
-        OptionNode::class => 'body/directive/option.html.twig',
-        ConfvalNode::class => 'body/directive/confval.html.twig',
-    ];
-    private const LATEX = [ConfvalNode::class => 'body/directive/confval.tex.twig'];
-
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -40,45 +28,27 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
             new FileLocator(dirname(__DIR__, 3) . '/resources/config'),
         );
 
-        foreach (self::HTML as $node => $template) {
-            $definition = new Definition(
-                TemplateNodeRenderer::class,
-                [
-                    '$renderer' => new Reference(TemplateRenderer::class),
-                    '$template' => $template,
-                    '$nodeClass' => $node,
-                ],
-            );
-            $definition->addTag('phpdoc.guides.noderenderer.html');
-
-            $container->setDefinition('phpdoc.guides.rst.html.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
-        }
-
-        foreach (self::LATEX as $node => $template) {
-            $definition = new Definition(
-                TemplateNodeRenderer::class,
-                [
-                    '$renderer' => new Reference(TemplateRenderer::class),
-                    '$template' => $template,
-                    '$nodeClass' => $node,
-                ],
-            );
-            $definition->addTag('phpdoc.guides.noderenderer.tex');
-
-            $container->setDefinition('phpdoc.guides.rst.tex.' . substr(strrchr($node, '\\') ?: '', 1), $definition);
-        }
-
         $loader->load('guides-restructured-text.php');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        $container->prependExtensionConfig('guides', [
-            'base_template_paths' => [
-                dirname(__DIR__, 3) . '/resources/template/html',
-                dirname(__DIR__, 3) . '/resources/template/latex',
+        $container->prependExtensionConfig(
+            'guides',
+            [
+                'base_template_paths' => [
+                    dirname(__DIR__, 3) . '/resources/template/html',
+                    dirname(__DIR__, 3) . '/resources/template/latex',
+                ],
+                'templates' => [
+                    template(ConfvalNode::class, 'body/directive/confval.html.twig'),
+                    template(VersionChangeNode::class, 'body/version-change.html.twig'),
+                    template(ConfvalNode::class, 'body/directive/confval.tex.twig', 'tex'),
+                    template(OptionNode::class, 'body/directive/option.html.twig'),
+
+                ],
             ],
-        ]);
+        );
     }
 
     public function process(ContainerBuilder $container): void
