@@ -32,7 +32,7 @@ For the PHP package to be an extension you need a class
 extending `\Symfony\Component\DependencyInjection\Extension\Extension` by 
 implementing the interface 
 `Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface` we
-can also add our ow configurations to our extension:
+can also add our own configurations to our extension:
 
 ..  literalinclude:: _YourExtension.php
     :language: php

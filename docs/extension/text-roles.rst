@@ -12,7 +12,7 @@ to introduce a new template in path :file:`resources/template/html/guides/inline
 See also :ref:`basic-text-role`.
 
 For more complex examples you can implement `\phpDocumentor\Guides\RestructuredText\TextRoles\TextRole`
-and let the method `processNode` return a custom `\phpDocumentor\Guides\Nodes\InlineToken` if this token extends
+and let the method `processNode` return a custom `\phpDocumentor\Guides\Nodes\InlineToken`. If this token extends
 `\phpDocumentor\Guides\Nodes\GenericTextRoleToken` the template will be automatically resolved by the name of the type.
 For more control rendering you can also implement your own token renderer.
 
