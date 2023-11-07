@@ -60,4 +60,10 @@
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="path" type="xsd:string" use="required"/>
     </xsd:complexType>
+
+    <xsd:complexType name="template">
+        <xsd:attribute name="file" type="xsd:string" use="required"/>
+        <xsd:attribute name="node" type="xsd:string" use="required"/>
+        <xsd:attribute name="format" type="xsd:string" default="html"/>
+    </xsd:complexType>
 </xsd:schema>

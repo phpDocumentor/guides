@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
 
 use function count;
 use function getcwd;
+use function is_array;
+use function iterator_to_array;
 
 final class Application extends BaseApplication
 {
@@ -19,6 +21,7 @@ final class Application extends BaseApplication
     {
         parent::__construct('phpDocumentor guides', '1.0.0');
 
+        $commands = is_array($commands) ? $commands : iterator_to_array($commands);
         foreach ($commands as $command) {
             $this->add($command);
         }
