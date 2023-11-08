@@ -144,38 +144,3 @@ parameters:
 			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:23\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
 			count: 1
 			path: packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:parse\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:render\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:run\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertFalse\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:markTestIncomplete\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/FunctionalTest.php
