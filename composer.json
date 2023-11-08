@@ -54,6 +54,8 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "ext-dom": "*",
+        "ext-libxml": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "doctrine/coding-standard": "^12.0",
         "fakerphp/faker": "^1.23",

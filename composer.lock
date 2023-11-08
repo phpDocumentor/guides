@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c25e826b5036d8ae4d395a32fd89030",
+    "content-hash": "4702e8ab68ddb64024cfbc6abee8fecd",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1165,7 +1165,7 @@
         },
         {
             "name": "phpdocumentor/guides",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
@@ -1212,7 +1212,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1260,7 +1260,7 @@
         },
         {
             "name": "phpdocumentor/guides-code",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
@@ -1294,7 +1294,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1335,7 +1335,7 @@
         },
         {
             "name": "phpdocumentor/guides-markdown",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
@@ -1370,7 +1370,7 @@
         },
         {
             "name": "phpdocumentor/guides-restructured-text",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
@@ -1407,7 +1407,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "dev-main",
+            "version": "dev-task/validate-xml",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -6859,9 +6859,12 @@
         "ext-json": "*",
         "ext-mbstring": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {
+        "ext-dom": "*",
+        "ext-libxml": "*"
+    },
     "platform-overrides": {
         "php": "8.1.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
