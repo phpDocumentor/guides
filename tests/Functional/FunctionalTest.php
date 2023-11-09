@@ -14,6 +14,8 @@ use Monolog\LogRecord;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
@@ -89,9 +91,11 @@ class FunctionalTest extends ApplicationTestCase
             }
 
             $parser = $this->getContainer()->get(Parser::class);
+            assert($parser instanceof Parser);
             $document = $parser->parse($rst);
 
             $compiler = $this->getContainer()->get(Compiler::class);
+            assert($compiler instanceof Compiler);
             $compiler->run([$document], new CompilerContext(new ProjectNode()));
 
             $inputFilesystem = new Filesystem(new MemoryAdapter());
@@ -104,6 +108,7 @@ class FunctionalTest extends ApplicationTestCase
             $settingsManager = $this->createMock(SettingsManager::class);
             $settingsManager->method('getProjectSettings')->willReturn($projectSettings);
 
+            /** @var NodeRenderer<Node> $renderer */
             $renderer = $this->getContainer()->get('phpdoc.guides.output_node_renderer');
             $context = RenderContext::forDocument(
                 $document,
@@ -144,18 +149,18 @@ class FunctionalTest extends ApplicationTestCase
             $logRecords = array_map(
                 static fn (array|LogRecord $log) => $log['level_name'] . ': ' . $log['message'],
                 array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING &&
-                    !in_array($log['message'], self::IGNORED_WARNINGS)),
+                    !in_array($log['message'], self::IGNORED_WARNINGS, true)),
             );
             self::assertEquals($expectedLogs, array_values($logRecords));
         } catch (ExpectationFailedException $e) {
             if ($skip) {
-                $this->markTestIncomplete(substr($firstLine, 5) ?: '');
+                self::markTestIncomplete(substr($firstLine, 5) ?: '');
             }
 
             throw $e;
         }
 
-        $this->assertFalse($skip, 'Test passes while marked as SKIP.');
+        self::assertFalse($skip, 'Test passes while marked as SKIP.');
     }
 
     /** @return mixed[] */
@@ -201,7 +206,12 @@ class FunctionalTest extends ApplicationTestCase
                 $useIndenter = !in_array($basename, self::SKIP_INDENTER_FILES, true);
 
                 $logFile = $file->getPath() . '/' . $file->getFilenameWithoutExtension() . '.log';
-                $logs = file_exists($logFile) ? array_map(trim(...), file($logFile)) : [];
+                $logs = [];
+                if (file_exists($logFile)) {
+                    $logFileContent = file($logFile);
+                    self::assertIsArray($logFileContent);
+                    $logs = array_map(trim(...), $logFileContent);
+                }
 
                 $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $useIndenter, $logs];
             }
