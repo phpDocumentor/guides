@@ -64,6 +64,19 @@ class RenderContext
         return $self;
     }
 
+    public function withDocument(DocumentNode $documentNode): self
+    {
+        return self::forDocument(
+            $documentNode,
+            $this->allDocuments,
+            $this->origin,
+            $this->destination,
+            $this->destinationPath,
+            $this->outputFormat,
+            $this->projectNode,
+        );
+    }
+
     /** @param DocumentNode[] $allDocumentNodes */
     public static function forProject(
         ProjectNode $projectNode,

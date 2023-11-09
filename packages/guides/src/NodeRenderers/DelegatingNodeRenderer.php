@@ -14,6 +14,10 @@ final class DelegatingNodeRenderer implements NodeRenderer, NodeRendererFactoryA
 
     public function setNodeRendererFactory(NodeRendererFactory $nodeRendererFactory): void
     {
+        if (isset($this->nodeRendererFactory)) {
+            return;
+        }
+
         $this->nodeRendererFactory = $nodeRendererFactory;
     }
 
