@@ -26,7 +26,7 @@ final class InventoryLoaderTest extends TestCase
     {
         $this->jsonLoader = $this->createMock(JsonLoader::class);
         $this->inventoryLoader = new InventoryLoader($this->jsonLoader);
-        $this->inventoryRepository = new InventoryRepository($this->inventoryLoader);
+        $this->inventoryRepository = new InventoryRepository($this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);

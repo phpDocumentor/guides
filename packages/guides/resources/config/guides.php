@@ -105,6 +105,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(DocumentNodeTraverser::class)
 
         ->set(InventoryRepository::class)
+        ->arg('$inventoryConfigs', param('phpdoc.guides.inventories'))
 
         ->set(InventoryLoader::class)
 

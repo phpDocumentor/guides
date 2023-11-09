@@ -14,14 +14,11 @@ class InventoryRepository
     /** @var array<string, Inventory>  */
     private array $inventories = [];
 
-    public function __construct(private readonly InventoryLoader $inventoryLoader)
-    {
-    }
-
     /** @param array<int, array<string, string>> $inventoryConfigs */
-    public function initialize(array $inventoryConfigs): void
-    {
-        $this->inventories = [];
+    public function __construct(
+        private readonly InventoryLoader $inventoryLoader,
+        array $inventoryConfigs,
+    ) {
         foreach ($inventoryConfigs as $inventory) {
             $this->inventories[$inventory['id']] = new Inventory($inventory['url']);
         }

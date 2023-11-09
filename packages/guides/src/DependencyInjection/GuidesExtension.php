@@ -41,6 +41,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         $rootNode
             ->fixXmlConfig('template')
+            ->fixXmlConfig('inventory', 'inventories')
             ->children()
                 ->arrayNode('project')
                     ->children()
@@ -49,13 +50,13 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                     ->end()
                 ->end()
                 ->arrayNode('inventories')
-                    ->children()
-                        ->arrayNode('inventory')
-                            ->arrayPrototype()
-                                ->children()
-                                    ->scalarNode('id')->end()
-                                    ->scalarNode('url')->end()
-                                ->end()
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('id')
+                                ->isRequired()
+                            ->end()
+                                ->scalarNode('url')
+                                ->isRequired()
                             ->end()
                         ->end()
                     ->end()
@@ -144,7 +145,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         }
 
         if (isset($config['inventories'])) {
-            $projectSettings->setInventories($config['inventories']['inventory']);
+            $projectSettings->setInventories($config['inventories']);
         }
 
         if (isset($config['theme'])) {
@@ -199,6 +200,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
         $config['base_template_paths'][] = dirname(__DIR__, 2) . '/resources/template/tex';
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
         $container->setParameter('phpdoc.guides.node_templates', $config['templates']);
+        $container->setParameter('phpdoc.guides.inventories', $config['inventories']);
 
         foreach ($config['themes'] as $themeName => $themeConfig) {
             $container->getDefinition(ThemeManager::class)
