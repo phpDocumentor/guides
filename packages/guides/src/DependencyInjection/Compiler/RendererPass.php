@@ -20,22 +20,7 @@ final class RendererPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        //Node Renderer factory
-
-        //Inject node renderer factory into node renderer factory aware services
-
-
         $definitions = [];
-
-        foreach ($container->findTaggedServiceIds('phpdoc.guides.noderendererfactoryaware') as $id => $tags) {
-            $definition = $container->getDefinition($id);
-            $definition->addMethodCall(
-                'setNodeRendererFactory',
-                [new Reference('phpdoc.guides.noderenderer.factory.html')],
-            );
-            $definition->clearTag('phpdoc.guides.noderendererfactoryaware');
-        }
-
         foreach ($container->findTaggedServiceIds('phpdoc.renderer.typerenderer') as $id => $tags) {
             foreach ($tags as $tag) {
                 if (isset($tag['noderender_tag']) === false) {
@@ -46,7 +31,8 @@ final class RendererPass implements CompilerPassInterface
                 $definitions[sprintf('phpdoc.guides.noderenderer.prefactory.%s', $tag['format'])] = $this->createPreNodeRendererFactory($tag);
                 $definitions[sprintf('phpdoc.guides.noderenderer.delegating.%s', $tag['format'])] = $this->createDelegatingNodeRender($tag);
                 $definitions[sprintf('phpdoc.guides.noderenderer.default.%s', $tag['format'])] = (new Definition(DefaultNodeRenderer::class))->setAutowired(true)
-                    ->addTag('phpdoc.guides.noderenderer.html');
+                    ->addMethodCall('setNodeRendererFactory', [new Reference(sprintf('phpdoc.guides.noderenderer.factory.%s', $tag['format']))])
+                    ->addTag(sprintf('phpdoc.guides.noderenderer.%s', $tag['format']));
             }
         }
 

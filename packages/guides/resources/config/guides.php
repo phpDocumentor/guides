@@ -17,7 +17,6 @@ use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
-use phpDocumentor\Guides\NodeRenderers\NodeRendererFactoryAware;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
@@ -68,9 +67,6 @@ return static function (ContainerConfigurator $container): void {
         ->autowire()
         ->autoconfigure()
 
-        ->instanceof(NodeRendererFactoryAware::class)
-        ->tag('phpdoc.guides.noderendererfactoryaware')
-
         ->instanceof(CompilerPass::class)
         ->tag('phpdoc.guides.compiler.passes')
 
@@ -88,11 +84,6 @@ return static function (ContainerConfigurator $container): void {
         ->load(
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
             '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php',
-        )
-
-        ->load(
-            'phpDocumentor\\Guides\\NodeRenderers\\',
-            '%vendor_dir%/phpdocumentor/guides/src/NodeRenderers',
         )
 
         ->set(AbsoluteUrlGenerator::class)
