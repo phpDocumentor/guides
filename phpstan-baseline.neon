@@ -21,11 +21,6 @@ parameters:
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
-			message: "#^Parameter \\#1 \\$inventoryConfigs of method phpDocumentor\\\\Guides\\\\Interlink\\\\InventoryRepository\\:\\:initialize\\(\\) expects array\\<int, array\\<string, string\\>\\>, array\\<string, string\\> given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
 			message: "#^Parameter \\#1 \\$iterable of method Symfony\\\\Component\\\\Console\\\\Helper\\\\ProgressBar\\:\\:iterate\\(\\) expects iterable, mixed given\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/Run.php

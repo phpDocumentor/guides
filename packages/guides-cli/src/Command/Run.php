@@ -17,7 +17,6 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
-use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
@@ -50,7 +49,6 @@ final class Run extends Command
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
-        private readonly InventoryRepository $inventoryRepository,
     ) {
         parent::__construct('run');
 
@@ -175,7 +173,6 @@ final class Run extends Command
             $settings->getTitle() === '' ? null : $settings->getTitle(),
             $settings->getVersion() === '' ? null : $settings->getVersion(),
         );
-        $this->inventoryRepository->initialize($settings->getInventories());
 
         $outputDir = $this->getAbsolutePath($settings->getOutput());
         $sourceFileSystem = new Filesystem(new Local($settings->getInput()));

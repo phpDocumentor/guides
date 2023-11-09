@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <guides>
     <project title="My Project" version="main (development)" />
-    <inventories>
-        <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/" />
-        <inventory id="t3home" url="https://docs.typo3.org/" />
-    </inventories>
+    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/" />
+    <inventory id="t3home" url="https://docs.typo3.org/" />
 </guides>

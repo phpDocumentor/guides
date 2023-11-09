@@ -13,6 +13,8 @@
             <xsd:element name="theme" type="theme" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="extension" type="extension" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="output-format" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="inventory" type="inventory" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="template" type="template" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:choice>
 
         <xsd:attribute name="input" type="xsd:string"/>
@@ -24,6 +26,7 @@
         <xsd:attribute name="show-progress" type="xsd:string"/>
         <xsd:attribute name="theme" type="xsd:string"/>
         <xsd:attribute name="default-code-language" type="xsd:string"/>
+
     </xsd:complexType>
 
     <xsd:complexType name="extension">
@@ -50,15 +53,9 @@
         <xsd:attribute name="extends" type="xsd:string"/>
     </xsd:complexType>
 
-    <xsd:complexType name="inventories">
-        <xsd:sequence>
-            <xsd:element name="inventory" type="inventory" minOccurs="1" maxOccurs="unbounded"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
     <xsd:complexType name="inventory">
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="path" type="xsd:string" use="required"/>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="template">
