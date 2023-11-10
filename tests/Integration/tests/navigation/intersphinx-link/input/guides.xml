@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<guides>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
+>
     <project title="My Project" version="main (development)" />
     <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/" />
     <inventory id="someapi" url="https://docs.typo3.org/m/typo3/reference-someapi/main/en-us/" />
