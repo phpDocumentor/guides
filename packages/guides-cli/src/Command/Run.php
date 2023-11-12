@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -49,6 +50,7 @@ final class Run extends Command
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
+        private readonly ClockInterface $clock,
     ) {
         parent::__construct('run');
 
@@ -172,6 +174,7 @@ final class Run extends Command
         $projectNode = new ProjectNode(
             $settings->getTitle() === '' ? null : $settings->getTitle(),
             $settings->getVersion() === '' ? null : $settings->getVersion(),
+            $this->clock->now(),
         );
 
         $outputDir = $this->getAbsolutePath($settings->getOutput());

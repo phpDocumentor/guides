@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use DateTimeImmutable;
 use Exception;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
-
-use function date;
 
 use const DATE_RFC2822;
 
@@ -38,12 +37,14 @@ class ProjectNode extends CompoundNode
     public function __construct(
         private string|null $title = null,
         private string|null $version = null,
+        private DateTimeImmutable|null $lastRendered = null,
     ) {
+        $this->lastRendered ??= new DateTimeImmutable();
         $this->addVariable('project', new PlainTextInlineNode($title ?? ''));
         $this->addVariable('version', new PlainTextInlineNode($version ?? ''));
         $this->addVariable('release', new PlainTextInlineNode($version ?? ''));
-        $this->addVariable('last_rendered', new PlainTextInlineNode(date(DATE_RFC2822)));
-        $this->addVariable('today', new PlainTextInlineNode(date(DATE_RFC2822)));
+        $this->addVariable('last_rendered', new PlainTextInlineNode($this->lastRendered->format(DATE_RFC2822)));
+        $this->addVariable('today', new PlainTextInlineNode($this->lastRendered->format(DATE_RFC2822)));
 
         parent::__construct();
     }
@@ -158,5 +159,10 @@ class ProjectNode extends CompoundNode
     public function reset(): void
     {
         $this->documentEntries = [];
+    }
+
+    public function getLastRendered(): DateTimeImmutable
+    {
+        return $this->lastRendered;
     }
 }
