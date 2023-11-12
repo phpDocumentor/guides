@@ -64,7 +64,9 @@ class IntegrationTest extends ApplicationTestCase
             system('mkdir ' . escapeshellarg($outputPath));
 
             $this->prepareContainer($configurationFile);
+
             $command = $this->getContainer()->get(Run::class);
+
             assert($command instanceof Run);
 
             $input = new ArrayInput(

@@ -33,13 +33,14 @@ class ProjectNode extends CompoundNode
 
     /** @var DocumentEntryNode[] */
     private array $documentEntries = [];
+    private DateTimeImmutable $lastRendered;
 
     public function __construct(
         private string|null $title = null,
         private string|null $version = null,
-        private DateTimeImmutable|null $lastRendered = null,
+        DateTimeImmutable|null $lastRendered = null,
     ) {
-        $this->lastRendered ??= new DateTimeImmutable();
+        $this->lastRendered = $lastRendered ?? new DateTimeImmutable();
         $this->addVariable('project', new PlainTextInlineNode($title ?? ''));
         $this->addVariable('version', new PlainTextInlineNode($version ?? ''));
         $this->addVariable('release', new PlainTextInlineNode($version ?? ''));

@@ -8,8 +8,11 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Parser;
+use Psr\Clock\ClockInterface;
+use Symfony\Component\Clock\MockClock;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -25,6 +28,9 @@ class TestExtension extends Extension implements CompilerPassInterface
         $container->getDefinition(Parser::class)->setPublic(true);
         $container->getDefinition(Compiler::class)->setPublic(true);
         $container->getDefinition('phpdoc.guides.output_node_renderer')->setPublic(true);
+
+        $clockDefinition = new Definition(MockClock::class, ['2023-01-01 12:00:00']);
+        $container->setDefinition(ClockInterface::class, $clockDefinition);
 
         $container->register(TestHandler::class, TestHandler::class)->setPublic(true);
         $container->getDefinition(Logger::class)
