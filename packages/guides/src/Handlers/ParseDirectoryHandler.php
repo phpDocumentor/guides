@@ -52,10 +52,22 @@ final class ParseDirectoryHandler
         string $sourceFormat,
     ): string {
         $extension = $sourceFormat;
-        $hasIndexFile = false;
+
+        // On macOS filesystems, a file-check against "index.rst"
+        // using $filesystem->has() would return TRUE, when in fact
+        // a file might be stored as "Index.rst". Thus, at this point
+        // we fetch the whole directory list and compare the contents
+        // with if the INDEX_FILE_NAMES entry matches. This ensures
+        // that we get the file with exactly the casing that is returned
+        // from the filesystem.
+        $contentFromFilesystem = $filesystem->listContents($directory);
+        $hashedContentFromFilesystem = [];
+        foreach($contentFromFilesystem AS $itemFromFilesystem) {
+            $hashedContentFromFilesystem[$itemFromFilesystem['basename']] = true;
+        }
         foreach (self::INDEX_FILE_NAMES as $indexName) {
             $indexFilename = sprintf('%s.%s', $indexName, $extension);
-            if ($filesystem->has($directory . '/' . $indexFilename)) {
+            if (isset($hashedContentFromFilesystem[$indexFilename])) {
                 return $indexName;
             }
         }
