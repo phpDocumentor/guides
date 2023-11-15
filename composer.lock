@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b9660654f012394e3a4425c09c5ba33",
+    "content-hash": "a328cccb497966f52d6f460eb696d916",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1933,16 +1933,16 @@
         },
         {
             "name": "symfony/contracts",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "9e4b5e4e44e7620475dbceecf7c72c3883f3ea35"
+                "reference": "f59eb1feac6dcc21b5954f7ab3e7a902160de9d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/9e4b5e4e44e7620475dbceecf7c72c3883f3ea35",
-                "reference": "9e4b5e4e44e7620475dbceecf7c72c3883f3ea35",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/f59eb1feac6dcc21b5954f7ab3e7a902160de9d3",
+                "reference": "f59eb1feac6dcc21b5954f7ab3e7a902160de9d3",
                 "shasum": ""
             },
             "require": {
@@ -2002,12 +2002,13 @@
                 "abstractions",
                 "contracts",
                 "decoupling",
+                "dev",
                 "interfaces",
                 "interoperability",
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -2023,7 +2024,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-30T17:17:10+00:00"
+            "time": "2023-10-02T13:27:40+00:00"
         },
         {
             "name": "symfony/dependency-injection",
