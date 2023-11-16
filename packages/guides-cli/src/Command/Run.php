@@ -68,7 +68,7 @@ final class Run extends Command
             'input-file',
             null,
             InputOption::VALUE_REQUIRED,
-            'If set, only specified file is parsed, relative to the directory specified in "input"',
+            'If set, only the specified file is parsed, relative to the directory specified in "input"',
         );
 
         $this->addOption(
