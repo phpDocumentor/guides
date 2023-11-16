@@ -62,9 +62,10 @@ final class ParseDirectoryHandler
         // from the filesystem.
         $contentFromFilesystem = $filesystem->listContents($directory);
         $hashedContentFromFilesystem = [];
-        foreach($contentFromFilesystem AS $itemFromFilesystem) {
+        foreach ($contentFromFilesystem as $itemFromFilesystem) {
             $hashedContentFromFilesystem[$itemFromFilesystem['basename']] = true;
         }
+
         foreach (self::INDEX_FILE_NAMES as $indexName) {
             $indexFilename = sprintf('%s.%s', $indexName, $extension);
             if (isset($hashedContentFromFilesystem[$indexFilename])) {
