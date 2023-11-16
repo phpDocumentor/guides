@@ -55,52 +55,52 @@ final class Run extends Command
         $this->addArgument(
             'input',
             InputArgument::OPTIONAL,
-            'Directory to read for files',
+            'Directory which holds the files to render',
         );
         $this->addOption(
             'output',
             null,
             InputOption::VALUE_REQUIRED,
-            'Directory to read for files',
+            'Directory to write rendered files to',
         );
 
         $this->addOption(
             'input-file',
             null,
             InputOption::VALUE_REQUIRED,
-            'If set only this file is parsed.',
+            'If set, only the specified file is parsed, relative to the directory specified in "input"',
         );
 
         $this->addOption(
             'input-format',
             null,
             InputOption::VALUE_REQUIRED,
-            'Format of the input can be RST, or Markdown',
+            'Format of the input can be "RST", or "Markdown"',
         );
         $this->addOption(
             'output-format',
             null,
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'Format of the input can be html and or interlink',
+            'Format of the input can be "html" and/or "interlink"',
         );
         $this->addOption(
             'log-path',
             null,
             InputOption::VALUE_REQUIRED,
-            'Write log to this path',
+            'Write rendering log to this path',
         );
         $this->addOption(
             'fail-on-log',
             null,
             InputOption::VALUE_NONE,
-            'Use a non-zero exit code as soon as any log is written',
+            'If set, returns a non-zero exit code as soon as any warnings/errors occur',
         );
 
         $this->addOption(
             'theme',
             null,
             InputOption::VALUE_REQUIRED,
-            'The theme used for rendering.',
+            'The theme used for rendering',
         );
 
         $this->addOption(
