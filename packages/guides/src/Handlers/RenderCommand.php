@@ -7,22 +7,29 @@ namespace phpDocumentor\Guides\Handlers;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Renderer\DocumentListIterator;
+use phpDocumentor\Guides\Renderer\DocumentTreeIterator;
 
 final class RenderCommand
 {
-    /**
-     * @param DocumentNode[] $documentArray
-     * @param iterable<DocumentNode> $documentIterator
-     */
+    private DocumentListIterator $documentIterator;
+
+    /** @param DocumentNode[] $documentArray */
     public function __construct(
         private readonly string $outputFormat,
         private readonly array $documentArray,
-        private readonly iterable $documentIterator,
         private readonly FilesystemInterface $origin,
         private readonly FilesystemInterface $destination,
         private readonly ProjectNode $projectNode,
         private readonly string $destinationPath = '/',
     ) {
+        $this->documentIterator = new DocumentListIterator(
+            new DocumentTreeIterator(
+                [$this->projectNode->getRootDocumentEntry()],
+                $this->documentArray,
+            ),
+            $this->documentArray,
+        );
     }
 
     public function getOutputFormat(): string
@@ -36,8 +43,7 @@ final class RenderCommand
         return $this->documentArray;
     }
 
-    /** @return iterable<DocumentNode> $documentIterator */
-    public function getDocumentIterator(): iterable
+    public function getDocumentIterator(): DocumentListIterator
     {
         return $this->documentIterator;
     }

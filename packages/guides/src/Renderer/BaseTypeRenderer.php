@@ -17,19 +17,20 @@ abstract class BaseTypeRenderer implements TypeRenderer
 
     public function render(RenderCommand $renderCommand): void
     {
-        foreach ($renderCommand->getDocumentIterator() as $document) {
+        $context = RenderContext::forProject(
+            $renderCommand->getProjectNode(),
+            $renderCommand->getDocumentArray(),
+            $renderCommand->getOrigin(),
+            $renderCommand->getDestination(),
+            $renderCommand->getDestinationPath(),
+            $renderCommand->getOutputFormat(),
+        )->withIterator($renderCommand->getDocumentIterator());
+
+        foreach ($context->getIterator() as $document) {
             $this->commandBus->handle(
                 new RenderDocumentCommand(
                     $document,
-                    RenderContext::forDocument(
-                        $document,
-                        $renderCommand->getDocumentArray(),
-                        $renderCommand->getOrigin(),
-                        $renderCommand->getDestination(),
-                        $renderCommand->getDestinationPath(),
-                        $renderCommand->getOutputFormat(),
-                        $renderCommand->getProjectNode(),
-                    ),
+                    $context->withDocument($document),
                 ),
             );
         }

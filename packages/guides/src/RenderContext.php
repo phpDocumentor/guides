@@ -29,6 +29,8 @@ class RenderContext
     /** @var DocumentNode[] */
     private array $allDocuments;
 
+    private Renderer\DocumentListIterator $iterator;
+
     private function __construct(
         private readonly string $destinationPath,
         private readonly string|null $currentFileName,
@@ -75,6 +77,14 @@ class RenderContext
             $this->outputFormat,
             $this->projectNode,
         );
+    }
+
+    public function withIterator(Renderer\DocumentListIterator $iterator): self
+    {
+        $that = clone $this;
+        $that->iterator = $iterator;
+
+        return $that;
     }
 
     /** @param DocumentNode[] $allDocumentNodes */
@@ -191,5 +201,10 @@ class RenderContext
     public function getOutputFormat(): string
     {
         return $this->outputFormat;
+    }
+
+    public function getIterator(): Renderer\DocumentListIterator
+    {
+        return $this->iterator;
     }
 }

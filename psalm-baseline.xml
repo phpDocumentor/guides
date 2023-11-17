@@ -50,4 +50,9 @@
       <code>[new SectionNode(TitleNode::emptyNode())]</code>
     </InvalidArgument>
   </file>
+  <file src="packages/guides/tests/unit/Renderer/IteratorTestCase.php">
+    <InvalidArgument>
+      <code>[new SectionNode($titleNode)]</code>
+    </InvalidArgument>
+  </file>
 </files>
