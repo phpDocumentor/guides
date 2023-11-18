@@ -70,15 +70,19 @@ class CodeBlockDirective extends BaseDirective
         return $node;
     }
 
-    /** @param mixed[] $options */
+    /** @param array<string, DirectiveOption> $options */
     private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
     {
         $startingLineNumber = null;
-        if (isset($options['linenos'])) {
+        if (isset($options['linenos']) || isset($options['number-lines'])) {
             $startingLineNumber = 1;
         }
 
-        $startingLineNumber = $options['number-lines'] ?? $options['lineno-start'] ?? $startingLineNumber;
+        if (isset($options['number-lines'])) {
+            $startingLineNumber = $options['number-lines']->getValue() ?? $startingLineNumber;
+        } elseif (isset($options['lineno-start'])) {
+            $startingLineNumber = $options['lineno-start']->getValue() ?? $startingLineNumber;
+        }
 
         if ($startingLineNumber === null) {
             return;
