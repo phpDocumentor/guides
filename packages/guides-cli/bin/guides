@@ -38,8 +38,11 @@ if (is_file($vendorDir . '/../guides.xml')) {
     // vendor folder was placed directly into the project directory
     $containerFactory->addConfigFile($vendorDir . '/../guides.xml');
 }
-if (is_file($input->getParameterOption('--config', getcwd(), true).'/guides.xml')) {
-    $containerFactory->addConfigFile($input->getParameterOption('--config', getcwd(), true).'/guides.xml');
+
+$workingDir = $input->getParameterOption('--working-dir', getcwd(), true);
+
+if (is_file($input->getParameterOption('--config', $workingDir, true).'/guides.xml')) {
+    $containerFactory->addConfigFile($input->getParameterOption('--config', $workingDir, true).'/guides.xml');
 }
 $container = $containerFactory->create($vendorDir);
 
