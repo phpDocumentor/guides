@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Integration;
 
-use DOMDocument;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Cli\Command\Run;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -22,11 +21,7 @@ use function explode;
 use function file_exists;
 use function file_get_contents;
 use function implode;
-use function libxml_clear_errors;
-use function libxml_get_errors;
-use function libxml_use_internal_errors;
 use function setlocale;
-use function sprintf;
 use function str_ends_with;
 use function str_replace;
 use function system;
@@ -172,65 +167,6 @@ class IntegrationTest extends ApplicationTestCase
     public static function getTestsForLatex(): array
     {
         return self::getTestsForDirectory(__DIR__ . '/tests-latex');
-    }
-
-    #[DataProvider('getTestsWithGuidesXmlForDirectoryTest')]
-    public function testXmlValidation(string $xmlFile): void
-    {
-        $xsdFile = 'packages/guides-cli/resources/schema/guides.xsd';
-        libxml_use_internal_errors(true);
-        // Create a DOMDocument for XML validation
-        $dom = new DOMDocument();
-        $dom->load($xmlFile);
-
-        // Validate against XSD schema
-        $isValid = $dom->schemaValidate($xsdFile);
-        $errorString = '';
-
-        if (!$isValid) {
-            $errors = libxml_get_errors();
-
-            foreach ($errors as $error) {
-                $errorString .= sprintf("Validation Error at line %s: %s\n", $error->line, $error->message);
-            }
-
-            libxml_clear_errors();
-        }
-
-        self::assertTrue($isValid, 'XML of ' . $xmlFile . ' does not validate against the schema: ' . $errorString);
-    }
-
-    /** @return mixed[] */
-    public static function getTestsWithGuidesXmlForDirectoryTest(): array
-    {
-        return self::getTestsWithGuidesXmlForSubDirectoryTest('tests/Integration/tests');
-    }
-
-    /** @return mixed[] */
-    private static function getTestsWithGuidesXmlForSubDirectoryTest(string $directory = 'tests'): array
-    {
-        $finder = new SymfonyFinder();
-        $finder
-            ->directories()
-            ->in($directory)
-            ->depth('== 0');
-
-        $tests = [];
-
-        foreach ($finder as $dir) {
-            if (!file_exists($dir->getPathname() . '/input')) {
-                $tests = array_merge($tests, self::getTestsWithGuidesXmlForSubDirectoryTest($dir->getPathname()));
-                continue;
-            }
-
-            if (!file_exists($dir->getPathname() . '/input/guides.xml')) {
-                continue;
-            }
-
-            $tests[$dir->getRelativePathname()] = [$dir->getPathname() . '/input/guides.xml'];
-        }
-
-        return $tests;
     }
 
     /** @return mixed[] */

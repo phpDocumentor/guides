@@ -28,7 +28,7 @@ psalm:
 	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
-test: test-unit test-functional test-integration test-docs## Runs all test suites with phpunit/phpunit
+test: test-unit test-functional test-integration test-xml test-docs## Runs all test suites with phpunit/phpunit
 
 .PHONY: test-unit
 test-unit: ## Runs unit tests with phpunit/phpunit
@@ -41,6 +41,10 @@ test-functional: ## Runs functional tests with phpunit/phpunit
 .PHONY: test-integration
 test-integration: ## Runs integration tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
+
+.PHONY: test-xml
+test-xml: ## Lint all guides.xml
+	./tools/xmllint.sh
 
 .PHONY: test-docs
 test-docs: ## Generate projects docs without warnings
