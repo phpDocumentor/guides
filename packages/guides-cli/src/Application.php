@@ -44,6 +44,14 @@ final class Application extends BaseApplication
             getcwd(),
         ));
 
+        $definition->addOption(new InputOption(
+            'working-dir',
+            'w',
+            InputOption::VALUE_REQUIRED,
+            'If specified, use the given directory as working directory.',
+            null,
+        ));
+
         return $definition;
     }
 }
