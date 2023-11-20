@@ -22,6 +22,8 @@ class CodeNode extends TextNode
 
     private string|null $caption = null;
 
+    private string|null $emphasizeLines = null;
+
     /** @param string[] $lines */
     public function __construct(array $lines, protected string|null $language = null)
     {
@@ -56,5 +58,15 @@ class CodeNode extends TextNode
     public function setCaption(string|null $caption): void
     {
         $this->caption = $caption;
+    }
+
+    public function getEmphasizeLines(): string|null
+    {
+        return $this->emphasizeLines;
+    }
+
+    public function setEmphasizeLines(string|null $emphasizeLines): void
+    {
+        $this->emphasizeLines = $emphasizeLines;
     }
 }
