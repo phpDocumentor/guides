@@ -10,7 +10,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOption
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use Psr\Log\LoggerInterface;
 
+use function preg_match;
 use function trim;
 
 /**
@@ -26,8 +28,13 @@ use function trim;
  */
 class CodeBlockDirective extends BaseDirective
 {
-    public function __construct(private readonly CodeNodeOptionMapper $codeNodeOptionMapper)
-    {
+    /** @see https://regex101.com/r/I3KttH/1 */
+    public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d+)?(?:,\s*\d+(-\d+)?)*$/';
+
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
+    ) {
     }
 
     public function getName(): string
@@ -58,6 +65,7 @@ class CodeBlockDirective extends BaseDirective
 
         $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
         $this->setCaptionBasedOnOptions($directive->getOptions(), $node);
+        $this->setEmphasizeLinesBasedOnOptions($blockContext, $directive->getOptions(), $node);
         $this->codeNodeOptionMapper->apply($node, $directive->getOptions());
 
         if ($directive->getVariable() !== '') {
@@ -100,5 +108,20 @@ class CodeBlockDirective extends BaseDirective
         }
 
         $node->setCaption($caption);
+    }
+
+    /** @param DirectiveOption[] $options */
+    private function setEmphasizeLinesBasedOnOptions(BlockContext $blockContext, array $options, CodeNode $node): void
+    {
+        $emphasizeLines = null;
+        if (isset($options['emphasize-lines'])) {
+            $emphasizeLines = (string) $options['emphasize-lines']->getValue();
+            if (!preg_match(self::LINE_NUMBER_RANGES_REGEX, $emphasizeLines)) {
+                // Input does not fit the pattern, log a warning
+                $this->logger->warning('Invalid value for option emphasize-lines in code-block directive. Expected format: \'1-5, 7, 33\'', $blockContext->getLoggerInformation());
+            }
+        }
+
+        $node->setEmphasizeLines($emphasizeLines);
     }
 }

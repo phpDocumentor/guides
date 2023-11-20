@@ -103,7 +103,7 @@ NOWDOC);
             $this->givenInlineMarkupRule(),
             new Logger('test'),
             new GeneralDirective(new DirectiveContentRule(new RuleContainer())),
-            [$this->directiveHandler, new CodeBlockDirective(new CodeNodeOptionMapper())],
+            [$this->directiveHandler, new CodeBlockDirective(new Logger('test'), new CodeNodeOptionMapper())],
         );
         $context = $this->createContext($input);
         $node = $this->rule->apply($context);
