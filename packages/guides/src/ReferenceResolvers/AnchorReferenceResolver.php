@@ -28,6 +28,10 @@ class AnchorReferenceResolver implements ReferenceResolver
     {
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
         if ($node instanceof ReferenceNode) {
+            if ($node->getInterlinkDomain() !== '') {
+                return false;
+            }
+
             $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
         } else {
             // Todo: move this to a separate resolver?
