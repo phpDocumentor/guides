@@ -21,9 +21,13 @@ use function explode;
 use function file_exists;
 use function file_get_contents;
 use function implode;
+use function PHPUnit\Framework\assertIsString;
 use function setlocale;
 use function str_ends_with;
 use function str_replace;
+use function strlen;
+use function strpos;
+use function substr;
 use function system;
 use function trim;
 
@@ -31,6 +35,9 @@ use const LC_ALL;
 
 class IntegrationTest extends ApplicationTestCase
 {
+    private const CONTENT_START = '<!-- content start -->';
+    private const CONTENT_END = '<!-- content end -->';
+
     protected function setUp(): void
     {
         setlocale(LC_ALL, 'en_US.utf8');
@@ -44,6 +51,23 @@ class IntegrationTest extends ApplicationTestCase
         string $outputPath,
         array $compareFiles,
     ): void {
+        $this->compareHtmlIntegration($outputPath, $inputPath, $expectedPath, $compareFiles, true);
+    }
+
+    /** @param list<string> $compareFiles */
+    #[DataProvider('getTestsForDirectoryTestsFull')]
+    public function testHtmlIntegrationFullFile(
+        string $inputPath,
+        string $expectedPath,
+        string $outputPath,
+        array $compareFiles,
+    ): void {
+        $this->compareHtmlIntegration($outputPath, $inputPath, $expectedPath, $compareFiles, false);
+    }
+
+    /** @param list<string> $compareFiles */
+    private function compareHtmlIntegration(string $outputPath, string $inputPath, string $expectedPath, array $compareFiles, bool $htmlOnlyBetweenMarkers): void
+    {
         system('rm -rf ' . escapeshellarg($outputPath));
         self::assertDirectoryExists($inputPath);
         self::assertDirectoryExists($expectedPath);
@@ -91,6 +115,14 @@ class IntegrationTest extends ApplicationTestCase
                 $outputFile = str_replace($expectedPath, $outputPath, $compareFile);
                 if (str_ends_with($compareFile, '.log')) {
                     self::assertFileContainsLines($compareFile, $outputFile);
+                } elseif ($htmlOnlyBetweenMarkers && str_ends_with($compareFile, '.html')) {
+                    self::assertFileEqualsTrimmedBetweenMarkers(
+                        $compareFile,
+                        $outputFile,
+                        'Expected file path: ' . $compareFile,
+                        self::CONTENT_START,
+                        self::CONTENT_END,
+                    );
                 } else {
                     self::assertFileEqualsTrimmed($compareFile, $outputFile, 'Expected file path: ' . $compareFile);
                 }
@@ -104,6 +136,37 @@ class IntegrationTest extends ApplicationTestCase
         }
 
         self::assertFalse($skip, 'Test passes while marked as SKIP.');
+    }
+
+    /**
+     * Asserts that each line of the expected file is contained in actual
+     *
+     * @throws ExpectationFailedException
+     */
+    private static function assertFileEqualsTrimmedBetweenMarkers(string $expected, string $actual, string $message, string $startMarker, string $endMarker): void
+    {
+        self::assertFileExists($expected);
+        self::assertFileExists($actual);
+
+        $expectedContent = self::extractContentBetweenMarkers($expected, $startMarker, $endMarker);
+        $actualContent = self::extractContentBetweenMarkers($actual, $startMarker, $endMarker);
+
+        self::assertEquals(self::getTrimmedContent($expectedContent), self::getTrimmedContent($actualContent), $message);
+    }
+
+    /**
+     * Extract content between specified markers in a file.
+     */
+    private static function extractContentBetweenMarkers(string $filePath, string $startMarker, string $endMarker): string
+    {
+        $fileContent = file_get_contents($filePath);
+        self::assertIsString($fileContent);
+        $startPos = strpos($fileContent, $startMarker);
+        self::assertIsInt($startPos, 'Start marker not found in file: ' . $filePath);
+        $endPos = strpos($fileContent, $endMarker, $startPos + strlen($startMarker));
+        self::assertIsInt($endPos, 'End marker not found in file: ' . $filePath);
+
+        return substr($fileContent, $startPos + strlen($startMarker), $endPos - $startPos - strlen($startMarker));
     }
 
     /**
@@ -145,6 +208,13 @@ class IntegrationTest extends ApplicationTestCase
     public static function getTrimmedFileContent(string $file): string
     {
         $fileContent = file_get_contents($file);
+        assertIsString($fileContent);
+
+        return self::getTrimmedContent($fileContent);
+    }
+
+    public static function getTrimmedContent(string $fileContent): string
+    {
         self::assertIsString($fileContent);
         $contentArray = explode("\n", $fileContent);
         array_walk($contentArray, static function (&$value): void {
@@ -164,9 +234,9 @@ class IntegrationTest extends ApplicationTestCase
     }
 
     /** @return mixed[] */
-    public static function getTestsForLatex(): array
+    public static function getTestsForDirectoryTestsFull(): array
     {
-        return self::getTestsForDirectory(__DIR__ . '/tests-latex');
+        return self::getTestsForDirectory(__DIR__ . '/tests-full');
     }
 
     /** @return mixed[] */
