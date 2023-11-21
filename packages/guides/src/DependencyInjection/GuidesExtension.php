@@ -141,7 +141,9 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 $projectSettings->setVersion((string) $config['project']['version']);
             }
 
-            $projectSettings->setTitle((string) $config['project']['title']);
+            if (isset($config['project']['title'])) {
+                $projectSettings->setTitle((string) $config['project']['title']);
+            }
         }
 
         if (isset($config['inventories'])) {
