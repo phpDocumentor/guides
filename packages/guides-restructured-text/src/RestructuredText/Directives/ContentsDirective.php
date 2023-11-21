@@ -39,6 +39,7 @@ class ContentsDirective extends BaseDirective
         );
 
         return (new ContentMenuNode([$absoluteUrl]))
-            ->withOptions($this->optionsToArray($options));
+            ->withOptions($this->optionsToArray($options))
+            ->withCaption($directive->getDataNode());
     }
 }
