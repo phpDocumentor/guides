@@ -91,8 +91,7 @@ final class AssetsExtension extends AbstractExtension
     {
         $outputPath = $this->copyAsset($context['env'] ?? null, $path);
 
-        // make it relative so it plays nice with the base tag in the HEAD
-        return trim($outputPath, '/');
+        return $this->urlGenerator->generateInternalUrl($context['env'] ?? null, trim($outputPath, '/'));
     }
 
     /**
