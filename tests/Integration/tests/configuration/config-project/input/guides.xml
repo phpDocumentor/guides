@@ -3,5 +3,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
 >
-    <project title="Title"/>
+    <project
+            title="Title"
+            version="12.4"
+            release="12.4.9-dev"
+            copyright="since 1998 phpDocumentor Team and Contributors"
+    />
 </guides>

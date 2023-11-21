@@ -38,12 +38,15 @@ class ProjectNode extends CompoundNode
     public function __construct(
         private string|null $title = null,
         private string|null $version = null,
+        private string|null $release = null,
+        private string|null $copyright = null,
         DateTimeImmutable|null $lastRendered = null,
     ) {
         $this->lastRendered = $lastRendered ?? new DateTimeImmutable();
         $this->addVariable('project', new PlainTextInlineNode($title ?? ''));
         $this->addVariable('version', new PlainTextInlineNode($version ?? ''));
-        $this->addVariable('release', new PlainTextInlineNode($version ?? ''));
+        $this->addVariable('release', new PlainTextInlineNode($release ?? ''));
+        $this->addVariable('copyright', new PlainTextInlineNode($copyright ?? ''));
         $this->addVariable('last_rendered', new PlainTextInlineNode($this->lastRendered->format(DATE_RFC2822)));
         $this->addVariable('today', new PlainTextInlineNode($this->lastRendered->format(DATE_RFC2822)));
 
@@ -58,8 +61,29 @@ class ProjectNode extends CompoundNode
     public function setVersion(string $version): void
     {
         $this->addVariable('version', new PlainTextInlineNode($version));
-        $this->addVariable('release', new PlainTextInlineNode($version));
         $this->version = $version;
+    }
+
+    public function getRelease(): string|null
+    {
+        return $this->release;
+    }
+
+    public function setRelease(string $release): void
+    {
+        $this->addVariable('release', new PlainTextInlineNode($release));
+        $this->release = $release;
+    }
+
+    public function getCopyright(): string|null
+    {
+        return $this->copyright;
+    }
+
+    public function setCopyright(string $copyright): void
+    {
+        $this->addVariable('copyright', new PlainTextInlineNode($copyright));
+        $this->copyright = $copyright;
     }
 
     public function getTitle(): string|null
