@@ -45,6 +45,8 @@
     <xsd:complexType name="project">
         <xsd:attribute name="title" type="xsd:string"/>
         <xsd:attribute name="version" type="xsd:string"/>
+        <xsd:attribute name="release" type="xsd:string"/>
+        <xsd:attribute name="copyright" type="xsd:string"/>
     </xsd:complexType>
 
     <xsd:complexType name="theme">
