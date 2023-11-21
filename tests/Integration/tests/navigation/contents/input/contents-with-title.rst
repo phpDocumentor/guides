@@ -1,7 +1,7 @@
 Title
 =====
 
-.. contents:: Table of Content
+.. contents:: **Table of Content**
 
 Depth Level 1
 -------------

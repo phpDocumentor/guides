@@ -1,5 +1,8 @@
 {% apply spaceless %}
     <div class="contents">
+        {% if node.caption %}
+        <p class="topic-title">{{ renderNode(node.caption) }}</p>
+        {% endif %}
         {% include "body/menu/menu-level.html.twig" %}
     </div>
 {% endapply %}
