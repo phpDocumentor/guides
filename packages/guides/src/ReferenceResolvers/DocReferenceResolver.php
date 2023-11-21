@@ -25,6 +25,10 @@ class DocReferenceResolver implements ReferenceResolver
             return false;
         }
 
+        if ($node->getInterlinkDomain() !== '') {
+            return false;
+        }
+
         $document = $renderContext->getProjectNode()->findDocumentEntry(
             $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $node->getTargetReference()),
         );
