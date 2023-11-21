@@ -21,11 +21,6 @@ parameters:
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
-			message: "#^Parameter \\#1 \\$iterable of method Symfony\\\\Component\\\\Console\\\\Helper\\\\ProgressBar\\:\\:iterate\\(\\) expects iterable, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
 			message: "#^Parameter \\#1 \\$outputFormats of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setOutputFormats\\(\\) expects array\\<string\\>, mixed given\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/Run.php
@@ -37,16 +32,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
-			count: 1
+			count: 2
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
 			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
-			message: "#^Parameter \\#3 \\$documentIterator of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects iterable\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/Run.php
 

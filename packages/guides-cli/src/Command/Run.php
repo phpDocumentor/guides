@@ -13,6 +13,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Event\PostRenderDocument;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
@@ -30,6 +31,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function array_pop;
 use function count;
@@ -51,6 +53,7 @@ final class Run extends Command
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
         private readonly ClockInterface $clock,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
         parent::__construct('run');
 
@@ -226,10 +229,14 @@ final class Run extends Command
 
         $outputFormats = $settings->getOutputFormats();
 
-        $progressBar = null;
-
         if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
-            $progressBar = new ProgressBar($output->section());
+            $progressBar = new ProgressBar($output->section(), count($documents));
+            $this->eventDispatcher->addListener(
+                PostRenderDocument::class,
+                static function (PostRenderDocument $event) use ($progressBar): void {
+                    $progressBar->advance();
+                },
+            );
         }
 
         foreach ($outputFormats as $format) {
@@ -237,7 +244,6 @@ final class Run extends Command
                 new RenderCommand(
                     $format,
                     $documents,
-                    $progressBar === null ? $documents : $progressBar->iterate($documents),
                     $sourceFileSystem,
                     $destinationFileSystem,
                     $projectNode,

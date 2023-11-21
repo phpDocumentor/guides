@@ -25,7 +25,7 @@ class LatexRenderer implements TypeRenderer
             $renderCommand->getDestination(),
             $renderCommand->getDestinationPath(),
             'tex',
-        );
+        )->withIterator($renderCommand->getDocumentIterator());
 
         $context->getDestination()->put(
             $renderCommand->getDestinationPath() . '/index.tex',
@@ -34,7 +34,7 @@ class LatexRenderer implements TypeRenderer
                 'structure/project.tex.twig',
                 [
                     'project' => $projectNode,
-                    'documents' => $renderCommand->getDocumentIterator(),
+                    'documents' => $context->getIterator(),
                 ],
             ),
         );
