@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\Menu;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use const PHP_INT_MAX;
@@ -25,6 +26,7 @@ use const PHP_INT_MAX;
  */
 abstract class MenuNode extends CompoundNode
 {
+    private InlineCompoundNode|null $caption = null;
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
     /** @var MenuEntryNode[] */
@@ -60,4 +62,17 @@ abstract class MenuNode extends CompoundNode
     }
 
     abstract public function isPageLevelOnly(): bool;
+
+    public function getCaption(): InlineCompoundNode|null
+    {
+        return $this->caption;
+    }
+
+    public function withCaption(InlineCompoundNode|null $caption): static
+    {
+        $that = clone $this;
+        $that->caption = $caption;
+
+        return $that;
+    }
 }
