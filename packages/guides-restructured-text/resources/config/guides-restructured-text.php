@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
-use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
@@ -129,8 +128,6 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.fieldlist')
         ->instanceof(InlineRule::class)
         ->tag('phpdoc.guides.parser.rst.inline_rule')
-        ->instanceof(NodeRenderer::class)
-        ->tag('phpdoc.guides.noderenderer.html')
         ->instanceof(TextRole::class)
         ->tag('phpdoc.guides.parser.rst.text_role')
         ->instanceof(SubDirective::class)
@@ -144,6 +141,12 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
             '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
         )
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->load(
+            'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\LaTeX\\',
+            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/LaTeX',
+        )
+        ->tag('phpdoc.guides.noderenderer.tex')
 
         ->set(GenericLinkProvider::class)
 
