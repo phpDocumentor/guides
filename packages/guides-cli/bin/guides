@@ -34,15 +34,23 @@ $input = new ArgvInput();
 
 $containerFactory = new ContainerFactory([new ApplicationExtension()]);
 
+// TODO: How to use $output at this point for coloured output and access
+//       $output->isVerbose() / $output->isDebug()?
 if (is_file($vendorDir . '/../guides.xml')) {
+    echo "DEBUG: Using vendorDir guides.xml file ($vendorDir/../guides.xml)\n";
     // vendor folder was placed directly into the project directory
     $containerFactory->addConfigFile($vendorDir . '/../guides.xml');
 }
 
 $workingDir = $input->getParameterOption('--working-dir', getcwd(), true);
+$configDir = $input->getParameterOption('--config', $workingDir, true);
 
-if (is_file($input->getParameterOption('--config', $workingDir, true).'/guides.xml')) {
-    $containerFactory->addConfigFile($input->getParameterOption('--config', $workingDir, true).'/guides.xml');
+echo "DEBUG: workingDir set to " . $workingDir;
+echo "DEBUG: configDir set to " . $configDir;
+
+if (is_file($configDir . '/guides.xml')) {
+    echo "DEBUG: Using configDir guides.xml file ($configDir/guides.xml)\n";
+    $containerFactory->addConfigFile($configDir . '/guides.xml');
 }
 $container = $containerFactory->create($vendorDir);
 
