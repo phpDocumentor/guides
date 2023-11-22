@@ -212,6 +212,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(TipDirective::class)
         ->set(TitleDirective::class)
         ->set(ToctreeDirective::class)
+        ->bind('$startingRule', service(InlineMarkupRule::class))
         ->set(MenuDirective::class)
         ->set(TodoDirective::class)
         ->set(UmlDirective::class)
