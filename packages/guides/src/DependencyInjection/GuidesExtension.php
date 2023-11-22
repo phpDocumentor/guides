@@ -47,6 +47,8 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                     ->children()
                         ->scalarNode('title')->end()
                         ->scalarNode('version')->end()
+                        ->scalarNode('release')->end()
+                        ->scalarNode('copyright')->end()
                     ->end()
                 ->end()
                 ->arrayNode('inventories')
@@ -143,6 +145,14 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
             if (isset($config['project']['title'])) {
                 $projectSettings->setTitle((string) $config['project']['title']);
+            }
+
+            if (isset($config['project']['release'])) {
+                $projectSettings->setRelease((string) $config['project']['release']);
+            }
+
+            if (isset($config['project']['copyright'])) {
+                $projectSettings->setCopyright((string) $config['project']['copyright']);
             }
         }
 

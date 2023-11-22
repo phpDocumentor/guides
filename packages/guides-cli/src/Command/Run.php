@@ -177,6 +177,8 @@ final class Run extends Command
         $projectNode = new ProjectNode(
             $settings->getTitle() === '' ? null : $settings->getTitle(),
             $settings->getVersion() === '' ? null : $settings->getVersion(),
+            $settings->getRelease() === '' ? null : $settings->getRelease(),
+            $settings->getCopyright() === '' ? null : $settings->getCopyright(),
             $this->clock->now(),
         );
 

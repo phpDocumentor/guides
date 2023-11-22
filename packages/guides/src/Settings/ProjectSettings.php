@@ -10,6 +10,8 @@ class ProjectSettings
     private array $inventories = [];
     private string $title = '';
     private string $version = '';
+    private string $release = '';
+    private string $copyright = '';
     private string $theme = 'default';
     private string $input = 'docs';
     private string $inputFile = '';
@@ -165,5 +167,25 @@ class ProjectSettings
     public function setInputFile(string $inputFile): void
     {
         $this->inputFile = $inputFile;
+    }
+
+    public function getRelease(): string
+    {
+        return $this->release;
+    }
+
+    public function setRelease(string $release): void
+    {
+        $this->release = $release;
+    }
+
+    public function getCopyright(): string
+    {
+        return $this->copyright;
+    }
+
+    public function setCopyright(string $copyright): void
+    {
+        $this->copyright = $copyright;
     }
 }
