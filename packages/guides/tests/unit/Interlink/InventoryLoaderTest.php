@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Interlink;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 use function count;
 use function file_get_contents;
@@ -25,7 +26,10 @@ final class InventoryLoaderTest extends TestCase
     protected function setUp(): void
     {
         $this->jsonLoader = $this->createMock(JsonLoader::class);
-        $this->inventoryLoader = new InventoryLoader($this->jsonLoader);
+        $this->inventoryLoader = new InventoryLoader(
+            self::createStub(NullLogger::class),
+            $this->jsonLoader,
+        );
         $this->inventoryRepository = new InventoryRepository($this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);

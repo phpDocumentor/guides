@@ -1,0 +1,4 @@
+app.WARNING: Reference with name "rst-overview-xx" not found for link type "std:label", required in file "index". Did you mean "RST Overview"? {"rst-file":"index","type":"ref","targetReference":"rst-overview-xx","value":"alternative","linkType":"std:label","interlinkDomain":""} []
+app.WARNING: Reference with name "other-overview-yy" not found for link type "std:label", required in file "index". Did you mean "Other Overview"? {"rst-file":"index","type":"ref","targetReference":"other-overview-yy","value":"","linkType":"std:label","interlinkDomain":""} []
+app.WARNING: Document with name "page-xxx" not found, required in file "index". Did you mean "page"? {"rst-file":"index","type":"doc","targetReference":"page-xxx","value":"","interlinkDomain":""} []
+app.WARNING: Document with name "page-yyy" not found, required in file "index". Did you mean "page"? {"rst-file":"index","type":"doc","targetReference":"page-yyy","value":"alternative","interlinkDomain":""} []

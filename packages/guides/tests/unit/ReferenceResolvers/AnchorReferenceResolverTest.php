@@ -12,6 +12,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 final class AnchorReferenceResolverTest extends TestCase
 {
@@ -33,6 +34,7 @@ final class AnchorReferenceResolverTest extends TestCase
         $this->subject = new AnchorReferenceResolver(
             $this->anchorReducer,
             $this->urlGenerator,
+            self::createStub(NullLogger::class),
         );
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
+use function array_merge;
+
 /**
  * Represents a link to document
  *
@@ -29,5 +31,13 @@ class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceN
     public function getInterlinkDomain(): string
     {
         return $this->interlinkDomain;
+    }
+
+    /** @return array<string, string> */
+    public function getDebugInformation(): array
+    {
+        return array_merge(parent::getDebugInformation(), [
+            'interlinkDomain' => $this->getInterlinkDomain(),
+        ]);
     }
 }

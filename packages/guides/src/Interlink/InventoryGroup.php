@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Interlink;
 use RuntimeException;
 
 use function array_key_exists;
+use function levenshtein;
 use function strtolower;
 
 final class InventoryGroup
@@ -35,5 +36,31 @@ final class InventoryGroup
         }
 
         return $this->links[$lowerCaseKey];
+    }
+
+    public function getProposedLink(string $key): InventoryLink|null
+    {
+        $shortestDistance = -1;
+        $closestMatch = null;
+        $closestKey = '';
+
+        foreach ($this->links as $realKey => $link) {
+            $distance = levenshtein($realKey, $key);
+
+            // If the distance is shorter than the current shortest distance or the shortest distance is not set
+            if ($distance >= $shortestDistance && $shortestDistance !== -1) {
+                continue;
+            }
+
+            $shortestDistance = $distance;
+            $closestMatch = $link;
+            $closestKey = $realKey;
+        }
+
+        if ($closestMatch !== null) {
+            $closestMatch->setOriginalKey($closestKey);
+        }
+
+        return $closestMatch;
     }
 }

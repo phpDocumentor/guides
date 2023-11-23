@@ -11,6 +11,8 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
+use function levenshtein;
+
 use const DATE_RFC2822;
 
 /** @extends CompoundNode<DocumentNode> */
@@ -131,6 +133,26 @@ class ProjectNode extends CompoundNode
         return $this->internalLinkTargets[$linkType][$anchorName] ?? null;
     }
 
+    public function getProposedInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): InternalTarget|null
+    {
+        $shortestDistance = -1;
+        $closestMatch = null;
+
+        foreach ($this->internalLinkTargets[$linkType] as $key => $value) {
+            $distance = levenshtein($anchorName, $key);
+
+            // If the distance is shorter than the current shortest distance or the shortest distance is not set
+            if ($distance >= $shortestDistance && $shortestDistance !== -1) {
+                continue;
+            }
+
+            $shortestDistance = $distance;
+            $closestMatch = $value;
+        }
+
+        return $closestMatch;
+    }
+
     /** @return array<string, array<string, InternalTarget>> */
     public function getAllInternalTargets(): array
     {
@@ -179,6 +201,26 @@ class ProjectNode extends CompoundNode
     public function findDocumentEntry(string $filePath): DocumentEntryNode|null
     {
         return $this->documentEntries[$filePath] ?? null;
+    }
+
+    public function findProposedDocumentEntry(string $filePath): DocumentEntryNode|null
+    {
+        $shortestDistance = -1;
+        $closestMatch = null;
+
+        foreach ($this->documentEntries as $realKey => $link) {
+            $distance = levenshtein($realKey, $filePath);
+
+            // If the distance is shorter than the current shortest distance or the shortest distance is not set
+            if ($distance >= $shortestDistance && $shortestDistance !== -1) {
+                continue;
+            }
+
+            $shortestDistance = $distance;
+            $closestMatch = $link;
+        }
+
+        return $closestMatch;
     }
 
     public function reset(): void

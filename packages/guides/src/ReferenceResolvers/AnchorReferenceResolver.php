@@ -8,6 +8,10 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
+use Psr\Log\LoggerInterface;
+
+use function array_merge;
+use function sprintf;
 
 /**
  * Resolves references with an anchor URL.
@@ -21,25 +25,39 @@ class AnchorReferenceResolver implements ReferenceResolver
     public function __construct(
         private readonly AnchorReducer $anchorReducer,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
-        $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-        if ($node instanceof ReferenceNode) {
-            if ($node->getInterlinkDomain() !== '') {
-                return false;
-            }
-
-            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
-        } else {
-            // Todo: move this to a separate resolver?
-            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        if (!$node instanceof ReferenceNode) {
+            return false;
         }
 
+        $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
+
+        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
+
         if ($target === null) {
-            return false;
+            $didYouMean = '';
+            $target = $renderContext->getProjectNode()->getProposedInternalTarget($reducedAnchor, $node->getLinkType());
+            if ($target !== null) {
+                $didYouMean = sprintf('Did you mean "%s"?', $target->getAnchor());
+            }
+
+            $this->logger->warning(
+                sprintf(
+                    'Reference with name "%s" not found for link type "%s", required in file "%s". %s',
+                    $node->getTargetReference(),
+                    $node->getLinkType(),
+                    $renderContext->getCurrentFileName(),
+                    $didYouMean,
+                ),
+                array_merge($renderContext->getLoggerInformation(), $node->getDebugInformation()),
+            );
+
+            return true;
         }
 
         $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getAnchor()));

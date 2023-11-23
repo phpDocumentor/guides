@@ -55,6 +55,11 @@ final class Inventory
         return $this->getInventory($group)->getLink($key);
     }
 
+    public function getProposedLink(string $group, string $key): InventoryLink|null
+    {
+        return $this->getInventory($group)->getProposedLink($key);
+    }
+
     public function hasInventoryGroup(string $key): bool
     {
         $lowerCaseKey = strtolower($key);
