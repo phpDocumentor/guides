@@ -11,7 +11,7 @@ on: # yamllint disable-line rule:truthy
 jobs:
   code-coverage:
     name: "Code Coverage"
-    uses: "phpDocumentor/.github/.github/workflows/code-coverage.yml@v0.4.0"
+    uses: "phpDocumentor/.github/.github/workflows/code-coverage.yml@v0.5.0"
     with:
       php-version: "8.2"
 
@@ -46,7 +46,7 @@ jobs:
 
   static-analysis:
     name: "Static analysis"
-    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.4.0"
+    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.5.0"
     with:
       php-version: "8.2"
 
@@ -72,13 +72,13 @@ jobs:
 
   unit-tests:
     name: "Unit test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.4.0"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
     with:
       php-versions: "['8.1', '8.2']"
 
   functional-tests:
     name: "Functional test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.4.0"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
     needs: "unit-tests"
     with:
       php-versions: "['8.1', '8.2']"
@@ -86,7 +86,7 @@ jobs:
 
   integration-tests:
     name: "integration test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.4.0"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
     needs: "unit-tests"
     with:
       php-versions: "['8.1', '8.2']"
