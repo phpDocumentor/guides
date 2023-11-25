@@ -27,4 +27,14 @@ abstract class AbstractLinkInlineNode extends InlineNode implements LinkInlineNo
     {
         return $this->url;
     }
+
+    /** @return array<string, string> */
+    public function getDebugInformation(): array
+    {
+        return [
+            'type' => $this->getType(),
+            'targetReference' => $this->getTargetReference(),
+            'value' => $this->getValue(),
+        ];
+    }
 }

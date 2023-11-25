@@ -1,0 +1,4 @@
+app.WARNING: Reference rst-overview-xx could not be resolved in index
+app.WARNING: Reference other-overview-yy could not be resolved in index
+app.WARNING: Document with name "page-xxx" not found, required in file "index".
+app.WARNING: Document with name "page-yyy" not found, required in file "index".

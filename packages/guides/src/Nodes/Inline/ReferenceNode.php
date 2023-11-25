@@ -6,6 +6,8 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 
 use phpDocumentor\Guides\Nodes\SectionNode;
 
+use function array_merge;
+
 /**
  * CrossReferences are references outside a document. As parsing is file based normal references are in document,
  * refering to other documents.
@@ -38,5 +40,14 @@ class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
     public function getInterlinkDomain(): string
     {
         return $this->interlinkDomain;
+    }
+
+    /** @return array<string, string> */
+    public function getDebugInformation(): array
+    {
+        return array_merge(parent::getDebugInformation(), [
+            'linkType' => $this->getLinkType(),
+            'interlinkDomain' => $this->getInterlinkDomain(),
+        ]);
     }
 }
