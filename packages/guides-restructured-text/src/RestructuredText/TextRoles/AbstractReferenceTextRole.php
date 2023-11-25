@@ -53,13 +53,16 @@ abstract class AbstractReferenceTextRole implements TextRole
                     }
 
                     if ($this->lexer->peek() !== null) {
-                        $this->logger->warning(
+                        $this->logger->debug(
                             sprintf(
-                                'Reference contains unexpected content after closing `>`: "%s"',
-                                $content,
+                                'Reference contains unexpected content after closing `>`, treating it as text like sphinx does: "%s"',
+                                $rawContent,
                             ),
                             $documentParserContext->getLoggerInformation(),
                         );
+                        $part = $value . '<' . $part . '>';
+                        $value = null;
+                        break;
                     }
 
                     $referenceTarget = $part;
