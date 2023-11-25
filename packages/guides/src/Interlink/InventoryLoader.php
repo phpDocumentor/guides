@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
+
 use function is_array;
 use function strval;
 
 final class InventoryLoader
 {
     public function __construct(
+        private readonly LoggerInterface $logger,
         private readonly JsonLoader $jsonLoader,
         private readonly string $pathToJson = 'objects.inv.json',
     ) {
@@ -43,8 +47,12 @@ final class InventoryLoader
             return;
         }
 
-        $json = $this->jsonLoader->loadJsonFromUrl($inventory->getBaseUrl() . $this->pathToJson);
+        try {
+            $json = $this->jsonLoader->loadJsonFromUrl($inventory->getBaseUrl() . $this->pathToJson);
 
-        $this->loadInventoryFromJson($inventory, $json);
+            $this->loadInventoryFromJson($inventory, $json);
+        } catch (ClientException $exception) {
+            $this->logger->warning('Interlink inventory not found: ' . $exception->getMessage());
+        }
     }
 }

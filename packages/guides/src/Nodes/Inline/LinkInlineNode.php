@@ -13,4 +13,7 @@ interface LinkInlineNode extends Node
     public function setUrl(string $url): void;
 
     public function getUrl(): string;
+
+    /** @return array<string, string> */
+    public function getDebugInformation(): array;
 }
