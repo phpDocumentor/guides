@@ -76,7 +76,7 @@ class RenderContext
             $this->destinationPath,
             $this->outputFormat,
             $this->projectNode,
-        );
+        )->withIterator($this->getIterator());
     }
 
     public function withIterator(Renderer\DocumentListIterator $iterator): self
