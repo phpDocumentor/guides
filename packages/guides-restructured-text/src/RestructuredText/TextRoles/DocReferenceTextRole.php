@@ -34,7 +34,7 @@ class DocReferenceTextRole extends AbstractReferenceTextRole
     /** @return DocReferenceNode */
     protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
-        $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
+        $pattern =  AbstractReferenceTextRole::INTERLINK_REGEX;
         if (preg_match($pattern, $referenceTarget, $matches)) {
             $interlinkDomain = $matches[1];
             $path = $matches[2];

@@ -38,7 +38,7 @@ class GenericReferenceTextRole extends AbstractReferenceTextRole
     {
         $linkType = $this->genericLinkProvider->getLinkType($role);
         $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
-        if (preg_match($pattern, $referenceTarget, $matches)) {
+        if (preg_match(AbstractReferenceTextRole::INTERLINK_REGEX, $referenceTarget, $matches)) {
             $interlinkDomain = $matches[1];
             $id = $this->anchorReducer->reduceAnchor($matches[2]);
         } else {

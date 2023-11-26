@@ -15,6 +15,8 @@ use function trim;
 /** @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#embedded-uris-and-aliases */
 abstract class AbstractReferenceTextRole implements TextRole
 {
+    /** @see https://regex101.com/r/htMn5p/1 */
+    public const INTERLINK_REGEX = '/^([a-zA-Z0-9-_]+):(.*$)/';
     private readonly InlineLexer $lexer;
 
     public function __construct(
