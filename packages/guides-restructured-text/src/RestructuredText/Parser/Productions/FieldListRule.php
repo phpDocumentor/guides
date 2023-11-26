@@ -55,6 +55,14 @@ final class FieldListRule implements Rule
         while ($iterator->valid() && $this->isFieldLine($iterator->current())) {
             $fieldListItemNodes[] = $this->createListItem($blockContext);
             $iterator->next();
+            while ($iterator->valid() && LinesIterator::isEmptyLine($iterator->current())) {
+                $peek = $iterator->peek();
+                if (!LinesIterator::isEmptyLine($peek) && !$this->isFieldLine($peek)) {
+                    break;
+                }
+
+                $iterator->next();
+            }
         }
 
         if ($on instanceof DocumentNode && !$on->isTitleFound()) {
@@ -173,8 +181,12 @@ final class FieldListRule implements Rule
         }
     }
 
-    private function isFieldLine(string $currentLine): bool
+    private function isFieldLine(string|null $currentLine): bool
     {
+        if ($currentLine === null) {
+            return false;
+        }
+
         if (LinesIterator::isEmptyLine($currentLine)) {
             return false;
         }
