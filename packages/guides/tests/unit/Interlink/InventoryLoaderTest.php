@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
+use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -30,13 +31,14 @@ final class InventoryLoaderTest extends TestCase
             self::createStub(NullLogger::class),
             $this->jsonLoader,
         );
-        $this->inventoryRepository = new InventoryRepository($this->inventoryLoader, []);
+        $this->inventoryRepository = new InventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $inventory = new Inventory('https://example.com/');
         $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
         $this->inventoryRepository->addInventory('somekey', $inventory);
+        $this->inventoryRepository->addInventory('some-key', $inventory);
     }
 
     public function testInventoryLoaderLoadsInventory(): void
@@ -57,6 +59,12 @@ final class InventoryLoaderTest extends TestCase
     public function testInventoryLoaderGetInventoryIsCaseInsensitive(): void
     {
         $inventory = $this->inventoryRepository->getInventory('SomeKey');
+        self::assertGreaterThan(1, count($inventory->getGroups()));
+    }
+
+    public function testInventoryLoaderGetInventoryIsSlugged(): void
+    {
+        $inventory = $this->inventoryRepository->getInventory('Some_Key');
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 }
