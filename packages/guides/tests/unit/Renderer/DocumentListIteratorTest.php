@@ -82,6 +82,24 @@ final class DocumentListIteratorTest extends IteratorTestCase
         self::assertSame('1.1.2', $iterator->previousNode()?->getTitle()?->toString());
     }
 
+    public function testNextNode(): void
+    {
+        $iterator = new DocumentListIterator(
+            new DocumentTreeIterator([$this->entry1, $this->entry2], $this->randomOrderedDocuments),
+            $this->randomOrderedDocuments,
+        );
+
+        $iterator->next(); // 1
+        $iterator->next(); // 1.1
+        $iterator->next(); // 1.1.1
+        self::assertSame('2', $iterator->nextNode()?->getTitle()?->toString());
+        self::assertSame('2', $iterator->nextNode()->getTitle()->toString());
+        $iterator->next();
+        self::assertSame('2', $iterator->current()->getTitle()?->toString());
+        $iterator->next();
+        self::assertSame('2.1', $iterator->current()->getTitle()?->toString());
+    }
+
     public function testPreviousReturnsNullWhenNoPrevious(): void
     {
         $iterator = new DocumentListIterator(
