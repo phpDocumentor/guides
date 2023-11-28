@@ -29,6 +29,8 @@ class RenderContext
     /** @var DocumentNode[] */
     private array $allDocuments;
 
+    private string $outputFilePath = '';
+
     private Renderer\DocumentListIterator $iterator;
 
     private function __construct(
@@ -62,6 +64,7 @@ class RenderContext
 
         $self->document = $documentNode;
         $self->allDocuments = $allDocumentNodes;
+        $self->outputFilePath =  $documentNode->getFilePath() . '.' . $ouputFormat;
 
         return $self;
     }
@@ -206,5 +209,18 @@ class RenderContext
     public function getIterator(): Renderer\DocumentListIterator
     {
         return $this->iterator;
+    }
+
+    public function getOutputFilePath(): string
+    {
+        return $this->outputFilePath;
+    }
+
+    public function withOutputFilePath(string $outputFilePath): RenderContext
+    {
+        $that = clone$this;
+        $that->outputFilePath = $outputFilePath;
+
+        return $that;
     }
 }

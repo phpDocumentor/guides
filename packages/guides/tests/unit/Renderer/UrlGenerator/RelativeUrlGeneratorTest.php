@@ -12,12 +12,11 @@ use PHPUnit\Framework\TestCase;
 final class RelativeUrlGeneratorTest extends TestCase
 {
     #[DataProvider('generateRelativeInternalUrlProvider')]
-    public function testGenerateRelativeInternalUrl(string $expected, string $canonicalUrl, string $currentFileName): void
+    public function testGenerateRelativeInternalUrl(string $expected, string $canonicalUrl, string $outputFilePath): void
     {
         $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
         $renderContext = $this->createMock(RenderContext::class);
-        $renderContext->method('getCurrentFileName')->willReturn($currentFileName);
-        $renderContext->method('getOutputFormat')->willReturn('html');
+        $renderContext->method('getOutputFilePath')->willReturn($outputFilePath);
         self::assertSame($expected, $urlGenerator->generateInternalUrl($renderContext, $canonicalUrl));
     }
 
@@ -28,37 +27,37 @@ final class RelativeUrlGeneratorTest extends TestCase
             'Same File' => [
                 'expected' => '#',
                 'canonicalUrl' => 'directory/file.html',
-                'currentPath' => 'directory/file',
+                'outputFilePath' => 'directory/file.html',
             ],
             'Same File with anchor' => [
                 'expected' => '#anchor',
                 'canonicalUrl' => 'directory/file.html#anchor',
-                'currentPath' => 'directory/file',
+                'outputFilePath' => 'directory/file.html',
             ],
             'File in same directory' => [
                 'expected' => 'file.html',
                 'canonicalUrl' => 'directory/file.html',
-                'currentPath' => 'directory/anotherFile',
+                'outputFilePath' => 'directory/anotherFile.html',
             ],
             'File in subdirectory' => [
                 'expected' => 'subdirectory/file.html',
                 'canonicalUrl' => 'directory/subdirectory/file.html',
-                'currentPath' => 'directory/anotherFile',
+                'outputFilePath' => 'directory/anotherFile.html',
             ],
             'File in directory above' => [
                 'expected' => '../file.html',
                 'canonicalUrl' => 'file.html',
-                'currentPath' => 'directory/anotherFile',
+                'outputFilePath' => 'directory/anotherFile.html',
             ],
             'File in two directory above' => [
                 'expected' => '../../file.html',
                 'canonicalUrl' => 'file.html',
-                'currentPath' => 'directory/subdirectory/anotherFile',
+                'outputFilePath' => 'directory/subdirectory/anotherFile',
             ],
             'File in other subdirectory above' => [
                 'expected' => '../subdirectory/file.html',
                 'canonicalUrl' => 'directory/subdirectory/file.html',
-                'currentPath' => 'directory/othersubdirectory/anotherFile',
+                'outputFilePath' => 'directory/othersubdirectory/anotherFile.html',
             ],
         ];
     }
