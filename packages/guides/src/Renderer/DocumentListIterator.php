@@ -76,10 +76,12 @@ final class DocumentListIterator implements Iterator
 
     public function nextNode(): DocumentNode|null
     {
-        $this->innerIterator->next();
+        if ($this->nextDocument === null) {
+            $this->innerIterator->next();
 
-        if ($this->innerIterator->valid()) {
-            $this->nextDocument = WeakReference::create($this->current());
+            if ($this->innerIterator->valid()) {
+                $this->nextDocument = WeakReference::create($this->current());
+            }
         }
 
         return $this->nextDocument?->get();
