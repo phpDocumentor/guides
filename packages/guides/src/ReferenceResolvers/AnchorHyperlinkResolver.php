@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
+use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
@@ -14,7 +14,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
  *
  * A link is an anchor if it starts with a hashtag
  */
-class AnchorReferenceResolver implements ReferenceResolver
+class AnchorHyperlinkResolver implements ReferenceResolver
 {
     public final const PRIORITY = -100;
 
@@ -26,13 +26,12 @@ class AnchorReferenceResolver implements ReferenceResolver
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
     {
-        if (!$node instanceof ReferenceNode) {
+        if (!$node instanceof HyperLinkNode) {
             return false;
         }
 
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-
-        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, $node->getLinkType());
+        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
 
         if ($target === null) {
             return false;

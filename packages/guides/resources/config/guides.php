@@ -19,6 +19,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorHyperlinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
@@ -120,6 +121,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(ExternalReferenceResolver::class)
 
         ->set(EmailReferenceResolver::class)
+
+        ->set(AnchorHyperlinkResolver::class)
 
         ->set(AnchorReferenceResolver::class)
 
