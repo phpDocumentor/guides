@@ -73,15 +73,12 @@ jobs:
   unit-tests:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
-    with:
-      php-versions: "['8.1', '8.2']"
 
   functional-tests:
     name: "Functional test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
     needs: "unit-tests"
     with:
-      php-versions: "['8.1', '8.2']"
       test-suite: "functional"
 
   integration-tests:
@@ -89,7 +86,6 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.5.0"
     needs: "unit-tests"
     with:
-      php-versions: "['8.1', '8.2']"
       test-suite: "integration"
 
   xml-lint:
