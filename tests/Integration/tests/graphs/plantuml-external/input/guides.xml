@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd">
     <extension class="phpDocumentor\Guides\Graphs">
-        <renderer>plantuml-server</renderer>
+        <renderer>testrender</renderer>
         <plantuml-binary>/usr/bin/plantuml</plantuml-binary>
     </extension>
 </guides>

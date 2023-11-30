@@ -19,8 +19,18 @@ use Twig\TwigFunction;
 
 final class UmlExtension extends AbstractExtension
 {
-    public function __construct(private readonly DiagramRenderer $diagramRenderer)
+    private DiagramRenderer $diagramRenderer;
+
+    /** @param iterable<string, DiagramRenderer> $renderers */
+    public function __construct(iterable $renderers, string $rendererAlias)
     {
+        foreach ($renderers as $alias => $renderer) {
+            if ($alias !== $rendererAlias) {
+                continue;
+            }
+
+            $this->diagramRenderer = $renderer;
+        }
     }
 
     /** @return TwigFunction[] */
