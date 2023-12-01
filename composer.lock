@@ -1169,7 +1169,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "2abaf8231c44b895403f3000019f5d10aaef695c"
+                "reference": "0d76126e7301d1715d7e99096d17d7d7b74cb317"
             },
             "require": {
                 "ext-json": "*",
@@ -1179,8 +1179,8 @@
                 "php": "^8.1",
                 "phpdocumentor/flyfinder": "^1.1",
                 "psr/event-dispatcher": "^1.0",
-                "symfony/clock": "^6.3",
-                "symfony/http-client": "^6.3.8",
+                "symfony/clock": "^6.4",
+                "symfony/http-client": "^6.4.0",
                 "symfony/string": "^5.4 || ^6.3",
                 "symfony/translation-contracts": "^3.4.0",
                 "twig/twig": "~2.15 || ^3.0",
@@ -4969,16 +4969,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.46",
+            "version": "1.10.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "90d3d25c5b98b8068916bbf08ce42d5cb6c54e70"
+                "reference": "84dbb33b520ea28b6cf5676a3941f4bae1c1ff39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/90d3d25c5b98b8068916bbf08ce42d5cb6c54e70",
-                "reference": "90d3d25c5b98b8068916bbf08ce42d5cb6c54e70",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/84dbb33b520ea28b6cf5676a3941f4bae1c1ff39",
+                "reference": "84dbb33b520ea28b6cf5676a3941f4bae1c1ff39",
                 "shasum": ""
             },
             "require": {
@@ -5027,7 +5027,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-28T14:57:26+00:00"
+            "time": "2023-12-01T15:19:17+00:00"
         },
         {
             "name": "phpstan/phpstan-strict-rules",
