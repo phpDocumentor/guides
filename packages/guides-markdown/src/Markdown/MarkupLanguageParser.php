@@ -16,6 +16,7 @@ use phpDocumentor\Guides\ParserContext;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+use function ltrim;
 use function md5;
 use function sprintf;
 use function strtolower;
@@ -54,7 +55,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
-        $document = new DocumentNode($hash, $this->getParserContext()->getCurrentAbsolutePath());
+        $document = new DocumentNode($hash, ltrim($this->getParserContext()->getCurrentAbsolutePath(), '/'));
         $this->document = $document;
 
         while ($event = $walker->next()) {

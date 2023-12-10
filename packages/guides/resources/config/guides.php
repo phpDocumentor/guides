@@ -30,6 +30,7 @@ use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InterlinkReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\PageHyperlinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
@@ -123,6 +124,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(EmailReferenceResolver::class)
 
         ->set(AnchorHyperlinkResolver::class)
+
+        ->set(PageHyperlinkResolver::class)
 
         ->set(AnchorReferenceResolver::class)
 
