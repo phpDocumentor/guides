@@ -38,8 +38,15 @@ class VariableInlineRule extends AbstractInlineRule
 
                     return new VariableInlineNode($text);
 
-                default:
+                case $token->type === InlineLexer::WORD:
+                case $token->type === InlineLexer::UNDERSCORE:
                     $text .= $token->value;
+                    break;
+
+                default:
+                    $this->rollback($lexer, $initialPosition ?? 0);
+
+                    return null;
             }
 
             if ($lexer->moveNext() === false && $lexer->token === null) {
