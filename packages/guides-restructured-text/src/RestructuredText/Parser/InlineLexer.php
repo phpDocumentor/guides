@@ -69,7 +69,7 @@ final class InlineLexer extends AbstractLexer
             '|',
             '\\*\\*',
             '\\*',
-            '\b(?<!:)[a-z0-9\\.\-+]{2,}:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
+            '\b(?<!:)[a-z0-9\\.\-+]{2,}:\\/\\/[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
         ];
     }
 
@@ -104,11 +104,12 @@ final class InlineLexer extends AbstractLexer
     /** @inheritDoc */
     protected function getType(string &$value)
     {
-        if (preg_match('/^\\\\[\s\S]/i', $value)) {
+        // $value is already a tokenized part. Therefore, we have to match against the complete String here.
+        if (preg_match('/^\\\\[\s\S]$/i', $value)) {
             return self::ESCAPED_SIGN;
         }
 
-        if (preg_match('/``.+``(?!`)/i', $value)) {
+        if (preg_match('/^``.+``(?!`)$/i', $value)) {
             return self::LITERAL;
         }
 
@@ -116,19 +117,19 @@ final class InlineLexer extends AbstractLexer
             return self::HYPERLINK;
         }
 
-        if (preg_match('/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/i', $value)) {
+        if (preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/i', $value)) {
             return self::EMAIL;
         }
 
-        if (preg_match('/[a-z0-9-]+_{2}/i', $value)) {
+        if (preg_match('/^[a-z0-9-]+_{2}$/i', $value)) {
             return self::ANONYMOUSE_REFERENCE;
         }
 
-        if (preg_match('/[a-z0-9-]+_{1}(?=\s|$)/i', $value)) {
+        if (preg_match('/^[a-z0-9-]+_{1}$/i', $value)) {
             return self::NAMED_REFERENCE;
         }
 
-        if (preg_match('/\s/i', $value)) {
+        if (preg_match('/^\s$/i', $value)) {
             return self::WHITESPACE;
         }
 
@@ -146,6 +147,7 @@ final class InlineLexer extends AbstractLexer
             '[' => self::ANNOTATION_START,
             ']' => self::ANNOTATION_END,
             '~' => self::NBSP,
+            '\\``' => self::ESCAPED_SIGN,
             default => self::WORD,
         };
     }
