@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -24,7 +24,7 @@ class StandaloneHyperlinkRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::HYPERLINK;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): HyperLinkNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
     {
         $value = $lexer->token?->value ?? '';
         $node = $this->createReference($blockContext, $value, $value, false);
