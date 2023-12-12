@@ -40,6 +40,14 @@ class InlineLexerTest extends TestCase
                 'https://www.test.com',
                 [InlineLexer::HYPERLINK],
             ],
+            'Not HTTPS Url' => [
+                'https:// somthing else',
+                [InlineLexer::WORD],
+            ],
+            'Not an url' => [
+                'er::anchor_',
+                [InlineLexer::WORD],
+            ],
             'String with underscore' => [
                 'EXT:css_styled_content/static/v6.2',
                 [InlineLexer::WORD],
@@ -59,6 +67,10 @@ class InlineLexerTest extends TestCase
             'Email in backticks' => [
                 '`git@github.com`',
                 [InlineLexer::BACKTICK],
+            ],
+            'Escaped double backtick' => [
+                '\\``git@github.com`',
+                [InlineLexer::ESCAPED_SIGN],
             ],
         ];
     }
