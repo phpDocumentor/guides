@@ -183,6 +183,11 @@ class LinesIterator implements Iterator
      */
     public static function isIndented(string $line, int $minIndent): bool
     {
-        return mb_strpos($line, str_repeat(' ', max(1, $minIndent))) === 0;
+        return self::isIndentedBy($line, $minIndent, ' ') || self::isIndentedBy($line, $minIndent, "\t");
+    }
+
+    private static function isIndentedBy(string $line, int $minIndent, string $indentationChar): bool
+    {
+        return mb_strpos($line, str_repeat($indentationChar, max(1, $minIndent))) === 0;
     }
 }
