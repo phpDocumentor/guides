@@ -35,8 +35,6 @@ class PageHyperlinkResolver implements ReferenceResolver
 
         $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $node->getTargetReference());
         $canonicalDocumentName = rtrim($canonicalDocumentName, '.' . $renderContext->getOutputFormat());
-        $canonicalDocumentName = rtrim($canonicalDocumentName, '.rst');
-        $canonicalDocumentName = rtrim($canonicalDocumentName, '.md');
         $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName);
         if ($document === null) {
             return false;

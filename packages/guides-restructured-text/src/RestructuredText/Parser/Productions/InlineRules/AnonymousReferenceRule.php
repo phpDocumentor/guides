@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -26,7 +26,7 @@ class AnonymousReferenceRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::ANONYMOUSE_REFERENCE;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): HyperLinkNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
     {
         $node = $this->createAnonymousReference(
             $blockContext,
@@ -37,7 +37,7 @@ class AnonymousReferenceRule extends ReferenceRule
         return $node;
     }
 
-    private function createAnonymousReference(BlockContext $blockContext, string $link): HyperLinkNode
+    private function createAnonymousReference(BlockContext $blockContext, string $link): AbstractLinkInlineNode
     {
         $node = $this->createReference($blockContext, $link, null, false);
         $blockContext->getDocumentParserContext()->pushAnonymous($link);
