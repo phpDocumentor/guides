@@ -1,0 +1,4 @@
+Directive tests
+===============
+
+..  testlogger::

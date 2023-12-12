@@ -9,7 +9,9 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
-use function rtrim;
+use function str_ends_with;
+use function strlen;
+use function substr;
 
 /**
  * Resolves named and anonymous references to source files
@@ -34,7 +36,10 @@ class PageHyperlinkResolver implements ReferenceResolver
         }
 
         $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $node->getTargetReference());
-        $canonicalDocumentName = rtrim($canonicalDocumentName, '.' . $renderContext->getOutputFormat());
+        if (str_ends_with($canonicalDocumentName, '.' . $renderContext->getOutputFormat())) {
+            $canonicalDocumentName = substr($canonicalDocumentName, 0, 0 - strlen('.' . $renderContext->getOutputFormat()));
+        }
+
         $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName);
         if ($document === null) {
             return false;

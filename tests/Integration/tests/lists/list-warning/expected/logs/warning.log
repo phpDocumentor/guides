@@ -1,2 +1,2 @@
-app.WARNING: List item without content {"rst-file":"index.rst","currentLine":"","currentLineNumber":7} []
-app.WARNING: List item without content {"rst-file":"index.rst","currentLine":"*","currentLineNumber":11} []
+app.WARNING: List item without content {"rst-file":"index.rst","currentLineNumber":7,"currentLine":""} []
+app.WARNING: List item without content {"rst-file":"index.rst","currentLineNumber":11,"currentLine":"*"} []
