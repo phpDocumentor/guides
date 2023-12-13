@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -25,7 +25,7 @@ class AnonymousPhraseRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::BACKTICK;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): HyperLinkNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
     {
         $text = '';
         $embeddedUrl = null;
@@ -64,7 +64,7 @@ class AnonymousPhraseRule extends ReferenceRule
         return null;
     }
 
-    private function createAnonymousReference(BlockContext $blockContext, string $link, string|null $embeddedUrl): HyperLinkNode
+    private function createAnonymousReference(BlockContext $blockContext, string $link, string|null $embeddedUrl): AbstractLinkInlineNode
     {
         $node = $this->createReference($blockContext, $link, $embeddedUrl, false);
         $blockContext->getDocumentParserContext()->pushAnonymous($link);

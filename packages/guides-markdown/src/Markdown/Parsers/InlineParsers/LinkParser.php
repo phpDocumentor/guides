@@ -11,7 +11,11 @@ use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use Psr\Log\LoggerInterface;
 
 use function assert;
-use function is_string;
+use function filter_var;
+use function str_ends_with;
+use function substr;
+
+use const FILTER_VALIDATE_URL;
 
 /** @extends AbstractInlineTextDecoratorParser<HyperLinkNode> */
 final class LinkParser extends AbstractInlineTextDecoratorParser
@@ -32,11 +36,14 @@ final class LinkParser extends AbstractInlineTextDecoratorParser
     protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode
     {
         assert($commonMarkNode instanceof Link);
-        if (is_string($content)) {
-            return new HyperLinkNode($content, $commonMarkNode->getUrl());
+
+        $content ??= $commonMarkNode->getUrl();
+        $url =  $commonMarkNode->getUrl();
+        if (str_ends_with($url, '.md') && filter_var($url, FILTER_VALIDATE_URL) === false) {
+            $url = substr($url, 0, -3);
         }
 
-        return new HyperLinkNode($commonMarkNode->getUrl(), $commonMarkNode->getUrl());
+        return new HyperLinkNode($content, $url);
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool
