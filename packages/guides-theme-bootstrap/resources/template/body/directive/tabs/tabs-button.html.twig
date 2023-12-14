@@ -2,7 +2,7 @@
     <button class="nav-link {%- if tab.active %} active{% endif -%}"
             id="{{ tab.key }}-tab-{{ tabsId }}" data-bs-toggle="tab" data-bs-target="#{{ tab.key }}-{{ tabsId }}"
             type="button" role="tab" aria-controls="{{ tab.key }}-{{ tabsId }}"
-            aria-selected="{{ selected }}">
+            aria-selected="{%- if tab.active -%} true {%- else -%} false {%- endif -%}">
         {{ renderNode(tab.content) }}
     </button>
 </li>
