@@ -1,14 +1,16 @@
-<div class="tabs-container {% if node.classes %} {{ node.classesString }}{% endif %}">
-    <ul class="nav nav-tabs" id="{{ node.key }}" role="tablist">
+<div class="tabs">
+    <ul class="nav nav-tabs" id="tab-{{ node.key }}" role="tablist">
         {% for tab in node.tabs -%}
             {% include "body/directive/tabs/tabs-button.html.twig" with {
+                tabsId: node.key,
                 tab:tab
             } %}
         {%- endfor %}
     </ul>
-    <div class="tab-content" id="{{ node.key }}-content">
+    <div class="tab-content" id="tab-content-{{ node.key }}">
         {% for tab in node.tabs -%}
             {% include "body/directive/tabs/tabs-body.html.twig" with {
+                tabsId: node.key,
                 tab:tab
             } %}
         {%- endfor %}
