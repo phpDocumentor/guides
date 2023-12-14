@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Bootstrap\Nodes\TabsNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -25,17 +26,17 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
 use function is_string;
-use function preg_replace;
-use function rand;
-use function str_replace;
-use function strtolower;
-use function strval;
 
 class TabsDirective extends SubDirective
 {
+    private int $tabsCounter = 0;
+
     /** @param Rule<CollectionNode> $startingRule */
-    public function __construct(protected Rule $startingRule, private readonly LoggerInterface $logger)
-    {
+    public function __construct(
+        protected Rule $startingRule,
+        private readonly LoggerInterface $logger,
+        private readonly AnchorReducer $anchorReducer,
+    ) {
         parent::__construct($startingRule);
     }
 
@@ -77,11 +78,10 @@ class TabsDirective extends SubDirective
         }
 
         if (is_string($directive->getOption('key')->getValue())) {
-            $key = strtolower($directive->getOption('key')->getValue());
-            $key = str_replace(' ', '-', $key);
-            $key = strval(preg_replace('/[^a-zA-Z0-9\-_]/', '', $key));
+            $key = $this->anchorReducer->reduceAnchor($directive->getOption('key')->getValue());
         } else {
-            $key = 'tabs-' . rand(1, 1000);
+            $this->tabsCounter++;
+            $key = 'tabs-' . $this->tabsCounter;
         }
 
         return new TabsNode(
