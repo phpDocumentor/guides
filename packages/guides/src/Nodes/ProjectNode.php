@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 
 use const DATE_RFC2822;
 
@@ -34,6 +35,9 @@ class ProjectNode extends CompoundNode
     /** @var DocumentEntryNode[] */
     private array $documentEntries = [];
     private DateTimeImmutable $lastRendered;
+
+    /** @var NavMenuNode[] */
+    private array $globalMenues = [];
 
     public function __construct(
         private string|null $title = null,
@@ -189,5 +193,19 @@ class ProjectNode extends CompoundNode
     public function getLastRendered(): DateTimeImmutable
     {
         return $this->lastRendered;
+    }
+
+    /** @return NavMenuNode[] */
+    public function getGlobalMenues(): array
+    {
+        return $this->globalMenues;
+    }
+
+    /** @param NavMenuNode[] $globalMenues */
+    public function setGlobalMenues(array $globalMenues): ProjectNode
+    {
+        $this->globalMenues = $globalMenues;
+
+        return $this;
     }
 }
