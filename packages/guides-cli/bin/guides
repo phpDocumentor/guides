@@ -21,13 +21,14 @@ if (file_exists($autoloadDirectory)){
         throw new \RuntimeException("Error while determining the current directory.", 1636451407);
     }
 
-    $vendorDir = __DIR__ . '/vendor';
-    while (!file_exists($vendorDir . '/autoload.php')) {
-        if ($vendorDir === $rootPath) {
+    $vendorDirParent = __DIR__;
+    while (!file_exists($vendorDirParent . '/vendor/autoload.php')) {
+        if ($vendorDirParent === $rootPath) {
             throw new \RuntimeException("Could not find autoload.php", 1636451408);
         }
-        $vendorDir = \dirname($vendorDir);
+        $vendorDirParent = \dirname($vendorDirParent);
     }
+    $vendorDir = $vendorDirParent . '/vendor';
     require $vendorDir . '/autoload.php';
 }
 
