@@ -29,6 +29,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
+use Throwable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -138,8 +139,16 @@ final class AssetsExtension extends AbstractExtension
         $renderContext = $this->getRenderContext($context);
         $globalMenues = $renderContext->getProjectNode()->getGlobalMenues();
         $menues = [];
-        foreach ($globalMenues as $menue) {
-            $menues[] = $menue->withOptions(['menu' => $menuType]);
+        foreach ($globalMenues as $menu) {
+            $menu = $menu->withOptions(['menu' => $menuType]);
+            try {
+                $menu = $menu->withCurrentPath($renderContext->getCurrentFileName());
+                $menu = $menu->withRootlinePaths($renderContext->getCurrentFileRootline());
+            } catch (Throwable) {
+                // do nothing, we are in a context without active menu like single page or functional test
+            }
+
+            $menues[] = $menu;
         }
 
         return $this->nodeRenderer->render(new CollectionNode($menues), $renderContext);

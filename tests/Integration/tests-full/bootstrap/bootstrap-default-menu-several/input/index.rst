@@ -15,7 +15,6 @@ Lorem Ipsum Dolor.
     :glob:
     :titlesonly:
     :caption: Main Menu
-    :maxdepth: 1
 
     anotherPage
     somePage

@@ -5,13 +5,14 @@
         <ul class="level-1">
     {% for entry in node.menuEntries -%}
         <li><a href="{{ renderLink(entry.url) }}"
-           class="nav-link {% if entry.options.active %} active {% endif %}"
-                {%- if entry.options.active %}  aria-current="page" {% endif -%} >
+           class="nav-link {%- if node.currentPath == entry.url %} current {%- endif -%}{% if entry.url in node.rootlinePaths %} active {%- endif -%}"
+                        {%- if node.currentPath == entry.url %} aria-current="page" {% endif -%} >
             {{ renderNode(entry.value.value) }}
                 </a>
 
         {%- if entry.children|length %}
             {% include "body/menu/mainmenu/menu-level.html.twig" with {
+                    menu:node,
                     menuEntry:entry
             } %}
         {%- endif -%}

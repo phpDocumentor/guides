@@ -152,6 +152,24 @@ class RenderContext
         return $this->currentFileName;
     }
 
+    /** @return string[] */
+    public function getCurrentFileRootline(): array
+    {
+        if ($this->getCurrentDocumentEntry() === null) {
+            throw new LogicException('Cannot get current document entry when not rendering a document');
+        }
+
+        $rootline = [];
+        $documentEntry = $this->getCurrentDocumentEntry();
+        $rootline[] = $documentEntry->getFile();
+        while ($documentEntry->getParent() instanceof DocumentEntryNode) {
+            $documentEntry = $documentEntry->getParent();
+            $rootline[] = $documentEntry->getFile();
+        }
+
+        return $rootline;
+    }
+
     /** @return array<string, string|null> */
     public function getLoggerInformation(): array
     {
