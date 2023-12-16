@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 use function filter_var;
 use function preg_replace;
@@ -40,36 +39,5 @@ abstract class ReferenceRule extends AbstractInlineRule
         }
 
         return new HyperLinkNode($link, $targetLink);
-    }
-
-    protected function parseEmbeddedUrl(InlineLexer $lexer): string|null
-    {
-        if ($lexer->token === null) {
-            return null;
-        }
-
-        $startPosition = $lexer->token->position;
-        $text = '';
-
-        while ($lexer->moveNext()) {
-            $token = $lexer->token;
-            switch ($token->type) {
-                case InlineLexer::BACKTICK:
-                    //We did not find the expected SpanLexer::EMBEDED_URL_END
-                    $this->rollback($lexer, $startPosition);
-
-                    return null;
-
-                case InlineLexer::EMBEDED_URL_END:
-                    return $text;
-
-                default:
-                    $text .= $token->value;
-            }
-        }
-
-        $this->rollback($lexer, $startPosition);
-
-        return null;
     }
 }

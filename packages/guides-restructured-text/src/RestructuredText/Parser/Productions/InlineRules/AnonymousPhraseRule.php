@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
+use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -20,6 +21,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  */
 class AnonymousPhraseRule extends ReferenceRule
 {
+    use EmbeddedUriParser;
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::BACKTICK;
@@ -27,8 +30,7 @@ class AnonymousPhraseRule extends ReferenceRule
 
     public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
     {
-        $text = '';
-        $embeddedUrl = null;
+        $value = '';
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {
@@ -43,17 +45,10 @@ class AnonymousPhraseRule extends ReferenceRule
 
                     $lexer->moveNext();
 
-                    return $this->createAnonymousReference($blockContext, $text, $embeddedUrl);
+                    return $this->createAnonymousReference($blockContext, $value);
 
-                case InlineLexer::EMBEDED_URL_START:
-                    $embeddedUrl = $this->parseEmbeddedUrl($lexer);
-                    if ($embeddedUrl === null) {
-                        $text .= '<';
-                    }
-
-                    break;
                 default:
-                    $text .= $lexer->token->value;
+                    $value .= $lexer->token->value;
             }
 
             $lexer->moveNext();
@@ -64,9 +59,17 @@ class AnonymousPhraseRule extends ReferenceRule
         return null;
     }
 
-    private function createAnonymousReference(BlockContext $blockContext, string $link, string|null $embeddedUrl): AbstractLinkInlineNode
+    private function createAnonymousReference(BlockContext $blockContext, string $value): AbstractLinkInlineNode
     {
-        $node = $this->createReference($blockContext, $link, $embeddedUrl, false);
+        $parsed = $this->extractEmbeddedUri($value);
+        $link = $parsed['text'];
+        $uri = $parsed['uri'];
+        if ($link === null) {
+            $link = $uri;
+            $uri = null;
+        }
+
+        $node = $this->createReference($blockContext, $link, $uri, false);
         $blockContext->getDocumentParserContext()->pushAnonymous($link);
 
         return $node;

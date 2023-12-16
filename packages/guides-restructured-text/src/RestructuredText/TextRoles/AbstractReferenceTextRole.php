@@ -6,25 +6,15 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
-use Psr\Log\LoggerInterface;
-
-use function sprintf;
-use function trim;
+use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 
 /** @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#embedded-uris-and-aliases */
 abstract class AbstractReferenceTextRole implements TextRole
 {
+    use EmbeddedUriParser;
+
     /** @see https://regex101.com/r/htMn5p/1 */
     public const INTERLINK_REGEX = '/^([a-zA-Z0-9-_]+):(.*$)/';
-    private readonly InlineLexer $lexer;
-
-    public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {
-        // Do not inject the $lexer. It contains a state.
-        $this->lexer = new InlineLexer();
-    }
 
     public function processNode(
         DocumentParserContext $documentParserContext,
@@ -32,60 +22,9 @@ abstract class AbstractReferenceTextRole implements TextRole
         string $content,
         string $rawContent,
     ): AbstractLinkInlineNode {
-        $referenceTarget = null;
-        $value = null;
+        $parsed = $this->extractEmbeddedUri($content);
 
-        $part = '';
-        $this->lexer->setInput($content);
-        $this->lexer->moveNext();
-        $this->lexer->moveNext();
-        while ($this->lexer->token !== null) {
-            $token = $this->lexer->token;
-            switch ($token->type) {
-                case InlineLexer::EMBEDED_URL_START:
-                    $value = trim($part);
-                    $part = '';
-
-                    break;
-                case InlineLexer::EMBEDED_URL_END:
-                    if ($value === null) {
-                        // not inside the embedded URL
-                        $part .= $token->value;
-                        break;
-                    }
-
-                    if ($this->lexer->peek() !== null) {
-                        $this->logger->debug(
-                            sprintf(
-                                'Reference contains unexpected content after closing `>`, treating it as text like sphinx does: "%s"',
-                                $rawContent,
-                            ),
-                            $documentParserContext->getLoggerInformation(),
-                        );
-                        $part = $value . '<' . $part . '>';
-                        $value = null;
-                        break;
-                    }
-
-                    $referenceTarget = $part;
-                    $part = '';
-
-                    break 2;
-                default:
-                    $part .= $token->value;
-            }
-
-            $this->lexer->moveNext();
-        }
-
-        $value .= trim($part);
-
-        if ($referenceTarget === null) {
-            $referenceTarget = $value;
-            $value = null;
-        }
-
-        return $this->createNode($referenceTarget, $value, $role);
+        return $this->createNode($parsed['uri'], $parsed['text'], $role);
     }
 
     abstract protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode;
