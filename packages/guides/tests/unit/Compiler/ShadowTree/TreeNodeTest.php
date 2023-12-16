@@ -75,9 +75,9 @@ final class TreeNodeTest extends TestCase
 
         $treeNode->getChildren()[0]->removeChild($nodeToRemove);
 
-        self::assertCount(0, $treeNode->getChildren()[0]->getChildren());
+        self::assertCount(1, $treeNode->getChildren()[0]->getChildren());
         self::assertInstanceOf(CompoundNode::class, $treeNode->getChildren()[0]->getNode());
-        self::assertCount(0, $treeNode->getChildren()[0]->getNode()->getChildren());
+        self::assertCount(1, $treeNode->getChildren()[0]->getNode()->getChildren());
         self::assertInstanceOf(CompoundNode::class, $treeNode->getNode());
         self::assertSame($treeNode->getNode()->getChildren()[0], $treeNode->getChildren()[0]->getNode());
         self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());

@@ -13,7 +13,7 @@ final class SectionNode extends CompoundNode implements LinkTargetNode
 
     public function __construct(private readonly TitleNode $title)
     {
-        parent::__construct();
+        parent::__construct([$title]);
     }
 
     public function getTitle(): TitleNode
