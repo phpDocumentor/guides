@@ -18,9 +18,11 @@ use Psr\Log\LoggerInterface;
 
 use function array_filter;
 use function array_map;
+use function assert;
 use function count;
 use function explode;
 use function implode;
+use function is_string;
 use function strval;
 use function trim;
 
@@ -93,6 +95,7 @@ final class CsvTableDirective extends BaseDirective
         foreach ($csv->getRecords() as $record) {
             $tableRow = new TableRow();
             foreach ($record as $column) {
+                assert(is_string($column) || $column === null);
                 $columnNode = new TableColumn($column ?? '', 1, []);
                 $tableRow->addColumn($this->buildColumn($columnNode, $blockContext, $this->productions));
             }
