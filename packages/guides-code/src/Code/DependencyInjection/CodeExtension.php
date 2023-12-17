@@ -31,10 +31,12 @@ class CodeExtension extends Extension implements ConfigurationInterface
             ->children()
                 ->arrayNode('aliases')
                     ->useAttributeAsKey('name')
+                    ->normalizeKeys(false)
                     ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('languages')
                     ->useAttributeAsKey('name')
+                    ->normalizeKeys(false)
                     ->scalarPrototype()->end()
                 ->end()
             ->end();
