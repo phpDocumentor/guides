@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
 
-class HighlighterTest extends TestCase
+class HighlightPhpHighlighterTest extends TestCase
 {
     public function testItEscapesCharactersForbiddenInPreTags(): void
     {
-        $highlight = new Highlighter(new HighlightPHP(), new NullLogger());
+        $highlight = new HighlightPhpHighlighter(new HighlightPHP(), new NullLogger());
         $result = $highlight('text', <<<'TXT'
         < I'm an expert in my field. >
           ---------------------------
@@ -37,7 +37,7 @@ class HighlighterTest extends TestCase
 
     public function testItIsIdempotent(): void
     {
-        $highlight = new Highlighter(new HighlightPHP(), new NullLogger());
+        $highlight = new HighlightPhpHighlighter(new HighlightPHP(), new NullLogger());
         $result = $highlight('text', <<<'TXT'
         &lt; I'm an expert in my field. &gt;
           ---------------------------
@@ -62,7 +62,7 @@ class HighlighterTest extends TestCase
     {
         $highlighter = $this->createStub(HighlightPHP::class);
         $logger = new TestLogger();
-        $highlight = new Highlighter($highlighter, $logger);
+        $highlight = new HighlightPhpHighlighter($highlighter, $logger);
 
         $highlighter->method('highlight')->willThrowException(new Exception('test'));
         $highlight('php', 'echo "Hello world";');
@@ -77,7 +77,7 @@ class HighlighterTest extends TestCase
     public function testItUnderstandsAliases(): void
     {
         $highlighter = $this->createMock(HighlightPHP::class);
-        $highlight = new Highlighter(
+        $highlight = new HighlightPhpHighlighter(
             $highlighter,
             new NullLogger(),
             ['attribute' => 'php'],
