@@ -44,7 +44,11 @@ final class DefinitionListRule implements Rule
 {
     public const PRIORITY = 30;
 
-    public function __construct(private readonly InlineMarkupRule $inlineMarkupRule, private readonly RuleContainer $bodyElements)
+    public function __construct(
+        private readonly InlineMarkupRule $inlineMarkupRule,
+        private readonly FieldListRule $fieldListRule,
+        private readonly RuleContainer $bodyElements
+    )
     {
     }
 
@@ -156,8 +160,7 @@ final class DefinitionListRule implements Rule
             return false;
         }
 
-        // This a field list
-        if (str_starts_with(trim($currentLine), ':')) {
+        if ($this->fieldListRule->applies($currentLine)) {
             return false;
         }
 
