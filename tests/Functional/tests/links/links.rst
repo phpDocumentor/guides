@@ -25,5 +25,9 @@ You can read more on the features of Embeddables objects `in the documentation
 Doctrine has a few links that are between brackets (`such as here
 <https://www.doctrine-project.org/projects/doctrine-orm/en/2.16/reference/dql-doctrine-query-language.html#query-hints>`_)
 
+Links may use reserved characters as name like `this one linking to the <head> element`_.
+But this :code:`<` is not a link :code:`>`.
+
 .. _`xkcd`: http://xkcd.com/
 .. _something: http://something.com/
+.. _`this one linking to the <head> element`: https://html.spec.whatwg.org/#the-head-element

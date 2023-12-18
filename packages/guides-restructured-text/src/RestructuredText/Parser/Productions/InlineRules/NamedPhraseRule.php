@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
+use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
 /**
@@ -20,6 +21,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  */
 class NamedPhraseRule extends ReferenceRule
 {
+    use EmbeddedUriParser;
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::BACKTICK;
@@ -27,8 +30,7 @@ class NamedPhraseRule extends ReferenceRule
 
     public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
     {
-        $text = '';
-        $embeddedUrl = null;
+        $value = '';
         $initialPosition = $lexer->token?->position;
         $lexer->moveNext();
         while ($lexer->token !== null) {
@@ -42,25 +44,23 @@ class NamedPhraseRule extends ReferenceRule
                     }
 
                     $lexer->moveNext();
-                    if ($text === '') {
-                        $text = $embeddedUrl ?? '';
+
+                    $parsed = $this->extractEmbeddedUri($value);
+                    $text = $parsed['text'];
+                    $uri = $parsed['uri'];
+                    if ($text === null) {
+                        $text = $uri;
+                        $uri = null;
                     }
 
-                    return $this->createReference($blockContext, $text, $embeddedUrl);
+                    return $this->createReference($blockContext, $text, $uri);
 
-                case InlineLexer::EMBEDED_URL_START:
-                    $embeddedUrl = $this->parseEmbeddedUrl($lexer);
-                    if ($embeddedUrl === null) {
-                        $text .= '<';
-                    }
-
-                    break;
                 case InlineLexer::WHITESPACE:
-                    $text .= ' ';
+                    $value .= ' ';
 
                     break;
                 default:
-                    $text .= $lexer->token->value;
+                    $value .= $lexer->token->value;
             }
 
             $lexer->moveNext();

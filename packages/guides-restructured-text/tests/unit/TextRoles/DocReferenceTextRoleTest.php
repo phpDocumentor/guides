@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -13,15 +12,13 @@ use PHPUnit\Framework\TestCase;
 
 class DocReferenceTextRoleTest extends TestCase
 {
-    private Logger $logger;
     private DocReferenceTextRole $docReferenceTextRole;
     private DocumentParserContext&MockObject $documentParserContext;
 
     public function setUp(): void
     {
-        $this->logger = new Logger('test');
         $this->documentParserContext = $this->createMock(DocumentParserContext::class);
-        $this->docReferenceTextRole = new DocReferenceTextRole($this->logger);
+        $this->docReferenceTextRole = new DocReferenceTextRole();
     }
 
     #[DataProvider('docReferenceProvider')]

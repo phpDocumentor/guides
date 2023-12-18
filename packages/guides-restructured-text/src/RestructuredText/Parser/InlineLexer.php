@@ -23,8 +23,6 @@ final class InlineLexer extends AbstractLexer
     public const ANONYMOUS_END = 3;
     public const LITERAL = 5;
     public const BACKTICK = 6;
-    public const EMBEDED_URL_START = 9;
-    public const EMBEDED_URL_END = 10;
     public const NAMED_REFERENCE = 11;
     public const ANONYMOUSE_REFERENCE = 12;
     public const COLON = 13;
@@ -62,8 +60,6 @@ final class InlineLexer extends AbstractLexer
             '``.+?``(?!`)',
             '_{2}',
             '_',
-            '<',
-            '>',
             '`',
             ':',
             '|',
@@ -138,8 +134,6 @@ final class InlineLexer extends AbstractLexer
             '**' => self::STRONG_DELIMITER,
             '*' => self::EMPHASIS_DELIMITER,
             '|' => self::VARIABLE_DELIMITER,
-            '<' => self::EMBEDED_URL_START,
-            '>' => self::EMBEDED_URL_END,
             '_' => self::UNDERSCORE,
             '__' => self::ANONYMOUS_END,
             ':' => self::COLON,

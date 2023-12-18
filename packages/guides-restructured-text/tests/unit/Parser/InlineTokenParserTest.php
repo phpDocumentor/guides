@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
-use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
@@ -43,20 +42,18 @@ use PHPUnit\Framework\TestCase;
 
 final class InlineTokenParserTest extends TestCase
 {
-    public Logger $logger;
     private DocumentParserContext $documentParserContext;
     private InlineParser $inlineTokenParser;
     private DefaultTextRoleFactory $textRoleFactory;
 
     public function setUp(): void
     {
-        $this->logger = new Logger('test');
         $this->textRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole(),
             new LiteralTextRole(),
             [
-                new ReferenceTextRole($this->logger),
-                new DocReferenceTextRole($this->logger),
+                new ReferenceTextRole(),
+                new DocReferenceTextRole(),
             ],
         );
         $this->documentParserContext = new DocumentParserContext(
@@ -167,19 +164,19 @@ final class InlineTokenParserTest extends TestCase
                 new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Named Reference, Phrased, With URL' => [
-                '`myref<https://test.com>`_',
+                '`myref <https://test.com>`_',
                 new InlineCompoundNode([new HyperLinkNode('myref', 'https://test.com')]),
             ],
             'Named Reference, Phrased, With URL not ended' => [
-                '`myref<https://test.com`_',
-                new InlineCompoundNode([new HyperLinkNode('myref<https://test.com', 'myref<https://test.com')]),
+                '`myref <https://test.com`_',
+                new InlineCompoundNode([new HyperLinkNode('myref <https://test.com', 'myref <https://test.com')]),
             ],
             'Anonymous Reference, Phrased' => [
                 '`myref`__',
                 new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
             'Anonymous Reference, Phrased, With URL' => [
-                '`myref<https://test.com>`__',
+                '`myref <https://test.com>`__',
                 new InlineCompoundNode([new HyperLinkNode('myref', 'https://test.com')]),
             ],
             'Footnote' => [

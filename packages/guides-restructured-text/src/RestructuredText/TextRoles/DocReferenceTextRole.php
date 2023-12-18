@@ -6,18 +6,11 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
-use Psr\Log\LoggerInterface;
 
 use function preg_match;
 
 class DocReferenceTextRole extends AbstractReferenceTextRole
 {
-    public function __construct(
-        protected readonly LoggerInterface $logger,
-    ) {
-        parent::__construct($this->logger);
-    }
-
     final public const NAME = 'doc';
 
     public function getName(): string

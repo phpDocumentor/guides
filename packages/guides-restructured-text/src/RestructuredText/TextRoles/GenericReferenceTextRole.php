@@ -7,7 +7,6 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
-use Psr\Log\LoggerInterface;
 
 use function array_keys;
 use function preg_match;
@@ -15,11 +14,9 @@ use function preg_match;
 class GenericReferenceTextRole extends AbstractReferenceTextRole
 {
     public function __construct(
-        protected readonly LoggerInterface $logger,
         private readonly GenericLinkProvider $genericLinkProvider,
         private readonly AnchorReducer $anchorReducer,
     ) {
-        parent::__construct($this->logger);
     }
 
     public function getName(): string
