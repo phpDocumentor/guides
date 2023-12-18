@@ -18,6 +18,10 @@ use function is_scalar;
 
 class NavMenuNode extends MenuNode
 {
+    private string|null $currentPath = null;
+    /** @var string[] */
+    private array $rootlinePaths = [];
+
     public function getDepth(): int
     {
         if ($this->hasOption('depth') && is_scalar($this->getOption('depth'))) {
@@ -52,5 +56,33 @@ class NavMenuNode extends MenuNode
         assert($node instanceof NavMenuNode);
 
         return $node;
+    }
+
+    public function withCurrentPath(string|null $currentPath): NavMenuNode
+    {
+        $that = clone $this;
+        $that->currentPath = $currentPath;
+
+        return $that;
+    }
+
+    /** @param string[] $rootlinePaths */
+    public function withRootlinePaths(array $rootlinePaths): NavMenuNode
+    {
+        $that = clone $this;
+        $that->rootlinePaths = $rootlinePaths;
+
+        return $that;
+    }
+
+    public function getCurrentPath(): string|null
+    {
+        return $this->currentPath;
+    }
+
+    /** @return string[] */
+    public function getRootlinePaths(): array
+    {
+        return $this->rootlinePaths;
     }
 }

@@ -12,16 +12,15 @@ Document Title
 Lorem Ipsum Dolor.
 
 ..  toctree::
-    :hidden:
     :glob:
     :titlesonly:
     :caption: Main Menu
 
     anotherPage
     somePage
+    subpages/index
 
 ..  toctree::
-    :hidden:
     :glob:
     :titlesonly:
     :caption: Additional Menu

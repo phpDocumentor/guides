@@ -22,7 +22,6 @@ use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
-use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
@@ -30,11 +29,11 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
+use Throwable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
-use function count;
 use function sprintf;
 use function trim;
 
@@ -138,17 +137,21 @@ final class AssetsExtension extends AbstractExtension
     public function renderMenu(array $context, string $menuType, int $maxMenuCount = 0): string
     {
         $renderContext = $this->getRenderContext($context);
-        $rootDocument = $renderContext->getRootDocumentNode();
-        $menuNodes = [];
-        foreach ($rootDocument->getTocNodes() as $tocNode) {
-            $menuNode = NavMenuNode::fromTocNode($tocNode, $menuType);
-            $menuNodes[] = $menuNode;
-            if ($maxMenuCount > 0 && $maxMenuCount <= count($menuNodes)) {
-                break;
+        $globalMenues = $renderContext->getProjectNode()->getGlobalMenues();
+        $menues = [];
+        foreach ($globalMenues as $menu) {
+            $menu = $menu->withOptions(['menu' => $menuType]);
+            try {
+                $menu = $menu->withCurrentPath($renderContext->getCurrentFileName());
+                $menu = $menu->withRootlinePaths($renderContext->getCurrentFileRootline());
+            } catch (Throwable) {
+                // do nothing, we are in a context without active menu like single page or functional test
             }
+
+            $menues[] = $menu;
         }
 
-        return $this->nodeRenderer->render(new CollectionNode($menuNodes), $renderContext);
+        return $this->nodeRenderer->render(new CollectionNode($menues), $renderContext);
     }
 
     /** @param array{env: RenderContext} $context */
