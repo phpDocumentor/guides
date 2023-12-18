@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Code\DependencyInjection;
 
-use Highlight\Highlighter as HighlighterPHP;
-use phpDocumentor\Guides\Code\Highlighter\Highlighter;
+use Highlight\Highlighter as HighlightPHP;
+use phpDocumentor\Guides\Code\Highlighter\HighlightPhpHighlighter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -31,10 +31,12 @@ class CodeExtension extends Extension implements ConfigurationInterface
             ->children()
                 ->arrayNode('aliases')
                     ->useAttributeAsKey('name')
+                    ->normalizeKeys(false)
                     ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('languages')
                     ->useAttributeAsKey('name')
+                    ->normalizeKeys(false)
                     ->scalarPrototype()->end()
                 ->end()
             ->end();
@@ -54,10 +56,10 @@ class CodeExtension extends Extension implements ConfigurationInterface
 
         $loader->load('guides-code.php');
 
-        $container->getDefinition(Highlighter::class)
+        $container->getDefinition(HighlightPhpHighlighter::class)
             ->replaceArgument('$languageAliases', $config['aliases'] ?? []);
 
-        $highlighter = $container->getDefinition(HighlighterPHP::class);
+        $highlighter = $container->getDefinition(HighlightPHP::class);
         foreach ($config['languages'] ?? [] as $name => $definitionFilePath) {
             $highlighter->addMethodCall('registerLanguage', [$name, $definitionFilePath, true]);
         }
