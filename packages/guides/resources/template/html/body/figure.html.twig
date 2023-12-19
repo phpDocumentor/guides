@@ -7,7 +7,7 @@
     {% if node.document %}
         {% set caption = renderNode(node.document) %}
 
-        {% if caption %}
+        {% if caption|trim %}
             <figcaption>{{ caption|raw }}</figcaption>
         {% endif %}
     {% endif %}
