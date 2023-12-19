@@ -40,18 +40,19 @@ if ($input->hasParameterOption('-vvv', true)) {
 
 $containerFactory = new ContainerFactory([new ApplicationExtension()]);
 
-if (is_file($vendorDir . '/../guides.xml')) {
+$projectConfig = realpath($vendorDir . '/../guides.xml');
+if (is_file($projectConfig)) {
     if ($verbosity === 3) {
-        echo 'Loading guides.xml from ' . $vendorDir . '/../guides.xml' . PHP_EOL;
+        echo 'Loading guides.xml from ' . $projectConfig . PHP_EOL;
     }
     // vendor folder was placed directly into the project directory
-    $containerFactory->addConfigFile($vendorDir . '/../guides.xml');
+    $containerFactory->addConfigFile($projectConfig);
 }
 
 $workingDir = $input->getParameterOption('--working-dir', getcwd(), true);
 $localConfig = $input->getParameterOption('--config', $workingDir, true).'/guides.xml';
 
-if (is_file($localConfig)) {
+if (is_file($localConfig) && realpath($localConfig) !== $projectConfig) {
     if ($verbosity === 3) {
         echo 'Loading guides.xml from ' . $localConfig . PHP_EOL;
     }
