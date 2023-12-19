@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CollectionNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -41,7 +42,7 @@ class SidebarDirective extends SubDirective
         Directive $directive,
     ): Node|null {
         return new SidebarNode(
-            $directive->getData(),
+            $directive->getDataNode() ?? InlineCompoundNode::getPlainTextInlineNode($directive->getData()),
             $collectionNode->getChildren(),
         );
     }
