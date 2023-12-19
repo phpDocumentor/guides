@@ -60,6 +60,7 @@ class FigureDirective extends SubDirective
             'target' => $scalarOptions['target'] ?? null,
             'class' => $scalarOptions['class'] ?? null,
             'name' => $scalarOptions['name'] ?? null,
+            'align' => $scalarOptions['align'] ?? null,
         ]);
 
         return new FigureNode($image, new CollectionNode($collectionNode->getChildren()));
