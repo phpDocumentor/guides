@@ -100,6 +100,26 @@ final class InlineLexer extends AbstractLexer
     /** @inheritDoc */
     protected function getType(string &$value)
     {
+        $type = match ($value) {
+            '`' => self::BACKTICK,
+            '**' => self::STRONG_DELIMITER,
+            '*' => self::EMPHASIS_DELIMITER,
+            '|' => self::VARIABLE_DELIMITER,
+            '_' => self::UNDERSCORE,
+            '__' => self::ANONYMOUS_END,
+            ':' => self::COLON,
+            '#' => self::OCTOTHORPE,
+            '[' => self::ANNOTATION_START,
+            ']' => self::ANNOTATION_END,
+            '~' => self::NBSP,
+            '\\``' => self::ESCAPED_SIGN,
+            default => null,
+        };
+
+        if ($type !== null) {
+            return $type;
+        }
+
         // $value is already a tokenized part. Therefore, we have to match against the complete String here.
         if (preg_match('/^\\\\[\s\S]$/i', $value)) {
             return self::ESCAPED_SIGN;
@@ -129,20 +149,6 @@ final class InlineLexer extends AbstractLexer
             return self::WHITESPACE;
         }
 
-        return match ($value) {
-            '`' => self::BACKTICK,
-            '**' => self::STRONG_DELIMITER,
-            '*' => self::EMPHASIS_DELIMITER,
-            '|' => self::VARIABLE_DELIMITER,
-            '_' => self::UNDERSCORE,
-            '__' => self::ANONYMOUS_END,
-            ':' => self::COLON,
-            '#' => self::OCTOTHORPE,
-            '[' => self::ANNOTATION_START,
-            ']' => self::ANNOTATION_END,
-            '~' => self::NBSP,
-            '\\``' => self::ESCAPED_SIGN,
-            default => self::WORD,
-        };
+        return self::WORD;
     }
 }
