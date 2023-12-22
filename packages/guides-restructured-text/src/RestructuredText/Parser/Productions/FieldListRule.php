@@ -45,19 +45,19 @@ final class FieldListRule implements Rule
 
     public function applies(BlockContext $blockContext): bool
     {
-        return $this->isFieldLine($blockContext->getDocumentIterator()->current());
+        return self::isFieldLine($blockContext->getDocumentIterator()->current());
     }
 
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
         $iterator = $blockContext->getDocumentIterator();
         $fieldListItemNodes = [];
-        while ($iterator->valid() && $this->isFieldLine($iterator->current())) {
+        while ($iterator->valid() && self::isFieldLine($iterator->current())) {
             $fieldListItemNodes[] = $this->createListItem($blockContext);
             $iterator->next();
             while ($iterator->valid() && LinesIterator::isEmptyLine($iterator->current())) {
                 $peek = $iterator->peek();
-                if (!LinesIterator::isEmptyLine($peek) && !$this->isFieldLine($peek)) {
+                if (!LinesIterator::isEmptyLine($peek) && !self::isFieldLine($peek)) {
                     break;
                 }
 
@@ -133,7 +133,7 @@ final class FieldListRule implements Rule
         $buffer = new Buffer();
         $documentIterator = $blockContext->getDocumentIterator();
         $nextLine = $documentIterator->getNextLine();
-        if ($nextLine !== null && !$this->isFieldLine($nextLine)) {
+        if ($nextLine !== null && !self::isFieldLine($nextLine)) {
             $indenting = mb_strlen($nextLine) - mb_strlen(trim($nextLine));
             if ($indenting > 0) {
                 $buffer->push(mb_substr($documentIterator->getNextLine() ?? '', $indenting));
@@ -181,7 +181,7 @@ final class FieldListRule implements Rule
         }
     }
 
-    private function isFieldLine(string|null $currentLine): bool
+    private static function isFieldLine(string|null $currentLine): bool
     {
         if ($currentLine === null) {
             return false;

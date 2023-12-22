@@ -32,6 +32,7 @@ use function explode;
 use function ltrim;
 use function mb_strlen;
 use function mb_substr;
+use function preg_match;
 use function str_starts_with;
 use function trim;
 
@@ -44,8 +45,10 @@ final class DefinitionListRule implements Rule
 {
     public const PRIORITY = 30;
 
-    public function __construct(private readonly InlineMarkupRule $inlineMarkupRule, private readonly RuleContainer $bodyElements)
-    {
+    public function __construct(
+        private readonly InlineMarkupRule $inlineMarkupRule,
+        private readonly RuleContainer $bodyElements,
+    ) {
     }
 
     public function applies(BlockContext $blockContext): bool
@@ -156,8 +159,8 @@ final class DefinitionListRule implements Rule
             return false;
         }
 
-        // This a field list
-        if (str_starts_with(trim($currentLine), ':')) {
+        // This is a field list
+        if (preg_match('/^:([^:]+):( (.*)|)$/mUsi', $currentLine) > 0) {
             return false;
         }
 
