@@ -19,7 +19,7 @@ use function rtrim;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-references
  */
-class NamedReferenceRule extends ReferenceRule
+class NamedReferenceRule extends ReferenceRule implements MatchCachable
 {
     public function applies(InlineLexer $lexer): bool
     {
@@ -39,5 +39,10 @@ class NamedReferenceRule extends ReferenceRule
     public function getPriority(): int
     {
         return 1000;
+    }
+
+    public function isCacheable(): bool
+    {
+        return true;
     }
 }

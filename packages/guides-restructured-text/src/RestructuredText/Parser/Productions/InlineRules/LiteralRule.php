@@ -14,7 +14,7 @@ use function substr;
 /**
  * Rule for literals such as ``something``
  */
-class LiteralRule extends AbstractInlineRule
+class LiteralRule extends AbstractInlineRule implements MatchCachable
 {
     public function applies(InlineLexer $lexer): bool
     {
@@ -37,5 +37,10 @@ class LiteralRule extends AbstractInlineRule
     {
         // Should be executed first as any other rules within may not be interpreted
         return 10_000;
+    }
+
+    public function isCacheable(): bool
+    {
+        return true;
     }
 }

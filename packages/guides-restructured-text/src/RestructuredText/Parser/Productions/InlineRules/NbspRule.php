@@ -11,7 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for non-breaking spaces: a~b
  */
-class NbspRule extends ReferenceRule
+final class NbspRule extends AbstractInlineRule implements MatchCachable
 {
     public function applies(InlineLexer $lexer): bool
     {
@@ -28,5 +28,10 @@ class NbspRule extends ReferenceRule
     public function getPriority(): int
     {
         return 1000;
+    }
+
+    public function isCacheable(): bool
+    {
+        return true;
     }
 }

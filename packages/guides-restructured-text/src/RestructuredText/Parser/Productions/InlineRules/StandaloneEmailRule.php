@@ -17,7 +17,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#standalone-hyperlinks
  */
-class StandaloneEmailRule extends ReferenceRule
+class StandaloneEmailRule extends ReferenceRule implements MatchCachable
 {
     public function applies(InlineLexer $lexer): bool
     {
@@ -37,5 +37,10 @@ class StandaloneEmailRule extends ReferenceRule
     public function getPriority(): int
     {
         return 100;
+    }
+
+    public function isCacheable(): bool
+    {
+        return true;
     }
 }
