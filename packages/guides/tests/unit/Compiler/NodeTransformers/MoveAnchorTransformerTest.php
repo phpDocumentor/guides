@@ -50,7 +50,7 @@ final class MoveAnchorTransformerTest extends TestCase
         $this->documentNodeTraverser->traverse($document, $context);
 
         self::assertCount(1, $context->getDocumentNode()->getChildren());
-        self::assertCount(1, $section->getChildren());
+        self::assertCount(2, $section->getChildren());
         self::assertSame($node, $section->getChildren()[0]);
     }
 
@@ -74,7 +74,7 @@ final class MoveAnchorTransformerTest extends TestCase
         $this->documentNodeTraverser->traverse($document, $context);
 
         self::assertCount(1, $context->getDocumentNode()->getChildren());
-        self::assertCount(4, $section->getChildren());
+        self::assertCount(5, $section->getChildren());
         self::assertEquals($node4, $section->getChildren()[0]);
         self::assertEquals($node3, $section->getChildren()[1]);
         self::assertEquals($node2, $section->getChildren()[2]);
@@ -84,8 +84,10 @@ final class MoveAnchorTransformerTest extends TestCase
     public function testAnchorShouldNotBeMovedTwice(): void
     {
         $node1 = new AnchorNode('foo');
-        $section = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('foo'), 1, 'id'));
-        $subSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('foo'), 1, 'id'));
+        $sectionTitle = new TitleNode(InlineCompoundNode::getPlainTextInlineNode('foo'), 1, 'id');
+        $section = new SectionNode($sectionTitle);
+        $subSectionTitle = new TitleNode(InlineCompoundNode::getPlainTextInlineNode('sub foo'), 2, 'sub-id');
+        $subSection = new SectionNode($subSectionTitle);
         $section->addChildNode(new AnchorNode('bar'));
         $section->addChildNode($subSection);
 
@@ -100,10 +102,10 @@ final class MoveAnchorTransformerTest extends TestCase
         self::assertCount(1, $context->getDocumentNode()->getChildren());
         $updatedSection = $context->getDocumentNode()->getChildren()[0];
         self::assertInstanceOf(SectionNode::class, $updatedSection);
-        self::assertEquals([$node1, $subSection], $updatedSection->getChildren());
-        $updatedSubSection = $updatedSection->getChildren()[1];
+        self::assertEquals([$node1, $sectionTitle, $subSection], $updatedSection->getChildren());
+        $updatedSubSection = $updatedSection->getChildren()[2];
         self::assertInstanceOf(SectionNode::class, $updatedSubSection);
-        self::assertEquals([new AnchorNode('bar')], $updatedSubSection->getChildren());
+        self::assertEquals([new AnchorNode('bar'), $subSectionTitle], $updatedSubSection->getChildren());
     }
 
     public function testNoMoveWhenAnchorIsOnlyChild(): void
@@ -143,8 +145,8 @@ final class MoveAnchorTransformerTest extends TestCase
         [$firstChild, $secondChild] = $context->getDocumentNode()->getChildren();
         self::assertInstanceOf(SectionNode::class, $firstChild);
         self::assertInstanceOf(SectionNode::class, $secondChild);
-        self::assertCount(0, $firstChild->getChildren());
-        self::assertCount(2, $secondChild->getChildren());
+        self::assertCount(1, $firstChild->getChildren());
+        self::assertCount(3, $secondChild->getChildren());
     }
 
     public function testMoveAnchorsAtTheEndOfSectionToNextParentNeighbourSection(): void
@@ -171,7 +173,7 @@ final class MoveAnchorTransformerTest extends TestCase
         [$firstChild, $secondChild] = $context->getDocumentNode()->getChildren();
         self::assertInstanceOf(SectionNode::class, $firstChild);
         self::assertInstanceOf(SectionNode::class, $secondChild);
-        self::assertCount(1, $firstChild->getChildren());
-        self::assertCount(2, $secondChild->getChildren());
+        self::assertCount(2, $firstChild->getChildren());
+        self::assertCount(3, $secondChild->getChildren());
     }
 }

@@ -1,5 +1,4 @@
 <div class="section{% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.title.id }}">
-    {{ renderNode(node.title) }}
     {% for childNode in node.children %}
         {{ renderNode(childNode) }}
     {% endfor %}
