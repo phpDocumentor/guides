@@ -6,7 +6,7 @@ Text Roles
 
 Text roles can be used to style content inline. Some text roles have advanced processing such as reference resolving.
 
-You can also :doc:`add your own custom text roles</extension/text-roles>`.
+You can also :doc:`add your own custom text roles </extension/text-roles>`.
 
 Currently the following text roles are implemented:
 

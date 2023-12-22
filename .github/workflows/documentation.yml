@@ -7,12 +7,14 @@ on: # yamllint disable-line rule:truthy
     paths:
       - ".github/workflows/documentation.yml"
       - "docs/**"
+      - "packages/**"
   push:
     branches:
       - "main"
     paths:
       - ".github/workflows/documentation.yml"
       - "docs/**"
+      - "packages/**"
 
 jobs:
   validate-with-guides:
