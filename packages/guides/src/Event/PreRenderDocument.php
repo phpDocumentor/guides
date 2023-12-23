@@ -8,6 +8,9 @@ use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
+/**
+ * This event is called before the rendering of each document.
+ */
 final class PreRenderDocument
 {
     /** @param NodeRenderer<DocumentNode> $renderer */
