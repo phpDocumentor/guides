@@ -9,6 +9,8 @@ use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Interlink\DefaultInventoryLoader;
+use phpDocumentor\Guides\Interlink\DefaultInventoryRepository;
 use phpDocumentor\Guides\Interlink\InventoryLoader;
 use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Interlink\JsonLoader;
@@ -106,10 +108,10 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeTraverser::class)
 
-        ->set(InventoryRepository::class)
+        ->set(InventoryRepository::class, DefaultInventoryRepository::class)
         ->arg('$inventoryConfigs', param('phpdoc.guides.inventories'))
 
-        ->set(InventoryLoader::class)
+        ->set(InventoryLoader::class, DefaultInventoryLoader::class)
 
         ->set(JsonLoader::class)
 
