@@ -18,7 +18,7 @@ use const JSON_THROW_ON_ERROR;
 
 final class InventoryLoaderTest extends TestCase
 {
-    private InventoryLoader $inventoryLoader;
+    private DefaultInventoryLoader $inventoryLoader;
     private JsonLoader&MockObject $jsonLoader;
     private InventoryRepository $inventoryRepository;
     /** @var array<string, mixed> */
@@ -27,11 +27,11 @@ final class InventoryLoaderTest extends TestCase
     protected function setUp(): void
     {
         $this->jsonLoader = $this->createMock(JsonLoader::class);
-        $this->inventoryLoader = new InventoryLoader(
+        $this->inventoryLoader = new DefaultInventoryLoader(
             self::createStub(NullLogger::class),
             $this->jsonLoader,
         );
-        $this->inventoryRepository = new InventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
+        $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
