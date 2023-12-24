@@ -7,9 +7,13 @@ namespace phpDocumentor\Guides\Handlers;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Tactician\CommandBus;
+use phpDocumentor\Guides\Event\PostParseProcess;
+use phpDocumentor\Guides\Event\PreParseProcess;
 use phpDocumentor\Guides\FileCollector;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
+use function assert;
 use function sprintf;
 
 final class ParseDirectoryHandler
@@ -19,12 +23,19 @@ final class ParseDirectoryHandler
     public function __construct(
         private readonly FileCollector $fileCollector,
         private readonly CommandBus $commandBus,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
     /** @return DocumentNode[] */
     public function handle(ParseDirectoryCommand $command): array
     {
+        $preParseProcessEvent = $this->eventDispatcher->dispatch(
+            new PreParseProcess($command),
+        );
+        assert($preParseProcessEvent instanceof PreParseProcess);
+        $command = $preParseProcessEvent->getParseDirectoryCommand();
+
         $origin = $command->getOrigin();
         $currentDirectory = $command->getDirectory();
         $extension = $command->getInputFormat();
@@ -36,12 +47,18 @@ final class ParseDirectoryHandler
         );
 
         $files = $this->fileCollector->collect($origin, $currentDirectory, $extension);
+        /** @var DocumentNode[] $documents */
         $documents = [];
         foreach ($files as $file) {
             $documents[] = $this->commandBus->handle(
                 new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode(), $indexName === $file),
             );
         }
+
+        $postParseProcessEvent = $this->eventDispatcher->dispatch(
+            new PostParseProcess($command, $documents),
+        );
+        assert($postParseProcessEvent instanceof PostParseProcess);
 
         return $documents;
     }
