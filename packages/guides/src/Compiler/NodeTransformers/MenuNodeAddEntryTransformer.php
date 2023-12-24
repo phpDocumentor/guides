@@ -73,7 +73,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                     $documentEntry->getFile(),
                     $documentEntry->getTitle(),
                     [],
-                    false,
+                    true,
                     1,
                     '',
                     $this->isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),

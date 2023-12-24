@@ -100,7 +100,7 @@ class BreadCrumbNodeRenderer implements NodeRenderer
             $documentEntry->getFile(),
             $documentEntry->getTitle(),
             [],
-            false,
+            true,
             $level,
             '',
             true,

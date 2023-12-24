@@ -57,7 +57,7 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
                 $subDocumentEntryNode->getFile(),
                 $subDocumentEntryNode->getTitle(),
                 [],
-                false,
+                true,
                 $currentLevel,
                 '',
                 self::isInRootline($subDocumentEntryNode, $compilerContext->getDocumentNode()->getDocumentEntry()),

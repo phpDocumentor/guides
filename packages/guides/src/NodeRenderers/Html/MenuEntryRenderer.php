@@ -11,6 +11,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function assert;
+
 /** @implements NodeRenderer<MenuEntryNode> */
 final class MenuEntryRenderer implements NodeRenderer
 {
@@ -27,11 +29,13 @@ final class MenuEntryRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $renderContext): string
     {
+        assert($node instanceof MenuEntryNode);
+
         return $this->renderer->renderTemplate(
             $renderContext,
             'body/menu/menu-item.html.twig',
             [
-                'url' => $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), $node->getValue()->getId()),
+                'url' => $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), !$node->isDocumentRoot() ? $node->getValue()->getId() : null),
                 'node' => $node,
             ],
         );
