@@ -134,7 +134,7 @@ class RenderContext
 
     public function getDirName(): string
     {
-        $dirname = dirname($this->getCurrentFileName());
+        $dirname = dirname($this->outputFilePath);
 
         if ($dirname === '.') {
             return '';
