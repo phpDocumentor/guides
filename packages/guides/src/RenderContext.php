@@ -142,6 +142,11 @@ class RenderContext
 
         return $dirname;
     }
+    
+    public function hasCurrentFileName(): bool
+    {
+        return $this->currentFileName !== null;
+    }
 
     public function getCurrentFileName(): string
     {
