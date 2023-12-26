@@ -24,6 +24,7 @@ class ProjectSettings
     private bool $showProgressBar = true;
     private bool $linksRelative = false;
     private string $defaultCodeLanguage = '';
+    private int $maxMenuDepth = 0;
 
     public function getTitle(): string
     {
@@ -187,5 +188,17 @@ class ProjectSettings
     public function setCopyright(string $copyright): void
     {
         $this->copyright = $copyright;
+    }
+
+    public function getMaxMenuDepth(): int
+    {
+        return $this->maxMenuDepth;
+    }
+
+    public function setMaxMenuDepth(int $maxMenuDepth): ProjectSettings
+    {
+        $this->maxMenuDepth = $maxMenuDepth;
+
+        return $this;
     }
 }

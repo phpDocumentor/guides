@@ -7,11 +7,25 @@ namespace phpDocumentor\Guides\Compiler\Passes;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use Throwable;
+
+use function array_map;
+use function assert;
+
+use const PHP_INT_MAX;
 
 class GlobalMenuPass implements CompilerPass
 {
+    public function __construct(
+        private readonly SettingsManager $settingsManager,
+    ) {
+    }
+
     public function getPriority(): int
     {
         return 20; // must be run very late
@@ -29,7 +43,7 @@ class GlobalMenuPass implements CompilerPass
             $rootDocumentEntry = $projectNode->getRootDocumentEntry();
         } catch (Throwable) {
             // Todo: Functional tests have not root document entry
-            return [];
+            return $documents;
         }
 
         $rootDocument = null;
@@ -46,12 +60,70 @@ class GlobalMenuPass implements CompilerPass
 
         $menuNodes = [];
         foreach ($rootDocument->getTocNodes() as $tocNode) {
-            $menuNode = NavMenuNode::fromTocNode($tocNode);
+            $menuNode = $this->getNavMenuNodefromTocNode($compilerContext, $tocNode);
             $menuNodes[] = $menuNode->withCaption($tocNode->getCaption());
         }
 
         $projectNode->setGlobalMenues($menuNodes);
 
         return $documents;
+    }
+
+    private function getNavMenuNodefromTocNode(CompilerContext $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
+    {
+        $node = new NavMenuNode($tocNode->getFiles());
+        $self = $this;
+        $menuEntries = array_map(static function (MenuEntryNode $tocEntry) use ($compilerContext, $self) {
+            return $self->getMenuEntryWithChildren($compilerContext, $tocEntry);
+        }, $tocNode->getMenuEntries());
+        $node = $node->withMenuEntries($menuEntries);
+        $options = $tocNode->getOptions();
+        unset($options['hidden']);
+        unset($options['titlesonly']);
+        unset($options['maxdepth']);
+        if ($menuType !== null) {
+            $options['menu'] = $menuType;
+        }
+
+        $node = $node->withOptions($options);
+        assert($node instanceof NavMenuNode);
+
+        return $node;
+    }
+
+    private function getMenuEntryWithChildren(CompilerContext $compilerContext, MenuEntryNode $menuEntry): MenuEntryNode
+    {
+        $maxdepth = $this->settingsManager->getProjectSettings()->getMaxMenuDepth();
+        $maxdepth = $maxdepth < 1 ? PHP_INT_MAX : $maxdepth + 1;
+        $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($menuEntry->getUrl());
+        $newMenuEntry = new MenuEntryNode($menuEntry->getUrl(), $menuEntry->getValue(), [], false, 2);
+        $this->addSubEntries($compilerContext, $newMenuEntry, $documentEntryOfMenuEntry, 3, $maxdepth);
+
+        return $newMenuEntry;
+    }
+
+    private function addSubEntries(
+        CompilerContext $compilerContext,
+        MenuEntryNode $sectionMenuEntry,
+        DocumentEntryNode $documentEntry,
+        int $currentLevel,
+        int $maxDepth,
+    ): void {
+        if ($maxDepth < $currentLevel) {
+            return;
+        }
+
+        foreach ($documentEntry->getChildren() as $subDocumentEntryNode) {
+            $subMenuEntry = new MenuEntryNode(
+                $subDocumentEntryNode->getFile(),
+                $subDocumentEntryNode->getTitle(),
+                [],
+                false,
+                $currentLevel,
+                '',
+            );
+            $sectionMenuEntry->addMenuEntry($subMenuEntry);
+            $this->addSubEntries($compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
+        }
     }
 }
