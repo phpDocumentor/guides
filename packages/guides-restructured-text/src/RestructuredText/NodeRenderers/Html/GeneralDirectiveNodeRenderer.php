@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 use phpDocumentor\Guides\TemplateRenderer;
 use Psr\Log\LoggerInterface;
 
+use function is_a;
 use function preg_replace;
 use function sprintf;
 use function str_replace;
@@ -34,9 +35,9 @@ class GeneralDirectiveNodeRenderer implements NodeRenderer
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof GeneralDirectiveNode;
+        return $nodeFqcn === GeneralDirectiveNode::class || is_a($nodeFqcn, GeneralDirectiveNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

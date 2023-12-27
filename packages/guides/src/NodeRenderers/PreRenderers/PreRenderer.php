@@ -19,9 +19,9 @@ final class PreRenderer implements NodeRenderer
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $this->nodeRenderer->supports($node);
+        return $this->nodeRenderer->supports($nodeFqcn);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

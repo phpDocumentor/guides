@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function implode;
+use function is_a;
 
 /** @implements NodeRenderer<AdmonitionNode> */
 class AdmonitionNodeRenderer implements NodeRenderer
@@ -29,9 +30,9 @@ class AdmonitionNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof AdmonitionNode;
+        return $nodeFqcn === AdmonitionNode::class || is_a($nodeFqcn, AdmonitionNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

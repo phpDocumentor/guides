@@ -19,7 +19,8 @@ use phpDocumentor\Guides\RenderContext;
 /** @template T of Node */
 interface NodeRenderer
 {
-    public function supports(Node $node): bool;
+    /** @param class-string<Node> $nodeFqcn */
+    public function supports(string $nodeFqcn): bool;
 
     /** @param T $node */
     public function render(Node $node, RenderContext $renderContext): string;

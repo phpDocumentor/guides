@@ -21,6 +21,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\RestructuredText\Nodes\TopicNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<TocNode> */
 final class TopicNodeRenderer implements NodeRenderer
 {
@@ -28,9 +30,9 @@ final class TopicNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof TopicNode;
+        return $nodeFqcn === TopicNode::class || is_a($nodeFqcn, TopicNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

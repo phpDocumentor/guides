@@ -17,6 +17,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 class InMemoryNodeRendererFactory implements NodeRendererFactory
 {
+    /** @var array<class-string<Node>, NodeRenderer<Node>> */
+    private array $cache = [];
+
     /**
      * @param iterable<NodeRenderer<Node>> $nodeRenderers
      * @param NodeRenderer<Node> $defaultNodeRenderer
@@ -40,12 +43,17 @@ class InMemoryNodeRendererFactory implements NodeRendererFactory
 
     public function get(Node $node): NodeRenderer
     {
+        $nodeFqcn = $node::class;
+        if (isset($this->cache[$nodeFqcn])) {
+            return $this->cache[$nodeFqcn];
+        }
+
         foreach ($this->nodeRenderers as $nodeRenderer) {
-            if ($nodeRenderer->supports($node)) {
-                return $nodeRenderer;
+            if ($nodeRenderer->supports($nodeFqcn)) {
+                return $this->cache[$nodeFqcn] = $nodeRenderer;
             }
         }
 
-        return $this->defaultNodeRenderer;
+        return $this->cache[$nodeFqcn] = $this->defaultNodeRenderer;
     }
 }

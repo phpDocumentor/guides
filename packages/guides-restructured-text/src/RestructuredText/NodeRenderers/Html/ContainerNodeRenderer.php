@@ -20,6 +20,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<ContainerNode> */
 final class ContainerNodeRenderer implements NodeRenderer
 {
@@ -27,9 +29,9 @@ final class ContainerNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof ContainerNode;
+        return $nodeFqcn === ContainerNode::class || is_a($nodeFqcn, ContainerNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

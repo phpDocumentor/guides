@@ -25,6 +25,7 @@ use phpDocumentor\Guides\RenderContext;
 use function assert;
 use function count;
 use function implode;
+use function is_a;
 use function max;
 
 /** @implements NodeRenderer<TableNode> */
@@ -77,8 +78,8 @@ class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
         return "\\begin{tabular}{" . $aligns . "}\n" . $rows . "\n\\end{tabular}\n";
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof TableNode;
+        return $nodeFqcn === TableNode::class || is_a($nodeFqcn, TableNode::class, true);
     }
 }

@@ -11,6 +11,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<MenuEntryNode> */
 final class MenuEntryRenderer implements NodeRenderer
 {
@@ -20,9 +22,9 @@ final class MenuEntryRenderer implements NodeRenderer
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof MenuEntryNode;
+        return $nodeFqcn === MenuEntryNode::class || is_a($nodeFqcn, MenuEntryNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

@@ -20,6 +20,8 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<TitleNode> */
 class TitleNodeRenderer implements NodeRenderer
 {
@@ -53,8 +55,8 @@ class TitleNodeRenderer implements NodeRenderer
         );
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof TitleNode;
+        return $nodeFqcn === TitleNode::class || is_a($nodeFqcn, TitleNode::class, true);
     }
 }

@@ -20,6 +20,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<CollectionNode> */
 final class CollectionNodeRenderer implements NodeRenderer
 {
@@ -27,9 +29,9 @@ final class CollectionNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof CollectionNode;
+        return $nodeFqcn === CollectionNode::class || is_a($nodeFqcn, CollectionNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

@@ -14,6 +14,7 @@ use phpDocumentor\Guides\TemplateRenderer;
 
 use function array_reverse;
 use function assert;
+use function is_a;
 
 /**
  * @template T as Node
@@ -28,9 +29,9 @@ class BreadCrumbNodeRenderer implements NodeRenderer
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof BreadCrumbNode;
+        return $nodeFqcn === BreadCrumbNode::class || is_a($nodeFqcn, BreadCrumbNode::class, true);
     }
     
     /** @param T $node */

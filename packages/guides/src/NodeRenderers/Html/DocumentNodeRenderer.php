@@ -11,6 +11,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function assert;
+use function is_a;
 
 /**
  * @template T as Node
@@ -25,9 +26,9 @@ final class DocumentNodeRenderer implements NodeRenderer
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof DocumentNode;
+        return $nodeFqcn === DocumentNode::class || is_a($nodeFqcn, DocumentNode::class, true);
     }
 
     /** @param T $node */

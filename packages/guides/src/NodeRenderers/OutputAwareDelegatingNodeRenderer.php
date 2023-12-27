@@ -28,7 +28,7 @@ final class OutputAwareDelegatingNodeRenderer implements NodeRenderer
         $this->nodeRenderers = $nodeRenderers;
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
         return true;
     }
