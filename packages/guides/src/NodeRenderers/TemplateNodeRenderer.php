@@ -8,6 +8,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /**
  * @template T as Node
  * @implements NodeRenderer<T>
@@ -19,9 +21,9 @@ final class TemplateNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof $this->nodeClass;
+        return $nodeFqcn === $this->nodeClass || is_a($nodeFqcn, $this->nodeClass, true);
     }
 
     /** @param T $node */

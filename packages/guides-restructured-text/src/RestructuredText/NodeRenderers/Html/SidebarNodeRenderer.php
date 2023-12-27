@@ -20,6 +20,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
+use function is_a;
+
 /** @implements NodeRenderer<SidebarNode> */
 final class SidebarNodeRenderer implements NodeRenderer
 {
@@ -27,9 +29,9 @@ final class SidebarNodeRenderer implements NodeRenderer
     {
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof SidebarNode;
+        return $nodeFqcn === SidebarNode::class || is_a($nodeFqcn, SidebarNode::class, true);
     }
 
     public function render(Node $node, RenderContext $renderContext): string

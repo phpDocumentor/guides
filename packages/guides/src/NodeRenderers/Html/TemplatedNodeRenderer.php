@@ -11,6 +11,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
+use function is_a;
+
 /** @implements NodeRenderer<TemplatedNode> */
 final class TemplatedNodeRenderer implements NodeRenderer
 {
@@ -25,8 +27,8 @@ final class TemplatedNodeRenderer implements NodeRenderer
         return $this->renderer->renderTemplate($renderContext, $node->getValue(), $node->getData());
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof TemplatedNode;
+        return $nodeFqcn === TemplatedNode::class || is_a($nodeFqcn, TemplatedNode::class, true);
     }
 }

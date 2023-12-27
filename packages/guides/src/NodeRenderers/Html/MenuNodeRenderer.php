@@ -22,6 +22,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 use Webmozart\Assert\Assert;
 
+use function is_a;
+
 /** @implements NodeRenderer<MenuNode> */
 final class MenuNodeRenderer implements NodeRenderer
 {
@@ -57,8 +59,8 @@ final class MenuNodeRenderer implements NodeRenderer
         return 'body/menu/menu.html.twig';
     }
 
-    public function supports(Node $node): bool
+    public function supports(string $nodeFqcn): bool
     {
-        return $node instanceof MenuNode;
+        return $nodeFqcn === MenuNode::class || is_a($nodeFqcn, MenuNode::class, true);
     }
 }
