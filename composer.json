@@ -31,13 +31,13 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "phpdocumentor/guides": "@dev",
-        "phpdocumentor/guides-cli": "@dev",
-        "phpdocumentor/guides-code": "@dev",
-        "phpdocumentor/guides-graphs": "@dev",
-        "phpdocumentor/guides-markdown": "@dev",
-        "phpdocumentor/guides-restructured-text": "@dev",
-        "phpdocumentor/guides-theme-bootstrap": "@dev"
+        "phpdocumentor/guides": "self.version",
+        "phpdocumentor/guides-cli": "self.version",
+        "phpdocumentor/guides-code": "self.version",
+        "phpdocumentor/guides-graphs": "self.version",
+        "phpdocumentor/guides-markdown": "self.version",
+        "phpdocumentor/guides-restructured-text": "self.version",
+        "phpdocumentor/guides-theme-bootstrap": "self.version"
     },
     "require-dev": {
         "ext-dom": "*",
