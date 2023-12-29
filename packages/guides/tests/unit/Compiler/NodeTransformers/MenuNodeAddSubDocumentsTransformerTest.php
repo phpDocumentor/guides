@@ -8,12 +8,15 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+
+use function array_map;
 
 class MenuNodeAddSubDocumentsTransformerTest extends TestCase
 {
@@ -44,7 +47,11 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
     {
         $context = self::getCompilerContext($currentPath, $paths);
 
-        $node = new TocNode($tocFiles);
+        $parsedMenuEntryNodes = array_map(static function ($file) {
+            return new ParsedMenuEntryNode($file);
+        }, $tocFiles);
+
+        $node = new TocNode($parsedMenuEntryNodes);
         if ($glob) {
             $node = $node->withOptions(['glob' => true]);
         }
@@ -149,7 +156,11 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
     {
         $context = self::getCompilerContext($currentPath, $paths);
 
-        $node = new NavMenuNode($tocFiles);
+        $parsedMenuEntryNodes = array_map(static function ($file) {
+            return new ParsedMenuEntryNode($file);
+        }, $tocFiles);
+
+        $node = new NavMenuNode($parsedMenuEntryNodes);
         if ($glob) {
             $node = $node->withOptions(['glob' => true]);
         }

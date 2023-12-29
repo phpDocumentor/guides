@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -38,7 +39,7 @@ class ContentsDirective extends BaseDirective
             $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
         );
 
-        return (new ContentMenuNode([$absoluteUrl]))
+        return (new ContentMenuNode([new ParsedMenuEntryNode($absoluteUrl)]))
             ->withOptions($this->optionsToArray($options))
             ->withCaption($directive->getDataNode());
     }

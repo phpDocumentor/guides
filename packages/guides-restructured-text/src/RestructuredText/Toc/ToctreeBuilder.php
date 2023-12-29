@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Toc;
 
+use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
-use function array_filter;
 use function array_map;
 
 class ToctreeBuilder
@@ -15,7 +15,7 @@ class ToctreeBuilder
     /**
      * @param mixed[] $options
      *
-     * @return string[]
+     * @return ParsedMenuEntryNode[]
      */
     public function buildToctreeFiles(
         ParserContext $parserContext,
@@ -31,12 +31,21 @@ class ToctreeBuilder
         return $toctreeFiles;
     }
 
-    /** @return string[] */
+    /** @return ParsedMenuEntryNode[] */
     private function parseToctreeFiles(LinesIterator $lines): array
     {
-        return array_filter(
-            array_map('trim', $lines->toArray()),
-            static fn (string $file): bool => $file !== '',
-        );
+        $linesArray = $lines->toArray();
+        $trimmedLines = array_map('trim', $linesArray);
+
+        $result = [];
+        foreach ($trimmedLines as $file) {
+            if ($file === '') {
+                continue;
+            }
+
+            $result[] = new ParsedMenuEntryNode($file);
+        }
+
+        return $result;
     }
 }

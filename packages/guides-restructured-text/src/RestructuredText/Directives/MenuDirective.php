@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -48,7 +49,7 @@ class MenuDirective extends BaseDirective
             $options,
         );
         if (count($toctreeFiles) === 0) {
-            $toctreeFiles[] = '/*';
+            $toctreeFiles[] = new ParsedMenuEntryNode('/*');
         }
 
         return (new NavMenuNode($toctreeFiles))->withOptions($this->optionsToArray($options));

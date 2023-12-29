@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
+use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
@@ -45,7 +46,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
             return $node;
         }
 
-        $files = $node->getFiles();
+        $parsedMenuEntryNodes = $node->getParsedMenuEntryNodes();
         $glob = $node->hasOption('glob');
         $globExclude = explode(',', $node->getOption('globExclude') . '');
 
@@ -54,11 +55,11 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         $documentEntriesInTree = [];
         $menuEntries = [];
 
-        foreach ($files as $file) {
+        foreach ($parsedMenuEntryNodes as $parsedMenuEntryNode) {
             foreach ($documentEntries as $documentEntry) {
                 if (
-                    !self::isEqualAbsolutePath($documentEntry->getFile(), $file, $currentPath, $glob, $globExclude)
-                    && !self::isEqualRelativePath($documentEntry->getFile(), $file, $currentPath, $glob, $globExclude)
+                    !self::isEqualAbsolutePath($documentEntry->getFile(), $parsedMenuEntryNode, $currentPath, $glob, $globExclude)
+                    && !self::isEqualRelativePath($documentEntry->getFile(), $parsedMenuEntryNode, $currentPath, $glob, $globExclude)
                 ) {
                     continue;
                 }
@@ -136,8 +137,9 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
     }
 
     /** @param String[] $globExclude */
-    private static function isEqualAbsolutePath(string $actualFile, string $expectedFile, string $currentFile, bool $glob, array $globExclude): bool
+    private static function isEqualAbsolutePath(string $actualFile, ParsedMenuEntryNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
     {
+        $expectedFile = $parsedMenuEntryNode->getReference();
         if (!self::isAbsoluteFile($expectedFile)) {
             return false;
         }
@@ -150,8 +152,9 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
     }
 
     /** @param String[] $globExclude */
-    private static function isEqualRelativePath(string $actualFile, string $expectedFile, string $currentFile, bool $glob, array $globExclude): bool
+    private static function isEqualRelativePath(string $actualFile, ParsedMenuEntryNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
     {
+        $expectedFile = $parsedMenuEntryNode->getReference();
         if (self::isAbsoluteFile($expectedFile)) {
             return false;
         }
