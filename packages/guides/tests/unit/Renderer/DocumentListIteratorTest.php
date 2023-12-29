@@ -20,7 +20,7 @@ final class DocumentListIteratorTest extends IteratorTestCase
 
         self::assertSame(self::documentsToTitle($this->flatDocumentList), self::documentsToTitle($result));
         self::assertNull($iterator->nextNode());
-        self::assertNull($iterator->previousNode());
+        self::assertNotNull($iterator->previousNode());
     }
 
     public function testPreviousStepsBackAtSameLevel(): void

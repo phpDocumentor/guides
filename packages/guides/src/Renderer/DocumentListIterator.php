@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Renderer;
 use AppendIterator;
 use Generator;
 use Iterator;
+use OutOfRangeException;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use RecursiveIteratorIterator;
 use WeakMap;
@@ -16,10 +17,13 @@ use WeakReference;
 final class DocumentListIterator implements Iterator
 {
     /** @var WeakReference<DocumentNode>|null */
-    private WeakReference|null $previousDocument;
+    private WeakReference|null $previousDocument = null;
 
     /** @var WeakReference<DocumentNode>|null */
-    private WeakReference|null $nextDocument;
+    private WeakReference|null $currentDocument;
+
+    /** @var WeakReference<DocumentNode>|null */
+    private WeakReference|null $nextDocument = null;
 
     /** @var WeakMap<DocumentNode, bool> */
     private WeakMap $unseenDocuments;
@@ -33,13 +37,15 @@ final class DocumentListIterator implements Iterator
         array $documents,
     ) {
         $this->unseenDocuments = new WeakMap();
-        $this->previousDocument = null;
-        $this->nextDocument = null;
         $this->innerIterator = new AppendIterator();
         $this->innerIterator->append(
             new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::SELF_FIRST),
         );
         $this->innerIterator->append($this->unseenIterator());
+        if ($this->innerIterator->valid()) {
+            $this->currentDocument = WeakReference::create($this->innerIterator->current());
+        }
+
         foreach ($documents as $document) {
             $this->unseenDocuments[$document] = true;
         }
@@ -47,14 +53,14 @@ final class DocumentListIterator implements Iterator
 
     public function next(): void
     {
-        if ($this->innerIterator->valid()) {
-            $this->previousDocument = WeakReference::create($this->current());
-        } else {
-            $this->previousDocument = null;
+        $this->previousDocument = $this->currentDocument;
+        if ($this->nextDocument === null && $this->innerIterator->valid()) {
+            $this->innerIterator->next();
         }
 
-        if ($this->nextDocument === null) {
-            $this->innerIterator->next();
+        $this->currentDocument = null;
+        if ($this->innerIterator->current() !== null) {
+            $this->currentDocument = WeakReference::create($this->innerIterator->current());
         }
 
         $this->nextDocument = null;
@@ -80,7 +86,7 @@ final class DocumentListIterator implements Iterator
             $this->innerIterator->next();
 
             if ($this->innerIterator->valid()) {
-                $this->nextDocument = WeakReference::create($this->current());
+                $this->nextDocument = WeakReference::create($this->innerIterator->current());
             }
         }
 
@@ -89,7 +95,12 @@ final class DocumentListIterator implements Iterator
 
     public function current(): mixed
     {
-        $document = $this->innerIterator->current();
+        $document = $this->currentDocument?->get();
+
+        if ($document === null) {
+            throw new OutOfRangeException('No current document available');
+        }
+
         if ($document instanceof DocumentNode) {
             $this->unseenDocuments[$document] = false;
         }
