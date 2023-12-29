@@ -8,24 +8,30 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\ExternalMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
-use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use Psr\Log\LoggerInterface;
 
 use function array_pop;
 use function array_unique;
 use function assert;
 use function explode;
+use function filter_var;
 use function implode;
 use function in_array;
+use function is_string;
 use function preg_match;
 use function sprintf;
 use function str_replace;
 use function str_starts_with;
+
+use const FILTER_VALIDATE_URL;
 
 /** @implements NodeTransformer<MenuNode> */
 class MenuNodeAddEntryTransformer implements NodeTransformer
@@ -56,6 +62,15 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         $menuEntries = [];
 
         foreach ($parsedMenuEntryNodes as $parsedMenuEntryNode) {
+            if (filter_var($parsedMenuEntryNode->getReference(), FILTER_VALIDATE_URL) !== false) {
+                $menuEntry = new ExternalMenuEntryNode(
+                    $parsedMenuEntryNode->getReference(),
+                    TitleNode::fromString($parsedMenuEntryNode->getTitle() ?? $parsedMenuEntryNode->getReference()),
+                );
+                $menuEntries[] = $menuEntry;
+                continue;
+            }
+
             foreach ($documentEntries as $documentEntry) {
                 if (
                     !self::isEqualAbsolutePath($documentEntry->getFile(), $parsedMenuEntryNode, $currentPath, $glob, $globExclude)
@@ -70,9 +85,9 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
                 }
 
                 $documentEntriesInTree[] = $documentEntry;
-                $menuEntry = new MenuEntryNode(
+                $menuEntry = new InternalMenuEntryNode(
                     $documentEntry->getFile(),
-                    $documentEntry->getTitle(),
+                    is_string($parsedMenuEntryNode->getTitle()) ? TitleNode::fromString($parsedMenuEntryNode->getTitle()) : $documentEntry->getTitle(),
                     [],
                     false,
                     1,
@@ -117,10 +132,10 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         return $menuEntry->getFile() === $currentPath;
     }
 
-    private function addSubSections(MenuEntryNode $sectionMenuEntry, SectionEntryNode $sectionEntryNode, DocumentEntryNode $documentEntry, int $currentLevel): void
+    private function addSubSections(InternalMenuEntryNode $sectionMenuEntry, SectionEntryNode $sectionEntryNode, DocumentEntryNode $documentEntry, int $currentLevel): void
     {
         foreach ($sectionEntryNode->getChildren() as $subSectionEntryNode) {
-            $subSectionMenuEntry = new MenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel + 1, $subSectionEntryNode->getId());
+            $subSectionMenuEntry = new InternalMenuEntryNode($documentEntry->getFile(), $subSectionEntryNode->getTitle(), [], false, $currentLevel + 1, $subSectionEntryNode->getId());
             $sectionMenuEntry->addSection($subSectionMenuEntry);
         }
     }
@@ -137,7 +152,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
     }
 
     /** @param String[] $globExclude */
-    private static function isEqualAbsolutePath(string $actualFile, ParsedMenuEntryNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
+    private static function isEqualAbsolutePath(string $actualFile, MenuDefinitionLineNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
     {
         $expectedFile = $parsedMenuEntryNode->getReference();
         if (!self::isAbsoluteFile($expectedFile)) {
@@ -152,7 +167,7 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
     }
 
     /** @param String[] $globExclude */
-    private static function isEqualRelativePath(string $actualFile, ParsedMenuEntryNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
+    private static function isEqualRelativePath(string $actualFile, MenuDefinitionLineNode $parsedMenuEntryNode, string $currentFile, bool $glob, array $globExclude): bool
     {
         $expectedFile = $parsedMenuEntryNode->getReference();
         if (self::isAbsoluteFile($expectedFile)) {
@@ -228,14 +243,14 @@ class MenuNodeAddEntryTransformer implements NodeTransformer
         }
     }
 
-    private function addSubSectionsToMenuEntries(DocumentEntryNode $documentEntry, MenuEntryNode $menuEntry): void
+    private function addSubSectionsToMenuEntries(DocumentEntryNode $documentEntry, InternalMenuEntryNode $menuEntry): void
     {
         foreach ($documentEntry->getSections() as $section) {
             // We do not add the main section as it repeats the document title
             foreach ($section->getChildren() as $subSectionEntryNode) {
                 assert($subSectionEntryNode instanceof SectionEntryNode);
                 $currentLevel = $menuEntry->getLevel() + 1;
-                $sectionMenuEntry = new MenuEntryNode(
+                $sectionMenuEntry = new InternalMenuEntryNode(
                     $documentEntry->getFile(),
                     $subSectionEntryNode->getTitle(),
                     [],

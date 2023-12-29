@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\NodeRenderers\Html;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -97,7 +98,7 @@ class BreadCrumbNodeRenderer implements NodeRenderer
         int $level,
         bool $isCurrent,
     ): array {
-        $entry = new MenuEntryNode(
+        $entry = new InternalMenuEntryNode(
             $documentEntry->getFile(),
             $documentEntry->getTitle(),
             [],

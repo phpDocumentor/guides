@@ -32,13 +32,13 @@ abstract class MenuNode extends CompoundNode
     /** @var MenuEntryNode[] */
     private array $menuEntries = [];
 
-    /** @param ParsedMenuEntryNode[] $parsedMenuEntryNodes */
+    /** @param MenuDefinitionLineNode[] $parsedMenuEntryNodes */
     public function __construct(private readonly array $parsedMenuEntryNodes)
     {
         parent::__construct();
     }
 
-    /** @return ParsedMenuEntryNode[] */
+    /** @return MenuDefinitionLineNode[] */
     public function getParsedMenuEntryNodes(): array
     {
         return $this->parsedMenuEntryNodes;

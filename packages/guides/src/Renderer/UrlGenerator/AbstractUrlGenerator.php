@@ -19,7 +19,11 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\UriFactory;
 
+use function filter_var;
 use function sprintf;
+
+use const FILTER_VALIDATE_EMAIL;
+use const FILTER_VALIDATE_URL;
 
 abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 {
@@ -41,16 +45,24 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
     /**
      * Generate a canonical output URL with the configured file extension and anchor
      */
-    public function generateCanonicalOutputUrl(RenderContext $context, string $linkedDocument, string|null $anchor = null): string
+    public function generateCanonicalOutputUrl(RenderContext $context, string $reference, string|null $anchor = null): string
     {
-        if ($context->getProjectNode()->findDocumentEntry($linkedDocument) !== null) {
+        if (filter_var($reference, FILTER_VALIDATE_URL) !== false) {
+            return $reference;
+        }
+
+        if (filter_var($reference, FILTER_VALIDATE_EMAIL) !== false) {
+            return $reference;
+        }
+
+        if ($context->getProjectNode()->findDocumentEntry($reference) !== null) {
             // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
-            $linkedDocument = '/' . $linkedDocument;
+            $reference = '/' . $reference;
         }
 
         $canonicalUrl = $this->documentNameResolver->canonicalUrl(
             $context->getDirName(),
-            $linkedDocument,
+            $reference,
         );
 
         return $this->generateInternalUrl(

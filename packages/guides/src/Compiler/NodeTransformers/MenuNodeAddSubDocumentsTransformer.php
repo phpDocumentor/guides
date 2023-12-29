@@ -7,7 +7,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
@@ -34,6 +34,10 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
 
 
         foreach ($node->getMenuEntries() as $menuEntry) {
+            if (!$menuEntry instanceof InternalMenuEntryNode) {
+                continue;
+            }
+
             $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($menuEntry->getUrl());
             $this->addSubEntries($compilerContext, $menuEntry, $documentEntryOfMenuEntry, $menuEntry->getLevel() + 1, $maxDepth);
         }
@@ -43,7 +47,7 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
 
     private function addSubEntries(
         CompilerContext $compilerContext,
-        MenuEntryNode $sectionMenuEntry,
+        InternalMenuEntryNode $sectionMenuEntry,
         DocumentEntryNode $documentEntry,
         int $currentLevel,
         int $maxDepth,
@@ -53,7 +57,7 @@ class MenuNodeAddSubDocumentsTransformer implements NodeTransformer
         }
         
         foreach ($documentEntry->getChildren() as $subDocumentEntryNode) {
-            $subMenuEntry = new MenuEntryNode(
+            $subMenuEntry = new InternalMenuEntryNode(
                 $subDocumentEntryNode->getFile(),
                 $subDocumentEntryNode->getTitle(),
                 [],

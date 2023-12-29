@@ -13,7 +13,7 @@ interface UrlGeneratorInterface
      */
     public function createFileUrl(RenderContext $context, string $filename, string|null $anchor = null): string;
 
-    public function generateCanonicalOutputUrl(RenderContext $context, string $linkedDocument, string|null $anchor = null): string;
+    public function generateCanonicalOutputUrl(RenderContext $context, string $reference, string|null $anchor = null): string;
 
     public function generateInternalUrl(
         RenderContext $renderContext,

@@ -7,8 +7,8 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
-use phpDocumentor\Guides\Nodes\Menu\ParsedMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -48,7 +48,7 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
         $context = self::getCompilerContext($currentPath, $paths);
 
         $parsedMenuEntryNodes = array_map(static function ($file) {
-            return new ParsedMenuEntryNode($file);
+            return new MenuDefinitionLineNode($file);
         }, $tocFiles);
 
         $node = new TocNode($parsedMenuEntryNodes);
@@ -157,7 +157,7 @@ class MenuNodeAddSubDocumentsTransformerTest extends TestCase
         $context = self::getCompilerContext($currentPath, $paths);
 
         $parsedMenuEntryNodes = array_map(static function ($file) {
-            return new ParsedMenuEntryNode($file);
+            return new MenuDefinitionLineNode($file);
         }, $tocFiles);
 
         $node = new NavMenuNode($parsedMenuEntryNodes);
