@@ -82,6 +82,7 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
                 ->scalarNode('fail_on_log')->end()
                 ->scalarNode('show_progress')->end()
                 ->scalarNode('links_are_relative')->end()
+                ->scalarNode('max_menu_depth')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -199,6 +200,10 @@ class GuidesExtension extends Extension implements CompilerPassInterface, Config
 
         if (isset($config['fail_on_log'])) {
             $projectSettings->setFailOnError((bool) $config['show_progress']);
+        }
+
+        if (isset($config['max_menu_depth'])) {
+            $projectSettings->setMaxMenuDepth((int) $config['max_menu_depth']);
         }
 
         if (isset($config['default_code_language'])) {
