@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Graphs\Renderer;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 
 use function file_get_contents;
@@ -44,12 +45,17 @@ PUML;
 
         $pumlFileLocation = tempnam(sys_get_temp_dir() . '/phpdocumentor', 'pu_');
         file_put_contents($pumlFileLocation, $output);
+        try {
+            $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);
+            $process->run();
 
-        $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);
-        $process->run();
+            if (!$process->isSuccessful()) {
+                $this->logger->error('Generating the class diagram failed', ['error' => $process->getErrorOutput()]);
 
-        if (!$process->isSuccessful()) {
-            $this->logger->error('Generating the class diagram failed', ['error' => $process->getErrorOutput()]);
+                return null;
+            }
+        } catch (RuntimeException $e) {
+            $this->logger->error('Generating the class diagram failed', ['error' => $e->getMessage()]);
 
             return null;
         }
