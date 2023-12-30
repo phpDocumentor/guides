@@ -7,6 +7,15 @@ Contributions
 Clone the mono repository
 =========================
 
+This project uses a :doc:`mono repository </contributions/monorepository-layout>`,
+meaning a single git repository regroups several different Composer packages,
+built from several git repositories split from this repository.
+Contributions need to be made against that mono repository.
+
+To clone the repository, run the following command::
+
+    git clone git@github.com:phpDocumentor/guides.git
+
 Run the tests
 =============
 
