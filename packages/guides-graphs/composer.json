@@ -25,7 +25,7 @@
         "phpdocumentor/guides": "self.version",
         "phpdocumentor/guides-restructured-text": "self.version",
         "jawira/plantuml-encoding": "^1.0",
-        "symfony/process": "^5.4 || ^6.3",
+        "symfony/process": "^5.4 || ^6.3 || ^7.0",
         "twig/twig": "~2.0 || ^3.0"
     },
     "suggest": {
