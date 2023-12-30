@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\Inline\VariableInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\DefaultInterlinkParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnnotationRoleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousPhraseRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\AnonymousReferenceRule;
@@ -53,7 +54,7 @@ final class InlineTokenParserTest extends TestCase
             new LiteralTextRole(),
             [
                 new ReferenceTextRole(),
-                new DocReferenceTextRole(),
+                new DocReferenceTextRole(new DefaultInterlinkParser()),
             ],
         );
         $this->documentParserContext = new DocumentParserContext(

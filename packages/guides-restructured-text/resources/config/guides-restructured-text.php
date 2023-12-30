@@ -56,6 +56,8 @@ use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContextFactory;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\DefaultInterlinkParser;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\AnnotationRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\BlockQuoteRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\CommentRule;
@@ -231,6 +233,8 @@ return static function (ContainerConfigurator $container): void {
 
         ->set('phpdoc.guides.parser.rst.body_elements', RuleContainer::class)
         ->set('phpdoc.guides.parser.rst.structural_elements', RuleContainer::class)
+
+        ->set(InterlinkParser::class, DefaultInterlinkParser::class)
 
         ->set(AnnotationRule::class)
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => AnnotationRule::PRIORITY])

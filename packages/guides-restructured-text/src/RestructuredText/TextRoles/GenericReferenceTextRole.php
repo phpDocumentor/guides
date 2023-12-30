@@ -7,15 +7,16 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
 use function array_keys;
-use function preg_match;
 
 class GenericReferenceTextRole extends AbstractReferenceTextRole
 {
     public function __construct(
         private readonly GenericLinkProvider $genericLinkProvider,
         private readonly AnchorReducer $anchorReducer,
+        private readonly InterlinkParser $interlinkParser,
     ) {
     }
 
@@ -34,15 +35,9 @@ class GenericReferenceTextRole extends AbstractReferenceTextRole
     protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
         $linkType = $this->genericLinkProvider->getLinkType($role);
-        $pattern = '/^([a-zA-Z0-9]+):(.*$)/';
-        if (preg_match(AbstractReferenceTextRole::INTERLINK_REGEX, $referenceTarget, $matches)) {
-            $interlinkDomain = $matches[1];
-            $id = $this->anchorReducer->reduceAnchor($matches[2]);
-        } else {
-            $interlinkDomain = '';
-            $id = $this->anchorReducer->reduceAnchor($referenceTarget);
-        }
+        $interlinkData = $this->interlinkParser->extractInterlink($referenceTarget);
+        $reference = $this->anchorReducer->reduceAnchor($interlinkData->reference);
 
-        return new ReferenceNode($id, $referenceName ?? '', $interlinkDomain, $linkType);
+        return new ReferenceNode($reference, $referenceName ?? '', $interlinkData->interlink, $linkType);
     }
 }
