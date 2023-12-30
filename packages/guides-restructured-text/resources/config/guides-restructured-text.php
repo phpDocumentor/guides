@@ -11,6 +11,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\BreadcrumbDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CautionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ClassDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\ConfigurationBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ConfvalDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContainerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ContentsDirective;
@@ -115,6 +116,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -175,6 +177,10 @@ return static function (ContainerConfigurator $container): void {
             ),
         ])
         ->set(ConfvalDirective::class)
+        ->set(ConfigurationBlockDirective::class)
+        ->args([
+            '$languageLabels' => param('phpdoc.rst.code_language_labels'),
+        ])
         ->set(ContainerDirective::class)
         ->set(ContentsDirective::class)
         ->arg('$documentNameResolver', service(DocumentNameResolverInterface::class))

@@ -18,6 +18,11 @@
       <code>scalarNode</code>
     </UndefinedInterfaceMethod>
   </file>
+  <file src="packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php">
+    <UndefinedInterfaceMethod>
+      <code>scalarNode</code>
+    </UndefinedInterfaceMethod>
+  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
     <InvalidArgument>
       <code>$listConfig</code>

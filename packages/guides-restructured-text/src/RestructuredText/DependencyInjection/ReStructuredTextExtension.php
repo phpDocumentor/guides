@@ -8,6 +8,9 @@ use phpDocumentor\Guides\RestructuredText\DependencyInjection\Compiler\TextRoleP
 use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\OptionNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,19 +18,31 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
+use function assert;
 use function dirname;
 use function phpDocumentor\Guides\DependencyInjection\template;
 
-class ReStructuredTextExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
+final class ReStructuredTextExtension extends Extension implements
+    PrependExtensionInterface,
+    CompilerPassInterface,
+    ConfigurationInterface
 {
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
         $loader = new PhpFileLoader(
             $container,
             new FileLocator(dirname(__DIR__, 3) . '/resources/config'),
         );
 
+        $normalizedLanguageLabels = [];
+        foreach ($config['code_language_labels'] ?? [] as $item) {
+            $normalizedLanguageLabels[$item['language']] = $item['label'];
+        }
+
+        $container->setParameter('phpdoc.rst.code_language_labels', $normalizedLanguageLabels);
         $loader->load('guides-restructured-text.php');
     }
 
@@ -54,5 +69,37 @@ class ReStructuredTextExtension extends Extension implements PrependExtensionInt
     public function process(ContainerBuilder $container): void
     {
         (new TextRolePass())->process($container);
+    }
+
+    public function getConfigTreeBuilder(): TreeBuilder
+    {
+        $treeBuilder = new TreeBuilder('rst');
+        $rootNode = $treeBuilder->getRootNode();
+        assert($rootNode instanceof ArrayNodeDefinition);
+
+        $rootNode
+            ->fixXmlConfig('code_language_label', 'code_language_labels')
+            ->children()
+                ->arrayNode('code_language_labels')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('language')
+                                ->isRequired()
+                            ->end()
+                            ->scalarNode('label')
+                                ->isRequired()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $treeBuilder;
+    }
+
+    /** @param mixed[] $config */
+    public function getConfiguration(array $config, ContainerBuilder $container): static
+    {
+        return $this;
     }
 }
