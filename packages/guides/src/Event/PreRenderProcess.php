@@ -17,8 +17,10 @@ final class PreRenderProcess
 {
     private bool $exitRendering = false;
 
-    public function __construct(private readonly RenderCommand $command)
-    {
+    public function __construct(
+        private readonly RenderCommand $command,
+        private readonly int $steps = 1,
+    ) {
     }
 
     public function getCommand(): RenderCommand
@@ -36,5 +38,10 @@ final class PreRenderProcess
         $this->exitRendering = $exitRendering;
 
         return $this;
+    }
+
+    public function getSteps(): int
+    {
+        return $this->steps;
     }
 }

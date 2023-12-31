@@ -13,7 +13,14 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
+use phpDocumentor\Guides\Event\PostParseDocument;
+use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PostRenderDocument;
+use phpDocumentor\Guides\Event\PostRenderProcess;
+use phpDocumentor\Guides\Event\PreParseDocument;
+use phpDocumentor\Guides\Event\PreRenderDocument;
+use phpDocumentor\Guides\Event\PreRenderProcess;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
@@ -39,6 +46,7 @@ use function getcwd;
 use function implode;
 use function is_countable;
 use function is_dir;
+use function microtime;
 use function pathinfo;
 use function realpath;
 use function sprintf;
@@ -114,6 +122,80 @@ final class Run extends Command
             InputOption::VALUE_NEGATABLE,
             'Whether to show a progress bar',
             true,
+        );
+    }
+
+    public function registerProgressBar(ConsoleOutputInterface $output): void
+    {
+        $parsingProgressBar = new ProgressBar($output->section());
+        $parsingProgressBar->setFormat('Parsing: %current%/%max% [%bar%] %percent:3s%% %message%');
+        $parsingStartTime = microtime(true);
+        $this->eventDispatcher->addListener(
+            PostCollectFilesForParsingEvent::class,
+            static function (PostCollectFilesForParsingEvent $event) use ($parsingProgressBar, &$parsingStartTime): void {
+                // Each File needs to be first parsed then rendered
+                $parsingStartTime = microtime(true);
+                $parsingProgressBar->setMaxSteps(count($event->getFiles()));
+            },
+        );
+        $this->eventDispatcher->addListener(
+            PreParseDocument::class,
+            static function (PreParseDocument $event) use ($parsingProgressBar): void {
+                $parsingProgressBar->setMessage('Parsing file: ' . $event->getFileName());
+                $parsingProgressBar->display();
+            },
+        );
+        $this->eventDispatcher->addListener(
+            PostParseDocument::class,
+            static function (PostParseDocument $event) use ($parsingProgressBar): void {
+                $parsingProgressBar->advance();
+            },
+        );
+        $this->eventDispatcher->addListener(
+            PostParseProcess::class,
+            static function (PostParseProcess $event) use ($parsingProgressBar, $parsingStartTime): void {
+                $parsingTimeElapsed = microtime(true) - $parsingStartTime;
+                $parsingProgressBar->setMessage(sprintf(
+                    'Parsed %s files in %.2f seconds',
+                    $parsingProgressBar->getMaxSteps(),
+                    $parsingTimeElapsed,
+                ));
+                $parsingProgressBar->finish();
+            },
+        );
+        $that = $this;
+        $this->eventDispatcher->addListener(
+            PreRenderProcess::class,
+            static function (PreRenderProcess $event) use ($that, $output): void {
+                $renderingProgressBar = new ProgressBar($output->section(), count($event->getCommand()->getDocumentArray()));
+                $renderingProgressBar->setFormat('Rendering: %current%/%max% [%bar%] %percent:3s%% Output format ' . $event->getCommand()->getOutputFormat() . ': %message%');
+                $renderingStartTime = microtime(true);
+                $that->eventDispatcher->addListener(
+                    PreRenderDocument::class,
+                    static function (PreRenderDocument $event) use ($renderingProgressBar): void {
+                        $renderingProgressBar->setMessage('Rendering: ' . $event->getCommand()->getFileDestination());
+                        $renderingProgressBar->display();
+                    },
+                );
+                $that->eventDispatcher->addListener(
+                    PostRenderDocument::class,
+                    static function (PostRenderDocument $event) use ($renderingProgressBar): void {
+                        $renderingProgressBar->advance();
+                    },
+                );
+                $that->eventDispatcher->addListener(
+                    PostRenderProcess::class,
+                    static function (PostRenderProcess $event) use ($renderingProgressBar, $renderingStartTime): void {
+                        $renderingElapsedTime = microtime(true) - $renderingStartTime;
+                        $renderingProgressBar->setMessage(sprintf(
+                            'Rendered %s documents in %.2f seconds',
+                            $renderingProgressBar->getMaxSteps(),
+                            $renderingElapsedTime,
+                        ));
+                        $renderingProgressBar->finish();
+                    },
+                );
+            },
         );
     }
 
@@ -200,6 +282,11 @@ final class Run extends Command
 
         $documents = [];
 
+
+        if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
+            $this->registerProgressBar($output);
+        }
+
         if ($settings->getInputFile() === '') {
             $documents = $this->commandBus->handle(
                 new ParseDirectoryCommand(
@@ -230,16 +317,6 @@ final class Run extends Command
         $destinationFileSystem = new Filesystem(new Local($outputDir));
 
         $outputFormats = $settings->getOutputFormats();
-
-        if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
-            $progressBar = new ProgressBar($output->section(), count($documents));
-            $this->eventDispatcher->addListener(
-                PostRenderDocument::class,
-                static function (PostRenderDocument $event) use ($progressBar): void {
-                    $progressBar->advance();
-                },
-            );
-        }
 
         foreach ($outputFormats as $format) {
             $this->commandBus->handle(

@@ -16,8 +16,10 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 final class PostRenderDocument
 {
     /** @param NodeRenderer<DocumentNode> $renderer */
-    public function __construct(private readonly NodeRenderer $renderer, private readonly RenderDocumentCommand $command)
-    {
+    public function __construct(
+        private readonly NodeRenderer $renderer,
+        private readonly RenderDocumentCommand $command,
+    ) {
     }
 
     /** @return NodeRenderer<DocumentNode> */
