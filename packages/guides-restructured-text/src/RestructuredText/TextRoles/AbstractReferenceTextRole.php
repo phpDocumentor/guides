@@ -13,9 +13,6 @@ abstract class AbstractReferenceTextRole implements TextRole
 {
     use EmbeddedUriParser;
 
-    /** @see https://regex101.com/r/htMn5p/1 */
-    public const INTERLINK_REGEX = '/^([a-zA-Z0-9-_]+):(.*$)/';
-
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $role,

@@ -6,12 +6,16 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
-
-use function preg_match;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
 class DocReferenceTextRole extends AbstractReferenceTextRole
 {
     final public const NAME = 'doc';
+
+    public function __construct(
+        private readonly InterlinkParser $interlinkParser,
+    ) {
+    }
 
     public function getName(): string
     {
@@ -27,15 +31,8 @@ class DocReferenceTextRole extends AbstractReferenceTextRole
     /** @return DocReferenceNode */
     protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
-        $pattern =  AbstractReferenceTextRole::INTERLINK_REGEX;
-        if (preg_match($pattern, $referenceTarget, $matches)) {
-            $interlinkDomain = $matches[1];
-            $path = $matches[2];
-        } else {
-            $interlinkDomain = '';
-            $path = $referenceTarget;
-        }
+        $interlinkData = $this->interlinkParser->extractInterlink($referenceTarget);
 
-        return new DocReferenceNode($path, $referenceName ?? '', $interlinkDomain);
+        return new DocReferenceNode($interlinkData->reference, $referenceName ?? '', $interlinkData->interlink);
     }
 }
