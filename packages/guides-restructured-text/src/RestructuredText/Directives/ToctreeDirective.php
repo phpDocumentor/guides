@@ -45,7 +45,7 @@ class ToctreeDirective extends BaseDirective
         $options = $directive->getOptions();
         $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
 
-        $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
+        $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
             $parserContext,
             $blockContext->getDocumentIterator(),
             $options,

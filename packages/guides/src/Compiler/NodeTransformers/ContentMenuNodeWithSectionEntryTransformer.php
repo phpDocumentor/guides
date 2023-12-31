@@ -9,7 +9,7 @@ use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
-use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -40,7 +40,7 @@ class ContentMenuNodeWithSectionEntryTransformer implements NodeTransformer
             // We do not add the main section as it repeats the document title
             foreach ($section->getChildren() as $subSectionEntryNode) {
                 assert($subSectionEntryNode instanceof SectionEntryNode);
-                $sectionMenuEntry = new MenuEntryNode(
+                $sectionMenuEntry = new InternalMenuEntryNode(
                     $documentEntry->getFile(),
                     $subSectionEntryNode->getTitle(),
                     [],
@@ -59,7 +59,7 @@ class ContentMenuNodeWithSectionEntryTransformer implements NodeTransformer
     }
 
     private function addSubSections(
-        MenuEntryNode $sectionMenuEntry,
+        InternalMenuEntryNode $sectionMenuEntry,
         SectionEntryNode $sectionEntryNode,
         DocumentEntryNode $documentEntry,
         int $currentLevel,
@@ -70,7 +70,7 @@ class ContentMenuNodeWithSectionEntryTransformer implements NodeTransformer
         }
 
         foreach ($sectionEntryNode->getChildren() as $subSectionEntryNode) {
-            $subSectionMenuEntry = new MenuEntryNode(
+            $subSectionMenuEntry = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
                 $subSectionEntryNode->getTitle(),
                 [],

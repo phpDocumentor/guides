@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -42,13 +43,13 @@ class MenuDirective extends BaseDirective
         $options['titlesonly'] = new DirectiveOption('titlesonly', false);
         $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
 
-        $toctreeFiles = $this->toctreeBuilder->buildToctreeFiles(
+        $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
             $parserContext,
             $blockContext->getDocumentIterator(),
             $options,
         );
         if (count($toctreeFiles) === 0) {
-            $toctreeFiles[] = '/*';
+            $toctreeFiles[] = new MenuDefinitionLineNode('/*');
         }
 
         return (new NavMenuNode($toctreeFiles))->withOptions($this->optionsToArray($options));
