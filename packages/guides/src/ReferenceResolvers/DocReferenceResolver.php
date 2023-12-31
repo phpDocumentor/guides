@@ -8,9 +8,7 @@ use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
-use Psr\Log\LoggerInterface;
 
-use function array_merge;
 use function sprintf;
 
 class DocReferenceResolver implements ReferenceResolver
@@ -20,11 +18,10 @@ class DocReferenceResolver implements ReferenceResolver
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly DocumentNameResolverInterface $documentNameResolver,
-        private readonly LoggerInterface $logger,
     ) {
     }
 
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
         if (!$node instanceof DocReferenceNode) {
             return false;
@@ -38,14 +35,11 @@ class DocReferenceResolver implements ReferenceResolver
 
         $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName);
         if ($document === null) {
-            $this->logger->warning(
-                sprintf(
-                    'Document with name "%s" not found, required in file "%s".',
-                    $canonicalDocumentName,
-                    $renderContext->getCurrentFileName(),
-                ),
-                array_merge($renderContext->getLoggerInformation(), $node->getDebugInformation()),
-            );
+            $messages->addWarning(new Message(sprintf(
+                'Document with name "%s" not found, required in file "%s".',
+                $canonicalDocumentName,
+                $renderContext->getCurrentFileName(),
+            )));
 
             return false;
         }

@@ -40,14 +40,18 @@ final class AnchorReferenceResolverTest extends TestCase
     {
         $this->anchorReducer->expects(self::once())->method('reduceAnchor')->willReturn('reduced-anchor');
         $input = new ReferenceNode('lorem-ipsum');
-        self::assertTrue($this->subject->resolve($input, $this->renderContext));
+        $messages = new Messages();
+        self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
     }
 
     public function testResolvedReferenceReturnsCanonicalUrl(): void
     {
         $this->urlGenerator->method('generateCanonicalOutputUrl')->willReturn('canonical-url');
         $input = new ReferenceNode('lorem-ipsum');
-        self::assertTrue($this->subject->resolve($input, $this->renderContext));
+        $messages = new Messages();
+        self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
         self::assertEquals('canonical-url', $input->getUrl());
     }
 }

@@ -10,7 +10,7 @@ use phpDocumentor\Guides\RenderContext;
 interface ReferenceResolver
 {
     /** @return bool true if the reference is resolved */
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool;
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool;
 
     public static function getPriority(): int;
 }
