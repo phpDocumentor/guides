@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\RestructuredText\Parser\Interlink\DefaultInterlinkParser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,7 @@ class DocReferenceTextRoleTest extends TestCase
     public function setUp(): void
     {
         $this->documentParserContext = $this->createMock(DocumentParserContext::class);
-        $this->docReferenceTextRole = new DocReferenceTextRole();
+        $this->docReferenceTextRole = new DocReferenceTextRole(new DefaultInterlinkParser());
     }
 
     #[DataProvider('docReferenceProvider')]
