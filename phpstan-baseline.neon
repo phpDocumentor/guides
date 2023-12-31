@@ -32,7 +32,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
-			count: 2
+			count: 1
 			path: packages/guides-cli/src/Command/Run.php
 
 		-

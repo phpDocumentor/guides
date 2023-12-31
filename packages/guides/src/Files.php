@@ -14,13 +14,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use ArrayIterator;
+use Countable;
 use Iterator;
 use IteratorAggregate;
 
+use function count;
 use function in_array;
 
 /** @implements IteratorAggregate<string> */
-final class Files implements IteratorAggregate
+final class Files implements IteratorAggregate, Countable
 {
     /** @var string[] */
     private array $files = [];
@@ -38,5 +40,10 @@ final class Files implements IteratorAggregate
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->files);
+    }
+
+    public function count(): int
+    {
+        return count($this->files);
     }
 }

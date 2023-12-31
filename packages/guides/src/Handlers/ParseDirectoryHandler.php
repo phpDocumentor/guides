@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Handlers;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Tactician\CommandBus;
+use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
 use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PreParseProcess;
 use phpDocumentor\Guides\FileCollector;
@@ -47,18 +48,23 @@ final class ParseDirectoryHandler
         );
 
         $files = $this->fileCollector->collect($origin, $currentDirectory, $extension);
+
+        $postCollectFilesForParsingEvent = $this->eventDispatcher->dispatch(
+            new PostCollectFilesForParsingEvent($command, $files),
+        );
+        assert($postCollectFilesForParsingEvent instanceof PostCollectFilesForParsingEvent);
         /** @var DocumentNode[] $documents */
         $documents = [];
-        foreach ($files as $file) {
+        foreach ($postCollectFilesForParsingEvent->getFiles() as $file) {
             $documents[] = $this->commandBus->handle(
                 new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode(), $indexName === $file),
             );
         }
 
-        $postParseProcessEvent = $this->eventDispatcher->dispatch(
+        $postCollectFilesForParsingEvent = $this->eventDispatcher->dispatch(
             new PostParseProcess($command, $documents),
         );
-        assert($postParseProcessEvent instanceof PostParseProcess);
+        assert($postCollectFilesForParsingEvent instanceof PostParseProcess);
 
         return $documents;
     }
