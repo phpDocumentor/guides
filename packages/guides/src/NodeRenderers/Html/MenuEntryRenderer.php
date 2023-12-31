@@ -29,11 +29,13 @@ final class MenuEntryRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $renderContext): string
     {
+        $url = $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), $node->getValue()->getId());
+
         return $this->renderer->renderTemplate(
             $renderContext,
             'body/menu/menu-item.html.twig',
             [
-                'url' => $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), $node->getValue()->getId()),
+                'url' => $url,
                 'node' => $node,
             ],
         );
