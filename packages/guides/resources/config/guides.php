@@ -8,6 +8,7 @@ use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
+use phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers\InternalMenuEntryNodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Interlink\DefaultInventoryLoader;
 use phpDocumentor\Guides\Interlink\DefaultInventoryRepository;
@@ -84,11 +85,19 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\',
             '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php',
         )
+        ->load(
+            'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\MenuNodeTransformers\\',
+            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/MenuNodeTransformers/*Transformer.php',
+        )
 
         ->load(
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
             '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php',
         )
+
+        ->set(InternalMenuEntryNodeTransformer::class)
+        ->tag('phpdoc.guides.compiler.nodeTransformers')
+
 
         ->set(AbsoluteUrlGenerator::class)
         ->set(RelativeUrlGenerator::class)

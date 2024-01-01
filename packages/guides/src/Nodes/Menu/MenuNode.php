@@ -15,50 +15,33 @@ namespace phpDocumentor\Guides\Nodes\Menu;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\Nodes\Node;
 
 use const PHP_INT_MAX;
 
 /**
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  *
- * @extends CompoundNode<Node>
+ * @extends CompoundNode<MenuEntryNode>
  */
 abstract class MenuNode extends CompoundNode
 {
     private InlineCompoundNode|null $caption = null;
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
-    /** @var MenuEntryNode[] */
-    private array $menuEntries = [];
-
-    /** @param MenuDefinitionLineNode[] $parsedMenuEntryNodes */
-    public function __construct(private readonly array $parsedMenuEntryNodes)
+    /**
+     * @param MenuEntryNode[] $menuEntries
+     */
+    public function __construct(array $menuEntries)
     {
-        parent::__construct();
-    }
-
-    /** @return MenuDefinitionLineNode[] */
-    public function getParsedMenuEntryNodes(): array
-    {
-        return $this->parsedMenuEntryNodes;
+        parent::__construct($menuEntries);
     }
 
     abstract public function getDepth(): int;
 
-    /** @param MenuEntryNode[] $menuEntries */
-    public function withMenuEntries(array $menuEntries): self
-    {
-        $that = clone $this;
-        $that->menuEntries = $menuEntries;
-
-        return $that;
-    }
-
     /** @return MenuEntryNode[] */
     public function getMenuEntries(): array
     {
-        return $this->menuEntries;
+        return $this->value;
     }
 
     abstract public function isPageLevelOnly(): bool;

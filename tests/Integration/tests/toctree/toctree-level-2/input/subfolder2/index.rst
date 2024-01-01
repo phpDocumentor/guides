@@ -10,4 +10,5 @@ the parent menu.
     :titlesonly:
     :hidden:
 
-    *
+    subpage1
+    subpage2

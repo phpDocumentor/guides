@@ -11,4 +11,5 @@ A Definition List
     :glob:
     :titlesonly:
 
-    *
+    subpage1
+    subpage2

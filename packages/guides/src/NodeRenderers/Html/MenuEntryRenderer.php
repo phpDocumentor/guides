@@ -29,7 +29,7 @@ final class MenuEntryRenderer implements NodeRenderer
 
     public function render(Node $node, RenderContext $renderContext): string
     {
-        $url = $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), $node->getValue()->getId());
+        $url = $this->urlGenerator->generateCanonicalOutputUrl($renderContext, $node->getUrl(), $node->getValue()?->getId());
 
         return $this->renderer->renderTemplate(
             $renderContext,

@@ -8,12 +8,12 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use Stringable;
 
-/** @extends AbstractNode<TitleNode> */
+/** @extends AbstractNode<TitleNode|null> */
 abstract class MenuEntryNode extends AbstractNode implements Stringable
 {
     public function __construct(
         private readonly string $url,
-        TitleNode $title,
+        TitleNode|null $title,
         private readonly int $level = 1,
     ) {
         $this->value = $title;

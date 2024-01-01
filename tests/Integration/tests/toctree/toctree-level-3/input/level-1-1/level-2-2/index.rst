@@ -8,4 +8,5 @@ A Toctree with multiple whitespaces in the directive:
     :glob:
     :titlesonly:
 
-    *
+    subpage1
+    subpage2

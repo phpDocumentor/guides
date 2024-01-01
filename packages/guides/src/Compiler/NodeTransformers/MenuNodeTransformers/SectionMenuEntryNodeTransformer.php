@@ -1,0 +1,49 @@
+<?php
+
+namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
+
+use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuNode;
+use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\TocNode;
+use phpDocumentor\Guides\Nodes\Node;
+use Psr\Log\LoggerInterface;
+
+final class SectionMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
+{
+    private const DEFAULT_MAX_LEVELS = PHP_INT_MAX;
+    public function __construct(
+        LoggerInterface $logger,
+    ) {
+        parent::__construct($logger);
+    }
+
+    public function supports(Node $node): bool
+    {
+        return $node instanceof MenuNode || $node instanceof SectionMenuEntryNode;
+    }
+
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
+    {
+        assert($node instanceof SectionMenuEntryNode);
+        $depth = (int) $currentMenu->getOption('depth', self::DEFAULT_MAX_LEVELS - 1) + 1;
+        $documentEntry = $compilerContext->getDocumentNode()->getDocumentEntry();
+        $menuEntry = new SectionMenuEntryNode(
+            $documentEntry->getFile(),
+            $node->getValue() ?? $documentEntry->getTitle(),
+            [],
+            false,
+            1,
+        );
+        $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $depth);
+        return $menuEntry->getSections();
+    }
+
+    public function getPriority(): int
+    {
+        // After DocumentEntryTransformer
+        return 4500;
+    }
+}

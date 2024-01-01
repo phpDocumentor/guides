@@ -9,5 +9,7 @@ Lorem Ipsum Dolor.
     :glob:
     :titlesonly:
 
-    *
-    */index
+    page1
+    page2
+    subfolder/index
+    subfolder2/index

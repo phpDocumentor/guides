@@ -7,6 +7,7 @@ namespace phpDocumentor\Guides\Compiler;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -20,7 +21,7 @@ final class DocumentNodeTraverserTest extends TestCase
     public function testRemoveNodeFromDocument(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
-        $document->addChildNode(new TocNode([new MenuDefinitionLineNode('/readme.rst')]));
+        $document->addChildNode(new TocNode([new InternalMenuEntryNode('/readme.rst', null)]));
         $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
         $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory([
@@ -60,10 +61,10 @@ final class DocumentNodeTraverserTest extends TestCase
     public function testReplaceInEnterNode(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
-        $document->addChildNode(new TocNode([new MenuDefinitionLineNode('/readme.rst')]));
+        $document->addChildNode(new TocNode([new InternalMenuEntryNode('/readme.rst', null)]));
         $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
-        $replacement = new TocNode([new MenuDefinitionLineNode('/foo.rst')]);
+        $replacement = new TocNode([new InternalMenuEntryNode('/foo.rst', null)]);
 
 
         /** @var iterable<NodeTransformer<Node>> $transformers */
@@ -113,10 +114,10 @@ final class DocumentNodeTraverserTest extends TestCase
     public function testReplaceInLeaveNode(): void
     {
         $document = new DocumentNode('foo', '/index.rst');
-        $document->addChildNode(new TocNode([new MenuDefinitionLineNode('/readme.rst')]));
+        $document->addChildNode(new TocNode([new InternalMenuEntryNode('/readme.rst', null)]));
         $document->addChildNode(new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')));
 
-        $replacement = new TocNode([new MenuDefinitionLineNode('/foo.rst')]);
+        $replacement = new TocNode([new InternalMenuEntryNode('/foo.rst', null)]);
 
 
         /** @var iterable<NodeTransformer<Node>> $transformers */

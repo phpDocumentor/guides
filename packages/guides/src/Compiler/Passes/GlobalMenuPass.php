@@ -72,12 +72,11 @@ class GlobalMenuPass implements CompilerPass
 
     private function getNavMenuNodefromTocNode(CompilerContext $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
     {
-        $node = new NavMenuNode($tocNode->getParsedMenuEntryNodes());
         $self = $this;
         $menuEntries = array_map(static function (MenuEntryNode $tocEntry) use ($compilerContext, $self) {
             return $self->getMenuEntryWithChildren($compilerContext, $tocEntry);
         }, $tocNode->getMenuEntries());
-        $node = $node->withMenuEntries($menuEntries);
+        $node = new NavMenuNode($menuEntries);
         $options = $tocNode->getOptions();
         unset($options['hidden']);
         unset($options['titlesonly']);
