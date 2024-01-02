@@ -20,24 +20,23 @@ use const FILTER_VALIDATE_URL;
 
 abstract class ReferenceRule extends AbstractInlineRule
 {
-    protected function createReference(BlockContext $blockContext, string $link, string|null $embeddedUrl = null, bool $registerLink = true): AbstractLinkInlineNode
+    protected function createReference(BlockContext $blockContext, string $reference, string|null $text = null, bool $registerLink = true): AbstractLinkInlineNode
     {
         // the link may have a new line in it, so we need to strip it
         // before setting the link and adding a token to be replaced
-        $link = str_replace("\n", ' ', $link);
-        $link = trim(preg_replace('/\s+/', ' ', $link) ?? '');
+        $reference = str_replace("\n", ' ', $reference);
+        $reference = trim(preg_replace('/\s+/', ' ', $reference) ?? '');
 
-        $targetLink = $embeddedUrl ?? $link;
-        if (str_ends_with($targetLink, '.rst') && filter_var($targetLink, FILTER_VALIDATE_URL) === false) {
-            $targetLink = substr($targetLink, 0, -4);
+        if (str_ends_with($reference, '.rst') && filter_var($reference, FILTER_VALIDATE_URL) === false) {
+            $reference = substr($reference, 0, -4);
 
-            return new DocReferenceNode($targetLink, $link);
+            return new DocReferenceNode($reference, $text ?? $reference);
         }
 
-        if ($registerLink && $embeddedUrl !== null) {
-            $blockContext->getDocumentParserContext()->setLink($link, $embeddedUrl);
+        if ($registerLink && $text !== null) {
+            $blockContext->getDocumentParserContext()->setLink($text, $reference);
         }
 
-        return new HyperLinkNode($link, $targetLink);
+        return new HyperLinkNode($text ?? $reference, $reference);
     }
 }

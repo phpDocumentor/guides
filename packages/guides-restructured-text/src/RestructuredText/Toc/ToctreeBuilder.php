@@ -6,15 +6,15 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 
 use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\ParserContext;
-use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
 use function array_filter;
 use function array_map;
 
 class ToctreeBuilder
 {
-    use EmbeddedUriParser;
+    use EmbeddedReferenceParser;
 
     /**
      * @param mixed[] $options
@@ -45,8 +45,8 @@ class ToctreeBuilder
 
         $result = [];
         foreach ($linesArray as $line) {
-            $parsed = $this->extractEmbeddedUri($line);
-            $result[] = new MenuDefinitionLineNode($parsed['uri'], $parsed['text']);
+            $referenceData = $this->extractEmbeddedReference($line);
+            $result[] = new MenuDefinitionLineNode($referenceData->reference, $referenceData->text);
         }
 
         return $result;

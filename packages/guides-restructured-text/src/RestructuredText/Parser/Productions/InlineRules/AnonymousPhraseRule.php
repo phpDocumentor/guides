@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
 /**
  * Rule to parse for anonymous references
@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  */
 class AnonymousPhraseRule extends ReferenceRule
 {
-    use EmbeddedUriParser;
+    use EmbeddedReferenceParser;
 
     public function applies(InlineLexer $lexer): bool
     {
@@ -61,16 +61,10 @@ class AnonymousPhraseRule extends ReferenceRule
 
     private function createAnonymousReference(BlockContext $blockContext, string $value): AbstractLinkInlineNode
     {
-        $parsed = $this->extractEmbeddedUri($value);
-        $link = $parsed['text'];
-        $uri = $parsed['uri'];
-        if ($link === null) {
-            $link = $uri;
-            $uri = null;
-        }
+        $referenceData = $this->extractEmbeddedReference($value);
 
-        $node = $this->createReference($blockContext, $link, $uri, false);
-        $blockContext->getDocumentParserContext()->pushAnonymous($link);
+        $node = $this->createReference($blockContext, $referenceData->reference, $referenceData->text, false);
+        $blockContext->getDocumentParserContext()->pushAnonymous($referenceData->reference);
 
         return $node;
     }

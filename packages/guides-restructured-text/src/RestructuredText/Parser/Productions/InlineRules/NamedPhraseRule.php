@@ -6,8 +6,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\EmbeddedUriParser;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
+use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
 /**
  * Rule to parse for named references
@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  */
 class NamedPhraseRule extends ReferenceRule
 {
-    use EmbeddedUriParser;
+    use EmbeddedReferenceParser;
 
     public function applies(InlineLexer $lexer): bool
     {
@@ -45,15 +45,9 @@ class NamedPhraseRule extends ReferenceRule
 
                     $lexer->moveNext();
 
-                    $parsed = $this->extractEmbeddedUri($value);
-                    $text = $parsed['text'];
-                    $uri = $parsed['uri'];
-                    if ($text === null) {
-                        $text = $uri;
-                        $uri = null;
-                    }
+                    $referenceData = $this->extractEmbeddedReference($value);
 
-                    return $this->createReference($blockContext, $text, $uri);
+                    return $this->createReference($blockContext, $referenceData->reference, $referenceData->text);
 
                 case InlineLexer::WHITESPACE:
                     $value .= ' ';
