@@ -38,7 +38,7 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
         assert($node instanceof InternalMenuEntryNode);
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($node->getUrl());
-        $this->addSubEntries($compilerContext, $node, $documentEntryOfMenuEntry, $node->getLevel() + 1, $maxDepth);
+        $this->addSubEntries($currentMenu, $compilerContext, $node, $documentEntryOfMenuEntry, $node->getLevel() + 1, $maxDepth);
 
         return [$node];
     }
@@ -50,6 +50,7 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
     }
 
     private function addSubEntries(
+        MenuNode $currentMenu,
         CompilerContext $compilerContext,
         InternalMenuEntryNode $sectionMenuEntry,
         DocumentEntryNode $documentEntry,
@@ -71,8 +72,13 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
                 self::isInRootline($subDocumentEntryNode, $compilerContext->getDocumentNode()->getDocumentEntry()),
                 self::isCurrent($subDocumentEntryNode, $compilerContext->getDocumentNode()->getFilePath()),
             );
+
+            if (!$currentMenu->hasOption('titlesonly') && $maxDepth - $currentLevel + 1 > 1) {
+                $this->addSubSectionsToMenuEntries($subDocumentEntryNode, $subMenuEntry, $maxDepth - $currentLevel + 2);
+            }
+
             $sectionMenuEntry->addMenuEntry($subMenuEntry);
-            $this->addSubEntries($compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
+            $this->addSubEntries($currentMenu, $compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
         }
     }
 }

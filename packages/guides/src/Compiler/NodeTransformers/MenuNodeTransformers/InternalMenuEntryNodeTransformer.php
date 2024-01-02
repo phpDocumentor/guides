@@ -59,8 +59,8 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
                 $this->isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
                 $this->isCurrent($documentEntry, $currentPath),
             );
-            if (!$currentMenu->hasOption('titlesonly')) {
-                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth - 1);
+            if (!$currentMenu->hasOption('titlesonly') && $maxDepth > 1) {
+                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth);
             }
 
             if ($currentMenu instanceof TocNode) {
