@@ -8,7 +8,6 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
-use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
@@ -20,6 +19,9 @@ use function implode;
 
 class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
+    // Setting a default level prevents PHP errors in case of circular references
+    private const DEFAULT_MAX_LEVELS = 10;
+
     public function __construct(
         LoggerInterface $logger,
     ) {
@@ -31,11 +33,13 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
         return $node instanceof MenuNode || $node instanceof InternalMenuEntryNode;
     }
 
+    /** @return list<MenuEntryNode> */
     protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
     {
         assert($node instanceof InternalMenuEntryNode);
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
+        $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         foreach ($documentEntries as $documentEntry) {
             if (
                 !self::isEqualAbsolutePath($documentEntry->getFile(), $node, $currentPath)
@@ -56,7 +60,7 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
                 $this->isCurrent($documentEntry, $currentPath),
             );
             if (!$currentMenu->hasOption('titlesonly')) {
-                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry);
+                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth - 1);
             }
 
             if ($currentMenu instanceof TocNode) {

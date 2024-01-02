@@ -7,12 +7,11 @@ namespace phpDocumentor\Guides\RestructuredText\Toc;
 use phpDocumentor\Guides\Nodes\Menu\ExternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use phpDocumentor\Guides\RestructuredText\Parser\Reference\EmbeddedReferenceParser;
+use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
 use function array_filter;
 use function array_map;
@@ -54,7 +53,7 @@ class ToctreeBuilder
 
         $result = [];
         foreach ($linesArray as $line) {
-            $referenceData = $this->extractEmbeddedUri($line);
+            $referenceData = $this->extractEmbeddedReference($line);
             if (filter_var($referenceData->reference, FILTER_VALIDATE_URL) !== false) {
                 $result[] = new ExternalMenuEntryNode($referenceData->reference, TitleNode::fromString($referenceData->text ?? $referenceData->reference));
                 continue;

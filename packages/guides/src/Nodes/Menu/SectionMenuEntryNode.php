@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Nodes\Menu;
 
 use phpDocumentor\Guides\Nodes\TitleNode;

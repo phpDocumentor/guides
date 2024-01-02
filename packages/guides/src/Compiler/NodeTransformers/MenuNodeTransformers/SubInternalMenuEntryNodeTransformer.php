@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
-use Exception;
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
@@ -34,7 +32,7 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
         return $node instanceof TocNode || $node instanceof NavMenuNode || $node instanceof InternalMenuEntryNode;
     }
 
-
+    /** @return list<MenuEntryNode> */
     protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
     {
         assert($node instanceof InternalMenuEntryNode);

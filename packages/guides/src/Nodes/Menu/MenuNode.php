@@ -28,9 +28,7 @@ abstract class MenuNode extends CompoundNode
     private InlineCompoundNode|null $caption = null;
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
-    /**
-     * @param MenuEntryNode[] $menuEntries
-     */
+    /** @param MenuEntryNode[] $menuEntries */
     public function __construct(array $menuEntries)
     {
         parent::__construct($menuEntries);

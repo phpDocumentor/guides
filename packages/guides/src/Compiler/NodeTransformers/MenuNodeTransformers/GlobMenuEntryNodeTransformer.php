@@ -12,23 +12,26 @@ use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\TitleNode;
 
 use function array_pop;
 use function assert;
 use function explode;
 use function implode;
 use function in_array;
-use function is_string;
 use function preg_match;
 use function str_replace;
 use function str_starts_with;
 
 final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
+    // Setting a default level prevents PHP errors in case of circular references
+    private const DEFAULT_MAX_LEVELS = 10;
+
+    /** @return list<MenuEntryNode> */
     protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
     {
         assert($node instanceof GlobMenuEntryNode);
+        $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
         $globExclude = explode(',', $currentMenu->getOption('globExclude') . '');
@@ -46,10 +49,17 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 continue;
             }
 
+            foreach ($currentMenu->getChildren() as $menuEntry) {
+                if ($menuEntry instanceof InternalMenuEntryNode && $menuEntry->getUrl() === $documentEntry->getFile()) {
+                    // avoid duplicates
+                    continue 2;
+                }
+            }
+
             $documentEntriesInTree[] = $documentEntry;
             $menuEntry = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
-                is_string($node->getValue()) ? TitleNode::fromString($node->getValue()) : $documentEntry->getTitle(),
+                $documentEntry->getTitle(),
                 [],
                 false,
                 1,
@@ -58,7 +68,7 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 $this->isCurrent($documentEntry, $currentPath),
             );
             if (!$currentMenu->hasOption('titlesonly')) {
-                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry);
+                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth - 1);
             }
 
             if ($currentMenu instanceof TocNode) {

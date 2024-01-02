@@ -12,13 +12,12 @@ use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
-use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
 
 use function assert;
+use function count;
 use function sprintf;
 use function str_starts_with;
 
@@ -57,7 +56,19 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
 
         $menuEntries = $this->handleMenuEntry($this->currentMenu, $node, $compilerContext);
 
-        return $menuEntries[0] ?? null;
+        if (count($menuEntries) === 0) {
+            return null;
+        }
+
+        if (count($menuEntries) === 1) {
+            return $menuEntries[0];
+        }
+
+        foreach ($menuEntries as $menuEntry) {
+            $compilerContext->getShadowTree()->getParent()?->addChild($menuEntry);
+        }
+
+        return null;
     }
 
     /** @return list<MenuEntryNode> */

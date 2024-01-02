@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 use Psr\Log\LoggerInterface;
+
+use function assert;
+
+use const PHP_INT_MAX;
 
 final class SectionMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
     private const DEFAULT_MAX_LEVELS = PHP_INT_MAX;
+
     public function __construct(
         LoggerInterface $logger,
     ) {
@@ -25,6 +30,7 @@ final class SectionMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransfo
         return $node instanceof MenuNode || $node instanceof SectionMenuEntryNode;
     }
 
+    /** @return list<MenuEntryNode> */
     protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
     {
         assert($node instanceof SectionMenuEntryNode);
@@ -38,6 +44,7 @@ final class SectionMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransfo
             1,
         );
         $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $depth);
+
         return $menuEntry->getSections();
     }
 
