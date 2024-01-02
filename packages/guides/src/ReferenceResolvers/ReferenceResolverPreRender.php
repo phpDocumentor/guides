@@ -8,12 +8,18 @@ use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRenderer;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
+
+use function array_merge;
+use function sprintf;
 
 final class ReferenceResolverPreRender implements PreNodeRenderer
 {
-    public function __construct(private readonly DelegatingReferenceResolver $referenceResolver)
-    {
+    public function __construct(
+        private readonly DelegatingReferenceResolver $referenceResolver,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function supports(Node $node): bool
@@ -24,7 +30,18 @@ final class ReferenceResolverPreRender implements PreNodeRenderer
     public function execute(Node $node, RenderContext $renderContext): Node
     {
         Assert::isInstanceOf($node, LinkInlineNode::class);
-        $this->referenceResolver->resolve($node, $renderContext);
+        $messages = new Messages();
+        $resolved = $this->referenceResolver->resolve($node, $renderContext, $messages);
+        if (!$resolved) {
+            $this->logger->warning(
+                $messages->getLastWarning()?->getMessage() ?? sprintf(
+                    'Reference %s could not be resolved in %s',
+                    $node->getTargetReference(),
+                    $renderContext->getCurrentFileName(),
+                ),
+                array_merge($renderContext->getLoggerInformation(), $messages->getLastWarning()?->getDebugInfo() ?? []),
+            );
+        }
 
         return $node;
     }

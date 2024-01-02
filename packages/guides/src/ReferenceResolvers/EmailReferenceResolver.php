@@ -18,7 +18,7 @@ class EmailReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = -100;
 
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
         if (filter_var($node->getTargetReference(), FILTER_VALIDATE_EMAIL)) {
             $node->setUrl('mailto:' . $node->getTargetReference());

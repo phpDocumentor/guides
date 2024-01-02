@@ -11,7 +11,7 @@ class InternalReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 100;
 
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
         $link = $renderContext->getLink($node->getTargetReference());
         if ($link) {

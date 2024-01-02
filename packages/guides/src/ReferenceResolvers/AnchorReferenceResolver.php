@@ -24,7 +24,7 @@ class AnchorReferenceResolver implements ReferenceResolver
     ) {
     }
 
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): bool
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
         if (!$node instanceof ReferenceNode) {
             return false;

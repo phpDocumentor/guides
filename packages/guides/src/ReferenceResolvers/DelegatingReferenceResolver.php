@@ -6,9 +6,6 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
-use Psr\Log\LoggerInterface;
-
-use function sprintf;
 
 /**
  * Resolves the URL for all inline link nodes using reference resolvers.
@@ -16,25 +13,18 @@ use function sprintf;
 final class DelegatingReferenceResolver
 {
     /** @param iterable<ReferenceResolver> $resolvers */
-    public function __construct(private readonly iterable $resolvers, private readonly LoggerInterface $logger)
+    public function __construct(private readonly iterable $resolvers)
     {
     }
 
-    public function resolve(LinkInlineNode $node, RenderContext $renderContext): void
+    public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
         foreach ($this->resolvers as $resolver) {
-            if ($resolver->resolve($node, $renderContext)) {
-                return;
+            if ($resolver->resolve($node, $renderContext, $messages)) {
+                return true;
             }
         }
 
-        $this->logger->warning(
-            sprintf(
-                'Reference %s could not be resolved in %s',
-                $node->getTargetReference(),
-                $renderContext->getCurrentFileName(),
-            ),
-            $renderContext->getLoggerInformation(),
-        );
+        return false;
     }
 }
