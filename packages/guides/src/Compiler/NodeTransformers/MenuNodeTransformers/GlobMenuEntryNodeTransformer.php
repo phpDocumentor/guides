@@ -38,8 +38,7 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         $menuEntries = [];
         foreach ($documentEntries as $documentEntry) {
             if (
-                !self::isEqualAbsolutePath($documentEntry->getFile(), $node, $currentPath, $globExclude)
-                && !self::isEqualRelativePath($documentEntry->getFile(), $node, $currentPath, $globExclude)
+                !self::matches($documentEntry->getFile(), $node, $currentPath, $globExclude)
             ) {
                 continue;
             }
@@ -92,27 +91,15 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         return 4500;
     }
 
-    /** @param String[] $globExclude */
-    private static function isEqualAbsolutePath(string $actualFile, GlobMenuEntryNode $parsedMenuEntryNode, string $currentFile, array $globExclude): bool
+    private static function matches(string $actualFile, GlobMenuEntryNode $parsedMenuEntryNode, string $currentFile, array $globExclude): bool
     {
         $expectedFile = $parsedMenuEntryNode->getUrl();
-        if (!self::isAbsoluteFile($expectedFile)) {
-            return false;
-        }
-
-        if ($expectedFile === '/' . $actualFile) {
-            return true;
-        }
-
-        return self::isGlob($actualFile, $currentFile, $expectedFile, '/', $globExclude);
-    }
-
-    /** @param String[] $globExclude */
-    private static function isEqualRelativePath(string $actualFile, GlobMenuEntryNode $menuEntryNode, string $currentFile, array $globExclude): bool
-    {
-        $expectedFile = $menuEntryNode->getUrl();
         if (self::isAbsoluteFile($expectedFile)) {
-            return false;
+            if ($expectedFile === '/' . $actualFile) {
+                return true;
+            }
+
+            return self::isGlob($actualFile, $currentFile, $expectedFile, '/', $globExclude);
         }
 
         $current = explode('/', $currentFile);
