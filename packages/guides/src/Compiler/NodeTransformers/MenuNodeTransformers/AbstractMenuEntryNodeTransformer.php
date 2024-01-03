@@ -31,7 +31,7 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
     ) {
     }
 
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    final public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if ($node instanceof MenuNode) {
             $this->currentMenu = $node;
