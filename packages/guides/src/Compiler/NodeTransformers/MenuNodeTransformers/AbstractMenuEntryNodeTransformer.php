@@ -169,7 +169,7 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
         return $menuEntry->getFile() === $currentPath;
     }
 
-    public static function isAbsoluteFile(string $expectedFile): bool
+    protected static function isAbsoluteFile(string $expectedFile): bool
     {
         return str_starts_with($expectedFile, '/');
     }
