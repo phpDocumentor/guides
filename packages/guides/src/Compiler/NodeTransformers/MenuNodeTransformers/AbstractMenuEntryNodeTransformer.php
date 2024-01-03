@@ -40,7 +40,7 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public final function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
         if ($node instanceof MenuNode) {
             $this->currentMenu = null;
