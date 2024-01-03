@@ -21,7 +21,7 @@ use function count;
 use function sprintf;
 use function str_starts_with;
 
-/** @implements NodeTransformer<Node> */
+/** @implements NodeTransformer<MenuNode|MenuEntryNode> */
 abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
 {
     private MenuNode|null $currentMenu = null;
