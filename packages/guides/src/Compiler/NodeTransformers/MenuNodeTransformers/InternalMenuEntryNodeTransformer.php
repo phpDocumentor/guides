@@ -42,8 +42,7 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         foreach ($documentEntries as $documentEntry) {
             if (
-                !self::isEqualAbsolutePath($documentEntry->getFile(), $node, $currentPath)
-                && !self::isEqualRelativePath($documentEntry->getFile(), $node, $currentPath)
+                !self::matches($documentEntry->getFile(), $node, $currentPath)
             ) {
                 continue;
             }
@@ -73,21 +72,11 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
         return [$node];
     }
 
-    private static function isEqualAbsolutePath(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool
+    private static function matches(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool
     {
         $expectedFile = $parsedMenuEntryNode->getUrl();
-        if (!self::isAbsoluteFile($expectedFile)) {
-            return false;
-        }
-
-        return $expectedFile === '/' . $actualFile;
-    }
-
-    private static function isEqualRelativePath(string $actualFile, InternalMenuEntryNode $menuEntryNode, string $currentFile): bool
-    {
-        $expectedFile = $menuEntryNode->getUrl();
         if (self::isAbsoluteFile($expectedFile)) {
-            return false;
+            return $expectedFile === '/' . $actualFile;
         }
 
         $current = explode('/', $currentFile);

@@ -91,6 +91,7 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         return 4500;
     }
 
+    /** @param String[] $globExclude */
     private static function matches(string $actualFile, GlobMenuEntryNode $parsedMenuEntryNode, string $currentFile, array $globExclude): bool
     {
         $expectedFile = $parsedMenuEntryNode->getUrl();
