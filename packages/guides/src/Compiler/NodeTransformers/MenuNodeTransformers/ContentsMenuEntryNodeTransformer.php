@@ -23,27 +23,27 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
 
     public function supports(Node $node): bool
     {
-        return $node instanceof MenuNode || $node instanceof SectionMenuEntryNode;
+        return $node instanceof SectionMenuEntryNode;
     }
 
     /** @return list<MenuEntryNode> */
-    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array
     {
         if (!$currentMenu instanceof ContentMenuNode) {
-            return [$node];
+            return [$entryNode];
         }
 
-        assert($node instanceof SectionMenuEntryNode);
+        assert($entryNode instanceof SectionMenuEntryNode);
         $depth = (int) $currentMenu->getOption('depth', self::DEFAULT_MAX_LEVELS - 1) + 1;
         $documentEntry = $compilerContext->getDocumentNode()->getDocumentEntry();
-        $menuEntry = new SectionMenuEntryNode(
+        $newEntryNode = new SectionMenuEntryNode(
             $documentEntry->getFile(),
-            $node->getValue() ?? $documentEntry->getTitle(),
+            $entryNode->getValue() ?? $documentEntry->getTitle(),
             1,
         );
-        $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $depth);
+        $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
 
-        return $menuEntry->getSections();
+        return $newEntryNode->getSections();
     }
 
     public function getPriority(): int

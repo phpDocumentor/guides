@@ -15,40 +15,35 @@ use Psr\Log\LoggerInterface;
 use function assert;
 use function count;
 
-/** @implements NodeTransformer<MenuNode|MenuEntryNode> */
+/** @implements NodeTransformer<MenuEntryNode> */
 abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
 {
-    private MenuNode|null $currentMenu = null;
-
     public function __construct(
         protected readonly LoggerInterface $logger,
     ) {
     }
 
-    final public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    final public function enterNode(Node $node, CompilerContext $compilerContext): MenuEntryNode
     {
-        if ($node instanceof MenuNode) {
-            $this->currentMenu = $node;
-        }
-
         return $node;
     }
 
-    final public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    /** @param MenuEntryNode $node */
+    final public function leaveNode(Node $node, CompilerContext $compilerContext): MenuEntryNode|null
     {
-        if ($node instanceof MenuNode) {
-            $this->currentMenu = null;
-
-            return $node;
+        assert($node instanceof MenuEntryNode);
+        $currentMenuShaddow = $compilerContext->getShadowTree()->getParent();
+        while ($currentMenuShaddow !== null && !$currentMenuShaddow->getNode() instanceof MenuNode) {
+            $currentMenuShaddow = $currentMenuShaddow->getParent();
         }
 
-        if ($this->currentMenu === null) {
+        $currentMenu = $currentMenuShaddow?->getNode();
+
+        if (!$currentMenu instanceof MenuNode) {
             throw new Exception('A MenuEntryNode must be attached to a MenuNode');
         }
 
-        assert($node instanceof MenuEntryNode);
-
-        $menuEntries = $this->handleMenuEntry($this->currentMenu, $node, $compilerContext);
+        $menuEntries = $this->handleMenuEntry($currentMenu, $node, $compilerContext);
 
         if (count($menuEntries) === 0) {
             return null;
@@ -66,5 +61,5 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
     }
 
     /** @return list<MenuEntryNode> */
-    abstract protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array;
+    abstract protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array;
 }

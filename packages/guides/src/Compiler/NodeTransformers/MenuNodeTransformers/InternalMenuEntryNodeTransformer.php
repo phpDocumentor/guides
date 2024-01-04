@@ -26,27 +26,27 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 
     public function supports(Node $node): bool
     {
-        return $node instanceof MenuNode || $node instanceof InternalMenuEntryNode;
+        return $node instanceof InternalMenuEntryNode;
     }
 
     /** @return list<MenuEntryNode> */
-    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array
     {
-        assert($node instanceof InternalMenuEntryNode);
+        assert($entryNode instanceof InternalMenuEntryNode);
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         foreach ($documentEntries as $documentEntry) {
             if (
-                !self::matches($documentEntry->getFile(), $node, $currentPath)
+                !self::matches($documentEntry->getFile(), $entryNode, $currentPath)
             ) {
                 continue;
             }
 
             $documentEntriesInTree[] = $documentEntry;
-            $menuEntry = new InternalMenuEntryNode(
+            $newEntryNode = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
-                $node->getValue() ?? $documentEntry->getTitle(),
+                $entryNode->getValue() ?? $documentEntry->getTitle(),
                 [],
                 false,
                 1,
@@ -55,17 +55,17 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
                 $this->isCurrent($documentEntry, $currentPath),
             );
             if (!$currentMenu->hasOption('titlesonly') && $maxDepth > 1) {
-                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth);
+                $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $maxDepth);
             }
 
             if ($currentMenu instanceof TocNode) {
                 $this->attachDocumentEntriesToParents($documentEntriesInTree, $compilerContext, $currentPath);
             }
 
-            return [$menuEntry];
+            return [$newEntryNode];
         }
 
-        return [$node];
+        return [$entryNode];
     }
 
     private static function matches(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool

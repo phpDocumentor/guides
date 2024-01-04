@@ -9,8 +9,6 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
-use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
-use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function assert;
@@ -25,18 +23,18 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
 
     public function supports(Node $node): bool
     {
-        return $node instanceof TocNode || $node instanceof NavMenuNode || $node instanceof InternalMenuEntryNode;
+        return $node instanceof InternalMenuEntryNode;
     }
 
     /** @return list<MenuEntryNode> */
-    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array
     {
-        assert($node instanceof InternalMenuEntryNode);
+        assert($entryNode instanceof InternalMenuEntryNode);
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
-        $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($node->getUrl());
-        $this->addSubEntries($currentMenu, $compilerContext, $node, $documentEntryOfMenuEntry, $node->getLevel() + 1, $maxDepth);
+        $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($entryNode->getUrl());
+        $this->addSubEntries($currentMenu, $compilerContext, $entryNode, $documentEntryOfMenuEntry, $entryNode->getLevel() + 1, $maxDepth);
 
-        return [$node];
+        return [$entryNode];
     }
 
     public function getPriority(): int

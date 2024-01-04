@@ -9,7 +9,6 @@ use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
-use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -30,9 +29,9 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
     private const DEFAULT_MAX_LEVELS = 10;
 
     /** @return list<MenuEntryNode> */
-    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $node, CompilerContext $compilerContext): array
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array
     {
-        assert($node instanceof GlobMenuEntryNode);
+        assert($entryNode instanceof GlobMenuEntryNode);
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
@@ -40,7 +39,7 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         $menuEntries = [];
         foreach ($documentEntries as $documentEntry) {
             if (
-                !self::matches($documentEntry->getFile(), $node, $currentPath, $globExclude)
+                !self::matches($documentEntry->getFile(), $entryNode, $currentPath, $globExclude)
             ) {
                 continue;
             }
@@ -50,15 +49,15 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 continue;
             }
 
-            foreach ($currentMenu->getChildren() as $menuEntry) {
-                if ($menuEntry instanceof InternalMenuEntryNode && $menuEntry->getUrl() === $documentEntry->getFile()) {
+            foreach ($currentMenu->getChildren() as $currentMenuEntry) {
+                if ($currentMenuEntry instanceof InternalMenuEntryNode && $currentMenuEntry->getUrl() === $documentEntry->getFile()) {
                     // avoid duplicates
                     continue 2;
                 }
             }
 
             $documentEntriesInTree[] = $documentEntry;
-            $menuEntry = new InternalMenuEntryNode(
+            $newEntryNode = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
                 $documentEntry->getTitle(),
                 [],
@@ -69,14 +68,14 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 $this->isCurrent($documentEntry, $currentPath),
             );
             if (!$currentMenu->hasOption('titlesonly')) {
-                $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $maxDepth - 1);
+                $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $maxDepth - 1);
             }
 
             if ($currentMenu instanceof TocNode) {
                 $this->attachDocumentEntriesToParents($documentEntriesInTree, $compilerContext, $currentPath);
             }
 
-            $menuEntries[] = $menuEntry;
+            $menuEntries[] = $newEntryNode;
         }
 
         return $menuEntries;
@@ -84,7 +83,7 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
 
     public function supports(Node $node): bool
     {
-        return $node instanceof TocNode || $node instanceof NavMenuNode || $node instanceof GlobMenuEntryNode;
+        return $node instanceof GlobMenuEntryNode;
     }
 
     public function getPriority(): int
