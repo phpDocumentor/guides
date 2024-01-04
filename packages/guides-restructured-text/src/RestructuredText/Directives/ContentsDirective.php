@@ -39,7 +39,7 @@ class ContentsDirective extends BaseDirective
             $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
         );
 
-        return (new ContentMenuNode([new SectionMenuEntryNode($absoluteUrl, null)]))
+        return (new ContentMenuNode([new SectionMenuEntryNode($absoluteUrl)]))
             ->withOptions($this->optionsToArray($options))
             ->withCaption($directive->getDataNode());
     }
