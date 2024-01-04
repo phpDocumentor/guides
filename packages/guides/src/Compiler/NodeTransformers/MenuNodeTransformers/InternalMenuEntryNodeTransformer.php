@@ -19,6 +19,9 @@ use function implode;
 
 class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
+    use MenuEntryManagement;
+    use SubSectionHierarchyHandler;
+
     // Setting a default level prevents PHP errors in case of circular references
     private const DEFAULT_MAX_LEVELS = 10;
 

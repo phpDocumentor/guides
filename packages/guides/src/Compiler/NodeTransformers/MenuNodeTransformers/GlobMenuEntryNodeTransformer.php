@@ -20,10 +20,12 @@ use function implode;
 use function in_array;
 use function preg_match;
 use function str_replace;
-use function str_starts_with;
 
 final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
+    use MenuEntryManagement;
+    use SubSectionHierarchyHandler;
+
     // Setting a default level prevents PHP errors in case of circular references
     private const DEFAULT_MAX_LEVELS = 10;
 
@@ -126,10 +128,5 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         }
 
         return false;
-    }
-
-    public static function isAbsoluteFile(string $expectedFile): bool
-    {
-        return str_starts_with($expectedFile, '/');
     }
 }

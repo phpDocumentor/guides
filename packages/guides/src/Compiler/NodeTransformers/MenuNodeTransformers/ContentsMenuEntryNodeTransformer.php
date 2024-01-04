@@ -18,6 +18,8 @@ use const PHP_INT_MAX;
 
 final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
+    use SubSectionHierarchyHandler;
+
     private const DEFAULT_MAX_LEVELS = PHP_INT_MAX;
 
     public function __construct(
