@@ -64,8 +64,8 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 false,
                 1,
                 '',
-                $this->isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
-                $this->isCurrent($documentEntry, $currentPath),
+                self::isInRootline($documentEntry, $compilerContext->getDocumentNode()->getDocumentEntry()),
+                self::isCurrent($documentEntry, $currentPath),
             );
             if (!$currentMenu->hasOption('titlesonly')) {
                 $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $maxDepth - 1);

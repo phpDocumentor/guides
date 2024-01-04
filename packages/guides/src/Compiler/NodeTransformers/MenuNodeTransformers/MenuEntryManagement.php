@@ -43,14 +43,14 @@ trait MenuEntryManagement
         }
     }
 
-    private function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode $currentDoc): bool
+    private static function isInRootline(DocumentEntryNode $menuEntry, DocumentEntryNode $currentDoc): bool
     {
         return $menuEntry->getFile() === $currentDoc->getFile()
             || ($currentDoc->getParent() !== null
                 && self::isInRootline($menuEntry, $currentDoc->getParent()));
     }
 
-    private function isCurrent(DocumentEntryNode $menuEntry, string $currentPath): bool
+    private static function isCurrent(DocumentEntryNode $menuEntry, string $currentPath): bool
     {
         return $menuEntry->getFile() === $currentPath;
     }
