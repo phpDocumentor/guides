@@ -12,7 +12,6 @@ use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use Psr\Log\LoggerInterface;
 
 use function assert;
 
@@ -23,12 +22,6 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
 
     // Setting a default level prevents PHP errors in case of circular references
     private const DEFAULT_MAX_LEVELS = 10;
-
-    public function __construct(
-        LoggerInterface $logger,
-    ) {
-        parent::__construct($logger);
-    }
 
     public function supports(Node $node): bool
     {

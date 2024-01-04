@@ -10,7 +10,6 @@ use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
-use Psr\Log\LoggerInterface;
 
 use function assert;
 
@@ -21,12 +20,6 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
     use SubSectionHierarchyHandler;
 
     private const DEFAULT_MAX_LEVELS = PHP_INT_MAX;
-
-    public function __construct(
-        LoggerInterface $logger,
-    ) {
-        parent::__construct($logger);
-    }
 
     public function supports(Node $node): bool
     {
