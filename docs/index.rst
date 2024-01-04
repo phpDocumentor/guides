@@ -6,12 +6,22 @@
     dev-main
 
 ====================
-phpDocumentor Guides
+|project|
 ====================
 
 This library can be used for rendering of
 `reStructuredText Markup <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`__ and
 `Markdown <https://daringfireball.net/projects/markdown/>`__.
+
+Description
+    |composer_description|
+Source
+   |composer_support_source|
+Report issues
+   |composer_support_issues|
+Latest public documentation
+    |composer_support_docs|
+
 
 Tip: Render this documentation
 ==============================

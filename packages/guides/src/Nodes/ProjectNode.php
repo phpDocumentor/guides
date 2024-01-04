@@ -13,6 +13,9 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 
+use function array_merge;
+use function array_unique;
+
 use const DATE_RFC2822;
 
 /** @extends CompoundNode<DocumentNode> */
@@ -39,6 +42,9 @@ class ProjectNode extends CompoundNode
 
     /** @var NavMenuNode[] */
     private array $globalMenues = [];
+
+    /** @var list<string> */
+    private array $keywords = [];
 
     public function __construct(
         private string|null $title = null,
@@ -209,5 +215,23 @@ class ProjectNode extends CompoundNode
         $this->globalMenues = $globalMenues;
 
         return $this;
+    }
+
+    /** @return list<string> */
+    public function getKeywords(): array
+    {
+        return $this->keywords;
+    }
+
+    /** @param list<string> $keywords */
+    public function setKeywords(array $keywords): void
+    {
+        $this->keywords = $keywords;
+    }
+
+    /** @param list<string> $keywords */
+    public function addKeywords(array $keywords): void
+    {
+        $this->keywords = array_unique(array_merge($this->keywords, $keywords));
     }
 }
