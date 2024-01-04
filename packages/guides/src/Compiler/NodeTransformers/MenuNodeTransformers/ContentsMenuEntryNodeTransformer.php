@@ -39,8 +39,6 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
         $menuEntry = new SectionMenuEntryNode(
             $documentEntry->getFile(),
             $node->getValue() ?? $documentEntry->getTitle(),
-            [],
-            false,
             1,
         );
         $this->addSubSectionsToMenuEntries($documentEntry, $menuEntry, $depth);

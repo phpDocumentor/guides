@@ -23,8 +23,6 @@ trait SubSectionHierarchyHandler
                 $sectionMenuEntry = new SectionMenuEntryNode(
                     $documentEntry->getFile(),
                     $subSectionEntryNode->getTitle(),
-                    [],
-                    false,
                     $currentLevel,
                     $subSectionEntryNode->getId(),
                 );
@@ -49,8 +47,6 @@ trait SubSectionHierarchyHandler
             $subSectionMenuEntry = new SectionMenuEntryNode(
                 $documentEntry->getFile(),
                 $subSectionEntryNode->getTitle(),
-                [],
-                false,
                 $currentLevel,
                 $subSectionEntryNode->getId(),
             );

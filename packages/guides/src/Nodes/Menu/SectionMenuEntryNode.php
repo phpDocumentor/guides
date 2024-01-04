@@ -11,12 +11,9 @@ final class SectionMenuEntryNode extends MenuEntryNode
     /** @var SectionMenuEntryNode[] */
     private array $sections = [];
 
-    /** @param MenuEntryNode[] $children */
     public function __construct(
         private readonly string $url,
         TitleNode|null $title = null,
-        private array $children = [],
-        private readonly bool $isDocumentRoot = false,
         int $level = 1,
         private readonly string $anchor = '',
     ) {
@@ -31,28 +28,6 @@ final class SectionMenuEntryNode extends MenuEntryNode
     public function getAnchor(): string
     {
         return $this->anchor;
-    }
-
-    /** @return MenuEntryNode[] */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-    /** @return MenuEntryNode[] */
-    public function getEntries(): array
-    {
-        return $this->children;
-    }
-
-    public function addMenuEntry(InternalMenuEntryNode $menuEntryNode): void
-    {
-        $this->children[] = $menuEntryNode;
-    }
-
-    public function isDocumentRoot(): bool
-    {
-        return $this->isDocumentRoot;
     }
 
     /** @return SectionMenuEntryNode[] */
