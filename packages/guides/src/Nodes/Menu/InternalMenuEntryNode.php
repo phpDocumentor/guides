@@ -8,13 +8,13 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 
 final class InternalMenuEntryNode extends MenuEntryNode
 {
-    /** @var MenuEntryNode[] */
+    /** @var SectionMenuEntryNode[] */
     private array $sections = [];
 
     /** @param MenuEntryNode[] $children */
     public function __construct(
         private readonly string $url,
-        TitleNode $title,
+        TitleNode|null $title = null,
         private array $children = [],
         private readonly bool $isDocumentRoot = false,
         int $level = 1,
@@ -58,13 +58,13 @@ final class InternalMenuEntryNode extends MenuEntryNode
         return $this->isDocumentRoot;
     }
 
-    /** @return MenuEntryNode[] */
+    /** @return SectionMenuEntryNode[] */
     public function getSections(): array
     {
         return $this->sections;
     }
 
-    public function addSection(InternalMenuEntryNode $section): void
+    public function addSection(SectionMenuEntryNode $section): void
     {
         $this->sections[] = $section;
     }

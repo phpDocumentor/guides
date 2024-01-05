@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Toc;
 
-use phpDocumentor\Guides\Nodes\Menu\MenuDefinitionLineNode;
+use phpDocumentor\Guides\Nodes\Menu\ExternalMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
 use function array_filter;
 use function array_map;
+use function filter_var;
+use function str_contains;
+
+use const FILTER_VALIDATE_URL;
 
 class ToctreeBuilder
 {
@@ -19,7 +27,7 @@ class ToctreeBuilder
     /**
      * @param mixed[] $options
      *
-     * @return MenuDefinitionLineNode[]
+     * @return MenuEntryNode[]
      */
     public function buildToctreeEntries(
         ParserContext $parserContext,
@@ -35,7 +43,7 @@ class ToctreeBuilder
         return $toctreeEntries;
     }
 
-    /** @return MenuDefinitionLineNode[] */
+    /** @return MenuEntryNode[] */
     private function parseToctreeEntryLines(LinesIterator $lines): array
     {
         $linesArray =  array_filter(
@@ -46,7 +54,17 @@ class ToctreeBuilder
         $result = [];
         foreach ($linesArray as $line) {
             $referenceData = $this->extractEmbeddedReference($line);
-            $result[] = new MenuDefinitionLineNode($referenceData->reference, $referenceData->text);
+            if (filter_var($referenceData->reference, FILTER_VALIDATE_URL) !== false) {
+                $result[] = new ExternalMenuEntryNode($referenceData->reference, TitleNode::fromString($referenceData->text ?? $referenceData->reference));
+                continue;
+            }
+
+            if (str_contains($referenceData->reference, '*')) {
+                $result[] = new GlobMenuEntryNode($referenceData->reference);
+                continue;
+            }
+
+            $result[] = new InternalMenuEntryNode($referenceData->reference, $referenceData->text === null ? null : TitleNode::fromString($referenceData->text));
         }
 
         return $result;

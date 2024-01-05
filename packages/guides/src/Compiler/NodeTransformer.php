@@ -26,5 +26,8 @@ interface NodeTransformer
     /** @psalm-assert-if-true T $node */
     public function supports(Node $node): bool;
 
+    /**
+     * The higher the priority the earlier the NodeTransformer is executed.
+     */
     public function getPriority(): int;
 }
