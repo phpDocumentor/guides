@@ -6,6 +6,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use DateTimeImmutable;
 use Exception;
+use phpDocumentor\Guides\Exception\DocumentEntryNotFound;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
@@ -163,6 +164,7 @@ class ProjectNode extends CompoundNode
         throw new Exception('No root document entry was found');
     }
 
+    /** @throws DocumentEntryNotFound */
     public function getDocumentEntry(string $file): DocumentEntryNode
     {
         foreach ($this->documentEntries as $documentEntry) {
@@ -171,7 +173,7 @@ class ProjectNode extends CompoundNode
             }
         }
 
-        throw new Exception('No document Entry found for file ' . $file);
+        throw new DocumentEntryNotFound('No document Entry found for file ' . $file);
     }
 
     /** @param DocumentEntryNode[] $documentEntries */
