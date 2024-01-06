@@ -3,46 +3,52 @@
       "Index": [
          "<project>",
          "<version>",
-         "Index.html",
-         "<project>"
-      ],
-      "Sitemap": [
-         "<project>",
-         "<version>",
-         "Sitemap.html",
+         "index.html",
          "-"
       ],
-      "genindex": [
+      "Page1": [
          "<project>",
          "<version>",
-         "genindex.html",
-         "Index"
+         "Page1.html",
+         "-"
+      ],
+      "Page1/Subpage1": [
+         "<project>",
+         "<version>",
+         "Page1/Subpage1.html",
+         "-"
+      ],
+      "Page2/Subpage2": [
+         "<project>",
+         "<version>",
+         "Page2/Subpage2.html",
+         "-"
       ]
    },
    "std:label": {
       "modindex": [
          "<project>",
          "<version>",
-         "py-modindex.html",
+         "some_page.html#modindex",
          "Module Index"
       ],
       "php-modindex": [
          "<project>",
          "<version>",
-         "php-modindex.html",
+         "some_page.html#php-modindex",
          "PHP Namespace Index"
       ],
-      "php-objectsindex": [
+      "php_objectsindex": [
          "<project>",
          "<version>",
-         "php-objectsindex.html",
+         "php-objectsindex.html#php-objectsindex",
          "PHP Objects Index"
       ],
-      "py-modindex": [
+      "php_8-modindex": [
          "<project>",
          "<version>",
-         "py-modindex.html",
-         "Python Module Index"
+         "php-objectsindex.html#php-8-objectsindex",
+         "PHP 8 Objects Index"
       ],
       "search": [
          "<project>",

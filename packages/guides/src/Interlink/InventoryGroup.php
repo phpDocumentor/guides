@@ -4,36 +4,43 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use RuntimeException;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 
 use function array_key_exists;
-use function strtolower;
+use function sprintf;
 
 final class InventoryGroup
 {
     /** @var InventoryLink[]  */
     private array $links = [];
 
+    public function __construct(private readonly AnchorReducer $anchorReducer)
+    {
+    }
+
     public function addLink(string $key, InventoryLink $link): void
     {
-        $lowerCaseKey               = strtolower($key);
-        $this->links[$lowerCaseKey] = $link;
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $this->links[$reducedKey] = $link;
     }
 
     public function hasLink(string $key): bool
     {
-        $lowerCaseKey = strtolower($key);
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
 
-        return array_key_exists($lowerCaseKey, $this->links);
+        return array_key_exists($reducedKey, $this->links);
     }
 
+    /** @throws InterlinkNotFound */
     public function getLink(string $key): InventoryLink
     {
-        $lowerCaseKey = strtolower($key);
-        if (!array_key_exists($lowerCaseKey, $this->links)) {
-            throw new RuntimeException('Inventory link with key ' . $lowerCaseKey . ' not found. ', 1_671_398_986);
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        if (!array_key_exists($reducedKey, $this->links)) {
+            throw new InterlinkTargetNotFound(sprintf('Inventory link with key "%s" (%s) not found. ', $key, $reducedKey), 1_671_398_986);
         }
 
-        return $this->links[$lowerCaseKey];
+        return $this->links[$reducedKey];
     }
 }

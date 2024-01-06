@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use RuntimeException;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkGroupNotFound;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
 
 use function array_key_exists;
-use function strtolower;
+use function sprintf;
 
 final class Inventory
 {
@@ -16,7 +18,7 @@ final class Inventory
 
     private bool $isLoaded = false;
 
-    public function __construct(private readonly string $baseUrl)
+    public function __construct(private readonly string $baseUrl, private readonly AnchorReducer $anchorReducer)
     {
     }
 
@@ -27,8 +29,8 @@ final class Inventory
 
     public function addGroup(string $key, InventoryGroup $group): void
     {
-        $lowerCaseKey       = strtolower($key);
-        $this->groups[$key] = $group;
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $this->groups[$reducedKey] = $group;
     }
 
     /** @return InventoryGroup[] */
@@ -37,29 +39,30 @@ final class Inventory
         return $this->groups;
     }
 
-    public function getInventory(string $key): InventoryGroup
+    /** @throws InterlinkNotFound */
+    public function getGroup(string $key): InventoryGroup
     {
-        $lowerCaseKey = strtolower($key);
-        if (!$this->hasInventoryGroup($lowerCaseKey)) {
-            throw new RuntimeException(
-                'Inventory group with key ' . $lowerCaseKey . ' not found. ',
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        if (!$this->hasGroup($reducedKey)) {
+            throw new InterlinkGroupNotFound(
+                sprintf('Inventory group with key "%s" (%s) not found. ', $key, $reducedKey),
                 1_671_398_986,
             );
         }
 
-        return $this->groups[$lowerCaseKey];
+        return $this->groups[$reducedKey];
     }
 
-    public function getLink(string $group, string $key): InventoryLink
+    public function getLink(string $groupKey, string $key): InventoryLink
     {
-        return $this->getInventory($group)->getLink($key);
+        return $this->getGroup($groupKey)->getLink($key);
     }
 
-    public function hasInventoryGroup(string $key): bool
+    public function hasGroup(string $key): bool
     {
-        $lowerCaseKey = strtolower($key);
+        $reducedKey = $this->anchorReducer->reduceAnchor($key);
 
-        return array_key_exists($lowerCaseKey, $this->groups);
+        return array_key_exists($reducedKey, $this->groups);
     }
 
     public function isLoaded(): bool

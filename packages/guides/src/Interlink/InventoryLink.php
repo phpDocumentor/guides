@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
+use phpDocumentor\Guides\Interlink\Exception\InvalidInventoryLink;
+
 use function preg_match;
 
 final class InventoryLink

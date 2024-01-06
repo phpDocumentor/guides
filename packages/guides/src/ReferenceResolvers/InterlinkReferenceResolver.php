@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
+use phpDocumentor\Guides\Interlink\Exception\InterlinkGroupNotFound;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkInventoryNotFound;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
 use phpDocumentor\Guides\Interlink\InventoryRepository;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
@@ -29,7 +32,12 @@ class InterlinkReferenceResolver implements ReferenceResolver
 
         $domain = $node->getInterlinkDomain();
         $target = $node->getTargetReference();
-        if (!$this->inventoryRepository->hasInventory($domain)) {
+        $group = $node instanceof DocReferenceNode ? 'std:doc' : 'std:label';
+
+        try {
+            $inventory = $this->inventoryRepository->getInventory($domain);
+            $link = $this->inventoryRepository->getLink($domain, $group, $target);
+        } catch (InterlinkInventoryNotFound) {
             $messages->addWarning(
                 new Message(
                     sprintf(
@@ -42,11 +50,7 @@ class InterlinkReferenceResolver implements ReferenceResolver
             );
 
             return false;
-        }
-
-        $inventory = $this->inventoryRepository->getInventory($domain);
-        $group = $node instanceof DocReferenceNode ? 'std:doc' : 'std:label';
-        if (!$inventory->hasInventoryGroup($group)) {
+        } catch (InterlinkGroupNotFound) {
             $messages->addWarning(new Message(
                 sprintf(
                     'Inventory with name "%s" does not contain group %s, required in file "%s". ',
@@ -58,10 +62,7 @@ class InterlinkReferenceResolver implements ReferenceResolver
             ));
 
             return false;
-        }
-
-        $inventoryGroup = $inventory->getInventory($group);
-        if (!$inventoryGroup->hasLink($target)) {
+        } catch (InterlinkTargetNotFound) {
             $messages->addWarning(new Message(
                 sprintf(
                     'Link with name "%s:%s" not found in group "%s", required in file "%s".',
@@ -75,8 +76,6 @@ class InterlinkReferenceResolver implements ReferenceResolver
 
             return false;
         }
-
-        $link = $inventory->getLink($group, $target);
 
         $node->setUrl($inventory->getBaseUrl() . $link->getPath());
         if ($node->getValue() === '') {

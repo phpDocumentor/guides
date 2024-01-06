@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
+use Generator;
+use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -30,12 +33,13 @@ final class InventoryLoaderTest extends TestCase
         $this->inventoryLoader = new DefaultInventoryLoader(
             self::createStub(NullLogger::class),
             $this->jsonLoader,
+            new SluggerAnchorReducer(),
         );
         $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
-        $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
+        $jsonString = file_get_contents(__DIR__ . '/fixtures/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
-        $inventory = new Inventory('https://example.com/');
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorReducer());
         $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
         $this->inventoryRepository->addInventory('somekey', $inventory);
         $this->inventoryRepository->addInventory('some-key', $inventory);
@@ -50,21 +54,112 @@ final class InventoryLoaderTest extends TestCase
     public function testInventoryIsLoadedExactlyOnce(): void
     {
         $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn($this->json);
-        $inventory = new Inventory('https://example.com/');
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorReducer());
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
-    public function testInventoryLoaderGetInventoryIsCaseInsensitive(): void
+    #[DataProvider('rawAnchorProvider')]
+    public function testInventoryContainsLink(string $expected, string $inventoryKey, string $groupKey, string $linkKey): void
     {
-        $inventory = $this->inventoryRepository->getInventory('SomeKey');
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        $link = $this->inventoryRepository->getLink($inventoryKey, $groupKey, $linkKey);
+        self::assertEquals($expected, $link->getPath());
     }
 
-    public function testInventoryLoaderGetInventoryIsSlugged(): void
+    /** @return Generator<string, array{string, string, string, string}> */
+    public static function rawAnchorProvider(): Generator
     {
-        $inventory = $this->inventoryRepository->getInventory('Some_Key');
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        yield 'Simple label' => [
+            'some_page.html#modindex',
+            'somekey',
+            'std:label',
+            'modindex',
+        ];
+
+        yield 'Inventory with changed case' => [
+            'some_page.html#modindex',
+            'SomeKey',
+            'std:label',
+            'modindex',
+        ];
+
+        yield 'Inventory with minus' => [
+            'some_page.html#modindex',
+            'some-key',
+            'std:label',
+            'modindex',
+        ];
+
+        yield 'Inventory with underscore and changed case' => [
+            'some_page.html#modindex',
+            'Some_Key',
+            'std:label',
+            'modindex',
+        ];
+
+        yield 'Both with minus' => [
+            'some_page.html#php-modindex',
+            'somekey',
+            'std:label',
+            'php-modindex',
+        ];
+
+        yield 'Linked with underscore, inventory with minus' => [
+            'some_page.html#php-modindex',
+            'somekey',
+            'std:label',
+            'php_modindex',
+        ];
+
+        yield 'Linked with underscore, inventory with underscore' => [
+            'php-objectsindex.html#php-objectsindex',
+            'somekey',
+            'std:label',
+            'php_objectsindex',
+        ];
+
+        yield 'Linked with minus, inventory with underscore' => [
+            'php-objectsindex.html#php-objectsindex',
+            'somekey',
+            'std:label',
+            'php-objectsindex',
+        ];
+
+        yield 'Doc link' => [
+            'Page1/Subpage1.html',
+            'somekey',
+            'std:doc',
+            'Page1/Subpage1',
+        ];
+    }
+
+    #[DataProvider('notFoundInventoryProvider')]
+    public function testInventoryLinkNotFound(string $inventoryKey, string $groupKey, string $linkKey): void
+    {
+        self::expectException(InterlinkTargetNotFound::class);
+        $this->inventoryRepository->getLink($inventoryKey, $groupKey, $linkKey);
+    }
+
+    /** @return Generator<string, array{string, string, string}> */
+    public static function notFoundInventoryProvider(): Generator
+    {
+        yield 'Simple labe not found' => [
+            'somekey',
+            'std:label',
+            'non-existant-label',
+        ];
+
+        yield 'docs are casesensitve' => [
+            'somekey',
+            'std:doc',
+            'index',
+        ];
+
+        yield 'docs are not slugged' => [
+            'somekey',
+            'std:doc',
+            'Page1-Subpage1',
+        ];
     }
 }
