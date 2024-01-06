@@ -15,6 +15,7 @@ use function array_pop;
 use function assert;
 use function explode;
 use function implode;
+use function sprintf;
 
 class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
@@ -36,6 +37,7 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
+
         foreach ($documentEntries as $documentEntry) {
             if (
                 !self::matches($documentEntry->getFile(), $entryNode, $currentPath)
@@ -65,7 +67,9 @@ class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
             return [$newEntryNode];
         }
 
-        return [$entryNode];
+        $this->logger->warning(sprintf('Menu entry "%s" was not found in the document tree. Ignoring it. ', $entryNode->getUrl()), $compilerContext->getLoggerInformation());
+
+        return [];
     }
 
     private static function matches(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Exception\DocumentEntryNotFound;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
@@ -12,6 +13,7 @@ use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function assert;
+use function sprintf;
 
 class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
@@ -31,6 +33,14 @@ class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransform
     {
         assert($entryNode instanceof InternalMenuEntryNode);
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
+        try {
+            $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($entryNode->getUrl());
+        } catch (DocumentEntryNotFound) {
+            $this->logger->warning(sprintf('Menu entry "%s" was not found in the document tree. Ignoring it. ', $entryNode->getUrl()), $compilerContext->getLoggerInformation());
+
+            return [];
+        }
+
         $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($entryNode->getUrl());
         $this->addSubEntries($currentMenu, $compilerContext, $entryNode, $documentEntryOfMenuEntry, $entryNode->getLevel() + 1, $maxDepth);
 

@@ -88,8 +88,9 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
 
     public function getPriority(): int
     {
-        // After DocumentEntryTransformer
-        return 4500;
+        // After GlobMenuEntryNodeTransformer
+        // Before SubInternalMenuEntry
+        return 4000;
     }
 
     /** @param String[] $globExclude */
