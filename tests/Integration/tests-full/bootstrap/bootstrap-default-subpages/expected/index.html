@@ -44,22 +44,22 @@
             <div class="row">
                 <div class="col-lg-3">
                                 <nav class="nav flex-column">
-                <ul class="level-1">
+                <ul class="menu-level-main">
     <li><a href="someDirectory/index.html"
            class="nav-link">
             Some Page
                 </a>            
-<ul class="level-2">
+<ul class="level-1">
         <li><a href="someDirectory/anotherDirectory/index.html"
                        class="nav-link">
                                 Another Page
                         </a>                                
-<ul class="level-3">
+<ul class="level-2">
         <li><a href="someDirectory/anotherDirectory/yetAnotherDirectory/index.html"
                        class="nav-link">
                                 Yet Another Page
                         </a>                                
-<ul class="level-4">
+<ul class="level-3">
         <li><a href="someDirectory/anotherDirectory/yetAnotherDirectory/andYetAnotherDirectory/index.html"
                        class="nav-link">
                                 And Yet Another Page
@@ -93,7 +93,16 @@
             <p>Lorem Ipsum Dolor.</p>
             <div class="toc">
     <ul class="menu-level">
-    <li class="toc-item"><a href="someDirectory/index.html#some-page">Some Page</a></li>
+    <li class="toc-item"><a href="someDirectory/index.html#some-page">Some Page</a>        <ul class="menu-level-1">
+            <li class="toc-item"><a href="someDirectory/anotherDirectory/index.html#another-page">Another Page</a>        <ul class="menu-level-2">
+            <li class="toc-item"><a href="someDirectory/anotherDirectory/yetAnotherDirectory/index.html#yet-another-page">Yet Another Page</a>        <ul class="menu-level-3">
+            <li class="toc-item"><a href="someDirectory/anotherDirectory/yetAnotherDirectory/andYetAnotherDirectory/index.html#and-yet-another-page">And Yet Another Page</a></li>
+
+                    </ul></li>
+
+                    </ul></li>
+
+                    </ul></li>
 
     </ul>
 </div>

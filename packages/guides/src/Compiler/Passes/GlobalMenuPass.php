@@ -97,11 +97,11 @@ class GlobalMenuPass implements CompilerPass
             return $menuEntry;
         }
 
-        $newMenuEntry = new InternalMenuEntryNode($menuEntry->getUrl(), $menuEntry->getValue(), [], false, 2);
+        $newMenuEntry = new InternalMenuEntryNode($menuEntry->getUrl(), $menuEntry->getValue(), [], false, 1);
         $maxdepth = $this->settingsManager->getProjectSettings()->getMaxMenuDepth();
         $maxdepth = $maxdepth < 1 ? PHP_INT_MAX : $maxdepth + 1;
         $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($menuEntry->getUrl());
-        $this->addSubEntries($compilerContext, $newMenuEntry, $documentEntryOfMenuEntry, 3, $maxdepth);
+        $this->addSubEntries($compilerContext, $newMenuEntry, $documentEntryOfMenuEntry, 2, $maxdepth);
 
         return $newMenuEntry;
     }
@@ -113,7 +113,7 @@ class GlobalMenuPass implements CompilerPass
         int $currentLevel,
         int $maxDepth,
     ): void {
-        if ($maxDepth < $currentLevel) {
+        if ($maxDepth <= $currentLevel) {
             return;
         }
 
