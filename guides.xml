@@ -10,7 +10,7 @@
         fail-on-log="false"
         log-path="php://stder"
 >
-    <project title="phpDocumentor Guides"/>
+    <project title="Guides"/>
     <extension class="phpDocumentor\Guides\Bootstrap"/>
     <extension class="phpDocumentor\Guides\Code"/>
 </guides>
