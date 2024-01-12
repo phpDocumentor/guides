@@ -15,6 +15,17 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
+/**
+ * Directive to create a tip admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. tip::
+ *
+ *      This is a tip admonition.
+ * ```
+ */
 final class TipDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

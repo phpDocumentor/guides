@@ -15,6 +15,17 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
+/**
+ * Directive to create a warning admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. warning::
+ *
+ *      This is a warning admonition.
+ * ```
+ */
 final class WarningDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

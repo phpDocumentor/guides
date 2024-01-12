@@ -15,6 +15,17 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
+/**
+ * Directive to create a error admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. error::
+ *
+ *      This is an error admonition.
+ * ```
+ */
 final class ErrorDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

@@ -15,6 +15,17 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
+/**
+ * Directive to create an attention admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. attention::
+ *
+ *      This is an attention admonition.
+ * ```
+ */
 final class AttentionDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
