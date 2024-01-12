@@ -1,17 +1,13 @@
 ..  include:: /include.rst.txt
 
 :project:
-    phpDocumentor Guides
+    Guides
 :version:
     dev-main
 
 ====================
 |project|
 ====================
-
-This library can be used for rendering of
-`reStructuredText Markup <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`__ and
-`Markdown <https://daringfireball.net/projects/markdown/>`__.
 
 Description
     |composer_description|
@@ -22,25 +18,35 @@ Report issues
 Latest public documentation
     |composer_support_docs|
 
+If you are building your own application you can install the libraries using `Composer <https://getcomposer.org/>`__::
 
-Tip: Render this documentation
-==============================
+.. code:: bash
 
-The following 3 steps let you render the documentation that you are currently reading using the framework you
-are currently reading about::
+    composer require phpdocumentor/guides
 
-    git clone git@github.com:phpDocumentor/guides.git .
-    composer install
-    vendor/bin/guides docs
+This will install all basic libraries needed to get started to get started.
+All libraries come with support for `Symfony dependency injection <https://symfony.com/doc/current/components/dependency_injection.html>`__.
+This will help you to get started with the libraries in symfony applications.
 
-You will then find the rendered documentation in the directory output
+Read more about writing your own application in the :doc:`developers` section.
 
-..  toctree::
+.. tip::
 
-    about
+    The following 3 steps let you render the documentation that you are currently reading using the framework you
+    are currently reading about::
+
+        git clone git@github.com:phpDocumentor/guides.git .
+        composer install
+        vendor/bin/guides
+
+    You will then find the rendered documentation in the directory output.
+
+.. toctree::
+    :hidden:
+
     usage
     configuration
-    components/index
     extension/index
     rst-reference/index
+    about
     contributions/index
