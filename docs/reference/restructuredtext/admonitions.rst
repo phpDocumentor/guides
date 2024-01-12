@@ -4,12 +4,19 @@
 Admonitions
 ===========
 
-The following directives are called "admonitions". You
-can use them to point out additional or important
-information.
+The following directives are called "admonitions".
+You can use them to point out additional or important information.
 
 Examples
 ========
+
+.. phpdoc:class-list:: [?(@.inheritedElement == "\phpDocumentor\Guides\RestructuredText\Directives\AbstractAdmonitionDirective")]
+
+   .. phpdoc:name::
+   .. phpdoc:summary::
+
+
+
 
 ..  index:: reST directives; seealso
 
