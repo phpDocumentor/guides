@@ -27,11 +27,11 @@ This will install the commandline tool in the vendor/bin directory. You can then
 
     vendor/bin/guides ./docs
 
-The commandline tool is built for extension, if you do not have special needs this is the
+The commandline tool is build for extension, if you do not have special needs this is the
 recommended way to get started. You can learn more about how to extend the commandline tool in the :doc:`/cli/index` section.
 
 Library (advanced)
-==================
+===============================
 
 .. _library:
 

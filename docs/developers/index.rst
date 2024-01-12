@@ -8,9 +8,5 @@ application to render ReStructuredText or Markdown documents. Or want to integra
 it in some other way that is not possible with the ``guides`` command line tool.
 
 .. toctree::
-   :maxdepth: 1
-   :titlesonly:
 
    extensions/index
-   compiler
-   directive
