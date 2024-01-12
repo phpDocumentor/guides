@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
+        input="extension"
+        output="foo"
+        input-format="rst"
+        show-progress="true"
+        theme="bootstrap"
+        fail-on-log="false"
+        log-path="php://stder"
+>
+    <project title="phpDocumentor Guides"/>
+    <extension class="phpDocumentor\Guides\Bootstrap"/>
+    <extension class="phpDocumentor\Guides\Code"/>
+</guides>
