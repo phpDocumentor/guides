@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+
+        html-theme="bootstrap"
+>
+    <extension class="phpDocumentor\Guides\Bootstrap" />
+    <extension class="phpDocumentor\Guides\Code">
+        <language name="php" />
+    </extension>
+</guides>
