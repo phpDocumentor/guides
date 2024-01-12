@@ -1,7 +1,5 @@
 ..  include:: /include.rst.txt
 
-:project:
-    Guides
 :version:
     dev-main
 
@@ -49,4 +47,5 @@ If you are looking for a complete solution to create a documentation website the
     developers/index
     architecture
     reference/index
+    contributions/index
     about
