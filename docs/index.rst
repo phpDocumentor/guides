@@ -18,17 +18,17 @@ Report issues
 Latest public documentation
     |composer_support_docs|
 
-If you are building your own application you can install the libraries using `Composer <https://getcomposer.org/>`__::
+This project contains a framework for rendering documentation. It provides a simple commandline tool to render
+your documentation from `reStructuredText Markup <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`__ and
+`Markdown <https://daringfireball.net/projects/markdown/>`__. to HTML or LaTeX. And can be extended to support other
+formats.
 
-.. code:: bash
+Besides the commandline tool it also provides a number of libraries that can be used to build your own application
+to render the supported formats. To any format you want. On these pages is explained how to use the commandline tool
+and how to use the libraries.
 
-    composer require phpdocumentor/guides
-
-This will install all basic libraries needed to get started to get started.
-All libraries come with support for `Symfony dependency injection <https://symfony.com/doc/current/components/dependency_injection.html>`__.
-This will help you to get started with the libraries in symfony applications.
-
-Read more about writing your own application in the :doc:`developers` section.
+If you are looking for a complete solution to create a documentation website then you may want to look at
+`PHPDocumentor <https://phpdoc.org/>`__.
 
 .. tip::
 
@@ -44,9 +44,10 @@ Read more about writing your own application in the :doc:`developers` section.
 .. toctree::
     :hidden:
 
-    usage
-    configuration
-    extension/index
-    rst-reference/index
+    installation
+    cli/index
+    developers/index
+    architecture
+    reference/index
     about
     contributions/index

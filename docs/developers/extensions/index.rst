@@ -1,8 +1,8 @@
 ..  include:: /include.rst.txt
 
-==================================
-Extending the phpdocumentor/guides
-==================================
+==========
+Extensions
+==========
 
 ``phpdocumentor/guides`` relies on `Symfony Dependency Injection
 Container
