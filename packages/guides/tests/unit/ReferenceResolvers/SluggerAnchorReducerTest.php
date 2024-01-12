@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 final class SluggerAnchorReducerTest extends TestCase
 {
-    private SluggerAnchorReducer $subject;
+    private SluggerAnchorNormalizer $subject;
 
     protected function setUp(): void
     {
-        $this->subject = new SluggerAnchorReducer();
+        $this->subject = new SluggerAnchorNormalizer();
     }
 
     #[DataProvider('rawAnchorProvider')]

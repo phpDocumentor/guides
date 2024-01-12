@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Interlink;
 
 use phpDocumentor\Guides\Interlink\Exception\InterlinkInventoryNotFound;
 use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 
 use function array_key_exists;
 
@@ -17,12 +17,12 @@ final class DefaultInventoryRepository implements InventoryRepository
 
     /** @param array<int, array<string, string>> $inventoryConfigs */
     public function __construct(
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorNormalizer,
         private readonly InventoryLoader $inventoryLoader,
         array $inventoryConfigs,
     ) {
         foreach ($inventoryConfigs as $inventory) {
-            $this->inventories[$this->anchorReducer->reduceAnchor($inventory['id'])] = new Inventory($inventory['url'], $anchorReducer);
+            $this->inventories[$this->anchorNormalizer->reduceAnchor($inventory['id'])] = new Inventory($inventory['url'], $anchorNormalizer);
         }
     }
 
@@ -37,7 +37,7 @@ final class DefaultInventoryRepository implements InventoryRepository
 
     public function hasInventory(string $key): bool
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
 
         return array_key_exists($reducedKey, $this->inventories);
     }
@@ -45,7 +45,7 @@ final class DefaultInventoryRepository implements InventoryRepository
     /** @throws InterlinkInventoryNotFound */
     public function getInventory(string $key): Inventory
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
         if (!$this->hasInventory($reducedKey)) {
             throw new InterlinkInventoryNotFound('Inventory with key ' . $reducedKey . ' not found. ', 1_671_398_986);
         }
@@ -57,7 +57,7 @@ final class DefaultInventoryRepository implements InventoryRepository
 
     public function addInventory(string $key, Inventory $inventory): void
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
         $this->inventories[$reducedKey] = $inventory;
     }
 }

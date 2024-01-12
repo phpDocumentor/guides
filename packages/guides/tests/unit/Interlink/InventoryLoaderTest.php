@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Interlink;
 
 use Generator;
 use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
-use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,13 +33,13 @@ final class InventoryLoaderTest extends TestCase
         $this->inventoryLoader = new DefaultInventoryLoader(
             self::createStub(NullLogger::class),
             $this->jsonLoader,
-            new SluggerAnchorReducer(),
+            new SluggerAnchorNormalizer(),
         );
-        $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
+        $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorNormalizer(), $this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/fixtures/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
-        $inventory = new Inventory('https://example.com/', new SluggerAnchorReducer());
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
         $this->inventoryRepository->addInventory('somekey', $inventory);
         $this->inventoryRepository->addInventory('some-key', $inventory);
@@ -54,7 +54,7 @@ final class InventoryLoaderTest extends TestCase
     public function testInventoryIsLoadedExactlyOnce(): void
     {
         $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn($this->json);
-        $inventory = new Inventory('https://example.com/', new SluggerAnchorReducer());
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));

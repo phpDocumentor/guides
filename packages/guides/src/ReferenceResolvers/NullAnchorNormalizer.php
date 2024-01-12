@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-class NullAnchorReducer implements AnchorReducer
+class NullAnchorNormalizer implements AnchorNormalizer
 {
     public function reduceAnchor(string $rawAnchor): string
     {

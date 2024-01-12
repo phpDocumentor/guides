@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\Interlink;
 
 use phpDocumentor\Guides\Interlink\Exception\InterlinkGroupNotFound;
 use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 
 use function array_key_exists;
 use function sprintf;
@@ -18,7 +18,7 @@ final class Inventory
 
     private bool $isLoaded = false;
 
-    public function __construct(private readonly string $baseUrl, private readonly AnchorReducer $anchorReducer)
+    public function __construct(private readonly string $baseUrl, private readonly AnchorNormalizer $anchorNormalizer)
     {
     }
 
@@ -29,7 +29,7 @@ final class Inventory
 
     public function addGroup(string $key, InventoryGroup $group): void
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
         $this->groups[$reducedKey] = $group;
     }
 
@@ -42,7 +42,7 @@ final class Inventory
     /** @throws InterlinkNotFound */
     public function getGroup(string $key): InventoryGroup
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
         if (!$this->hasGroup($reducedKey)) {
             throw new InterlinkGroupNotFound(
                 sprintf('Inventory group with key "%s" (%s) not found. ', $key, $reducedKey),
@@ -60,7 +60,7 @@ final class Inventory
 
     public function hasGroup(string $key): bool
     {
-        $reducedKey = $this->anchorReducer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
 
         return array_key_exists($reducedKey, $this->groups);
     }

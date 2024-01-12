@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -30,7 +30,7 @@ final class ConfvalDirective extends SubDirective
     public function __construct(
         protected Rule $startingRule,
         GenericLinkProvider $genericLinkProvider,
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
         private readonly InlineParser $inlineParser,
     ) {
         parent::__construct($startingRule);

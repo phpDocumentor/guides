@@ -23,7 +23,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorHyperlinkResolver;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DelegatingReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocReferenceResolver;
@@ -36,7 +36,7 @@ use phpDocumentor\Guides\ReferenceResolvers\InternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\PageHyperlinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
-use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\InterlinkObjectsRenderer;
@@ -193,8 +193,8 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer', 'format'))
         ->alias(TypeRendererFactory::class, InMemoryRendererFactory::class)
 
-        ->set(SluggerAnchorReducer::class)
-        ->alias(AnchorReducer::class, SluggerAnchorReducer::class)
+        ->set(SluggerAnchorNormalizer::class)
+        ->alias(AnchorNormalizer::class, SluggerAnchorNormalizer::class)
 
         ->set('phpdoc.guides.output_node_renderer', OutputAwareDelegatingNodeRenderer::class)
         ->arg('$nodeRenderers', tagged_iterator('phpdoc.guides.output_node_renderer', 'format'))

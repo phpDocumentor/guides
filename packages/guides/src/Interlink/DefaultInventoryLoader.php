@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
-use phpDocumentor\Guides\ReferenceResolvers\NullAnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\NullAnchorNormalizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
@@ -18,7 +18,7 @@ final class DefaultInventoryLoader implements InventoryLoader
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly JsonLoader $jsonLoader,
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
         private readonly string $pathToJson = 'objects.inv.json',
     ) {
     }
@@ -27,20 +27,20 @@ final class DefaultInventoryLoader implements InventoryLoader
     public function loadInventoryFromJson(Inventory $inventory, array $json): void
     {
         foreach ($json as $groupKey => $groupArray) {
-            $groupAnchorReducer = $this->anchorReducer;
+            $groupAnchorNormalizer = $this->anchorReducer;
             if ($groupKey === 'std:doc') {
                 // Do not reduce Document names
-                $groupAnchorReducer = new NullAnchorReducer();
+                $groupAnchorNormalizer = new NullAnchorNormalizer();
             }
 
-            $group = new InventoryGroup($groupAnchorReducer);
+            $group = new InventoryGroup($groupAnchorNormalizer);
             if (is_array($groupArray)) {
                 foreach ($groupArray as $linkKey => $linkArray) {
                     if (!is_array($linkArray) || count($linkArray) < 4) {
                         continue;
                     }
 
-                    $reducedLinkKey = $groupAnchorReducer->reduceAnchor(strval($linkKey));
+                    $reducedLinkKey = $groupAnchorNormalizer->reduceAnchor(strval($linkKey));
                     $link = new InventoryLink($linkArray[0], $linkArray[1], $linkArray[2], $linkArray[3]);
                     $group->addLink($reducedLinkKey, $link);
                 }

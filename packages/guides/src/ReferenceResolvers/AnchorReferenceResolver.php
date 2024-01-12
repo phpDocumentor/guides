@@ -19,7 +19,7 @@ class AnchorReferenceResolver implements ReferenceResolver
     public final const PRIORITY = -100;
 
     public function __construct(
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
         private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }

@@ -6,7 +6,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
 use function array_keys;
@@ -15,7 +15,7 @@ class GenericReferenceTextRole extends AbstractReferenceTextRole
 {
     public function __construct(
         private readonly GenericLinkProvider $genericLinkProvider,
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
         private readonly InterlinkParser $interlinkParser,
     ) {
     }
