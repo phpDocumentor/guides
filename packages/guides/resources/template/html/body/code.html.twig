@@ -9,5 +9,7 @@
     {%- endif -%}
     <pre{% if node.classes %} class="{{ node.classesString }}"{% endif %}><code class="language-{{ node.language }}{{ node.startingLineNumber ? ' line-numbers' }}"
                 {%- if node.startingLineNumber %} data-start="{{ node.startingLineNumber }}"{% endif -%}
-                {%- if node.emphasizeLines %} data-emphasize-lines="{{ node.emphasizeLines }}"{% endif -%}>{{ node.value }}</code></pre>
+                {%- if node.emphasizeLines %} data-emphasize-lines="{{ node.emphasizeLines }}"{% endif -%}>
+    {%- include "body/code/highlighted-code.html.twig" -%}
+        </code></pre>
 {%- endif -%}

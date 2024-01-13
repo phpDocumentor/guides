@@ -12,12 +12,13 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function assert;
 use function dirname;
 
-class CodeExtension extends Extension implements ConfigurationInterface
+class CodeExtension extends Extension implements ConfigurationInterface, PrependExtensionInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -69,5 +70,12 @@ class CodeExtension extends Extension implements ConfigurationInterface
     public function getConfiguration(array $config, ContainerBuilder $container): ConfigurationInterface
     {
         return $this;
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('guides', [
+            'base_template_paths' => [dirname(__DIR__, 3) . '/resources/template/html'],
+        ]);
     }
 }

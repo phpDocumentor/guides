@@ -8,6 +8,8 @@ use phpDocumentor\Guides\Code\Highlighter\Highlighter;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+use function is_array;
+
 class CodeExtension extends AbstractExtension
 {
     public function __construct(
@@ -21,12 +23,18 @@ class CodeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('highlight', $this->highlight(...), ['is_safe' => ['html']]),
+            new TwigFilter('highlight', $this->highlight(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
 
-    public function highlight(string $code, string $language = 'text'): string
+    /** @param array<string, mixed> $context */
+    public function highlight(array $context, string $code, string $language = 'text'): string
     {
-        return ($this->highlighter)($language, $code)->code;
+        $debugInformation = $context['debugInformation'] ?? [];
+        if (!is_array($debugInformation)) {
+            $debugInformation = [];
+        }
+
+        return ($this->highlighter)($language, $code, $debugInformation)->code;
     }
 }
