@@ -6,5 +6,6 @@ namespace phpDocumentor\Guides\Code\Highlighter;
 
 interface Highlighter
 {
-    public function __invoke(string $language, string $code): HighlightResult;
+    /** @param array<string, string|null> $debugInformation */
+    public function __invoke(string $language, string $code, array $debugInformation): HighlightResult;
 }

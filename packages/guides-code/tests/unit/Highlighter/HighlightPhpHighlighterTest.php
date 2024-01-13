@@ -23,7 +23,7 @@ class HighlightPhpHighlighterTest extends TestCase
                   (__)\       )\/\
                       ||----w |
                       ||     ||
-        TXT);
+        TXT, []);
         self::assertSame(<<<'TXT'
         &lt; I'm an expert in my field. &gt;
           ---------------------------
@@ -46,7 +46,7 @@ class HighlightPhpHighlighterTest extends TestCase
                   (__)\       )\/\
                       ||----w |
                       ||     ||
-        TXT);
+        TXT, []);
         self::assertSame(<<<'TXT'
         &lt; I'm an expert in my field. &gt;
           ---------------------------
@@ -65,10 +65,10 @@ class HighlightPhpHighlighterTest extends TestCase
         $highlight = new HighlightPhpHighlighter($highlighter, $logger);
 
         $highlighter->method('highlight')->willThrowException(new Exception('test'));
-        $highlight('php', 'echo "Hello world";');
+        $highlight('php', 'echo "Hello world";', []);
 
-        self::assertTrue($logger->hasErrorRecords(), 'An error should be logged');
-        self::assertTrue($logger->hasErrorThatPasses(static function (array $record): bool {
+        self::assertTrue($logger->hasWarningRecords(), 'An error should be logged');
+        self::assertTrue($logger->hasWarningThatPasses(static function (array $record): bool {
             return isset($record['context']['exception'], $record['context']['code'])
                 && $record['context']['code'] === 'echo "Hello world";';
         }));
@@ -88,6 +88,6 @@ class HighlightPhpHighlighterTest extends TestCase
             ->with('php', '#[Attribute]')
             ->willReturn((object) ['language' => 'php', 'value' => '<span class="hljs-attribute">#[Attribute]</span>']);
 
-        $highlight('attribute', '#[Attribute]');
+        $highlight('attribute', '#[Attribute]', []);
     }
 }

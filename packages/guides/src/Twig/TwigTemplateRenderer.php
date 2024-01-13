@@ -28,6 +28,7 @@ final class TwigTemplateRenderer implements TemplateRenderer
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();
         $twig->addGlobal('env', $context);
+        $twig->addGlobal('debugInformation', $context->getLoggerInformation());
 
         return $twig->render($template, $params);
     }

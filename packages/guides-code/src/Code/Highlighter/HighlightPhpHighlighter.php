@@ -8,6 +8,7 @@ use Highlight\Highlighter as HighlightPHP;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use function array_merge;
 use function assert;
 use function is_string;
 use function preg_replace;
@@ -32,9 +33,10 @@ final class HighlightPhpHighlighter implements Highlighter
     ) {
     }
 
-    public function __invoke(string $language, string $code): HighlightResult
+    /** @param $debugInformation array<string, string|null> */
+    public function __invoke(string $language, string $code, array $debugInformation): HighlightResult
     {
-        if ($language === 'text') {
+        if ($language === 'text' || $language === '' || $language === 'rest') {
             // Highlighter escapes correctly the code, we need to manually escape only for "text" code
             $code = $this->escapeForbiddenCharactersInsideCodeBlock($code);
 
@@ -49,9 +51,9 @@ final class HighlightPhpHighlighter implements Highlighter
 
             return new HighlightResult($highlightLanguage, $highlightValue);
         } catch (Throwable $e) {
-            $this->logger->error(
+            $this->logger->warning(
                 <<<'MESSAGE'
-                Error highlighting {language} code block!
+                Highlighting {language} code-block failed
 
                 Code:
 
@@ -61,11 +63,11 @@ final class HighlightPhpHighlighter implements Highlighter
 
                 {exception}
                 MESSAGE,
-                [
+                array_merge($debugInformation, [
                     'language' => $language,
                     'code' => $code,
                     'exception' => $e,
-                ],
+                ]),
             );
 
             return new HighlightResult($language, $code);
