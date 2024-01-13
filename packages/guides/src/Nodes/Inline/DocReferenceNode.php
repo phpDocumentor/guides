@@ -40,4 +40,9 @@ class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceN
             'interlinkDomain' => $this->getInterlinkDomain(),
         ]);
     }
+
+    public function getInterlinkGroup(): string
+    {
+        return 'std:doc';
+    }
 }

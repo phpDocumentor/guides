@@ -14,4 +14,6 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 interface CrossReferenceNode extends LinkInlineNode
 {
     public function getInterlinkDomain(): string;
+
+    public function getInterlinkGroup(): string;
 }

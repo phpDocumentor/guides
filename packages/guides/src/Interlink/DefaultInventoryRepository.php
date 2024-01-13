@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\Interlink\Exception\InterlinkInventoryNotFound;
-use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\Message;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
+use phpDocumentor\Guides\RenderContext;
 
 use function array_key_exists;
+use function array_merge;
+use function sprintf;
 
 final class DefaultInventoryRepository implements InventoryRepository
 {
@@ -26,13 +30,12 @@ final class DefaultInventoryRepository implements InventoryRepository
         }
     }
 
-    /** @throws InterlinkNotFound */
-    public function getLink(string $inventoryKey, string $groupKey, string $linkKey): InventoryLink
+    public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink|null
     {
-        $inventory = $this->getInventory($inventoryKey);
-        $group = $inventory->getGroup($groupKey);
+        $inventory = $this->getInventory($node, $renderContext, $messages);
+        $group = $inventory?->getGroup($node, $renderContext, $messages);
 
-        return $group->getLink($linkKey);
+        return $group?->getLink($node, $renderContext, $messages);
     }
 
     public function hasInventory(string $key): bool
@@ -42,12 +45,21 @@ final class DefaultInventoryRepository implements InventoryRepository
         return array_key_exists($reducedKey, $this->inventories);
     }
 
-    /** @throws InterlinkInventoryNotFound */
-    public function getInventory(string $key): Inventory
+    public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory|null
     {
-        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($node->getInterlinkDomain());
         if (!$this->hasInventory($reducedKey)) {
-            throw new InterlinkInventoryNotFound('Inventory with key ' . $reducedKey . ' not found. ', 1_671_398_986);
+            $messages->addWarning(
+                new Message(
+                    sprintf(
+                        'Inventory with key %s not found. ',
+                        $node->getInterlinkDomain(),
+                    ),
+                    array_merge($renderContext->getLoggerInformation(), $node->getDebugInformation()),
+                ),
+            );
+
+            return null;
         }
 
         $this->inventoryLoader->loadInventory($this->inventories[$reducedKey]);

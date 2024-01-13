@@ -1,1 +1,1 @@
-app.WARNING: Inventory with name "unknowninventory" could not be resolved in file "Index".  {"rst-file":"Index","type":"doc","targetReference":"Index","value":"TYPO3 documentation","interlinkDomain":"unknowninventory"} []
+app.WARNING: Inventory with key unknowninventory not found.  {"rst-file":"Index","type":"doc","targetReference":"Index","value":"TYPO3 documentation","interlinkDomain":"unknowninventory"} []

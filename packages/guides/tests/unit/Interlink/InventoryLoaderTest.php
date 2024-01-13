@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Interlink;
 
 use Generator;
-use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
+use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +28,7 @@ final class InventoryLoaderTest extends TestCase
     private DefaultInventoryLoader $inventoryLoader;
     private JsonLoader&MockObject $jsonLoader;
     private InventoryRepository $inventoryRepository;
+    private RenderContext&MockObject $renderContext;
     /** @var array<string, mixed> */
     private array $json;
 
@@ -35,6 +40,7 @@ final class InventoryLoaderTest extends TestCase
             $this->jsonLoader,
             new SluggerAnchorNormalizer(),
         );
+        $this->renderContext = $this->createMock(RenderContext::class);
         $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorNormalizer(), $this->inventoryLoader, []);
         $jsonString = file_get_contents(__DIR__ . '/fixtures/objects.inv.json');
         assertIsString($jsonString);
@@ -47,7 +53,9 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryLoaderLoadsInventory(): void
     {
-        $inventory = $this->inventoryRepository->getInventory('somekey');
+        $node = new DocReferenceNode('SomeDocument', '', 'somekey');
+        $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
+        self::assertTrue($inventory instanceof Inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
@@ -61,105 +69,83 @@ final class InventoryLoaderTest extends TestCase
     }
 
     #[DataProvider('rawAnchorProvider')]
-    public function testInventoryContainsLink(string $expected, string $inventoryKey, string $groupKey, string $linkKey): void
+    public function testInventoryContainsLink(string $expected, CrossReferenceNode $node): void
     {
-        $link = $this->inventoryRepository->getLink($inventoryKey, $groupKey, $linkKey);
+        $link = $this->inventoryRepository->getLink($node, $this->renderContext, new Messages());
+        self::assertTrue($link instanceof InventoryLink);
         self::assertEquals($expected, $link->getPath());
     }
 
-    /** @return Generator<string, array{string, string, string, string}> */
+    /** @return Generator<string, array{string, CrossReferenceNode}> */
     public static function rawAnchorProvider(): Generator
     {
         yield 'Simple label' => [
             'some_page.html#modindex',
-            'somekey',
-            'std:label',
-            'modindex',
+            new ReferenceNode('modindex', '', 'somekey'),
         ];
 
         yield 'Inventory with changed case' => [
             'some_page.html#modindex',
-            'SomeKey',
-            'std:label',
-            'modindex',
+            new ReferenceNode('modindex', '', 'SomeKey'),
         ];
 
         yield 'Inventory with minus' => [
             'some_page.html#modindex',
-            'some-key',
-            'std:label',
-            'modindex',
+            new ReferenceNode('modindex', '', 'some-key'),
         ];
 
         yield 'Inventory with underscore and changed case' => [
             'some_page.html#modindex',
-            'Some_Key',
-            'std:label',
-            'modindex',
+            new ReferenceNode('modindex', '', 'Some_Key'),
         ];
 
         yield 'Both with minus' => [
             'some_page.html#php-modindex',
-            'somekey',
-            'std:label',
-            'php-modindex',
+            new ReferenceNode('php-modindex', '', 'somekey'),
         ];
 
         yield 'Linked with underscore, inventory with minus' => [
             'some_page.html#php-modindex',
-            'somekey',
-            'std:label',
-            'php_modindex',
+            new ReferenceNode('php_modindex', '', 'somekey'),
         ];
 
         yield 'Linked with underscore, inventory with underscore' => [
             'php-objectsindex.html#php-objectsindex',
-            'somekey',
-            'std:label',
-            'php_objectsindex',
+            new ReferenceNode('php_objectsindex', '', 'somekey'),
         ];
 
         yield 'Linked with minus, inventory with underscore' => [
             'php-objectsindex.html#php-objectsindex',
-            'somekey',
-            'std:label',
-            'php-objectsindex',
+            new ReferenceNode('php-objectsindex', '', 'somekey'),
         ];
 
         yield 'Doc link' => [
             'Page1/Subpage1.html',
-            'somekey',
-            'std:doc',
-            'Page1/Subpage1',
+            new DocReferenceNode('Page1/Subpage1', '', 'somekey'),
         ];
     }
 
     #[DataProvider('notFoundInventoryProvider')]
-    public function testInventoryLinkNotFound(string $inventoryKey, string $groupKey, string $linkKey): void
+    public function testInventoryLinkNotFound(CrossReferenceNode $node): void
     {
-        self::expectException(InterlinkTargetNotFound::class);
-        $this->inventoryRepository->getLink($inventoryKey, $groupKey, $linkKey);
+        $messages = new Messages();
+        $this->inventoryRepository->getLink($node, $this->renderContext, $messages);
+        self::assertCount(1, $messages->getWarnings());
     }
 
-    /** @return Generator<string, array{string, string, string}> */
+    /** @return Generator<string, array{CrossReferenceNode}> */
     public static function notFoundInventoryProvider(): Generator
     {
         yield 'Simple labe not found' => [
-            'somekey',
-            'std:label',
-            'non-existant-label',
+            new ReferenceNode('non-existant-label', '', 'somekey'),
         ];
 
         yield 'docs are casesensitve' => [
-            'somekey',
-            'std:doc',
-            'index',
+            new DocReferenceNode('index', '', 'somekey'),
         ];
 
         yield 'docs are not slugged' => [
-            'somekey',
-            'std:doc',
-            'Page1-Subpage1',
+            new DocReferenceNode('Page1-Subpage1', '', 'somekey'),
         ];
     }
 }

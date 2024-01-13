@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\Interlink\Exception\InterlinkGroupNotFound;
-use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\Message;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
+use phpDocumentor\Guides\RenderContext;
 
 use function array_key_exists;
+use function array_merge;
 use function sprintf;
 
 final class Inventory
@@ -39,23 +42,24 @@ final class Inventory
         return $this->groups;
     }
 
-    /** @throws InterlinkNotFound */
-    public function getGroup(string $key): InventoryGroup
+    public function getGroup(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryGroup|null
     {
-        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($node->getInterlinkGroup());
         if (!$this->hasGroup($reducedKey)) {
-            throw new InterlinkGroupNotFound(
-                sprintf('Inventory group with key "%s" (%s) not found. ', $key, $reducedKey),
-                1_671_398_986,
-            );
+            $messages->addWarning(new Message(
+                sprintf(
+                    'Inventory group with key "%s" (%s) not found in inventory %s. ',
+                    $node->getInterlinkGroup(),
+                    $reducedKey,
+                    $this->baseUrl,
+                ),
+                array_merge($renderContext->getLoggerInformation(), $node->getDebugInformation()),
+            ));
+
+            return null;
         }
 
         return $this->groups[$reducedKey];
-    }
-
-    public function getLink(string $groupKey, string $key): InventoryLink
-    {
-        return $this->getGroup($groupKey)->getLink($key);
     }
 
     public function hasGroup(string $key): bool

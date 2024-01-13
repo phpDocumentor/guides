@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
+use phpDocumentor\Guides\RenderContext;
 
 interface InventoryRepository
 {
-    /** @throws InterlinkNotFound */
-    public function getLink(string $inventoryKey, string $groupKey, string $linkKey): InventoryLink;
+    public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink|null;
 
     public function hasInventory(string $key): bool;
 
-    public function getInventory(string $key): Inventory;
+    public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory|null;
 }

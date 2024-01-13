@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\Interlink\Exception\InterlinkNotFound;
-use phpDocumentor\Guides\Interlink\Exception\InterlinkTargetNotFound;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\Message;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
+use phpDocumentor\Guides\RenderContext;
 
 use function array_key_exists;
+use function array_merge;
 use function sprintf;
 
 final class InventoryGroup
@@ -33,12 +36,23 @@ final class InventoryGroup
         return array_key_exists($reducedKey, $this->links);
     }
 
-    /** @throws InterlinkNotFound */
-    public function getLink(string $key): InventoryLink
+    public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink|null
     {
-        $reducedKey = $this->anchorNormalizer->reduceAnchor($key);
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($node->getTargetReference());
         if (!array_key_exists($reducedKey, $this->links)) {
-            throw new InterlinkTargetNotFound(sprintf('Inventory link with key "%s" (%s) not found. ', $key, $reducedKey), 1_671_398_986);
+            $messages->addWarning(
+                new Message(
+                    sprintf(
+                        'Inventory link with key "%s:%s" (%s) not found. ',
+                        $node->getInterlinkDomain(),
+                        $node->getTargetReference(),
+                        $reducedKey,
+                    ),
+                    array_merge($renderContext->getLoggerInformation(), $node->getDebugInformation()),
+                ),
+            );
+
+            return null;
         }
 
         return $this->links[$reducedKey];

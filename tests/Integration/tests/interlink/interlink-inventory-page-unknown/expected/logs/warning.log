@@ -1,1 +1,1 @@
-app.WARNING: Link with name "t3coreapi:Unknown/Page" not found in group "std:doc", required in file "Index".
+app.WARNING: Inventory link with key "t3coreapi:Unknown/Page" (Unknown/Page) not found.
