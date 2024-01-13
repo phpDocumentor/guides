@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Interlink;
+namespace phpDocumentor\Guides\ReferenceResolvers\Interlink;
 
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\Messages;

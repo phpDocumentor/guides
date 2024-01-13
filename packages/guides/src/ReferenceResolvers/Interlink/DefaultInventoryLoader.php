@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Interlink;
+namespace phpDocumentor\Guides\ReferenceResolvers\Interlink;
 
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\ReferenceResolvers\NullAnchorNormalizer;

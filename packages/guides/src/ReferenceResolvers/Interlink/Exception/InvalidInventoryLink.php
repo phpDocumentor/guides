@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Interlink\Exception;
+namespace phpDocumentor\Guides\ReferenceResolvers\Interlink\Exception;
 
 use Exception;
 

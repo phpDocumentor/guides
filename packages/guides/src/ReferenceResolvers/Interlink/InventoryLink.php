@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Interlink;
+namespace phpDocumentor\Guides\ReferenceResolvers\Interlink;
 
-use phpDocumentor\Guides\Interlink\Exception\InvalidInventoryLink;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\Exception\InvalidInventoryLink;
 
 use function preg_match;
 
