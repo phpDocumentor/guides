@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Graphs\Renderer;
 
+use phpDocumentor\Guides\RenderContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 
+use function array_merge;
 use function file_get_contents;
 use function file_put_contents;
 use function sys_get_temp_dir;
@@ -28,7 +30,7 @@ class PlantumlRenderer implements DiagramRenderer
     {
     }
 
-    public function render(string $diagram): string|null
+    public function render(RenderContext $renderContext, string $diagram): string|null
     {
         $output = <<<PUML
 @startuml
@@ -50,12 +52,24 @@ PUML;
             $process->run();
 
             if (!$process->isSuccessful()) {
-                $this->logger->error('Generating the class diagram failed', ['error' => $process->getErrorOutput()]);
+                $this->logger->error(
+                    'Generating the class diagram failed',
+                    array_merge(
+                        ['error' => $process->getErrorOutput()],
+                        $renderContext->getLoggerInformation(),
+                    ),
+                );
 
                 return null;
             }
         } catch (RuntimeException $e) {
-            $this->logger->error('Generating the class diagram failed', ['error' => $e->getMessage()]);
+            $this->logger->error(
+                'Generating the class diagram failed',
+                array_merge(
+                    ['error' => $e->getMessage()],
+                    $renderContext->getLoggerInformation(),
+                ),
+            );
 
             return null;
         }
