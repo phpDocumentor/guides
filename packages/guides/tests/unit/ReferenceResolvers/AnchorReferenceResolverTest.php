@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AnchorReferenceResolverTest extends TestCase
 {
-    private AnchorReducer&MockObject $anchorReducer;
+    private AnchorNormalizer&MockObject $anchorReducer;
     private RenderContext&MockObject $renderContext;
     private ProjectNode&MockObject $projectNode;
     private AnchorReferenceResolver $subject;
@@ -26,7 +26,7 @@ final class AnchorReferenceResolverTest extends TestCase
         $internalTarget = new InternalTarget('some-path', 'some-name');
         $this->projectNode = $this->createMock(ProjectNode::class);
         $this->projectNode->expects(self::once())->method('getInternalTarget')->willReturn($internalTarget);
-        $this->anchorReducer = $this->createMock(AnchorReducer::class);
+        $this->anchorReducer = $this->createMock(AnchorNormalizer::class);
         $this->renderContext = $this->createMock(RenderContext::class);
         $this->renderContext->expects(self::once())->method('getProjectNode')->willReturn($this->projectNode);
         $this->urlGenerator = self::createStub(UrlGeneratorInterface::class);

@@ -10,13 +10,13 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CollectLinkTargetsTransformerTest extends TestCase
 {
-    private AnchorReducer&MockObject $anchorReducer;
+    private AnchorNormalizer&MockObject $anchorReducer;
     private CompilerContext $context;
     private ProjectNode&MockObject $projectNode;
 
@@ -24,7 +24,7 @@ class CollectLinkTargetsTransformerTest extends TestCase
     {
         $this->projectNode = $this->createMock(ProjectNode::class);
         $this->context = $this->getCompilerContext('some-path');
-        $this->anchorReducer = $this->createMock(AnchorReducer::class);
+        $this->anchorReducer = $this->createMock(AnchorNormalizer::class);
     }
 
     private function getCompilerContext(string $path): CompilerContext

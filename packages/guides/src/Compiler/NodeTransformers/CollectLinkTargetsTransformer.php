@@ -13,7 +13,7 @@ use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use SplStack;
 use Webmozart\Assert\Assert;
 
@@ -24,7 +24,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     private readonly SplStack $documentStack;
 
     public function __construct(
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
     ) {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are

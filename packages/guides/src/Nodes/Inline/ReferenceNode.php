@@ -50,4 +50,9 @@ class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
             'interlinkDomain' => $this->getInterlinkDomain(),
         ]);
     }
+
+    public function getInterlinkGroup(): string
+    {
+        return 'std:label';
+    }
 }

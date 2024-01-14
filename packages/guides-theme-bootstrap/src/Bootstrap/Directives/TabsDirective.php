@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Bootstrap\Nodes\TabsNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\ReferenceResolvers\AnchorReducer;
+use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -35,7 +35,7 @@ class TabsDirective extends SubDirective
     public function __construct(
         protected Rule $startingRule,
         private readonly LoggerInterface $logger,
-        private readonly AnchorReducer $anchorReducer,
+        private readonly AnchorNormalizer $anchorReducer,
     ) {
         parent::__construct($startingRule);
     }

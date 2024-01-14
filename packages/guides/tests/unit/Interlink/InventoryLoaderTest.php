@@ -4,7 +4,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Interlink;
 
-use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorReducer;
+use Generator;
+use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryLoader;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryRepository;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\Inventory;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLink;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryRepository;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\JsonLoader;
+use phpDocumentor\Guides\ReferenceResolvers\Messages;
+use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
+use phpDocumentor\Guides\RenderContext;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -21,6 +34,7 @@ final class InventoryLoaderTest extends TestCase
     private DefaultInventoryLoader $inventoryLoader;
     private JsonLoader&MockObject $jsonLoader;
     private InventoryRepository $inventoryRepository;
+    private RenderContext&MockObject $renderContext;
     /** @var array<string, mixed> */
     private array $json;
 
@@ -30,12 +44,14 @@ final class InventoryLoaderTest extends TestCase
         $this->inventoryLoader = new DefaultInventoryLoader(
             self::createStub(NullLogger::class),
             $this->jsonLoader,
+            new SluggerAnchorNormalizer(),
         );
-        $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorReducer(), $this->inventoryLoader, []);
-        $jsonString = file_get_contents(__DIR__ . '/input/objects.inv.json');
+        $this->renderContext = $this->createMock(RenderContext::class);
+        $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorNormalizer(), $this->inventoryLoader, []);
+        $jsonString = file_get_contents(__DIR__ . '/fixtures/objects.inv.json');
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
-        $inventory = new Inventory('https://example.com/');
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
         $this->inventoryRepository->addInventory('somekey', $inventory);
         $this->inventoryRepository->addInventory('some-key', $inventory);
@@ -43,28 +59,99 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryLoaderLoadsInventory(): void
     {
-        $inventory = $this->inventoryRepository->getInventory('somekey');
+        $node = new DocReferenceNode('SomeDocument', '', 'somekey');
+        $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
+        self::assertTrue($inventory instanceof Inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
     public function testInventoryIsLoadedExactlyOnce(): void
     {
         $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn($this->json);
-        $inventory = new Inventory('https://example.com/');
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
-    public function testInventoryLoaderGetInventoryIsCaseInsensitive(): void
+    #[DataProvider('rawAnchorProvider')]
+    public function testInventoryContainsLink(string $expected, CrossReferenceNode $node): void
     {
-        $inventory = $this->inventoryRepository->getInventory('SomeKey');
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        $link = $this->inventoryRepository->getLink($node, $this->renderContext, new Messages());
+        self::assertTrue($link instanceof InventoryLink);
+        self::assertEquals($expected, $link->getPath());
     }
 
-    public function testInventoryLoaderGetInventoryIsSlugged(): void
+    /** @return Generator<string, array{string, CrossReferenceNode}> */
+    public static function rawAnchorProvider(): Generator
     {
-        $inventory = $this->inventoryRepository->getInventory('Some_Key');
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        yield 'Simple label' => [
+            'some_page.html#modindex',
+            new ReferenceNode('modindex', '', 'somekey'),
+        ];
+
+        yield 'Inventory with changed case' => [
+            'some_page.html#modindex',
+            new ReferenceNode('modindex', '', 'SomeKey'),
+        ];
+
+        yield 'Inventory with minus' => [
+            'some_page.html#modindex',
+            new ReferenceNode('modindex', '', 'some-key'),
+        ];
+
+        yield 'Inventory with underscore and changed case' => [
+            'some_page.html#modindex',
+            new ReferenceNode('modindex', '', 'Some_Key'),
+        ];
+
+        yield 'Both with minus' => [
+            'some_page.html#php-modindex',
+            new ReferenceNode('php-modindex', '', 'somekey'),
+        ];
+
+        yield 'Linked with underscore, inventory with minus' => [
+            'some_page.html#php-modindex',
+            new ReferenceNode('php_modindex', '', 'somekey'),
+        ];
+
+        yield 'Linked with underscore, inventory with underscore' => [
+            'php-objectsindex.html#php-objectsindex',
+            new ReferenceNode('php_objectsindex', '', 'somekey'),
+        ];
+
+        yield 'Linked with minus, inventory with underscore' => [
+            'php-objectsindex.html#php-objectsindex',
+            new ReferenceNode('php-objectsindex', '', 'somekey'),
+        ];
+
+        yield 'Doc link' => [
+            'Page1/Subpage1.html',
+            new DocReferenceNode('Page1/Subpage1', '', 'somekey'),
+        ];
+    }
+
+    #[DataProvider('notFoundInventoryProvider')]
+    public function testInventoryLinkNotFound(CrossReferenceNode $node): void
+    {
+        $messages = new Messages();
+        $this->inventoryRepository->getLink($node, $this->renderContext, $messages);
+        self::assertCount(1, $messages->getWarnings());
+    }
+
+    /** @return Generator<string, array{CrossReferenceNode}> */
+    public static function notFoundInventoryProvider(): Generator
+    {
+        yield 'Simple labe not found' => [
+            new ReferenceNode('non-existant-label', '', 'somekey'),
+        ];
+
+        yield 'docs are casesensitve' => [
+            new DocReferenceNode('index', '', 'somekey'),
+        ];
+
+        yield 'docs are not slugged' => [
+            new DocReferenceNode('Page1-Subpage1', '', 'somekey'),
+        ];
     }
 }
