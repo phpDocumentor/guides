@@ -18,6 +18,10 @@ function copyTests(string $directory, bool $shortenHtml=true): void
         if (!is_dir($inputDirectory)) {
             continue;
         }
+        if (file_exists($inputDirectory . '/skip') || file_exists($inputDirectory . '/incomplete')) {
+            // ignore skipped and incomplete tests
+            continue;
+        }
         $tempDir = $dir->getPathname() . '/temp';
         $expectedDir = $dir->getPathname() . '/expected';
         if (!file_exists($tempDir)) {
