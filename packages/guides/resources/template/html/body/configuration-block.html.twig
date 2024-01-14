@@ -1,0 +1,17 @@
+<div class="configuration-block">
+    <div role="tablist" aria-label="Configuration formats" class="configuration-tabs configuration-tabs-length-{{ node.tabs|length }}">
+        {% for tab in node.tabs %}
+            <button role="tab" type="button" data-language="{{ tab.slug }}"
+                    aria-controls="{{ 'configuration-block-tabpanel-' ~ tab.hash }}" aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                    {{ loop.first ? 'data-active="true"' }} {{ not loop.first ? 'tabindex="-1"' }}>
+                <span>{{ tab.label }}</span>
+            </button>
+        {% endfor %}
+    </div>
+
+    {% for tab in node.tabs %}
+        <div role="tabpanel" id="{{ 'configuration-block-tabpanel-' ~ tab.hash }}" aria-label="{{ tab.label }}" class="configuration-codeblock" data-language="{{ tab.slug }}" style="{{ not loop.first ? 'display: none' }}">
+            {{ renderNode(tab.content) }}
+        </div>
+    {% endfor %}
+</div>

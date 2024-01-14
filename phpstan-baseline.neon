@@ -91,6 +91,11 @@ parameters:
 			path: packages/guides-graphs/src/Graphs/Renderer/PlantumlRenderer.php
 
 		-
+			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
 			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnonymousPhraseRule.php

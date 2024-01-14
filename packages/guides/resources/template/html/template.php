@@ -6,6 +6,7 @@ use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\AnnotationListNode;
 use phpDocumentor\Guides\Nodes\CitationNode;
 use phpDocumentor\Guides\Nodes\CodeNode;
+use phpDocumentor\Guides\Nodes\Configuration\ConfigurationBlockNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -65,6 +66,7 @@ return [
     DocumentNode::class => 'structure/document.html.twig',
     ImageNode::class => 'body/image.html.twig',
     CodeNode::class => 'body/code.html.twig',
+    ConfigurationBlockNode::class => 'body/configuration-block.html.twig',
     DefinitionListNode::class => 'body/definition-list.html.twig',
     DefinitionNode::class => 'body/definition.html.twig',
     FieldListNode::class => 'body/field-list.html.twig',
