@@ -10,6 +10,8 @@ use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers\InternalMenuEntryNodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Event\PostProjectNodeCreated;
+use phpDocumentor\Guides\EventListener\LoadSettingsFromComposer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
@@ -47,6 +49,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\AbstractUrlGenerator;
 use phpDocumentor\Guides\Renderer\UrlGenerator\ConfigurableUrlGenerator;
 use phpDocumentor\Guides\Renderer\UrlGenerator\RelativeUrlGenerator;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
+use phpDocumentor\Guides\Settings\ComposerSettingsLoader;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
@@ -216,6 +219,11 @@ return static function (ContainerConfigurator $container): void {
             '$paths',
             param('phpdoc.guides.base_template_paths'),
         )
+
+        ->set(LoadSettingsFromComposer::class)
+        ->tag('event_listener', ['event' => PostProjectNodeCreated::class])
+
+        ->set(ComposerSettingsLoader::class)
 
         ->set(EnvironmentBuilder::class)
         ->arg('$extensions', tagged_iterator('twig.extension'))

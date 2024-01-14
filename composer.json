@@ -14,6 +14,11 @@
         },
         "sort-packages": true
     },
+    "support": {
+        "issues": "https://github.com/phpDocumentor/guides/issues",
+        "source": "https://github.com/phpDocumentor/guides",
+        "docs": "https://docs.phpdoc.org/3.0/guide/guides/index.html"
+    },
     "autoload-dev": {
         "psr-4": {
             "phpDocumentor\\Guides\\": ["packages/guides/tests/unit/", "tests/"],

@@ -16,6 +16,7 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Event\PostParseProcess;
+use phpDocumentor\Guides\Event\PostProjectNodeCreated;
 use phpDocumentor\Guides\Event\PostRenderDocument;
 use phpDocumentor\Guides\Event\PostRenderProcess;
 use phpDocumentor\Guides\Event\PreParseDocument;
@@ -41,6 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function array_pop;
+use function assert;
 use function count;
 use function getcwd;
 use function implode;
@@ -199,7 +201,7 @@ final class Run extends Command
         );
     }
 
-    private function getSettingsOverridenWithInput(InputInterface $input): ProjectSettings
+    private function getSettingsOverriddenWithInput(InputInterface $input): ProjectSettings
     {
         $settings = $this->settingsManager->getProjectSettings();
 
@@ -249,7 +251,7 @@ final class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $settings = $this->getSettingsOverridenWithInput($input);
+        $settings = $this->getSettingsOverriddenWithInput($input);
         $inputDir = $this->getAbsolutePath($settings->getInput());
         if (!is_dir($inputDir)) {
             throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
@@ -263,6 +265,12 @@ final class Run extends Command
             $settings->getCopyright() === '' ? null : $settings->getCopyright(),
             $this->clock->now(),
         );
+
+        $event = new PostProjectNodeCreated($projectNode, $settings);
+        $event = $this->eventDispatcher->dispatch($event);
+        assert($event instanceof PostProjectNodeCreated);
+        $projectNode = $event->getProjectNode();
+        $settings = $event->getSettings();
 
         $outputDir = $this->getAbsolutePath($settings->getOutput());
         $sourceFileSystem = new Filesystem(new Local($settings->getInput()));
