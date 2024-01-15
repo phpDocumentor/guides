@@ -1,4 +1,4 @@
-<li class="toc-item {%- if node.isCurrent %} current{% endif -%} {%- if node.isInRootline %} active{% endif -%}"><a href="{{ url }}">{{ renderNode(node.value.value) }}</a>
+<li class="toc-item {%- if node.isCurrent %} current{% endif -%} {%- if node.isInRootline %} active{% endif -%}"><a href="{{ url }}">{{ node.value.toString }}</a>
     {%- if node.children|length %}
         <ul class="menu-level-{{ node.level }}">
             {% for child in node.children -%}
