@@ -9,7 +9,7 @@ code-style:
 	$(PHP_BIN) vendor/bin/phpcs
 
 .PHONY: fix-code-style
-fix-code-style:
+fix-code-style: add-license
 	$(PHP_BIN) vendor/bin/phpcbf
 
 .PHONY: static-code-analysis
@@ -79,3 +79,18 @@ rector: ## Refactor code using rector
 
 .PHONY: pre-commit-test
 pre-commit-test: fix-code-style test code-style static-code-analysis
+
+add-license:
+	find ./packages/ -name "*.php" -exec tools/license.sh {} \;
+	find ./tests/ -name "*.php" -exec tools/license.sh {} \;
+
+.PHONY: docs
+docs: ## Render documentation
+	$(PHP_BIN) tools/phpDocumentor.phar
+
+.PHONY: docs-watch
+docs-watch: ## Render documentation and watch for changes
+	while true; do \
+		$(MAKE) docs; \
+	inotifywait -qre close_write docs; \
+	done
