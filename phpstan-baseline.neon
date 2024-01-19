@@ -136,6 +136,6 @@ parameters:
 			path: packages/guides/src/Renderer/DocumentListIterator.php
 
 		-
-			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:23\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
+			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:32\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
 			count: 1
 			path: packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
