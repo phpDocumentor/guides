@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function strtolower;
 
-class NocommentsFieldListItemRule implements FieldListItemRule
+final class NocommentsFieldListItemRule implements FieldListItemRule
 {
     public function applies(FieldListItemNode $fieldListItemNode): bool
     {

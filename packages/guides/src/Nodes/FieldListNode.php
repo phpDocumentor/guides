@@ -16,6 +16,6 @@ namespace phpDocumentor\Guides\Nodes;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 
 /** @extends CompoundNode<FieldListItemNode> */
-class FieldListNode extends CompoundNode
+final class FieldListNode extends CompoundNode
 {
 }

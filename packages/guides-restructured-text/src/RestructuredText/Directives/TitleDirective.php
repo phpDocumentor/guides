@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * .. title:: Page title
  */
-class TitleDirective extends ActionDirective
+final class TitleDirective extends ActionDirective
 {
     public function getName(): string
     {

@@ -23,7 +23,7 @@ use const FILTER_VALIDATE_EMAIL;
 /**
  * Resolves references with an embedded email address
  */
-class EmailReferenceResolver implements ReferenceResolver
+final class EmailReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = -100;
 

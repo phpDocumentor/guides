@@ -16,6 +16,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 /**
  * The date node contains the date of publication, release, or last modification of the document.
  */
-class DateNode extends MetadataNode
+final class DateNode extends MetadataNode
 {
 }

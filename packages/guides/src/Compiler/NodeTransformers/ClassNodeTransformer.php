@@ -27,7 +27,7 @@ use function array_merge;
  * The "class" directive sets the "classes" attribute value on its content or on the first immediately following
  * non-comment element. https://docutils.sourceforge.io/docs/ref/rst/directives.html#class
  */
-class ClassNodeTransformer implements NodeTransformer
+final class ClassNodeTransformer implements NodeTransformer
 {
     /** @var string[] */
     private array $classes = [];

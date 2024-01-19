@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
 
-class HighlightPhpHighlighterTest extends TestCase
+final class HighlightPhpHighlighterTest extends TestCase
 {
     public function testItEscapesCharactersForbiddenInPreTags(): void
     {

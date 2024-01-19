@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */
-class FootnoteInlineNodeTransformer implements NodeTransformer
+final class FootnoteInlineNodeTransformer implements NodeTransformer
 {
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {

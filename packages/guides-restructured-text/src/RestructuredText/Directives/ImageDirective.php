@@ -28,7 +28,7 @@ use function dirname;
  *      :width: 100
  *      :title: An image
  */
-class ImageDirective extends BaseDirective
+final class ImageDirective extends BaseDirective
 {
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,

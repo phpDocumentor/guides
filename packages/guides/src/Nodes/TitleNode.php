@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 /** @extends CompoundNode<InlineCompoundNode> */
-class TitleNode extends CompoundNode
+final class TitleNode extends CompoundNode
 {
     protected string $target = '';
 

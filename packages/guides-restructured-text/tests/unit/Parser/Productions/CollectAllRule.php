@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 
 /** @implements Rule<RawNode> */
-class CollectAllRule implements Rule
+final class CollectAllRule implements Rule
 {
     public function applies(BlockContext $blockContext): bool
     {

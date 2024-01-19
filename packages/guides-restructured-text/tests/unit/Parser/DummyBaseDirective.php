@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 
-class DummyBaseDirective extends DirectiveHandler
+final class DummyBaseDirective extends DirectiveHandler
 {
     private string $name = 'dummy';
 

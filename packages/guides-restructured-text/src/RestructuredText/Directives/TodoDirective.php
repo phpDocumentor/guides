@@ -19,7 +19,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /**
  * Todo directives are treated as comments, omitting all content or options
  */
-class TodoDirective extends ActionDirective
+final class TodoDirective extends ActionDirective
 {
     public function getName(): string
     {

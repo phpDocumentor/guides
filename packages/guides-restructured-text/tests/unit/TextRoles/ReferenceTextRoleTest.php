@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class ReferenceTextRoleTest extends TestCase
+final class ReferenceTextRoleTest extends TestCase
 {
     private ReferenceTextRole $referenceTextRole;
     private DocumentParserContext&MockObject $documentParserContext;

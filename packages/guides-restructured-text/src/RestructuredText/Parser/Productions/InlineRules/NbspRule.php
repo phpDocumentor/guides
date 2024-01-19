@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for non-breaking spaces: a~b
  */
-class NbspRule extends ReferenceRule
+final class NbspRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
-class FootnoteTarget extends AnnotationTarget
+final class FootnoteTarget extends AnnotationTarget
 {
     public function __construct(string $documentPath, string $anchorName, string $name, private int $number)
     {

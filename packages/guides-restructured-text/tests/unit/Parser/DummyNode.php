@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Node;
 
-class DummyNode implements Node
+final class DummyNode implements Node
 {
     /** @param DirectiveOption[] $directiveOptions */
     public function __construct(private readonly string $name, private readonly string $data, private readonly array $directiveOptions)

@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 
-class InternalReferenceResolver implements ReferenceResolver
+final class InternalReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 100;
 

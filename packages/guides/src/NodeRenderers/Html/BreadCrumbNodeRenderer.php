@@ -30,7 +30,7 @@ use function is_a;
  * @template T as Node
  * @implements NodeRenderer<BreadCrumbNode>
  */
-class BreadCrumbNodeRenderer implements NodeRenderer
+final class BreadCrumbNodeRenderer implements NodeRenderer
 {
     private string $template = 'body/menu/breadcrumb.html.twig';
 

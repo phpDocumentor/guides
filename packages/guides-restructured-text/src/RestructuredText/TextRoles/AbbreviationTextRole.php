@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 use function preg_match;
 use function trim;
 
-class AbbreviationTextRole extends BaseTextRole
+final class AbbreviationTextRole extends BaseTextRole
 {
     protected string $name = 'abbreviation';
 

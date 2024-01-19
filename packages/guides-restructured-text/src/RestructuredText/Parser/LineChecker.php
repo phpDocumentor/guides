@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 use function in_array;
 use function mb_strlen;
 
-class LineChecker
+final class LineChecker
 {
     private const HEADER_LETTERS = [
         '!',

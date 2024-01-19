@@ -26,7 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#standalone-hyperlinks
  */
-class StandaloneEmailRule extends ReferenceRule
+final class StandaloneEmailRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function dirname;
 
-class BootstrapExtension extends Extension implements PrependExtensionInterface
+final class BootstrapExtension extends Extension implements PrependExtensionInterface
 {
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

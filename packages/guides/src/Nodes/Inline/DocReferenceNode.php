@@ -25,7 +25,7 @@ use function array_merge;
  * :doc:`custom text <foo>`
  * :doc:`custom text <domain:foo/subdoc#anchor>`
  */
-class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
+final class DocReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
 {
     final public const TYPE = 'doc';
 

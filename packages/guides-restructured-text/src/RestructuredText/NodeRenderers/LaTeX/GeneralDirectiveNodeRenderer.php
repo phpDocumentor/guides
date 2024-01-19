@@ -27,7 +27,7 @@ use function sprintf;
 use function str_replace;
 
 /** @implements NodeRenderer<GeneralDirectiveNode> */
-class GeneralDirectiveNodeRenderer implements NodeRenderer
+final class GeneralDirectiveNodeRenderer implements NodeRenderer
 {
     public function __construct(
         private readonly TemplateRenderer $renderer,

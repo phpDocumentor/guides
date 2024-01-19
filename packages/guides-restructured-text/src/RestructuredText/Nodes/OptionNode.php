@@ -25,7 +25,7 @@ use phpDocumentor\Guides\Nodes\Node;
  *
  * @extends CompoundNode<Node>
  */
-class OptionNode extends CompoundNode implements LinkTargetNode, MultipleLinkTargetsNode
+final class OptionNode extends CompoundNode implements LinkTargetNode, MultipleLinkTargetsNode
 {
     public const LINK_TYPE = 'std:option';
 

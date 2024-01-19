@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */
-class CitationInlineNodeTransformer implements NodeTransformer
+final class CitationInlineNodeTransformer implements NodeTransformer
 {
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {

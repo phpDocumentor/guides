@@ -27,7 +27,7 @@ use function str_replace;
 use function strtolower;
 use function strval;
 
-class TabDirective extends SubDirective
+final class TabDirective extends SubDirective
 {
     public function getName(): string
     {

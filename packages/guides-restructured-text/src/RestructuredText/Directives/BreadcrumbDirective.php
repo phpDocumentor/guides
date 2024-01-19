@@ -30,7 +30,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  * ..  breadcrumb::
  * ```
  */
-class BreadcrumbDirective extends BaseDirective
+final class BreadcrumbDirective extends BaseDirective
 {
     public function getName(): string
     {

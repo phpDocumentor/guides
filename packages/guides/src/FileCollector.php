@@ -25,7 +25,7 @@ use function strlen;
 use function substr;
 use function trim;
 
-class FileCollector
+final class FileCollector
 {
     /** @var string[][] */
     private array $fileInfos = [];

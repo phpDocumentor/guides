@@ -28,7 +28,7 @@ use function count;
  *
  * .. |test| replace:: The Test String!
  */
-class ReplaceDirective extends SubDirective
+final class ReplaceDirective extends SubDirective
 {
     public function getName(): string
     {

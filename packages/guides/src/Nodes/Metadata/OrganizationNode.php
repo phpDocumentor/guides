@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
  * The organization element contains the name of document author's organization,
  * or the organization responsible for the document.
  */
-class OrganizationNode extends MetadataNode
+final class OrganizationNode extends MetadataNode
 {
     /** @param Node[] $children */
     public function __construct(string $plaintext, private readonly array $children)

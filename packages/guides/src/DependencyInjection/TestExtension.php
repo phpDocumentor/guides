@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
 
-class TestExtension extends Extension implements CompilerPassInterface
+final class TestExtension extends Extension implements CompilerPassInterface
 {
     /** @param array<mixed> $configs */
     public function load(array $configs, ContainerBuilder $container): void

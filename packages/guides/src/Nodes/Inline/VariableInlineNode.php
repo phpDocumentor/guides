@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 
 use phpDocumentor\Guides\Nodes\Node;
 
-class VariableInlineNode extends InlineNode
+final class VariableInlineNode extends InlineNode
 {
     final public const TYPE = 'variable';
 

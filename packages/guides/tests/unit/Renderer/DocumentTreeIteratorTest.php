@@ -18,7 +18,7 @@ use RecursiveIteratorIterator;
 
 use function assert;
 
-class DocumentTreeIteratorTest extends IteratorTestCase
+final class DocumentTreeIteratorTest extends IteratorTestCase
 {
     public function testIterateDocumentStructure(): void
     {

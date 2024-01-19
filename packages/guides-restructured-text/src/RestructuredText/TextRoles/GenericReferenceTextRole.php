@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
 use function array_keys;
 
-class GenericReferenceTextRole extends AbstractReferenceTextRole
+final class GenericReferenceTextRole extends AbstractReferenceTextRole
 {
     public function __construct(
         private readonly GenericLinkProvider $genericLinkProvider,

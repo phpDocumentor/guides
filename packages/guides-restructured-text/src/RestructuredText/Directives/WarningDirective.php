@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class WarningDirective extends AbstractAdmonitionDirective
+final class WarningDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
     {

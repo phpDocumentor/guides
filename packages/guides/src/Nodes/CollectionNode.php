@@ -20,6 +20,6 @@ namespace phpDocumentor\Guides\Nodes;
  *
  * @extends CompoundNode<Node>
  */
-class CollectionNode extends CompoundNode
+final class CollectionNode extends CompoundNode
 {
 }

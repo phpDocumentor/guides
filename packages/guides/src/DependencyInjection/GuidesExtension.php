@@ -40,7 +40,7 @@ use function dirname;
 use function is_array;
 use function pathinfo;
 
-class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface, PrependExtensionInterface
+final class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface, PrependExtensionInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {

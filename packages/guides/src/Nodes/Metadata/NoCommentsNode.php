@@ -16,6 +16,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 /**
  * If set, the web application won’t display a comment form for a page generated from this source file
  */
-class NoCommentsNode extends MetadataNode
+final class NoCommentsNode extends MetadataNode
 {
 }

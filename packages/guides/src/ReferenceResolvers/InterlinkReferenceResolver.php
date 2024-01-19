@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryRepository;
 use phpDocumentor\Guides\RenderContext;
 
-class InterlinkReferenceResolver implements ReferenceResolver
+final class InterlinkReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 50;
 

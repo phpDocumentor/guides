@@ -13,6 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
-class CitationTarget extends AnnotationTarget
+final class CitationTarget extends AnnotationTarget
 {
 }

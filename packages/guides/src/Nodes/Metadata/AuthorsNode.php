@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 /**
  * The authors element is a container for author information for documents with multiple authors.
  */
-class AuthorsNode extends MetadataNode
+final class AuthorsNode extends MetadataNode
 {
     /** @param AuthorNode[] $authorNodes */
     public function __construct(private readonly array $authorNodes)

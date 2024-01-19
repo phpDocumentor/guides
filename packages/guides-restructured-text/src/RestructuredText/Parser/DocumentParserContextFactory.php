@@ -17,7 +17,7 @@ use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\Settings\SettingsManager;
 
-class DocumentParserContextFactory
+final class DocumentParserContextFactory
 {
     public function __construct(
         private readonly TextRoleFactory $textRoleFactory,

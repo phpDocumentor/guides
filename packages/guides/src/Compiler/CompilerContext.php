@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
-class CompilerContext
+final class CompilerContext
 {
     /** @var TreeNode<Node> */
     private TreeNode $shadowTree;

@@ -22,7 +22,7 @@ namespace phpDocumentor\Guides\Nodes;
  */
 
 /** @extends AbstractNode<string> */
-class ClassNode extends AbstractNode
+final class ClassNode extends AbstractNode
 {
     public function __construct(string $value)
     {

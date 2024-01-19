@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ParserRulesPass implements CompilerPassInterface
+final class ParserRulesPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 

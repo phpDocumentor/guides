@@ -23,7 +23,7 @@ use phpDocumentor\Guides\TemplateRenderer;
 use function is_a;
 
 /** @implements  NodeRenderer<TocNode> */
-class TocNodeRenderer implements NodeRenderer
+final class TocNodeRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {

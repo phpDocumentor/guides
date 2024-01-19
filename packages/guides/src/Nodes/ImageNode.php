@@ -13,6 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class ImageNode extends TextNode
+final class ImageNode extends TextNode
 {
 }

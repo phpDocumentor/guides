@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 
-class SectionEntryRegistrationTransformerTest extends TestCase
+final class SectionEntryRegistrationTransformerTest extends TestCase
 {
     private CompilerContext $context;
 

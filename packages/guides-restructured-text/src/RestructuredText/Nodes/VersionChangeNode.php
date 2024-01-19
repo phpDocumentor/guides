@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use function sprintf;
 
 /** @extends CompoundNode<Node> */
-class VersionChangeNode extends CompoundNode
+final class VersionChangeNode extends CompoundNode
 {
     private readonly string $versionLabel;
 

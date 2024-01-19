@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
-class DocumentBlockDirective extends SubDirective
+final class DocumentBlockDirective extends SubDirective
 {
     public function getName(): string
     {

@@ -24,7 +24,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#container
  */
-class ContainerDirective extends SubDirective
+final class ContainerDirective extends SubDirective
 {
     public function getName(): string
     {

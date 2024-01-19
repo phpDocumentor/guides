@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class DeprecatedDirective extends AbstractVersionChangeDirective
+final class DeprecatedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
     {

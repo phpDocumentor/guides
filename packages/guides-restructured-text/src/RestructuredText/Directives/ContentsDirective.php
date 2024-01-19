@@ -25,7 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * Displays a table of content of the current page
  */
-class ContentsDirective extends BaseDirective
+final class ContentsDirective extends BaseDirective
 {
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,

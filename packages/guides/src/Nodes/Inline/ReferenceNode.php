@@ -28,7 +28,7 @@ use function array_merge;
  *
  * Cross-references are resolved at the start of the rendering phase.
  */
-class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
+final class ReferenceNode extends AbstractLinkInlineNode implements CrossReferenceNode
 {
     final public const TYPE = 'ref';
 

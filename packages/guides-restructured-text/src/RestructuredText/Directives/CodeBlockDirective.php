@@ -35,7 +35,7 @@ use function trim;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
-class CodeBlockDirective extends BaseDirective
+final class CodeBlockDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/I3KttH/1 */
     public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d+)?(?:,\s*\d+(-\d+)?)*$/';

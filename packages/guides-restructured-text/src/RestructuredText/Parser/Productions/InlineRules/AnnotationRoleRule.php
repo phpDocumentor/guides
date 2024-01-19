@@ -23,7 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for text roles such as ``:ref:`something` `
  */
-class AnnotationRoleRule extends AbstractInlineRule
+final class AnnotationRoleRule extends AbstractInlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

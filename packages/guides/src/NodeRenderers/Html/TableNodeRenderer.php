@@ -22,7 +22,7 @@ use phpDocumentor\Guides\TemplateRenderer;
 use function is_a;
 
 /** @implements NodeRenderer<TableNode> */
-class TableNodeRenderer implements NodeRenderer
+final class TableNodeRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {

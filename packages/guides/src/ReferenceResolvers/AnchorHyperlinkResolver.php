@@ -23,7 +23,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
  *
  * A link is an anchor if it starts with a hashtag
  */
-class AnchorHyperlinkResolver implements ReferenceResolver
+final class AnchorHyperlinkResolver implements ReferenceResolver
 {
     public final const PRIORITY = -100;
 

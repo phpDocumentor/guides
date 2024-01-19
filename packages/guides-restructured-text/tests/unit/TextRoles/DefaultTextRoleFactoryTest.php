@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
-class DefaultTextRoleFactoryTest extends TestCase
+final class DefaultTextRoleFactoryTest extends TestCase
 {
     private Logger $logger;
     private DefaultTextRoleFactory $defaultTextRoleFactory;

@@ -23,7 +23,7 @@ use function is_array;
 use function is_string;
 use function sprintf;
 
-class XmlFileLoader extends FileLoader
+final class XmlFileLoader extends FileLoader
 {
     /** @return mixed[][] */
     public function load(mixed $resource, string|null $type = null): array

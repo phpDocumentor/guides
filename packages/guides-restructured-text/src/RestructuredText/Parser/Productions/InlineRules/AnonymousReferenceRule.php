@@ -28,7 +28,7 @@ use function trim;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#anonymous-hyperlinks
  */
-class AnonymousReferenceRule extends ReferenceRule
+final class AnonymousReferenceRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

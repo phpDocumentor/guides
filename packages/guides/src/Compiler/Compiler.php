@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Compiler\NodeTransformers\TransformerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use SplPriorityQueue;
 
-class Compiler
+final class Compiler
 {
     /** @var SplPriorityQueue<int, CompilerPass> */
     private readonly SplPriorityQueue $passes;

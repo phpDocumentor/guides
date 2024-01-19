@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
-class DocReferenceTextRole extends AbstractReferenceTextRole
+final class DocReferenceTextRole extends AbstractReferenceTextRole
 {
     final public const NAME = 'doc';
 

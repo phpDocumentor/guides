@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Metadata;
 
-class MetaNode extends MetadataNode
+final class MetaNode extends MetadataNode
 {
     public function __construct(protected string $key, string $value)
     {

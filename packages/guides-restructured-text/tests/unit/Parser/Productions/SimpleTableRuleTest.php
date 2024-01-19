@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class SimpleTableRuleTest extends RuleTestCase
+final class SimpleTableRuleTest extends RuleTestCase
 {
     private SimpleTableRule $rule;
 

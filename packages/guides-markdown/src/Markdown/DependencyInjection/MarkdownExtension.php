@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function dirname;
 
-class MarkdownExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
+final class MarkdownExtension extends Extension implements PrependExtensionInterface, CompilerPassInterface
 {
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

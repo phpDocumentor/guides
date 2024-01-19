@@ -23,15 +23,15 @@ use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class CollectLinkTargetsTransformerTest extends TestCase
+final class CollectLinkTargetsTransformerTest extends TestCase
 {
     private AnchorNormalizer&MockObject $anchorReducer;
     private CompilerContext $context;
-    private ProjectNode&MockObject $projectNode;
+    private ProjectNode $projectNode;
 
     protected function setUp(): void
     {
-        $this->projectNode = $this->createMock(ProjectNode::class);
+        $this->projectNode = new ProjectNode('some-name');
         $this->context = $this->getCompilerContext('some-path');
         $this->anchorReducer = $this->createMock(AnchorNormalizer::class);
     }

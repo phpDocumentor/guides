@@ -25,7 +25,7 @@ use function count;
 use function end;
 
 /** @implements NodeTransformer<Node> */
-class SectionEntryRegistrationTransformer implements NodeTransformer
+final class SectionEntryRegistrationTransformer implements NodeTransformer
 {
     /** @var SectionEntryNode[] $sectionStack */
     private array $sectionStack = [];

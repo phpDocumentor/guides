@@ -14,6 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends CompoundNode<InlineCompoundNode|TextNode> */
-class ParagraphNode extends CompoundNode
+final class ParagraphNode extends CompoundNode
 {
 }

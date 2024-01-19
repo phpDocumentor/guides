@@ -27,7 +27,7 @@ use function explode;
 use function str_contains;
 use function strtolower;
 
-class AuthorsFieldListItemRule implements FieldListItemRule
+final class AuthorsFieldListItemRule implements FieldListItemRule
 {
     public function applies(FieldListItemNode $fieldListItemNode): bool
     {

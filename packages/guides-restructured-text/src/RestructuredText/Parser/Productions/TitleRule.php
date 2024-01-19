@@ -31,7 +31,7 @@ use function trim;
  *
  * @implements Rule<TitleNode>
  */
-class TitleRule implements Rule
+final class TitleRule implements Rule
 {
     private const TITLE_LENGTH_MIN = 2;
 

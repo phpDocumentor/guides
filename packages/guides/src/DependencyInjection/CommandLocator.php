@@ -22,7 +22,7 @@ use function assert;
 use function is_object;
 use function sprintf;
 
-class CommandLocator implements HandlerLocator
+final class CommandLocator implements HandlerLocator
 {
     public function __construct(private readonly ContainerInterface $commands)
     {

@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function sprintf;
 
-class DocReferenceResolver implements ReferenceResolver
+final class DocReferenceResolver implements ReferenceResolver
 {
     public final const PRIORITY = 1000;
 

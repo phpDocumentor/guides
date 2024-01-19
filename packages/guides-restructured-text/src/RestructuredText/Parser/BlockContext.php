@@ -18,7 +18,7 @@ use function array_merge;
 /**
  * Our document parser contains
  */
-class BlockContext
+final class BlockContext
 {
     private readonly LinesIterator $documentIterator;
     

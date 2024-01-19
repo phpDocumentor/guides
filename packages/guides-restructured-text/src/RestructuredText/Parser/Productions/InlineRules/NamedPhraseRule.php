@@ -28,7 +28,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferencePar
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-references
  */
-class NamedPhraseRule extends ReferenceRule
+final class NamedPhraseRule extends ReferenceRule
 {
     use EmbeddedReferenceParser;
 

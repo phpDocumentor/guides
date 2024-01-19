@@ -34,7 +34,7 @@ use function trim;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/directives.html#generic-admonition
  */
-class AdmonitionDirective extends SubDirective
+final class AdmonitionDirective extends SubDirective
 {
     public function getName(): string
     {

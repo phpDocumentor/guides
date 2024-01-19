@@ -17,7 +17,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function strtolower;
 
-class SluggerAnchorNormalizer implements AnchorNormalizer
+final class SluggerAnchorNormalizer implements AnchorNormalizer
 {
     public function reduceAnchor(string $rawAnchor): string
     {

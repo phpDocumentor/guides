@@ -24,7 +24,7 @@ use function implode;
 use function is_a;
 
 /** @implements NodeRenderer<AdmonitionNode> */
-class AdmonitionNodeRenderer implements NodeRenderer
+final class AdmonitionNodeRenderer implements NodeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {

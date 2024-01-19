@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-class InlineLexerTest extends TestCase
+final class InlineLexerTest extends TestCase
 {
     /** @param int[] $result */
     #[DataProvider('inlineLexerProvider')]

@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class DocumentEntryRegistrationTransformerTest extends TestCase
+final class DocumentEntryRegistrationTransformerTest extends TestCase
 {
     private CompilerContext $context;
 

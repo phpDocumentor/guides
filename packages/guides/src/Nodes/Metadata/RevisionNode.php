@@ -17,6 +17,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  * The revision element contains the revision number of the document. It can be
  * used alone or in conjunction with version.
  */
-class RevisionNode extends MetadataNode
+final class RevisionNode extends MetadataNode
 {
 }

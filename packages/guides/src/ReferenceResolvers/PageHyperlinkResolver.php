@@ -27,7 +27,7 @@ use function substr;
  *
  * `Link Text <../page.rst>`_ or [Link Text](path/to/another/page.md)
  */
-class PageHyperlinkResolver implements ReferenceResolver
+final class PageHyperlinkResolver implements ReferenceResolver
 {
     // Named links and anchors take precedence
     public final const PRIORITY = -200;

@@ -19,7 +19,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 
 use function rtrim;
 
-class GlobSearcher
+final class GlobSearcher
 {
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,

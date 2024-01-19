@@ -25,7 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#sidebar
  */
-class SidebarDirective extends SubDirective
+final class SidebarDirective extends SubDirective
 {
     public function getName(): string
     {

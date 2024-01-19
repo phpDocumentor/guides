@@ -19,7 +19,7 @@ use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
 
-class EnvironmentBuilder
+final class EnvironmentBuilder
 {
     private Environment $environment;
 

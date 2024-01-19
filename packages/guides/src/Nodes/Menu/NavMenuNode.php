@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes\Menu;
 
 use function is_scalar;
 
-class NavMenuNode extends MenuNode
+final class NavMenuNode extends MenuNode
 {
     private string|null $currentPath = null;
     /** @var string[] */

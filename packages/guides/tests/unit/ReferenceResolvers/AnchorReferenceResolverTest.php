@@ -26,15 +26,15 @@ final class AnchorReferenceResolverTest extends TestCase
 {
     private AnchorNormalizer&MockObject $anchorReducer;
     private RenderContext&MockObject $renderContext;
-    private ProjectNode&MockObject $projectNode;
+    private ProjectNode $projectNode;
     private AnchorReferenceResolver $subject;
     private Stub&UrlGeneratorInterface $urlGenerator;
 
     protected function setUp(): void
     {
         $internalTarget = new InternalTarget('some-path', 'some-name');
-        $this->projectNode = $this->createMock(ProjectNode::class);
-        $this->projectNode->expects(self::once())->method('getInternalTarget')->willReturn($internalTarget);
+        $this->projectNode = new ProjectNode('some-name');
+        $this->projectNode->addLinkTarget('reduced-anchor', $internalTarget);
         $this->anchorReducer = $this->createMock(AnchorNormalizer::class);
         $this->renderContext = $this->createMock(RenderContext::class);
         $this->renderContext->expects(self::once())->method('getProjectNode')->willReturn($this->projectNode);
@@ -56,6 +56,7 @@ final class AnchorReferenceResolverTest extends TestCase
 
     public function testResolvedReferenceReturnsCanonicalUrl(): void
     {
+        $this->anchorReducer->expects(self::once())->method('reduceAnchor')->willReturn('reduced-anchor');
         $this->urlGenerator->method('generateCanonicalOutputUrl')->willReturn('canonical-url');
         $input = new ReferenceNode('lorem-ipsum');
         $messages = new Messages();

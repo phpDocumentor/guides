@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-class Message
+final class Message
 {
     /** @param array<string, mixed> $debugInfo */
     public function __construct(

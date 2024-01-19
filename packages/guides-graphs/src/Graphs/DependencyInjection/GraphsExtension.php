@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function dirname;
 
-class GraphsExtension extends Extension implements PrependExtensionInterface
+final class GraphsExtension extends Extension implements PrependExtensionInterface
 {
     /** @param mixed[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

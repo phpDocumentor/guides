@@ -17,7 +17,7 @@ use Generator;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class LinkRuleTest extends RuleTestCase
+final class LinkRuleTest extends RuleTestCase
 {
     private LinkRule $rule;
 

@@ -23,7 +23,7 @@ use function substr;
 /**
  * Rule for literals such as ``something``
  */
-class LiteralRule extends AbstractInlineRule
+final class LiteralRule extends AbstractInlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

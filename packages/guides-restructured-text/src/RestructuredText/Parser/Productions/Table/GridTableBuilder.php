@@ -34,7 +34,7 @@ use function str_contains;
 use function str_repeat;
 use function trim;
 
-class GridTableBuilder
+final class GridTableBuilder
 {
     public function __construct(private readonly LoggerInterface $logger)
     {

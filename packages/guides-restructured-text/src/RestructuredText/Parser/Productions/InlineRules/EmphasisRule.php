@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for default text roles such as `something`
  */
-class EmphasisRule extends AbstractInlineRule
+final class EmphasisRule extends AbstractInlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

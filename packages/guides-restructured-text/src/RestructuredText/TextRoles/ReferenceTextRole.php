@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 
-class ReferenceTextRole extends AbstractReferenceTextRole
+final class ReferenceTextRole extends AbstractReferenceTextRole
 {
     final public const NAME = 'ref';
 

@@ -29,7 +29,7 @@ use function implode;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#raw-data-pass-through
  */
-class RawDirective extends BaseDirective
+final class RawDirective extends BaseDirective
 {
     public function getName(): string
     {

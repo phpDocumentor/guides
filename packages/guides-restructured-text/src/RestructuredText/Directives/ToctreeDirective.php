@@ -31,7 +31,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
  */
-class ToctreeDirective extends BaseDirective
+final class ToctreeDirective extends BaseDirective
 {
     /** @param Rule<InlineCompoundNode> $startingRule */
     public function __construct(
