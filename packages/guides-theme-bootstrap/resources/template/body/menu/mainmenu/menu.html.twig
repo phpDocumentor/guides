@@ -2,7 +2,7 @@
         {% if node.caption %}
             <h2>{{ renderNode(node.caption) }}</h2>
         {% endif %}
-        <ul class="level-1">
+        <ul class="menu-level-main">
     {% for entry in node.menuEntries -%}
         <li><a href="{{ renderLink(entry.url) }}"
            class="nav-link {%- if node.currentPath == entry.url %} current {%- endif -%}{% if entry.url in node.rootlinePaths %} active {%- endif -%}"
