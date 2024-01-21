@@ -17,6 +17,7 @@ use Iterator;
 use OutOfBoundsException;
 
 use function chr;
+use function count;
 use function explode;
 use function max;
 use function mb_strpos;
@@ -131,6 +132,11 @@ final class LinesIterator implements Iterator
     public function toArray(): array
     {
         return $this->lines;
+    }
+
+    public function isEmpty(): bool
+    {
+        return count($this->lines) === 0 || (count($this->lines) === 1 && trim($this->lines[0]) === '');
     }
 
     /** @psalm-assert-if-false non-empty-string $line */
