@@ -41,11 +41,17 @@ Maxdepth 5
     page1
     subpage2/page1
 
-
-
 No Maxdepth
 
 .. toctree::
 
     page1
     subpage2/page1
+
+Glob
+
+.. toctree::
+    :glob:
+    :maxdepth: 1
+
+    subpages/*
