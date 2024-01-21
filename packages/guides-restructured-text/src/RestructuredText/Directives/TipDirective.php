@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class TipDirective extends AbstractAdmonitionDirective
+final class TipDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
     {

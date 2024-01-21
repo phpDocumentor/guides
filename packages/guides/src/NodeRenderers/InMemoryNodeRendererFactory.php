@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\NodeRenderers;
 
 use phpDocumentor\Guides\Nodes\Node;
 
-class InMemoryNodeRendererFactory implements NodeRendererFactory
+final class InMemoryNodeRendererFactory implements NodeRendererFactory
 {
     /** @var array<class-string<Node>, NodeRenderer<Node>> */
     private array $cache = [];

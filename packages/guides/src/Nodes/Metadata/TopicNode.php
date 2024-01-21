@@ -21,7 +21,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  * It can be created by the `.. topic::` directive or by a Bibliographic field list containing the keyword `:Abstract:`
  * or `:Dedication:`.
  */
-class TopicNode extends MetadataNode
+final class TopicNode extends MetadataNode
 {
     public function __construct(private readonly string $title, private readonly string $body)
     {

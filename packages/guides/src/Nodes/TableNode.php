@@ -19,7 +19,7 @@ use function count;
 use function max;
 
 /** @extends CompoundNode<Node> */
-class TableNode extends CompoundNode
+final class TableNode extends CompoundNode
 {
     /**
      * @param TableRow[] $data

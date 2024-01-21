@@ -23,7 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /**
  * A catch-all directive, the content is treated as content, the options passed on
  */
-class GeneralDirective extends SubDirective
+final class GeneralDirective extends SubDirective
 {
     public function getName(): string
     {

@@ -16,6 +16,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 /**
  * If set, warnings about this file not being included in any toctree will be suppressed.
  */
-class OrphanNode extends MetadataNode
+final class OrphanNode extends MetadataNode
 {
 }

@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
-class InternalReferenceRule extends ReferenceRule
+final class InternalReferenceRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

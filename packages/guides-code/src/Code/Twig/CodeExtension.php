@@ -19,7 +19,7 @@ use Twig\TwigFilter;
 
 use function is_array;
 
-class CodeExtension extends AbstractExtension
+final class CodeExtension extends AbstractExtension
 {
     public function __construct(
         private Highlighter $highlighter,

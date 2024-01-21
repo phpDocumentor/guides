@@ -25,7 +25,7 @@ use phpDocumentor\Guides\Nodes\Node;
  *
  * @extends CompoundNode<Node>
  */
-class ConfvalNode extends CompoundNode implements LinkTargetNode
+final class ConfvalNode extends CompoundNode implements LinkTargetNode
 {
     public const LINK_TYPE = 'std:confval';
 

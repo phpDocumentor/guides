@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for inline variables such as |replace_me|
  */
-class VariableInlineRule extends AbstractInlineRule
+final class VariableInlineRule extends AbstractInlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

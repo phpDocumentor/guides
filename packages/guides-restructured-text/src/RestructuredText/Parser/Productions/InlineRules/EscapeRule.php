@@ -23,7 +23,7 @@ use function substr;
 /**
  * Rule to escape characters with a backslash
  */
-class EscapeRule extends ReferenceRule
+final class EscapeRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

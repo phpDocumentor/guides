@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends CompoundNode<Node> */
-class SeparatorNode extends CompoundNode
+final class SeparatorNode extends CompoundNode
 {
     public function __construct(protected int $level)
     {

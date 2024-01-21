@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 use function sprintf;
 use function strtolower;
 
-class ProjectFieldListItemRule implements FieldListItemRule
+final class ProjectFieldListItemRule implements FieldListItemRule
 {
     public function __construct(private readonly LoggerInterface $logger)
     {

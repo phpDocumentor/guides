@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Cli\Logger;
 
 use PHPUnit\Framework\TestCase;
 
-class SpyProcessorTest extends TestCase
+final class SpyProcessorTest extends TestCase
 {
     public function testHasBeenCalledReturnsFalseByDefault(): void
     {

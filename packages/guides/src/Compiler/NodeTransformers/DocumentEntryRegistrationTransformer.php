@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use Psr\Log\LoggerInterface;
 
 /** @implements NodeTransformer<Node> */
-class DocumentEntryRegistrationTransformer implements NodeTransformer
+final class DocumentEntryRegistrationTransformer implements NodeTransformer
 {
     public function __construct(
         private readonly LoggerInterface $logger,

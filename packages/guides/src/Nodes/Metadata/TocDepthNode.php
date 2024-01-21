@@ -20,7 +20,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  *    This metadata effects to the depth of local toctree. But it does not effect to the depth of global
  *    toctree. So this would not be change the sidebar of some themes which uses global one.
  */
-class TocDepthNode extends MetadataNode
+final class TocDepthNode extends MetadataNode
 {
     public function __construct(int $value)
     {

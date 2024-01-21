@@ -42,7 +42,7 @@ use function trim;
 
 use const LC_ALL;
 
-class IntegrationTest extends ApplicationTestCase
+final class IntegrationTest extends ApplicationTestCase
 {
     private const CONTENT_START = '<!-- content start -->';
     private const CONTENT_END = '<!-- content end -->';

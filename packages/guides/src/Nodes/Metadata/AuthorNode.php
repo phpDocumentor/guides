@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Node;
 /**
  * The author element holds the name of the author of the document.
  */
-class AuthorNode extends MetadataNode
+final class AuthorNode extends MetadataNode
 {
     /** @param Node[] $children */
     public function __construct(string $plaintext, private readonly array $children)

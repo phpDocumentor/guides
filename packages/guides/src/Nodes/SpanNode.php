@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-class SpanNode extends TextNode
+final class SpanNode extends TextNode
 {
     /** @param InlineCompoundNode[] $tokens */
     public function __construct(string $content, protected array $tokens = [])

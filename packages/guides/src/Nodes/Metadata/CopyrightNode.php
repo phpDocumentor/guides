@@ -16,6 +16,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
 /**
  * The copyright element contains the document's copyright statement.
  */
-class CopyrightNode extends MetadataNode
+final class CopyrightNode extends MetadataNode
 {
 }

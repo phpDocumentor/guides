@@ -22,7 +22,7 @@ use function strtolower;
  *
  * .. [Ref] Book or article reference, URL or whatever.
  */
-class CitationNode extends AnnotationNode
+final class CitationNode extends AnnotationNode
 {
     public function getAnchor(): string
     {

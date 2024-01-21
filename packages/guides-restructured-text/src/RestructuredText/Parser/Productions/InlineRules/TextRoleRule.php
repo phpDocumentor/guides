@@ -22,7 +22,7 @@ use function substr;
 /**
  * Rule to parse for text roles such as ``:ref:`something` `
  */
-class TextRoleRule extends AbstractInlineRule
+final class TextRoleRule extends AbstractInlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

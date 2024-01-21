@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 
 use function is_string;
 
-class TabsDirective extends SubDirective
+final class TabsDirective extends SubDirective
 {
     private int $tabsCounter = 0;
 

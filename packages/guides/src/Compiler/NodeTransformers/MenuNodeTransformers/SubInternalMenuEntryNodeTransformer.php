@@ -24,7 +24,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use function assert;
 use function sprintf;
 
-class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
+final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
     use MenuEntryManagement;
     use SubSectionHierarchyHandler;

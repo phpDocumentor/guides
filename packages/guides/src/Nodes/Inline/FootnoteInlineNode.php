@@ -29,7 +29,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  *
  * https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#footnotes
  */
-class FootnoteInlineNode extends AnnotationInlineNode
+final class FootnoteInlineNode extends AnnotationInlineNode
 {
     final public const TYPE = 'footnote';
 

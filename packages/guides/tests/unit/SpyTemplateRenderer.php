@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides;
 
 use phpDocumentor\Guides\Nodes\Node;
 
-class SpyTemplateRenderer implements TemplateRenderer
+final class SpyTemplateRenderer implements TemplateRenderer
 {
     /** @var mixed[] */
     private array $context;

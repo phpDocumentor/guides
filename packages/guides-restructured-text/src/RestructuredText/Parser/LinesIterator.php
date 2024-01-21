@@ -27,7 +27,7 @@ use function str_replace;
 use function trim;
 
 /** @implements Iterator<string> */
-class LinesIterator implements Iterator
+final class LinesIterator implements Iterator
 {
     /** @var string[] */
     private array $lines = [];

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends AbstractNode<ImageNode> */
-class FigureNode extends AbstractNode
+final class FigureNode extends AbstractNode
 {
     public function __construct(ImageNode $image, protected Node|null $document = null)
     {

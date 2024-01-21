@@ -23,7 +23,7 @@ namespace phpDocumentor\Guides\Nodes;
  * .. [#f1] Text of the first footnote.
  * .. [#f2] Text of the second footnote.
  */
-class FootnoteNode extends AnnotationNode
+final class FootnoteNode extends AnnotationNode
 {
     /** @param list<InlineCompoundNode> $value */
     public function __construct(array $value, string $name, private int $number)

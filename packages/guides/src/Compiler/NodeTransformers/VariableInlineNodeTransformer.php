@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  * The "class" directive sets the "classes" attribute value on its content or on the first immediately following
  * non-comment element. https://docutils.sourceforge.io/docs/ref/rst/directives.html#class
  */
-class VariableInlineNodeTransformer implements NodeTransformer
+final class VariableInlineNodeTransformer implements NodeTransformer
 {
     public function __construct(
         private readonly LoggerInterface $logger,

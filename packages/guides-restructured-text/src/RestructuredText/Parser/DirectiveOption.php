@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use function strval;
 
-class DirectiveOption
+final class DirectiveOption
 {
     public function __construct(private readonly string $name, private string|int|float|bool|null $value = null)
     {

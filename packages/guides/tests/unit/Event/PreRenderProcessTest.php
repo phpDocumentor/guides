@@ -25,7 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
-class PreRenderProcessTest extends TestCase
+final class PreRenderProcessTest extends TestCase
 {
     private EventDispatcherInterface&MockObject $eventDispatcherMock;
 

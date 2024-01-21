@@ -20,7 +20,7 @@ use phpDocumentor\Guides\Nodes\FootnoteNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @implements NodeTransformer<Node> */
-class FootNodeNamedTransformer implements NodeTransformer
+final class FootNodeNamedTransformer implements NodeTransformer
 {
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {

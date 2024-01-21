@@ -22,7 +22,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  *
  * https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#citations
  */
-class CitationInlineNode extends AnnotationInlineNode
+final class CitationInlineNode extends AnnotationInlineNode
 {
     final public const TYPE = 'citation_inline';
 

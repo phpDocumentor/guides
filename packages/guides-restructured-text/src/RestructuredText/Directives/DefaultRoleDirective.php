@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#default-role
  */
-class DefaultRoleDirective extends ActionDirective
+final class DefaultRoleDirective extends ActionDirective
 {
     public function getName(): string
     {

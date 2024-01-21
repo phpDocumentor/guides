@@ -19,7 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 /** @implements Rule<CollectionNode> */
-class DirectiveContentRule implements Rule
+final class DirectiveContentRule implements Rule
 {
     public function __construct(private readonly RuleContainer $bodyElements)
     {

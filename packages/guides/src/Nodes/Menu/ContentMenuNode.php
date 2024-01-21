@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes\Menu;
 use function is_scalar;
 
 /** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */
-class ContentMenuNode extends MenuNode
+final class ContentMenuNode extends MenuNode
 {
     public function getDepth(): int
     {

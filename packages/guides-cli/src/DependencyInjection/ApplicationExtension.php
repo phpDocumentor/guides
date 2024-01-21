@@ -26,7 +26,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use function dirname;
 use function sprintf;
 
-class ApplicationExtension extends Extension implements CompilerPassInterface
+final class ApplicationExtension extends Extension implements CompilerPassInterface
 {
     /** @param string[] $configs */
     public function load(array $configs, ContainerBuilder $container): void

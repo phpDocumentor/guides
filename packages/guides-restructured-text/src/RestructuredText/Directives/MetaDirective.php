@@ -23,7 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  * .. meta::
  *      :key: value
  */
-class MetaDirective extends ActionDirective
+final class MetaDirective extends ActionDirective
 {
     public function getName(): string
     {

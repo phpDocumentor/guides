@@ -25,7 +25,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#highlights
  */
-class HighlightsDirective extends SubDirective
+final class HighlightsDirective extends SubDirective
 {
     public function getName(): string
     {

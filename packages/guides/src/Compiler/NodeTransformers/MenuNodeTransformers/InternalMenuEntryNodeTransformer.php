@@ -26,7 +26,7 @@ use function explode;
 use function implode;
 use function sprintf;
 
-class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
+final class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
     use MenuEntryManagement;
     use SubSectionHierarchyHandler;

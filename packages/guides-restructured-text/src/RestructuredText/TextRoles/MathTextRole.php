@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
-class MathTextRole extends BaseTextRole
+final class MathTextRole extends BaseTextRole
 {
     protected string $name = 'math';
 

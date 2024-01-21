@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use function in_array;
 
-class DefaultTextRoleFactory implements TextRoleFactory
+final class DefaultTextRoleFactory implements TextRoleFactory
 {
     /** @var TextRole[] */
     private array $textRoles;

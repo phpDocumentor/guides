@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#container
  */
-class TestLoggerDirective extends SubDirective
+final class TestLoggerDirective extends SubDirective
 {
     public function __construct(
         protected Rule $startingRule,

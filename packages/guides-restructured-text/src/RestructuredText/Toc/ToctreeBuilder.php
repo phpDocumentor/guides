@@ -29,7 +29,7 @@ use function str_contains;
 
 use const FILTER_VALIDATE_URL;
 
-class ToctreeBuilder
+final class ToctreeBuilder
 {
     use EmbeddedReferenceParser;
 

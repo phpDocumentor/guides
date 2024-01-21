@@ -23,7 +23,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-class ImplicitHyperlinkTargetPassTest extends TestCase
+final class ImplicitHyperlinkTargetPassTest extends TestCase
 {
     public function testAllImplicitUniqueSections(): void
     {

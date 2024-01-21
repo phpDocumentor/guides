@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use function assert;
 use function dirname;
 
-class CodeExtension extends Extension implements ConfigurationInterface, PrependExtensionInterface
+final class CodeExtension extends Extension implements ConfigurationInterface, PrependExtensionInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {

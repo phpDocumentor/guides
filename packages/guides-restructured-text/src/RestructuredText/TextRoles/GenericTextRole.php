@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
-class GenericTextRole extends BaseTextRole
+final class GenericTextRole extends BaseTextRole
 {
     protected string $name = 'default';
     protected string|null $baseRole = null;

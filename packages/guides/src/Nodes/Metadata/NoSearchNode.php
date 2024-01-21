@@ -18,6 +18,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  *
  * If the file is rendered to HTML the meta tag "noindex" will also be set.
  */
-class NoSearchNode extends MetadataNode
+final class NoSearchNode extends MetadataNode
 {
 }

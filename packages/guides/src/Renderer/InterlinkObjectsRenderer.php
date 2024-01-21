@@ -22,7 +22,7 @@ use function json_encode;
 
 use const JSON_PRETTY_PRINT;
 
-class InterlinkObjectsRenderer implements TypeRenderer
+final class InterlinkObjectsRenderer implements TypeRenderer
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,

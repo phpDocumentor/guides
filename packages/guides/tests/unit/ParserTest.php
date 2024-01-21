@@ -18,7 +18,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class ParserTest extends TestCase
+final class ParserTest extends TestCase
 {
     public function testParseWillThrowWhenInputFormatIsNotSupported(): void
     {

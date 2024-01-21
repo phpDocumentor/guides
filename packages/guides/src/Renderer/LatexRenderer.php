@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
-class LatexRenderer implements TypeRenderer
+final class LatexRenderer implements TypeRenderer
 {
     public function __construct(private readonly TemplateRenderer $renderer)
     {

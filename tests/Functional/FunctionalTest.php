@@ -56,7 +56,7 @@ use function trim;
 
 use const LC_ALL;
 
-class FunctionalTest extends ApplicationTestCase
+final class FunctionalTest extends ApplicationTestCase
 {
     private const SKIP_INDENTER_FILES = ['code-block-diff'];
 

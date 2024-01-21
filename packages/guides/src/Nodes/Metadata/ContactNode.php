@@ -17,7 +17,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  * The contact element holds contact information for the author (individual or group) of the document, or a
  * third-party contact. It is typically used for an email or web address.
  */
-class ContactNode extends MetadataNode
+final class ContactNode extends MetadataNode
 {
     public function __construct(private readonly string $email)
     {

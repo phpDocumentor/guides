@@ -26,7 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#epigraph
  */
-class EpigraphDirective extends SubDirective
+final class EpigraphDirective extends SubDirective
 {
     public function getName(): string
     {

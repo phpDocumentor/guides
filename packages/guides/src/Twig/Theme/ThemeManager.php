@@ -21,7 +21,7 @@ use function array_merge;
 use function implode;
 use function sprintf;
 
-class ThemeManager
+final class ThemeManager
 {
     /** @var array<string, ThemeConfig> */
     private array $themeMap = [];

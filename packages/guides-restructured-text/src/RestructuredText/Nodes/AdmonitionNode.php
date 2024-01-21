@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @extends CompoundNode<Node> */
-class AdmonitionNode extends CompoundNode
+final class AdmonitionNode extends CompoundNode
 {
     /** @param Node[] $value */
     public function __construct(private readonly string $name, private readonly InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)

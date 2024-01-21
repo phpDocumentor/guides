@@ -28,7 +28,7 @@ use function array_unique;
 use const DATE_RFC2822;
 
 /** @extends CompoundNode<DocumentNode> */
-class ProjectNode extends CompoundNode
+final class ProjectNode extends CompoundNode
 {
     /**
      * Variables are replacements in a document or project.

@@ -28,7 +28,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferencePar
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#anonymous-hyperlinks
  */
-class AnonymousPhraseRule extends ReferenceRule
+final class AnonymousPhraseRule extends ReferenceRule
 {
     use EmbeddedReferenceParser;
 

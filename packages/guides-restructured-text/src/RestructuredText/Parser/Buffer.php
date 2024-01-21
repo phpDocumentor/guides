@@ -26,7 +26,7 @@ use function trim;
 
 use const PHP_INT_MAX;
 
-class Buffer
+final class Buffer
 {
     /** @param string[] $lines */
     public function __construct(

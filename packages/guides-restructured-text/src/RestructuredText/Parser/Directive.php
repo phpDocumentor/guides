@@ -26,7 +26,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
  *
  * .. |variable| name::
  */
-class Directive
+final class Directive
 {
     private InlineCompoundNode|null $dataNode = null;
 

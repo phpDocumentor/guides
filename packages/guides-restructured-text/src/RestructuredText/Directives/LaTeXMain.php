@@ -21,7 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /**
  * Marks the document as LaTeX main
  */
-class LaTeXMain extends BaseDirective
+final class LaTeXMain extends BaseDirective
 {
     public function getName(): string
     {

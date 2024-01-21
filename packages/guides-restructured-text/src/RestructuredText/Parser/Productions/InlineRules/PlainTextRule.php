@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
-class PlainTextRule implements InlineRule
+final class PlainTextRule implements InlineRule
 {
     public function applies(InlineLexer $lexer): bool
     {

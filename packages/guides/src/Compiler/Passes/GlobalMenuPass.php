@@ -29,7 +29,7 @@ use function assert;
 
 use const PHP_INT_MAX;
 
-class GlobalMenuPass implements CompilerPass
+final class GlobalMenuPass implements CompilerPass
 {
     public function __construct(
         private readonly SettingsManager $settingsManager,

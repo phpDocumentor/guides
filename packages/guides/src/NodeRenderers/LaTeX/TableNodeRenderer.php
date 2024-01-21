@@ -29,7 +29,7 @@ use function is_a;
 use function max;
 
 /** @implements NodeRenderer<TableNode> */
-class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
+final class TableNodeRenderer implements NodeRenderer, NodeRendererFactoryAware
 {
     private NodeRendererFactory|null $nodeRendererFactory = null;
 

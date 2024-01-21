@@ -35,7 +35,7 @@ abstract class AbstractTabNode extends GeneralDirectiveNode
     {
         return $this->key;
     }
-    
+
     public function isActive(): bool
     {
         return $this->active;

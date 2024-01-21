@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineR
 
 use function usort;
 
+/** @internal */
 class InlineParser
 {
     /** @var InlineRule[] */

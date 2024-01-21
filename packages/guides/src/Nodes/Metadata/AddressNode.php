@@ -18,7 +18,7 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  * document, or a third-party contact address. Its structure is identical to that of the literal_block
  * element: whitespace is significant, especially newlines.
  */
-class AddressNode extends MetadataNode
+final class AddressNode extends MetadataNode
 {
     public function __construct(private readonly string $body)
     {

@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
-class LiteralTextRole extends BaseTextRole
+final class LiteralTextRole extends BaseTextRole
 {
     protected string $name = 'literal';
 

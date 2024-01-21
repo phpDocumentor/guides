@@ -33,7 +33,7 @@ use function dirname;
  *
  *      Here is an awesome caption
  */
-class FigureDirective extends SubDirective
+final class FigureDirective extends SubDirective
 {
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,

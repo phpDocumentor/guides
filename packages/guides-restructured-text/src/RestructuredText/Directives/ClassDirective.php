@@ -25,7 +25,7 @@ use function array_map;
 use function array_merge;
 use function explode;
 
-class ClassDirective extends SubDirective
+final class ClassDirective extends SubDirective
 {
     public function getName(): string
     {

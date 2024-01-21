@@ -24,7 +24,7 @@ use function file_put_contents;
 use function sys_get_temp_dir;
 use function tempnam;
 
-class PlantumlRenderer implements DiagramRenderer
+final class PlantumlRenderer implements DiagramRenderer
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly string $plantUmlBinaryPath)
     {

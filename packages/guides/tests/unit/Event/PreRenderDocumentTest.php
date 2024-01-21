@@ -21,7 +21,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\TestCase;
 
-class PreRenderDocumentTest extends TestCase
+final class PreRenderDocumentTest extends TestCase
 {
     public function testCreateEvent(): void
     {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Meta;
 
-class ExternalTarget implements Target
+final class ExternalTarget implements Target
 {
     public function __construct(
         private readonly string $url,

@@ -27,7 +27,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
  *
  * ```
  */
-class SpanTextRole extends BaseTextRole
+final class SpanTextRole extends BaseTextRole
 {
     protected string $name = 'span';
 

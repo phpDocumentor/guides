@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 /** @extends CompoundNode<InlineNode> */
-class InlineCompoundNode extends CompoundNode
+final class InlineCompoundNode extends CompoundNode
 {
     public function toString(): string
     {

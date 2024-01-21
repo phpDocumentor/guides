@@ -30,7 +30,7 @@ use function count;
  *
  * By default it displays a menu of the pages on level 1 up to level 2.
  */
-class MenuDirective extends BaseDirective
+final class MenuDirective extends BaseDirective
 {
     public function __construct(private readonly ToctreeBuilder $toctreeBuilder)
     {

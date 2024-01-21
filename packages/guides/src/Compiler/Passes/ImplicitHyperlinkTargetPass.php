@@ -35,7 +35,7 @@ use function prev;
  * This follows the reStructuredText rules as outlined in:
  * https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#implicit-hyperlink-targets
  */
-class ImplicitHyperlinkTargetPass implements CompilerPass
+final class ImplicitHyperlinkTargetPass implements CompilerPass
 {
     public function getPriority(): int
     {

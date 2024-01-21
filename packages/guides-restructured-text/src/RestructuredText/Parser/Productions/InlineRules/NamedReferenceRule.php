@@ -28,7 +28,7 @@ use function rtrim;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#hyperlink-references
  */
-class NamedReferenceRule extends ReferenceRule
+final class NamedReferenceRule extends ReferenceRule
 {
     public function applies(InlineLexer $lexer): bool
     {

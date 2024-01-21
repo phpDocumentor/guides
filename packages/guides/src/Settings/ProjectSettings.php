@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Settings;
 
-class ProjectSettings
+final class ProjectSettings
 {
     /** @var array<string, string> */
     private array $inventories = [];

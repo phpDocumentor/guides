@@ -17,6 +17,6 @@ namespace phpDocumentor\Guides\Nodes\Metadata;
  * The version element contains the version number of the document. It can be
  * used alone or in conjunction with revision.
  */
-class VersionNode extends MetadataNode
+final class VersionNode extends MetadataNode
 {
 }
