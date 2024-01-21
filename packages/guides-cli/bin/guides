@@ -40,8 +40,9 @@ if ($input->hasParameterOption('-vvv', true)) {
 
 $containerFactory = new ContainerFactory([new ApplicationExtension()]);
 
-$projectConfig = realpath($vendorDir . '/../guides.xml');
+$projectConfig = $vendorDir . '/../guides.xml';
 if (is_file($projectConfig)) {
+    $projectConfig = realpath($vendorDir . '/../guides.xml');
     if ($verbosity === 3) {
         echo 'Loading guides.xml from ' . $projectConfig . PHP_EOL;
     }
