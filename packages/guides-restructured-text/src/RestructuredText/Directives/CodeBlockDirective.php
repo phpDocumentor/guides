@@ -62,6 +62,12 @@ final class CodeBlockDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
+        if ($blockContext->getDocumentIterator()->isEmpty()) {
+            $this->logger->warning('The code-block has no content. Did you properly indent the code? ', $blockContext->getLoggerInformation());
+
+            return null;
+        }
+
         $node = new CodeNode(
             $blockContext->getDocumentIterator()->toArray(),
         );
