@@ -19,6 +19,8 @@ use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use Psr\Log\LoggerInterface;
 
 use function array_pop;
 use function assert;
@@ -33,6 +35,13 @@ final class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
 
     // Setting a default level prevents PHP errors in case of circular references
     private const DEFAULT_MAX_LEVELS = 10;
+
+    public function __construct(
+        LoggerInterface $logger,
+        private readonly DocumentNameResolverInterface $documentNameResolver,
+    ) {
+        parent::__construct($logger);
+    }
 
     public function supports(Node $node): bool
     {
@@ -81,7 +90,7 @@ final class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
         return [];
     }
 
-    private static function matches(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool
+    private function matches(string $actualFile, InternalMenuEntryNode $parsedMenuEntryNode, string $currentFile): bool
     {
         $expectedFile = $parsedMenuEntryNode->getUrl();
         if (self::isAbsoluteFile($expectedFile)) {
@@ -90,8 +99,9 @@ final class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
 
         $current = explode('/', $currentFile);
         array_pop($current);
-        $current[] = $expectedFile;
-        $absoluteExpectedFile = implode('/', $current);
+
+
+        $absoluteExpectedFile = $this->documentNameResolver->canonicalUrl(implode('/', $current), $expectedFile);
 
         return $absoluteExpectedFile === $actualFile;
     }
