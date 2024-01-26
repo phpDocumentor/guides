@@ -1,0 +1,1 @@
+3.0 is treated as a float in the TreeBuilder and the trailing zero is lost
