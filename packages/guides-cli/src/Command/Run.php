@@ -53,15 +53,12 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use function array_pop;
 use function assert;
 use function count;
-use function getcwd;
 use function implode;
 use function is_countable;
 use function is_dir;
 use function microtime;
 use function pathinfo;
-use function realpath;
 use function sprintf;
-use function str_starts_with;
 use function strtoupper;
 
 final class Run extends Command
@@ -261,7 +258,7 @@ final class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $settings = $this->getSettingsOverriddenWithInput($input);
-        $inputDir = $this->getAbsolutePath($settings->getInput());
+        $inputDir = $settings->getInput();
         if (!is_dir($inputDir)) {
             throw new RuntimeException(sprintf('Input directory "%s" was not found! ' . "\n" .
                 'Run "vendor/bin/guides -h" for information on how to configure this command.', $inputDir));
@@ -281,7 +278,7 @@ final class Run extends Command
         $projectNode = $event->getProjectNode();
         $settings = $event->getSettings();
 
-        $outputDir = $this->getAbsolutePath($settings->getOutput());
+        $outputDir = $settings->getOutput();
         $sourceFileSystem = new Filesystem(new Local($settings->getInput()));
         $sourceFileSystem->addPlugin(new Finder());
         $logPath = $settings->getLogPath();
@@ -366,22 +363,5 @@ final class Run extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    private function getAbsolutePath(string $path): string
-    {
-        $absolutePath = $path;
-        if (!str_starts_with($absolutePath, '/')) {
-            if (getcwd() === false) {
-                throw new RuntimeException('Cannot find current working directory, use absolute paths.');
-            }
-
-            $absolutePath = realpath(getcwd() . '/' . $absolutePath);
-            if ($absolutePath === false) {
-                throw new RuntimeException('Cannot find path "' . $path . '".');
-            }
-        }
-
-        return $absolutePath;
     }
 }
