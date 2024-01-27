@@ -153,13 +153,21 @@ final class DirectiveRule implements Rule
      */
     private function postProcessNode(Node $node, array $options): Node
     {
+        $optionsForNode = [];
         foreach ($options as $option) {
-            if ($option->getName() !== 'class' || !is_string($option->getValue()) || $option->getValue() === '') {
+            if (!is_string($option->getValue())) {
                 continue;
             }
 
-            $node->setClasses(array_merge($node->getClasses(), explode(' ', (string) $option->getValue())));
+            if ($option->getName() === 'class') {
+                $node->setClasses(array_merge($node->getClasses(), explode(' ', (string) $option->getValue())));
+                continue;
+            }
+
+            $optionsForNode[$option->getName()] = $option->getValue();
         }
+
+        $node = $node->withOptions(array_merge($optionsForNode, $node->getOptions()));
 
         return $node;
     }
