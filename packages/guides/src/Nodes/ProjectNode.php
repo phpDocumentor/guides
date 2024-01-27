@@ -117,6 +117,12 @@ final class ProjectNode extends CompoundNode
         $this->title = $title;
     }
 
+    /** @return array<string, Node> */
+    public function getVariables(): array
+    {
+        return $this->variables;
+    }
+
     public function getVariable(string $name, Node|null $default): Node|null
     {
         return $this->variables[$name] ?? $default;
