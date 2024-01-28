@@ -38,7 +38,10 @@ use function array_values;
 use function assert;
 use function dirname;
 use function is_array;
+use function is_int;
+use function is_string;
 use function pathinfo;
+use function var_export;
 
 final class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface, PrependExtensionInterface
 {
@@ -55,7 +58,20 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->arrayNode('project')
                     ->children()
                         ->scalarNode('title')->end()
-                        ->scalarNode('version')->end()
+                        ->scalarNode('version')
+                            ->beforeNormalization()
+                            ->always(
+                                // We need to revert the phpize call in XmlUtils. Version is always a string!
+                                static function ($value) {
+                                    if (!is_int($value) && !is_string($value)) {
+                                        return var_export($value, true);
+                                    }
+
+                                    return $value;
+                                },
+                            )
+                            ->end()
+                        ->end()
                         ->scalarNode('release')->end()
                         ->scalarNode('copyright')->end()
                     ->end()
