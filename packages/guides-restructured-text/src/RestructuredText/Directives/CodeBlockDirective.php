@@ -18,10 +18,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use Psr\Log\LoggerInterface;
 
-use function preg_match;
 use function trim;
 
 /**
@@ -37,9 +35,6 @@ use function trim;
  */
 final class CodeBlockDirective extends BaseDirective
 {
-    /** @see https://regex101.com/r/I3KttH/1 */
-    public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d+)?(?:,\s*\d+(-\d+)?)*$/';
-
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
@@ -78,10 +73,7 @@ final class CodeBlockDirective extends BaseDirective
             $node->setLanguage($blockContext->getDocumentParserContext()->getCodeBlockDefaultLanguage());
         }
 
-        $this->setStartingLineNumberBasedOnOptions($directive->getOptions(), $node);
-        $this->setCaptionBasedOnOptions($directive->getOptions(), $node);
-        $this->setEmphasizeLinesBasedOnOptions($blockContext, $directive->getOptions(), $node);
-        $this->codeNodeOptionMapper->apply($node, $directive->getOptions());
+        $this->codeNodeOptionMapper->apply($node, $directive->getOptions(), $blockContext);
 
         if ($directive->getVariable() !== '') {
             $document = $blockContext->getDocumentParserContext()->getDocument();
@@ -91,52 +83,5 @@ final class CodeBlockDirective extends BaseDirective
         }
 
         return $node;
-    }
-
-    /** @param array<string, DirectiveOption> $options */
-    private function setStartingLineNumberBasedOnOptions(array $options, CodeNode $node): void
-    {
-        $startingLineNumber = null;
-        if (isset($options['linenos']) || isset($options['number-lines'])) {
-            $startingLineNumber = 1;
-        }
-
-        if (isset($options['number-lines'])) {
-            $startingLineNumber = $options['number-lines']->getValue() ?? $startingLineNumber;
-        } elseif (isset($options['lineno-start'])) {
-            $startingLineNumber = $options['lineno-start']->getValue() ?? $startingLineNumber;
-        }
-
-        if ($startingLineNumber === null) {
-            return;
-        }
-
-        $node->setStartingLineNumber((int) $startingLineNumber);
-    }
-
-    /** @param DirectiveOption[] $options */
-    private function setCaptionBasedOnOptions(array $options, CodeNode $node): void
-    {
-        $caption = null;
-        if (isset($options['caption'])) {
-            $caption = (string) $options['caption']->getValue();
-        }
-
-        $node->setCaption($caption);
-    }
-
-    /** @param DirectiveOption[] $options */
-    private function setEmphasizeLinesBasedOnOptions(BlockContext $blockContext, array $options, CodeNode $node): void
-    {
-        $emphasizeLines = null;
-        if (isset($options['emphasize-lines'])) {
-            $emphasizeLines = (string) $options['emphasize-lines']->getValue();
-            if (!preg_match(self::LINE_NUMBER_RANGES_REGEX, $emphasizeLines)) {
-                // Input does not fit the pattern, log a warning
-                $this->logger->warning('Invalid value for option emphasize-lines in code-block directive. Expected format: \'1-5, 7, 33\'', $blockContext->getLoggerInformation());
-            }
-        }
-
-        $node->setEmphasizeLines($emphasizeLines);
     }
 }

@@ -57,7 +57,7 @@ final class LiteralincludeDirective extends BaseDirective
         }
 
         $codeNode = new CodeNode(explode("\n", $contents));
-        $this->codeNodeOptionMapper->apply($codeNode, $directive->getOptions());
+        $this->codeNodeOptionMapper->apply($codeNode, $directive->getOptions(), $blockContext);
 
         return $codeNode;
     }

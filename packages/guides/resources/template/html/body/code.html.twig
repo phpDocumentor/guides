@@ -4,7 +4,7 @@
 {%- else -%}
     {% if node.caption %}
         <div class="code-block-caption">
-            <span class="caption-text">{{ node.caption }}</span>
+            <span class="caption-text">{{ renderNode(node.caption) }}</span>
         </div>
     {%- endif -%}
     <pre{% if node.classes %} class="{{ node.classesString }}"{% endif %}><code class="language-{{ node.language }}{{ node.startingLineNumber ? ' line-numbers' }}"
