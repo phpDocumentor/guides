@@ -20,7 +20,7 @@ final class CodeNode extends TextNode
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;
 
-    private string|null $caption = null;
+    private InlineCompoundNode|null $caption = null;
 
     private string|null $emphasizeLines = null;
 
@@ -50,12 +50,12 @@ final class CodeNode extends TextNode
         return $this->startingLineNumber;
     }
 
-    public function getCaption(): string|null
+    public function getCaption(): InlineCompoundNode|null
     {
         return $this->caption;
     }
 
-    public function setCaption(string|null $caption): void
+    public function setCaption(InlineCompoundNode|null $caption): void
     {
         $this->caption = $caption;
     }

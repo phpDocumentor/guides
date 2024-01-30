@@ -108,11 +108,12 @@ NOWDOC);
     #[DataProvider('codeBlockValueProvider')]
     public function testCodeBlockValue(string $input, string $expectedValue): void
     {
+        $logger = new Logger('test');
         $this->rule = new DirectiveRule(
             $this->givenInlineMarkupRule(),
             new Logger('test'),
             new GeneralDirective(new DirectiveContentRule(new RuleContainer())),
-            [$this->directiveHandler, new CodeBlockDirective(new Logger('test'), new CodeNodeOptionMapper())],
+            [$this->directiveHandler, new CodeBlockDirective($logger, $this->createMock(CodeNodeOptionMapper::class))],
         );
         $context = $this->createContext($input);
         $node = $this->rule->apply($context);

@@ -38,6 +38,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\DefaultCodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Directives\PullQuoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ReplaceDirective;
@@ -172,9 +173,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ClassDirective::class)
         ->set(CodeBlockDirective::class)
         ->args([
-            '$codeNodeOptionMapper' => service(
-                CodeNodeOptionMapper::class,
-            ),
+            '$codeNodeOptionMapper' => service(CodeNodeOptionMapper::class),
         ])
         ->set(ConfvalDirective::class)
         ->set(ConfigurationBlockDirective::class)
@@ -352,5 +351,7 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
-        ->set(CodeNodeOptionMapper::class);
+        ->set(InlineMarkupRule::class)
+        ->set(DefaultCodeNodeOptionMapper::class)
+        ->alias(CodeNodeOptionMapper::class, DefaultCodeNodeOptionMapper::class);
 };
