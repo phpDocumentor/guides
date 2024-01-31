@@ -28,7 +28,7 @@
         "league/uri": "^6.5 || ^7.0",
         "phpdocumentor/flyfinder": "^1.1",
         "psr/event-dispatcher": "^1.0",
-        "symfony/clock": "^6.4.2",
+        "symfony/clock": "^6.4.3",
         "symfony/string": "^5.4 || ^6.3 || ^7.0",
         "symfony/translation-contracts": "^3.4.1",
         "symfony/http-client": "^6.4.2",
