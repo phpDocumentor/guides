@@ -48,4 +48,3 @@ If you are looking for a complete solution to create a documentation website the
     architecture
     reference/index
     contributions/index
-    about
