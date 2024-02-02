@@ -16,6 +16,17 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
+/**
+ * Role to create a math block.
+ *
+ * A math block is a block of text that is displayed as-is, without any formatting.
+ *
+ * Example:
+ *
+ * ```rest
+ * :math:`code`
+ * ```
+ */
 final class MathTextRole extends BaseTextRole
 {
     protected string $name = 'math';

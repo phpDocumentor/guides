@@ -15,6 +15,15 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\SectionNode;
 
+/**
+ *  Role to create references to link targets.
+ *
+ *  Example:
+ *
+ * ```rest
+ *  :ref:`label`
+ * ```
+ */
 final class GenericLinkProvider
 {
     /** @var array<string, string> */

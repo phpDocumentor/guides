@@ -17,6 +17,15 @@ use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
+/**
+ * Role to create a reference to a document.
+ *
+ * Example:
+ *
+ * ```rest
+ * :doc:`doc/index`
+ * ```
+ */
 final class DocReferenceTextRole extends AbstractReferenceTextRole
 {
     final public const NAME = 'doc';

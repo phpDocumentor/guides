@@ -21,6 +21,15 @@ use Psr\Log\LoggerInterface;
 use function preg_match;
 use function trim;
 
+/**
+ * Role to create an abbreviation.
+ *
+ * Example:
+ *
+ * ```rest
+ * :abbreviation:`term (some term definition)`
+ * ```
+ */
 final class AbbreviationTextRole extends BaseTextRole
 {
     protected string $name = 'abbreviation';
