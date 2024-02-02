@@ -40,6 +40,7 @@ use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -115,6 +116,13 @@ final class Run extends Command
             null,
             InputOption::VALUE_NONE,
             'If set, returns a non-zero exit code as soon as any warnings/errors occur',
+        );
+
+        $this->addOption(
+            'fail-on-error',
+            null,
+            InputOption::VALUE_NONE,
+            'If set, returns a non-zero exit code as soon as any errors occur',
         );
 
         $this->addOption(
@@ -240,8 +248,12 @@ final class Run extends Command
             $settings->setLogPath((string) $input->getOption('log-path'));
         }
 
+        if ($input->getOption('fail-on-error')) {
+            $settings->setFailOnError(LogLevel::ERROR);
+        }
+
         if ($input->getOption('fail-on-log')) {
-            $settings->setFailOnError(true);
+            $settings->setFailOnError(LogLevel::WARNING);
         }
 
         if (count($input->getOption('output-format')) > 0) {
@@ -290,7 +302,7 @@ final class Run extends Command
         }
 
         if ($settings->isFailOnError()) {
-            $spyProcessor = new SpyProcessor();
+            $spyProcessor = new SpyProcessor($settings->getFailOnError());
             $this->logger->pushProcessor($spyProcessor);
         }
 

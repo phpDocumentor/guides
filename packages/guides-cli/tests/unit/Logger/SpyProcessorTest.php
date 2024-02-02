@@ -27,7 +27,7 @@ final class SpyProcessorTest extends TestCase
     public function testItKnowsWhenALogIsEmitted(): void
     {
         $process = new SpyProcessor();
-        $process(['channel' => 'test']);
+        $process(['channel' => 'test', 'level_name' => 'warning']);
         self::assertTrue($process->hasBeenCalled());
     }
 }

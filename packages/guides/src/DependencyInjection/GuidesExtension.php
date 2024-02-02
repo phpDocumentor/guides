@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -105,6 +106,7 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->end()
                 ->scalarNode('log_path')->end()
                 ->scalarNode('fail_on_log')->end()
+                ->scalarNode('fail_on_error')->end()
                 ->scalarNode('show_progress')->end()
                 ->scalarNode('links_are_relative')->end()
                 ->scalarNode('max_menu_depth')->end()
@@ -223,8 +225,12 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
             $projectSettings->setShowProgressBar((bool) $config['show_progress']);
         }
 
+        if (isset($config['fail_on_error'])) {
+            $projectSettings->setFailOnError(LogLevel::ERROR);
+        }
+
         if (isset($config['fail_on_log'])) {
-            $projectSettings->setFailOnError((bool) $config['show_progress']);
+            $projectSettings->setFailOnError(LogLevel::WARNING);
         }
 
         if (isset($config['max_menu_depth'])) {

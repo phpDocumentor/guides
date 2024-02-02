@@ -15,6 +15,9 @@ namespace phpDocumentor\Guides\Cli\Logger;
 
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
+use Psr\Log\LogLevel;
+
+use function strtolower;
 
 /**
  * This decorator has an extra method to check whether anything was logged
@@ -25,6 +28,10 @@ final class SpyProcessor implements ProcessorInterface
 {
     private bool $hasBeenCalled = false;
 
+    public function __construct(private string|null $level = LogLevel::WARNING)
+    {
+    }
+
     public function hasBeenCalled(): bool
     {
         return $this->hasBeenCalled;
@@ -32,7 +39,9 @@ final class SpyProcessor implements ProcessorInterface
 
     public function __invoke(array|LogRecord $record): array|LogRecord
     {
-        $this->hasBeenCalled = true;
+        if (strtolower($record['level_name']) === $this->level) {
+            $this->hasBeenCalled = true;
+        }
 
         return $record;
     }

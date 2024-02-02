@@ -29,7 +29,7 @@ final class ProjectSettings
     /** @var string[]  */
     private array $outputFormats = ['html'];
     private string $logPath = 'php://stder';
-    private bool $failOnError = false;
+    private string|null $failOnError = null;
     private bool $showProgressBar = true;
     private bool $linksRelative = false;
     private string $defaultCodeLanguage = '';
@@ -119,12 +119,17 @@ final class ProjectSettings
 
     public function isFailOnError(): bool
     {
+        return $this->failOnError !== null;
+    }
+
+    public function getFailOnError(): string|null
+    {
         return $this->failOnError;
     }
 
-    public function setFailOnError(bool $failOnError): void
+    public function setFailOnError(string $logLevel): void
     {
-        $this->failOnError = $failOnError;
+        $this->failOnError = $logLevel;
     }
 
     public function isShowProgressBar(): bool

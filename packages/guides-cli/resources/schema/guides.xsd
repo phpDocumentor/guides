@@ -24,6 +24,7 @@
         <xsd:attribute name="input-format" type="xsd:string"/>
         <xsd:attribute name="log-path" type="xsd:string"/>
         <xsd:attribute name="fail-on-log" type="xsd:string"/>
+        <xsd:attribute name="fail-on-error" type="xsd:string"/>
         <xsd:attribute name="show-progress" type="xsd:string"/>
         <xsd:attribute name="theme" type="xsd:string"/>
         <xsd:attribute name="default-code-language" type="xsd:string"/>
