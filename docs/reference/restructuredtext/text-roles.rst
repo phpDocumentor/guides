@@ -10,6 +10,19 @@ You can also :doc:`add your own custom text roles </extension/text-roles>`.
 
 Currently the following text roles are implemented:
 
+.. phpdoc:class-list:: [?(@.interfacesIncludingInherited contains "\phpDocumentor\Guides\RestructuredText\TextRoles\TextRole")]
+
+   .. phpdoc:name::
+      :title: true
+      :level: 2
+
+   .. phpdoc:summary::
+   .. phpdoc:description::
+
+
+Examples
+========
+
 :ref:`Reference somewhere <basic-text-role>`
 
 :doc:`Reference to document </extension/text-roles>`

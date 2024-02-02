@@ -16,6 +16,17 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use phpDocumentor\Guides\Nodes\Inline\GenericTextRoleInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 
+/**
+ * Role to create a literal block.
+ *
+ * A literal block is a block of text that is displayed as-is, without any formatting.
+ *
+ * Example:
+ *
+ * ```rest
+ * :literal:`code`
+ * ```
+ */
 final class LiteralTextRole extends BaseTextRole
 {
     protected string $name = 'literal';
