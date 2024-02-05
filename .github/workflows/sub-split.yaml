@@ -33,7 +33,7 @@ jobs:
         with:
           path: "./.splitsh"
           key: "${{ runner.os }}-splitsh-d-101"
-      - uses: "frankdejonge/use-subsplit-publish@1.0.0"
+      - uses: "frankdejonge/use-subsplit-publish@1.1.0"
         with:
           source-branch: "main"
           config-path: "./config.subsplit-publish.json"
