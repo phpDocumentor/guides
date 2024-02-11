@@ -35,7 +35,7 @@ final class AnchorReferenceResolver implements ReferenceResolver
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
-        if (!$node instanceof ReferenceNode) {
+        if (!$node instanceof ReferenceNode || $node->getInterlinkDomain() !== '') {
             return false;
         }
 
