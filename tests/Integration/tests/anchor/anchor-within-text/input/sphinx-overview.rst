@@ -1,3 +1,5 @@
+:orphan:
+
 .. _sphinx-overview:
 
 Sphinx Overview
