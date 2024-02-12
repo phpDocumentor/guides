@@ -73,6 +73,9 @@ final class CompilerContext
     /** @return array<string, string> */
     public function getLoggerInformation(): array
     {
+        if (!isset($this->shadowTree)) {
+            return [];
+        }
         return [...$this->getDocumentNode()->getLoggerInformation()];
     }
 }
