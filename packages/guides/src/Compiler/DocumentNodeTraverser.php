@@ -55,7 +55,9 @@ final class DocumentNodeTraverser
 
         if ($supports) {
             $transformed = $transformer->enterNode($node, $compilerContext);
-            $shadowNode->getParent()?->replaceChild($node, $transformed);
+            if ($transformed !== $node) {
+                $shadowNode->getParent()?->replaceChild($node, $transformed);
+            }
         }
 
         foreach ($shadowNode->getChildren() as $shadowChild) {
@@ -68,7 +70,9 @@ final class DocumentNodeTraverser
 
         $transformed = $transformer->leaveNode($node, $compilerContext);
         if ($transformed !== null) {
-            $shadowNode->getParent()?->replaceChild($node, $transformed);
+            if ($transformed !== $node) {
+                $shadowNode->getParent()?->replaceChild($node, $transformed);
+            }
 
             return;
         }
