@@ -16,16 +16,15 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
-
 use phpDocumentor\Guides\Nodes\TitleNode;
+
 use function array_pop;
-use function assert;
 use function count;
 use function end;
+
+use const PHP_INT_MAX;
 
 /** @implements NodeTransformer<Node> */
 final class SectionCreationTransformer implements NodeTransformer
@@ -33,21 +32,17 @@ final class SectionCreationTransformer implements NodeTransformer
     /** @var SectionNode[] $sectionStack */
     private array $sectionStack = [];
 
-
     public function enterNode(Node $node, CompilerContext $compilerContext): Node
     {
         if (!$compilerContext->getShadowTree()->getParent()?->getNode() instanceof DocumentNode) {
             return $node;
         }
-        if ($node instanceof TitleNode) {
-            if (count($this->sectionStack) === 0) {
-                $this->sectionStack[] = new SectionNode($node);
-            }
-        }
 
-        $lastSection = end($this->sectionStack);
-        if ($lastSection instanceof SectionNode) {
-            $lastSection->addChildNode($node);
+        if (!$node instanceof TitleNode) {
+            $lastSection = end($this->sectionStack);
+            if ($lastSection instanceof SectionNode) {
+                $lastSection->addChildNode($node);
+            }
         }
 
         return $node;
@@ -58,18 +53,50 @@ final class SectionCreationTransformer implements NodeTransformer
         if (!$compilerContext->getShadowTree()->getParent()?->getNode() instanceof DocumentNode) {
             return $node;
         }
-        // Try removing all nodes...
-        return null;
-        /*
-        if (count($this->sectionStack) === 0) {
+
+        if ($node instanceof SectionNode) {
             return $node;
         }
+
+        if (count($this->sectionStack) === 0 && !$node instanceof TitleNode) {
+            return $node;
+        }
+
+        if (count($this->sectionStack) > 0 && $compilerContext->getShadowTree()->isLastChildOfParent()) {
+            $lastSection = end($this->sectionStack);
+            while ($lastSection?->getTitle()->getLevel() > 1) {
+                $lastSection = array_pop($this->sectionStack);
+            }
+
+            return $lastSection;
+        }
+
         if ($node instanceof TitleNode) {
-            return array_pop($this->sectionStack);
+            $lastSection = end($this->sectionStack);
+            if ($lastSection instanceof SectionNode && $node !== $lastSection->getTitle() && $node->getLevel() <= $lastSection->getTitle()->getLevel()) {
+                while (end($this->sectionStack) instanceof SectionNode && $node !== end($this->sectionStack)->getTitle() && $node->getLevel() <= end($this->sectionStack)->getTitle()->getLevel()) {
+                    $lastSection = array_pop($this->sectionStack);
+                }
+
+                $newSection = new SectionNode($node);
+                if (end($this->sectionStack) instanceof SectionNode) {
+                    end($this->sectionStack)->addChildNode($newSection);
+                }
+
+                $this->sectionStack[] = $newSection;
+
+                return $lastSection?->getTitle()->getLevel() === 1 ? $lastSection : null;
+            } else {
+                $newSection = new SectionNode($node);
+                if ($lastSection instanceof SectionNode) {
+                    $lastSection->addChildNode($newSection);
+                }
+
+                $this->sectionStack[] = $newSection;
+            }
         }
 
         return null;
-        */
     }
 
     public function supports(Node $node): bool
@@ -79,7 +106,7 @@ final class SectionCreationTransformer implements NodeTransformer
 
     public function getPriority(): int
     {
-        // Before SectionEntryRegistrationTransformer
-        return 1;
+        // Should run as first transformer
+        return PHP_INT_MAX;
     }
 }
