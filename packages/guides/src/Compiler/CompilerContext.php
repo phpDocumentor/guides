@@ -76,6 +76,7 @@ final class CompilerContext
         if (!isset($this->shadowTree)) {
             return [];
         }
+
         return [...$this->getDocumentNode()->getLoggerInformation()];
     }
 }

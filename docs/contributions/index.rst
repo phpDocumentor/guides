@@ -4,6 +4,13 @@
 Contributions
 =============
 
+.. toctree::
+    :glob:
+    :hidden:
+
+    *
+
+
 Clone the mono repository
 =========================
 

@@ -35,9 +35,12 @@ are currently reading about::
 
 You will then find the rendered documentation in the directory output
 
-.. toctree::
+..  toctree::
+
     about
     usage
     configuration
+    components/index
     extension/index
     rst-reference/index
+    contributions/index
