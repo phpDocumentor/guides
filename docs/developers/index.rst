@@ -12,3 +12,5 @@ it in some other way that is not possible with the ``guides`` command line tool.
    :titlesonly:
 
    extensions/index
+   compiler
+   directive

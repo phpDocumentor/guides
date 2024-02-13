@@ -1,5 +1,7 @@
 ..  include:: /include.rst.txt
 
+.. _developer-extension:
+
 ==========
 Extensions
 ==========
