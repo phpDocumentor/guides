@@ -1,5 +1,7 @@
 ..  include:: /include.rst.txt
 
+.. _directive-reference:
+
 ===========
 Admonitions
 ===========
