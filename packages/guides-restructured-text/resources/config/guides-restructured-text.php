@@ -89,6 +89,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\GridTableRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\LineBlockRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\LinkRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\ListRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\LiteralBlockRule;
@@ -256,6 +257,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(EnumeratedListRule::class)
         ->arg('$productions', service('phpdoc.guides.parser.rst.body_elements'))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => EnumeratedListRule::PRIORITY])
+        ->set(LineBlockRule::class)
+        ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => ParagraphRule::PRIORITY + 1])
         ->set(DirectiveRule::class)
         ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => DirectiveRule::PRIORITY])
