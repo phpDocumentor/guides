@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function is_a;
+use function trim;
 
 /** @implements NodeRenderer<ContainerNode> */
 final class ContainerNodeRenderer implements NodeRenderer
@@ -44,7 +45,7 @@ final class ContainerNodeRenderer implements NodeRenderer
             $renderContext,
             'body/container.html.twig',
             [
-                'class' => $node->getOption('class'),
+                'class' => trim($node->getOption('class') . ' ' . $node->getClassesString()),
                 'id' => $node->getOption('name'),
                 'node' => $node->getValue(),
             ],
