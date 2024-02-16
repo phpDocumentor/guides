@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Nodes\Configuration\ConfigurationBlockNode;
 use phpDocumentor\Guides\Nodes\DefinitionListNode;
 use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\EmbeddedFrame;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FigureNode;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
@@ -76,6 +77,7 @@ return [
     CitationNode::class => 'body/citation.html.twig',
     FootnoteNode::class => 'body/footnote.html.twig',
     AnnotationListNode::class => 'body/annotation-list.html.twig',
+    EmbeddedFrame::class => 'body/embedded-frame.html.twig',
     // Inline
     ImageInlineNode::class => 'inline/image.html.twig',
     InlineCompoundNode::class => 'inline/inline-node.html.twig',

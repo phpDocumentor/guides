@@ -55,6 +55,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\TodoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\YoutubeDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContextFactory;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
@@ -229,6 +230,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(VersionAddedDirective::class)
         ->set(VersionChangedDirective::class)
         ->set(WarningDirective::class)
+        ->set(YoutubeDirective::class)
 
 
         ->set(DefaultTextRoleFactory::class, DefaultTextRoleFactory::class)

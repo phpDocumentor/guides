@@ -1,0 +1,8 @@
+<iframe src="{{ node.url }}"
+        {%- if node.hasOption('width') %} width="{{ node.option('width') }}"{% endif -%}
+        {%- if node.hasOption('height') %} height="{{ node.option('height') }}"{% endif -%}
+        {%- if node.hasOption('title') %} title="{{ node.option('title') }}"{% endif -%}
+        {%- if node.hasOption('allow') %} allow="{{ node.option('allow') }}"{% endif -%}
+        {%- if node.hasOption('allowfullscreen') and node.option('allowfullscreen') %} allowfullscreen{% endif -%}
+        >
+</iframe>
