@@ -11,3 +11,5 @@ Line Blocks
 | Continuation lines are wrapped
   portions of long lines; they begin
   with spaces in place of vertical bars.
+
+This is normal text
