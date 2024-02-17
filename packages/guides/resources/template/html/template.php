@@ -57,6 +57,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 
 return [
     AnchorNode::class => 'inline/anchor.html.twig',
+    \phpDocumentor\Guides\Nodes\AuthorNode::class => 'body/author.html.twig',
     FigureNode::class => 'body/figure.html.twig',
     MetaNode::class => 'structure/header/meta.html.twig',
     ParagraphNode::class => 'body/paragraph.html.twig',

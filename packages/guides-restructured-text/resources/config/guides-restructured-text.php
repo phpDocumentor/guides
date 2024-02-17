@@ -43,6 +43,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\PullQuoteDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RawDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ReplaceDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\RoleDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\SectionauthorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
@@ -216,6 +217,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(RawDirective::class)
         ->set(ReplaceDirective::class)
         ->set(RoleDirective::class)
+        ->set(SectionauthorDirective::class)
         ->set(SeeAlsoDirective::class)
         ->set(SidebarDirective::class)
         ->set(TableDirective::class)
