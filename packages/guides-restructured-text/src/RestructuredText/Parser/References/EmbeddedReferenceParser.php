@@ -14,19 +14,25 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\References;
 
 use function preg_match;
+use function trim;
 
 trait EmbeddedReferenceParser
 {
+    /**
+     * https://regex101.com/r/KadqKx/1
+     */
+    private string $referenceRegex = '/^(.*?)(<([^<]+)>)?$/s';
+
     private function extractEmbeddedReference(string $text): ReferenceData
     {
-        preg_match('/^(.*?)(?:(?:\s|^)<([^<]+)>)?$/s', $text, $matches);
+        preg_match($this->referenceRegex, $text, $matches);
 
-        $text = $matches[1] === '' ? null : $matches[1];
-        $reference = $matches[1];
+        $text = $matches[1] === '' ? null : trim($matches[1]);
+        $reference = trim($matches[1]);
 
-        if (isset($matches[2])) {
+        if (isset($matches[3])) {
             // there is an embedded URI, text and URI are different
-            $reference = $matches[2];
+            $reference = $matches[3];
         } else {
             $text = null;
         }
