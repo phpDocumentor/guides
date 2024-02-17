@@ -1,3 +1,5 @@
+:orphan:
+
 ..  _page1:
 
 Some file

@@ -1,2 +1,4 @@
+:orphan:
+
 Subpage 1
 =========

@@ -22,3 +22,9 @@ An image with relative paths
     :alt: Alternative text
 
     Description
+
+..  toctree::
+    :hidden:
+    :glob:
+
+    subfolder/*

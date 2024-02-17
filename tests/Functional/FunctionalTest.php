@@ -24,8 +24,10 @@ use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Settings\ProjectSettings;
@@ -102,10 +104,13 @@ final class FunctionalTest extends ApplicationTestCase
             $parser = $this->getContainer()->get(Parser::class);
             assert($parser instanceof Parser);
             $document = $parser->parse($rst);
+            $documentEntry = new DocumentEntryNode($document->getFilePath(), $document->getTitle() ?? TitleNode::fromString(''), true);
 
             $compiler = $this->getContainer()->get(Compiler::class);
             assert($compiler instanceof Compiler);
-            $compiler->run([$document], new CompilerContext(new ProjectNode()));
+            $projectNode = new ProjectNode();
+            $projectNode->setDocumentEntries([$documentEntry]);
+            $compiler->run([$document], new CompilerContext($projectNode));
 
             $inputFilesystem = new Filesystem(new MemoryAdapter());
             $inputFilesystem->write('img/test-image.jpg', 'Some image');
@@ -126,7 +131,7 @@ final class FunctionalTest extends ApplicationTestCase
                 $outfs = new Filesystem(new MemoryAdapter()),
                 '',
                 $format,
-                new ProjectNode(),
+                $projectNode,
             );
 
             $rendered = '';
