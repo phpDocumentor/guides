@@ -34,7 +34,7 @@ Processing documents is done in a few steps.
    parser component will parse the document and create a tree of nodes. Each node
    represents a part of the document. For example a paragraph, a list or a table.
 #. :php:class:`Compiling <\phpDocumentor\Guides\Compiler\Compiler>` The second step is to compile the tree of nodes. This is done by the :doc:`compiler`
-   component. During the compilation modifications can be made to the tree of nodes. For
+   component. During the compilation, modifications can be made to the tree of nodes. For
    example the compiler can add a table of contents to the tree of nodes.
 
 #. :php:class:`Rendering <\phpDocumentor\Guides\Renderer\BaseTypeRenderer>` The third step is to render the tree of nodes. This is done by the :doc:`render`
