@@ -49,5 +49,3 @@ All you need to do is create a node and add the content.
     :caption: your-extension/Directive/ExampleDirective.php
     :lineos:
 
-
-
