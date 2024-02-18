@@ -1,5 +1,7 @@
 ..  include:: /include.rst.txt
 
+..  _custom_text_roles:
+
 ==========
 Text Roles
 ==========
