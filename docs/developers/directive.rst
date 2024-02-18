@@ -34,7 +34,7 @@ By design, this library distinguishes between three types of directives:
   Action directives are not producing nodes in the document tree. They can be used to perform actions on the document.
   For example set the default language for code blocks or configure other settings.
 
-- :php:class:`phpDocumentor\Guides\RestructuredText\Directives\ActionDirective`,
+- :php:class:`phpDocumentor\Guides\RestructuredText\Directives\BaseDirective`,
   more or less a basic directive handler.
   This is the most advanced directive type. You are on your own here. You need to do everything yourself.
 
