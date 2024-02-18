@@ -47,7 +47,7 @@ test-xml: ## Lint all guides.xml
 	./tools/xmllint.sh
 
 .PHONY: test-docs
-test-docs: ## Generate projects docs without warnings
+test-docs: ## Generate projects docs without errors
 	$(PHP_BIN) vendor/bin/guides -vvv --no-progress docs --output="/tmp/test" --fail-on-error
 
 .PHONY: cleanup
