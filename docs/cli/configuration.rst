@@ -8,7 +8,7 @@ The cli tool is able to read configuration from a ``guides.xml`` file.
 You should put this file in the current working directory where you execute
 the tool. Generally speaking, this is the root of your project.
 
-Using a configuration file allows you to set project specific settings and
+Using a configuration file allows you to set project-specific settings and
 keep them under version control. Not all options available in the configuration
 are available on the command line. Such as the :ref:`extension configuration`.
 

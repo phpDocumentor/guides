@@ -9,7 +9,7 @@ Compiler
 This library uses a simplified compiler design. This basically means that our pipeline contains less steps
 than a regular compiler. But its following the same semantics.
 
-stages
+Stages
 ======
 
 Lexing and Parsing
@@ -41,7 +41,7 @@ Extending
 =========
 
 The compiler is designed to be extended. This allows you to remove or add nodes to the AST or mutate the AST in any way
-you like. Compiler extension is mostly done when you want want to do dynamic calulations based on the AST. The mutations
+you like. Compiler extension is mostly done when you want want to do dynamic calculations based on the AST. The mutations
 will not have direct impact on the rendering process. Style changes should be done in the rendering phase.
 
 To read more about extending the compiler, see :ref:`extending_compiler`.
