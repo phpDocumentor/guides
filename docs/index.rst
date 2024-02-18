@@ -44,9 +44,8 @@ If you are looking for a complete solution to create a documentation website the
 
     installation
     cli/index
+    components/index
     developers/index
     architecture
     reference/index
-    contributions/index
-    about
     contributions/index
