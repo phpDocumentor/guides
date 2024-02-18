@@ -2,7 +2,7 @@
 Architecture
 ============
 
-The project is build around the core library that is called ``guides``. This library
+The project is built around the core library that is called ``guides``. This library
 contains all core components of the project. Like the different layers :doc:`parser`,
 :doc:`compiler` and :doc:`render` and includes the basic Nodes and templates to create
 output.
