@@ -16,7 +16,7 @@ If you want to extend the compiler to support new features there are two options
 NodeTransformer
 ===============
 
-Node transformers are used to transform specific types of nodes in the AST. This is usefull when you want to remove
+Node transformers are used to transform specific types of nodes in the AST. This is useful when you want to remove
 a node type or manipulate nodes of a specific type. Your new node transformer should implement the :php:class:`phpDocumentor\Guides\Compiler\NodeTransformer`
 interface and you should register it in the dependency injection container.
 
@@ -33,13 +33,13 @@ interface and you should register it in the dependency injection container.
 .. note::
 
     The tag `phpdoc.guides.compiler.nodeTransformers` is used to register the node transformer in the compiler. The higher
-    the priority of the node transformer, the earlier it will be executed. Where higest priority is `PHP_INT_MAX`, lower
+    the priority of the node transformer, the earlier it will be executed. Where highest priority is `PHP_INT_MAX`, lower
     number is lower priority.
 
 CompilerPass
 ============
 
-If you want to do more complex transformations for example transformations that require multiple nodes to be transformed
+If you want to do more complex transformations, for example transformations that require multiple nodes to be transformed
 you should implement a :php:class:`phpDocumentor\Guides\Compiler\CompilerPass`. A compiler pass needs to be registered
 just like a node transformer.
 
@@ -56,5 +56,5 @@ just like a node transformer.
 .. note::
 
     The tag `phpdoc.guides.compiler.passes` is used to register the node transformer in the compiler. The higher
-    the priority of the node transformer, the earlier it will be executed. Where higest priority is `PHP_INT_MAX`, lower
+    the priority of the node transformer, the earlier it will be executed. Where highest priority is `PHP_INT_MAX`, lower
     number is lower priority.

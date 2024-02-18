@@ -8,11 +8,11 @@ will do the actual processing of the directive.
 
 .. hint::
 
-   This project contains a lot of directives. You can find them in the :php:namespace:`\phpDocumentor\Guides\RestructuredText\Directives` namespace.
-   Including the way how to use them.
+   This project contains a lot of directives. You can find them in the :php:namespace:`\phpDocumentor\Guides\RestructuredText\Directives` namespace,
+   including the way to use them.
 
-To implement a directive you need to create a class that extends :php:class:`\phpDocumentor\Guides\RestructuredText\Directives\BaseDirective`.
-And register it with the parser using a :ref:`custom extension <developer-extension>`.
+To implement a directive you need to create a class that extends :php:class:`\phpDocumentor\Guides\RestructuredText\Directives\BaseDirective`,
+and register it with the parser using a :ref:`custom extension <developer-extension>`.
 
 .. code-block:: php
     :caption: your-extension.php
@@ -24,7 +24,7 @@ And register it with the parser using a :ref:`custom extension <developer-extens
             ->set(YourDirective::class)
             ->tag('phpdoc.guides.directive');
 
-By design this library distinguishes between three types of directives:
+By design, this library distinguishes between three types of directives:
 
 - :php:class:`phpDocumentor\Guides\RestructuredText\Directives\SubDirective`
   This is the most common directive type. It is used to add a new node type to the document tree that allows you to do
@@ -39,7 +39,7 @@ By design this library distinguishes between three types of directives:
   This is the most advanced directive type. You are on your own here. You need to do everything yourself.
 
 Implement a sub directive
-========================
+=========================
 
 A sub directivehandler is a node with child nodes. The parser will take care of the parsing of the directive content.
 All you need to do is create a node and add the content.
