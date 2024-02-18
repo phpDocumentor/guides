@@ -6,4 +6,5 @@
 Renderer
 ========
 
-..  warning:: This needs to be documented
+..  warning::
+    This needs to be documented
