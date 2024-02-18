@@ -7,7 +7,7 @@ Admonitions
 ===========
 
 Admonitions are blocks of text that are rendered in a special way to draw attention to them. They are often used to
-provide additional information to the reader about the content that is being discussed. t6est
+provide additional information to the reader about the content that is being discussed.
 
 .. index:: reST directives; seealso
 

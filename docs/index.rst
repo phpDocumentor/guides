@@ -22,7 +22,7 @@ your documentation from `reStructuredText Markup <https://docutils.sourceforge.i
 formats.
 
 Besides the commandline tool it also provides a number of libraries that can be used to build your own application
-to render the supported formats. To any format you want. On these pages is explained how to use the commandline tool
+to render the supported formats, to any format you want. On these pages is explained how to use the commandline tool
 and how to use the libraries.
 
 If you are looking for a complete solution to create a documentation website then you may want to look at

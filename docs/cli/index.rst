@@ -12,7 +12,7 @@ Create your first documentation
 ===============================
 
 After :doc:`/installation` you can directly start to create your first documentation.
-to do this create a new directory named ``docs`` and create a file called ``index.rst`` in it.
+to do this, create a new directory named ``docs`` and create a file called ``index.rst`` in it.
 
 .. code-block:: rst
 
@@ -49,6 +49,6 @@ to learn more about the configuration.
 Extending
 =========
 
-Like any other component in this repository the commandline tool can be extended. This can
-be done using an extension class. And reference this class in the configuration file. Like
+Like any other component in this repository, the commandline tool can be extended. This can
+be done using an extension class, and referencing this class in the configuration file, like
 shown for in the :ref:`.extension-configuration` section.
