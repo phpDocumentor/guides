@@ -23,7 +23,7 @@ building should live in ``guides.xml`` in the current working directory.
     <?xml version="1.0" encoding="UTF-8" ?>
     <guides xmlns="https://www.phpdoc.org/guides"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd">
+        xsi:schemaLocation="https://raw.githubusercontent.com/phpDocumentor/guides/main/packages/guides-cli/resources/schema/guides.xsd">
 
         <project title="phpDocumentor Guides"/>
 
@@ -38,9 +38,9 @@ you want to use the Bootstrap HTML theme, use this configuration:
     <?xml version="1.0" encoding="UTF-8" ?>
     <guides xmlns="https://www.phpdoc.org/guides"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+        xsi:schemaLocation="https://raw.githubusercontent.com/phpDocumentor/guides/main/packages/guides-cli/resources/schema/guides.xsd"
 
-        html-theme="bootstrap"
+        theme="bootstrap"
     >
         <extension class="phpDocumentor\Guides\Bootstrap"/>
     </guides>
