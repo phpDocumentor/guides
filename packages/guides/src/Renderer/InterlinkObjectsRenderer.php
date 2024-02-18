@@ -19,8 +19,11 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function json_encode;
+use function sprintf;
+use function zlib_encode;
 
 use const JSON_PRETTY_PRINT;
+use const ZLIB_ENCODING_DEFLATE;
 
 final class InterlinkObjectsRenderer implements TypeRenderer
 {
@@ -83,6 +86,32 @@ final class InterlinkObjectsRenderer implements TypeRenderer
         $renderCommand->getDestination()->put(
             'objects.inv.json',
             $json,
+        );
+
+        $header = sprintf(
+            <<<'EOF'
+# Sphinx inventory version 2
+# Project: %s
+# Version: %s
+# The remainder of this file is compressed using zlib.
+
+EOF
+            ,
+            $renderCommand->getProjectNode()->getTitle(),
+            $renderCommand->getProjectNode()->getVersion(),
+        );
+        $body = '';
+
+        foreach ($inventory as $role => $entry) {
+            foreach ($entry as $key => $value) {
+                $body .= sprintf("%s %s %s %s %s\n", $key, $role, -1, $value[2], $value[3]);
+            }
+        }
+
+        $encodedBody = zlib_encode($body, ZLIB_ENCODING_DEFLATE);
+        $renderCommand->getDestination()->put(
+            'objects.inv',
+            $header . $encodedBody,
         );
     }
 }
