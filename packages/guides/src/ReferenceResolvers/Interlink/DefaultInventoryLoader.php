@@ -20,6 +20,9 @@ use Symfony\Component\HttpClient\Exception\ClientException;
 
 use function count;
 use function is_array;
+use function is_scalar;
+use function is_string;
+use function sprintf;
 use function strval;
 
 final class DefaultInventoryLoader implements InventoryLoader
@@ -46,11 +49,22 @@ final class DefaultInventoryLoader implements InventoryLoader
             if (is_array($groupArray)) {
                 foreach ($groupArray as $linkKey => $linkArray) {
                     if (!is_array($linkArray) || count($linkArray) < 4) {
+                        $this->logger->warning(sprintf('Invalid Inventory entry found. Each entry in array "%s" MUST be an array with at least 4 entries. ', $groupKey));
+                        continue;
+                    }
+
+                    if (!is_string($linkArray[2])) {
+                        $this->logger->warning(sprintf('Invalid Inventory entry found. Each entry in array "%s" must have a path as third entry.', $groupKey));
+                        continue;
+                    }
+
+                    if (!is_scalar($linkArray[0] ?? '') || !is_scalar($linkArray[1] ?? '') || !is_scalar($linkArray[3] ?? '')) {
+                        $this->logger->warning(sprintf('Invalid Inventory entry found. Only scalar values are allowed in each entry of array "%s". ', $groupKey));
                         continue;
                     }
 
                     $reducedLinkKey = $groupAnchorNormalizer->reduceAnchor(strval($linkKey));
-                    $link = new InventoryLink($linkArray[0], $linkArray[1], $linkArray[2], $linkArray[3]);
+                    $link = new InventoryLink(strval($linkArray[0] ?? ''), strval($linkArray[1] ?? ''), $linkArray[2], strval($linkArray[3] ?? '-'));
                     $group->addLink($reducedLinkKey, $link);
                 }
             }

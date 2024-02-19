@@ -1,0 +1,54 @@
+{
+   "std:doc": {
+      "Index": [
+         "<project>",
+         "<version>",
+         "index.html",
+         null
+      ],
+      "Page1": [
+         null,
+         "<version>",
+         "Page1.html",
+         "-"
+      ],
+      "Page1/Subpage1": [
+         "<project>",
+         null,
+         "Page1/Subpage1.html",
+         "-"
+      ],
+      "Page2/Subpage2": [
+         "<project>",
+         "<version>",
+         null,
+         "-"
+      ]
+   },
+   "std:label": {
+      "modindex": [
+         null,
+         "<version>",
+         "some_page.html#modindex",
+         "Module Index"
+      ],
+      "php-modindex": [
+         "<project>",
+         null,
+         "some_page.html#php-modindex",
+         "PHP Namespace Index"
+      ],
+      "php_objectsindex": [
+         "<project>",
+         "<version>",
+         null,
+         "PHP Objects Index"
+      ],
+      "php_8-modindex": [
+         "<project>",
+         "<version>",
+         "php-objectsindex.html#php-8-objectsindex",
+         null
+      ]
+   }
+}
