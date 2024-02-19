@@ -8,6 +8,9 @@ on: # yamllint disable-line rule:truthy
     branches:
       - "main"
 
+env:
+  ComposerRootVersion: "1.x-dev"
+
 jobs:
   code-coverage:
     name: "Code Coverage"
@@ -49,6 +52,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.6"
     with:
       php-version: "8.2"
+      composer-root-version: "1.x-dev"
 
   architecture:
     name: "Check architecture"
@@ -73,6 +77,8 @@ jobs:
   unit-tests:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.6"
+    with:
+      composer-root-version: "1.x-dev"
 
   functional-tests:
     name: "Functional test"
@@ -80,6 +86,7 @@ jobs:
     needs: "unit-tests"
     with:
       test-suite: "functional"
+      composer-root-version: "1.x-dev"
 
   integration-tests:
     name: "integration test"
@@ -87,6 +94,7 @@ jobs:
     needs: "unit-tests"
     with:
       test-suite: "integration"
+      composer-root-version: "1.x-dev"
 
   xml-lint:
     runs-on: "ubuntu-latest"

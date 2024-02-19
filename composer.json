@@ -76,5 +76,10 @@
             "url": "./packages/*",
             "type": "path"
         }
-    ]
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9244d01e80c97ab53daca39bd1a21fc",
+    "content-hash": "62a596b39c1b834628447d1a05cf4888",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1170,18 +1170,19 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "9dde09df7f25daeed370fbfaa624eee897b2e9e4"
+                "reference": "b4445bd9ea3871675dbf5d8c14d18500a1ac7e84"
             },
             "require": {
                 "ext-json": "*",
+                "ext-zlib": "*",
                 "league/flysystem": "^1.1",
                 "league/tactician": "^1.1",
                 "league/uri": "^6.5 || ^7.0",
                 "php": "^8.1",
                 "phpdocumentor/flyfinder": "^1.1",
                 "psr/event-dispatcher": "^1.0",
-                "symfony/clock": "^6.4 || ^7.0",
-                "symfony/http-client": "^6.4.0 || ^7.0",
+                "symfony/clock": "^6.4.3",
+                "symfony/http-client": "^6.4.3",
                 "symfony/string": "^5.4 || ^6.3 || ^7.0",
                 "symfony/translation-contracts": "^3.4.1",
                 "twig/twig": "~2.15 || ^3.0",
@@ -1191,6 +1192,11 @@
                 "psr/log": "^2.0 || ^3.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1218,13 +1224,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "7bcdad36c8d865623de8e2f499035ea2264cc751"
+                "reference": "e0e994aabec0ba983999d741f35fd33dd5653827"
             },
             "require": {
                 "monolog/monolog": "^2.9 || ^3.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "self.version",
-                "phpdocumentor/guides-restructured-text": "self.version",
+                "phpdocumentor/guides": "^1.0",
+                "phpdocumentor/guides-restructured-text": "^1.0",
                 "symfony/config": "^5.4 || ^6.3 || ^7.0",
                 "symfony/console": "^5.4 || ^6.3 || ^7.0",
                 "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
@@ -1234,6 +1240,11 @@
                 "bin/guides"
             ],
             "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\Cli\\": "src/"
@@ -1266,13 +1277,18 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
-                "reference": "d5ecfb7a8e3ed8d7b7d97a2eb4474553508836ff"
+                "reference": "9968c98c68ab630d39bd25c8b677ebe9fd537995"
             },
             "require": {
                 "php": "^8.1",
                 "scrivo/highlight.php": "^9.18.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1300,13 +1316,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "962cdb6f99d1c591f3cec5e9186e9f0927539050"
+                "reference": "55ce9636b6b03e1e2fbdef9ee311b42ba67ce42e"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "self.version",
-                "phpdocumentor/guides-restructured-text": "self.version",
+                "phpdocumentor/guides": "^1.0",
+                "phpdocumentor/guides-restructured-text": "^1.0",
                 "symfony/process": "^5.4 || ^6.3 || ^7.0",
                 "twig/twig": "~2.0 || ^3.0"
             },
@@ -1314,6 +1330,11 @@
                 "jawira/plantuml": "To render graphs locally using plant uml"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1341,14 +1362,19 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
-                "reference": "70ac6334139fe80a3c394ea58a931ceafaae7b53"
+                "reference": "9265a9011003f07eeda7b6bf9c88e4b7968362d8"
             },
             "require": {
                 "league/commonmark": "^2.4",
                 "php": "^8.1",
-                "phpdocumentor/guides": "self.version"
+                "phpdocumentor/guides": "^1.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1376,16 +1402,21 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "2958c895918cfe8fcf3b42a6e0e32a5b4dd9c085"
+                "reference": "70fcf58741085edd50521714fa7c8d9ca8acbef1"
             },
             "require": {
                 "doctrine/lexer": "^3.0",
                 "league/csv": "^9.10.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "self.version",
+                "phpdocumentor/guides": "^1.0",
                 "webmozart/assert": "^1.11"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1413,14 +1444,19 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "5599abeff6cdc9ef55161916b917a8760917da09"
+                "reference": "0ce9bcf7a174d69193837a9b3bbded7fb71cb4ab"
             },
             "require": {
                 "php": "^8.1",
-                "phpdocumentor/guides": "self.version",
-                "phpdocumentor/guides-restructured-text": "self.version"
+                "phpdocumentor/guides": "^1.0",
+                "phpdocumentor/guides-restructured-text": "^1.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "phpDocumentor\\Guides\\": "src/"
@@ -1769,16 +1805,16 @@
         },
         {
             "name": "symfony/clock",
-            "version": "v6.4.2",
+            "version": "v6.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/clock.git",
-                "reference": "0639710e65f73cc504167958ea29be6de5c7177a"
+                "reference": "f48770105c544001da00b8d745873a628e0de198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/clock/zipball/0639710e65f73cc504167958ea29be6de5c7177a",
-                "reference": "0639710e65f73cc504167958ea29be6de5c7177a",
+                "url": "https://api.github.com/repos/symfony/clock/zipball/f48770105c544001da00b8d745873a628e0de198",
+                "reference": "f48770105c544001da00b8d745873a628e0de198",
                 "shasum": ""
             },
             "require": {
@@ -1823,7 +1859,7 @@
                 "time"
             ],
             "support": {
-                "source": "https://github.com/symfony/clock/tree/v6.4.2"
+                "source": "https://github.com/symfony/clock/tree/v6.4.3"
             },
             "funding": [
                 {
@@ -1839,7 +1875,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-27T00:32:33+00:00"
+            "time": "2024-01-23T14:51:35+00:00"
         },
         {
             "name": "symfony/config",
@@ -2379,16 +2415,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v6.4.2",
+            "version": "v6.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "fc0944665bd932cf32a7b8a1d009466afc16528f"
+                "reference": "a9034bc119fab8238f76cf49c770f3135f3ead86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/fc0944665bd932cf32a7b8a1d009466afc16528f",
-                "reference": "fc0944665bd932cf32a7b8a1d009466afc16528f",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/a9034bc119fab8238f76cf49c770f3135f3ead86",
+                "reference": "a9034bc119fab8238f76cf49c770f3135f3ead86",
                 "shasum": ""
             },
             "require": {
@@ -2452,7 +2488,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v6.4.2"
+                "source": "https://github.com/symfony/http-client/tree/v6.4.3"
             },
             "funding": [
                 {
@@ -2468,7 +2504,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-02T12:49:56+00:00"
+            "time": "2024-01-29T15:01:07+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -5339,16 +5375,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.7.3",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419"
+                "reference": "bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419",
-                "reference": "3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353",
+                "reference": "bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353",
                 "shasum": ""
             },
             "require": {
@@ -5391,9 +5427,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.7.3"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.8.1"
             },
-            "time": "2023-08-12T11:01:26+00:00"
+            "time": "2024-01-18T19:15:27+00:00"
         },
         {
             "name": "phpstan/extension-installer",
