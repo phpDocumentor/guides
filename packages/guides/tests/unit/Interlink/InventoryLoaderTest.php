@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Interlink;
 
 use Generator;
+use JsonException;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
@@ -21,7 +22,6 @@ use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryRepository;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\Inventory;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLink;
-use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryRepository;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\JsonLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Messages;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
@@ -42,7 +42,7 @@ final class InventoryLoaderTest extends TestCase
 {
     private DefaultInventoryLoader $inventoryLoader;
     private JsonLoader&MockObject $jsonLoader;
-    private InventoryRepository $inventoryRepository;
+    private DefaultInventoryRepository $inventoryRepository;
     private RenderContext&MockObject $renderContext;
     /** @var array<string, mixed> */
     private array $json;
@@ -57,7 +57,13 @@ final class InventoryLoaderTest extends TestCase
         );
         $this->renderContext = $this->createMock(RenderContext::class);
         $this->inventoryRepository = new DefaultInventoryRepository(new SluggerAnchorNormalizer(), $this->inventoryLoader, []);
-        $jsonString = file_get_contents(__DIR__ . '/fixtures/objects.inv.json');
+        $this->loadObjectsJsonInv(__DIR__ . '/fixtures/objects.inv.json');
+    }
+
+    /** @throws JsonException */
+    public function loadObjectsJsonInv(string $filename): void
+    {
+        $jsonString = file_get_contents($filename);
         assertIsString($jsonString);
         $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
@@ -80,6 +86,15 @@ final class InventoryLoaderTest extends TestCase
         $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
+        self::assertGreaterThan(1, count($inventory->getGroups()));
+    }
+
+    public function testInventoryLoaderAcceptsNull(): void
+    {
+        $this->loadObjectsJsonInv(__DIR__ . '/fixtures/null-in-objects.inv.json');
+        $node = new DocReferenceNode('SomeDocument', '', 'somekey');
+        $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
+        self::assertTrue($inventory instanceof Inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
     }
 
