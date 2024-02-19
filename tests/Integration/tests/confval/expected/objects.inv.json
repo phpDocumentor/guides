@@ -1,24 +1,24 @@
 {
     "std:doc": {
         "index": [
-            null,
-            null,
+            "-",
+            "-",
             "index.html",
             "Confval directive"
         ]
     },
     "std:label": {
         "confval-directive": [
-            null,
-            null,
+            "-",
+            "-",
             "index.html#confval-directive",
             "Confval directive"
         ]
     },
     "std:confval": {
         "demo": [
-            null,
-            null,
+            "-",
+            "-",
             "index.html#demo",
             "demo"
         ]
