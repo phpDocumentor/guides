@@ -56,10 +56,10 @@ final class InterlinkObjectsRenderer implements TypeRenderer
                 $this->urlGenerator->createFileUrl($context, $documentEntry->getFile()),
             );
             $inventory['std:doc'][$key] = [
-                $projectNode->getTitle(),
-                $projectNode->getVersion(),
+                $projectNode->getTitle() ?? '-',
+                $projectNode->getVersion() ?? '-',
                 $url,
-                $documentEntry->getTitle()->toString(),
+                $documentEntry->getTitle()->toString() ?? '-',
             ];
         }
 
@@ -74,10 +74,10 @@ final class InterlinkObjectsRenderer implements TypeRenderer
                     $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
                 );
                 $inventory[$linkType][$key] = [
-                    $projectNode->getTitle(),
-                    $projectNode->getVersion(),
+                    $projectNode->getTitle() ?? '-',
+                    $projectNode->getVersion() ?? '-',
                     $url,
-                    $internalTarget->getTitle(),
+                    $internalTarget->getTitle() ?? '-',
                 ];
             }
         }
@@ -97,8 +97,8 @@ final class InterlinkObjectsRenderer implements TypeRenderer
 
 EOF
             ,
-            $renderCommand->getProjectNode()->getTitle(),
-            $renderCommand->getProjectNode()->getVersion(),
+            $renderCommand->getProjectNode()->getTitle() ?? '-',
+            $renderCommand->getProjectNode()->getVersion() ?? '-',
         );
         $body = '';
 
