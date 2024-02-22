@@ -31,6 +31,10 @@ jobs:
           coverage: "none"
           php-version: "8.2"
 
+      - name: "Set COMPOSER_ROOT_VERSION"
+        run: |
+          echo "COMPOSER_ROOT_VERSION=1.x-dev" >> $GITHUB_ENV
+
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v2"
         with:
