@@ -1224,13 +1224,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "e0e994aabec0ba983999d741f35fd33dd5653827"
+                "reference": "f57dd9368328b8ce2b59c5da720698ab624acbb1"
             },
             "require": {
                 "monolog/monolog": "^2.9 || ^3.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "^1.0",
-                "phpdocumentor/guides-restructured-text": "^1.0",
+                "phpdocumentor/guides": "^1.0 || ^0.3",
+                "phpdocumentor/guides-restructured-text": "^1.0 || ^0.3",
                 "symfony/config": "^5.4 || ^6.3 || ^7.0",
                 "symfony/console": "^5.4 || ^6.3 || ^7.0",
                 "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
@@ -1316,13 +1316,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "55ce9636b6b03e1e2fbdef9ee311b42ba67ce42e"
+                "reference": "db36ceb36dd95fbe6816f7810abba5c1cc0e080f"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "^1.0",
-                "phpdocumentor/guides-restructured-text": "^1.0",
+                "phpdocumentor/guides": "^1.0 || ^0.3",
+                "phpdocumentor/guides-restructured-text": "^1.0 || ^0.3",
                 "symfony/process": "^5.4 || ^6.3 || ^7.0",
                 "twig/twig": "~2.0 || ^3.0"
             },
@@ -1362,12 +1362,12 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
-                "reference": "9265a9011003f07eeda7b6bf9c88e4b7968362d8"
+                "reference": "3a64b789fb8250a3948296ac19e74a83ffd0b755"
             },
             "require": {
                 "league/commonmark": "^2.4",
                 "php": "^8.1",
-                "phpdocumentor/guides": "^1.0"
+                "phpdocumentor/guides": "^1.0 || ^0.3"
             },
             "type": "library",
             "extra": {
@@ -1402,13 +1402,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "70fcf58741085edd50521714fa7c8d9ca8acbef1"
+                "reference": "88da53d25a35809f318c08dcaee349ea00d70e19"
             },
             "require": {
                 "doctrine/lexer": "^3.0",
                 "league/csv": "^9.10.0",
                 "php": "^8.1",
-                "phpdocumentor/guides": "^1.0",
+                "phpdocumentor/guides": "^1.0 || ^0.3",
                 "webmozart/assert": "^1.11"
             },
             "type": "library",
@@ -1444,12 +1444,12 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "0ce9bcf7a174d69193837a9b3bbded7fb71cb4ab"
+                "reference": "77fb1783ea5154ff9c4cc623655d6a00f412aa87"
             },
             "require": {
                 "php": "^8.1",
-                "phpdocumentor/guides": "^1.0",
-                "phpdocumentor/guides-restructured-text": "^1.0"
+                "phpdocumentor/guides": "^1.0 || ^0.3",
+                "phpdocumentor/guides-restructured-text": "^1.0 || ^0.3"
             },
             "type": "library",
             "extra": {
@@ -5524,16 +5524,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.50",
+            "version": "1.10.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4"
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/06a98513ac72c03e8366b5a0cb00750b487032e4",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e607609388d3a6d418a50a49f7940e8086798281",
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281",
                 "shasum": ""
             },
             "require": {
@@ -5582,7 +5582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-13T10:59:42+00:00"
+            "time": "2024-02-20T13:59:13+00:00"
         },
         {
             "name": "phpstan/phpstan-strict-rules",
