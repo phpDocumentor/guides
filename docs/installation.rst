@@ -7,10 +7,10 @@ This project can be used in two ways:
 * :ref:`Standalone commandline tool <cli>`
 * :ref:`Library in your own application <library>`
 
-Standalone (recommended)
-=====================================
-
 .. _cli:
+
+Standalone (recommended)
+========================
 
 The commandline tool allows you start rendering your documentation without having to install any other software if
 you have PHP installed.
@@ -30,10 +30,10 @@ This will install the commandline tool in the vendor/bin directory. You can then
 The commandline tool is built for extension, if you do not have special needs this is the
 recommended way to get started. You can learn more about how to extend the commandline tool in the :doc:`/cli/index` section.
 
+.. _library:
+
 Library (advanced)
 ==================
-
-.. _library:
 
 If you are building your own application you can install the libraries using `Composer <https://getcomposer.org/>`__::
 
