@@ -71,30 +71,34 @@ final class SectionCreationTransformer implements NodeTransformer
             return $lastSection;
         }
 
-        if ($node instanceof TitleNode) {
-            $lastSection = end($this->sectionStack);
-            if ($lastSection instanceof SectionNode && $node !== $lastSection->getTitle() && $node->getLevel() <= $lastSection->getTitle()->getLevel()) {
-                while (end($this->sectionStack) instanceof SectionNode && $node !== end($this->sectionStack)->getTitle() && $node->getLevel() <= end($this->sectionStack)->getTitle()->getLevel()) {
-                    $lastSection = array_pop($this->sectionStack);
-                }
-
-                $newSection = new SectionNode($node);
-                if (end($this->sectionStack) instanceof SectionNode) {
-                    end($this->sectionStack)->addChildNode($newSection);
-                }
-
-                $this->sectionStack[] = $newSection;
-
-                return $lastSection?->getTitle()->getLevel() === 1 ? $lastSection : null;
-            } else {
-                $newSection = new SectionNode($node);
-                if ($lastSection instanceof SectionNode) {
-                    $lastSection->addChildNode($newSection);
-                }
-
-                $this->sectionStack[] = $newSection;
-            }
+        if (!$node instanceof TitleNode) {
+            // Remove all nodes that will be attached to a section
+            return null;
         }
+
+        $lastSection = end($this->sectionStack);
+        if ($lastSection instanceof SectionNode && $node !== $lastSection->getTitle() && $node->getLevel() <= $lastSection->getTitle()->getLevel()) {
+            while (end($this->sectionStack) instanceof SectionNode && $node !== end($this->sectionStack)->getTitle() && $node->getLevel() <= end($this->sectionStack)->getTitle()->getLevel()) {
+                $lastSection = array_pop($this->sectionStack);
+            }
+
+            $newSection = new SectionNode($node);
+            // Attach the new section to the last one still on the stack if there still is one
+            if (end($this->sectionStack) instanceof SectionNode) {
+                end($this->sectionStack)->addChildNode($newSection);
+            }
+
+            $this->sectionStack[] = $newSection;
+
+            return $lastSection?->getTitle()->getLevel() === 1 ? $lastSection : null;
+        }
+
+        $newSection = new SectionNode($node);
+        if ($lastSection instanceof SectionNode) {
+            $lastSection->addChildNode($newSection);
+        }
+
+        $this->sectionStack[] = $newSection;
 
         return null;
     }
