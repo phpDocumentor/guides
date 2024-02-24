@@ -23,6 +23,7 @@ use function preg_match;
 
 final class SectionauthorDirective extends BaseDirective
 {
+    /** @see https://regex101.com/r/vGy4Uu/1 */
     public const NAME_EMAIL_REGEX = '/^(?P<name>[\w\s]+)(?: <(?P<email>[^>]+)>)?$/';
 
     public function __construct(

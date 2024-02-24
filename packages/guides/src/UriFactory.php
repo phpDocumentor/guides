@@ -30,7 +30,8 @@ use const DIRECTORY_SEPARATOR;
 //TODO remove this, as it is copied form phpDocumentor to make things work.
 final class UriFactory
 {
-    public const WINDOWS_URI_FORMAT = '~^(file:\/\/\/)?(?<root>[a-zA-Z][:|\|])~';
+    /** @see https://regex101.com/r/4UN6ZR/1 */
+    public const WINDOWS_URI_FORMAT_REGEX = '~^(file:\/\/\/)?(?<root>[a-zA-Z][:|\|])~';
 
     public static function createUri(string $uriString): UriInterface
     {
@@ -40,7 +41,7 @@ final class UriFactory
                 return self::createPharUri($uriString);
             }
 
-            if (preg_match(self::WINDOWS_URI_FORMAT, $uriString)) {
+            if (preg_match(self::WINDOWS_URI_FORMAT_REGEX, $uriString)) {
                 if (str_starts_with($uriString, 'file:///')) {
                     $uriString = substr($uriString, strlen('file:///'));
                 }

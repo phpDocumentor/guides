@@ -1,5 +1,8 @@
 includes:
 	- phpstan-baseline.neon
+rules:
+  - Symplify\PHPStanRules\Rules\AnnotateRegexClassConstWithRegexLinkRule
+  - Symplify\PHPStanRules\Rules\RegexSuffixInRegexConstantRule
 parameters:
   level: max
 
