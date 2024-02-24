@@ -44,10 +44,11 @@ final class ListRule implements Rule
     /**
      * A regex matching all bullet list markers and a subset of the enumerated list markers.
      *
+     * @see https://regex101.com/r/LBXWFV/1
      * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists
      * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#enumerated-lists
      */
-    private const LIST_MARKER = '/
+    private const LIST_MARKER_REGEX = '/
         ^(
             [-+*\x{2022}\x{2023}\x{2043}]     # match bullet list markers: "*", "+", "-", "•", "‣", or "⁃"        
         )
@@ -120,13 +121,13 @@ final class ListRule implements Rule
             return false;
         }
 
-        return preg_match(self::LIST_MARKER, $line) > 0;
+        return preg_match(self::LIST_MARKER_REGEX, $line) > 0;
     }
 
     /** @return array{marker: string, indenting: int} */
     public function getItemConfig(string $line): array
     {
-        $isList = preg_match(self::LIST_MARKER, $line, $m) > 0;
+        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) > 0;
         if (!$isList) {
             throw new InvalidArgumentException('Line is not a valid item line');
         }
@@ -143,7 +144,7 @@ final class ListRule implements Rule
             return false;
         }
 
-        $isList = preg_match(self::LIST_MARKER, $line, $m) > 0;
+        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) > 0;
         if (!$isList) {
             return false;
         }

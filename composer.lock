@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7cf6b11204a6b5c064c2e132fba9dd6",
+    "content-hash": "927a266e578eb2559977a4113a86f043",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -7623,6 +7623,61 @@
                 }
             ],
             "time": "2023-08-08T10:16:24+00:00"
+        },
+        {
+            "name": "symplify/phpstan-rules",
+            "version": "12.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symplify/phpstan-rules.git",
+                "reference": "393656aaf9fd09d9dc40d658c57ef222dd1f082d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symplify/phpstan-rules/zipball/393656aaf9fd09d9dc40d658c57ef222dd1f082d",
+                "reference": "393656aaf9fd09d9dc40d658c57ef222dd1f082d",
+                "shasum": ""
+            },
+            "require": {
+                "nette/utils": "^3.2 || ^4.0",
+                "nikic/php-parser": "^4.17.1",
+                "php": "^7.2|^8.0",
+                "phpstan/phpstan": "^1.10.30",
+                "webmozart/assert": "^1.11"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "config/services/services.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symplify\\PHPStanRules\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Set of Symplify rules for PHPStan",
+            "support": {
+                "issues": "https://github.com/symplify/phpstan-rules/issues",
+                "source": "https://github.com/symplify/phpstan-rules/tree/12.4.8"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/rectorphp",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-02-09T21:23:31+00:00"
         },
         {
             "name": "theseer/tokenizer",
