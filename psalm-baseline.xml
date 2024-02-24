@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
   <file src="packages/guides-cli/src/Config/Configuration.php">
     <UndefinedMethod>
-      <code>ignoreExtraKeys</code>
+      <code><![CDATA[ignoreExtraKeys]]></code>
     </UndefinedMethod>
   </file>
   <file src="packages/guides-cli/src/Logger/SpyProcessor.php">
     <InvalidReturnStatement>
-      <code>$record</code>
+      <code><![CDATA[$record]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code>array|LogRecord</code>
+      <code><![CDATA[array|LogRecord]]></code>
     </InvalidReturnType>
   </file>
   <file src="packages/guides-graphs/src/Graphs/DependencyInjection/Configuration.php">
     <UndefinedInterfaceMethod>
-      <code>scalarNode</code>
+      <code><![CDATA[scalarNode]]></code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php">
     <UndefinedInterfaceMethod>
-      <code>scalarNode</code>
+      <code><![CDATA[scalarNode]]></code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
     <InvalidArgument>
-      <code>$listConfig</code>
-      <code>$listConfig</code>
+      <code><![CDATA[$listConfig]]></code>
+      <code><![CDATA[$listConfig]]></code>
     </InvalidArgument>
   </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
     <MoreSpecificImplementedParamType>
-      <code>$on</code>
+      <code><![CDATA[$on]]></code>
     </MoreSpecificImplementedParamType>
   </file>
   <file src="packages/guides/src/Compiler/NodeTransformers/CustomNodeTransformerFactory.php">
     <ReservedWord>
-      <code>NodeTransformer</code>
+      <code><![CDATA[NodeTransformer]]></code>
     </ReservedWord>
   </file>
   <file src="packages/guides/src/Compiler/ShadowTree/TreeNode.php">
     <InvalidPropertyAssignmentValue>
-      <code>$newNode</code>
-      <code>$newNode</code>
+      <code><![CDATA[$newNode]]></code>
+      <code><![CDATA[$newNode]]></code>
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="packages/guides/src/DependencyInjection/GuidesExtension.php">
     <UndefinedInterfaceMethod>
-      <code>scalarNode</code>
+      <code><![CDATA[scalarNode]]></code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="packages/guides/src/Nodes/CompoundNode.php">
@@ -57,12 +57,12 @@
   </file>
   <file src="packages/guides/tests/unit/Compiler/NodeTransformers/DocumentEntryRegistrationTransformerTest.php">
     <InvalidArgument>
-      <code>[new SectionNode(TitleNode::emptyNode())]</code>
+      <code><![CDATA[[new SectionNode(TitleNode::emptyNode())]]]></code>
     </InvalidArgument>
   </file>
   <file src="packages/guides/tests/unit/Renderer/IteratorTestCase.php">
     <InvalidArgument>
-      <code>[new SectionNode($titleNode)]</code>
+      <code><![CDATA[[new SectionNode($titleNode)]]]></code>
     </InvalidArgument>
   </file>
 </files>
