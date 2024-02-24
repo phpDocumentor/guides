@@ -104,6 +104,16 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                     ->end()
                     ->scalarPrototype()->end()
                 ->end()
+                ->arrayNode('ignored_domain')
+                    ->defaultValue([])
+                    ->beforeNormalization()
+                    ->ifString()
+                    ->then(static function ($value) {
+                        return [$value];
+                    })
+                    ->end()
+                    ->scalarPrototype()->end()
+                ->end()
                 ->scalarNode('log_path')->end()
                 ->scalarNode('fail_on_log')->end()
                 ->scalarNode('fail_on_error')->end()
@@ -215,6 +225,10 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
 
         if (isset($config['output_format']) && is_array($config['output_format'])) {
             $projectSettings->setOutputFormats($config['output_format']);
+        }
+
+        if (isset($config['ignored_domain']) && is_array($config['ignored_domain'])) {
+            $projectSettings->setIgnoredDomains($config['ignored_domain']);
         }
 
         if (isset($config['links_are_relative'])) {

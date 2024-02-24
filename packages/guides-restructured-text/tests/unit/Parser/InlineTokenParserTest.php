@@ -47,6 +47,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -59,7 +60,7 @@ final class InlineTokenParserTest extends TestCase
     public function setUp(): void
     {
         $this->textRoleFactory = new DefaultTextRoleFactory(
-            new GenericTextRole(),
+            new GenericTextRole(self::createMock(SettingsManager::class)),
             new LiteralTextRole(),
             [
                 new ReferenceTextRole(),

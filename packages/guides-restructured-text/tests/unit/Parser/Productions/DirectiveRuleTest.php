@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyBaseDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function array_values;
@@ -36,7 +37,7 @@ final class DirectiveRuleTest extends RuleTestCase
         $this->rule = new DirectiveRule(
             $this->givenInlineMarkupRule(),
             new Logger('test'),
-            new GeneralDirective(new DirectiveContentRule(new RuleContainer())),
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createMock(SettingsManager::class)),
             [$this->directiveHandler],
         );
     }
@@ -112,7 +113,7 @@ NOWDOC);
         $this->rule = new DirectiveRule(
             $this->givenInlineMarkupRule(),
             new Logger('test'),
-            new GeneralDirective(new DirectiveContentRule(new RuleContainer())),
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createMock(SettingsManager::class)),
             [$this->directiveHandler, new CodeBlockDirective($logger, $this->createMock(CodeNodeOptionMapper::class))],
         );
         $context = $this->createContext($input);

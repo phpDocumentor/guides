@@ -116,6 +116,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -234,9 +235,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(WarningDirective::class)
         ->set(YoutubeDirective::class)
 
-
+        ->set(GenericTextRole::class, GenericTextRole::class)
+        ->arg('$settingsManager', inline_service(SettingsManager::class))
         ->set(DefaultTextRoleFactory::class, DefaultTextRoleFactory::class)
-        ->arg('$genericTextRole', inline_service(GenericTextRole::class))
+        ->arg('$genericTextRole', service(GenericTextRole::class))
+
         ->arg('$defaultTextRole', inline_service(LiteralTextRole::class))
         ->arg('$textRoles', tagged_iterator('phpdoc.guides.parser.rst.text_role'))
         ->alias(TextRoleFactory::class, DefaultTextRoleFactory::class)
