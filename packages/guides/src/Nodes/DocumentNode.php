@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\Nodes\Metadata\NavigationTitleNode;
 
 use function array_filter;
 use function max;
@@ -51,6 +52,8 @@ final class DocumentNode extends CompoundNode
 
     private int $maxFootnoteNumber = 0;
     private int $lastReturnedAnonymousFootnoteNumber = -1;
+
+    private string|null $navigationTitle = null;
 
     /**
      * Variables are replacements in a document or project.
@@ -97,6 +100,11 @@ final class DocumentNode extends CompoundNode
         return array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType);
     }
 
+    public function getNavigationTitle(): string|null
+    {
+        return $this->navigationTitle;
+    }
+
     public function getPageTitle(): string|null
     {
         if ($this->metaTitle !== null) {
@@ -132,6 +140,10 @@ final class DocumentNode extends CompoundNode
 
     public function addHeaderNode(MetadataNode $node): void
     {
+        if ($node instanceof NavigationTitleNode) {
+            $this->navigationTitle = $node->getValue();
+        }
+
         $this->headerNodes[] = $node;
     }
 

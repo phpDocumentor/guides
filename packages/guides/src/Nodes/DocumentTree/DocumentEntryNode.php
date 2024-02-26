@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
@@ -27,10 +28,12 @@ final class DocumentEntryNode extends EntryNode
     /** @var SectionEntryNode[]  */
     private array $sections = [];
 
+    /** @param array<string, Node> $additionalData */
     public function __construct(
         private readonly string $file,
         private readonly TitleNode $titleNode,
         private readonly bool $isRoot = false,
+        private array $additionalData = [],
     ) {
     }
 
@@ -99,5 +102,15 @@ final class DocumentEntryNode extends EntryNode
         }
 
         return null;
+    }
+
+    public function getAdditionalData(string $key): Node|null
+    {
+        return $this->additionalData[$key] ?? null;
+    }
+
+    public function addAdditionalData(string $key, Node $value): void
+    {
+        $this->additionalData[$key] = $value;
     }
 }
