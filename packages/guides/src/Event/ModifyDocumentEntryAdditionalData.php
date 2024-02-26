@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Event;
 
-use phpDocumentor\Guides\Compiler\CompilerContextInterface;
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -23,7 +23,7 @@ final class ModifyDocumentEntryAdditionalData
     public function __construct(
         private array $additionalData,
         private readonly DocumentNode $documentNode,
-        private readonly CompilerContextInterface $compilerContext,
+        private readonly CompilerContext $compilerContext,
     ) {
     }
 
@@ -46,7 +46,7 @@ final class ModifyDocumentEntryAdditionalData
         return $this->documentNode;
     }
 
-    public function getCompilerContext(): CompilerContextInterface
+    public function getCompilerContext(): CompilerContext
     {
         return $this->compilerContext;
     }
