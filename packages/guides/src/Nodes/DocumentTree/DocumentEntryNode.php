@@ -31,6 +31,7 @@ final class DocumentEntryNode extends EntryNode
         private readonly string $file,
         private readonly TitleNode $titleNode,
         private readonly bool $isRoot = false,
+        private string|null $navigationTitle = null,
     ) {
     }
 
@@ -99,5 +100,10 @@ final class DocumentEntryNode extends EntryNode
         }
 
         return null;
+    }
+
+    public function getNavigationTitle(): string|null
+    {
+        return $this->navigationTitle;
     }
 }
