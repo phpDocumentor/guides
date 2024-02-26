@@ -81,6 +81,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\Copyright
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NavigationTitleFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrganizationFieldListItemRule;
@@ -318,6 +319,9 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(DedicationFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(NavigationTitleFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(NocommentsFieldListItemRule::class)

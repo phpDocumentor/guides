@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
@@ -107,9 +108,15 @@ final class BreadCrumbNodeRenderer implements NodeRenderer
         int $level,
         bool $isCurrent,
     ): array {
+        $title = $documentEntry->getTitle();
+        $navigationTitle =  $documentEntry->getAdditionalData('navigationTitle');
+        if ($navigationTitle instanceof TitleNode) {
+            $title = $navigationTitle;
+        }
+
         $entry = new InternalMenuEntryNode(
             $documentEntry->getFile(),
-            $documentEntry->getTitle(),
+            $title,
             [],
             false,
             $level,

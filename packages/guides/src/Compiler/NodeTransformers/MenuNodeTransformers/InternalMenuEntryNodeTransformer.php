@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use Psr\Log\LoggerInterface;
 
@@ -63,10 +64,20 @@ final class InternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
                 continue;
             }
 
+            $titleNode = $documentEntry->getTitle();
+            $navigationTitle =  $documentEntry->getAdditionalData('navigationTitle');
+            if ($navigationTitle instanceof TitleNode) {
+                $titleNode = $navigationTitle;
+            }
+
+            if ($entryNode->getValue() instanceof TitleNode) {
+                $titleNode = $entryNode->getValue();
+            }
+
             $documentEntriesInTree[] = $documentEntry;
             $newEntryNode = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
-                $entryNode->getValue() ?? $documentEntry->getTitle(),
+                $titleNode,
                 [],
                 false,
                 1,
