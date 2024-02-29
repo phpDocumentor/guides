@@ -61,11 +61,11 @@ final class FileCollector
 
         $parseQueue = new Files();
         foreach ($this->fileInfos as $filename => $_fileInfo) {
-            if (!$this->doesFileRequireParsing($filename)) {
+            if (!$this->doesFileRequireParsing((string) $filename)) {
                 continue;
             }
 
-            $parseQueue->add($filename);
+            $parseQueue->add((string) $filename);
         }
 
         return $parseQueue;

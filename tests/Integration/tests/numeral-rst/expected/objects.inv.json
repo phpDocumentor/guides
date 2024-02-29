@@ -1,0 +1,30 @@
+{
+    "std:doc": {
+        "404": [
+            "-",
+            "-",
+            "404.html",
+            "Page not found (404)"
+        ],
+        "index": [
+            "-",
+            "-",
+            "index.html",
+            "Some Title"
+        ]
+    },
+    "std:label": {
+        "page-not-found-404": [
+            "-",
+            "-",
+            "404.html#page-not-found-404",
+            "Page not found (404)"
+        ],
+        "some-title": [
+            "-",
+            "-",
+            "index.html#some-title",
+            "Some Title"
+        ]
+    }
+}

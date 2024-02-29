@@ -1,0 +1,10 @@
+:orphan:
+
+====================
+Page not found (404)
+====================
+
+The page you were redirected to no longer exists.
+
+To search the entire TYPO3 documentation (https://docs.typo3.org), use the search
+box on the top of the page.
