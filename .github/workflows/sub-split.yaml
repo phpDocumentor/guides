@@ -12,6 +12,7 @@ on: # yamllint disable-line rule:truthy
       - "packages/**/*"
     branches:
       - "main"
+      - "1.x"
 
 jobs:
   publish_sub_splits:
