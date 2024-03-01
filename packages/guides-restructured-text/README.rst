@@ -3,6 +3,10 @@
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
 
+..  image:: http://poser.pugx.org/phpdocumentor/guides-restructured-text/v/stable
+    :alt: Latest Stable Version
+    :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
+
 ..  image:: http://poser.pugx.org/phpdocumentor/guides-restructured-text/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
