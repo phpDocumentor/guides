@@ -12,7 +12,7 @@ jobs:
       - name: "Backport Action"
         uses: "sorenlouv/backport-github-action@v9.3.1"
         with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          github_token: "${{ secrets.BOT_TOKEN }}"
           auto_backport_label_prefix: "auto-backport-to-"
 
       - name: "Info log"
