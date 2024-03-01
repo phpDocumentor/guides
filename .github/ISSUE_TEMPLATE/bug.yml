@@ -1,0 +1,26 @@
+name: "Bug report 🐛"
+description: "If something isn't working as expected 🤔."
+title: "[Bug]: "
+labels: ["bug", "triage"]
+
+body:
+  - type: "textarea"
+    attributes:
+      label: "Summary"
+      description: "Please describe your problem here"
+    validations:
+      required: true
+
+  - type: "textarea"
+    attributes:
+      label: "Code snippet that reproduces the problem"
+      description: |
+        Please provide a minimal code snippet that reproduces the problem. If you have a larger code example,
+        please provide a link to a repository or create a pull request that introduces a failing test case.
+
+  - type: "textarea"
+    attributes:
+      label: "Expected output"
+      description: "What did you expect to happen?"
+    validations:
+      required: true
