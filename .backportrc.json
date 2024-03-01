@@ -1,0 +1,8 @@
+{
+  "repoOwner": "phpDocumentor",
+  "repoName": "guides",
+  "targetBranchChoices": ["1.x"],
+  "targetPRLabels": ["backport"],
+  "autoMerge": true,
+  "autoMergeMethod": "merge"
+}
