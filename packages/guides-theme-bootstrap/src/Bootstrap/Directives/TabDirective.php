@@ -25,7 +25,6 @@ use function is_string;
 use function preg_replace;
 use function str_replace;
 use function strtolower;
-use function strval;
 
 final class TabDirective extends SubDirective
 {
@@ -50,7 +49,7 @@ final class TabDirective extends SubDirective
         }
 
         $key = str_replace(' ', '-', $key);
-        $key = strval(preg_replace('/[^a-zA-Z0-9\-_]/', '', $key));
+        $key = (string) (preg_replace('/[^a-zA-Z0-9\-_]/', '', $key));
         $active = $directive->hasOption('active');
 
         return new TabNode(
