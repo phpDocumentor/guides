@@ -35,6 +35,9 @@ final class ProjectSettings
     private string $defaultCodeLanguage = '';
     private int $maxMenuDepth = 0;
 
+    /** @var string[] */
+    private array $ignoredDomains = [];
+
     public function getTitle(): string
     {
         return $this->title;
@@ -214,5 +217,17 @@ final class ProjectSettings
         $this->maxMenuDepth = $maxMenuDepth;
 
         return $this;
+    }
+
+    /** @return string[] */
+    public function getIgnoredDomains(): array
+    {
+        return $this->ignoredDomains;
+    }
+
+    /** @param string[] $ignoredDomains */
+    public function setIgnoredDomains(array $ignoredDomains): void
+    {
+        $this->ignoredDomains = $ignoredDomains;
     }
 }

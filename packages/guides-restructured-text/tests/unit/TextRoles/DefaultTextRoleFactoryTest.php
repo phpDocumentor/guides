@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use Monolog\Logger;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\TestCase;
 
 final class DefaultTextRoleFactoryTest extends TestCase
@@ -25,7 +26,7 @@ final class DefaultTextRoleFactoryTest extends TestCase
     {
         $this->logger = new Logger('test');
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
-            new GenericTextRole(),
+            new GenericTextRole(self::createMock(SettingsManager::class)),
             new LiteralTextRole(),
             [],
             [],
@@ -35,12 +36,6 @@ final class DefaultTextRoleFactoryTest extends TestCase
     public function testUnknownTextRoleReturnsGenericTextRole(): void
     {
         $textRole = $this->defaultTextRoleFactory->getTextRole('unknown');
-        self::assertInstanceOf(GenericTextRole::class, $textRole);
-    }
-
-    public function testUnknownDomainReturnsGenericTextRole(): void
-    {
-        $textRole = $this->defaultTextRoleFactory->getTextRole('unknown', 'unknown');
         self::assertInstanceOf(GenericTextRole::class, $textRole);
     }
 

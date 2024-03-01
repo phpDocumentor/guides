@@ -11,6 +11,8 @@
         log-path="php://stder"
 >
     <project title="Guides"/>
+    <ignored_domain>phpdoc</ignored_domain>
+    <ignored_domain>php</ignored_domain>
     <extension class="phpDocumentor\Guides\Bootstrap"/>
     <extension class="phpDocumentor\Guides\Code"/>
 </guides>

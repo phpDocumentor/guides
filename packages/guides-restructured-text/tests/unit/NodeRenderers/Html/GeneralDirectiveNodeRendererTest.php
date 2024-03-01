@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\TemplateRenderer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,7 +41,7 @@ final class GeneralDirectiveNodeRendererTest extends TestCase
             new Logger('test'),
         );
         $textRoleFactory = new DefaultTextRoleFactory(
-            new GenericTextRole(),
+            new GenericTextRole(self::createMock(SettingsManager::class)),
             new LiteralTextRole(),
             [],
         );

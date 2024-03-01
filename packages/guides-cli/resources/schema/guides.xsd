@@ -14,6 +14,7 @@
             <xsd:element name="base-template-path" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="extension" type="extension" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="output-format" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="ignored_domain" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="inventory" type="inventory" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="template" type="template" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
