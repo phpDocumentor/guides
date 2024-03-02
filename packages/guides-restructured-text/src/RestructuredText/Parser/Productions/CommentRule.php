@@ -56,11 +56,11 @@ final class CommentRule implements Rule
             return false;
         }
 
-        return $this->isComment($line) || (trim($line) !== '' && $line[0] === ' ');
+        return $this->isComment($line) || trim($line) === '' || $line[0] === ' ';
     }
 
     private function isComment(string $line): bool
     {
-        return trim($line) === '..' || preg_match('/^\.\.\s+.*$/mUsi', $line) > 0;
+        return trim($line) === '..' || preg_match('/^\.\.\s+[^:]*$/mUsi', $line) > 0;
     }
 }
