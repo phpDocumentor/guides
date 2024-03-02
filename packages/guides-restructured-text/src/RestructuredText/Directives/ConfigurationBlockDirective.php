@@ -27,6 +27,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function assert;
 use function get_debug_type;
+use function sprintf;
 
 final class ConfigurationBlockDirective extends SubDirective
 {
@@ -59,7 +60,10 @@ final class ConfigurationBlockDirective extends SubDirective
         $tabs = [];
         foreach ($collectionNode->getValue() as $child) {
             if (!$child instanceof CodeNode) {
-                $this->logger->warning('The ".. configuration-block::" directive only supports code blocks, "' . get_debug_type($child) . '" given.');
+                $this->logger->warning(
+                    sprintf('The ".. configuration-block::" directive only supports code blocks, "%s" given.', get_debug_type($child)),
+                    $blockContext->getLoggerInformation(),
+                );
 
                 continue;
             }
