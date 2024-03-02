@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 
 use function array_filter;
 use function array_map;
+use function array_merge;
 use function assert;
 use function count;
 use function explode;
@@ -69,7 +70,10 @@ final class CsvTableDirective extends BaseDirective
                 ->readStream((string) $directive->getOption('file')->getValue());
 
             if ($csvStream === false) {
-                $this->logger->error('Unable to read CSV file {file}', ['file' => $directive->getOption('file')->getValue()]);
+                $this->logger->error(
+                    'Unable to read CSV file {file}',
+                    array_merge(['file' => $directive->getOption('file')->getValue()], $blockContext->getLoggerInformation()),
+                );
 
                 return new GenericNode('csv-table');
             }

@@ -56,7 +56,7 @@ final class GeneralDirectiveNodeRenderer implements NodeRenderer
             'No template found for rendering directive "%s". Expected template "%s"',
             $node->getName(),
             $template,
-        ));
+        ), $renderContext->getLoggerInformation());
         $template = 'body/directive/not-found.html.twig';
 
         return $this->renderer->renderTemplate($renderContext, $template, $data);
