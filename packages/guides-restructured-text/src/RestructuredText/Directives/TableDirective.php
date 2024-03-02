@@ -64,14 +64,20 @@ final class TableDirective extends SubDirective
         Directive $directive,
     ): Node|null {
         if (count($collectionNode->getChildren()) !== 1) {
-            $this->logger->warning(sprintf('The table directive may contain exactly one table. %s children found', count($collectionNode->getChildren())));
+            $this->logger->warning(
+                sprintf('The table directive may contain exactly one table. %s children found', count($collectionNode->getChildren())),
+                $blockContext->getLoggerInformation(),
+            );
 
             return $collectionNode;
         }
 
         $tableNode = $collectionNode->getChildren()[0];
         if (!$tableNode instanceof TableNode) {
-            $this->logger->warning(sprintf('The table directive may contain exactly one table. A node of type %s was found. ', $tableNode::class));
+            $this->logger->warning(
+                sprintf('The table directive may contain exactly one table. A node of type %s was found. ', $tableNode::class),
+                $blockContext->getLoggerInformation(),
+            );
 
             return $collectionNode;
         }
