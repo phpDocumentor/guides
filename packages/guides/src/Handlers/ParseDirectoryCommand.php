@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Handlers;
 
+use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
@@ -23,6 +24,7 @@ final class ParseDirectoryCommand
         private readonly string $directory,
         private readonly string $inputFormat,
         private readonly ProjectNode $projectNode,
+        private readonly SpecificationInterface|null $excludedSpecification = null,
     ) {
     }
 
@@ -44,5 +46,10 @@ final class ParseDirectoryCommand
     public function getProjectNode(): ProjectNode
     {
         return $this->projectNode;
+    }
+
+    public function getExcludedSpecification(): SpecificationInterface|null
+    {
+        return $this->excludedSpecification;
     }
 }
