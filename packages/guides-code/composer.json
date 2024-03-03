@@ -22,10 +22,5 @@
     "require": {
         "php": "^8.1",
         "scrivo/highlight.php": "^9.18.0"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-main": "1.x-dev"
-        }
     }
 }
