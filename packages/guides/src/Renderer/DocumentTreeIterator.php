@@ -18,6 +18,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use RecursiveIterator;
 
+use function array_filter;
+
 /**
  * Iterates over the document tree and returns the documents in the table of contents order.
  *
@@ -77,6 +79,8 @@ final class DocumentTreeIterator implements RecursiveIterator
 
     public function getChildren(): self|null
     {
-        return new self($this->levelNodes[$this->position]->getChildren(), $this->documents);
+        $children = $this->levelNodes[$this->position]->getChildren();
+
+        return new self($children, $this->documents);
     }
 }
