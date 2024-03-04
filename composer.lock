@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d23cfc1886e800eb1d14e197211d3d5e",
+    "content-hash": "8c400e85f4ed1140f5acf5e7e845aca7",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1169,7 +1169,7 @@
         },
         {
             "name": "phpdocumentor/guides",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
@@ -1223,7 +1223,7 @@
         },
         {
             "name": "phpdocumentor/guides-cli",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
@@ -1276,7 +1276,7 @@
         },
         {
             "name": "phpdocumentor/guides-code",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
@@ -1315,7 +1315,7 @@
         },
         {
             "name": "phpdocumentor/guides-graphs",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
@@ -1361,7 +1361,7 @@
         },
         {
             "name": "phpdocumentor/guides-markdown",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
@@ -1401,7 +1401,7 @@
         },
         {
             "name": "phpdocumentor/guides-restructured-text",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
@@ -1443,7 +1443,7 @@
         },
         {
             "name": "phpdocumentor/guides-theme-bootstrap",
-            "version": "2.x-dev",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
@@ -6308,16 +6308,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "258b775511e62a7188f8ce114d44acaf244d9a7d"
+                "reference": "7596fa6da06c6a20c012efe6bb3d9188a9113b11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/258b775511e62a7188f8ce114d44acaf244d9a7d",
-                "reference": "258b775511e62a7188f8ce114d44acaf244d9a7d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/7596fa6da06c6a20c012efe6bb3d9188a9113b11",
+                "reference": "7596fa6da06c6a20c012efe6bb3d9188a9113b11",
                 "shasum": ""
             },
             "require": {
@@ -6352,7 +6352,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.0.1"
+                "source": "https://github.com/rectorphp/rector/tree/1.0.2"
             },
             "funding": [
                 {
@@ -6360,7 +6360,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-16T07:53:23+00:00"
+            "time": "2024-03-03T12:32:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
