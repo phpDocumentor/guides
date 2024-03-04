@@ -4,6 +4,8 @@
 
 :abbreviation:`LIFO (last-in, first-out)`
 
+:abbr:`PGP (Pretty Good Privacy)`
+
 :aspect:`Some important aspect`
 
 :code:`result = (1 + x) * 32`
