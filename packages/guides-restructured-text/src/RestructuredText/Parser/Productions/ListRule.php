@@ -173,8 +173,6 @@ final class ListRule implements Rule
         }
 
         if (!isset($nodes[0])) {
-            $this->logger->warning('List item without content', $blockContext->getLoggerInformation());
-
             return $listItem;
         }
 

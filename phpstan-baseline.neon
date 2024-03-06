@@ -116,6 +116,11 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/NamedPhraseRule.php
 
 		-
+			message: "#^Property phpDocumentor\\\\Guides\\\\RestructuredText\\\\Parser\\\\Productions\\\\ListRule\\:\\:\\$logger is never read, only written\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
+
+		-
 			message: "#^Function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
 			count: 2
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
