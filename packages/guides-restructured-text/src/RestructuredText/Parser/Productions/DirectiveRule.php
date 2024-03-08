@@ -22,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\UnindentStrategy;
 use Psr\Log\LoggerInterface;
@@ -69,12 +70,7 @@ final class DirectiveRule implements Rule
 
     public function applies(BlockContext $blockContext): bool
     {
-        return $this->isDirective($blockContext->getDocumentIterator()->current());
-    }
-
-    private function isDirective(string $line): bool
-    {
-        return preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
+        return LineChecker::isDirective($blockContext->getDocumentIterator()->current());
     }
 
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null

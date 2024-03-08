@@ -15,6 +15,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use function in_array;
 use function mb_strlen;
+use function preg_match;
+use function trim;
 
 final class LineChecker
 {
@@ -73,5 +75,20 @@ final class LineChecker
         }
 
         return $letter;
+    }
+
+    public static function isDirective(string $line): bool
+    {
+        return preg_match('/^\.\.\s+(\|(.+)\| |)([^\s]+)::( (.*)|)$/mUsi', $line) > 0;
+    }
+
+    public static function isLink(string $line): bool
+    {
+        return preg_match('/^\.\.\s+_(.+):.*$/mUsi', trim($line)) > 0;
+    }
+
+    public static function isAnnotation(string $line): bool
+    {
+        return preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $line) > 0;
     }
 }
