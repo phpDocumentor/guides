@@ -17,8 +17,9 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
+use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 
-use function preg_match;
+use function str_starts_with;
 use function trim;
 
 /**
@@ -59,8 +60,27 @@ final class CommentRule implements Rule
         return $this->isComment($line) || trim($line) === '' || $line[0] === ' ';
     }
 
+    /**
+     * Every explicit markup block which is not a valid markup construct is regarded as a comment.
+     */
     private function isComment(string $line): bool
     {
-        return trim($line) === '..' || preg_match('/^\.\.\s+[^:]*$/mUsi', $line) > 0;
+        if (trim($line) === '..') {
+            return true;
+        }
+
+        if (!str_starts_with($line, '.. ')) {
+            return false;
+        }
+
+        if (LineChecker::isDirective($line)) {
+            return false;
+        }
+
+        if (LineChecker::isLink($line)) {
+            return false;
+        }
+
+        return !LineChecker::isAnnotation($line);
     }
 }

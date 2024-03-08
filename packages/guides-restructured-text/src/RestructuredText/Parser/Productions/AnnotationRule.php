@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\AnnotationUtility;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
+use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 
 use function preg_match;
@@ -42,12 +43,7 @@ final class AnnotationRule implements Rule
 
     public function applies(BlockContext $blockContext): bool
     {
-        return $this->isAnnotation($blockContext->getDocumentIterator()->current());
-    }
-
-    private function isAnnotation(string $line): bool
-    {
-        return preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $line) > 0;
+        return LineChecker::isAnnotation($blockContext->getDocumentIterator()->current());
     }
 
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
@@ -66,7 +62,7 @@ final class AnnotationRule implements Rule
             && LinesIterator::isEmptyLine($documentIterator->getNextLine()) === false
         ) {
             $documentIterator->next();
-            if ($this->isAnnotation($documentIterator->current())) {
+            if (LineChecker::isAnnotation($documentIterator->current())) {
                 $nodes[] = $this->createAnnotationNode($annotationKey, $buffer, $blockContext, $documentIterator, $name);
                 $openingLine = $documentIterator->current();
                 [$annotationKey, $content] = $this->analyzeOpeningLine($openingLine);
