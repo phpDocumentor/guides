@@ -54,6 +54,7 @@ use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\TemplateRenderer;
 use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
+use phpDocumentor\Guides\Twig\GlobalMenuExtension;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -203,6 +204,11 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$nodeRenderers', tagged_iterator('phpdoc.guides.output_node_renderer', 'format'))
 
         ->set(AssetsExtension::class)
+        ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
+        ->tag('twig.extension')
+        ->autowire()
+
+        ->set(GlobalMenuExtension::class)
         ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
         ->tag('twig.extension')
         ->autowire()

@@ -21,7 +21,6 @@ use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
@@ -29,7 +28,6 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
-use Throwable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -39,6 +37,8 @@ use function trim;
 
 final class AssetsExtension extends AbstractExtension
 {
+    private GlobalMenuExtension $menuExtension;
+
     /** @param NodeRenderer<Node> $nodeRenderer */
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -46,6 +46,7 @@ final class AssetsExtension extends AbstractExtension
         private readonly DocumentNameResolverInterface $documentNameResolver,
         private readonly UrlGeneratorInterface $urlGenerator,
     ) {
+        $this->menuExtension = new GlobalMenuExtension($this->nodeRenderer);
     }
 
     /** @return TwigFunction[] */
@@ -56,7 +57,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderBreadcrumb', $this->renderBreadcrumb(...), ['is_safe' => ['html'], 'needs_context' => true]),
-            new TwigFunction('renderMenu', $this->renderMenu(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderMenu', $this->renderMenu(...), ['is_safe' => ['html'], 'needs_context' => true, 'deprecated' => true]),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
         ];
     }
@@ -136,22 +137,7 @@ final class AssetsExtension extends AbstractExtension
     /** @param array{env: RenderContext} $context */
     public function renderMenu(array $context, string $menuType, int $maxMenuCount = 0): string
     {
-        $renderContext = $this->getRenderContext($context);
-        $globalMenues = $renderContext->getProjectNode()->getGlobalMenues();
-        $menues = [];
-        foreach ($globalMenues as $menu) {
-            $menu = $menu->withOptions(['menu' => $menuType]);
-            try {
-                $menu = $menu->withCurrentPath($renderContext->getCurrentFileName());
-                $menu = $menu->withRootlinePaths($renderContext->getCurrentFileRootline());
-            } catch (Throwable) {
-                // do nothing, we are in a context without active menu like single page or functional test
-            }
-
-            $menues[] = $menu;
-        }
-
-        return $this->nodeRenderer->render(new CollectionNode($menues), $renderContext);
+        return $this->menuExtension->renderMenu($context, $menuType);
     }
 
     /** @param array{env: RenderContext} $context */
