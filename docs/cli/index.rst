@@ -14,7 +14,7 @@ Create your first documentation
 After :doc:`/installation` you can directly start to create your first documentation.
 to do this, create a new directory named ``docs`` and create a file called ``index.rst`` in it.
 
-.. code-block:: rst
+.. code-block:: text
 
     My first documentation
     ======================
