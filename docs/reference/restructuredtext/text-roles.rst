@@ -25,7 +25,7 @@ Examples
 
 :ref:`Reference somewhere <basic-text-role>`
 
-:doc:`Reference to document </extension/text-roles>`
+:doc:`Reference to document </reference/restructuredtext/text-roles>`
 
 :code:`Lorem Ipsum`
 
