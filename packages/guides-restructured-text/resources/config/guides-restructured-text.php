@@ -32,6 +32,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\ImportantDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IncludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
+use phpDocumentor\Guides\RestructuredText\Directives\ListTableDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MenuDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
@@ -205,6 +206,7 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$startingRule', service(DocumentRule::class))
         ->set(IndexDirective::class)
         ->set(LaTeXMain::class)
+        ->set(ListTableDirective::class)
         ->set(LiteralincludeDirective::class)
         ->args([
             '$codeNodeOptionMapper' => service(
