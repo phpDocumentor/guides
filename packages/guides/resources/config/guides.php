@@ -28,6 +28,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolver;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
+use phpDocumentor\Guides\ReferenceResolvers\ImageReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryRepository;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLoader;
@@ -191,6 +192,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.noderenderer.html')
 
         ->set(ReferenceResolverPreRender::class)
+        ->tag('phpdoc.guides.prerenderer')
+        ->set(ImageReferenceResolverPreRender::class)
         ->tag('phpdoc.guides.prerenderer')
 
         ->set(InMemoryRendererFactory::class)
