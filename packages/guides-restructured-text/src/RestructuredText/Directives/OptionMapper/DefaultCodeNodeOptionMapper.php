@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
 use Psr\Log\LoggerInterface;
 
 use function preg_match;
+use function sprintf;
 use function strval;
 use function trim;
 
@@ -30,8 +31,8 @@ use function trim;
  */
 final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
 {
-    /** @see https://regex101.com/r/I3KttH/1 */
-    public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d+)?(?:,\s*\d+(-\d+)?)*$/';
+    /** @see https://regex101.com/r/czvfnV/2 */
+    public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d*)?(?:,\s*\d+(-\d*)?)*$/';
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -79,7 +80,10 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
             $emphasizeLines = (string) $options['emphasize-lines']->getValue();
             if (!preg_match(self::LINE_NUMBER_RANGES_REGEX, $emphasizeLines)) {
                 // Input does not fit the pattern, log a warning
-                $this->logger->warning('Invalid value for option emphasize-lines. Expected format: \'1-5, 7, 33\'', $blockContext->getLoggerInformation());
+                $this->logger->warning(
+                    sprintf('Invalid value for option emphasize-lines: "%s". Expected format: \'1-5, 7, 33\'', $emphasizeLines),
+                    $blockContext->getLoggerInformation(),
+                );
             }
         }
 
