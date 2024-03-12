@@ -77,6 +77,8 @@ final class DocumentTreeIterator implements RecursiveIterator
 
     public function getChildren(): self|null
     {
-        return new self($this->levelNodes[$this->position]->getChildren(), $this->documents);
+        $children = $this->levelNodes[$this->position]->getChildren();
+
+        return new self($children, $this->documents);
     }
 }

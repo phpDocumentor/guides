@@ -17,10 +17,14 @@ use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\EntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\ExternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use Throwable;
 
@@ -115,10 +119,11 @@ final class GlobalMenuPass implements CompilerPass
         return $newMenuEntry;
     }
 
+    /** @param EntryNode<DocumentEntryNode|ExternalEntryNode>|ExternalEntryNode $entryNode */
     private function addSubEntries(
         CompilerContext $compilerContext,
         MenuEntryNode $sectionMenuEntry,
-        DocumentEntryNode $documentEntry,
+        EntryNode $entryNode,
         int $currentLevel,
         int $maxDepth,
     ): void {
@@ -130,17 +135,45 @@ final class GlobalMenuPass implements CompilerPass
             return;
         }
 
-        foreach ($documentEntry->getChildren() as $subDocumentEntryNode) {
-            $subMenuEntry = new InternalMenuEntryNode(
-                $subDocumentEntryNode->getFile(),
-                $subDocumentEntryNode->getTitle(),
-                [],
-                false,
-                $currentLevel,
-                '',
-            );
-            $sectionMenuEntry->addMenuEntry($subMenuEntry);
-            $this->addSubEntries($compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
+        if (!$entryNode instanceof DocumentEntryNode) {
+            return;
         }
+
+        foreach ($entryNode->getMenuEntries() as $subEntryNode) {
+            $subMenuEntry = match ($subEntryNode::class) {
+                DocumentEntryNode::class => $this->createInternalMenuEntry($subEntryNode, $currentLevel),
+                ExternalEntryNode::class => $this->createExternalMenuEntry($subEntryNode, $currentLevel),
+            };
+
+            $sectionMenuEntry->addMenuEntry($subMenuEntry);
+            $this->addSubEntries(
+                $compilerContext,
+                $subMenuEntry,
+                $subEntryNode,
+                $currentLevel + 1,
+                $maxDepth,
+            );
+        }
+    }
+
+    private function createInternalMenuEntry(DocumentEntryNode $subEntryNode, int $currentLevel): InternalMenuEntryNode
+    {
+        return new InternalMenuEntryNode(
+            $subEntryNode->getFile(),
+            $subEntryNode->getTitle(),
+            [],
+            false,
+            $currentLevel,
+            '',
+        );
+    }
+
+    private function createExternalMenuEntry(ExternalEntryNode $subEntryNode, int $currentLevel): ExternalMenuEntryNode
+    {
+        return new ExternalMenuEntryNode(
+            $subEntryNode->getValue(),
+            TitleNode::fromString($subEntryNode->getTitle()),
+            $currentLevel,
+        );
     }
 }

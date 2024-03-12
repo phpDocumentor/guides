@@ -16,10 +16,13 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Exception\DocumentEntryNotFound;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\ExternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 
 use function assert;
 use function sprintf;
@@ -74,24 +77,38 @@ final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTra
             return;
         }
 
-        foreach ($documentEntry->getChildren() as $subDocumentEntryNode) {
-            $subMenuEntry = new InternalMenuEntryNode(
-                $subDocumentEntryNode->getFile(),
-                $subDocumentEntryNode->getTitle(),
-                [],
-                false,
-                $currentLevel,
-                '',
-                self::isInRootline($subDocumentEntryNode, $compilerContext->getDocumentNode()->getDocumentEntry()),
-                self::isCurrent($subDocumentEntryNode, $compilerContext->getDocumentNode()->getFilePath()),
-            );
+        foreach ($documentEntry->getMenuEntries() as $subEntryNode) {
+            if ($subEntryNode instanceof DocumentEntryNode) {
+                $subMenuEntry = new InternalMenuEntryNode(
+                    $subEntryNode->getFile(),
+                    $subEntryNode->getTitle(),
+                    [],
+                    false,
+                    $currentLevel,
+                    '',
+                    self::isInRootline($subEntryNode, $compilerContext->getDocumentNode()->getDocumentEntry()),
+                    self::isCurrent($subEntryNode, $compilerContext->getDocumentNode()->getFilePath()),
+                );
 
-            if (!$currentMenu->hasOption('titlesonly') && $maxDepth - $currentLevel + 1 > 1) {
-                $this->addSubSectionsToMenuEntries($subDocumentEntryNode, $subMenuEntry, $maxDepth - $currentLevel + 2);
+                if (!$currentMenu->hasOption('titlesonly') && $maxDepth - $currentLevel + 1 > 1) {
+                    $this->addSubSectionsToMenuEntries($subEntryNode, $subMenuEntry, $maxDepth - $currentLevel + 2);
+                }
+
+                $sectionMenuEntry->addMenuEntry($subMenuEntry);
+                $this->addSubEntries($currentMenu, $compilerContext, $subMenuEntry, $subEntryNode, $currentLevel + 1, $maxDepth);
+                continue;
             }
 
+            if (!($subEntryNode instanceof ExternalEntryNode)) {
+                continue;
+            }
+
+            $subMenuEntry = new ExternalMenuEntryNode(
+                $subEntryNode->getValue(),
+                TitleNode::fromString($subEntryNode->getTitle()),
+                $currentLevel,
+            );
             $sectionMenuEntry->addMenuEntry($subMenuEntry);
-            $this->addSubEntries($currentMenu, $compilerContext, $subMenuEntry, $subDocumentEntryNode, $currentLevel + 1, $maxDepth);
         }
     }
 }

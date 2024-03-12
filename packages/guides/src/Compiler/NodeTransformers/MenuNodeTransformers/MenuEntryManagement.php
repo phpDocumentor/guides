@@ -15,40 +15,43 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
 
 use function sprintf;
 use function str_starts_with;
 
 trait MenuEntryManagement
 {
-    /** @param DocumentEntryNode[] $documentEntriesInTree */
+    /** @param array<DocumentEntryNode|ExternalEntryNode> $entryNodes */
     private function attachDocumentEntriesToParents(
-        array $documentEntriesInTree,
+        array $entryNodes,
         CompilerContext $compilerContext,
         string $currentPath,
     ): void {
-        foreach ($documentEntriesInTree as $documentEntryInToc) {
-            if ($documentEntryInToc->isRoot() || $currentPath === $documentEntryInToc->getFile()) {
-                // The root page may not be attached to any other
-                continue;
+        foreach ($entryNodes as $entryNode) {
+            if ($entryNode instanceof DocumentEntryNode) {
+                if (($entryNode->isRoot() || $currentPath === $entryNode->getFile())) {
+                    // The root page may not be attached to any other
+                    continue;
+                }
+
+                if ($entryNode->getParent() !== null && $entryNode->getParent() !== $compilerContext->getDocumentNode()->getDocumentEntry()) {
+                    $this->logger->warning(sprintf(
+                        'Document %s has been added to parents %s and %s. The `toctree` directive changes the '
+                        . 'position of documents in the document tree. Use the `menu` directive to only display a menu without changing the document tree.',
+                        $entryNode->getFile(),
+                        $entryNode->getParent()->getFile(),
+                        $compilerContext->getDocumentNode()->getDocumentEntry()->getFile(),
+                    ), $compilerContext->getLoggerInformation());
+                }
+
+                if ($entryNode->getParent() !== null) {
+                    continue;
+                }
             }
 
-            if ($documentEntryInToc->getParent() !== null && $documentEntryInToc->getParent() !== $compilerContext->getDocumentNode()->getDocumentEntry()) {
-                $this->logger->warning(sprintf(
-                    'Document %s has been added to parents %s and %s. The `toctree` directive changes the '
-                    . 'position of documents in the document tree. Use the `menu` directive to only display a menu without changing the document tree.',
-                    $documentEntryInToc->getFile(),
-                    $documentEntryInToc->getParent()->getFile(),
-                    $compilerContext->getDocumentNode()->getDocumentEntry()->getFile(),
-                ), $compilerContext->getLoggerInformation());
-            }
-
-            if ($documentEntryInToc->getParent() !== null) {
-                continue;
-            }
-
-            $documentEntryInToc->setParent($compilerContext->getDocumentNode()->getDocumentEntry());
-            $compilerContext->getDocumentNode()->getDocumentEntry()->addChild($documentEntryInToc);
+            $entryNode->setParent($compilerContext->getDocumentNode()->getDocumentEntry());
+            $compilerContext->getDocumentNode()->getDocumentEntry()->addChild($entryNode);
         }
     }
 
