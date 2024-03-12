@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
+namespace phpDocumentor\Guides\Nodes\DocumentTree;
+
+/** @extends EntryNode<string> */
+final class ExternalEntryNode extends EntryNode
+{
+    public function __construct(string $value, public readonly string $title)
+    {
+        $this->value = $value;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+}

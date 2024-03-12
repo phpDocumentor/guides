@@ -57,7 +57,7 @@ final class InternalMenuEntryNode extends MenuEntryNode
         return $this->children;
     }
 
-    public function addMenuEntry(InternalMenuEntryNode $menuEntryNode): void
+    public function addMenuEntry(MenuEntryNode $menuEntryNode): void
     {
         $this->children[] = $menuEntryNode;
     }
