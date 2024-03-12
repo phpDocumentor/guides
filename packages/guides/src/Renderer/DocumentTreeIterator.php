@@ -18,8 +18,6 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use RecursiveIterator;
 
-use function array_filter;
-
 /**
  * Iterates over the document tree and returns the documents in the table of contents order.
  *

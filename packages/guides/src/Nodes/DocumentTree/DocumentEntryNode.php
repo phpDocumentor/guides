@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
-use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
-/** @extends EntryNode<DocumentNode> */
+use function array_filter;
+use function array_values;
+
+/** @extends EntryNode<DocumentEntryNode|ExternalEntryNode> */
 final class DocumentEntryNode extends EntryNode
 {
     /** @var array<DocumentEntryNode|ExternalEntryNode> */
@@ -41,20 +43,17 @@ final class DocumentEntryNode extends EntryNode
         $this->entries[] = $child;
     }
 
-    /**
-     * @return array<DocumentEntryNode>
-     */
+    /** @return array<DocumentEntryNode> */
     public function getChildren(): array
     {
         // Filter the entries array to only include DocumentEntryNode instances
-        $documentEntries = array_filter($this->entries, function ($entry) {
+        $documentEntries = array_filter($this->entries, static function ($entry) {
             return $entry instanceof DocumentEntryNode;
         });
 
         // Re-index the array to maintain numeric keys
         return array_values($documentEntries);
     }
-
 
     /** @return array<DocumentEntryNode|ExternalEntryNode> */
     public function getMenuEntries(): array
