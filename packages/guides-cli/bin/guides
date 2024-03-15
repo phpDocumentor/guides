@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\Cli\DependencyInjection\ApplicationExtension;
 use phpDocumentor\Guides\Cli\DependencyInjection\ContainerFactory;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 $vendorDir = dirname(__DIR__) . '/../../vendor';
 $autoloadDirectory = $vendorDir . '/autoload.php';
@@ -47,11 +46,13 @@ if (is_file($projectConfig)) {
         echo 'Loading guides.xml from ' . $projectConfig . PHP_EOL;
     }
     // vendor folder was placed directly into the project directory
-    $containerFactory->addConfigFile($projectConfig);
+    if ($projectConfig) {
+        $containerFactory->addConfigFile($projectConfig);
+    }
 }
 
-$workingDir = $input->getParameterOption('--working-dir', getcwd(), true);
-$localConfig = $input->getParameterOption('--config', $workingDir, true).'/guides.xml';
+$workingDir = $input->getParameterOption(['--working-dir', '-w'], getcwd(), true);
+$localConfig = $input->getParameterOption(['--config', '-c'], $workingDir, true) . '/guides.xml';
 
 if (is_file($localConfig) && realpath($localConfig) !== $projectConfig) {
     if ($verbosity === 3) {
