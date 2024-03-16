@@ -24,6 +24,7 @@ class InternalTarget implements Target
         protected string $anchorName,
         private readonly string|null $title = null,
         private readonly string $linkType = SectionNode::STD_LABEL,
+        private readonly string $prefix = '',
     ) {
     }
 
@@ -62,5 +63,10 @@ class InternalTarget implements Target
     public function getLinkType(): string
     {
         return $this->linkType;
+    }
+
+    public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 }
