@@ -34,6 +34,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
+use phpDocumentor\Guides\Nodes\MathNode;
 use phpDocumentor\Guides\Nodes\Metadata\AddressNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorsNode;
@@ -75,6 +76,7 @@ return [
     ListNode::class => 'body/list/list.html.twig',
     ListItemNode::class => 'body/list/list-item.html.twig',
     LiteralBlockNode::class => 'body/literal-block.html.twig',
+    MathNode::class => 'body/math.html.twig',
     CitationNode::class => 'body/citation.html.twig',
     FootnoteNode::class => 'body/footnote.html.twig',
     AnnotationListNode::class => 'body/annotation-list.html.twig',

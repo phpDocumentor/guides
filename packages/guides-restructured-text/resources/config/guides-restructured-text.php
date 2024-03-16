@@ -34,6 +34,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\IndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
 use phpDocumentor\Guides\RestructuredText\Directives\ListTableDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LiteralincludeDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\MathDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MenuDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\MetaDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\NoteDirective;
@@ -213,6 +214,7 @@ return static function (ContainerConfigurator $container): void {
                 CodeNodeOptionMapper::class,
             ),
         ])
+        ->set(MathDirective::class)
         ->set(MetaDirective::class)
         ->set(NoteDirective::class)
         ->set(OptionDirective::class)
