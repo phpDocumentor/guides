@@ -1,1 +1,5 @@
-{{- node.value -}}
+{%- if node.value == ' ' -%}
+    {{ '&#32;'|raw }}
+{%- else -%}
+    {{ node.value }}
+{%- endif -%}
