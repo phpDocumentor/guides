@@ -44,7 +44,7 @@ final class ConfvalDirective extends SubDirective
     ) {
         parent::__construct($startingRule);
 
-        $genericLinkProvider->addGenericLink(self::NAME, ConfvalNode::LINK_TYPE);
+        $genericLinkProvider->addGenericLink(self::NAME, ConfvalNode::LINK_TYPE, ConfvalNode::LINK_PREFIX);
     }
 
     public function getName(): string
