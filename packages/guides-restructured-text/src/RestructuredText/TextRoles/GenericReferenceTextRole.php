@@ -46,7 +46,8 @@ final class GenericReferenceTextRole extends AbstractReferenceTextRole
         $linkType = $this->genericLinkProvider->getLinkType($role);
         $interlinkData = $this->interlinkParser->extractInterlink($referenceTarget);
         $reference = $this->anchorReducer->reduceAnchor($interlinkData->reference);
+        $prefix = $this->genericLinkProvider->getLinkPrefix($role);
 
-        return new ReferenceNode($reference, $referenceName ?? '', $interlinkData->interlink, $linkType);
+        return new ReferenceNode($reference, $referenceName ?? '', $interlinkData->interlink, $linkType, $prefix);
     }
 }

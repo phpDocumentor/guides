@@ -30,10 +30,13 @@ final class GenericLinkProvider
     private array $textRoleLinkTypeMapping = [
         'ref' => SectionNode::STD_LABEL,
     ];
+    /** @var array<string, string> */
+    private array $prefixLinkTypeMapping = ['ref' => ''];
 
-    public function addGenericLink(string $textRole, string $linkType): void
+    public function addGenericLink(string $textRole, string $linkType, string $prefix = ''): void
     {
         $this->textRoleLinkTypeMapping[$textRole] = $linkType;
+        $this->prefixLinkTypeMapping[$textRole] = $prefix;
     }
 
     /** @return string[] */
@@ -45,5 +48,10 @@ final class GenericLinkProvider
     public function getLinkType(string $textRole): string
     {
         return $this->textRoleLinkTypeMapping[$textRole] ?? SectionNode::STD_LABEL;
+    }
+
+    public function getLinkPrefix(string $textRole): string
+    {
+        return $this->prefixLinkTypeMapping[$textRole] ?? '';
     }
 }
