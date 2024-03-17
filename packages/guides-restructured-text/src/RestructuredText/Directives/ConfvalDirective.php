@@ -61,7 +61,12 @@ final class ConfvalDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
-        $id = $this->anchorReducer->reduceAnchor($directive->getData());
+        $id = $directive->getData();
+        if ($directive->hasOption('name')) {
+            $id = (string) $directive->getOption('name')->getValue();
+        }
+
+        $id = $this->anchorReducer->reduceAnchor($id);
         $type = null;
         $required = false;
         $default = null;
@@ -79,7 +84,7 @@ final class ConfvalDirective extends SubDirective
         }
 
         foreach ($directive->getOptions() as $option) {
-            if (in_array($option->getName(), ['type', 'required', 'default', 'noindex'], true)) {
+            if (in_array($option->getName(), ['type', 'required', 'default', 'noindex', 'name'], true)) {
                 continue;
             }
 
