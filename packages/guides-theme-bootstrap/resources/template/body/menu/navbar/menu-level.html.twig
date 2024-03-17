@@ -1,13 +1,13 @@
+
 <ul class="level-{{ node.level }}">
     {% for entry in node.menuEntries -%}
-    {% apply spaceless %}
-        <li class="nav-item">
-            <a href="{{ renderLink(entry.url) }}"
-               class="nav-link  {%- if menu.currentPath == entry.url %} current {%- endif -%}{% if entry.url in menu.rootlinePaths %} active {%- endif -%}"
-                    {%- if menu.currentPath == entry.url %} aria-current="page" {% endif %} >
-                {{ renderNode(entry.value.value) }}
-            </a>
-        </li>
-        {% endapply %}
-    {%- endfor %}
+    <li class="nav-item">
+        <a href="{{ renderLink(entry.url) }}"
+           class="nav-link  {%- if menu.currentPath == entry.url %} current {%- endif -%}{% if entry.url in menu.rootlinePaths %} active {%- endif -%}"
+                {%- if menu.currentPath == entry.url %} aria-current="page"{% endif %}>
+            {{- renderNode(entry.value.value) -}}
+        </a>
+    </li>
+    {%~ endfor %}
 </ul>
+{# force a new line at the end of the file #}

@@ -1,3 +1,4 @@
+
 <div class="admonition {{ name }}{{ class ? (' '~class) }}{% if node.classes %} {{ node.classesString }}{% endif %}">
     {% if title and isTitled %}<p class="admonition-title">{{ renderNode(title) }}</p>{% endif %}
     {% if title and not isTitled %}<p>{{ renderNode(title) }}</p>{% endif %}

@@ -1,16 +1,17 @@
-<li class="toc-item {%- if node.isCurrent %} current{% endif -%} {%- if node.isInRootline %} active{% endif -%}"><a href="{{ url }}">{{ node.value.toString }}</a>
-    {%- if node.children|length %}
+<li class="toc-item {%- if node.isCurrent %} current{% endif -%} {%- if node.isInRootline %} active{% endif -%}">
+    <a href="{{ url }}">{{ node.value.toString }}</a>
+    {%~ if node.children|length %}
         <ul class="menu-level-{{ node.level }}">
             {% for child in node.children -%}
                 {{ renderNode(child) }}
             {% endfor %}
         </ul>
-    {%- endif -%}
-    {%- if node.sections|length %}
+    {%- endif ~%}
+    {%~ if node.sections|length %}
         <ul class="section-level-{{ node.level }}">
             {% for subsection in node.sections -%}
                 {{ renderNode(subsection) }}
             {% endfor %}
         </ul>
-    {%- endif -%}
+    {%- endif ~%}
 </li>

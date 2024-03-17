@@ -7,7 +7,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
             {% if parts.navbar %}
                 {% for child in parts.navbar -%}
                     {{ renderNode(child) }}
@@ -18,3 +17,4 @@
         </div>
     </div>
 </nav>
+{# force a new line at the end of the file #}
