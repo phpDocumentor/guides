@@ -1,6 +1,4 @@
-{%- apply spaceless -%}
 {%- set headingLevel = node.level -%}
 \{% if headingLevel == 1 %}section{% elseif headingLevel == 2 %}subsection{% elseif headingLevel == 3 %}subsubsection{% elseif headingLevel == 4 %}paragraph{% elseif headingLevel == 5 %}subparagraph{% elseif headingLevel == 6 %}subparagraph{% endif %}{
 {{- renderNode(node.value) -}}
 }
-{%- endapply -%}

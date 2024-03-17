@@ -2,4 +2,4 @@
 Document Title
 ==============
 
-Lorem ipsum [UnkownCitation]_ dolor sit amet.
+Lorem ipsum [UnknownCitation]_ dolor sit amet.
