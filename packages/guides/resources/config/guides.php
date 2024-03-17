@@ -57,6 +57,7 @@ use phpDocumentor\Guides\Twig\AssetsExtension;
 use phpDocumentor\Guides\Twig\EnvironmentBuilder;
 use phpDocumentor\Guides\Twig\GlobalMenuExtension;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
+use phpDocumentor\Guides\Twig\TrimFilesystemLoader;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -223,11 +224,12 @@ return static function (ContainerConfigurator $container): void {
             param('phpdoc.guides.base_template_paths'),
         )
 
-        ->set(FilesystemLoader::class)
+        ->set(TrimFilesystemLoader::class)
         ->arg(
             '$paths',
             param('phpdoc.guides.base_template_paths'),
         )
+        ->alias(FilesystemLoader::class, TrimFilesystemLoader::class)
 
         ->set(LoadSettingsFromComposer::class)
         ->tag('event_listener', ['event' => PostProjectNodeCreated::class])
