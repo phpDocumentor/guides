@@ -23,8 +23,11 @@ use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use Psr\Log\LoggerInterface;
 use SplStack;
 use Webmozart\Assert\Assert;
+
+use function sprintf;
 
 /** @implements NodeTransformer<DocumentNode|AnchorNode|SectionNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
@@ -34,6 +37,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
 
     public function __construct(
         private readonly AnchorNormalizer $anchorReducer,
+        private LoggerInterface|null $logger = null,
     ) {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are
@@ -68,17 +72,43 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchor = $node->getId();
-            $compilerContext->getProjectNode()->addLinkTarget(
-                $anchor,
-                new InternalTarget(
-                    $currentDocument->getFilePath(),
+            if ($compilerContext->getProjectNode()->hasInternalTarget($anchor, $node->getLinkType())) {
+                $this->logger?->warning(
+                    sprintf(
+                        'Duplicate anchor "%s" for link type "%s" in document "%s". The anchor is already used at "%s"',
+                        $anchor,
+                        $node->getLinkType(),
+                        $compilerContext->getDocumentNode()->getFilePath(),
+                        $compilerContext->getProjectNode()->getInternalTarget($anchor, $node->getLinkType())?->getDocumentPath(),
+                    ),
+                    $compilerContext->getLoggerInformation(),
+                );
+            } else {
+                $compilerContext->getProjectNode()->addLinkTarget(
                     $anchor,
-                    $node->getLinkText(),
-                    $node->getLinkType(),
-                ),
-            );
+                    new InternalTarget(
+                        $currentDocument->getFilePath(),
+                        $anchor,
+                        $node->getLinkText(),
+                        $node->getLinkType(),
+                    ),
+                );
+            }
             if ($node instanceof MultipleLinkTargetsNode) {
                 foreach ($node->getAdditionalIds() as $id) {
+                    if ($compilerContext->getProjectNode()->hasInternalTarget($id, $node->getLinkType())) {
+                        $this->logger?->warning(
+                            sprintf(
+                                'Duplicate anchor "%s" for link type "%s" in document "%s". The anchor is already used at "%s"',
+                                $anchor,
+                                $node->getLinkType(),
+                                $compilerContext->getDocumentNode()->getFilePath(),
+                                $compilerContext->getProjectNode()->getInternalTarget($anchor, $node->getLinkType())?->getDocumentPath(),
+                            ),
+                            $compilerContext->getLoggerInformation(),
+                        );
+                    }
+
                     $compilerContext->getProjectNode()->addLinkTarget(
                         $id,
                         new InternalTarget(

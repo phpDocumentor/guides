@@ -152,6 +152,11 @@ final class ProjectNode extends CompoundNode
         $this->internalLinkTargets[$target->getLinkType()][$anchorName] = $target;
     }
 
+    public function hasInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): bool
+    {
+        return isset($this->internalLinkTargets[$linkType][$anchorName]);
+    }
+
     public function getInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): InternalTarget|null
     {
         return $this->internalLinkTargets[$linkType][$anchorName] ?? null;
