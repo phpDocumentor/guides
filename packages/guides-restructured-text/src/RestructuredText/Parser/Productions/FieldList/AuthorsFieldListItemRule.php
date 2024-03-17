@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\ListNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorsNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
-use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function count;
@@ -46,12 +46,12 @@ final class AuthorsFieldListItemRule implements FieldListItemRule
                 if (str_contains($fieldListItemNode->getPlaintextContent(), ';')) {
                     $authorStrings = explode(';', $fieldListItemNode->getPlaintextContent());
                     foreach ($authorStrings as $authorString) {
-                        $authorNodes[] = new AuthorNode($authorString, [new RawNode($authorString)]);
+                        $authorNodes[] = new AuthorNode($authorString, [new PlainTextInlineNode($authorString)]);
                     }
                 } elseif (str_contains($fieldListItemNode->getPlaintextContent(), ',')) {
                     $authorStrings = explode(',', $fieldListItemNode->getPlaintextContent());
                     foreach ($authorStrings as $authorString) {
-                        $authorNodes[] = new AuthorNode($authorString, [new RawNode($authorString)]);
+                        $authorNodes[] = new AuthorNode($authorString, [new PlainTextInlineNode($authorString)]);
                     }
                 } else {
                     $authorNodes[] = new AuthorNode($fieldListItemNode->getPlaintextContent(), $fieldListItemNode->getChildren());
