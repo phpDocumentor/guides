@@ -23,8 +23,11 @@ use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use Psr\Log\LoggerInterface;
 use SplStack;
 use Webmozart\Assert\Assert;
+
+use function sprintf;
 
 /** @implements NodeTransformer<DocumentNode|AnchorNode|SectionNode> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
@@ -34,6 +37,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
 
     public function __construct(
         private readonly AnchorNormalizer $anchorReducer,
+        private LoggerInterface|null $logger = null,
     ) {
         /*
          * TODO: remove stack here, as we should not have sub documents in this way, sub documents are
@@ -47,7 +51,11 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
-        } elseif ($node instanceof AnchorNode) {
+
+            return $node;
+        }
+
+        if ($node instanceof AnchorNode) {
             $currentDocument = $compilerContext->getDocumentNode();
             $parentSection = $compilerContext->getShadowTree()->getParent()?->getNode();
             $title = null;
@@ -64,12 +72,33 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                     $title,
                 ),
             );
-        } elseif ($node instanceof LinkTargetNode) {
+
+            return $node;
+        }
+
+        if ($node instanceof SectionNode) {
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
-            $anchor = $node->getId();
+            $anchorName = $node->getId();
             $compilerContext->getProjectNode()->addLinkTarget(
-                $anchor,
+                $anchorName,
+                new InternalTarget(
+                    $currentDocument->getFilePath(),
+                    $anchorName,
+                    $node->getLinkText(),
+                    $node->getLinkType(),
+                ),
+            );
+
+            return $node;
+        }
+
+        if ($node instanceof LinkTargetNode) {
+            $currentDocument = $this->documentStack->top();
+            Assert::notNull($currentDocument);
+            $anchor = $this->anchorReducer->reduceAnchor($node->getId());
+            $this->addLinkTargetToProject(
+                $compilerContext,
                 new InternalTarget(
                     $currentDocument->getFilePath(),
                     $anchor,
@@ -79,11 +108,12 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             );
             if ($node instanceof MultipleLinkTargetsNode) {
                 foreach ($node->getAdditionalIds() as $id) {
-                    $compilerContext->getProjectNode()->addLinkTarget(
-                        $id,
+                    $anchor = $this->anchorReducer->reduceAnchor($id);
+                    $this->addLinkTargetToProject(
+                        $compilerContext,
                         new InternalTarget(
                             $currentDocument->getFilePath(),
-                            $id,
+                            $anchor,
                             $node->getLinkText(),
                             $node->getLinkType(),
                         ),
@@ -113,5 +143,29 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     {
         // After MetasPass
         return 5000;
+    }
+
+    private function addLinkTargetToProject(CompilerContext $compilerContext, InternalTarget $internalTarget): void
+    {
+        if ($compilerContext->getProjectNode()->hasInternalTarget($internalTarget->getAnchor(), $internalTarget->getLinkType())) {
+            $otherLink = $compilerContext->getProjectNode()->getInternalTarget($internalTarget->getAnchor(), $internalTarget->getLinkType());
+            $this->logger?->warning(
+                sprintf(
+                    'Duplicate anchor "%s" for link type "%s" in document "%s". The anchor is already used at "%s"',
+                    $internalTarget->getAnchor(),
+                    $internalTarget->getLinkType(),
+                    $compilerContext->getDocumentNode()->getFilePath(),
+                    $otherLink?->getDocumentPath(),
+                ),
+                $compilerContext->getLoggerInformation(),
+            );
+
+            return;
+        }
+
+        $compilerContext->getProjectNode()->addLinkTarget(
+            $internalTarget->getAnchor(),
+            $internalTarget,
+        );
     }
 }
