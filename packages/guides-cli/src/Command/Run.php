@@ -14,6 +14,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Cli\Command;
 
 use Flyfinder\Finder;
+use Flyfinder\Path;
+use Flyfinder\Specification\InPath;
+use Flyfinder\Specification\NotSpecification;
+use Flyfinder\Specification\OrSpecification;
+use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Tactician\CommandBus;
@@ -51,7 +56,10 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+use function array_map;
 use function array_pop;
+use function array_reduce;
+use function array_shift;
 use function assert;
 use function count;
 use function implode;
@@ -91,6 +99,13 @@ final class Run extends Command
             null,
             InputOption::VALUE_REQUIRED,
             'If set, only the specified file is parsed, relative to the directory specified in "input"',
+        );
+
+        $this->addOption(
+            'exclude-path',
+            null,
+            InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+            'Paths to exclude, doc files in these directories will not be parsed',
         );
 
         $this->addOption(
@@ -314,12 +329,28 @@ final class Run extends Command
         }
 
         if ($settings->getInputFile() === '') {
+            $exclude = null;
+            if ($input->getOption('exclude-path')) {
+                /** @var string[] $excludedPaths */
+                $excludedPaths = (array) $input->getOption('exclude-path');
+                $excludedSpecifications = array_map(static fn (string $path) => new NotSpecification(new InPath(new Path($path))), $excludedPaths);
+                $excludedSpecification = array_shift($excludedSpecifications);
+                assert($excludedSpecification !== null);
+
+                $exclude = array_reduce(
+                    $excludedSpecifications,
+                    static fn (SpecificationInterface $carry, SpecificationInterface $spec) => new OrSpecification($carry, $spec),
+                    $excludedSpecification,
+                );
+            }
+
             $documents = $this->commandBus->handle(
                 new ParseDirectoryCommand(
                     $sourceFileSystem,
                     '',
                     $settings->getInputFormat(),
                     $projectNode,
+                    $exclude,
                 ),
             );
         } else {

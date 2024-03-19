@@ -17,6 +17,8 @@ use Flyfinder\Path;
 use Flyfinder\Specification\AndSpecification;
 use Flyfinder\Specification\HasExtension;
 use Flyfinder\Specification\InPath;
+use Flyfinder\Specification\NotSpecification;
+use Flyfinder\Specification\SpecificationInterface;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 
@@ -36,14 +38,19 @@ final class FileCollector
      * This takes into account the presence of cached & fresh MetaEntry
      * objects, and avoids adding files to the parse queue that have
      * not changed and whose direct dependencies have not changed.
+     *
+     * @param SpecificationInterface|null $excludedSpecification specification that is used to exclude specific files/directories
      */
-    public function collect(FilesystemInterface $filesystem, string $directory, string $extension): Files
+    public function collect(FilesystemInterface $filesystem, string $directory, string $extension, SpecificationInterface|null $excludedSpecification = null): Files
     {
         $directory = trim($directory, '/');
+        $specification = new AndSpecification(new InPath(new Path($directory)), new HasExtension([$extension]));
+        if ($excludedSpecification) {
+            $specification = new AndSpecification($specification, new NotSpecification($excludedSpecification));
+        }
+
         /** @var array<array<string>> $files */
-        $files = $filesystem->find(
-            new AndSpecification(new InPath(new Path($directory)), new HasExtension([$extension])),
-        );
+        $files = $filesystem->find($specification);
 
         // completely populate the splFileInfos property
         $this->fileInfos = [];
