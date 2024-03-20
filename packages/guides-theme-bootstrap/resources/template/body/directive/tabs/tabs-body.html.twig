@@ -1,3 +1,4 @@
 <div class="tab-pane fade {%- if tab.active %} show active{% endif -%}" id="{{ tab.key }}-{{ tabsId }}" role="tabpanel" aria-labelledby="{{ tab.key }}-tab-{{ tabsId }}">
     {{ renderNode(tab.value) }}
 </div>
+{# force a new line at the end of the file #}

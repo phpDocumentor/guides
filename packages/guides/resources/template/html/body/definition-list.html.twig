@@ -16,7 +16,7 @@
         {% if definitionListTerm.children %}
             {%- for definition in definitionListTerm.children -%}
             <dd>{{ renderNode(definition) }}</dd>
-            {%- endfor -%}
+            {%- endfor ~%}
         {% endif %}
     {% endfor %}
 </dl>
