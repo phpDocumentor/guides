@@ -83,6 +83,8 @@ final class ConfvalDirective extends SubDirective
             $type = $this->inlineParser->parse($directive->getOption('default')->toString(), $blockContext);
         }
 
+        $noindex = $directive->hasOption('noindex');
+
         foreach ($directive->getOptions() as $option) {
             if (in_array($option->getName(), ['type', 'required', 'default', 'noindex', 'name'], true)) {
                 continue;
@@ -91,6 +93,6 @@ final class ConfvalDirective extends SubDirective
             $additionalOptions[$option->getName()] = $this->inlineParser->parse($option->toString(), $blockContext);
         }
 
-        return new ConfvalNode($id, $directive->getData(), $type, $required, $default, $additionalOptions, $collectionNode->getChildren());
+        return new ConfvalNode($id, $directive->getData(), $type, $required, $default, $additionalOptions, $collectionNode->getChildren(), $noindex);
     }
 }

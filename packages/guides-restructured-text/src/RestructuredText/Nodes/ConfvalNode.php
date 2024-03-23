@@ -15,7 +15,9 @@ namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\OptionalLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
 
 /**
@@ -25,7 +27,7 @@ use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
  *
  * @extends CompoundNode<Node>
  */
-final class ConfvalNode extends CompoundNode implements PrefixedLinkTargetNode
+final class ConfvalNode extends CompoundNode implements LinkTargetNode, OptionalLinkTargetsNode, PrefixedLinkTargetNode
 {
     public const LINK_TYPE = 'std:confval';
     public const LINK_PREFIX = 'confval-';
@@ -42,6 +44,7 @@ final class ConfvalNode extends CompoundNode implements PrefixedLinkTargetNode
         private readonly InlineCompoundNode|null $default = null,
         private readonly array $additionalOptions = [],
         array $value = [],
+        private readonly bool $noindex = false,
     ) {
         parent::__construct($value);
     }
@@ -95,5 +98,10 @@ final class ConfvalNode extends CompoundNode implements PrefixedLinkTargetNode
     public function getPrefix(): string
     {
         return self::LINK_PREFIX;
+    }
+
+    public function isNoindex(): bool
+    {
+        return $this->noindex;
     }
 }
