@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\OptionalLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
@@ -95,6 +96,10 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         }
 
         if ($node instanceof LinkTargetNode) {
+            if ($node instanceof OptionalLinkTargetsNode && $node->isNoindex()) {
+                return $node;
+            }
+
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchor = $this->anchorReducer->reduceAnchor($node->getId());
