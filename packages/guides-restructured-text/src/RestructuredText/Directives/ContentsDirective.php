@@ -50,6 +50,7 @@ final class ContentsDirective extends BaseDirective
 
         return (new ContentMenuNode([new SectionMenuEntryNode($absoluteUrl)]))
             ->withOptions($this->optionsToArray($options))
-            ->withCaption($directive->getDataNode());
+            ->withCaption($directive->getDataNode())
+            ->withLocal($directive->hasOption('local'));
     }
 }
