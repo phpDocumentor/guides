@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 /** @extends EntryNode<DocumentNode> */
@@ -45,5 +46,23 @@ final class SectionEntryNode extends EntryNode
     public function getChildren(): array
     {
         return $this->children;
+    }
+
+    public function findSectionEntry(SectionNode $sectionNode): SectionEntryNode|null
+    {
+        foreach ($this->children as $sectionEntryNode) {
+            if ($sectionNode->getId() === $sectionEntryNode->getId()) {
+                return $sectionEntryNode;
+            }
+        }
+
+        foreach ($this->children as $sectionEntryNode) {
+            $subsection = $sectionEntryNode->findSectionEntry($sectionNode);
+            if ($subsection !== null) {
+                return $subsection;
+            }
+        }
+
+        return null;
     }
 }
