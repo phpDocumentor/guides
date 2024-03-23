@@ -46,7 +46,7 @@ final class AnchorReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getAnchor()));
+        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getPrefix() . $target->getAnchor()));
         if ($node->getValue() === '') {
             $node->setValue($target->getTitle() ?? '');
         }

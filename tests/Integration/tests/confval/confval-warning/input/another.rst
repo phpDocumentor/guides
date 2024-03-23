@@ -1,3 +1,6 @@
+
+..  _demo:
+
 Confval directive
 =================
 
@@ -11,4 +14,5 @@ Confval directive
 
     Another paragraph.
 
-See option :confval:`demo`.
+See option :confval:`demo`. We can also link the
+headline: :ref:`demo`.

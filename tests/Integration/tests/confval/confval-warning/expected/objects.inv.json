@@ -19,6 +19,12 @@
             "-",
             "index.html#confval-directive",
             "Confval directive"
+        ],
+        "demo": [
+            "-",
+            "-",
+            "another.html#demo",
+            "Confval directive"
         ]
     },
     "std:confval": {

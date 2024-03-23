@@ -21,6 +21,7 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\MultipleLinkTargetsNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use Psr\Log\LoggerInterface;
@@ -97,6 +98,11 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchor = $this->anchorReducer->reduceAnchor($node->getId());
+            $prefix = '';
+            if ($node instanceof PrefixedLinkTargetNode) {
+                $prefix = $node->getPrefix();
+            }
+
             $this->addLinkTargetToProject(
                 $compilerContext,
                 new InternalTarget(
@@ -104,6 +110,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                     $anchor,
                     $node->getLinkText(),
                     $node->getLinkType(),
+                    $prefix,
                 ),
             );
             if ($node instanceof MultipleLinkTargetsNode) {
