@@ -18,6 +18,8 @@ use function is_scalar;
 /** @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents */
 final class ContentMenuNode extends MenuNode
 {
+    private bool $local = false;
+
     public function getDepth(): int
     {
         if ($this->hasOption('depth') && is_scalar($this->getOption('depth'))) {
@@ -30,5 +32,18 @@ final class ContentMenuNode extends MenuNode
     public function isPageLevelOnly(): bool
     {
         return false;
+    }
+
+    public function isLocal(): bool
+    {
+        return $this->local;
+    }
+
+    public function withLocal(bool $local): ContentMenuNode
+    {
+        $that = clone $this;
+        $that->local = $local;
+
+        return $that;
     }
 }

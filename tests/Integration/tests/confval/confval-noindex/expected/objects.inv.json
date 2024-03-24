@@ -1,0 +1,32 @@
+{
+    "std:doc": {
+        "another": [
+            "-",
+            "-",
+            "another.html",
+            "Confval directive"
+        ],
+        "index": [
+            "-",
+            "-",
+            "index.html",
+            "Confval directive"
+        ]
+    },
+    "std:label": {
+        "confval-directive": [
+            "-",
+            "-",
+            "index.html#confval-directive",
+            "Confval directive"
+        ]
+    },
+    "std:confval": {
+        "demo": [
+            "-",
+            "-",
+            "index.html#demo",
+            "demo"
+        ]
+    }
+}

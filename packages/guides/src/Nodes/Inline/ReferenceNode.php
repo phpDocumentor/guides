@@ -37,6 +37,7 @@ final class ReferenceNode extends AbstractLinkInlineNode implements CrossReferen
         string $value = '',
         private readonly string $interlinkDomain = '',
         private readonly string $linkType = SectionNode::STD_LABEL,
+        private readonly string $prefix = '',
     ) {
         parent::__construct(self::TYPE, $targetReference, $value);
     }
@@ -62,6 +63,11 @@ final class ReferenceNode extends AbstractLinkInlineNode implements CrossReferen
 
     public function getInterlinkGroup(): string
     {
-        return 'std:label';
+        return $this->linkType;
+    }
+
+    public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 }

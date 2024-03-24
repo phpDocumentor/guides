@@ -17,6 +17,8 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\OptionalLinkTargetsNode;
+use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
 
 /**
  * The confval directive configuration values.
@@ -25,9 +27,10 @@ use phpDocumentor\Guides\Nodes\Node;
  *
  * @extends CompoundNode<Node>
  */
-final class ConfvalNode extends CompoundNode implements LinkTargetNode
+final class ConfvalNode extends CompoundNode implements LinkTargetNode, OptionalLinkTargetsNode, PrefixedLinkTargetNode
 {
     public const LINK_TYPE = 'std:confval';
+    public const LINK_PREFIX = 'confval-';
 
     /**
      * @param list<Node> $value
@@ -41,6 +44,7 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode
         private readonly InlineCompoundNode|null $default = null,
         private readonly array $additionalOptions = [],
         array $value = [],
+        private readonly bool $noindex = false,
     ) {
         parent::__construct($value);
     }
@@ -58,6 +62,11 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getAnchor(): string
+    {
+        return self::LINK_PREFIX . $this->id;
     }
 
     public function getLinkText(): string
@@ -84,5 +93,15 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode
     public function getAdditionalOptions(): array
     {
         return $this->additionalOptions;
+    }
+
+    public function getPrefix(): string
+    {
+        return self::LINK_PREFIX;
+    }
+
+    public function isNoindex(): bool
+    {
+        return $this->noindex;
     }
 }

@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\SectionNode;
 
 use function assert;
 
@@ -45,12 +47,36 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
         assert($entryNode instanceof SectionMenuEntryNode);
         $depth = (int) $currentMenu->getOption('depth', self::DEFAULT_MAX_LEVELS - 1) + 1;
         $documentEntry = $compilerContext->getDocumentNode()->getDocumentEntry();
-        $newEntryNode = new SectionMenuEntryNode(
-            $documentEntry->getFile(),
-            $entryNode->getValue() ?? $documentEntry->getTitle(),
-            1,
-        );
-        $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
+        if ($currentMenu->isLocal()) {
+            $sectionNode = $compilerContext->getShadowTree()->getParent()?->getParent()?->getNode();
+            if (!$sectionNode instanceof SectionNode) {
+                $this->logger->error('Section of contents directive not found. ', $compilerContext->getLoggerInformation());
+
+                return [];
+            }
+
+            $sectionEntry = $documentEntry->findSectionEntry($sectionNode);
+            if (!$sectionEntry instanceof SectionEntryNode) {
+                $this->logger->error('Section of contents directive not found. ', $compilerContext->getLoggerInformation());
+
+                return [];
+            }
+
+            $newEntryNode = new SectionMenuEntryNode(
+                $documentEntry->getFile(),
+                $entryNode->getValue() ?? $sectionEntry->getTitle(),
+                1,
+                $sectionEntry->getId(),
+            );
+            $this->addSubSections($newEntryNode, $sectionEntry, $documentEntry, 1, $depth);
+        } else {
+            $newEntryNode = new SectionMenuEntryNode(
+                $documentEntry->getFile(),
+                $entryNode->getValue() ?? $documentEntry->getTitle(),
+                1,
+            );
+            $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
+        }
 
         return $newEntryNode->getSections();
     }
