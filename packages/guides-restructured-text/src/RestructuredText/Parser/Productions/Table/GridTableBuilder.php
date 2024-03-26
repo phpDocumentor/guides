@@ -40,139 +40,219 @@ final class GridTableBuilder
     {
     }
 
+    /** @throws Exception */
     protected function compile(ParserContext $context): TableNode
     {
-        $columnRanges = $context->getColumnRanges();
-        $finalHeadersRow = $context->getHeaderRows();
+        $rows = $this->extractTableRows($context);
+        $rows = $this->concatenateTableRows($rows, $context);
+        $headers = $this->extractHeaderRows($rows, $context);
 
-        /** @var TableRow[] $rows */
+        return new TableNode($rows, $headers);
+    }
+
+    /** @return array<int, TableRow> */
+    private function extractTableRows(ParserContext $context): array
+    {
+        /** @var array<int, TableRow> $rows */
         $rows = [];
-        $partialSeparatorRows = $this->findRowSpans($context);
+        $columnRanges = $context->getColumnRanges();
         $currentSpan = 1;
-
         foreach ($context->getDataLines() as $rowIndex => $line) {
-            $row = new TableRow();
-            $currentColumnStart = null;
-            $previousColumnEnd = null;
-            foreach ($columnRanges as $start => $end) {
-                $this->assertColumnEnded($currentColumnStart, $previousColumnEnd);
+            $rows[$rowIndex] = $this->extractRow($columnRanges, $line, $currentSpan);
+        }
 
-                if ($currentColumnStart !== null) {
-                    $cellText = mb_substr($line, $previousColumnEnd, $start - $previousColumnEnd);
-                    if (!str_contains($cellText, '|') && !str_contains($cellText, '+')) {
-                        // text continued through the "gap". This is a colspan
-                        // "+" is an odd character - it's usually "|", but "+" can
-                        // happen in row-span situations
-                        $currentSpan++;
-                        $previousColumnEnd = $end;
-                        continue;
-                    }
+        return $rows;
+    }
 
-                    // we just hit a proper "gap" record the line up until now
-                    $row->addColumn(
-                        $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
-                    );
-                    $currentSpan = 1;
-                    $currentColumnStart = null;
-                }
+    /** @param array<int, int> $columnRanges */
+    private function extractRow(array $columnRanges, string $line, int &$currentSpan): TableRow
+    {
+        $row = new TableRow();
+        $currentColumnStart = null;
+        $previousColumnEnd = null;
+        $this->extractTableCell($columnRanges, $currentColumnStart, $previousColumnEnd, $line, $currentSpan, $row);
 
-                // if the current column start is null, then set it
-                // otherwise, leave it - this is a colspan, and eventually
-                // we want to get all the text starting here
-                $currentColumnStart = $start;
+        // record the last column
+        $this->assertColumnEnded($currentColumnStart, $previousColumnEnd);
 
-                $previousColumnEnd = $end;
-            }
+        if ($currentColumnStart !== null) {
+            $row->addColumn(
+                $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
+            );
+        }
 
-            // record the last column
+        return $row;
+    }
+
+    /** @param list<int> $columnRanges */
+    private function extractTableCell(array $columnRanges, int|null &$currentColumnStart, int|null &$previousColumnEnd, string $line, int &$currentSpan, TableRow $row): void
+    {
+        foreach ($columnRanges as $start => $end) {
             $this->assertColumnEnded($currentColumnStart, $previousColumnEnd);
 
             if ($currentColumnStart !== null) {
-                $row->addColumn(
-                    $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
-                );
-            }
-
-            $rows[$rowIndex] = $row;
-        }
-
-        $columnIndexesCurrentlyInRowspan = [];
-        foreach ($rows as $rowIndex => $row) {
-            if (isset($partialSeparatorRows[$rowIndex])) {
-                // this row is part content, part separator due to a rowspan
-                // for each column that contains content, we need to
-                // push it onto the last real row's content and record
-                // that this column in the next row should also be
-                // included in that previous row's content
-                foreach ($row->getColumns() as $columnIndex => $column) {
-                    if (
-                        !$column->isCompletelyEmpty()
-                        && str_repeat(
-                            '-',
-                            mb_strlen($column->getContent()),
-                        ) === $column->getContent()
-                    ) {
-                        // only a line separator in this column - not content!
-                        continue;
-                    }
-
-                    $prevTargetColumn = $this->findColumnInPreviousRows((int) $columnIndex, $rows, (int) $rowIndex);
-                    $prevTargetColumn->addContent("\n" . $column->getContent());
-                    $prevTargetColumn->incrementRowSpan();
-                    // mark that this column on the next row should also be added
-                    // to the previous row
-                    $columnIndexesCurrentlyInRowspan[] = $columnIndex;
-                }
-
-                // remove the row - it's not real
-                unset($rows[$rowIndex]);
-
-                continue;
-            }
-
-            // check if the previous row was a partial separator row, and
-            // we need to take some columns and add them to a previous row's content
-            foreach ($columnIndexesCurrentlyInRowspan as $columnIndex) {
-                $prevTargetColumn = $this->findColumnInPreviousRows($columnIndex, $rows, (int) $rowIndex);
-                $columnInRowspan = $row->getColumn($columnIndex);
-                if ($columnInRowspan === null) {
-                    $context->addError(sprintf('Cannot find column for index "%s"', $columnIndex));
+                $cellText = mb_substr($line, $previousColumnEnd, $start - $previousColumnEnd);
+                if (!str_contains($cellText, '|') && !str_contains($cellText, '+')) {
+                    // text continued through the "gap". This is a colspan
+                    // "+" is an odd character - it's usually "|", but "+" can
+                    // happen in row-span situations
+                    $currentSpan++;
+                    $previousColumnEnd = $end;
                     continue;
                 }
 
-                $prevTargetColumn->addContent("\n" . $columnInRowspan->getContent());
-
-                // now this column actually needs to be removed from this row,
-                // as it's not a real column that needs to be printed
-                $row->removeColumn($columnIndex);
+                // we just hit a proper "gap" record the line up until now
+                $row->addColumn(
+                    $this->createColumn($line, $currentColumnStart, $previousColumnEnd, $currentSpan),
+                );
+                $currentSpan = 1;
+                $currentColumnStart = null;
             }
+
+            // if the current column start is null, then set it
+            // otherwise, leave it - this is a colspan, and eventually
+            // we want to get all the text starting here
+            $currentColumnStart = $start;
+
+            $previousColumnEnd = $end;
+        }
+    }
+
+    /**
+     * @param array<int, TableRow> $rows
+     *
+     * @return array<int, TableRow>
+     *
+     * @throws Exception
+     */
+    private function concatenateTableRows(array $rows, ParserContext $context): array
+    {
+        $partialSeparatorRows = $this->findRowSpans($context);
+        $columnIndexesCurrentlyInRowspan = [];
+        foreach ($rows as $rowIndex => $row) {
+            if (isset($partialSeparatorRows[$rowIndex])) {
+                $rows = $this->handlePartialSeparator($row, $rows, $rowIndex, $columnIndexesCurrentlyInRowspan);
+                continue;
+            }
+
+            $this->handlePreviousRowWasAPartialSeparator($columnIndexesCurrentlyInRowspan, $rows, $rowIndex, $row, $context);
 
             $columnIndexesCurrentlyInRowspan = [];
-
-            // if the next row is just $i+1, it means there
-            // was no "separator" and this is really just a
-            // continuation of this row.
-            $nextRowCounter = 1;
-            while (isset($rows[(int) $rowIndex + $nextRowCounter])) {
-                // but if the next line is actually a partial separator, then
-                // it is not a continuation of the content - quit now
-                if (isset($partialSeparatorRows[(int) $rowIndex + $nextRowCounter])) {
-                    break;
-                }
-
-                $targetRow = $rows[(int) $rowIndex + $nextRowCounter];
-                unset($rows[(int) $rowIndex + $nextRowCounter]);
-
-                try {
-                    $row->absorbRowContent($targetRow);
-                } catch (InvalidTableStructure $e) {
-                    $this->logger->error($e->getMessage());
-                }
-
-                $nextRowCounter++;
-            }
+            $rows = $this->concatenateTableRow($rows, $rowIndex, $partialSeparatorRows, $row);
         }
 
+        return $rows;
+    }
+
+    /**
+     * @param array<int, TableRow> $rows
+     * @param array<int, bool> $partialSeparatorRows
+     *
+     * @return array<int, TableRow>
+     */
+    private function concatenateTableRow(array $rows, int $rowIndex, array $partialSeparatorRows, TableRow $row): array
+    {
+        // if the next row is just $i+1, it means there
+        // was no "separator" and this is really just a
+        // continuation of this row.
+        $nextRowCounter = 1;
+        while (isset($rows[$rowIndex + $nextRowCounter])) {
+            // but if the next line is actually a partial separator, then
+            // it is not a continuation of the content - quit now
+            if (isset($partialSeparatorRows[$rowIndex + $nextRowCounter])) {
+                break;
+            }
+
+            $targetRow = $rows[$rowIndex + $nextRowCounter];
+            unset($rows[$rowIndex + $nextRowCounter]);
+
+            try {
+                $row->absorbRowContent($targetRow);
+            } catch (InvalidTableStructure $e) {
+                $this->logger->error($e->getMessage());
+            }
+
+            $nextRowCounter++;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @param array<int, int> $columnIndexesCurrentlyInRowspan
+     * @param array<int, TableRow> $rows
+     *
+     * @throws Exception
+     */
+    private function handlePreviousRowWasAPartialSeparator(array $columnIndexesCurrentlyInRowspan, array $rows, int $rowIndex, TableRow $row, ParserContext $context): void
+    {
+        // check if the previous row was a partial separator row, and
+        // we need to take some columns and add them to a previous row's content
+        foreach ($columnIndexesCurrentlyInRowspan as $columnIndex) {
+            $prevTargetColumn = $this->findColumnInPreviousRows($columnIndex, $rows, $rowIndex);
+            $columnInRowspan = $row->getColumn($columnIndex);
+            if ($columnInRowspan === null) {
+                $context->addError(sprintf('Cannot find column for index "%s"', $columnIndex));
+                continue;
+            }
+
+            $prevTargetColumn->addContent("\n" . $columnInRowspan->getContent());
+
+            // now this column actually needs to be removed from this row,
+            // as it's not a real column that needs to be printed
+            $row->removeColumn($columnIndex);
+        }
+    }
+
+    /**
+     * @param array<int, TableRow> $rows
+     * @param array<int, int> $columnIndexesCurrentlyInRowspan
+     *
+     * @return array<int, TableRow>
+     *
+     * @throws Exception
+     */
+    private function handlePartialSeparator(TableRow $row, array $rows, int $rowIndex, array &$columnIndexesCurrentlyInRowspan): array
+    {
+        // this row is part content, part separator due to a rowspan
+        // for each column that contains content, we need to
+        // push it onto the last real row's content and record
+        // that this column in the next row should also be
+        // included in that previous row's content
+        foreach ($row->getColumns() as $columnIndex => $column) {
+            if (
+                !$column->isCompletelyEmpty()
+                && str_repeat(
+                    '-',
+                    mb_strlen($column->getContent()),
+                ) === $column->getContent()
+            ) {
+                // only a line separator in this column - not content!
+                continue;
+            }
+
+            $prevTargetColumn = $this->findColumnInPreviousRows((int) $columnIndex, $rows, $rowIndex);
+            $prevTargetColumn->addContent("\n" . $column->getContent());
+            $prevTargetColumn->incrementRowSpan();
+            // mark that this column on the next row should also be added
+            // to the previous row
+            $columnIndexesCurrentlyInRowspan[] = $columnIndex;
+        }
+
+        // remove the row - it's not real
+        unset($rows[$rowIndex]);
+
+        return $rows;
+    }
+
+    /**
+     * @param array<int, TableRow> $rows
+     *
+     * @return array<int, TableRow>
+     */
+    private function extractHeaderRows(array &$rows, ParserContext $context): array
+    {
+        $finalHeadersRow = $context->getHeaderRows();
         $headers = [];
         // one more loop to set headers
         foreach ($rows as $rowIndex => $row) {
@@ -184,13 +264,13 @@ final class GridTableBuilder
             unset($rows[$rowIndex]);
         }
 
-        return new TableNode($rows, $headers);
+        return $headers;
     }
 
-    /** @param TableRow[] $rows */
+    /** @param array<int, TableRow> $rows */
     private function findColumnInPreviousRows(int $columnIndex, array $rows, int $currentRowIndex): TableColumn
     {
-        /** @var TableRow[] $reversedRows */
+        /** @var array<int, TableRow> $reversedRows */
         $reversedRows = array_reverse($rows, true);
 
         // go through the rows backwards to find the last/previous
