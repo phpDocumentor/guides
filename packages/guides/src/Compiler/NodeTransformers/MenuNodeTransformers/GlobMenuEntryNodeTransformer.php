@@ -20,12 +20,14 @@ use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 
 use function array_pop;
 use function assert;
 use function explode;
 use function implode;
 use function in_array;
+use function is_string;
 use function preg_match;
 use function str_replace;
 
@@ -65,10 +67,15 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
                 }
             }
 
+            $titleNode = $documentEntry->getTitle();
+            if (is_string($documentEntry->getNavigationTitle())) {
+                $titleNode = TitleNode::fromString($documentEntry->getNavigationTitle());
+            }
+
             $documentEntriesInTree[] = $documentEntry;
             $newEntryNode = new InternalMenuEntryNode(
                 $documentEntry->getFile(),
-                $documentEntry->getTitle(),
+                $titleNode,
                 [],
                 false,
                 1,

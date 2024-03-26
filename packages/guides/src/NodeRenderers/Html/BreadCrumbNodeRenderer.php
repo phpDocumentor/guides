@@ -19,12 +19,14 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function array_reverse;
 use function assert;
 use function is_a;
+use function is_string;
 
 /**
  * @template T as Node
@@ -107,9 +109,14 @@ final class BreadCrumbNodeRenderer implements NodeRenderer
         int $level,
         bool $isCurrent,
     ): array {
+        $title = $documentEntry->getTitle();
+        if (is_string($documentEntry->getNavigationTitle())) {
+            $title = TitleNode::fromString($documentEntry->getNavigationTitle());
+        }
+
         $entry = new InternalMenuEntryNode(
             $documentEntry->getFile(),
-            $documentEntry->getTitle(),
+            $title,
             [],
             false,
             $level,
