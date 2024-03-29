@@ -42,3 +42,56 @@ jobs:
 
       - name: "Run guides-cli"
         run: "vendor/bin/guides -vvv --no-progress docs --output='/tmp/test' --fail-on-log"
+
+  build:
+    name: "Documentation"
+    if: "${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Build"
+        uses: "phpDocumentor/phpDocumentor@master"
+
+      - name: "Upload"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "documentation"
+          path: "build/docs"
+          retention-days: 1
+
+  deploy:
+    name: "Deploy"
+    if: "${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}"
+    runs-on: "ubuntu-latest"
+    needs: "build"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          repository: "phpDocumentor/docs"
+          token: "${{ secrets.BOT_TOKEN }}"
+          path: "docs"
+
+      - name: "Download"
+        uses: "actions/download-artifact@v4"
+        with:
+          name: "documentation"
+          path: "build/docs"
+
+      - name: "Copy files"
+        run: "rsync -r --delete build/docs/* docs/docs/components/guides"
+
+      - name: "Commit"
+        uses: "stefanzweifel/git-auto-commit-action@v5"
+        with:
+          repository: "docs"
+          commit_message: "Update guides documentation"
+
+      - name: "Push"
+        uses: "ad-m/github-push-action@master"
+        with:
+          directory: "docs"
+          github_token: "${{ secrets.BOT_TOKEN }}"
+          repository: "phpDocumentor/docs"
