@@ -32,7 +32,7 @@
         "symfony/clock": "^6.4.5",
         "symfony/string": "^6.4.4",
         "symfony/translation-contracts": "^3.4.2",
-        "symfony/http-client": "^6.4.5",
+        "symfony/http-client": "^6.4.6",
         "twig/twig": "~2.15 || ^3.0",
         "webmozart/assert": "^1.11"
     },
