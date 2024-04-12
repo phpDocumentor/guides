@@ -4,6 +4,6 @@
     xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd">
     <extension class="phpDocumentor\Guides\Graphs">
         <renderer>plantuml-server</renderer>
-        <plantuml-server>https://example.com</plantuml-server>
+        <plantuml-server>https://this-does-not-exist-phpdoc.com</plantuml-server>
     </extension>
 </guides>

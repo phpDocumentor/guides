@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Graphs\Renderer;
 
 use phpDocumentor\Guides\RenderContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function Jawira\PlantUml\encodep;
@@ -35,24 +36,36 @@ final class PlantumlServerRenderer implements DiagramRenderer
 
         $url = $this->plantumlServerUrl . '/svg/' . $encodedDiagram;
 
-        $response = $this->httpClient->request(
-            'GET',
-            $url,
-        );
+        try {
+            $response = $this->httpClient->request(
+                'GET',
+                $url,
+            );
 
-        if ($response->getStatusCode() !== 200) {
+            if ($response->getStatusCode() !== 200) {
+                $this->logger->warning(
+                    sprintf(
+                        'Failed to render diagram using url: %s. The server returned status code %s. ',
+                        $url,
+                        $response->getStatusCode(),
+                    ),
+                    $renderContext->getLoggerInformation(),
+                );
+
+                return null;
+            }
+
+            return $response->getContent();
+        } catch (TransportExceptionInterface) {
             $this->logger->warning(
                 sprintf(
-                    'Failed to render diagram using url: %s. The server returned status code %s. ',
+                    'Failed to render diagram using url: %s. ',
                     $url,
-                    $response->getStatusCode(),
                 ),
                 $renderContext->getLoggerInformation(),
             );
 
             return null;
         }
-
-        return $response->getContent();
     }
 }
