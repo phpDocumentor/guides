@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: "Backport Action"
         uses: "sorenlouv/backport-github-action@v9.3.1"
+        if: "${{ github.event.pull_request.merged == true }}"
         with:
           github_token: "${{ secrets.BOT_TOKEN }}"
           auto_backport_label_prefix: "auto-backport-to-"
