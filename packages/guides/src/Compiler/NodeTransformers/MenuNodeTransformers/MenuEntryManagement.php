@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
 
@@ -25,7 +25,7 @@ trait MenuEntryManagement
     /** @param array<DocumentEntryNode|ExternalEntryNode> $entryNodes */
     private function attachDocumentEntriesToParents(
         array $entryNodes,
-        CompilerContext $compilerContext,
+        CompilerContextInterface $compilerContext,
         string $currentPath,
     ): void {
         foreach ($entryNodes as $entryNode) {

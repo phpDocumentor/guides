@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use Exception;
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuNode;
@@ -32,13 +32,13 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
     ) {
     }
 
-    final public function enterNode(Node $node, CompilerContext $compilerContext): MenuEntryNode
+    final public function enterNode(Node $node, CompilerContextInterface $compilerContext): MenuEntryNode
     {
         return $node;
     }
 
     /** @param MenuEntryNode $node */
-    final public function leaveNode(Node $node, CompilerContext $compilerContext): MenuEntryNode|null
+    final public function leaveNode(Node $node, CompilerContextInterface $compilerContext): MenuEntryNode|null
     {
         assert($node instanceof MenuEntryNode);
         $currentMenuShaddow = $compilerContext->getShadowTree()->getParent();
@@ -70,5 +70,5 @@ abstract class AbstractMenuEntryNodeTransformer implements NodeTransformer
     }
 
     /** @return list<MenuEntryNode> */
-    abstract protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array;
+    abstract protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContextInterface $compilerContext): array;
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Exception\DocumentEntryNotFound;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
@@ -41,7 +41,7 @@ final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTra
     }
 
     /** @return list<MenuEntryNode> */
-    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContext $compilerContext): array
+    protected function handleMenuEntry(MenuNode $currentMenu, MenuEntryNode $entryNode, CompilerContextInterface $compilerContext): array
     {
         assert($entryNode instanceof InternalMenuEntryNode);
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
@@ -67,7 +67,7 @@ final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTra
 
     private function addSubEntries(
         MenuNode $currentMenu,
-        CompilerContext $compilerContext,
+        CompilerContextInterface $compilerContext,
         InternalMenuEntryNode $sectionMenuEntry,
         DocumentEntryNode $documentEntry,
         int $currentLevel,

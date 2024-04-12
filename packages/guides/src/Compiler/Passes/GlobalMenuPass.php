@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
@@ -50,7 +50,7 @@ final class GlobalMenuPass implements CompilerPass
      *
      * @return DocumentNode[]
      */
-    public function run(array $documents, CompilerContext $compilerContext): array
+    public function run(array $documents, CompilerContextInterface $compilerContext): array
     {
         $projectNode = $compilerContext->getProjectNode();
         try {
@@ -83,7 +83,7 @@ final class GlobalMenuPass implements CompilerPass
         return $documents;
     }
 
-    private function getNavMenuNodefromTocNode(CompilerContext $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
+    private function getNavMenuNodefromTocNode(CompilerContextInterface $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
     {
         $self = $this;
         $menuEntries = array_map(static function (MenuEntryNode $tocEntry) use ($compilerContext, $self) {
@@ -104,7 +104,7 @@ final class GlobalMenuPass implements CompilerPass
         return $node;
     }
 
-    private function getMenuEntryWithChildren(CompilerContext $compilerContext, MenuEntryNode $menuEntry): MenuEntryNode
+    private function getMenuEntryWithChildren(CompilerContextInterface $compilerContext, MenuEntryNode $menuEntry): MenuEntryNode
     {
         if (!$menuEntry instanceof InternalMenuEntryNode) {
             return $menuEntry;
@@ -121,7 +121,7 @@ final class GlobalMenuPass implements CompilerPass
 
     /** @param EntryNode<DocumentEntryNode|ExternalEntryNode>|ExternalEntryNode $entryNode */
     private function addSubEntries(
-        CompilerContext $compilerContext,
+        CompilerContextInterface $compilerContext,
         MenuEntryNode $sectionMenuEntry,
         EntryNode $entryNode,
         int $currentLevel,
