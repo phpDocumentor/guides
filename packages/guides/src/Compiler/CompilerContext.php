@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use Doctrine\Deprecations\Deprecation;
 use Exception;
 use phpDocumentor\Guides\Compiler\ShadowTree\TreeNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -38,6 +39,15 @@ class CompilerContext implements CompilerContextInterface
     public function __construct(
         private readonly ProjectNode $projectNode,
     ) {
+        if (self::class === static::class) {
+            return;
+        }
+
+        Deprecation::trigger(
+            'phpdocumentor/guides',
+            'https://github.com/phpDocumentor/guides/issues/971',
+            'Extending CompilerContext is deprecated, please use the CompilerContextInterface instead.',
+        );
     }
 
     public function getProjectNode(): ProjectNode
