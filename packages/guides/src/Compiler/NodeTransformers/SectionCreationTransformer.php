@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -32,7 +32,7 @@ final class SectionCreationTransformer implements NodeTransformer
     /** @var SectionNode[] $sectionStack */
     private array $sectionStack = [];
 
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if (!$compilerContext->getShadowTree()->getParent()?->getNode() instanceof DocumentNode) {
             return $node;
@@ -48,7 +48,7 @@ final class SectionCreationTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
     {
         if (!$compilerContext->getShadowTree()->getParent()?->getNode() instanceof DocumentNode) {
             return $node;

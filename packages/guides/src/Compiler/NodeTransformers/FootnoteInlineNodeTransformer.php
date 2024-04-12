@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\Inline\FootnoteInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -21,7 +21,7 @@ use phpDocumentor\Guides\Nodes\Node;
 /** @implements NodeTransformer<Node> */
 final class FootnoteInlineNodeTransformer implements NodeTransformer
 {
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof FootnoteInlineNode) {
             if ($node->getNumber() > 0) {
@@ -38,7 +38,7 @@ final class FootnoteInlineNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
     {
         return $node;
     }

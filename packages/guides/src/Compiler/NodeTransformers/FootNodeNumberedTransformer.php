@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\FootnoteNode;
@@ -22,7 +22,7 @@ use phpDocumentor\Guides\Nodes\Node;
 /** @implements NodeTransformer<Node> */
 final class FootNodeNumberedTransformer implements NodeTransformer
 {
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof FootnoteNode && $this->supports($node)) {
             $compilerContext->getDocumentNode()->addFootnoteTarget(new FootnoteTarget(
@@ -36,7 +36,7 @@ final class FootNodeNumberedTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
     {
         return $node;
     }

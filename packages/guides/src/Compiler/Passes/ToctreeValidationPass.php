@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
@@ -37,7 +37,7 @@ final class ToctreeValidationPass implements CompilerPass
      *
      * @return DocumentNode[]
      */
-    public function run(array $documents, CompilerContext $compilerContext): array
+    public function run(array $documents, CompilerContextInterface $compilerContext): array
     {
         $projectNode = $compilerContext->getProjectNode();
 
