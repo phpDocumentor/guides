@@ -36,6 +36,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "doctrine/deprecations": "^1.1",
         "phpdocumentor/guides": "^2.0@dev || ^1.0",
         "phpdocumentor/guides-cli": "^2.0@dev || ^1.0",
         "phpdocumentor/guides-code": "^2.0@dev || ^1.0",

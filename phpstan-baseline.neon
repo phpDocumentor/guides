@@ -121,6 +121,16 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
 
 		-
+			message: "#^Strict comparison using \\=\\=\\= between 'phpDocumentor\\\\\\\\Guides\\\\\\\\Compiler\\\\\\\\CompilerContext' and 'phpDocumentor\\\\\\\\Guides\\\\\\\\Compiler\\\\\\\\CompilerContext' will always evaluate to true\\.$#"
+			count: 1
+			path: packages/guides/src/Compiler/CompilerContext.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: packages/guides/src/Compiler/CompilerContext.php
+
+		-
 			message: "#^Function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
 			count: 2
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
@@ -139,6 +149,11 @@ parameters:
 			message: "#^Property phpDocumentor\\\\Guides\\\\Renderer\\\\DocumentListIterator\\:\\:\\$currentDocument \\(WeakReference\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>\\|null\\) does not accept WeakReference\\<TIn of object\\>\\.$#"
 			count: 1
 			path: packages/guides/src/Renderer/DocumentListIterator.php
+
+		-
+			message: "#^Anonymous class extends @final class phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext\\.$#"
+			count: 1
+			path: packages/guides/tests/unit/Compiler/CompilerContextTest.php
 
 		-
 			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:32\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
