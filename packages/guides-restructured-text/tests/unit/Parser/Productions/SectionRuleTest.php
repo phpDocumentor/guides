@@ -182,7 +182,7 @@ RST;
     {
         $inlineTokenParser = $this->createMock(InlineParser::class);
         $inlineTokenParser->method('parse')->willReturnCallback(
-            static fn (string $arg): InlineCompoundNode => InlineCompoundNode::getPlainTextInlineNode($arg)
+            static fn (string $arg): InlineCompoundNode => InlineCompoundNode::getPlainTextInlineNode($arg),
         );
 
         return $inlineTokenParser;

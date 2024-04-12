@@ -67,7 +67,7 @@ abstract class RuleTestCase extends TestCase
         $inlineTokenParser->method('parse')->willReturnCallback(
             static fn (string $arg): InlineCompoundNode => new InlineCompoundNode([
                 new PlainTextInlineNode($arg),
-            ])
+            ]),
         );
 
         return new InlineMarkupRule($inlineTokenParser);
