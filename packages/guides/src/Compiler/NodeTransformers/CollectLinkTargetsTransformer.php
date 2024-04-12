@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
-use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\AnchorNode;
@@ -49,7 +49,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         $this->documentStack = new SplStack();
     }
 
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
+    public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->push($node);
@@ -137,7 +137,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();
@@ -157,7 +157,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return 5000;
     }
 
-    private function addLinkTargetToProject(CompilerContext $compilerContext, InternalTarget $internalTarget): void
+    private function addLinkTargetToProject(CompilerContextInterface $compilerContext, InternalTarget $internalTarget): void
     {
         if ($compilerContext->getProjectNode()->hasInternalTarget($internalTarget->getAnchor(), $internalTarget->getLinkType())) {
             $otherLink = $compilerContext->getProjectNode()->getInternalTarget($internalTarget->getAnchor(), $internalTarget->getLinkType());
