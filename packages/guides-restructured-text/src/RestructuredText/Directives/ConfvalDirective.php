@@ -22,9 +22,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
+use Psr\Log\LoggerInterface;
 
 use function boolval;
 use function in_array;
+use function trim;
 
 /**
  * The confval directive configuration values.
@@ -41,6 +43,7 @@ final class ConfvalDirective extends SubDirective
         GenericLinkProvider $genericLinkProvider,
         private readonly AnchorNormalizer $anchorReducer,
         private readonly InlineParser $inlineParser,
+        private readonly LoggerInterface|null $logger = null,
     ) {
         parent::__construct($startingRule);
 
@@ -71,6 +74,12 @@ final class ConfvalDirective extends SubDirective
         $required = false;
         $default = null;
         $additionalOptions = [];
+        if (trim($directive->getData()) === '') {
+            if ($this->logger !== null) {
+                $this->logger->warning('A directive must have a title: ..  confval:: [some_title]', $blockContext->getLoggerInformation());
+            }
+        }
+
         if ($directive->hasOption('type')) {
             $type = $this->inlineParser->parse($directive->getOption('type')->toString(), $blockContext);
         }
