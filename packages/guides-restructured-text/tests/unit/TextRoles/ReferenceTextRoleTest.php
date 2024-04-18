@@ -33,13 +33,13 @@ final class ReferenceTextRoleTest extends TestCase
     #[DataProvider('referenceProvider')]
     public function testReferenceIsParsedIntoRefReferenceNode(
         string $span,
-        string $url,
+        string $referenceName,
         string|null $text = null,
     ): void {
         $result = $this->referenceTextRole->processNode($this->documentParserContext, 'doc', $span, $span);
 
         self::assertInstanceOf(ReferenceNode::class, $result);
-        self::assertEquals($url, $result->getTargetReference(), 'ReferenceNames are different');
+        self::assertEquals($referenceName, $result->getTargetReference(), 'ReferenceNames are different');
         self::assertEquals($text ?? '', $result->toString());
     }
 

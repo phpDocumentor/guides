@@ -30,8 +30,8 @@ final class ParagraphRuleTest extends RuleTestCase
     #[DataProvider('paragraphProvider')]
     public function testParagraphNodeFromLinesIterator(
         string $input,
-        ParagraphNode $node,
-        string|null $nextLine,
+        ParagraphNode $output,
+        string|null $remaining,
         bool $nextLiteral = false,
     ): void {
         $blockParser = $this->createContext($input);
@@ -43,11 +43,11 @@ final class ParagraphRuleTest extends RuleTestCase
         self::assertTrue($rule->applies($blockParser));
         $result = $rule->apply($blockParser);
         self::assertEquals(
-            $node,
+            $output,
             $result,
         );
 
-        self::assertSame($nextLine, $blockParser->getDocumentIterator()->getNextLine());
+        self::assertSame($remaining, $blockParser->getDocumentIterator()->getNextLine());
         self::assertSame($nextLiteral, $blockParser->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock);
     }
 
