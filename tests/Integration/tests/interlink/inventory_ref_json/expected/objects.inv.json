@@ -38,28 +38,36 @@
         ]
     },
     "std:label": {
-        "document-title": [
-            "My Project",
-            "3.1.4",
-            "index.html#document-title",
-            "Document Title"
-        ],
         "my-index": [
             "My Project",
             "3.1.4",
             "index.html#my_index",
             "Document Title"
         ],
-        "page-1": [
-            "My Project",
-            "3.1.4",
-            "page1.html#page-1",
-            "Page 1"
-        ],
         "my-cool-page": [
             "My Project",
             "3.1.4",
             "page1.html#my_cool_page",
+            "Page 1"
+        ],
+        "another-cool-page": [
+            "My Project",
+            "3.1.4",
+            "subfolder\/subpage1.html#another_cool_page",
+            "Subpage 1"
+        ]
+    },
+    "std:title": {
+        "document-title": [
+            "My Project",
+            "3.1.4",
+            "index.html#document-title",
+            "Document Title"
+        ],
+        "page-1": [
+            "My Project",
+            "3.1.4",
+            "page1.html#page-1",
             "Page 1"
         ],
         "page-2": [
@@ -78,12 +86,6 @@
             "My Project",
             "3.1.4",
             "subfolder\/subpage1.html#subpage-1",
-            "Subpage 1"
-        ],
-        "another-cool-page": [
-            "My Project",
-            "3.1.4",
-            "subfolder\/subpage1.html#another_cool_page",
             "Subpage 1"
         ],
         "subpage-2": [

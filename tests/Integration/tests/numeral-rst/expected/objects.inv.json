@@ -13,7 +13,8 @@
             "Some Title"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "page-not-found-404": [
             "-",
             "-",
