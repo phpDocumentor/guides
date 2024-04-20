@@ -40,6 +40,7 @@ use phpDocumentor\Guides\ReferenceResolvers\PageHyperlinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ReferenceResolverPreRender;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\TitleReferenceResolver;
 use phpDocumentor\Guides\Renderer\HtmlRenderer;
 use phpDocumentor\Guides\Renderer\InMemoryRendererFactory;
 use phpDocumentor\Guides\Renderer\InterlinkObjectsRenderer;
@@ -145,6 +146,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(PageHyperlinkResolver::class)
 
         ->set(AnchorReferenceResolver::class)
+
+        ->set(TitleReferenceResolver::class)
 
         ->set(InternalReferenceResolver::class)
 

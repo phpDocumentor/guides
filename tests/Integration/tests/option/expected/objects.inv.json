@@ -7,7 +7,8 @@
             "Some Title"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "some-title": [
             "-",
             "-",

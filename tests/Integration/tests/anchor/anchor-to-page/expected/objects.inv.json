@@ -20,18 +20,6 @@
         ]
     },
     "std:label": {
-        "page": [
-            "-",
-            "-",
-            "index.html#page",
-            "Page"
-        ],
-        "overview": [
-            "-",
-            "-",
-            "sphinx-overview.html#overview",
-            "Overview"
-        ],
         "rst-overview": [
             "-",
             "-",
@@ -42,6 +30,20 @@
             "-",
             "-",
             "sphinx-overview.html#sphinx-overview",
+            "Overview"
+        ]
+    },
+    "std:title": {
+        "page": [
+            "-",
+            "-",
+            "index.html#page",
+            "Page"
+        ],
+        "overview": [
+            "-",
+            "-",
+            "sphinx-overview.html#overview",
             "Overview"
         ]
     }

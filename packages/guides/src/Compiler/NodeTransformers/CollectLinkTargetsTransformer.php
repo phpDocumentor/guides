@@ -88,7 +88,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
                     $currentDocument->getFilePath(),
                     $anchorName,
                     $node->getLinkText(),
-                    $node->getLinkType(),
+                    SectionNode::STD_TITLE,
                 ),
             );
 

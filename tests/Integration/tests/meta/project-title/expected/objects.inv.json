@@ -7,7 +7,8 @@
             "Document Title"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "document-title": [
             "My Project",
             "-",

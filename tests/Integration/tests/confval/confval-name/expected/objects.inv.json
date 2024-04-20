@@ -13,7 +13,8 @@
             "Confval directive"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "confval-directive": [
             "-",
             "-",

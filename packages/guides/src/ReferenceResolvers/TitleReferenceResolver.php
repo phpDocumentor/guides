@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
@@ -24,9 +24,9 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
  *
  * A link is an anchor if it starts with a hashtag
  */
-final class AnchorHyperlinkResolver implements ReferenceResolver
+final class TitleReferenceResolver implements ReferenceResolver
 {
-    public final const PRIORITY = -100;
+    public final const PRIORITY = -200;
 
     public function __construct(
         private readonly AnchorNormalizer $anchorReducer,
@@ -36,21 +36,18 @@ final class AnchorHyperlinkResolver implements ReferenceResolver
 
     public function resolve(LinkInlineNode $node, RenderContext $renderContext, Messages $messages): bool
     {
-        if (!$node instanceof HyperLinkNode) {
+        if (!$node instanceof ReferenceNode || $node->getInterlinkDomain() !== '') {
             return false;
         }
 
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);
 
         if ($target === null) {
-            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);
-            if ($target === null) {
-                return false;
-            }
+            return false;
         }
 
-        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getAnchor()));
+        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getPrefix() . $target->getAnchor()));
         if ($node->getValue() === '') {
             $node->setValue($target->getTitle() ?? '');
         }
