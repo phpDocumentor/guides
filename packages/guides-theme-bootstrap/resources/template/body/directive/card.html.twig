@@ -1,0 +1,34 @@
+<div class="card {%- if node.cardHeight > 0 %} h-{{ node.cardHeight }}{% endif %} {%- if node.classes %} {{ node.classesString }}{% endif %}"  {%- if node.isNoindex == false %} id="{{ node.anchor }}"{% endif %}>
+    {% if node.cardHeader %}
+        <div class="card-header">
+            {% if node.cardHeader.content %}
+                {{ renderNode(node.cardHeader.content) }}
+            {% endif %}
+            {% if node.cardHeader.value %}
+                {{ renderNode(node.cardHeader.value) }}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if node.cardImage and node.cardImage.position != 'bottom' %}
+        {% include "body/directive/card/card-image.html.twig" %}
+    {% endif %}
+    <div class="card-body">
+        {{ renderNode(node.title) }}
+        <div class="card-text">
+            {{ renderNode(node.value) }}
+        </div>
+    </div>
+    {% if node.cardImage and node.cardImage.position == 'bottom' %}
+        {% include "body/directive/card/card-image.html.twig" %}
+    {% endif %}
+    {% if node.cardFooter %}
+        <div class="card-footer">
+            {% if node.cardFooter.content %}
+                {{ renderNode(node.cardFooter.content) }}
+            {% endif %}
+            {% if node.cardFooter.value %}
+                {{ renderNode(node.cardFooter.value) }}
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
