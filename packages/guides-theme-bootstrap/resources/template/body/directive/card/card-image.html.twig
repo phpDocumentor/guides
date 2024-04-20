@@ -1,0 +1,8 @@
+<img src="{{ asset(node.cardImage.plainContent) }}" class="card-img-{{ node.cardImage.position }}" alt="{{ node.cardImage.alt }}">
+{% if node.cardImage.value %}
+    <div class="card-img-overlay">
+        <div class="card-text">
+            {{ renderNode(node.cardImage.value) }}
+        </div>
+    </div>
+{% endif %}
