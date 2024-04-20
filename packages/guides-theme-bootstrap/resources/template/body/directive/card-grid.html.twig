@@ -1,0 +1,15 @@
+<div class="row card-group
+{%- if node.classes %} {{ node.classesString }}{% endif -%}
+{%- if node.columns > 0 %} row-cols-{{ node.columns }}{% endif -%}
+{%- if node.columnsSm > 0 %} row-cols-sm-{{ node.columnsSm }}{% endif -%}
+{%- if node.columnsMd > 0 %} row-cols-md-{{ node.columnsMd }}{% endif -%}
+{%- if node.columnsLg > 0 %} row-cols-lg-{{ node.columnsLg }}{% endif -%}
+{%- if node.columnsXl > 0 %} row-cols-xl-{{ node.columnsXl }}{% endif -%}
+{%- if node.gap > 0 %} g-{{ node.gap }}{% endif -%}
+">
+    {% for card in node.value -%}
+        <div class="col">
+            {{ renderNode(card) }}
+        </div>
+    {%- endfor %}
+</div>
