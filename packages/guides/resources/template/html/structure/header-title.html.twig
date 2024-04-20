@@ -1,1 +1,1 @@
-<h{{ node.level }}>{{ renderNode(node.value) }}</h{{ node.level }}>
+<h{{ node.level }}{% if node.classes %} class="{{ node.classesString }}"{% endif %}>{{ renderNode(node.value) }}</h{{ node.level }}>
