@@ -37,7 +37,8 @@
             "Subpage 2"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "document-title": [
             "-",
             "-",
