@@ -40,6 +40,13 @@ final class TitleNode extends CompoundNode
         return $this->level;
     }
 
+    public function setLevel(int $level): TitleNode
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
     public function setTarget(string $target): void
     {
         $this->target = $target;

@@ -1,69 +1,62 @@
 <!-- content start -->
                         <div class="section" id="document-title">
             <h1>Document Title</h1>
-            <div class="tabs">
-    <ul class="nav nav-tabs" id="tab-my-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-    <button class="nav-link active"
-            id="tab-1-tab-my-tab" data-bs-toggle="tab" data-bs-target="#tab-1-my-tab"
-            type="button" role="tab" aria-controls="tab-1-my-tab"
-            aria-selected="true">
-        Tab 1
-    </button>
-</li>
-<li class="nav-item" role="presentation">
-    <button class="nav-link"
-            id="tab-2-tab-my-tab" data-bs-toggle="tab" data-bs-target="#tab-2-my-tab"
-            type="button" role="tab" aria-controls="tab-2-my-tab"
-            aria-selected="false">
-        Tab 2
-    </button>
-</li>
-    </ul>
-    <div class="tab-content" id="tab-content-my-tab">
-        <div class="tab-pane fade show active" id="tab-1-my-tab" role="tabpanel" aria-labelledby="tab-1-tab-my-tab">
+            <div class="accordion" id="accordion-parent-accordionExample">
+            <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-headingone-heading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-headingone"
+                        aria-expanded="true" aria-controls="accordion-headingone">
+                    Accordion Item #1
+                </button>
+            </h2>
+            <div id="accordion-headingone" class="accordion-collapse collapse show" aria-labelledby="accordion-headingone-heading"
+                 data-bs-parent="#accordion-parent-accordionExample">
+                <div class="accordion-body">
 
-    <p>Lorem Ipsum Dolor 1</p>
+    <p><strong>This is the first item&#039;s accordion body.</strong> It is shown by default, until the collapse plugin adds the
+appropriate classes that we use to style each element. These classes control the overall appearance,
+as well as the showing and hiding via CSS transitions.</p>
 
-</div>
-<div class="tab-pane fade" id="tab-2-my-tab" role="tabpanel" aria-labelledby="tab-2-tab-my-tab">
+    <p>You can modify any of this with custom CSS
+or overriding our default variables. It&#039;s also worth noting that just about any HTML can go within
+the <code>.accordion-body</code>, though the transition does limit overflow.</p>
 
-    <p>Lorem Ipsum Dolor 2</p>
+                </div>
+            </div>
+        </div>        <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-headingtwo-heading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-headingtwo"
+                        aria-expanded="false" aria-controls="accordion-headingtwo">
+                    Accordion Item #2
+                </button>
+            </h2>
+            <div id="accordion-headingtwo" class="accordion-collapse collapse" aria-labelledby="accordion-headingtwo-heading"
+                 data-bs-parent="#accordion-parent-accordionExample">
+                <div class="accordion-body">
 
-</div>
-    </div>
-</div>
-            <div class="tabs">
-    <ul class="nav nav-tabs" id="tab-another-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-    <button class="nav-link"
-            id="tab-3-tab-another-tab" data-bs-toggle="tab" data-bs-target="#tab-3-another-tab"
-            type="button" role="tab" aria-controls="tab-3-another-tab"
-            aria-selected="false">
-        Tab 3
-    </button>
-</li>
-<li class="nav-item" role="presentation">
-    <button class="nav-link active"
-            id="lorem-tab-another-tab" data-bs-toggle="tab" data-bs-target="#lorem-another-tab"
-            type="button" role="tab" aria-controls="lorem-another-tab"
-            aria-selected="true">
-        Tab 4
-    </button>
-</li>
-    </ul>
-    <div class="tab-content" id="tab-content-another-tab">
-        <div class="tab-pane fade" id="tab-3-another-tab" role="tabpanel" aria-labelledby="tab-3-tab-another-tab">
+    <p>Placeholder content for this accordion, which is intended to demonstrate the .accordion-flush class.
+This is the second item&#039;s accordion body. Let&#039;s imagine this being filled with some actual content.</p>
 
-    <p>Lorem Ipsum Dolor 3</p>
+                </div>
+            </div>
+        </div>        <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-headingthree-heading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-headingthree"
+                        aria-expanded="false" aria-controls="accordion-headingthree">
+                    Accordion Item #3
+                </button>
+            </h2>
+            <div id="accordion-headingthree" class="accordion-collapse collapse" aria-labelledby="accordion-headingthree-heading"
+                 data-bs-parent="#accordion-parent-accordionExample">
+                <div class="accordion-body">
 
-</div>
-<div class="tab-pane fade show active" id="lorem-another-tab" role="tabpanel" aria-labelledby="lorem-tab-another-tab">
+    <p>Placeholder content for this accordion, which is intended to demonstrate the .accordion-flush class.
+This is the third item&#039;s accordion body. Nothing more exciting happening here in terms of content, but
+just filling up the space to make it look,
+at least at first glance, a bit more representative of how this would look in a real-world application.</p>
 
-    <p>Lorem Ipsum Dolor 4</p>
-
-</div>
-    </div>
-</div>
+                </div>
+            </div>
+        </div></div>
     </div>
                     <!-- content end -->
