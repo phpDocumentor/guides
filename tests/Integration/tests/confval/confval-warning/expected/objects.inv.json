@@ -14,16 +14,18 @@
         ]
     },
     "std:label": {
-        "confval-directive": [
-            "-",
-            "-",
-            "index.html#confval-directive",
-            "Confval directive"
-        ],
         "demo": [
             "-",
             "-",
             "another.html#demo",
+            "Confval directive"
+        ]
+    },
+    "std:title": {
+        "confval-directive": [
+            "-",
+            "-",
+            "index.html#confval-directive",
             "Confval directive"
         ]
     },

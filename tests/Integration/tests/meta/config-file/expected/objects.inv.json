@@ -7,7 +7,8 @@
             "Title"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "title": [
             "Project Title",
             "6.4",
