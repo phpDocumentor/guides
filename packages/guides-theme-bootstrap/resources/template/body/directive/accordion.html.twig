@@ -1,0 +1,18 @@
+<div class="accordion {%- if node.classes %} {{ node.classesString }}{% endif -%}" id="{{ node.anchor }}">
+    {% for item in node.value %}
+        <div class="accordion-item {%- if item.classes %} {{ item.classesString }}{% endif -%}">
+            <h{{ item.title.level }} class="accordion-header" id="{{ item.anchor }}-heading">
+                <button class="accordion-button {%- if not item.show %} collapsed{% endif -%}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ item.anchor }}"
+                        aria-expanded="{%- if item.show %}true{% else %}false{% endif -%}" aria-controls="{{ item.anchor }}">
+                    {{  renderNode(item.title.value) }}
+                </button>
+            </h{{ item.title.level }}>
+            <div id="{{ item.anchor }}" class="accordion-collapse collapse {%- if item.show %} show{% endif -%}" aria-labelledby="{{ item.anchor }}-heading"
+                 data-bs-parent="#{{ node.anchor }}">
+                <div class="accordion-body">
+                    {{ renderNode(item.value) }}
+                </div>
+            </div>
+        </div>
+    {%- endfor %}
+</div>
