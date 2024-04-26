@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
+use phpDocumentor\Guides\Exception\DuplicateLinkAnchorException;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -66,14 +67,18 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             }
 
             $anchorName = $this->anchorReducer->reduceAnchor($node->toString());
-            $compilerContext->getProjectNode()->addLinkTarget(
-                $anchorName,
-                new InternalTarget(
-                    $currentDocument->getFilePath(),
-                    $node->toString(),
-                    $title,
-                ),
-            );
+            try {
+                $compilerContext->getProjectNode()->addLinkTarget(
+                    $anchorName,
+                    new InternalTarget(
+                        $currentDocument->getFilePath(),
+                        $node->toString(),
+                        $title,
+                    ),
+                );
+            } catch (DuplicateLinkAnchorException $exception) {
+                $this->logger?->warning($exception->getMessage(), $compilerContext->getLoggerInformation());
+            }
 
             return $node;
         }
@@ -82,15 +87,19 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchorName = $node->getId();
-            $compilerContext->getProjectNode()->addLinkTarget(
-                $anchorName,
-                new InternalTarget(
-                    $currentDocument->getFilePath(),
+            try {
+                $compilerContext->getProjectNode()->addLinkTarget(
                     $anchorName,
-                    $node->getLinkText(),
-                    SectionNode::STD_TITLE,
-                ),
-            );
+                    new InternalTarget(
+                        $currentDocument->getFilePath(),
+                        $anchorName,
+                        $node->getLinkText(),
+                        SectionNode::STD_TITLE,
+                    ),
+                );
+            } catch (DuplicateLinkAnchorException $exception) {
+                $this->logger?->warning($exception->getMessage(), $compilerContext->getLoggerInformation());
+            }
 
             return $node;
         }
@@ -175,9 +184,13 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             return;
         }
 
-        $compilerContext->getProjectNode()->addLinkTarget(
-            $internalTarget->getAnchor(),
-            $internalTarget,
-        );
+        try {
+            $compilerContext->getProjectNode()->addLinkTarget(
+                $internalTarget->getAnchor(),
+                $internalTarget,
+            );
+        } catch (DuplicateLinkAnchorException $exception) {
+            $this->logger?->warning($exception->getMessage(), $compilerContext->getLoggerInformation());
+        }
     }
 }
