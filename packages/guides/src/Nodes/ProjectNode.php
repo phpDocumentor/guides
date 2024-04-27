@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Nodes;
 use DateTimeImmutable;
 use Exception;
 use phpDocumentor\Guides\Exception\DocumentEntryNotFound;
+use phpDocumentor\Guides\Exception\DuplicateLinkAnchorException;
 use phpDocumentor\Guides\Meta\CitationTarget;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
@@ -24,6 +25,7 @@ use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 
 use function array_merge;
 use function array_unique;
+use function sprintf;
 
 use const DATE_RFC2822;
 
@@ -143,13 +145,19 @@ final class ProjectNode extends CompoundNode
         return $this->citationTargets[$name] ?? null;
     }
 
+    /** @throws DuplicateLinkAnchorException */
     public function addLinkTarget(string $anchorName, InternalTarget $target): void
     {
-        if (!isset($this->internalLinkTargets[$target->getLinkType()])) {
-            $this->internalLinkTargets[$target->getLinkType()] = [];
+        $linkType = $target->getLinkType();
+        if (!isset($this->internalLinkTargets[$linkType])) {
+            $this->internalLinkTargets[$linkType] = [];
         }
 
-        $this->internalLinkTargets[$target->getLinkType()][$anchorName] = $target;
+        if (isset($this->internalLinkTargets[$linkType][$anchorName]) && $linkType !== 'std:title') {
+            throw new DuplicateLinkAnchorException(sprintf('Duplicate anchor "%s". There is already another anchor of that name in document "%s"', $anchorName, $this->internalLinkTargets[$linkType][$anchorName]->getDocumentPath()));
+        }
+
+        $this->internalLinkTargets[$linkType][$anchorName] = $target;
     }
 
     public function hasInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): bool
