@@ -30,7 +30,7 @@
         "league/uri": "^7.4.1",
         "phpdocumentor/flyfinder": "^1.1",
         "psr/event-dispatcher": "^1.0",
-        "symfony/clock": "^6.4.5",
+        "symfony/clock": "^6.4.7",
         "symfony/string": "^6.4.7",
         "symfony/translation-contracts": "^3.4.2",
         "symfony/http-client": "^6.4.6",
