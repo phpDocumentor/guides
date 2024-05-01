@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\ReferenceResolvers\Interlink;
 
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\ReferenceResolvers\Message;
 use phpDocumentor\Guides\ReferenceResolvers\Messages;
@@ -21,7 +22,9 @@ use phpDocumentor\Guides\RenderContext;
 
 use function array_key_exists;
 use function array_merge;
+use function explode;
 use function sprintf;
+use function str_contains;
 
 final class InventoryGroup
 {
@@ -47,7 +50,15 @@ final class InventoryGroup
 
     public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink|null
     {
-        $reducedKey = $this->anchorNormalizer->reduceAnchor($node->getTargetReference());
+        $targetReference = $node->getTargetReference();
+        $anchor = '';
+        if ($node instanceof DocReferenceNode && str_contains($targetReference, '#')) {
+            $exploded = explode('#', $targetReference, 2);
+            $targetReference = $exploded[0];
+            $anchor = '#' . $exploded[1];
+        }
+
+        $reducedKey = $this->anchorNormalizer->reduceAnchor($targetReference);
         if (!array_key_exists($reducedKey, $this->links)) {
             $messages->addWarning(
                 new Message(
@@ -64,6 +75,11 @@ final class InventoryGroup
             return null;
         }
 
-        return $this->links[$reducedKey];
+        $link = $this->links[$reducedKey];
+        if ($anchor !== '') {
+            $link = $link->withPath($link->getPath() . $anchor);
+        }
+
+        return $link;
     }
 }
