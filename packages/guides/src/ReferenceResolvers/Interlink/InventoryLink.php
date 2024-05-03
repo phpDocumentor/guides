@@ -22,7 +22,7 @@ final class InventoryLink
     public function __construct(
         private readonly string $project,
         private readonly string $version,
-        private readonly string $path,
+        private string $path,
         private readonly string $title,
     ) {
         if (preg_match('/^([a-zA-Z0-9-_.]+\/)*([a-zA-Z0-9-_.])+\.html(#[^#]*)?$/', $path) < 1) {
@@ -48,5 +48,13 @@ final class InventoryLink
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function withPath(string $path): InventoryLink
+    {
+        $that = clone$this;
+        $that->path = $path;
+
+        return $that;
     }
 }

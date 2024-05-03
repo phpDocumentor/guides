@@ -18,7 +18,9 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
+use function explode;
 use function sprintf;
+use function str_contains;
 
 final class DocReferenceResolver implements ReferenceResolver
 {
@@ -40,7 +42,15 @@ final class DocReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $node->getTargetReference());
+        $targetReference = $node->getTargetReference();
+        $anchor = '';
+        if (str_contains($targetReference, '#')) {
+            $exploded = explode('#', $targetReference, 2);
+            $targetReference = $exploded[0];
+            $anchor = '#' . $exploded[1];
+        }
+
+        $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $targetReference);
 
         $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName);
         if ($document === null) {
@@ -53,7 +63,7 @@ final class DocReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $document->getFile()));
+        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $document->getFile()) . $anchor);
         if ($node->getValue() === '') {
             $node->setValue($document->getTitle()->toString());
         }
