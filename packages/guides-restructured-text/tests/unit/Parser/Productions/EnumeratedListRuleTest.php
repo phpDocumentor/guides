@@ -119,10 +119,12 @@ REST,
         self::assertEquals(
             new ListNode(
                 [
-                    new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode('second item')]),
+                    new ListItemNode('1', false, [new RawNode('first items')], '1'),
+                    new ListItemNode('2', false, [new RawNode('second item')], '2'),
                 ],
                 true,
+                '1',
+                null,
             ),
             $result,
         );
@@ -151,16 +153,18 @@ REST,
         self::assertEquals(
             new ListNode(
                 [
-                    new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode('second item')]),
+                    new ListItemNode('1', false, [new RawNode('first items')], '1'),
+                    new ListItemNode('2', false, [new RawNode('second item')], '2'),
                 ],
                 true,
+                '1',
+                null,
             ),
             $result,
         );
     }
 
-    public function testListFistTekstOnNewLine(): void
+    public function testListWithTextOnNewLine(): void
     {
         $input = <<<'INPUT'
 (#)
@@ -191,6 +195,8 @@ REST,
                     new ListItemNode('#', false, [new RawNode("second item\nother line")]),
                 ],
                 true,
+                null,
+                null,
             ),
             $result,
         );
@@ -222,10 +228,12 @@ REST,
         self::assertEquals(
             new ListNode(
                 [
-                    new ListItemNode('1', false, [new RawNode('first items')]),
-                    new ListItemNode('2', false, [new RawNode("second item\nother line")]),
+                    new ListItemNode('1', false, [new RawNode('first items')], '1'),
+                    new ListItemNode('2', false, [new RawNode("second item\nother line")], '2'),
                 ],
                 true,
+                '1',
+                null,
             ),
             $result,
         );

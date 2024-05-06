@@ -116,8 +116,14 @@ final class EnumeratedListRule implements Rule
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
+        $start = null;
+        $orderType = null;
+        if (isset($items[0])) {
+            $start = $items[0]->getOrderNumber();
+            $orderType = $items[0]->getOrderType();
+        }
 
-        return new ListNode($items, true);
+        return new ListNode($items, true, $start, $orderType);
     }
 
     private function isListLine(string|null $line): bool
@@ -168,11 +174,16 @@ final class EnumeratedListRule implements Rule
         return true;
     }
 
-    /** @param array{marker: string, indenting: int} $listConfig */
+    /** @param array{marker: string, indenting: int, marker_type: string} $listConfig */
     private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext): ListItemNode
     {
         $marker = trim($listConfig['marker'], '.()');
-        $listItem = new ListItemNode($marker, false, []);
+        $orderNumber = null;
+        if ($marker !== '#') {
+            $orderNumber = $marker;
+        }
+
+        $listItem = new ListItemNode($marker, false, [], $orderNumber);
         $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $blockContext->getDocumentIterator()->key());
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $listItem);
@@ -185,7 +196,7 @@ final class EnumeratedListRule implements Rule
 
         // the list item offset is determined by the offset of the first text
         if ($nodes[0] instanceof ParagraphNode) {
-            return new ListItemNode($marker, false, $nodes[0]->getChildren());
+            return new ListItemNode($marker, false, $nodes[0]->getChildren(), $orderNumber, $listConfig['marker_type']);
         }
 
         return $listItem;
