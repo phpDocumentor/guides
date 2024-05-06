@@ -17,9 +17,37 @@ namespace phpDocumentor\Guides\Nodes;
 final class ListNode extends CompoundNode
 {
     /** @param ListItemNode[] $items */
-    public function __construct(array $items, private readonly bool $ordered = false)
-    {
+    public function __construct(
+        array $items,
+        private readonly bool $ordered = false,
+        private string|null $start = null,
+        private string|null $orderingType = null,
+    ) {
         parent::__construct($items);
+    }
+
+    public function getStart(): string|null
+    {
+        return $this->start;
+    }
+
+    public function setStart(string|null $start): ListNode
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    public function getOrderingType(): string|null
+    {
+        return $this->orderingType;
+    }
+
+    public function setOrderingType(string|null $orderingType): ListNode
+    {
+        $this->orderingType = $orderingType;
+
+        return $this;
     }
 
     public function isOrdered(): bool
