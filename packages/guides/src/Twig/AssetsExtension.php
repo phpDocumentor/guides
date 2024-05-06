@@ -59,6 +59,7 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('renderBreadcrumb', $this->renderBreadcrumb(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderMenu', $this->renderMenu(...), ['is_safe' => ['html'], 'needs_context' => true, 'deprecated' => true]),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
+            new TwigFunction('renderOrderedListType', $this->renderOrderedListType(...), ['is_safe' => ['html'], 'needs_context' => false]),
         ];
     }
 
@@ -206,5 +207,23 @@ final class AssetsExtension extends AbstractExtension
         }
 
         return $renderContext;
+    }
+
+    public function renderOrderedListType(string $listType): string
+    {
+        switch ($listType) {
+            case 'numberdot':
+            case 'numberparentheses':
+            case 'numberright-parenthesis':
+                return '1';
+
+            case 'romandot':
+            case 'romanparentheses':
+            case 'romanright-parenthesis':
+                return 'i';
+
+            default:
+                return 'a';
+        }
     }
 }

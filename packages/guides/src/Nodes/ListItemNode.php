@@ -25,6 +25,8 @@ final class ListItemNode extends CompoundNode
         private readonly string $prefix,
         private readonly bool $ordered,
         array $contents,
+        private readonly string|null $orderNumber = null,
+        private readonly string|null $orderType = null,
     ) {
         parent::__construct($contents);
     }
@@ -37,5 +39,15 @@ final class ListItemNode extends CompoundNode
     public function isOrdered(): bool
     {
         return $this->ordered;
+    }
+
+    public function getOrderNumber(): string|null
+    {
+        return $this->orderNumber;
+    }
+
+    public function getOrderType(): string|null
+    {
+        return $this->orderType;
     }
 }
