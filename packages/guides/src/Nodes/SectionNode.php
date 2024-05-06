@@ -19,6 +19,7 @@ use function array_merge;
 final class SectionNode extends CompoundNode implements LinkTargetNode
 {
     public const STD_LABEL = 'std:label';
+    public const STD_TITLE = 'std:title';
 
     public function __construct(private readonly TitleNode $title)
     {

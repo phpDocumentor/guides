@@ -82,6 +82,17 @@ class RenderContext
         )->withIterator($this->getIterator());
     }
 
+    public function getDocument(): DocumentNode
+    {
+        return $this->document;
+    }
+
+    /** @return DocumentNode[] */
+    public function getAllDocuments(): array
+    {
+        return $this->allDocuments;
+    }
+
     public function withIterator(Renderer\DocumentListIterator $iterator): self
     {
         $that = clone $this;

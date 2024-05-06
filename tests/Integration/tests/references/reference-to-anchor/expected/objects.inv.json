@@ -1,0 +1,56 @@
+{
+    "std:doc": {
+        "anotherPage": [
+            "-",
+            "-",
+            "anotherPage.html",
+            "Another Page"
+        ],
+        "index": [
+            "-",
+            "-",
+            "index.html",
+            "FlexForms"
+        ],
+        "yetAnotherPage": [
+            "-",
+            "-",
+            "yetAnotherPage.html",
+            "Yet Another Page"
+        ]
+    },
+    "std:label": {
+        "flexforms": [
+            "-",
+            "-",
+            "index.html#flexforms",
+            "FlexForms"
+        ]
+    },
+    "std:title": {
+        "another-page": [
+            "-",
+            "-",
+            "anotherPage.html#another-page",
+            "Another Page"
+        ],
+        "flexforms": [
+            "-",
+            "-",
+            "yetAnotherPage.html#flexforms",
+            "FlexForms"
+        ],
+        "flexforms-1": [
+            "-",
+            "-",
+            "index.html#flexforms-1",
+            "FlexForms"
+        ],
+        "yet-another-page": [
+            "-",
+            "-",
+            "yetAnotherPage.html#yet-another-page",
+            "Yet Another Page"
+        ]
+    }
+}

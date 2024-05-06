@@ -71,7 +71,7 @@ final class AnnotationRuleTest extends RuleTestCase
     public function testAnnotationNodeFromLinesIterator(
         string $input,
         AnnotationListNode $node,
-        string|null $nextLine = null,
+        string|null $remaining = null,
         bool $nextLiteral = false,
     ): void {
         $blockParser = $this->createContext($input);
@@ -83,7 +83,7 @@ final class AnnotationRuleTest extends RuleTestCase
             $result,
         );
 
-        self::assertSame($nextLine, $blockParser->getDocumentIterator()->getNextLine());
+        self::assertSame($remaining, $blockParser->getDocumentIterator()->getNextLine());
         self::assertSame($nextLiteral, $blockParser->getDocumentParserContext()->nextIndentedBlockShouldBeALiteralBlock);
     }
 
@@ -93,19 +93,19 @@ final class AnnotationRuleTest extends RuleTestCase
         return [
             'single line citation' => [
                 'input' => '..  [name] Some Citation',
-                'output' => new AnnotationListNode([new CitationNode([InlineCompoundNode::getPlainTextInlineNode('Some Citation')], 'name')], 'citation-list'),
+                'node' => new AnnotationListNode([new CitationNode([InlineCompoundNode::getPlainTextInlineNode('Some Citation')], 'name')], 'citation-list'),
             ],
             'single line Anonymous numbered footnote' => [
                 'input' => '..  [#] Anonymous numbered footnote',
-                'output' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Anonymous numbered footnote')], '#', 0)], 'footer-list'),
+                'node' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Anonymous numbered footnote')], '#', 0)], 'footer-list'),
             ],
             'single line Numbered footnote' => [
                 'input' => '..  [42] Numbered footnote',
-                'output' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Numbered footnote')], '', 42)], 'footer-list'),
+                'node' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Numbered footnote')], '', 42)], 'footer-list'),
             ],
             'single line named footnote' => [
                 'input' => '..  [#somename] Named footnote',
-                'output' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Named footnote')], '#somename', 0)], 'footer-list'),
+                'node' => new AnnotationListNode([new FootnoteNode([InlineCompoundNode::getPlainTextInlineNode('Named footnote')], '#somename', 0)], 'footer-list'),
             ],
             'multi line citation' => [
                 'input' => <<<'RST'
@@ -113,7 +113,7 @@ final class AnnotationRuleTest extends RuleTestCase
     annotation
 RST
                 ,
-                'output' => new AnnotationListNode([
+                'node' => new AnnotationListNode([
                     new CitationNode(
                         [
                             InlineCompoundNode::getPlainTextInlineNode(
@@ -136,7 +136,7 @@ RST,
 This is a new paragraph
 RST
                 ,
-                'output' => new AnnotationListNode([
+                'node' => new AnnotationListNode([
                     new CitationNode(
                         [
                             InlineCompoundNode::getPlainTextInlineNode(
@@ -159,7 +159,7 @@ RST,
 This is a new paragraph
 RST
                 ,
-                'output' => new AnnotationListNode([
+                'node' => new AnnotationListNode([
                     new FootnoteNode(
                         [
                             InlineCompoundNode::getPlainTextInlineNode(
@@ -183,7 +183,7 @@ RST,
 This is a new paragraph
 RST
                 ,
-                'output' => new AnnotationListNode([
+                'node' => new AnnotationListNode([
                     new FootnoteNode(
                         [
                             InlineCompoundNode::getPlainTextInlineNode(
@@ -208,7 +208,7 @@ RST,
 This is a new paragraph
 RST
                 ,
-                'output' => new AnnotationListNode([
+                'node' => new AnnotationListNode([
                     new FootnoteNode(
                         [
                             InlineCompoundNode::getPlainTextInlineNode('Footnote 1'),

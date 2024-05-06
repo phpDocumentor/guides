@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use phpDocumentor\Guides\Bootstrap\Directives\AccordionDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\AccordionItemDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardFooterDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardGridDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardGroupDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardHeaderDirective;
+use phpDocumentor\Guides\Bootstrap\Directives\CardImageDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\TabDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\TabsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
@@ -20,6 +28,15 @@ return static function (ContainerConfigurator $container): void {
         ->bind('$startingRule', service(DirectiveContentRule::class))
         ->instanceof(BaseDirective::class)
         ->tag('phpdoc.guides.directive')
+        ->set(AccordionDirective::class)
+        ->set(AccordionItemDirective::class)
+        ->set(CardDirective::class)
+        ->set(CardDirective::class)
+        ->set(CardFooterDirective::class)
+        ->set(CardHeaderDirective::class)
+        ->set(CardImageDirective::class)
+        ->set(CardGroupDirective::class)
+        ->set(CardGridDirective::class)
         ->set(TabDirective::class)
         ->set(TabsDirective::class);
 };

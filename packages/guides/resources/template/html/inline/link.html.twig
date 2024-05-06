@@ -1,5 +1,8 @@
 {%- if node.url -%}
-    <a href="{{- node.url -}}"{% for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor %}>
+    <a href="{{- node.url -}}"
+        {%- for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor -%}
+        {%- if node.classes %} class="{{ node.classesString }}"{% endif -%}
+    >
     {{- node.value -}}
     </a>
 {%- else -%}

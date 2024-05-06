@@ -13,7 +13,8 @@
             "Document Title"
         ]
     },
-    "std:label": {
+    "std:label": [],
+    "std:title": {
         "a-page": [
             "My Project",
             "3.1.4",
