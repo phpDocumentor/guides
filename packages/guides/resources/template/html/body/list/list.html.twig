@@ -4,7 +4,9 @@
     {% set keyword = 'ol' %}
 {% endif %}
 
-<{{ keyword }}{% if node.classes %} class="{{ node.classesString }}"{% endif %}>
+<{{ keyword }}{% if node.classes %} class="{{ node.classesString }}"{% endif %}
+{%- if node.start  %} start="{{ node.start }}"{% endif -%}
+{%- if node.orderingType  %} type="{{ renderOrderedListType(node.orderingType) }}"{% endif -%}>
 {% for child in node.children %}
     {{ renderNode(child) }}
 {% endfor %}

@@ -23,12 +23,6 @@
       <code><![CDATA[scalarNode]]></code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/EnumeratedListRule.php">
-    <InvalidArgument>
-      <code><![CDATA[$listConfig]]></code>
-      <code><![CDATA[$listConfig]]></code>
-    </InvalidArgument>
-  </file>
   <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
     <MoreSpecificImplementedParamType>
       <code><![CDATA[$on]]></code>
