@@ -1,0 +1,67 @@
+{
+    "std:doc": {
+        "index": [
+            "Bootstrap Theme",
+            "1.0",
+            "index.html",
+            "Document Title"
+        ],
+        "someDir\/anotherPage": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/anotherPage.html",
+            "Another Page"
+        ],
+        "someDir\/index": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/index.html",
+            "Some Directory"
+        ],
+        "someDir\/somePage": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/somePage.html",
+            "Some Page"
+        ],
+        "someDir\/yetAnotherPage": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/yetAnotherPage.html",
+            "Yet Another Page"
+        ]
+    },
+    "std:label": [],
+    "std:title": {
+        "document-title": [
+            "Bootstrap Theme",
+            "1.0",
+            "index.html#document-title",
+            "Document Title"
+        ],
+        "another-page": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/anotherPage.html#another-page",
+            "Another Page"
+        ],
+        "some-directory": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/index.html#some-directory",
+            "Some Directory"
+        ],
+        "some-page": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/somePage.html#some-page",
+            "Some Page"
+        ],
+        "yet-another-page": [
+            "Bootstrap Theme",
+            "1.0",
+            "someDir\/yetAnotherPage.html#yet-another-page",
+            "Yet Another Page"
+        ]
+    }
+}
