@@ -53,7 +53,6 @@ final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTra
             return [];
         }
 
-        $documentEntryOfMenuEntry = $compilerContext->getProjectNode()->getDocumentEntry($entryNode->getUrl());
         $this->addSubEntries($currentMenu, $compilerContext, $entryNode, $documentEntryOfMenuEntry, $entryNode->getLevel() + 1, $maxDepth);
 
         return [$entryNode];
@@ -79,9 +78,15 @@ final class SubInternalMenuEntryNodeTransformer extends AbstractMenuEntryNodeTra
 
         foreach ($documentEntry->getMenuEntries() as $subEntryNode) {
             if ($subEntryNode instanceof DocumentEntryNode) {
+                $titleNode = $subEntryNode->getTitle();
+                $navigationTitle =  $subEntryNode->getAdditionalData('navigationTitle');
+                if ($navigationTitle instanceof TitleNode) {
+                    $titleNode = $navigationTitle;
+                }
+
                 $subMenuEntry = new InternalMenuEntryNode(
                     $subEntryNode->getFile(),
-                    $subEntryNode->getTitle(),
+                    $titleNode,
                     [],
                     false,
                     $currentLevel,

@@ -158,9 +158,15 @@ final class GlobalMenuPass implements CompilerPass
 
     private function createInternalMenuEntry(DocumentEntryNode $subEntryNode, int $currentLevel): InternalMenuEntryNode
     {
+        $titleNode = $subEntryNode->getTitle();
+        $navigationTitle =  $subEntryNode->getAdditionalData('navigationTitle');
+        if ($navigationTitle instanceof TitleNode) {
+            $titleNode = $navigationTitle;
+        }
+
         return new InternalMenuEntryNode(
             $subEntryNode->getFile(),
-            $subEntryNode->getTitle(),
+            $titleNode,
             [],
             false,
             $currentLevel,
