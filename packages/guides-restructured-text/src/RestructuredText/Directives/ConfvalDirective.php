@@ -89,7 +89,7 @@ final class ConfvalDirective extends SubDirective
         }
 
         if ($directive->hasOption('default')) {
-            $type = $this->inlineParser->parse($directive->getOption('default')->toString(), $blockContext);
+            $default = $this->inlineParser->parse($directive->getOption('default')->toString(), $blockContext);
         }
 
         $noindex = $directive->hasOption('noindex');
