@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use function is_bool;
+use function is_string;
+use function strtolower;
 use function strval;
+use function trim;
 
 final class DirectiveOption
 {
@@ -34,6 +38,23 @@ final class DirectiveOption
     public function toString(): string
     {
         return strval($this->value);
+    }
+
+    public function toBool(): bool
+    {
+        if (is_bool($this->value)) {
+            return $this->value;
+        }
+
+        if (is_string($this->value)) {
+            return strtolower(trim($this->value)) !== 'false' && strtolower(trim($this->value)) !== '0' && strtolower(trim($this->value)) !== '';
+        }
+
+        if ($this->value === null) {
+            return false;
+        }
+
+        return $this->value === 0 || $this->value === 0.0;
     }
 
     public function appendValue(string $append): void

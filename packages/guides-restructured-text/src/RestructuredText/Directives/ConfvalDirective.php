@@ -80,18 +80,16 @@ final class ConfvalDirective extends SubDirective
         }
 
         if ($directive->hasOption('type')) {
-            $type = $this->inlineParser->parse($directive->getOption('type')->toString(), $blockContext);
+            $type = $this->inlineParser->parse($directive->getOptionString('type'), $blockContext);
         }
 
-        if ($directive->hasOption('required')) {
-            $required = $directive->getOption('required')->getValue() === null || (bool) $directive->getOption('required')->toString();
-        }
+        $required = $directive->getOptionBool('required');
 
         if ($directive->hasOption('default')) {
-            $default = $this->inlineParser->parse($directive->getOption('default')->toString(), $blockContext);
+            $default = $this->inlineParser->parse($directive->getOptionString('default'), $blockContext);
         }
 
-        $noindex = $directive->hasOption('noindex');
+        $noindex = $directive->getOptionBool('noindex');
 
         foreach ($directive->getOptions() as $option) {
             if (in_array($option->getName(), ['type', 'required', 'default', 'noindex', 'name'], true)) {
