@@ -34,6 +34,30 @@
             "-",
             "index.html#demo",
             "demo"
+        ],
+        "demo2": [
+            "-",
+            "-",
+            "index.html#demo2",
+            "demo2"
+        ],
+        "demo3": [
+            "-",
+            "-",
+            "index.html#demo3",
+            "demo3"
+        ],
+        "demo4": [
+            "-",
+            "-",
+            "index.html#demo4",
+            "demo4"
+        ],
+        "demo5": [
+            "-",
+            "-",
+            "index.html#demo5",
+            "demo5"
         ]
     }
 }

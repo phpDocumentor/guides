@@ -71,6 +71,37 @@ final class Directive
         return $this->options[$name] ?? new DirectiveOption($name, null);
     }
 
+    public function getOptionString(string $name, string $default = ''): string
+    {
+        if (!isset($this->options[$name])) {
+            return $default;
+        }
+
+        return $this->options[$name]->toString();
+    }
+
+    public function getOptionBool(string $name, bool $default = false, bool $nullDefault = true): bool
+    {
+        if (!isset($this->options[$name])) {
+            return $default;
+        }
+
+        if ($this->options[$name]->getValue() === null) {
+            return $nullDefault;
+        }
+
+        return $this->options[$name]->toBool();
+    }
+
+    public function getOptionInt(string $name, int $default = 0): int
+    {
+        if (!isset($this->options[$name])) {
+            return $default;
+        }
+
+        return (int) $this->options[$name]->getValue();
+    }
+
     public function getDataNode(): InlineCompoundNode|null
     {
         return $this->dataNode;
