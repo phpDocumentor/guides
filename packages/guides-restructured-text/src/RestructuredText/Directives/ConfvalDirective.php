@@ -24,7 +24,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
 use Psr\Log\LoggerInterface;
 
-use function boolval;
 use function in_array;
 use function trim;
 
@@ -85,7 +84,7 @@ final class ConfvalDirective extends SubDirective
         }
 
         if ($directive->hasOption('required')) {
-            $required = boolval($directive->getOption('required'));
+            $required = $directive->getOption('required')->getValue() === null || (bool) $directive->getOption('required')->toString();
         }
 
         if ($directive->hasOption('default')) {
