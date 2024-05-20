@@ -65,7 +65,7 @@
         "psalm/plugin-phpunit": "^0.19.0",
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^1.1.0",
-        "squizlabs/php_codesniffer": "^3.9",
+        "squizlabs/php_codesniffer": "^3.10",
         "symfony/finder": "^6.4.7",
         "symplify/phpstan-rules": "^12.6",
         "vimeo/psalm": "^5.22"
