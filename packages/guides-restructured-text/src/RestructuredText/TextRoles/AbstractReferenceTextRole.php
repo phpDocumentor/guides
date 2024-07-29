@@ -22,13 +22,15 @@ abstract class AbstractReferenceTextRole implements TextRole
 {
     use EmbeddedReferenceParser;
 
+    protected bool $useRawContent = false;
+
     public function processNode(
         DocumentParserContext $documentParserContext,
         string $role,
         string $content,
         string $rawContent,
     ): AbstractLinkInlineNode {
-        $referenceData = $this->extractEmbeddedReference($content);
+        $referenceData = $this->extractEmbeddedReference($this->useRawContent ? $rawContent : $content);
 
         return $this->createNode($referenceData->reference, $referenceData->text, $role);
     }
