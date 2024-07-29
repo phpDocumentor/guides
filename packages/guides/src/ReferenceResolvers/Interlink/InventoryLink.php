@@ -25,7 +25,7 @@ final class InventoryLink
         private string $path,
         private readonly string $title,
     ) {
-        if (preg_match('/^([a-zA-Z0-9-_.]+\/)*([a-zA-Z0-9-_.])+\.html(#[^#]*)?$/', $path) < 1) {
+        if (preg_match('/^([a-zA-Z0-9-_.]+\/)*([a-zA-Z0-9-_.]+)(\.html)?(#[^#]*)?$/', $path) < 1) {
             throw new InvalidInventoryLink('Inventory link "' . $path . '" has an invalid scheme. ', 1_671_398_986);
         }
     }
