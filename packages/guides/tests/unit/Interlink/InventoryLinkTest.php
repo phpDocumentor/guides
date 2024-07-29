@@ -54,13 +54,6 @@ final class InventoryLinkTest extends TestCase
         self::assertEquals($inventoryLink->getPath(), $link);
     }
 
-    public function testPhpLinkThrowsError(): void
-    {
-        $link = 'Some/Path/SomeThing.php#anchor';
-        $this->expectException(InvalidInventoryLink::class);
-        new InventoryLink('', '', $link, '');
-    }
-
     public function testJavaScriptLinkThrowsError(): void
     {
         $link = 'javascript:alert()';

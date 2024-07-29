@@ -42,6 +42,10 @@ test-functional: ## Runs functional tests with phpunit/phpunit
 test-integration: ## Runs integration tests with phpunit/phpunit
 	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
 
+.PHONY: integration-baseline
+integration-baseline: ## Copies the output files of the integration tests into the expected directories, making a new baseline.
+	$(PHP_BIN) tools/integration-test-copy-baseline.php
+
 .PHONY: test-xml
 test-xml: ## Lint all guides.xml
 	./tools/xmllint.sh
