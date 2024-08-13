@@ -1,0 +1,7 @@
+{%- if node.url -%}
+    `{{ node.value|raw }} <{{- node.url -}}>`__
+{%- elseif node.targetReference -%}
+    :doc:`{{ node.value|raw }} <{{- node.targetReference -}}>`
+{%- else -%}
+    {{- node.value -}}
+{%- endif -%}
