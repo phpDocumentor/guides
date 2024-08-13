@@ -67,7 +67,7 @@
         "rector/rector": "^1.1.0",
         "squizlabs/php_codesniffer": "^3.10",
         "symfony/finder": "^6.4.8",
-        "symplify/phpstan-rules": "^12.6",
+        "symplify/phpstan-rules": "^12.7",
         "vimeo/psalm": "^5.22"
     },
     "suggest": {

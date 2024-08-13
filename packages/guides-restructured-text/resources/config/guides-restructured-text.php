@@ -106,6 +106,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuil
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TitleRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\TransitionRule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\AbbreviationTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\ApiClassTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DefaultTextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
@@ -168,6 +169,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(GenericReferenceTextRole::class)
         ->set(ReferenceTextRole::class)
         ->set(AbbreviationTextRole::class)
+        ->set(ApiClassTextRole::class)
         ->set(MathTextRole::class)
         ->set(LiteralTextRole::class)
         ->set(SpanTextRole::class)
