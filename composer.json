@@ -43,7 +43,8 @@
         "phpdocumentor/guides-graphs": "^2.0@dev || ^1.0",
         "phpdocumentor/guides-markdown": "^2.0@dev || ^1.0",
         "phpdocumentor/guides-restructured-text": "^2.0@dev || ^1.0",
-        "phpdocumentor/guides-theme-bootstrap": "^2.0@dev || ^1.0"
+        "phpdocumentor/guides-theme-bootstrap": "^2.0@dev || ^1.0",
+        "phpdocumentor/guides-theme-rst": "^2.0@dev || ^1.0"
     },
     "require-dev": {
         "ext-dom": "*",

@@ -43,6 +43,7 @@
             <errorLevel type="suppress">
                 <referencedFunction name="tagged_iterator"/>
                 <referencedFunction name="template"/>
+                <referencedFunction name="templateArray"/>
             </errorLevel>
         </UndefinedFunction>
     </issueHandlers>

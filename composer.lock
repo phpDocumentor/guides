@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "838af16e3563e2e1002a608d028b0f55",
+    "content-hash": "5c44fdb9ce8b1709c92d86b1d5c127e8",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1585,6 +1585,45 @@
                 "MIT"
             ],
             "description": "A theme for phpdocumentor/guides based on Bootstrap",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-theme-rst",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-theme-rst",
+                "reference": "70ef007a53221f1c725d02d6cc71adb4e7648177"
+            },
+            "require": {
+                "php": "^8.1",
+                "phpdocumentor/guides": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds a reStructuredText theme used to convert Markdown into reStructuredText",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -8188,7 +8227,8 @@
         "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-markdown": 20,
         "phpdocumentor/guides-restructured-text": 20,
-        "phpdocumentor/guides-theme-bootstrap": 20
+        "phpdocumentor/guides-theme-bootstrap": 20,
+        "phpdocumentor/guides-theme-rst": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

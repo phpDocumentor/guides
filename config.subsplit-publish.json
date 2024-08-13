@@ -34,6 +34,11 @@
       "name": "guides-code",
       "directory": "packages/guides-code",
       "target": "git@github.com:phpDocumentor/guides-code.git"
+    },
+    {
+      "name": "guides-theme-rst",
+      "directory": "packages/guides-rst-theme",
+      "target": "git@github.com:phpDocumentor/guides-theme-rst.git"
     }
   ]
 }
