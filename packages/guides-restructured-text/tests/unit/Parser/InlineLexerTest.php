@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
+use function trim;
 
 final class InlineLexerTest extends TestCase
 {
@@ -81,6 +82,39 @@ final class InlineLexerTest extends TestCase
                 '\\``git@github.com`',
                 [InlineLexer::ESCAPED_SIGN],
             ],
+        ];
+    }
+
+    #[DataProvider('hyperlinkProvider')]
+    public function testHyperlinkEndsBeforeParenthesis(string $url): void
+    {
+        $input = '(text in parenthesis ' . $url . ').';
+        $lexer = new InlineLexer();
+
+        $lexer->setInput($input);
+        $lexer->moveNext();
+
+        for ($i = 0; $i < 21; $i++) {
+            $lexer->moveNext();
+            assertEquals(
+                trim($input[$i]) === '' ? InlineLexer::WHITESPACE : InlineLexer::WORD,
+                $lexer->token?->type,
+            );
+            assertEquals($input[$i], $lexer->token?->value);
+        }
+
+        $lexer->moveNext();
+        assertEquals(InlineLexer::HYPERLINK, $lexer->token?->type);
+        assertEquals($url, $lexer->token?->value);
+    }
+
+    /** @return array<string, array<string>> */
+    public static function hyperlinkProvider(): array
+    {
+        return [
+            'Url with parenthesis' => ['https://www.test.com'],
+            'Url with parenthesis and query' => ['https://www.test.com?query=1'],
+            'Url with parenthesis and query and fragment' => ['https://www.test.com?query=1#fragment'],
         ];
     }
 }
