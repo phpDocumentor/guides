@@ -74,7 +74,7 @@ final class InlineLexer extends AbstractLexer
             '|',
             '\\*\\*',
             '\\*',
-            '\b(?<!:)[a-z0-9\\.\-+]{2,}:\\/\\/[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9()@%_\\+~#&\\/=]', // standalone hyperlinks
+            '\b(?<!:)[a-z0-9\\.\-+]{2,}:\\/\\/[-a-zA-Z0-9@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9@%_\\+~#&\\/=]', // standalone hyperlinks
         ];
     }
 
