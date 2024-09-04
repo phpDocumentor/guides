@@ -5,7 +5,7 @@
 >
     <project
             title="Title"
-            version="12.4"
+            version="12.4.0"
             release="12.4.9-dev"
             copyright="since 1998 phpDocumentor Team and Contributors"
     />
