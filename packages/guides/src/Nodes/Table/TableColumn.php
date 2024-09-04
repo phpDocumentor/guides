@@ -54,7 +54,7 @@ final class TableColumn extends CompoundNode
 
     public function addContent(string $content): void
     {
-        $this->content = trim($this->content . $content);
+        $this->content .= $content;
     }
 
     public function incrementRowSpan(): void
