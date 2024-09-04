@@ -24,6 +24,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
 use Psr\Log\LoggerInterface;
 
+use function array_map;
 use function array_reverse;
 use function count;
 use function mb_strlen;
@@ -45,6 +46,7 @@ final class GridTableBuilder
     {
         $rows = $this->extractTableRows($context);
         $rows = $this->concatenateTableRows($rows, $context);
+        $rows = $this->trimTableCellContents($rows);
         $headers = $this->extractHeaderRows($rows, $context);
 
         return new TableNode($rows, $headers);
@@ -406,5 +408,28 @@ final class GridTableBuilder
     private function hasRowSpan(string $line): bool
     {
         return preg_match('/\+[-]+\+/', $line) === 1;
+    }
+
+    /**
+     * @param array<int, TableRow> $rows
+     *
+     * @return array<int, TableRow>
+     */
+    private function trimTableCellContents(array $rows): array
+    {
+        return array_map(
+            static fn (TableRow $row) => new TableRow(
+                array_map(
+                    static fn (TableColumn $column) => new TableColumn(
+                        trim($column->getContent()),
+                        $column->getColSpan(),
+                        [],
+                        $column->getRowSpan(),
+                    ),
+                    $row->getColumns(),
+                ),
+            ),
+            $rows,
+        );
     }
 }
