@@ -205,7 +205,7 @@ RST;
 +===================================+===============+
 | description                       | string        |
 +-----------------------------------+               |
-| author                            |               |
+| author                            | test          |
 +-----------------------------------+---------------+
 | keywords                          | string        |
 +-----------------------------------+---------------+
@@ -217,7 +217,7 @@ RST;
 
         $row1 = new TableRow();
         $row1->addColumn(self::createColumnNode('description'));
-        $rowSpan = self::createColumnNode('string');
+        $rowSpan = self::createColumnNode("string\n\ntest");
         $rowSpan->incrementRowSpan();
         $row1->addColumn($rowSpan);
 

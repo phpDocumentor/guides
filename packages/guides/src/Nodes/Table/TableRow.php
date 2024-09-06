@@ -23,8 +23,10 @@ use function sprintf;
 
 final class TableRow
 {
-    /** @var TableColumn[] */
-    private array $columns = [];
+    /** @param TableColumn[] $columns */
+    public function __construct(private array $columns = [])
+    {
+    }
 
     public function addColumn(TableColumn $tableColumn): void
     {
