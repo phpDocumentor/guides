@@ -38,7 +38,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "psr/log": "^3.0.1"
+        "psr/log": "^3.0.2"
     },
     "extra": {
         "branch-alias": {
