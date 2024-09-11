@@ -17,13 +17,13 @@ you have PHP installed.
 
 To use the commandline tool you need to install it using `Composer <https://getcomposer.org/>`__::
 
-.. code:: bash
+.. code-block:: bash
 
     composer require --dev phpdocumentor/guides-cli
 
 This will install the commandline tool in the vendor/bin directory. You can then use it as follows::
 
-.. code:: bash
+.. code-block:: bash
 
     vendor/bin/guides ./docs
 
@@ -37,7 +37,7 @@ Library (advanced)
 
 If you are building your own application you can install the libraries using `Composer <https://getcomposer.org/>`__::
 
-.. code:: bash
+.. code-block:: bash
 
     composer require phpdocumentor/guides
 
