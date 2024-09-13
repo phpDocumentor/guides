@@ -19,5 +19,5 @@ Create Issues
 Make changes (create pull requests)
 ===================================
 
-See the `Contribution chapter <https://github.com/phpDocumentor/guides/tree/main/docs/contributions/index.rst>`__ in the
-`Documentation` <https://github.com/phpDocumentor/guides/tree/main/docs/index.rst>`__.
+See the `Contribution chapter <https://docs.phpdoc.org/components/guides/guides/contributions/index.html>`__ in the
+`Documentation` <https://docs.phpdoc.org/components/guides/guides/index.html>`__.

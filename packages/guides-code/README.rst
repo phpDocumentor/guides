@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-code/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-code/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-code
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-code/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-code/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-code
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-code/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-code/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-code
 
@@ -31,6 +31,6 @@ The package `phpdocumentor/guides-code <https://packagist.org/packages/phpdocume
 support for syntax highlighting, and a multi-language code block, allowing you to show equivalent code in multiple languages.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides-code
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst

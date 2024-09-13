@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-theme-bootstrap
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-theme-bootstrap
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-theme-bootstrap/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-theme-bootstrap
 
@@ -32,6 +32,6 @@ The package `phpdocumentor/guides-theme-bootstrap <https://packagist.org/package
 phpDocumentor's Guides library.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides-theme-bootstrap
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst

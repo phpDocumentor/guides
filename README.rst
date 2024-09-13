@@ -1,9 +1,9 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-cli/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-cli/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-cli
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-cli/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-cli/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-cli
 
@@ -25,7 +25,7 @@ The Guides library is flexible, allowing you to plug in support for various inpu
 such as Restructured Text, and output formats, such as HTML.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides
 
 You can try out this reposistory convieniently in GitPod by clicking this button:

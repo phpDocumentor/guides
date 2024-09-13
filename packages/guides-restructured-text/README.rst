@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-restructured-text/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-restructured-text/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-restructured-text/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-restructured-text/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-restructured-text/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-restructured-text/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-restructured-text
 
@@ -32,6 +32,6 @@ The package `phpdocumentor/guides-restructured-text <https://packagist.org/packa
 phpDocumentor's Guides library.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides-restructured-text
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst
