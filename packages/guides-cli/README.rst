@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-cli/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-cli/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-cli
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-cli/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-cli/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-cli
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-cli/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-cli/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-cli
 
@@ -31,6 +31,6 @@ The package `phpdocumentor/guides-cli <https://packagist.org/packages/phpdocumen
 application and Symfony Console Command used for standalone processing of documentation files.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides-cli
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst

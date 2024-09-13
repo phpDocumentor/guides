@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides
 
@@ -31,7 +31,7 @@ The package `phpdocumentor/guides <https://packagist.org/packages/phpdocumentor/
 functionality from the phpDocumentor Guides.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst
 
