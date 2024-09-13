@@ -1,13 +1,13 @@
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-graphs/require/php
+..  image:: https://poser.pugx.org/phpdocumentor/guides-graphs/require/php
     :alt: PHP Version Require
     :target: https://packagist.org/packages/phpdocumentor/guides-graphs
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-graphs/v/stable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-graphs/v/stable
     :alt: Latest Stable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-graphs
 
-..  image:: http://poser.pugx.org/phpdocumentor/guides-graphs/v/unstable
+..  image:: https://poser.pugx.org/phpdocumentor/guides-graphs/v/unstable
     :alt: Latest Unstable Version
     :target: https://packagist.org/packages/phpdocumentor/guides-graphs
 
@@ -32,6 +32,6 @@ The package `phpdocumentor/guides-graphs <https://packagist.org/packages/phpdocu
 Guides library. Using this package is optional.
 
 :Mono-Repository:   https://github.com/phpDocumentor/guides
-:Documentation:     https://github.com/phpDocumentor/guides/tree/main/docs/index.rst
+:Documentation:     https://docs.phpdoc.org/components/guides/guides/index.html
 :Packagist:         https://packagist.org/packages/phpdocumentor/guides-graphs
 :Contribution:      https://github.com/phpDocumentor/guides/tree/main/CONTRIBUTING.rst
