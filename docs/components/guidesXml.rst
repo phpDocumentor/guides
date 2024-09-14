@@ -37,7 +37,7 @@ it at :file:`packages/guides-cli/resources/schema/guides.xsd` in the
 mono repository.
 
 Register the new configuration option in the :php:`TreeBuilder` at
-:php:func:`phpDocumentor\Guides\DependencyInjection\GuidesExtension::getConfigTreeBuilder`.
+:php:method:`phpDocumentor\Guides\DependencyInjection\GuidesExtension::getConfigTreeBuilder()`.
 
 ..  seealso::
 
@@ -60,7 +60,7 @@ Save a configuration value into the :php:`ProjectSettings`
 
 To add a configuration value to the :php:`ProjectSettings`,
 register the setting in
-:php:func:`phpDocumentor\Guides\DependencyInjection\GuidesExtension::load`.
+:php:method:`phpDocumentor\Guides\DependencyInjection\GuidesExtension::load()`.
 
 ..  code-block:: php
     :caption: phpDocumentor\Guides\DependencyInjection\GuidesExtension::load
@@ -73,6 +73,6 @@ Save a configuration value to the :php:`ProjectNode`
 ----------------------------------------------------
 
 Additional settings can be added to the ProjectNode in a
-:php:`phpDocumentor\Guides\Event\PostProjectNodeCreated` event.
+:php:class:`phpDocumentor\Guides\Event\PostProjectNodeCreated` event.
 
 ..  todo: Add example

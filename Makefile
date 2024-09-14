@@ -1,4 +1,5 @@
 PHP_BIN = docker run -it --rm --user $$(id -u):$$(id -g) -v${PWD}:/opt/project -w /opt/project php:8.2-cli php -d memory_limit=1024M
+PHP_DOC = docker run --rm -v ${PWD}:/data -w /data phpdoc/phpdoc:3-unstable
 
 .PHONY: help
 help: ## Displays this list of targets with descriptions
@@ -90,7 +91,7 @@ add-license:
 
 .PHONY: docs
 docs: ## Render documentation
-	$(PHP_BIN) tools/phpDocumentor.phar
+	$(PHP_DOC) run
 
 .PHONY: docs-watch
 docs-watch: ## Render documentation and watch for changes
