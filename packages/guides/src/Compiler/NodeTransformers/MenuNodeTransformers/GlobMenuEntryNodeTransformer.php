@@ -27,8 +27,9 @@ use function assert;
 use function explode;
 use function implode;
 use function in_array;
+use function is_string;
 use function preg_match;
-use function str_replace;
+use function preg_replace;
 
 final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransformer
 {
@@ -137,7 +138,9 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
     private static function isGlob(string $documentEntryFile, string $currentPath, string $file, string $prefix, array $globExclude): bool
     {
         if (!in_array($documentEntryFile, $globExclude, true)) {
-            $file = str_replace('*', '[^\/]*', $file);
+            $file = preg_replace('/(?<!\*)\*(?!\*)/', '[^\/]*', $file);
+            assert(is_string($file));
+            $file = preg_replace('/\*{2}/', '.*', $file);
             $pattern = '`^' . $file . '$`';
 
             return preg_match($pattern, $prefix . $documentEntryFile) > 0;
