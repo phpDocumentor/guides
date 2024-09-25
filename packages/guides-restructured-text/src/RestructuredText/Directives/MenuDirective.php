@@ -49,7 +49,6 @@ final class MenuDirective extends BaseDirective
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['glob'] = new DirectiveOption('glob', true);
-        $options['titlesonly'] = new DirectiveOption('titlesonly', false);
         $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
