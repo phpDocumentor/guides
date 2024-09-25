@@ -13,3 +13,4 @@ A Toctree with multiple whitespaces in the directive:
 
 
 ..  menu::
+    :titlesonly:
