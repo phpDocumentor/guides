@@ -21,7 +21,7 @@ Each Composer package must have a file `composer.json`. See an example here:
     :lineos:
 
 The PHP sources can be found in the directory `src` then as is stated in line 8
-in the `composer.json`. 
+in the `composer.json`.
 
 ..  _extension_symfony:
 
@@ -39,8 +39,8 @@ you can also configure the guides extension from your extension:
     :caption: your-extension/DependencyInjection/YourExtension.php
     :lineos:
 
-Lines 24 to 28 load a :ref:`Dependency Injection configuration <extension_di_configuration>` 
-file. Lines 29 to 36 configure the directory overriding the default templates. 
+Lines 24 to 28 load a :ref:`Dependency Injection configuration <extension_di_configuration>`
+file. Lines 29 to 36 configure the directory overriding the default templates.
 Read chapter :ref:`extending_templates` to learn more about this.
 
 ..  note::
