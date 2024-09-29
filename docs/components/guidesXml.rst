@@ -46,7 +46,7 @@ Register the new configuration option in the :php:`TreeBuilder` at
 
 Using the tree builder is a topic of itself. Refer to the according symfony documentation.
 
-If the configuration is a setting option to controll the applications workflow you can
+If the configuration is a setting option to control the applications workflow you can
 save it in the :php:class:`phpDocumentor\Guides\Settings\ProjectSettings`. Examples of
 settings options would be `logPath`, `showProgressBar` or `theme`.
 
