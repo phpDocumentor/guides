@@ -29,10 +29,10 @@ Create an extension
 ===================
 
 For the PHP package to be an extension you need a class
-extending `\Symfony\Component\DependencyInjection\Extension\Extension` by 
-implementing the interface 
-`Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface` we
-can also add our own configurations to our extension:
+extending `\Symfony\Component\DependencyInjection\Extension\Extension`.
+By implementing the interface
+`Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface`
+you can also configure the guides extension from your extension:
 
 ..  literalinclude:: _YourExtension.php
     :language: php
