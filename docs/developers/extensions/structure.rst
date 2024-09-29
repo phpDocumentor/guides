@@ -36,7 +36,7 @@ you can also configure the guides extension from your extension:
 
 ..  literalinclude:: _YourExtension.php
     :language: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
     :lineos:
 
 Lines 24 to 28 load a :ref:`Dependency Injection configuration <extension_di_configuration>`
