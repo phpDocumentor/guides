@@ -11,7 +11,7 @@ Register the templates overrides in your extension's
 
 ..  literalinclude:: _YourExtension.php
     :language: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
     :lineos:
     :emphasize-lines: 29-35
 
@@ -40,7 +40,7 @@ To extend the base template (plain HTML) require `phpdocumentor/guides` in your
 
 
 ..  code-block:: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
 
     $container->prependExtensionConfig('guides', [
         'themes' => ['mytheme' => dirname(__DIR__, 3) . '/resources/template'],
