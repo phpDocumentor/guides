@@ -21,7 +21,7 @@ Each Composer package must have a file `composer.json`. See an example here:
     :lineos:
 
 The PHP sources can be found in the directory `src` then as is stated in line 8
-in the `composer.json`. 
+in the `composer.json`.
 
 ..  _extension_symfony:
 
@@ -29,18 +29,18 @@ Create an extension
 ===================
 
 For the PHP package to be an extension you need a class
-extending `\Symfony\Component\DependencyInjection\Extension\Extension` by 
-implementing the interface 
-`Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface` we
-can also add our own configurations to our extension:
+extending `\Symfony\Component\DependencyInjection\Extension\Extension`.
+By implementing the interface
+`Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface`
+you can also configure the guides extension from your extension:
 
 ..  literalinclude:: _YourExtension.php
     :language: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
     :lineos:
 
-Lines 24 to 28 load a :ref:`Dependency Injection configuration <extension_di_configuration>` 
-file. Lines 29 to 36 configure the directory overriding the default templates. 
+Lines 24 to 28 load a :ref:`Dependency Injection configuration <extension_di_configuration>`
+file. Lines 29 to 36 configure the directory overriding the default templates.
 Read chapter :ref:`extending_templates` to learn more about this.
 
 ..  note::

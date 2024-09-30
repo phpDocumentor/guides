@@ -11,7 +11,7 @@ Register the templates overrides in your extension's
 
 ..  literalinclude:: _YourExtension.php
     :language: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
     :lineos:
     :emphasize-lines: 29-35
 
@@ -19,7 +19,7 @@ It is recommended to always extend an existing template so that the Twig files
 of the base templates can be used as fallback for non-defined specific template
 files.
 
-In order to extend the default bootstrap theme, require the according base 
+In order to extend the default bootstrap theme, require the according base
 extension in your extension's `composer.json`:
 
 ..  code-block:: json
@@ -35,12 +35,12 @@ extension in your extension's `composer.json`:
 
 And then set `'extends' => 'bootstrap'` (line 32 in the first code-snippet).
 
-To extend the base template (plain HTML) require `phpdocumentor/guides` in your 
+To extend the base template (plain HTML) require `phpdocumentor/guides` in your
 `composer.json`, and omit the key `extends`:
 
 
 ..  code-block:: php
-    :caption: your-extension/DependencyInjection/YourExtension.php
+    :caption: your-extension/src/DependencyInjection/YourExtension.php
 
     $container->prependExtensionConfig('guides', [
         'themes' => ['mytheme' => dirname(__DIR__, 3) . '/resources/template'],
