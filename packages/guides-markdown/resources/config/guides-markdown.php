@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Markdown\Parsers\ListBlockParser;
 use phpDocumentor\Guides\Markdown\Parsers\ListItemParser;
 use phpDocumentor\Guides\Markdown\Parsers\ParagraphParser;
 use phpDocumentor\Guides\Markdown\Parsers\SeparatorParser;
+use phpDocumentor\Guides\Markdown\Parsers\Table\TableParser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -57,6 +58,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(CodeBlockParser::class)
         ->tag('phpdoc.guides.markdown.parser.blockParser')
         ->tag('phpdoc.guides.markdown.parser.subParser')
+
+        ->set(TableParser::class)
+        ->arg('$subParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
+        ->tag('phpdoc.guides.markdown.parser.blockParser')
 
         ->set(EmphasisParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
