@@ -1,1 +1,1 @@
-<img src="{{- node.url -}}" alt="{{- node.altText -}}"/>
+<img src="{%- if node.value is external_target -%} {{ node.value }} {%- else -%} {{ asset(node.value) }} {%- endif -%}" alt="{{- node.altText -}}"/>
