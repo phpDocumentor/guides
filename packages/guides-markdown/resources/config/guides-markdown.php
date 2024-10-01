@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\EmphasisParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineCodeParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\InlineImageParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\LinkParser;
+use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\NewLineParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\PlainTextParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\StrongParser;
 use phpDocumentor\Guides\Markdown\Parsers\ListBlockParser;
@@ -72,6 +73,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
         ->set(InlineImageParser::class)
         ->arg('$inlineParsers', tagged_iterator('phpdoc.guides.markdown.parser.inlineParser'))
+        ->tag('phpdoc.guides.markdown.parser.inlineParser')
+        ->set(NewLineParser::class)
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
 
         ->set(MarkupLanguageParser::class)
