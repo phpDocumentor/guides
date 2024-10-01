@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Markdown;
 
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\NodeWalker;
@@ -45,6 +46,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
     ) {
         $cmEnvironment = new CommonMarkEnvironment(['html_input' => 'strip']);
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
+        $cmEnvironment->addExtension(new AutolinkExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
     }
 
