@@ -21,6 +21,7 @@
 
         <xsd:attribute name="input" type="xsd:string"/>
         <xsd:attribute name="input-file" type="xsd:string"/>
+        <xsd:attribute name="index-name" type="xsd:string"/>
         <xsd:attribute name="output" type="xsd:string"/>
         <xsd:attribute name="input-format" type="xsd:string"/>
         <xsd:attribute name="log-path" type="xsd:string"/>

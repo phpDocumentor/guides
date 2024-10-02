@@ -21,20 +21,28 @@ use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PreParseProcess;
 use phpDocumentor\Guides\FileCollector;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
+use function array_map;
 use function assert;
+use function explode;
+use function implode;
 use function sprintf;
 
 final class ParseDirectoryHandler
 {
-    private const INDEX_FILE_NAMES = ['index', 'Index'];
+    private SettingsManager $settingsManager;
 
     public function __construct(
         private readonly FileCollector $fileCollector,
         private readonly CommandBus $commandBus,
         private readonly EventDispatcherInterface $eventDispatcher,
+        SettingsManager|null $settingsManager = null,
     ) {
+        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
     /** @return DocumentNode[] */
@@ -98,17 +106,20 @@ final class ParseDirectoryHandler
             $hashedContentFromFilesystem[$itemFromFilesystem['basename']] = true;
         }
 
-        foreach (self::INDEX_FILE_NAMES as $indexName) {
-            $indexFilename = sprintf('%s.%s', $indexName, $extension);
-            if (isset($hashedContentFromFilesystem[$indexFilename])) {
+        $indexFileNames = array_map('trim', explode(',', $this->settingsManager->getProjectSettings()->getIndexName()));
+
+        $indexNamesNotFound = [];
+        foreach ($indexFileNames as $indexName) {
+            $fullIndexFilename = sprintf('%s.%s', $indexName, $extension);
+            if (isset($hashedContentFromFilesystem[$fullIndexFilename])) {
                 return $indexName;
             }
+
+            $indexNamesNotFound[] = $fullIndexFilename;
         }
 
-        $indexFilename = sprintf('%s.%s', self::INDEX_FILE_NAMES[0], $extension);
-
         throw new InvalidArgumentException(
-            sprintf('Could not find index file "%s" in "%s"', $indexFilename, $directory),
+            sprintf('Could not find an index file "%s", expected file names: %s', $directory, implode(', ', $indexNamesNotFound)),
         );
     }
 }

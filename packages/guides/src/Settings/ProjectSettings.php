@@ -24,6 +24,7 @@ final class ProjectSettings
     private string $theme = 'default';
     private string $input = 'docs';
     private string $inputFile = '';
+    private string $indexName = 'index,Index';
     private string $output = 'output';
     private string $inputFormat = 'rst';
     /** @var string[]  */
@@ -229,5 +230,17 @@ final class ProjectSettings
     public function setIgnoredDomains(array $ignoredDomains): void
     {
         $this->ignoredDomains = $ignoredDomains;
+    }
+
+    public function getIndexName(): string
+    {
+        return $this->indexName;
+    }
+
+    public function setIndexName(string $indexName): ProjectSettings
+    {
+        $this->indexName = $indexName;
+
+        return $this;
     }
 }
