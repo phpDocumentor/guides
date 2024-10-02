@@ -34,6 +34,10 @@ final class SectionCreationTransformer implements NodeTransformer
 
     public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
+        if ($node instanceof DocumentNode) {
+            $this->sectionStack = [];
+        }
+
         if (!$compilerContext->getShadowTree()->getParent()?->getNode() instanceof DocumentNode) {
             return $node;
         }
