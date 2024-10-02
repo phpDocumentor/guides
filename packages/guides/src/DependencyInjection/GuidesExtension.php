@@ -114,6 +114,7 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->scalarNode('theme')->end()
                 ->scalarNode('input')->end()
                 ->scalarNode('input_file')->end()
+                ->scalarNode('index_name')->end()
                 ->scalarNode('output')->end()
                 ->scalarNode('input_format')->end()
                 ->arrayNode('output_format')
@@ -235,6 +236,10 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
             if (!empty($pathInfo['extension'])) {
                 $projectSettings->setInputFormat($pathInfo['extension']);
             }
+        }
+
+        if (isset($config['index_name']) && $config['index_name'] !== '') {
+            $projectSettings->setIndexName((string) $config['index_name']);
         }
 
         if (isset($config['output'])) {

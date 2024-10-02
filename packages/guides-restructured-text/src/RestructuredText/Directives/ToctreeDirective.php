@@ -21,6 +21,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 
 /**
  * Sphinx based Toctree directive.
@@ -33,11 +35,16 @@ use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
  */
 final class ToctreeDirective extends BaseDirective
 {
+    private SettingsManager $settingsManager;
+
     /** @param Rule<InlineCompoundNode> $startingRule */
     public function __construct(
         private readonly ToctreeBuilder $toctreeBuilder,
         private readonly Rule $startingRule,
+        SettingsManager|null $settingsManager = null,
     ) {
+        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
     public function getName(): string
@@ -52,7 +59,8 @@ final class ToctreeDirective extends BaseDirective
     ): Node|null {
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
-        $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
+        $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
+        $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
             $parserContext,
