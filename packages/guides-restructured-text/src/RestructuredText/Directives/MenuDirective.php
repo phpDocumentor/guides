@@ -20,6 +20,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 
 use function count;
 
@@ -28,12 +30,18 @@ use function count;
  * is for display only. It does not change the position of document in the document tree and can therefore be included
  * all pages as navigation.
  *
- * By default it displays a menu of the pages on level 1 up to level 2.
+ * By default, it displays a menu of the pages on level 1 up to level 2.
  */
 final class MenuDirective extends BaseDirective
 {
-    public function __construct(private readonly ToctreeBuilder $toctreeBuilder)
-    {
+    private SettingsManager $settingsManager;
+
+    public function __construct(
+        private readonly ToctreeBuilder $toctreeBuilder,
+        SettingsManager|null $settingsManager = null,
+    ) {
+        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
     public function getName(): string
@@ -49,7 +57,8 @@ final class MenuDirective extends BaseDirective
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['glob'] = new DirectiveOption('glob', true);
-        $options['globExclude'] ??= new DirectiveOption('globExclude', 'index,Index');
+        $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
+        $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
             $parserContext,
