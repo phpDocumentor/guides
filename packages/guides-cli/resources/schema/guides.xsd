@@ -31,6 +31,7 @@
         <xsd:attribute name="theme" type="xsd:string"/>
         <xsd:attribute name="default-code-language" type="xsd:string"/>
         <xsd:attribute name="links-are-relative" type="xsd:string"/>
+        <xsd:attribute name="automatic-menu" type="xsd:string"/>
         <xsd:attribute name="max-menu-depth" type="xsd:int"/>
 
     </xsd:complexType>
