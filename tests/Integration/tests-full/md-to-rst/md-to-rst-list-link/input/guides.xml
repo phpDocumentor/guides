@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
+        input-format="md"
+        theme="rst"
+>
+    <project title="Project Title" version="6.4"/>
+    <extension class="phpDocumentor\Guides\RstTheme"/>
+    <output-format>rst</output-format>
+</guides>
