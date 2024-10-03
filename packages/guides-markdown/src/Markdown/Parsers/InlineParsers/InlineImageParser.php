@@ -52,7 +52,7 @@ final class InlineImageParser extends AbstractInlineTextDecoratorParser
             );
         }
 
-        return new ImageInlineNode($commonMarkNode->getUrl(), $content ?? '');
+        return new ImageInlineNode($commonMarkNode->getUrl(), $content ?? '', $commonMarkNode->getTitle() ?? '');
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool

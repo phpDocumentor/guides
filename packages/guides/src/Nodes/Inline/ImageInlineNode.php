@@ -20,8 +20,11 @@ final class ImageInlineNode extends InlineNode
 {
     public const TYPE = 'image';
 
-    public function __construct(private readonly string $url, private readonly string $altText)
-    {
+    public function __construct(
+        private readonly string $url,
+        private readonly string $altText,
+        private readonly string|null $title = null,
+    ) {
         parent::__construct(self::TYPE, $url);
     }
 
@@ -33,5 +36,10 @@ final class ImageInlineNode extends InlineNode
     public function getAltText(): string
     {
         return $this->altText;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title ?? '';
     }
 }
