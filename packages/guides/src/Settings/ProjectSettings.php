@@ -35,6 +35,7 @@ final class ProjectSettings
     private bool $linksRelative = false;
     private string $defaultCodeLanguage = '';
     private int $maxMenuDepth = 0;
+    private bool $automaticMenu = false;
 
     /** @var string[] */
     private array $ignoredDomains = [];
@@ -240,6 +241,18 @@ final class ProjectSettings
     public function setIndexName(string $indexName): ProjectSettings
     {
         $this->indexName = $indexName;
+
+        return $this;
+    }
+
+    public function isAutomaticMenu(): bool
+    {
+        return $this->automaticMenu;
+    }
+
+    public function setAutomaticMenu(bool $automaticMenu): ProjectSettings
+    {
+        $this->automaticMenu = $automaticMenu;
 
         return $this;
     }

@@ -18,13 +18,20 @@ use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use Psr\Log\LoggerInterface;
 
 final class ToctreeValidationPass implements CompilerPass
 {
+    private SettingsManager $settingsManager;
+
     public function __construct(
         private readonly LoggerInterface $logger,
+        SettingsManager|null $settingsManager = null,
     ) {
+        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
     public function getPriority(): int
@@ -39,6 +46,10 @@ final class ToctreeValidationPass implements CompilerPass
      */
     public function run(array $documents, CompilerContextInterface $compilerContext): array
     {
+        if ($this->settingsManager->getProjectSettings()->isAutomaticMenu()) {
+            return $documents;
+        }
+
         $projectNode = $compilerContext->getProjectNode();
 
         foreach ($documents as $document) {
