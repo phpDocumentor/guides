@@ -1,0 +1,1 @@
+app.WARNING: The `.. toctree::` directive is not supported in automatic-menu mode. Use `.. menu::` instead.
