@@ -57,7 +57,7 @@ final class GlobalMenuPass implements CompilerPass
         try {
             $rootDocumentEntry = $projectNode->getRootDocumentEntry();
         } catch (Throwable) {
-            // Todo: Functional tests have not root document entry
+            // Todo: Functional tests have no root document entry
             return $documents;
         }
 
