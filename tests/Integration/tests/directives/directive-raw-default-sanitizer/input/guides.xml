@@ -2,8 +2,7 @@
 <guides xmlns="https://www.phpdoc.org/guides"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
-        input-format="md"
+        input-format="rst"
 >
     <project title="Project Title" version="6.4"/>
-    <raw-node escape="true" />
 </guides>

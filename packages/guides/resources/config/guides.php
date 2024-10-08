@@ -10,6 +10,7 @@ use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers\InternalMenuEntryNodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
+use phpDocumentor\Guides\Compiler\NodeTransformers\RawNodeEscapeTransformer;
 use phpDocumentor\Guides\Event\PostProjectNodeCreated;
 use phpDocumentor\Guides\EventListener\LoadSettingsFromComposer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
@@ -62,6 +63,7 @@ use phpDocumentor\Guides\Twig\TrimFilesystemLoader;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Loader\FilesystemLoader;
@@ -105,6 +107,9 @@ return static function (ContainerConfigurator $container): void {
         ->set(InternalMenuEntryNodeTransformer::class)
         ->tag('phpdoc.guides.compiler.nodeTransformers')
 
+        ->set(RawNodeEscapeTransformer::class)
+        ->arg('$escapeRawNodes', param('phpdoc.guides.raw_node.escape'))
+        ->arg('$htmlSanitizerConfig', service('phpdoc.guides.raw_node.sanitizer.default'))
 
         ->set(AbsoluteUrlGenerator::class)
         ->set(RelativeUrlGenerator::class)
@@ -244,5 +249,8 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$themeManager', service(ThemeManager::class))
 
         ->set(TemplateRenderer::class, TwigTemplateRenderer::class)
-        ->arg('$environmentBuilder', new Reference(EnvironmentBuilder::class));
+        ->arg('$environmentBuilder', new Reference(EnvironmentBuilder::class))
+
+        ->set('phpdoc.guides.raw_node.sanitizer.default', HtmlSanitizerConfig::class)
+        ->call('allowSafeElements', [], true);
 };

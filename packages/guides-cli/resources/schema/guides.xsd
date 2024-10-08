@@ -17,6 +17,7 @@
             <xsd:element name="ignored_domain" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="inventory" type="inventory" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="template" type="template" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="raw-node" type="raw-node" minOccurs="0" maxOccurs="1" />
         </xsd:choice>
 
         <xsd:attribute name="input" type="xsd:string"/>
@@ -32,7 +33,6 @@
         <xsd:attribute name="default-code-language" type="xsd:string"/>
         <xsd:attribute name="links-are-relative" type="xsd:string"/>
         <xsd:attribute name="max-menu-depth" type="xsd:int"/>
-
     </xsd:complexType>
 
     <xsd:complexType name="extension">
@@ -70,5 +70,25 @@
         <xsd:attribute name="file" type="xsd:string" use="required"/>
         <xsd:attribute name="node" type="xsd:string" use="required"/>
         <xsd:attribute name="format" type="xsd:string" default="html"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="raw-node">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="sanitizer" type="sanitizer" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+        <xsd:attribute name="escape" type="xsd:boolean" />
+        <xsd:attribute name="sanitizer-name" type="xsd:string" default="default" />
+    </xsd:complexType>
+
+    <xsd:complexType name="sanitizer">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="allow-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="block-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="drop-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="allow-attribute" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="drop-attribute" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+
+        <xsd:attribute name="name" type="xsd:string" use="required" />
     </xsd:complexType>
 </xsd:schema>
