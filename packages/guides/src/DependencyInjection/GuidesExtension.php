@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
+use phpDocumentor\Guides\Compiler\NodeTransformers\RawNodeEscapeTransformer;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
@@ -31,6 +32,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 use function array_keys;
 use function array_map;
@@ -158,6 +161,33 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                             ->end()
                             ->scalarNode('format')
                                 ->defaultValue('html')
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('raw_node')
+                    ->fixXmlConfig('sanitizer')
+                    ->children()
+                        ->booleanNode('escape')->defaultValue(false)->end()
+                        ->scalarNode('sanitizer_name')->end()
+                        ->arrayNode('sanitizers')
+                            ->defaultValue([])
+                            ->arrayPrototype()
+                                ->fixXmlConfig('allow_element')
+                                ->fixXmlConfig('drop_element')
+                                ->fixXmlConfig('block_element')
+                                ->fixXmlConfig('allow_attribute')
+                                ->fixXmlConfig('drop_attribute')
+                                ->children()
+                                    ->scalarNode('name')->isRequired()->end()
+                                    ->booleanNode('allow_safe_elements')->defaultValue(true)->end()
+                                    ->booleanNode('allow_static_elements')->defaultValue(true)->end()
+                                    ->arrayNode('allow_elements')->scalarPrototype()->end()->end()
+                                    ->arrayNode('block_elements')->scalarPrototype()->end()->end()
+                                    ->arrayNode('drop_elements')->scalarPrototype()->end()->end()
+                                    ->arrayNode('allow_attributes')->scalarPrototype()->end()->end()
+                                    ->arrayNode('drop_attributes')->scalarPrototype()->end()->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
@@ -290,6 +320,11 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
         $container->setParameter('phpdoc.guides.base_template_paths', $config['base_template_paths']);
         $container->setParameter('phpdoc.guides.node_templates', $config['templates']);
         $container->setParameter('phpdoc.guides.inventories', $config['inventories']);
+        $container->setParameter('phpdoc.guides.raw_node.escape', $config['raw_node']['escape'] ?? false);
+
+        if ($config['raw_node'] ?? false) {
+            $this->configureSanitizers($config['raw_node'], $container);
+        }
 
         foreach ($config['themes'] as $themeName => $themeConfig) {
             $container->getDefinition(ThemeManager::class)
@@ -327,6 +362,50 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ),
             ],
         );
+    }
+
+    /** @param array<string, mixed> $rawNodeConfig */
+    private function configureSanitizers(array $rawNodeConfig, ContainerBuilder $container): void
+    {
+        if ($rawNodeConfig['sanitizer_name'] ?? false) {
+            $container->getDefinition(RawNodeEscapeTransformer::class)
+                ->setArgument('$htmlSanitizerConfig', new Reference('phpdoc.guides.raw_node.sanitizer.' . $rawNodeConfig['sanitizer_name']));
+        }
+
+        foreach ($rawNodeConfig['sanitizers'] as $sanitizerConfig) {
+            $def = $container->register('phpdoc.guides.raw_node.sanitizer.' . $sanitizerConfig['name'], HtmlSanitizerConfig::class);
+
+            // Base
+            if ($sanitizerConfig['allow_safe_elements']) {
+                $def->addMethodCall('allowSafeElements', [], true);
+            }
+
+            if ($sanitizerConfig['allow_static_elements']) {
+                $def->addMethodCall('allowStaticElements', [], true);
+            }
+
+            // Configures elements
+            foreach ($sanitizerConfig['allow_elements'] as $element => $attributes) {
+                $def->addMethodCall('allowElement', [$element, $attributes], true);
+            }
+
+            foreach ($sanitizerConfig['block_elements'] as $element) {
+                $def->addMethodCall('blockElement', [$element], true);
+            }
+
+            foreach ($sanitizerConfig['drop_elements'] as $element) {
+                $def->addMethodCall('dropElement', [$element], true);
+            }
+
+            // Configures attributes
+            foreach ($sanitizerConfig['allow_attributes'] as $attribute => $elements) {
+                $def->addMethodCall('allowAttribute', [$attribute, $elements], true);
+            }
+
+            foreach ($sanitizerConfig['drop_attributes'] as $attribute => $elements) {
+                $def->addMethodCall('dropAttribute', [$attribute, $elements], true);
+            }
+        }
     }
 }
 
