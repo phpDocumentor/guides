@@ -41,6 +41,9 @@ final class RawDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node|null {
-        return new RawNode(implode("\n", $blockContext->getDocumentIterator()->toArray()));
+        return new RawNode(
+            implode("\n", $blockContext->getDocumentIterator()->toArray()),
+            $directive->getData(),
+        );
     }
 }
