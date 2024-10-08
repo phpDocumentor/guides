@@ -3,8 +3,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
         theme="bootstrap"
-        input-format="md"
-        links-are-relative="1"
         automatic-menu="true"
 >
     <extension class="phpDocumentor\Guides\Bootstrap"/>
