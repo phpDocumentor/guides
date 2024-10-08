@@ -31,9 +31,10 @@
         "phpdocumentor/flyfinder": "^1.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/clock": "^6.4.3",
+        "symfony/html-sanitizer": "^6.4.8",
+        "symfony/http-client": "^6.4.9",
         "symfony/string": "^5.4 || ^6.3 || ^7.0",
         "symfony/translation-contracts": "^3.4.1",
-        "symfony/http-client": "^6.4.4",
         "twig/twig": "~2.15 || ^3.0",
         "webmozart/assert": "^1.11"
     },

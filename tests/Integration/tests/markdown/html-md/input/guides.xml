@@ -5,4 +5,5 @@
         input-format="md"
 >
     <project title="Project Title" version="6.4"/>
+    <raw-node escape="true" />
 </guides>
