@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RstTheme\Twig;
 
-use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RstTheme\Configuration\HeaderSyntax;
-use phpDocumentor\Guides\Twig\GlobalMenuExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -33,13 +30,6 @@ use function strlen;
 
 final class RstExtension extends AbstractExtension
 {
-    /** @param NodeRenderer<Node> $nodeRenderer */
-    public function __construct(
-        private readonly NodeRenderer $nodeRenderer,
-    ) {
-        $this->menuExtension = new GlobalMenuExtension($this->nodeRenderer);
-    }
-
     /** @return TwigFunction[] */
     public function getFunctions(): array
     {
