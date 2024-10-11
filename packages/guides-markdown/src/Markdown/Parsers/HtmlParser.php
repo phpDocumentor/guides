@@ -18,12 +18,11 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 
 use function assert;
 
-/** @extends AbstractBlockParser<ParagraphNode> */
+/** @extends AbstractBlockParser<RawNode> */
 final class HtmlParser extends AbstractBlockParser
 {
     public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): RawNode

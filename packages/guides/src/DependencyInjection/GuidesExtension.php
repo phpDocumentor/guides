@@ -372,6 +372,10 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->setArgument('$htmlSanitizerConfig', new Reference('phpdoc.guides.raw_node.sanitizer.' . $rawNodeConfig['sanitizer_name']));
         }
 
+        if (!is_array($rawNodeConfig['sanitizers'] ?? false)) {
+            return;
+        }
+
         foreach ($rawNodeConfig['sanitizers'] as $sanitizerConfig) {
             $def = $container->register('phpdoc.guides.raw_node.sanitizer.' . $sanitizerConfig['name'], HtmlSanitizerConfig::class);
 

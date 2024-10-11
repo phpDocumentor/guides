@@ -24,6 +24,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
+use function assert;
+
+/** @implements NodeTransformer<Node> */
 final class RawNodeEscapeTransformer implements NodeTransformer
 {
     private HtmlSanitizer $htmlSanitizer;
@@ -43,6 +46,7 @@ final class RawNodeEscapeTransformer implements NodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
+        assert($node instanceof RawNode);
         if ($this->escapeRawNodes) {
             $this->logger->warning('We do not support plain HTML for security reasons. Escaping all HTML ');
 
