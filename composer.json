@@ -68,7 +68,7 @@
         "squizlabs/php_codesniffer": "^3.10",
         "symfony/finder": "^6.4.8",
         "symplify/phpstan-rules": "^12.7",
-        "vimeo/psalm": "^5.22"
+        "vimeo/psalm": "^5.26"
     },
     "suggest": {
         "league/csv:": "To use the CSV tables"
