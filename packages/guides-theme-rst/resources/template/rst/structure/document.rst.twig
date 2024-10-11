@@ -1,3 +1,7 @@
-{% for child in node.children -%}
-    {{- renderNode(child) -}}
-{%- endfor %}
+{%- set renderedContent -%}
+    {%- for child in node.children -%}
+        {{- renderNode(child) -}}
+    {%- endfor -%}
+{%- endset -%}
+
+{{- renderedContent | clean_content | raw -}}

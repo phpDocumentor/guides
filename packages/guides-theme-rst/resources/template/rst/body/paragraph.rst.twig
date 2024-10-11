@@ -1,4 +1,6 @@
-{%- set text = renderNode(node.value)|raw -%}
+{% set text = renderNode(node.value)|raw -%}
 {%- if text|trim %}
     {{- text|raw -}}
 {% endif -%}
+{{ "\n" }}
+{{ "\n" }}

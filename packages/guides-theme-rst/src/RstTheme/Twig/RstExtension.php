@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RstTheme\Configuration\HeaderSyntax;
 use phpDocumentor\Guides\Twig\GlobalMenuExtension;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 use function min;
@@ -41,6 +42,24 @@ final class RstExtension extends AbstractExtension
             new TwigFunction('renderRstTitle', $this->renderRstTitle(...), ['is_safe' => ['rst'], 'needs_context' => false]),
             new TwigFunction('renderRstIndent', $this->renderRstIndent(...), ['is_safe' => ['rst'], 'needs_context' => false]),
         ];
+    }
+
+    /** @return TwigFilter[] */
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('clean_content', [$this, 'cleanContent']),
+        ];
+    }
+
+    public function cleanContent(string $content): string
+    {
+        $lines = explode("\n", $content);
+        $lines = array_map('rtrim', $lines);
+        $content = implode("\n", $lines);
+
+        $content = preg_replace('/(\n){2,}/', "\n\n", $content);
+        return rtrim($content)."\n";
     }
 
     public function renderRstIndent(string $text, int $indentNr): string

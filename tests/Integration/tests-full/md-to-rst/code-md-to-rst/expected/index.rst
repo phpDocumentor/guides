@@ -9,7 +9,6 @@ Markdown with Code Blocks
       </head>
     </html>
 
-
 Fenced Code Blocks
 ==================
 
@@ -20,9 +19,6 @@ Fenced Code Blocks
       "lastName": "Smith",
       "age": 25
     }
-
-
-
 
 Fenced Code Block with caption
 ==============================
@@ -35,7 +31,3 @@ Fenced Code Block with caption
            waitForNextIteration()
        end while
     end procedure
-
-
-
-
