@@ -156,25 +156,27 @@ final class AssetsExtension extends AbstractExtension
         }
 
         $canonicalUrl = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $sourcePath);
+        $normalizedSourcePath = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $sourcePath);
+
         $outputPath = $this->documentNameResolver->absoluteUrl(
             $renderContext->getDestinationPath(),
             $canonicalUrl,
         );
 
         try {
-            if ($renderContext->getOrigin()->has($sourcePath) === false) {
+            if ($renderContext->getOrigin()->has($normalizedSourcePath) === false) {
                 $this->logger->error(
-                    sprintf('Image reference not found "%s"', $sourcePath),
+                    sprintf('Image reference not found "%s"', $normalizedSourcePath),
                     $renderContext->getLoggerInformation(),
                 );
 
                 return $outputPath;
             }
 
-            $fileContents = $renderContext->getOrigin()->read($sourcePath);
+            $fileContents = $renderContext->getOrigin()->read($normalizedSourcePath);
             if ($fileContents === false) {
                 $this->logger->error(
-                    sprintf('Could not read image file "%s"', $sourcePath),
+                    sprintf('Could not read image file "%s"', $normalizedSourcePath),
                     $renderContext->getLoggerInformation(),
                 );
 
