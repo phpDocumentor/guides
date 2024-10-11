@@ -39,7 +39,14 @@ final class RstExtension extends AbstractExtension
     {
         return [
             new TwigFunction('renderRstTitle', $this->renderRstTitle(...), ['is_safe' => ['rst'], 'needs_context' => false]),
+            new TwigFunction('renderRstIndent', $this->renderRstIndent(...), ['is_safe' => ['rst'], 'needs_context' => false]),
         ];
+    }
+
+    public function renderRstIndent(string $text, int $indentNr): string
+    {
+        $indent = str_repeat(' ', $indentNr*4);
+        return preg_replace('/^/m', $indent, $text);
     }
 
     public function renderRstTitle(TitleNode $node, string $content): string
