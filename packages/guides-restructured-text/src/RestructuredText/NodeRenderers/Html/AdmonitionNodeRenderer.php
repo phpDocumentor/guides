@@ -15,9 +15,9 @@ namespace phpDocumentor\Guides\RestructuredText\NodeRenderers\Html;
 
 use InvalidArgumentException;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\RestructuredText\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function implode;
