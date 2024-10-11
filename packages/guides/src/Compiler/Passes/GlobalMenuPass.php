@@ -90,14 +90,23 @@ final class GlobalMenuPass implements CompilerPass
 
     private function getNavMenuNodeFromDocumentEntries(CompilerContextInterface $compilerContext): NavMenuNode
     {
-        $menuEntries = [];
         $rootDocumentEntry = $compilerContext->getProjectNode()->getRootDocumentEntry();
+        $menuEntries = $this->getMenuEntriesFromDocumentEntries($rootDocumentEntry);
+
+        return new NavMenuNode($menuEntries);
+    }
+
+    /** @return InternalMenuEntryNode[] */
+    public function getMenuEntriesFromDocumentEntries(DocumentEntryNode $rootDocumentEntry): array
+    {
+        $menuEntries = [];
         foreach ($rootDocumentEntry->getChildren() as $documentEntryNode) {
-            $newMenuEntry = new InternalMenuEntryNode($documentEntryNode->getFile(), $documentEntryNode->getTitle(), [], false, 1);
+            $children = $this->getMenuEntriesFromDocumentEntries($documentEntryNode);
+            $newMenuEntry = new InternalMenuEntryNode($documentEntryNode->getFile(), $documentEntryNode->getTitle(), $children, false, 1);
             $menuEntries[] = $newMenuEntry;
         }
 
-        return new NavMenuNode($menuEntries);
+        return $menuEntries;
     }
 
     private function getNavMenuNodefromTocNode(CompilerContextInterface $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
