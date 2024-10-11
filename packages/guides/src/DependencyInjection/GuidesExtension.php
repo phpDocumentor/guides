@@ -146,6 +146,7 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->scalarNode('show_progress')->end()
                 ->scalarNode('links_are_relative')->end()
                 ->scalarNode('max_menu_depth')->end()
+                ->scalarNode('automatic_menu')->end()
                 ->arrayNode('base_template_paths')
                     ->defaultValue([])
                     ->scalarPrototype()->end()
@@ -306,6 +307,10 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
 
         if (isset($config['max_menu_depth'])) {
             $projectSettings->setMaxMenuDepth((int) $config['max_menu_depth']);
+        }
+
+        if (isset($config['automatic_menu'])) {
+            $projectSettings->setAutomaticMenu((bool) $config['automatic_menu']);
         }
 
         if (isset($config['default_code_language'])) {

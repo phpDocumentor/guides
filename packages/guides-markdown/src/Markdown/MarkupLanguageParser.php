@@ -24,6 +24,8 @@ use phpDocumentor\Guides\MarkupLanguageParser as MarkupLanguageParserInterface;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ParserContext;
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -40,16 +42,21 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
 
     private DocumentNode|null $document = null;
 
+    private SettingsManager $settingsManager;
+
     /** @param iterable<ParserInterface<Node>> $parsers */
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly iterable $parsers,
+        SettingsManager|null $settingsManager,
     ) {
         $cmEnvironment = new CommonMarkEnvironment(['html_input' => 'strip']);
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $cmEnvironment->addExtension(new TableExtension());
         $cmEnvironment->addExtension(new AutolinkExtension());
         $this->markdownParser = new MarkdownParser($cmEnvironment);
+        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
     public function supports(string $inputFormat): bool
@@ -69,7 +76,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
     private function parseDocument(NodeWalker $walker, string $hash): DocumentNode
     {
         $document = new DocumentNode($hash, ltrim($this->getParserContext()->getCurrentAbsolutePath(), '/'));
-        $document->setOrphan(true);
+        $document->setOrphan(!$this->settingsManager->getProjectSettings()->isAutomaticMenu());
         $this->document = $document;
 
         while ($event = $walker->next()) {

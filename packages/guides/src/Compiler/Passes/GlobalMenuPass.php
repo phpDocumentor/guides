@@ -30,6 +30,7 @@ use Throwable;
 
 use function array_map;
 use function assert;
+use function count;
 
 use const PHP_INT_MAX;
 
@@ -56,7 +57,7 @@ final class GlobalMenuPass implements CompilerPass
         try {
             $rootDocumentEntry = $projectNode->getRootDocumentEntry();
         } catch (Throwable) {
-            // Todo: Functional tests have not root document entry
+            // Todo: Functional tests have no root document entry
             return $documents;
         }
 
@@ -78,9 +79,25 @@ final class GlobalMenuPass implements CompilerPass
             $menuNodes[] = $menuNode->withCaption($tocNode->getCaption());
         }
 
+        if ($this->settingsManager->getProjectSettings()->isAutomaticMenu() && count($menuNodes) === 0) {
+            $menuNodes[] = $this->getNavMenuNodeFromDocumentEntries($compilerContext);
+        }
+
         $projectNode->setGlobalMenues($menuNodes);
 
         return $documents;
+    }
+
+    private function getNavMenuNodeFromDocumentEntries(CompilerContextInterface $compilerContext): NavMenuNode
+    {
+        $menuEntries = [];
+        $rootDocumentEntry = $compilerContext->getProjectNode()->getRootDocumentEntry();
+        foreach ($rootDocumentEntry->getChildren() as $documentEntryNode) {
+            $newMenuEntry = new InternalMenuEntryNode($documentEntryNode->getFile(), $documentEntryNode->getTitle(), [], false, 1);
+            $menuEntries[] = $newMenuEntry;
+        }
+
+        return new NavMenuNode($menuEntries);
     }
 
     private function getNavMenuNodefromTocNode(CompilerContextInterface $compilerContext, TocNode $tocNode, string|null $menuType = null): NavMenuNode
