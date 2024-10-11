@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends CompoundNode<Node> */
-final class AdmonitionNode extends CompoundNode
+class AdmonitionNode extends CompoundNode
 {
     /** @param Node[] $value */
     public function __construct(private readonly string $name, private readonly InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)
