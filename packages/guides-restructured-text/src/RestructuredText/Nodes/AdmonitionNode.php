@@ -11,8 +11,8 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\RestructuredText\NodeRenderers\Html;
+namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
-final class AdmonitionNodeRenderer extends \phpDocumentor\Guides\NodeRenderers\Html\AdmonitionNodeRenderer
+class AdmonitionNode extends \phpDocumentor\Guides\Nodes\AdmonitionNode
 {
 }

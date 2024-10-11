@@ -62,9 +62,9 @@ final class BlockQuoteParser extends AbstractBlockParser
 
             // leaving the heading node
             if ($commonMarkNode instanceof BlockQuote) {
-                if (count($content) > 0 and $content[0] instanceof ParagraphNode and ($content[0]->getValue()[0]) instanceof InlineCompoundNode) {
+                if (count($content) > 0 && $content[0] instanceof ParagraphNode && ($content[0]->getValue()[0]) instanceof InlineCompoundNode) {
                     $paragraphContent = $content[0]->getValue()[0]->getValue();
-                    if (count($paragraphContent) > 0 and $paragraphContent[0] instanceof PlainTextInlineNode) {
+                    if (count($paragraphContent) > 0 && $paragraphContent[0] instanceof PlainTextInlineNode) {
                         $text = trim($paragraphContent[0]->getValue());
                         $newParagraphContent = $paragraphContent;
                         array_shift($newParagraphContent);
