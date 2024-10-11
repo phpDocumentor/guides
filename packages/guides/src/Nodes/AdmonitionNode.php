@@ -11,11 +11,7 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\RestructuredText\Nodes;
-
-use phpDocumentor\Guides\Nodes\CompoundNode;
-use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\Nodes\Node;
+namespace phpDocumentor\Guides\Nodes;
 
 /** @extends CompoundNode<Node> */
 final class AdmonitionNode extends CompoundNode
