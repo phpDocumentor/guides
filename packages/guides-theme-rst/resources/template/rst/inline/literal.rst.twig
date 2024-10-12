@@ -1,0 +1,5 @@
+{%- if node.value matches '/`/' -%}
+    ``{{- node.value|raw -}}``
+{%- else -%}
+    `{{- node.value|raw -}}`
+{%- endif -%}
