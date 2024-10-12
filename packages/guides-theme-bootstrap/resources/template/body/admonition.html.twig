@@ -1,11 +1,13 @@
-
+{% if name == 'caution' %}
+    {% include "body/admonitions/caution.html.twig" %}
+{% endif %}
 {% if name == 'important' %}
     {% include "body/admonitions/important.html.twig" %}
 {% endif %}
 {% if name == 'note' %}
     {% include "body/admonitions/note.html.twig" %}
 {% endif %}
-{% if name == 'warning' or name == 'caution' %}
+{% if name == 'warning' %}
     {% include "body/admonitions/warning.html.twig" %}
 {% endif %}
 {% if name == 'tip' or name == 'hint' %}
