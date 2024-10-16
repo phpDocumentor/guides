@@ -103,7 +103,7 @@ final class ParseFileHandler
             );
         }
 
-        $event = $this->eventDispatcher->dispatch(new PostParseDocument($fileName, $document));
+        $event = $this->eventDispatcher->dispatch(new PostParseDocument($fileName, $document, $path));
         assert($event instanceof PostParseDocument);
 
         return $event->getDocumentNode();

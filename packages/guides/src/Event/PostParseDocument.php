@@ -22,8 +22,11 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
  */
 final class PostParseDocument
 {
-    public function __construct(private readonly string $fileName, private readonly DocumentNode|null $documentNode)
-    {
+    public function __construct(
+        private readonly string $fileName,
+        private DocumentNode|null $documentNode,
+        private readonly string $originalFile,
+    ) {
     }
 
     public function getDocumentNode(): DocumentNode|null
@@ -31,8 +34,18 @@ final class PostParseDocument
         return $this->documentNode;
     }
 
+    public function setDocumentNode(DocumentNode|null $documentNode): void
+    {
+        $this->documentNode = $documentNode;
+    }
+
     public function getFileName(): string
     {
         return $this->fileName;
+    }
+
+    public function getOriginalFileName(): string
+    {
+        return $this->originalFile;
     }
 }
