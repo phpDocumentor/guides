@@ -5,6 +5,8 @@ declare(strict_types=1);
 use phpDocumentor\Guides\Markdown\MarkupLanguageParser;
 use phpDocumentor\Guides\Markdown\Parsers\BlockQuoteParser;
 use phpDocumentor\Guides\Markdown\Parsers\CodeBlockParser;
+use phpDocumentor\Guides\Markdown\Parsers\FrontMatter\TitleParser;
+use phpDocumentor\Guides\Markdown\Parsers\FrontMatterParser;
 use phpDocumentor\Guides\Markdown\Parsers\HeaderParser;
 use phpDocumentor\Guides\Markdown\Parsers\HtmlParser;
 use phpDocumentor\Guides\Markdown\Parsers\InlineParsers\EmphasisParser;
@@ -81,6 +83,13 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
         ->set(NewLineParser::class)
         ->tag('phpdoc.guides.markdown.parser.inlineParser')
+
+        ->set(FrontMatterParser::class)
+        ->arg('$fieldParsers', tagged_iterator('phpdoc.guides.markdown.front_matter', 'fieldName'))
+        ->tag('phpdoc.guides.markdown.parser.blockParser')
+
+        ->set(TitleParser::class)
+        ->tag('phpdoc.guides.markdown.front_matter')
 
         ->set(MarkupLanguageParser::class)
         ->arg('$parsers', tagged_iterator('phpdoc.guides.markdown.parser.blockParser'))
