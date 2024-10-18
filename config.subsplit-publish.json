@@ -37,7 +37,7 @@
     },
     {
       "name": "guides-theme-rst",
-      "directory": "packages/guides-rst-theme",
+      "directory": "packages/guides-theme-rst",
       "target": "git@github.com:phpDocumentor/guides-theme-rst.git"
     }
   ]
