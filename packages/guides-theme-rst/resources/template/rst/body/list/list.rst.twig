@@ -1,0 +1,11 @@
+{{ "\n" }}
+{% if node.isOrdered -%}
+    {%- for item in node.value -%}
+        #.  {{ renderNode(item.value)|raw }}{{ "\n" }}
+    {% endfor -%}
+{%- else -%}
+    {%- for item in node.value -%}
+        *   {{ renderNode(item.value)|raw }}{{ "\n" }}
+    {%- endfor -%}
+{%- endif %}
+{{ "\n" }}
