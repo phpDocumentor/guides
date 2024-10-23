@@ -16,6 +16,8 @@ namespace phpDocumentor\Guides\Markdown;
 use League\CommonMark\Environment\Environment as CommonMarkEnvironment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\FrontMatter\Data\SymfonyYamlFrontMatterParser;
+use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\NodeWalker;
@@ -54,6 +56,7 @@ final class MarkupLanguageParser implements MarkupLanguageParserInterface
         $cmEnvironment->addExtension(new CommonMarkCoreExtension());
         $cmEnvironment->addExtension(new TableExtension());
         $cmEnvironment->addExtension(new AutolinkExtension());
+        $cmEnvironment->addExtension(new FrontMatterExtension(new SymfonyYamlFrontMatterParser()));
         $this->markdownParser = new MarkdownParser($cmEnvironment);
         // if for backward compatibility reasons no settings manager was passed, use the defaults
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
