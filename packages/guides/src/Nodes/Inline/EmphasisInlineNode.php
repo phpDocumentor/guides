@@ -13,12 +13,32 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
-final class EmphasisInlineNode extends InlineNode
+use Doctrine\Deprecations\Deprecation;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+
+final class EmphasisInlineNode extends InlineCompoundNode
 {
+    use BCInlineNodeBehavior;
+
     public const TYPE = 'emphasis';
 
-    public function __construct(string $value)
+    /** @param InlineNodeInterface[] $children */
+    public function __construct(string $value, array $children = [])
     {
-        parent::__construct(self::TYPE, $value);
+        if (empty($children)) {
+            $children = [new PlainTextInlineNode($value)];
+            Deprecation::trigger(
+                'phpdocumentor/guides',
+                'https://github.com/phpDocumentor/guides/issues/1161',
+                'Please provide the children as an array of InlineNodeInterface instances instead of a string.',
+            );
+        }
+
+        parent::__construct($children);
+    }
+
+    public function getType(): string
+    {
+        return self::TYPE;
     }
 }

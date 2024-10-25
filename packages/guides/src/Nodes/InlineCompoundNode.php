@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
-/** @extends CompoundNode<InlineNode> */
-final class InlineCompoundNode extends CompoundNode
+/** @extends CompoundNode<InlineNodeInterface> */
+class InlineCompoundNode extends CompoundNode implements InlineNodeInterface
 {
     public function toString(): string
     {
@@ -32,5 +32,10 @@ final class InlineCompoundNode extends CompoundNode
     public static function getPlainTextInlineNode(string $content): self
     {
         return new InlineCompoundNode([new PlainTextInlineNode($content)]);
+    }
+
+    public function getType(): string
+    {
+        return 'compound';
     }
 }

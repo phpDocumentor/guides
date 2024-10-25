@@ -14,19 +14,28 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\Inline;
 
 use Doctrine\Deprecations\Deprecation;
-use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
-final class StrongInlineNode extends InlineCompoundNode
+use function is_string;
+
+trait BCInlineNodeBehavior
 {
-    use BCInlineNodeBehavior;
-
-    public const TYPE = 'strong';
-
-    /** @param InlineNodeInterface[] $children */
-    public function __construct(string $value, array $children = [])
+    public function getValue(): string
     {
-        if (empty($children)) {
-            $children = [new PlainTextInlineNode($value)];
+        Deprecation::trigger(
+            'phpdocumentor/guides',
+            'https://github.com/phpDocumentor/guides/issues/1161',
+            'Use getChildren to access the value of this node.',
+        );
+
+        return $this->toString();
+    }
+
+    /** @param InlineNodeInterface[]|string $value */
+    public function setValue(mixed $value): void
+    {
+        if (is_string($value)) {
+            $value = [new PlainTextInlineNode($value)];
+
             Deprecation::trigger(
                 'phpdocumentor/guides',
                 'https://github.com/phpDocumentor/guides/issues/1161',
@@ -34,11 +43,8 @@ final class StrongInlineNode extends InlineCompoundNode
             );
         }
 
-        parent::__construct($children);
+        parent::setValue($value);
     }
 
-    public function getType(): string
-    {
-        return self::TYPE;
-    }
+    abstract public function toString(): string;
 }

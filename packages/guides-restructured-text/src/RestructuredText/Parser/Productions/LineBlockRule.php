@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\NewlineInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
@@ -71,7 +71,7 @@ final class LineBlockRule implements Rule
         return $buffer;
     }
 
-    /** @return CompoundNode<InlineNode> */
+    /** @return CompoundNode<InlineNodeInterface> */
     private function createLine(BlockContext $blockContext, Buffer $buffer): CompoundNode
     {
         $line = $this->inlineMarkupRule->apply(new BlockContext(

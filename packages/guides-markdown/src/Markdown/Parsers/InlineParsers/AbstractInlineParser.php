@@ -17,13 +17,13 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use phpDocumentor\Guides\Markdown\ParserInterface;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 
 /**
- * @template TValue as InlineNode
+ * @template TValue as InlineNodeInterface
  * @implements ParserInterface<TValue>
  */
 abstract class AbstractInlineParser implements ParserInterface
 {
-    abstract public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNode;
+    abstract public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNodeInterface;
 }

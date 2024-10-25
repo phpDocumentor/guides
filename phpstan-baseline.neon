@@ -91,6 +91,11 @@ parameters:
 			path: packages/guides-graphs/src/Graphs/Renderer/PlantumlRenderer.php
 
 		-
+			message: "#^Method phpDocumentor\\\\Guides\\\\Markdown\\\\Parsers\\\\InlineParsers\\\\AbstractInlineTextDecoratorParser\\<TValue of phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\:\\:createInlineNode\\(\\) invoked with 3 parameters, 2 required\\.$#"
+			count: 2
+			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
+
+		-
 			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
@@ -144,6 +149,36 @@ parameters:
 			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
 			count: 1
 			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\AbstractLinkInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
+			count: 3
+			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
+
+		-
+			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\AbstractLinkInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
+			count: 1
+			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
+
+		-
+			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\EmphasisInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
+			count: 2
+			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
+
+		-
+			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\EmphasisInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
+			count: 1
+			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
+
+		-
+			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\StrongInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
+			count: 2
+			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
+
+		-
+			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\StrongInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
+			count: 1
+			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
 
 		-
 			message: "#^Property phpDocumentor\\\\Guides\\\\Renderer\\\\DocumentListIterator\\:\\:\\$currentDocument \\(WeakReference\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>\\|null\\) does not accept WeakReference\\<TIn of object\\>\\.$#"

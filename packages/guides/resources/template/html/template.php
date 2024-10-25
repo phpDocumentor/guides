@@ -83,7 +83,6 @@ return [
     EmbeddedFrame::class => 'body/embedded-frame.html.twig',
     // Inline
     ImageInlineNode::class => 'inline/image.html.twig',
-    InlineCompoundNode::class => 'inline/inline-node.html.twig',
     AbbreviationInlineNode::class => 'inline/textroles/abbreviation.html.twig',
     CitationInlineNode::class => 'inline/citation.html.twig',
     DocReferenceNode::class => 'inline/doc.html.twig',
@@ -98,6 +97,8 @@ return [
     StrongInlineNode::class => 'inline/strong.html.twig',
     VariableInlineNode::class => 'inline/variable.html.twig',
     GenericTextRoleInlineNode::class => 'inline/textroles/generic.html.twig',
+    InlineCompoundNode::class => 'inline/inline-node.html.twig',
+
     // Output as Metatags
     AuthorNode::class => 'structure/header/author.html.twig',
     CopyrightNode::class => 'structure/header/copyright.html.twig',

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -28,7 +28,7 @@ final class EmphasisRule extends AbstractInlineRule
         return $lexer->token?->type === InlineLexer::EMPHASIS_DELIMITER;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNodeInterface|null
     {
         $text = '';
 
