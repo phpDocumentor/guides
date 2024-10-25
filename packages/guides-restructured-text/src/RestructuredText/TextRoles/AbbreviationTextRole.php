@@ -52,7 +52,7 @@ final class AbbreviationTextRole extends BaseTextRole
         string $content,
         string $rawContent,
     ): InlineNode {
-        if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 0) {
+        if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) === 1) {
             return new AbbreviationInlineNode(trim($matches[1]), trim($matches[2]));
         }
 

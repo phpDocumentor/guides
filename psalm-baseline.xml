@@ -23,11 +23,6 @@
       <code><![CDATA[scalarNode]]></code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineMarkupRule.php">
-    <MoreSpecificImplementedParamType>
-      <code><![CDATA[$on]]></code>
-    </MoreSpecificImplementedParamType>
-  </file>
   <file src="packages/guides/src/Compiler/NodeTransformers/CustomNodeTransformerFactory.php">
     <ReservedWord>
       <code><![CDATA[NodeTransformer]]></code>
