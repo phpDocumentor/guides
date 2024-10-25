@@ -17,6 +17,7 @@ use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Node\Node as CommonMarkNode;
 use phpDocumentor\Guides\Nodes\Inline\ImageInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use Psr\Log\LoggerInterface;
 
 use function assert;
@@ -38,7 +39,7 @@ final class InlineImageParser extends AbstractInlineTextDecoratorParser
         return 'Image';
     }
 
-    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode
+    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNodeInterface
     {
         assert($commonMarkNode instanceof Image);
 

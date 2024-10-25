@@ -3,8 +3,12 @@
         {%- for key, value in attributes %} {{- key -}}="{{- value -}}"{% endfor -%}
         {%- if node.classes %} class="{{ node.classesString }}"{% endif -%}
     >
-    {{- node.value -}}
+    {%- for child in node.children -%}
+        {{- renderNode(child) -}}
+    {%- endfor -%}
     </a>
 {%- else -%}
-    {{- node.value -}}
+    {%- for child in node.children -%}
+        {{- renderNode(child) -}}
+    {%- endfor -%}
 {%- endif -%}

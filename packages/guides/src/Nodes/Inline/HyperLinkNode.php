@@ -18,8 +18,9 @@ namespace phpDocumentor\Guides\Nodes\Inline;
  */
 final class HyperLinkNode extends AbstractLinkInlineNode
 {
-    public function __construct(string $value, string $targetReference)
+    /** @param InlineNodeInterface[] $children */
+    public function __construct(string $value, string $targetReference, array $children = [])
     {
-        parent::__construct('link', $targetReference, $value);
+        parent::__construct('link', $targetReference, $value, $children);
     }
 }
