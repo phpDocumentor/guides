@@ -19,6 +19,8 @@
 
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info"/>
+        <LessSpecificImplementedReturnType errorLevel="info"/>
+        <MoreSpecificImplementedParamType errorLevel="info"/>
         <MissingConstructor errorLevel="info" />
         <PropertyNotSetInConstructor errorLevel="info" />
         <DeprecatedMethod errorLevel="info">

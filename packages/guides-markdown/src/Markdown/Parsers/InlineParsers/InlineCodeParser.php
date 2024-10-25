@@ -18,6 +18,7 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\LiteralInlineNode;
 
 use function assert;
@@ -25,7 +26,7 @@ use function assert;
 /** @extends AbstractInlineParser<LiteralInlineNode> */
 final class InlineCodeParser extends AbstractInlineParser
 {
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): LiteralInlineNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNodeInterface
     {
         assert($current instanceof Code);
 
