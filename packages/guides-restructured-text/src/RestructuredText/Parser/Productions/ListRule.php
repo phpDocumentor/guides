@@ -127,7 +127,7 @@ final class ListRule implements Rule
     /** @return array{marker: string, indenting: int} */
     public function getItemConfig(string $line): array
     {
-        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) > 0;
+        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) === 1;
         if (!$isList) {
             throw new InvalidArgumentException('Line is not a valid item line');
         }
@@ -144,7 +144,7 @@ final class ListRule implements Rule
             return false;
         }
 
-        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) > 0;
+        $isList = preg_match(self::LIST_MARKER_REGEX, $line, $m) === 1;
         if (!$isList) {
             return false;
         }

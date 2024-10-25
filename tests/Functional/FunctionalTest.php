@@ -160,6 +160,7 @@ final class FunctionalTest extends ApplicationTestCase
             $logHandler = $this->getContainer()->get(TestHandler::class);
             assert($logHandler instanceof TestHandler);
 
+            /** @var list<string> $logRecords */
             $logRecords = array_map(
                 static fn (array|LogRecord $log) => $log['level_name'] . ': ' . $log['message'],
                 array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING &&

@@ -256,11 +256,11 @@ final class DirectiveRule implements Rule
      */
     private function parseDirectiveOption(string $line): DirectiveOption
     {
-        if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) > 0) {
+        if (preg_match('/^(\s+):(.+): (.*)$/mUsi', $line, $match) === 1) {
             return new DirectiveOption($match[2], trim($match[3]));
         }
 
-        if (preg_match('/^(\s+):(.+):(\s*)$/mUsi', $line, $match) > 0) {
+        if (preg_match('/^(\s+):(.+):(\s*)$/mUsi', $line, $match) === 1) {
             return new DirectiveOption($match[2], true);
         }
 

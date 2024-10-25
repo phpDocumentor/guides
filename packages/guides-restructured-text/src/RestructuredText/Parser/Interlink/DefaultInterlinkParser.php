@@ -26,6 +26,6 @@ final class DefaultInterlinkParser implements InterlinkParser
             return new InterlinkData($fullReference, '');
         }
 
-        return new InterlinkData($matches[2], $matches[1] ?? '');
+        return new InterlinkData($matches[2], $matches[1]);
     }
 }
