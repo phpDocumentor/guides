@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -35,7 +35,7 @@ final class NamedReferenceRule extends ReferenceRule
         return $lexer->token?->type === InlineLexer::NAMED_REFERENCE;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNodeInterface|null
     {
         $value = rtrim($lexer->token?->value ?? '', '_');
         $node = $this->createReference($blockContext, $value);

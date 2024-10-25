@@ -1,1 +1,5 @@
-<strong>{{- node.value -}}</strong>
+<strong>
+{%- for child in node.children -%}
+    {{- renderNode(child) -}}
+{%- endfor -%}
+</strong>

@@ -76,7 +76,6 @@ return [
     AnnotationListNode::class => 'body/annotation-list.rst.twig',
     // Inline
     ImageInlineNode::class => 'inline/image.rst.twig',
-    InlineCompoundNode::class => 'inline/inline-node.rst.twig',
     AbbreviationInlineNode::class => 'inline/textroles/abbreviation.rst.twig',
     CitationInlineNode::class => 'inline/citation.rst.twig',
     DocReferenceNode::class => 'inline/doc.rst.twig',
@@ -91,6 +90,7 @@ return [
     StrongInlineNode::class => 'inline/strong.rst.twig',
     VariableInlineNode::class => 'inline/variable.rst.twig',
     GenericTextRoleInlineNode::class => 'inline/textroles/generic.rst.twig',
+    InlineCompoundNode::class => 'inline/inline-node.rst.twig',
     // Output as Metatags
     AuthorNode::class => 'structure/header/author.rst.twig',
     CopyrightNode::class => 'structure/header/copyright.rst.twig',

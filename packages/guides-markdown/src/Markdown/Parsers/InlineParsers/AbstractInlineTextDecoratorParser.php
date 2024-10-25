@@ -18,16 +18,16 @@ use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function count;
 use function sprintf;
-use function var_export;
 
 /**
- * @template TValue as InlineNode
+ * @template TValue as InlineNodeInterface
  * @extends AbstractInlineParser<TValue>
  */
 abstract class AbstractInlineTextDecoratorParser extends AbstractInlineParser
@@ -40,7 +40,7 @@ abstract class AbstractInlineTextDecoratorParser extends AbstractInlineParser
     }
 
     /** @return TValue */
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNodeInterface
     {
         $content = [];
 
@@ -66,12 +66,10 @@ abstract class AbstractInlineTextDecoratorParser extends AbstractInlineParser
 
             if ($this->supportsCommonMarkNode($commonMarkNode)) {
                 if (count($content) === 1 && $content[0] instanceof PlainTextInlineNode) {
-                    return $this->createInlineNode($commonMarkNode, $content[0]->getValue());
+                    return $this->createInlineNode($commonMarkNode, $content[0]->getValue(), $content);
                 }
 
-                $this->logger->warning(sprintf('%s CONTEXT: Content of emphasis could not be interpreted: %s', $this->getType(), var_export($content, true)));
-
-                return $this->createInlineNode($commonMarkNode, null);
+                return $this->createInlineNode($commonMarkNode, null, $content);
             }
 
             $this->logger->warning(sprintf('%s context does not allow a %s node', $this->getType(), $commonMarkNode::class));
@@ -83,7 +81,7 @@ abstract class AbstractInlineTextDecoratorParser extends AbstractInlineParser
     abstract protected function getType(): string;
 
     /** @return TValue */
-    abstract protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode;
+    abstract protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNodeInterface;
 
     abstract protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool;
 

@@ -16,7 +16,7 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 use phpDocumentor\Guides\Nodes\AbstractNode;
 
 /** @extends AbstractNode<String> */
-abstract class InlineNode extends AbstractNode
+abstract class InlineNode extends AbstractNode implements InlineNodeInterface
 {
     public function __construct(private readonly string $type, string $value = '')
     {

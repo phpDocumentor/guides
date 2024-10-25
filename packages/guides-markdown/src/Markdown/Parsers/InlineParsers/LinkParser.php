@@ -17,6 +17,7 @@ use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Node as CommonMarkNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use Psr\Log\LoggerInterface;
 
 use function assert;
@@ -42,7 +43,8 @@ final class LinkParser extends AbstractInlineTextDecoratorParser
         return 'Link';
     }
 
-    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode
+    /** @param InlineNodeInterface[] $children */
+    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content, array $children = []): InlineNodeInterface
     {
         assert($commonMarkNode instanceof Link);
 
@@ -52,7 +54,7 @@ final class LinkParser extends AbstractInlineTextDecoratorParser
             $url = substr($url, 0, -3);
         }
 
-        return new HyperLinkNode($content, $url);
+        return new HyperLinkNode($content, $url, $children);
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool

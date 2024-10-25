@@ -18,7 +18,7 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
-use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 
 /** @extends AbstractInlineParser<PlainTextInlineNode> */
@@ -28,7 +28,7 @@ class NewLineParser extends AbstractInlineParser
     {
     }
 
-    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNode
+    public function parse(MarkupLanguageParser $parser, NodeWalker $walker, CommonMarkNode $current): InlineNodeInterface
     {
         return new PlainTextInlineNode(' ');
     }

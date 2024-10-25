@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Markdown\Parsers\InlineParsers;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 use League\CommonMark\Node\Node as CommonMarkNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use Psr\Log\LoggerInterface;
 
@@ -35,9 +36,10 @@ final class StrongParser extends AbstractInlineTextDecoratorParser
         return 'StrongDecorator';
     }
 
-    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content): InlineNode
+    /** @param InlineNodeInterface[] $children */
+    protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content, array $children = []): InlineNodeInterface
     {
-        return new StrongInlineNode($content ?? '');
+        return new StrongInlineNode($content ?? '', $children);
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool
