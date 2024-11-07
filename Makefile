@@ -14,7 +14,7 @@ fix-code-style: add-license
 	$(PHP_BIN) vendor/bin/phpcbf
 
 .PHONY: static-code-analysis
-static-code-analysis: vendor phpstan psalm test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
+static-code-analysis: vendor phpstan test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
 
 .PHONY: phpstan-baseline
 phpstan-baseline:
@@ -23,10 +23,6 @@ phpstan-baseline:
 .PHONY: phpstan
 phpstan:
 	$(PHP_BIN) -d memory_limit=1024M vendor/bin/phpstan --configuration=phpstan.neon
-
-.PHONY: psalm
-psalm:
-	$(PHP_BIN) vendor/bin/psalm --update-baseline
 
 .PHONY: test
 test: test-unit test-functional test-integration test-xml test-docs## Runs all test suites with phpunit/phpunit

@@ -49,7 +49,7 @@ jobs:
 
   static-analysis:
     name: "Static analysis"
-    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.7"
+    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.8"
     with:
       php-version: "8.2"
       composer-root-version: "2.x-dev"
