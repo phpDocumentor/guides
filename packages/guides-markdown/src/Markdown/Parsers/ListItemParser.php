@@ -21,9 +21,12 @@ use League\CommonMark\Node\NodeWalkerEvent;
 use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\ListItemNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\ParagraphNode;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+use function count;
+use function current;
 use function sprintf;
 
 /** @extends AbstractBlockParser<ListItemNode> */
@@ -57,6 +60,10 @@ final class ListItemParser extends AbstractBlockParser
             if ($commonMarkNode instanceof ListItem) {
                 $prefix = $commonMarkNode->getListData()->bulletChar ?? $commonMarkNode->getListData()->delimiter ?? '';
                 $ordered = $commonMarkNode->getListData()->type === ListBlock::TYPE_ORDERED;
+
+                if (count($content) === 1 && current($content) instanceof ParagraphNode) {
+                    $content = current($content)->getChildren();
+                }
 
                 return new ListItemNode($prefix, $ordered, $content);
             }
