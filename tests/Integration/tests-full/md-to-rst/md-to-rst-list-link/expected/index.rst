@@ -5,9 +5,7 @@ TYPO3 Extension powermail - Documentation
 This documentation helps
 
 *   Administrators to install and configure powermail
-
 *   Editors to use powermail
-
 *   Developers to extend powermail
 
 Example Screenshots
@@ -49,5 +47,4 @@ Documentation overview
 ======================
 
 *   `Introduction <https://github.com/in2code-de/powermail/blob/develop/Documentation/Readme.md>`__
-
 *   `Documentation for editors <https://github.com/in2code-de/powermail/blob/develop/Documentation/ForEditors/Readme.md>`__
