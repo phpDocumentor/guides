@@ -33,7 +33,7 @@
         "demo": [
             "-",
             "-",
-            "another.html#demo",
+            "another.html#confval-demo",
             "demo"
         ]
     }

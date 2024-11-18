@@ -26,37 +26,37 @@
         "another-demo": [
             "-",
             "-",
-            "another.html#another-demo",
+            "another.html#confval-another-demo",
             "demo"
         ],
         "demo": [
             "-",
             "-",
-            "index.html#demo",
+            "index.html#confval-demo",
             "demo"
         ],
         "demo2": [
             "-",
             "-",
-            "index.html#demo2",
+            "index.html#confval-demo2",
             "demo2"
         ],
         "demo3": [
             "-",
             "-",
-            "index.html#demo3",
+            "index.html#confval-demo3",
             "demo3"
         ],
         "demo4": [
             "-",
             "-",
-            "index.html#demo4",
+            "index.html#confval-demo4",
             "demo4"
         ],
         "demo5": [
             "-",
             "-",
-            "index.html#demo5",
+            "index.html#confval-demo5",
             "demo5"
         ]
     }

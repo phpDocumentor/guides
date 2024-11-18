@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer;
 
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
@@ -73,6 +74,13 @@ final class InterlinkObjectsRenderer implements TypeRenderer
                     '',
                     $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getAnchor()),
                 );
+                if ($internalTarget instanceof InternalTarget) {
+                    $url = $this->documentNameResolver->canonicalUrl(
+                        '',
+                        $this->urlGenerator->createFileUrl($context, $internalTarget->getDocumentPath(), $internalTarget->getPrefix() . $internalTarget->getAnchor()),
+                    );
+                }
+
                 $inventory[$linkType][$key] = [
                     $projectNode->getTitle() ?? '-',
                     $projectNode->getVersion() ?? '-',
