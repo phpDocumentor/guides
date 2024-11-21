@@ -13,7 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RstTheme\Twig;
 
+use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\Table\TableColumn;
+use phpDocumentor\Guides\Nodes\Table\TableRow;
+use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
+use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\RstTheme\Configuration\HeaderSyntax;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -22,6 +27,9 @@ use Twig\TwigFunction;
 use function array_map;
 use function explode;
 use function implode;
+use function max;
+use function mb_str_pad;
+use function mb_strlen;
 use function min;
 use function preg_replace;
 use function rtrim;
@@ -30,11 +38,17 @@ use function strlen;
 
 final class RstExtension extends AbstractExtension
 {
+    public function __construct(
+        private NodeRenderer $nodeRenderer,
+    ) {
+    }
+
     /** @return TwigFunction[] */
     public function getFunctions(): array
     {
         return [
             new TwigFunction('renderRstTitle', $this->renderRstTitle(...), ['is_safe' => ['rst'], 'needs_context' => false]),
+            new TwigFunction('renderRstTable', $this->renderRstTable(...), ['is_safe' => ['rst'], 'needs_context' => true]),
             new TwigFunction('renderRstIndent', $this->renderRstIndent(...), ['is_safe' => ['rst'], 'needs_context' => false]),
         ];
     }
@@ -74,6 +88,75 @@ final class RstExtension extends AbstractExtension
         }
 
         $ret .= $content . "\n" . str_repeat($headerSyntax->delimiter(), strlen($content));
+
+        return $ret . "\n";
+    }
+
+    /** @param array{env: RenderContext} $context */
+    public function renderRstTable(array $context, TableNode $node): string
+    {
+        $columnWidths = [];
+
+        $this->determineMaxLenght($node->getHeaders(), $context['env'], $columnWidths);
+        $this->determineMaxLenght($node->getData(), $context['env'], $columnWidths);
+
+        $ret = $this->renderTableRowEnd($columnWidths);
+        $ret .= $this->renderRows($node->getHeaders(), $context['env'], $columnWidths, '=');
+        $ret .= $this->renderRows($node->getData(), $context['env'], $columnWidths);
+
+        return $ret . "\n";
+    }
+
+    private function renderCellContent(RenderContext $env, TableColumn $column): string
+    {
+        return implode('', array_map(fn ($node) => $this->nodeRenderer->render($node, $env), $column->getValue()));
+    }
+
+    /**
+     * @param TableRow[] $rows
+     * @param int[] &$columnWidths
+     */
+    private function determineMaxLenght(array $rows, RenderContext $env, array &$columnWidths): void
+    {
+        foreach ($rows as $row) {
+            foreach ($row->getColumns() as $index => $column) {
+                $content = $this->renderCellContent($env, $column);
+
+                $columnWidths[$index] = max(mb_strlen($content) + 2, $columnWidths[$index] ?? 0);
+            }
+        }
+    }
+
+    /**
+     * @param TableRow[] $rows
+     * @param int[] $columnWidths
+     */
+    private function renderRows(array $rows, RenderContext $env, array $columnWidths, string $separator = '-'): string
+    {
+        $ret = '';
+        foreach ($rows as $row) {
+            $ret .= '|';
+            foreach ($row->getColumns() as $index => $column) {
+                $content = $this->renderCellContent($env, $column);
+
+                $ret .= ' ' . mb_str_pad($content, $columnWidths[$index] - 2) . ' |';
+            }
+
+            $ret .= "\n" . $this->renderTableRowEnd($columnWidths, $separator);
+        }
+
+        return $ret;
+    }
+
+    /** @param int[] $columnWidths */
+    private function renderTableRowEnd(array $columnWidths, string $char = '-'): string
+    {
+        $ret = '';
+        foreach ($columnWidths as $width) {
+            $ret .= '+' . str_repeat($char, $width);
+        }
+
+        $ret .= '+' . "\n";
 
         return $ret;
     }
