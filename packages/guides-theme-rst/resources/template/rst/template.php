@@ -51,6 +51,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\SeparatorNode;
+use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 
 return [
@@ -74,6 +75,7 @@ return [
     CitationNode::class => 'body/citation.rst.twig',
     FootnoteNode::class => 'body/footnote.rst.twig',
     AnnotationListNode::class => 'body/annotation-list.rst.twig',
+    TableNode::class => 'body/table.rst.twig',
     // Inline
     ImageInlineNode::class => 'inline/image.rst.twig',
     AbbreviationInlineNode::class => 'inline/textroles/abbreviation.rst.twig',
