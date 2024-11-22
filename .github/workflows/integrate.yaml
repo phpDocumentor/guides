@@ -17,6 +17,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/code-coverage.yml@v0.8"
     with:
       php-version: "8.2"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
 
   coding-standards:
     name: "Coding Standards"
@@ -29,6 +30,7 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
+          extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
           php-version: "8.2"
           tools: "cs2pr"
 
@@ -45,6 +47,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/lint.yml@main"
     with:
       composer-options: "--no-check-publish --ansi"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
       php-version: "8.2"
 
   static-analysis:
@@ -52,6 +55,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.8"
     with:
       php-version: "8.2"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
       composer-root-version: "2.x-dev"
 
   architecture:
@@ -64,6 +68,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "8.2"
+          extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
 
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v3"
@@ -79,6 +84,7 @@ jobs:
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.8"
     with:
       composer-root-version: "2.x-dev"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
 
   functional-tests:
     name: "Functional test"
@@ -86,6 +92,7 @@ jobs:
     needs: "unit-tests"
     with:
       test-suite: "functional"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
       composer-root-version: "2.x-dev"
 
   integration-tests:
@@ -94,6 +101,7 @@ jobs:
     needs: "unit-tests"
     with:
       test-suite: "integration"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
       composer-root-version: "2.x-dev"
 
   xml-lint:

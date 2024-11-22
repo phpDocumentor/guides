@@ -6,6 +6,8 @@ use phpDocumentor\Guides\RstTheme\Renderer\RstRenderer;
 use phpDocumentor\Guides\RstTheme\Twig\RstExtension;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
 return static function (ContainerConfigurator $container): void {
     $container->services()
         ->defaults()
@@ -29,6 +31,7 @@ return static function (ContainerConfigurator $container): void {
         )
 
         ->set(RstExtension::class)
+        ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
         ->tag('twig.extension')
         ->autowire();
 };

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "420872b359a64babd842e98ef1572ec4",
+    "content-hash": "af22dade10c460040d600f3e32132c34",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1597,9 +1597,10 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-rst",
-                "reference": "70ef007a53221f1c725d02d6cc71adb4e7648177"
+                "reference": "2e5308d46fd6d65e1ea788c7c4a872d2d5008de0"
             },
             "require": {
+                "ext-iconv": "*",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0"
             },
@@ -7197,6 +7198,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1",
+        "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*"
     },
