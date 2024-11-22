@@ -34,6 +34,7 @@
     },
     "require": {
         "php": "^8.1",
+        "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "doctrine/deprecations": "^1.1",
