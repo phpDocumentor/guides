@@ -4,5 +4,6 @@
   "targetBranchChoices": ["1.x"],
   "targetPRLabels": ["backport"],
   "autoMerge": true,
-  "autoMergeMethod": "merge"
+  "autoMergeMethod": "merge",
+  "commitConflicts": true
 }
