@@ -16,6 +16,10 @@ namespace phpDocumentor\Guides\Nodes\Inline;
 use Doctrine\Deprecations\Deprecation;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
+use function func_get_arg;
+use function func_num_args;
+use function is_string;
+
 abstract class AbstractLinkInlineNode extends InlineCompoundNode implements LinkInlineNode
 {
     use BCInlineNodeBehavior;
@@ -26,16 +30,24 @@ abstract class AbstractLinkInlineNode extends InlineCompoundNode implements Link
     public function __construct(
         private readonly string $type,
         private readonly string $targetReference,
-        string $value = '',
-        array $children = [],
+        string|array $children = [],
     ) {
-        if (empty($children)) {
+        if (is_string($children)) {
             Deprecation::trigger(
                 'phpdocumentor/guides',
                 'https://github.com/phpDocumentor/guides/issues/1161',
-                'Please provide the children as an array of InlineNodeInterface instances instead of a string.',
+                'Passing the content of %s as string is deprecated, pass an array of InlineNodeInterface instances instead. New signature: string $type, string $targetReference, array $children',
+                static::class,
             );
-            $children = [new PlainTextInlineNode($value)];
+
+            if (func_num_args() < 4) {
+                // compat with (string $type, string $targetReference, string $value) signature
+                $children = $children === '' ? [] : [new PlainTextInlineNode($children)];
+            } else {
+                // compat with (string $type, string $targetReference, string $value, array $children = []) signature
+                /** @var InlineNodeInterface[] $children */
+                $children = func_get_arg(3);
+            }
         }
 
         parent::__construct($children);
