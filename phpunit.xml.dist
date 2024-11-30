@@ -3,16 +3,18 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
-        bootstrap="vendor/autoload.php"
+        bootstrap="tests/bootstrap.php"
         colors="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
         beStrictAboutChangesToGlobalState="true"
         failOnNotice="true"
         failOnWarning="true"
+        failOnDeprecation="true"
         displayDetailsOnTestsThatTriggerNotices="true"
         displayDetailsOnTestsThatTriggerWarnings="true"
         displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
         cacheDirectory=".cache/.phpunit.cache"
         requireCoverageMetadata="false"
 >
@@ -28,7 +30,7 @@
         </testsuite>
     </testsuites>
     <coverage/>
-    <source>
+    <source ignoreSuppressionOfDeprecations="true">
         <include>
             <directory suffix=".php">packages/**/src</directory>
         </include>
