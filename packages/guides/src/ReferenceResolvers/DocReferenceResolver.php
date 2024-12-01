@@ -15,9 +15,11 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
+use function count;
 use function explode;
 use function sprintf;
 use function str_contains;
@@ -64,8 +66,8 @@ final class DocReferenceResolver implements ReferenceResolver
         }
 
         $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $document->getFile()) . $anchor);
-        if ($node->getValue() === '') {
-            $node->setValue($document->getTitle()->toString());
+        if (count($node->getChildren()) === 0) {
+            $node->addChildNode(new PlainTextInlineNode($document->getTitle()->toString()));
         }
 
         return true;

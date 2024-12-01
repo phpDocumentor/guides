@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
+use Doctrine\Deprecations\Deprecation;
 use phpDocumentor\Guides\Nodes\SectionNode;
 
 use function array_merge;
+use function is_string;
 
 /**
  * CrossReferences are references outside a document. As parsing is file based normal references are in document,
@@ -32,14 +34,26 @@ final class ReferenceNode extends AbstractLinkInlineNode implements CrossReferen
 {
     final public const TYPE = 'ref';
 
+    /** @param InlineNodeInterface[] $children */
     public function __construct(
         string $targetReference,
-        string $value = '',
+        string|array $children = [],
         private readonly string $interlinkDomain = '',
         private readonly string $linkType = SectionNode::STD_LABEL,
         private readonly string $prefix = '',
     ) {
-        parent::__construct(self::TYPE, $targetReference, $value);
+        if (is_string($children)) {
+            Deprecation::trigger(
+                'phpdocumentor/guides',
+                'https://github.com/phpDocumentor/guides/issues/1161',
+                'Passing the content of %s as string is deprecated, pass an array of InlineNodeInterface instances instead. New signature: string $targetReference, $children, string $interlinkDomain, string $linkType, string $prefix',
+                static::class,
+            );
+
+            $children = $children === '' ? [] : [new PlainTextInlineNode($children)];
+        }
+
+        parent::__construct(self::TYPE, $targetReference, $children);
     }
 
     public function getLinkType(): string

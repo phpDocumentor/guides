@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
+
+use function count;
 
 /**
  * Resolves references with an anchor URL.
@@ -48,8 +51,8 @@ final class TitleReferenceResolver implements ReferenceResolver
         }
 
         $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getPrefix() . $target->getAnchor()));
-        if ($node->getValue() === '') {
-            $node->setValue($target->getTitle() ?? '');
+        if (count($node->getChildren()) === 0) {
+            $node->addChildNode(new PlainTextInlineNode($target->getTitle() ?? ''));
         }
 
         return true;
