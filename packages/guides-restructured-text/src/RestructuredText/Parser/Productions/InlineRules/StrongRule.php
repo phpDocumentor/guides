@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\StrongInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
@@ -45,7 +46,7 @@ final class StrongRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new StrongInlineNode($text);
+                    return new StrongInlineNode([new PlainTextInlineNode($text)]);
 
                 default:
                     $text .= $token->value;

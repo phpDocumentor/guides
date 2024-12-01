@@ -1,7 +1,7 @@
 {%- if node.url -%}
-    `{{ node.value|raw }} <{{- node.url -}}>`__
+    `{{ node|plaintext }} <{{- node.url -}}>`__
 {%- elseif node.targetReference -%}
-    :doc:`{{ node.value|raw }} <{{- node.targetReference -}}>`
+    :doc:`{{ node|plaintext }} <{{- node.targetReference -}}>`
 {%- else -%}
-    {{- node.value -}}
+    {{- node|plaintext -}}
 {%- endif -%}

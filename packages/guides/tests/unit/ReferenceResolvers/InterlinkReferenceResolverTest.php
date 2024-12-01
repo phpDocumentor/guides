@@ -40,7 +40,7 @@ final class InterlinkReferenceResolverTest extends TestCase
     #[DataProvider('pathProvider')]
     public function testDocumentReducer(string $expected, string $input, string $path): void
     {
-        $input = new DocReferenceNode($input, '', 'interlink-target');
+        $input = new DocReferenceNode($input, [], 'interlink-target');
         $inventoryLink = new InventoryLink('project', '1.0', $path, '');
         $inventory = new Inventory('base-url/', $this->anchorNormalizer);
         $this->inventoryRepository->expects(self::once())->method('getInventory')->willReturn($inventory);

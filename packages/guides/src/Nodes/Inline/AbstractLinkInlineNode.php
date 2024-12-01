@@ -74,7 +74,7 @@ abstract class AbstractLinkInlineNode extends InlineCompoundNode implements Link
         return [
             'type' => $this->getType(),
             'targetReference' => $this->getTargetReference(),
-            'value' => $this->getValue(),
+            'value' => $this->toString(),
         ];
     }
 

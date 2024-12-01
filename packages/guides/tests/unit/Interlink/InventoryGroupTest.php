@@ -41,7 +41,7 @@ final class InventoryGroupTest extends TestCase
         $this->inventoryGroup->addLink($path, new InventoryLink('', '', $path . '.html', ''));
         $messages = new Messages();
         $link = $this->inventoryGroup->getLink(
-            new DocReferenceNode($input, '', 'interlink'),
+            new DocReferenceNode($input, [], 'interlink'),
             $this->renderContext,
             $messages,
         );

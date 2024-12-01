@@ -18,6 +18,7 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
 
 use function assert;
@@ -48,13 +49,12 @@ final class LinkParser extends AbstractInlineTextDecoratorParser
     {
         assert($commonMarkNode instanceof Link);
 
-        $content ??= $commonMarkNode->getUrl();
         $url =  $commonMarkNode->getUrl();
         if (str_ends_with($url, '.md') && filter_var($url, FILTER_VALIDATE_URL) === false) {
             $url = substr($url, 0, -3);
         }
 
-        return new HyperLinkNode($content, $url, $children);
+        return new HyperLinkNode($content ? [new PlainTextInlineNode($content)] : $children, $url);
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool

@@ -77,21 +77,21 @@ final class ImageDirective extends BaseDirective
     private function resolveLinkTarget(string $targetReference): LinkInlineNode
     {
         if (filter_var($targetReference, FILTER_VALIDATE_EMAIL)) {
-            return new HyperLinkNode('', $targetReference);
+            return new HyperLinkNode([], $targetReference);
         }
 
         if (filter_var($targetReference, FILTER_VALIDATE_URL)) {
-            return new HyperLinkNode('', $targetReference);
+            return new HyperLinkNode([], $targetReference);
         }
 
         if (preg_match(self::REFERENCE_REGEX, $targetReference, $matches)) {
-            return new ReferenceNode($matches[1], '');
+            return new ReferenceNode($matches[1]);
         }
 
         if (preg_match(self::REFERENCE_ESCAPED_REGEX, $targetReference, $matches)) {
-            return new ReferenceNode($matches[1], '');
+            return new ReferenceNode($matches[1]);
         }
 
-        return new DocReferenceNode($targetReference, '');
+        return new DocReferenceNode($targetReference);
     }
 }
