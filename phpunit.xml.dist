@@ -30,7 +30,7 @@
         </testsuite>
     </testsuites>
     <coverage/>
-    <source ignoreSuppressionOfDeprecations="true">
+    <source ignoreSuppressionOfDeprecations="true" baseline="phpunit-baseline.xml">
         <include>
             <directory suffix=".php">packages/**/src</directory>
         </include>
