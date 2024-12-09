@@ -27,7 +27,7 @@
         "doctrine/deprecations": "^1.1",
         "league/flysystem": "^1.1",
         "league/tactician": "^1.1",
-        "league/uri": "^7.4.1",
+        "league/uri": "^7.5.1",
         "phpdocumentor/flyfinder": "^1.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/clock": "^6.4.8",
