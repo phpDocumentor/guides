@@ -74,7 +74,7 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryLoaderLoadsInventory(): void
     {
-        $node = new DocReferenceNode('SomeDocument', '', 'somekey');
+        $node = new DocReferenceNode('SomeDocument', [], 'somekey');
         $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
         self::assertTrue($inventory instanceof Inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
@@ -92,7 +92,7 @@ final class InventoryLoaderTest extends TestCase
     public function testInventoryLoaderAcceptsNull(): void
     {
         $this->loadObjectsJsonInv(__DIR__ . '/fixtures/null-in-objects.inv.json');
-        $node = new DocReferenceNode('SomeDocument', '', 'somekey');
+        $node = new DocReferenceNode('SomeDocument', [], 'somekey');
         $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
         self::assertTrue($inventory instanceof Inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
@@ -111,47 +111,47 @@ final class InventoryLoaderTest extends TestCase
     {
         yield 'Simple label' => [
             'some_page.html#modindex',
-            new ReferenceNode('modindex', '', 'somekey'),
+            new ReferenceNode('modindex', [], 'somekey'),
         ];
 
         yield 'Inventory with changed case' => [
             'some_page.html#modindex',
-            new ReferenceNode('modindex', '', 'SomeKey'),
+            new ReferenceNode('modindex', [], 'SomeKey'),
         ];
 
         yield 'Inventory with minus' => [
             'some_page.html#modindex',
-            new ReferenceNode('modindex', '', 'some-key'),
+            new ReferenceNode('modindex', [], 'some-key'),
         ];
 
         yield 'Inventory with underscore and changed case' => [
             'some_page.html#modindex',
-            new ReferenceNode('modindex', '', 'Some_Key'),
+            new ReferenceNode('modindex', [], 'Some_Key'),
         ];
 
         yield 'Both with minus' => [
             'some_page.html#php-modindex',
-            new ReferenceNode('php-modindex', '', 'somekey'),
+            new ReferenceNode('php-modindex', [], 'somekey'),
         ];
 
         yield 'Linked with underscore, inventory with minus' => [
             'some_page.html#php-modindex',
-            new ReferenceNode('php_modindex', '', 'somekey'),
+            new ReferenceNode('php_modindex', [], 'somekey'),
         ];
 
         yield 'Linked with underscore, inventory with underscore' => [
             'php-objectsindex.html#php-objectsindex',
-            new ReferenceNode('php_objectsindex', '', 'somekey'),
+            new ReferenceNode('php_objectsindex', [], 'somekey'),
         ];
 
         yield 'Linked with minus, inventory with underscore' => [
             'php-objectsindex.html#php-objectsindex',
-            new ReferenceNode('php-objectsindex', '', 'somekey'),
+            new ReferenceNode('php-objectsindex', [], 'somekey'),
         ];
 
         yield 'Doc link' => [
             'Page1/Subpage1.html',
-            new DocReferenceNode('Page1/Subpage1', '', 'somekey'),
+            new DocReferenceNode('Page1/Subpage1', [], 'somekey'),
         ];
     }
 
@@ -167,15 +167,15 @@ final class InventoryLoaderTest extends TestCase
     public static function notFoundInventoryProvider(): Generator
     {
         yield 'Simple labe not found' => [
-            new ReferenceNode('non-existant-label', '', 'somekey'),
+            new ReferenceNode('non-existant-label', [], 'somekey'),
         ];
 
         yield 'docs are casesensitve' => [
-            new DocReferenceNode('index', '', 'somekey'),
+            new DocReferenceNode('index', [], 'somekey'),
         ];
 
         yield 'docs are not slugged' => [
-            new DocReferenceNode('Page1-Subpage1', '', 'somekey'),
+            new DocReferenceNode('Page1-Subpage1', [], 'somekey'),
         ];
     }
 }

@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
+use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryRepository;
 use phpDocumentor\Guides\RenderContext;
+
+use function count;
 
 final class InterlinkReferenceResolver implements ReferenceResolver
 {
@@ -44,7 +48,11 @@ final class InterlinkReferenceResolver implements ReferenceResolver
         }
 
         $node->setUrl($inventory->getBaseUrl() . $link->getPath());
-        if ($node->getValue() === '') {
+        if ($node instanceof CompoundNode) {
+            if (count($node->getChildren()) === 0) {
+                $node->addChildNode(new PlainTextInlineNode($link->getTitle()));
+            }
+        } elseif ($node->getValue() === '') {
             $node->setValue($link->getTitle());
         }
 

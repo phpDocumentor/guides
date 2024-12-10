@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Interlink\InterlinkParser;
 
 /**
@@ -51,6 +52,6 @@ final class DocReferenceTextRole extends AbstractReferenceTextRole
     {
         $interlinkData = $this->interlinkParser->extractInterlink($referenceTarget);
 
-        return new DocReferenceNode($interlinkData->reference, $referenceName ?? '', $interlinkData->interlink);
+        return new DocReferenceNode($interlinkData->reference, $referenceName ? [new PlainTextInlineNode($referenceName)] : [], $interlinkData->interlink);
     }
 }

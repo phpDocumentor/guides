@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 
 final class ReferenceTextRole extends AbstractReferenceTextRole
@@ -34,6 +35,6 @@ final class ReferenceTextRole extends AbstractReferenceTextRole
     /** @return ReferenceNode */
     protected function createNode(string $referenceTarget, string|null $referenceName, string $role): AbstractLinkInlineNode
     {
-        return new ReferenceNode($referenceTarget, $referenceName ?? '');
+        return new ReferenceNode($referenceTarget, $referenceName ? [new PlainTextInlineNode($referenceName)] : []);
     }
 }

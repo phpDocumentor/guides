@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
 use function filter_var;
@@ -39,13 +40,17 @@ abstract class ReferenceRule extends AbstractInlineRule
         if (str_ends_with($reference, '.rst') && filter_var($reference, FILTER_VALIDATE_URL) === false) {
             $reference = substr($reference, 0, -4);
 
-            return new DocReferenceNode($reference, $text ?? $reference);
+            $text ??= $reference;
+
+            return new DocReferenceNode($reference, $text !== '' ? [new PlainTextInlineNode($text)] : []);
         }
 
         if ($registerLink && $text !== null) {
             $blockContext->getDocumentParserContext()->setLink($text, $reference);
         }
 
-        return new HyperLinkNode($text ?? $reference, $reference);
+        $text ??= $reference;
+
+        return new HyperLinkNode($text !== '' ? [new PlainTextInlineNode($text)] : [], $reference);
     }
 }

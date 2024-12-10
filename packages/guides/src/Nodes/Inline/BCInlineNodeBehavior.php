@@ -24,7 +24,8 @@ trait BCInlineNodeBehavior
         Deprecation::trigger(
             'phpdocumentor/guides',
             'https://github.com/phpDocumentor/guides/issues/1161',
-            'Use getChildren to access the value of this node.',
+            'Use getChildren to access the value of %s.',
+            static::class,
         );
 
         return $this->toString();
@@ -34,12 +35,13 @@ trait BCInlineNodeBehavior
     public function setValue(mixed $value): void
     {
         if (is_string($value)) {
-            $value = [new PlainTextInlineNode($value)];
+            $value = $value === '' ? [] : [new PlainTextInlineNode($value)];
 
             Deprecation::trigger(
                 'phpdocumentor/guides',
                 'https://github.com/phpDocumentor/guides/issues/1161',
-                'Please provide the children as an array of InlineNodeInterface instances instead of a string.',
+                'Passing a string to %s is deprecated, pass an array of InlineNodeInterface instances instead.',
+                __METHOD__,
             );
         }
 

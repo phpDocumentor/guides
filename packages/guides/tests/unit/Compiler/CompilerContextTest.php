@@ -15,12 +15,14 @@ namespace phpDocumentor\Guides\Compiler;
 
 use Doctrine\Deprecations\PHPUnit\VerifyDeprecations;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 
 final class CompilerContextTest extends TestCase
 {
     use VerifyDeprecations;
 
+    #[WithoutErrorHandler]
     public function testTriggersDeprecationOnContextExtend(): void
     {
         $this->expectDeprecationWithIdentifier('https://github.com/phpDocumentor/guides/issues/971');
@@ -28,6 +30,7 @@ final class CompilerContextTest extends TestCase
         };
     }
 
+    #[WithoutErrorHandler]
     public function testNoDeprecationOnNormalConstruct(): void
     {
         $this->expectNoDeprecationWithIdentifier('https://github.com/phpDocumentor/guides/issues/971');
