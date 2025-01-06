@@ -87,9 +87,16 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             $currentDocument = $this->documentStack->top();
             Assert::notNull($currentDocument);
             $anchorName = $node->getId();
+            foreach ($node->getChildren() as $childNode) {
+                if ($childNode instanceof AnchorNode) {
+                    $anchorName = $childNode->getValue();
+                    break;
+                }
+            }
+
             try {
                 $compilerContext->getProjectNode()->addLinkTarget(
-                    $anchorName,
+                    $node->getId(),
                     new InternalTarget(
                         $currentDocument->getFilePath(),
                         $anchorName,
