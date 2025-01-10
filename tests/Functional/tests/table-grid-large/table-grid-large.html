@@ -1,0 +1,543 @@
+<table>
+    <thead>
+        <tr>
+            <th>Doctrine</th>
+            <th>PHP</th>
+            <th colspan="3">Database vendor</th>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="5"><strong>smallint</strong></td>
+            <td rowspan="5"><code>integer</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>SMALLINT</code> <code>UNSIGNED</code> [10] <code>AUTO_INCREMENT</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>SMALLINT</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><em>all</em></td>
+            <td><code>NUMBER(5)</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>SMALLINT</code> <code>IDENTITY</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+            <td><em>all</em></td>
+            <td><code>INTEGER</code> [15]</td>
+        </tr>
+        <tr>
+            <td rowspan="6"><strong>integer</strong></td>
+            <td rowspan="6"><code>integer</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>INT</code> <code>UNSIGNED</code> [10] <code>AUTO_INCREMENT</code> [11]</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><strong>PostgreSQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td><code>INT</code> [12]</td>
+        </tr>
+        <tr>
+            <td><code>SERIAL</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><em>all</em></td>
+            <td><code>NUMBER(10)</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>INT</code> <code>IDENTITY</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+            <td><em>all</em></td>
+            <td><code>INTEGER</code> [15]</td>
+        </tr>
+        <tr>
+            <td rowspan="6"><strong>bigint</strong></td>
+            <td rowspan="6"><code>string</code> [8]</td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>BIGINT</code> <code>UNSIGNED</code> [10] <code>AUTO_INCREMENT</code> [11]</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><strong>PostgreSQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td><code>BIGINT</code> [12]</td>
+        </tr>
+        <tr>
+            <td><code>BIGSERIAL</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><em>all</em></td>
+            <td><code>NUMBER(20)</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>BIGINT</code> <code>IDENTITY</code> [11]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+            <td><em>all</em></td>
+            <td><code>INTEGER</code> [15]</td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>decimal</strong> [7]</td>
+            <td rowspan="5"><code>string</code> [9]</td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>NUMERIC(p, s)</code> <code>UNSIGNED</code> [10]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td rowspan="4"><code>NUMERIC(p, s)</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>number</strong> [7]</td>
+            <td rowspan="5"><code>\BCMath\Number</code>
+[9]</td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>NUMERIC(p, s)</code> <code>UNSIGNED</code> [10]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td rowspan="4"><code>NUMERIC(p, s)</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>smallfloat</strong></td>
+            <td rowspan="5"><code>float</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>FLOAT</code> <code>UNSIGNED</code> [10]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td rowspan="4"><code>REAL</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>float</strong></td>
+            <td rowspan="5"><code>float</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>DOUBLE PRECISION</code> <code>UNSIGNED</code> [10]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td rowspan="4"><code>DOUBLE PRECISION</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="7"><strong>string</strong>
+[2] [5]</td>
+            <td rowspan="7"><code>string</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="3"><em>all</em></td>
+            <td rowspan="2"><code>VARCHAR(n)</code> [3]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><strong>Oracle</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td><code>VARCHAR2(n)</code> [3]</td>
+        </tr>
+        <tr>
+            <td><code>CHAR(n)</code> [4]</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><strong>SQL Server</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td><code>NVARCHAR(n)</code> [3]</td>
+        </tr>
+        <tr>
+            <td><code>NCHAR(n)</code> [4]</td>
+        </tr>
+        <tr>
+            <td><strong>ascii_string</strong></td>
+            <td><code>string</code></td>
+            <td><strong>SQL Server</strong></td>
+            <td>&nbsp;</td>
+            <td><code>VARCHAR(n)</code>
+<code>CHAR(n)</code></td>
+        </tr>
+        <tr>
+            <td rowspan="8"><strong>text</strong></td>
+            <td rowspan="8"><code>string</code></td>
+            <td rowspan="4"><strong>MySQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td><code>TINYTEXT</code> [16]</td>
+        </tr>
+        <tr>
+            <td><code>TEXT</code> [17]</td>
+        </tr>
+        <tr>
+            <td><code>MEDIUMTEXT</code> [18]</td>
+        </tr>
+        <tr>
+            <td><code>LONGTEXT</code> [19]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="3">
+                <p><em>all</em></p>
+                <p><em>all</em></p>
+            </td>
+            <td rowspan="3">
+                <p><code>TEXT</code></p>
+                <p><code>CLOB</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>VARCHAR(MAX)</code></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>guid</strong></td>
+            <td rowspan="5"><code>string</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="3"><em>all</em></td>
+            <td rowspan="3"><code>CHAR(36)</code> [1]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td rowspan="2">
+                <p><em>all</em></p>
+                <p><em>all</em></p>
+            </td>
+            <td rowspan="2">
+                <p><code>UNIQUEIDENTIFIER</code></p>
+                <p><code>UUID</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>binary</strong>
+[2] [6]</td>
+            <td rowspan="5"><code>resource</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="3">
+                <p><em>all</em></p>
+                <p><em>all</em></p>
+            </td>
+            <td><code>VARBINARY(n)</code> [3]</td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><code>BINARY(n)</code> [4]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><code>RAW(n)</code></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>BYTEA</code> [15]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+            <td><em>all</em></td>
+            <td><code>BLOB</code> [15]</td>
+        </tr>
+        <tr>
+            <td rowspan="8"><strong>blob</strong></td>
+            <td rowspan="8"><code>resource</code></td>
+            <td rowspan="4"><strong>MySQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td><code>TINYBLOB</code> [16]</td>
+        </tr>
+        <tr>
+            <td><code>BLOB</code> [17]</td>
+        </tr>
+        <tr>
+            <td><code>MEDIUMBLOB</code> [18]</td>
+        </tr>
+        <tr>
+            <td><code>LONGBLOB</code> [19]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>BLOB</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>VARBINARY(MAX)</code></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>BYTEA</code></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>boolean</strong></td>
+            <td rowspan="5"><code>boolean</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>TINYINT(1)</code></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>BOOLEAN</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td rowspan="2">
+                <p><em>all</em></p>
+                <p><em>all</em></p>
+            </td>
+            <td rowspan="2">
+                <p><code>BIT</code></p>
+                <p><code>NUMBER(1)</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>date</strong></td>
+            <td rowspan="5"><code>\DateTime</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td rowspan="5"><code>DATE</code></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td>&quot;all&quot;</td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>datetime</strong></td>
+            <td rowspan="5"><code>\DateTime</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>DATETIME</code> [13]</td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>DATETIME</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>TIMESTAMP(0) WITHOUT TIME ZONE</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><em>all</em></td>
+            <td><code>TIMESTAMP(0)</code></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>datetimetz</strong></td>
+            <td rowspan="5"><code>\DateTime</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="3"><code>DATETIME</code> [14] [15]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td>&quot;all&quot;</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>TIMESTAMP(0) WITH TIME ZONE</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td rowspan="5"><strong>time</strong></td>
+            <td rowspan="5"><code>\DateTime</code></td>
+            <td><strong>MySQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>TIME</code></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>TIME(0) WITHOUT TIME ZONE</code></td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td><em>all</em></td>
+            <td><code>DATE</code> [15]</td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td>&quot;all&quot;</td>
+            <td><code>TIME(0)</code></td>
+        </tr>
+        <tr>
+            <td rowspan="8"><strong>simple array</strong>
+[1]</td>
+            <td rowspan="8"><code>array</code></td>
+            <td rowspan="4"><strong>MySQL</strong></td>
+            <td rowspan="4"><em>all</em></td>
+            <td><code>TINYTEXT</code> [16]</td>
+        </tr>
+        <tr>
+            <td><code>TEXT</code> [17]</td>
+        </tr>
+        <tr>
+            <td><code>MEDIUMTEXT</code> [18]</td>
+        </tr>
+        <tr>
+            <td><code>LONGTEXT</code> [19]</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td rowspan="3">
+                <p><em>all</em></p>
+                <p><em>all</em></p>
+            </td>
+            <td rowspan="3">
+                <p><code>TEXT</code></p>
+                <p><code>CLOB</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>VARCHAR(MAX)</code></td>
+        </tr>
+        <tr>
+            <td rowspan="6"><strong>json</strong></td>
+            <td rowspan="6"><code>mixed</code></td>
+            <td><strong>MySQL</strong></td>
+            <td><em>all</em></td>
+            <td><code>JSON</code></td>
+        </tr>
+        <tr>
+            <td rowspan="2"><strong>PostgreSQL</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td><code>JSON</code> [20]</td>
+        </tr>
+        <tr>
+            <td><code>JSONB</code> [21]</td>
+        </tr>
+        <tr>
+            <td><strong>Oracle</strong></td>
+            <td rowspan="2"><em>all</em></td>
+            <td rowspan="2"><code>CLOB</code> [1]</td>
+        </tr>
+        <tr>
+            <td><strong>SQLite</strong></td>
+        </tr>
+        <tr>
+            <td><strong>SQL Server</strong></td>
+            <td><em>all</em></td>
+            <td><code>VARCHAR(MAX)</code> [1]</td>
+        </tr>
+    </tbody>
+</table>
