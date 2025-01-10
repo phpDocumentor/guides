@@ -121,7 +121,7 @@ final class DocumentNode extends CompoundNode
     public function getTitle(): TitleNode|null
     {
         foreach ($this->value as $node) {
-            if ($node instanceof SectionNode && $node->getTitle()->getLevel() === 1) {
+            if ($node instanceof SectionNode) {
                 return $node->getTitle();
             }
 

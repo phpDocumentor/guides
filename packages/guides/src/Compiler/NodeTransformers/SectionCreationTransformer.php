@@ -31,10 +31,12 @@ final class SectionCreationTransformer implements NodeTransformer
 {
     /** @var SectionNode[] $sectionStack */
     private array $sectionStack = [];
+    private int $firstLevel = 1;
 
     public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
+            $this->firstLevel = 1;
             $this->sectionStack = [];
         }
 
@@ -68,7 +70,7 @@ final class SectionCreationTransformer implements NodeTransformer
 
         if (count($this->sectionStack) > 0 && $compilerContext->getShadowTree()->isLastChildOfParent()) {
             $lastSection = end($this->sectionStack);
-            while ($lastSection?->getTitle()->getLevel() > 1) {
+            while ($lastSection?->getTitle()->getLevel() > $this->firstLevel) {
                 $lastSection = array_pop($this->sectionStack);
             }
 
@@ -92,9 +94,9 @@ final class SectionCreationTransformer implements NodeTransformer
                 end($this->sectionStack)->addChildNode($newSection);
             }
 
-            $this->sectionStack[] = $newSection;
+            $this->pushNewSectionToStack($newSection);
 
-            return $lastSection?->getTitle()->getLevel() === 1 ? $lastSection : null;
+            return $lastSection?->getTitle()->getLevel() <= $this->firstLevel ? $lastSection : null;
         }
 
         $newSection = new SectionNode($node);
@@ -102,7 +104,7 @@ final class SectionCreationTransformer implements NodeTransformer
             $lastSection->addChildNode($newSection);
         }
 
-        $this->sectionStack[] = $newSection;
+        $this->pushNewSectionToStack($newSection);
 
         return null;
     }
@@ -116,5 +118,22 @@ final class SectionCreationTransformer implements NodeTransformer
     {
         // Should run as first transformer
         return PHP_INT_MAX;
+    }
+
+    /**
+     * Pushes the new section to the stack.
+     *
+     * The stack is used to track the current level of nodes and adding child
+     * nodes to the section. As not all documentation formats are using the
+     * correct level of title nodes we need to track the level of the first
+     * title node to determine the correct level of the section.
+     */
+    private function pushNewSectionToStack(SectionNode $newSection): void
+    {
+        if (count($this->sectionStack) === 0) {
+            $this->firstLevel = $newSection->getTitle()->getLevel();
+        }
+
+        $this->sectionStack[] = $newSection;
     }
 }
