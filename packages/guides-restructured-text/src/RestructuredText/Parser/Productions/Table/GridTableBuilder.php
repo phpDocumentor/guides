@@ -67,7 +67,7 @@ final class GridTableBuilder
     }
 
     /** @param array<int, int> $columnRanges */
-    private function extractRow(array $columnRanges, string $line, int &$currentSpan): TableRow
+    private function extractRow(array $columnRanges, string $line, int $currentSpan): TableRow
     {
         $row = new TableRow();
         $currentColumnStart = null;
