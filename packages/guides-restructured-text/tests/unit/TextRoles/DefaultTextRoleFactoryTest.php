@@ -26,7 +26,7 @@ final class DefaultTextRoleFactoryTest extends TestCase
     {
         $this->logger = new Logger('test');
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
-            new GenericTextRole(self::createMock(SettingsManager::class)),
+            new GenericTextRole($this->createMock(SettingsManager::class)),
             new LiteralTextRole(),
             [],
             [],
@@ -43,6 +43,13 @@ final class DefaultTextRoleFactoryTest extends TestCase
     {
         $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole($this->logger));
         $textRole = $this->defaultTextRoleFactory->getTextRole('abbreviation');
+        self::assertInstanceOf(AbbreviationTextRole::class, $textRole);
+    }
+
+    public function testRegisteredTextRoleIsCaseInSensitive(): void
+    {
+        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole($this->logger));
+        $textRole = $this->defaultTextRoleFactory->getTextRole('ABbreviation');
         self::assertInstanceOf(AbbreviationTextRole::class, $textRole);
     }
 }
