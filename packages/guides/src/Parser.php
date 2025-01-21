@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem as FileSystemAlias;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
@@ -52,7 +52,7 @@ final class Parser
 
     /** @psalm-assert ParserContext $this->parserContext */
     public function prepare(
-        FilesystemInterface|null $origin,
+        FilesystemInterface|FileSystemAlias|null $origin,
         string $sourcePath,
         string $fileName,
         ProjectNode $projectNode,
@@ -61,7 +61,7 @@ final class Parser
         if ($origin === null) {
             $cwd = getcwd();
             Assert::string($cwd);
-            $origin = new Filesystem(new Local($cwd));
+            $origin = FlySystemAdapter::createForPath($cwd);
         }
 
         $this->parserContext = $this->createParserContext(
@@ -106,7 +106,7 @@ final class Parser
     private function createParserContext(
         string $sourcePath,
         string $file,
-        FilesystemInterface $origin,
+        FilesystemInterface|FileSystemAlias $origin,
         int $initialHeaderLevel,
         ProjectNode $projectNode,
     ): ParserContext {

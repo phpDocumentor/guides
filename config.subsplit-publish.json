@@ -39,6 +39,11 @@
       "name": "guides-theme-rst",
       "directory": "packages/guides-theme-rst",
       "target": "git@github.com:phpDocumentor/guides-theme-rst.git"
+    },
+    {
+      "name": "filesystem",
+      "directory": "packages/filesystem",
+      "target": "git@github.com:phpDocumentor/filesystem.git"
     }
   ]
 }

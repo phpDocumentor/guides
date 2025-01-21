@@ -20,6 +20,7 @@ use IteratorAggregate;
 
 use function count;
 use function in_array;
+use function sort;
 
 /** @implements IteratorAggregate<string> */
 final class Files implements IteratorAggregate, Countable
@@ -34,6 +35,7 @@ final class Files implements IteratorAggregate, Countable
         }
 
         $this->files[] = $filename;
+        sort($this->files);
     }
 
     /** @return Iterator<string> */

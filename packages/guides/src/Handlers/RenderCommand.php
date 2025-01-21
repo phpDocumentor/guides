@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Renderer\DocumentListIterator;
@@ -27,8 +28,8 @@ final class RenderCommand
     public function __construct(
         private readonly string $outputFormat,
         private readonly array $documentArray,
-        private readonly FilesystemInterface $origin,
-        private readonly FilesystemInterface $destination,
+        private readonly FilesystemInterface|FileSystem $origin,
+        private readonly FilesystemInterface|FileSystem $destination,
         private readonly ProjectNode $projectNode,
         private readonly string $destinationPath = '/',
     ) {
@@ -57,12 +58,12 @@ final class RenderCommand
         return $this->documentIterator;
     }
 
-    public function getOrigin(): FilesystemInterface
+    public function getOrigin(): FilesystemInterface|FileSystem
     {
         return $this->origin;
     }
 
-    public function getDestination(): FilesystemInterface
+    public function getDestination(): FilesystemInterface|FileSystem
     {
         return $this->destination;
     }

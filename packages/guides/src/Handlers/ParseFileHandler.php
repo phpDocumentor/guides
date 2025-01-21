@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Handlers;
 
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Event\PreParseDocument;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -53,7 +54,7 @@ final class ParseFileHandler
         );
     }
 
-    private function getFileContents(FilesystemInterface $origin, string $file): string
+    private function getFileContents(FilesystemInterface|FileSystem $origin, string $file): string
     {
         if (!$origin->has($file)) {
             throw new InvalidArgumentException(sprintf('File at path %s does not exist', $file));
@@ -69,7 +70,7 @@ final class ParseFileHandler
     }
 
     private function createDocument(
-        FilesystemInterface $origin,
+        FilesystemInterface|FileSystem $origin,
         string $documentFolder,
         string $fileName,
         string $extension,

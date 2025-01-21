@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides;
 use League\Flysystem\FilesystemInterface;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 
@@ -29,7 +30,7 @@ class ParserContext
         private readonly string $currentFileName,
         private readonly string $currentDirectory,
         private readonly int $initialHeaderLevel,
-        private readonly FilesystemInterface $origin,
+        private readonly FilesystemInterface|FileSystem $origin,
         private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
     }
@@ -78,7 +79,7 @@ class ParserContext
         ];
     }
 
-    public function getOrigin(): FilesystemInterface
+    public function getOrigin(): FilesystemInterface|FileSystem
     {
         return $this->origin;
     }
