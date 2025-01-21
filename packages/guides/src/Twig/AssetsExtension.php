@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
-use League\Flysystem\Exception;
 use League\Uri\Uri;
 use League\Uri\UriInfo;
-use LogicException;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
@@ -28,6 +26,7 @@ use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
+use Throwable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -190,7 +189,7 @@ final class AssetsExtension extends AbstractExtension
                     $renderContext->getLoggerInformation(),
                 );
             }
-        } catch (LogicException | Exception $e) {
+        } catch (Throwable $e) {
             $this->logger->error(
                 sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()),
                 $renderContext->getLoggerInformation(),

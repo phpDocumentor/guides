@@ -15,7 +15,7 @@ parameters:
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
     # FlyFinder plugin adds a find method to FlySystem's Filesystem
-    - '#Call to an undefined method League\\Flysystem\\FilesystemInterface::find\(\)#'
+    - '#Call to an undefined method League\\Flysystem\\FilesystemInterface\|phpDocumentor\\FileSystem\\FileSystem::find\(\)#'
 
     -
       message: '#Unreachable statement - code above always terminates\.#'
@@ -35,6 +35,7 @@ parameters:
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
 
   paths:
+    - packages/filesystem/src
     - packages/guides/src
     - packages/guides-code/src
     - packages/guides-cli/src

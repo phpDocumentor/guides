@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\Handlers;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Tactician\CommandBus;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
 use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PreParseProcess;
@@ -87,7 +88,7 @@ final class ParseDirectoryHandler
     }
 
     private function getDirectoryIndexFile(
-        FilesystemInterface $filesystem,
+        FilesystemInterface|FileSystem $filesystem,
         string $directory,
         string $sourceFormat,
     ): string {

@@ -21,6 +21,7 @@ use Flyfinder\Specification\NotSpecification;
 use Flyfinder\Specification\SpecificationInterface;
 use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem;
 
 use function sprintf;
 use function strlen;
@@ -41,7 +42,7 @@ final class FileCollector
      *
      * @param SpecificationInterface|null $excludedSpecification specification that is used to exclude specific files/directories
      */
-    public function collect(FilesystemInterface $filesystem, string $directory, string $extension, SpecificationInterface|null $excludedSpecification = null): Files
+    public function collect(FilesystemInterface|FileSystem $filesystem, string $directory, string $extension, SpecificationInterface|null $excludedSpecification = null): Files
     {
         $directory = trim($directory, '/');
         $specification = new AndSpecification(new InPath(new Path($directory)), new HasExtension([$extension]));
@@ -55,13 +56,14 @@ final class FileCollector
         // completely populate the splFileInfos property
         $this->fileInfos = [];
         foreach ($files as $fileInfo) {
+            $dirname = $fileInfo['dirname'];
+
             if (strlen($directory) > 0) {
                 // Make paths relative to the provided source folder
-                $fileInfo['path'] = substr($fileInfo['path'], strlen($directory) + 1);
-                $fileInfo['dirname'] = substr($fileInfo['dirname'], strlen($directory) + 1) ?: '';
+                $dirname = substr($fileInfo['dirname'], strlen($directory) + 1) ?: '';
             }
 
-            $documentPath = $this->getFilenameFromFile($fileInfo);
+            $documentPath = $this->getFilenameFromFile($fileInfo['filename'], $dirname);
 
             $this->fileInfos[$documentPath] = $fileInfo;
         }
@@ -133,13 +135,11 @@ final class FileCollector
 
     /**
      * Converts foo/bar.rst to foo/bar (the document filename)
-     *
-     * @param array<string> $fileInfo
      */
-    private function getFilenameFromFile(array $fileInfo): string
+    private function getFilenameFromFile(string $filename, string $dirname): string
     {
-        $directory = $fileInfo['dirname'] ? $fileInfo['dirname'] . '/' : '';
+        $directory = $dirname ? $dirname . '/' : '';
 
-        return $directory . $fileInfo['filename'];
+        return $directory . $filename;
     }
 }

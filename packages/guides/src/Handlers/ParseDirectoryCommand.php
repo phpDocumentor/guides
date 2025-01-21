@@ -15,12 +15,13 @@ namespace phpDocumentor\Guides\Handlers;
 
 use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class ParseDirectoryCommand
 {
     public function __construct(
-        private readonly FilesystemInterface $origin,
+        private readonly FilesystemInterface|FileSystem $origin,
         private readonly string $directory,
         private readonly string $inputFormat,
         private readonly ProjectNode $projectNode,
@@ -28,7 +29,7 @@ final class ParseDirectoryCommand
     ) {
     }
 
-    public function getOrigin(): FilesystemInterface
+    public function getOrigin(): FilesystemInterface|FileSystem
     {
         return $this->origin;
     }

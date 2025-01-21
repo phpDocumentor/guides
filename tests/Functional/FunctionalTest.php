@@ -16,10 +16,11 @@ namespace phpDocumentor\Guides\Functional;
 use Exception;
 use Gajus\Dindent\Indenter;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Memory\MemoryAdapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Monolog\LogRecord;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -42,6 +43,8 @@ use function array_map;
 use function array_shift;
 use function array_values;
 use function assert;
+use function class_alias;
+use function class_exists;
 use function explode;
 use function file;
 use function file_exists;
@@ -57,6 +60,10 @@ use function substr;
 use function trim;
 
 use const LC_ALL;
+
+if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
+    class_alias('League\Flysystem\Memory\MemoryAdapter', 'League\Flysystem\InMemory\InMemoryFilesystemAdapter');
+}
 
 final class FunctionalTest extends ApplicationTestCase
 {
@@ -112,8 +119,8 @@ final class FunctionalTest extends ApplicationTestCase
             $projectNode->setDocumentEntries([$documentEntry]);
             $compiler->run([$document], new CompilerContext($projectNode));
 
-            $inputFilesystem = new Filesystem(new MemoryAdapter());
-            $inputFilesystem->write('img/test-image.jpg', 'Some image');
+            $inputFilesystem = FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter()));
+            $inputFilesystem->put('img/test-image.jpg', 'Some image');
 
 
             $projectSettings = new ProjectSettings();
@@ -128,7 +135,7 @@ final class FunctionalTest extends ApplicationTestCase
                 $document,
                 [$document],
                 $inputFilesystem,
-                $outfs = new Filesystem(new MemoryAdapter()),
+                FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter())),
                 '',
                 $format,
                 $projectNode,
