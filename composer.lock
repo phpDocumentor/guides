@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33da623596e5b8f0bc0f7adc297a3434",
+    "content-hash": "963b8dcb9cfcf40e43b371af372c2c70",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -1274,7 +1274,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/filesystem",
-                "reference": "51ec44c29420664e31d26a16fd86303fc6748560"
+                "reference": "dbcfe2cc7f7f36d8d4543e55741a88c99f2e8069"
             },
             "require": {
                 "php": "^8.1"
@@ -1282,7 +1282,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1371,7 +1371,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "92a5f85dcc3c60476e37a1784b2acb2071f863e5"
+                "reference": "56575227967683271986052d5e6342458b75757e"
             },
             "require": {
                 "doctrine/deprecations": "^1.1",
@@ -1397,7 +1397,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1427,7 +1427,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "78cf7939514049511c8b829b29acd05a421def10"
+                "reference": "f2ec5a6f5471d7fe81ab58c7f3cb623ab0e5f215"
             },
             "require": {
                 "monolog/monolog": "^2.9 || ^3.0",
@@ -1445,7 +1445,7 @@
             "type": "project",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1480,7 +1480,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
-                "reference": "eb0b42ca9b5bda9076a45711f37f6631c0d2c5d0"
+                "reference": "9968c98c68ab630d39bd25c8b677ebe9fd537995"
             },
             "require": {
                 "php": "^8.1",
@@ -1489,7 +1489,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1519,7 +1519,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "847cff3bd2fa4ae97fa8afce34701077cedca293"
+                "reference": "d1762770c0293909a8112fb659e05b0ca94942b8"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
@@ -1535,7 +1535,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1565,7 +1565,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
-                "reference": "1b539ac52549d0ad20f86416df2d526a8ce70270"
+                "reference": "cfd9426a8dfd8168edc7911978d00cb6ff607130"
             },
             "require": {
                 "league/commonmark": "^2.4",
@@ -1576,7 +1576,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1606,7 +1606,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "a7c868405b6fbf1bc24f7416ba71fcf35eaf0ab3"
+                "reference": "c1fbb5c5c2b6a74160eb8d29310b022a1830a3c7"
             },
             "require": {
                 "doctrine/lexer": "^3.0",
@@ -1618,7 +1618,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1648,7 +1648,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "4cbaf535fc76a478d8b7c2b9ea8bc3188a364d82"
+                "reference": "a3ad78c3fc59928050b1ff3997a676248b0728a1"
             },
             "require": {
                 "php": "^8.1",
@@ -1658,7 +1658,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -1681,7 +1681,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-rst",
-                "reference": "2e5308d46fd6d65e1ea788c7c4a872d2d5008de0"
+                "reference": "ded777eb8d32c94915e730f3bb1f2b6a02cbbbc0"
             },
             "require": {
                 "ext-iconv": "*",
@@ -1691,7 +1691,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.x-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {

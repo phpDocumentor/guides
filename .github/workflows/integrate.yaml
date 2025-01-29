@@ -9,7 +9,7 @@ on: # yamllint disable-line rule:truthy
       - "main"
 
 env:
-  ComposerRootVersion: "2.x-dev"
+  ComposerRootVersion: "1.x-dev"
 
 jobs:
   code-coverage:
@@ -56,7 +56,7 @@ jobs:
     with:
       php-version: "8.2"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
-      composer-root-version: "2.x-dev"
+      composer-root-version: "1.x-dev"
 
   architecture:
     name: "Check architecture"
@@ -83,7 +83,7 @@ jobs:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.8"
     with:
-      composer-root-version: "2.x-dev"
+      composer-root-version: "1.x-dev"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
 
   functional-tests:
@@ -93,7 +93,7 @@ jobs:
     with:
       test-suite: "functional"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
-      composer-root-version: "2.x-dev"
+      composer-root-version: "1.x-dev"
 
   integration-tests:
     name: "integration test"
@@ -102,7 +102,7 @@ jobs:
     with:
       test-suite: "integration"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv"
-      composer-root-version: "2.x-dev"
+      composer-root-version: "1.x-dev"
 
   xml-lint:
     runs-on: "ubuntu-latest"
