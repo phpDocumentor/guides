@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides;
 use Exception;
 use League\Flysystem\FilesystemInterface;
 use LogicException;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -36,8 +37,8 @@ class RenderContext
     private function __construct(
         private readonly string $destinationPath,
         private readonly string|null $currentFileName,
-        private readonly FilesystemInterface $origin,
-        private readonly FilesystemInterface $destination,
+        private readonly FilesystemInterface|FileSystem $origin,
+        private readonly FilesystemInterface|FileSystem $destination,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
     ) {
@@ -47,8 +48,8 @@ class RenderContext
     public static function forDocument(
         DocumentNode $documentNode,
         array $allDocumentNodes,
-        FilesystemInterface $origin,
-        FilesystemInterface $destination,
+        FilesystemInterface|FileSystem $origin,
+        FilesystemInterface|FileSystem $destination,
         string $destinationPath,
         string $ouputFormat,
         ProjectNode $projectNode,
@@ -105,8 +106,8 @@ class RenderContext
     public static function forProject(
         ProjectNode $projectNode,
         array $allDocumentNodes,
-        FilesystemInterface $origin,
-        FilesystemInterface $destination,
+        FilesystemInterface|FileSystem $origin,
+        FilesystemInterface|FileSystem $destination,
         string $destinationPath,
         string $ouputFormat,
     ): self {
@@ -194,7 +195,7 @@ class RenderContext
         ];
     }
 
-    public function getOrigin(): FilesystemInterface
+    public function getOrigin(): FilesystemInterface|FileSystem
     {
         return $this->origin;
     }
@@ -209,7 +210,7 @@ class RenderContext
         return $this->destinationPath;
     }
 
-    public function getDestination(): FilesystemInterface
+    public function getDestination(): FilesystemInterface|FileSystem
     {
         return $this->destination;
     }

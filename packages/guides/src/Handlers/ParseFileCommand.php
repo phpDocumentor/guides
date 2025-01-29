@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class ParseFileCommand
 {
     public function __construct(
-        private readonly FilesystemInterface $origin,
+        private readonly FilesystemInterface|FileSystem $origin,
         private readonly string $directory,
         private readonly string $file,
         private readonly string $extension,
@@ -29,7 +30,7 @@ final class ParseFileCommand
     ) {
     }
 
-    public function getOrigin(): FilesystemInterface
+    public function getOrigin(): FilesystemInterface|FileSystem
     {
         return $this->origin;
     }

@@ -13,18 +13,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Cli\Command;
 
-use Flyfinder\Finder;
 use Flyfinder\Path;
 use Flyfinder\Specification\InPath;
 use Flyfinder\Specification\NotSpecification;
 use Flyfinder\Specification\OrSpecification;
 use Flyfinder\Specification\SpecificationInterface;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
 use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
@@ -306,8 +304,8 @@ final class Run extends Command
         $settings = $event->getSettings();
 
         $outputDir = $settings->getOutput();
-        $sourceFileSystem = new Filesystem(new Local($settings->getInput()));
-        $sourceFileSystem->addPlugin(new Finder());
+        $sourceFileSystem = FlySystemAdapter::createForPath($settings->getInput());
+
         $logPath = $settings->getLogPath();
         if ($logPath === 'php://stder') {
             $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING));
@@ -371,7 +369,7 @@ final class Run extends Command
 
         $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
 
-        $destinationFileSystem = new Filesystem(new Local($outputDir));
+        $destinationFileSystem = FlySystemAdapter::createForPath($outputDir);
 
         $outputFormats = $settings->getOutputFormats();
 
