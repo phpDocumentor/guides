@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Monolog\Logger;
 use phpDocumentor\Guides\Cli\Application;
+use phpDocumentor\Guides\Cli\Command\ProgressBarSubscriber;
 use phpDocumentor\Guides\Cli\Command\Run;
 use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
 use Psr\Clock\ClockInterface;
@@ -41,5 +42,7 @@ return static function (ContainerConfigurator $container): void {
         ->public()
 
         ->set(WorkingDirectorySwitcher::class)
-        ->tag('event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => '__invoke']);
+        ->tag('event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => '__invoke'])
+
+        ->set(ProgressBarSubscriber::class);
 };
