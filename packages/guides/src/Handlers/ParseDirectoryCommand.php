@@ -13,20 +13,38 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Handlers;
 
+use Doctrine\Deprecations\Deprecation;
 use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\FileSystem\FileSystem;
+use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
 final class ParseDirectoryCommand
 {
+    private readonly SpecificationInterface|null $excludedSpecification;
+    private readonly Exclude|null $exclude;
+
     public function __construct(
         private readonly FilesystemInterface|FileSystem $origin,
         private readonly string $directory,
         private readonly string $inputFormat,
         private readonly ProjectNode $projectNode,
-        private readonly SpecificationInterface|null $excludedSpecification = null,
+        SpecificationInterface|Exclude|null $excludedSpecification = null,
     ) {
+        if ($excludedSpecification instanceof SpecificationInterface) {
+            Deprecation::trigger(
+                'phpDocumentor/guides',
+                'https://github.com/phpDocumentor/guides/issues/1209',
+                'Passing ' . $excludedSpecification::class . ' to ' . self::class . 'will be deprecated,'
+                . 'use phpDocumentor\FileSystem\Finder\Exclude instead.',
+            );
+            $this->excludedSpecification = $excludedSpecification;
+            $this->exclude = null;
+        } else {
+            $this->exclude = $excludedSpecification;
+            $this->excludedSpecification = null;
+        }
     }
 
     public function getOrigin(): FilesystemInterface|FileSystem
@@ -49,8 +67,25 @@ final class ParseDirectoryCommand
         return $this->projectNode;
     }
 
+    /** @deprecated Specification definition on parse directory is deprecated. Use @{see self::getExclude()} instead.*/
     public function getExcludedSpecification(): SpecificationInterface|null
     {
-        return $this->excludedSpecification;
+        Deprecation::trigger(
+            'phpDocumentor/guides',
+            'https://github.com/phpDocumentor/guides/issues/1209',
+            'Specification definition on parse directory is deprecated. Use getExclude() instead.',
+        );
+
+        return $this->excludedSpecification ?? null;
+    }
+
+    public function getExclude(): Exclude
+    {
+        return $this->exclude ?? new Exclude();
+    }
+
+    public function hasExclude(): bool
+    {
+        return isset($this->exclude);
     }
 }

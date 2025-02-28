@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Settings;
 
+use phpDocumentor\FileSystem\Finder\Exclude;
+
 final class ProjectSettings
 {
     /** @var array<string, string> */
@@ -39,6 +41,12 @@ final class ProjectSettings
 
     /** @var string[] */
     private array $ignoredDomains = [];
+    private Exclude $excludes;
+
+    public function __construct()
+    {
+        $this->excludes = new Exclude();
+    }
 
     public function getTitle(): string
     {
@@ -255,5 +263,15 @@ final class ProjectSettings
         $this->automaticMenu = $automaticMenu;
 
         return $this;
+    }
+
+    public function setExcludes(Exclude $exclude): void
+    {
+        $this->excludes = $exclude;
+    }
+
+    public function getExcludes(): Exclude
+    {
+        return $this->excludes;
     }
 }
