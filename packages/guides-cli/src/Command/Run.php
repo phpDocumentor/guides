@@ -23,6 +23,7 @@ use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -55,6 +56,7 @@ use function count;
 use function implode;
 use function is_countable;
 use function is_dir;
+use function method_exists;
 use function pathinfo;
 use function sprintf;
 use function strtoupper;
@@ -146,11 +148,12 @@ final class Run extends Command
         );
     }
 
+    /** @deprecated this method will be removed in v2 */
     public function registerProgressBar(ConsoleOutputInterface $output): void
     {
         Deprecation::trigger(
             'phpdocumentor/guides-cli',
-            'https://github.com/phpdocumentor/guides/issues/33',
+            'https://github.com/phpDocumentor/guides/issues/1210',
             'Progressbar will be registered via settings',
         );
         $this->progressBarSubscriber->subscribe($output, $this->eventDispatcher);
@@ -205,6 +208,16 @@ final class Run extends Command
             $settings->setTheme((string) $input->getOption('theme'));
         }
 
+        if (method_exists($settings, 'setExcludes')) {
+            /** @var list<string> $excludePaths */
+            $excludePaths = (array) $input->getOption('exclude-path');
+            if ($excludePaths !== []) {
+                $settings->setExcludes(
+                    $settings->getExcludes()->withPaths($excludePaths),
+                );
+            }
+        }
+
         return $settings;
     }
 
@@ -255,28 +268,13 @@ final class Run extends Command
         }
 
         if ($settings->getInputFile() === '') {
-            $exclude = null;
-            if ($input->getOption('exclude-path')) {
-                /** @var string[] $excludedPaths */
-                $excludedPaths = (array) $input->getOption('exclude-path');
-                $excludedSpecifications = array_map(static fn (string $path) => new NotSpecification(new InPath(new Path($path))), $excludedPaths);
-                $excludedSpecification = array_shift($excludedSpecifications);
-                assert($excludedSpecification !== null);
-
-                $exclude = array_reduce(
-                    $excludedSpecifications,
-                    static fn (SpecificationInterface $carry, SpecificationInterface $spec) => new OrSpecification($carry, $spec),
-                    $excludedSpecification,
-                );
-            }
-
             $documents = $this->commandBus->handle(
                 new ParseDirectoryCommand(
                     $sourceFileSystem,
                     '',
                     $settings->getInputFormat(),
                     $projectNode,
-                    $exclude,
+                    $this->getExclude($settings, $input),
                 ),
             );
         } else {
@@ -332,5 +330,32 @@ final class Run extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function getExclude(ProjectSettings $settings, InputInterface|null $input = null): Exclude|SpecificationInterface|null
+    {
+        if (method_exists($settings, 'getExcludes')) {
+            return $settings->getExcludes();
+        }
+
+        if ($input === null) {
+            return null;
+        }
+
+        if ($input->getOption('exclude-path')) {
+            /** @var string[] $excludedPaths */
+            $excludedPaths = (array) $input->getOption('exclude-path');
+            $excludedSpecifications = array_map(static fn (string $path) => new NotSpecification(new InPath(new Path($path))), $excludedPaths);
+            $excludedSpecification = array_shift($excludedSpecifications);
+            assert($excludedSpecification !== null);
+
+            return array_reduce(
+                $excludedSpecifications,
+                static fn (SpecificationInterface $carry, SpecificationInterface $spec) => new OrSpecification($carry, $spec),
+                $excludedSpecification,
+            );
+        }
+
+        return null;
     }
 }

@@ -6,26 +6,28 @@
     version="3.0"
     elementFormDefault="qualified"
 >
+    <xsd:simpleType name="path"><xsd:restriction base="xsd:string"/></xsd:simpleType>
     <xsd:element name="guides" type="guides"/>
 
     <xsd:complexType name="guides">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="project" type="project" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="base-template-path" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="base-template-path" type="path" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="extension" type="extension" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="output-format" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="ignored_domain" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="inventory" type="inventory" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="template" type="template" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="raw-node" type="raw-node" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="exclude" type="ignoreType" minOccurs="0" maxOccurs="1" />
         </xsd:choice>
 
-        <xsd:attribute name="input" type="xsd:string"/>
-        <xsd:attribute name="input-file" type="xsd:string"/>
+        <xsd:attribute name="input" type="path"/>
+        <xsd:attribute name="input-file" type="path"/>
         <xsd:attribute name="index-name" type="xsd:string"/>
         <xsd:attribute name="output" type="xsd:string"/>
         <xsd:attribute name="input-format" type="xsd:string"/>
-        <xsd:attribute name="log-path" type="xsd:string"/>
+        <xsd:attribute name="log-path" type="path"/>
         <xsd:attribute name="fail-on-log" type="xsd:string"/>
         <xsd:attribute name="fail-on-error" type="xsd:string"/>
         <xsd:attribute name="show-progress" type="xsd:string"/>
@@ -34,6 +36,14 @@
         <xsd:attribute name="links-are-relative" type="xsd:string"/>
         <xsd:attribute name="automatic-menu" type="xsd:string"/>
         <xsd:attribute name="max-menu-depth" type="xsd:int"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="ignoreType">
+        <xsd:sequence>
+            <xsd:element name="path" type="path" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="hidden" type="xsd:boolean"/>
+        <xsd:attribute name="symlinks" type="xsd:boolean"/>
     </xsd:complexType>
 
     <xsd:complexType name="extension">

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
+use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\Guides\Compiler\NodeTransformers\RawNodeEscapeTransformer;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
@@ -118,6 +119,15 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->scalarNode('input')->end()
                 ->scalarNode('input_file')->end()
                 ->scalarNode('index_name')->end()
+                ->arrayNode('exclude')
+                    ->addDefaultsIfNotSet()
+                    ->fixXmlConfig('path')
+                    ->children()
+                    ->booleanNode('hidden')->defaultTrue()->end()
+                    ->booleanNode('symlinks')->defaultTrue()->end()
+                    ->append($this->paths())
+                    ->end()
+                ->end()
                 ->scalarNode('output')->end()
                 ->scalarNode('input_format')->end()
                 ->arrayNode('output_format')
@@ -317,6 +327,14 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
             $projectSettings->setDefaultCodeLanguage((string) $config['default_code_language']);
         }
 
+        $projectSettings->setExcludes(
+            new Exclude(
+                $config['exclude']['paths'],
+                $config['exclude']['hidden'],
+                $config['exclude']['symlinks'],
+            ),
+        );
+
         $container->getDefinition(SettingsManager::class)
             ->addMethodCall('setProjectSettings', [$projectSettings]);
 
@@ -335,6 +353,20 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
             $container->getDefinition(ThemeManager::class)
                 ->addMethodCall('registerTheme', [new ThemeConfig($themeName, $themeConfig['templates'], $themeConfig['extends'] ?? null)]);
         }
+    }
+
+    /** @param array<string> $defaultValue */
+    private function paths(array $defaultValue = []): ArrayNodeDefinition
+    {
+        $treebuilder = new TreeBuilder('paths');
+
+        return $treebuilder->getRootNode()
+            ->beforeNormalization()
+                ->castToArray()
+            ->end()
+            ->defaultValue($defaultValue)
+            ->prototype('scalar')
+            ->end();
     }
 
     public function process(ContainerBuilder $container): void

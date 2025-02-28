@@ -65,7 +65,12 @@ final class ParseDirectoryHandler
             $extension,
         );
 
-        $files = $this->fileCollector->collect($origin, $currentDirectory, $extension, $command->getExcludedSpecification());
+        $files = $this->fileCollector->collect(
+            $origin,
+            $currentDirectory,
+            $extension,
+            $command->hasExclude() ? $command->getExclude() : $command->getExcludedSpecification(),
+        );
 
         $postCollectFilesForParsingEvent = $this->eventDispatcher->dispatch(
             new PostCollectFilesForParsingEvent($command, $files),

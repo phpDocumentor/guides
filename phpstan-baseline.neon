@@ -6,6 +6,16 @@ parameters:
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
+			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'getExcludes' will always evaluate to true\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
+			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'setExcludes' will always evaluate to true\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Command/Run.php
+
+		-
 			message: "#^Cannot cast mixed to string\\.$#"
 			count: 6
 			path: packages/guides-cli/src/Command/Run.php
@@ -139,6 +149,11 @@ parameters:
 			message: "#^Used function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
 			count: 1
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:prototype\\(\\)\\.$#"
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
 
 		-
 			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
