@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
+use League\Uri\BaseUri;
 use League\Uri\Uri;
-use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
@@ -79,7 +79,7 @@ final class AssetsExtension extends AbstractExtension
             ),
             new TwigTest(
                 'external_target',
-                static fn (string|Stringable $value): bool => UriInfo::isAbsolute(Uri::createFromString($value)),
+                static fn (string|Stringable $value): bool => BaseUri::from(Uri::new($value))->isAbsolute(),
             ),
         ];
     }

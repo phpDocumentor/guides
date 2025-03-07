@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <files version="1">
+ <file path="packages/filesystem/Flysystem/FilesystemInterface.php">
+  <line number="286" hash="e2010bb2ff8572975ea792898ad31f72ea87a511">
+   <issue><![CDATA[League\Flysystem\FilesystemInterface::get(): Implicitly marking parameter $handler as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
  <file path="vendor/league/flysystem/src/FilesystemInterface.php">
   <line number="274" hash="974a66e314c847f29d4b178ad6b47395be68d98f">
    <issue><![CDATA[League\Flysystem\FilesystemInterface::get(): Implicitly marking parameter $handler as nullable is deprecated, the explicit nullable type must be used instead]]></issue>

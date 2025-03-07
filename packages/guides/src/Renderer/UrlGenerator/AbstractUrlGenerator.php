@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
 use Exception;
-use League\Uri\UriInfo;
+use League\Uri\BaseUri;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\UriFactory;
 
 use function filter_var;
 use function sprintf;
@@ -84,9 +83,7 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 
     private function isRelativeUrl(string $url): bool
     {
-        $uri = UriFactory::createUri($url);
-
-        return UriInfo::isRelativePath($uri);
+        return BaseUri::from($url)->isRelativePath();
     }
 
     public function getCurrentFileUrl(RenderContext $renderContext): string
