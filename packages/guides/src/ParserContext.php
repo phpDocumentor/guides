@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides;
 
 use League\Flysystem\FilesystemInterface;
-use League\Uri\Uri;
-use League\Uri\UriInfo;
+use League\Uri\BaseUri;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
@@ -47,8 +46,7 @@ class ParserContext
 
     public function absoluteRelativePath(string $url): string
     {
-        $uri = Uri::createFromString($url);
-        if (UriInfo::isAbsolutePath($uri)) {
+        if (BaseUri::from($url)->isAbsolutePath()) {
             return $this->currentDirectory . '/' . ltrim($url, '/');
         }
 

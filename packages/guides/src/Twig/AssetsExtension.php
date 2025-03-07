@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
+use League\Uri\BaseUri;
 use League\Uri\Uri;
-use League\Uri\UriInfo;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
@@ -27,10 +27,12 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
 use Throwable;
+use Twig\DeprecatedCallableInfo;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
+use function class_exists;
 use function sprintf;
 use function trim;
 
@@ -56,7 +58,11 @@ final class AssetsExtension extends AbstractExtension
             new TwigFunction('renderNode', $this->renderNode(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderLink', $this->renderLink(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderBreadcrumb', $this->renderBreadcrumb(...), ['is_safe' => ['html'], 'needs_context' => true]),
-            new TwigFunction('renderMenu', $this->renderMenu(...), ['is_safe' => ['html'], 'needs_context' => true, 'deprecated' => true]),
+            new TwigFunction(
+                'renderMenu',
+                $this->renderMenu(...),
+                ['is_safe' => ['html'], 'needs_context' => true] + (class_exists(DeprecatedCallableInfo::class) ? ['deprecation_info' => new DeprecatedCallableInfo('phpdocumentor/guides', '1.1.0', 'renderMenu" from "' . GlobalMenuExtension::class)] : ['deprecated' => true]),
+            ),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderOrderedListType', $this->renderOrderedListType(...), ['is_safe' => ['html'], 'needs_context' => false]),
         ];
@@ -73,7 +79,7 @@ final class AssetsExtension extends AbstractExtension
             ),
             new TwigTest(
                 'external_target',
-                static fn (string|Stringable $value): bool => UriInfo::isAbsolute(Uri::createFromString($value)),
+                static fn (string|Stringable $value): bool => BaseUri::from(Uri::new($value))->isAbsolute(),
             ),
         ];
     }

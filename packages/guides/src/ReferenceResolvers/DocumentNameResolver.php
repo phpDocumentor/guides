@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
-use League\Uri\UriInfo;
-use phpDocumentor\Guides\UriFactory;
+use League\Uri\BaseUri;
 
 use function array_pop;
 use function explode;
@@ -32,13 +31,12 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
      */
     public function absoluteUrl(string $basePath, string $url): string
     {
-        $uri = UriFactory::createUri($url);
-
-        if (UriInfo::isAbsolute($uri)) {
+        $uri = BaseUri::from($url);
+        if ($uri->isAbsolute()) {
             return $url;
         }
 
-        if (UriInfo::isAbsolutePath($uri)) {
+        if ($uri->isAbsolutePath()) {
             return $url;
         }
 

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<files version="1">
+ <file path="packages/filesystem/Flysystem/FilesystemInterface.php">
+  <line number="286" hash="e2010bb2ff8572975ea792898ad31f72ea87a511">
+   <issue><![CDATA[League\Flysystem\FilesystemInterface::get(): Implicitly marking parameter $handler as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/flysystem/src/FilesystemInterface.php">
+  <line number="274" hash="974a66e314c847f29d4b178ad6b47395be68d98f">
+   <issue><![CDATA[League\Flysystem\FilesystemInterface::get(): Implicitly marking parameter $handler as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/flysystem/src/Filesystem.php">
+  <line number="363" hash="813ac25441e5e8e2323613ee4eee44ff5927e423">
+   <issue><![CDATA[League\Flysystem\Filesystem::get(): Implicitly marking parameter $handler as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/nette/schema/src/Schema/Expect.php">
+  <line number="98" hash="af1375155757440ebfd58e5dca925b96fb0841ac">
+   <issue><![CDATA[Nette\Schema\Expect::arrayOf(): Implicitly marking parameter $keyType as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/nette/schema/src/Schema/Elements/Type.php">
+  <line number="78" hash="6a2e76e00e49203f2c092ea7e12816644b8f8233">
+   <issue><![CDATA[Nette\Schema\Elements\Type::items(): Implicitly marking parameter $keyType as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/flysystem-memory/src/MemoryAdapter.php">
+  <line number="26" hash="f0bf740e14d85a52ca37e77741186b5c5b98f50c">
+   <issue><![CDATA[League\Flysystem\Memory\MemoryAdapter::__construct(): Implicitly marking parameter $config as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/dflydev/dot-access-data/src/Exception/MissingPathException.php">
+  <line number="26" hash="96f447834334c66936af737893284c52fb2092ce">
+   <issue><![CDATA[Dflydev\DotAccessData\Exception\MissingPathException::__construct(): Implicitly marking parameter $previous as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/csv/src/AbstractCsv.php">
+  <line number="249" hash="8d3a4a94318f60e69c3685de8cad0d3f4898c555">
+   <issue><![CDATA[League\Csv\AbstractCsv::output(): Implicitly marking parameter $filename as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/csv/src/Stream.php">
+  <line number="180" hash="c9814e34949edeb814f365664d2182da05fa0200">
+   <issue><![CDATA[League\Csv\Stream::appendFilter(): Implicitly marking parameter $params as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="487" hash="de0462b80d9195d51755e594cbed894d423b7838">
+   <issue><![CDATA[League\Csv\Stream::fwrite(): Implicitly marking parameter $length as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="vendor/league/csv/src/ResultSet.php">
+  <line number="205" hash="c380ab2e507d3be0492acc1cd022e4f6de1b851b">
+   <issue><![CDATA[League\Csv\ResultSet::slice(): Implicitly marking parameter $length as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+</files>

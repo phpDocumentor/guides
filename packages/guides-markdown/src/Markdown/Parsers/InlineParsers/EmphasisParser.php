@@ -18,6 +18,7 @@ use League\CommonMark\Node\Node as CommonMarkNode;
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
 
 /** @extends AbstractInlineTextDecoratorParser<EmphasisInlineNode> */
@@ -39,7 +40,7 @@ final class EmphasisParser extends AbstractInlineTextDecoratorParser
     /** @param InlineNodeInterface[] $children */
     protected function createInlineNode(CommonMarkNode $commonMarkNode, string|null $content, array $children = []): InlineNodeInterface
     {
-        return new EmphasisInlineNode($content ?? '', $children);
+        return new EmphasisInlineNode($content ? [new PlainTextInlineNode($content)] : $children);
     }
 
     protected function supportsCommonMarkNode(CommonMarkNode $commonMarkNode): bool
