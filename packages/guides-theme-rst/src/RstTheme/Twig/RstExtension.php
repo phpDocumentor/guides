@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RstTheme\Twig;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
@@ -57,14 +59,24 @@ final class RstExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('clean_content', [$this, 'cleanContent']),
+            new TwigFilter('clean_content', $this->cleanContent(...)),
+            new TwigFilter('plaintext', $this->plaintext(...)),
         ];
+    }
+
+    public function plaintext(InlineNodeInterface $node): string
+    {
+        if ($node instanceof InlineCompoundNode) {
+            return implode('', array_map($this->plaintext(...), $node->getChildren()));
+        }
+
+        return $node->toString();
     }
 
     public function cleanContent(string $content): string
     {
         $lines = explode("\n", $content);
-        $lines = array_map('rtrim', $lines);
+        $lines = array_map(rtrim(...), $lines);
         $content = implode("\n", $lines);
 
         $content = preg_replace('/(\n){2,}/', "\n\n", $content);

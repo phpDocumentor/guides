@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules;
 
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
@@ -45,7 +46,7 @@ final class EmphasisRule extends AbstractInlineRule
 
                     $lexer->moveNext();
 
-                    return new EmphasisInlineNode($text);
+                    return new EmphasisInlineNode([new PlainTextInlineNode($text)]);
 
                 default:
                     $text .= $token->value;
