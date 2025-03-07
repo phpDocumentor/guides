@@ -29,7 +29,7 @@
         "league/tactician": "^1.1",
         "league/uri": "^7.5.1",
         "phpdocumentor/flyfinder": "^1.1 || ^2.0",
-        "phpdocumentor/filesystem": "^1.7.0",
+        "phpdocumentor/filesystem": "^1.7.1",
         "psr/event-dispatcher": "^1.0",
         "symfony/clock": "^6.4.8",
         "symfony/html-sanitizer": "^6.4.8",
