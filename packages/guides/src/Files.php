@@ -22,6 +22,9 @@ use function count;
 use function in_array;
 use function sort;
 
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+
 /** @implements IteratorAggregate<string> */
 final class Files implements IteratorAggregate, Countable
 {
@@ -35,7 +38,7 @@ final class Files implements IteratorAggregate, Countable
         }
 
         $this->files[] = $filename;
-        sort($this->files);
+        sort($this->files, SORT_NATURAL | SORT_FLAG_CASE);
     }
 
     /** @return Iterator<string> */
