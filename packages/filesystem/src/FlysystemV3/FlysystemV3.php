@@ -52,6 +52,12 @@ final class FlysystemV3 implements FileSystem
         return true;
     }
 
+    /** @param resource $resource */
+    public function putStream(string $path, $resource): void
+    {
+        $this->filesystem->writeStream($path, $resource);
+    }
+
     /** @return FileAttributes[] */
     public function listContents(string $directory = '', bool $recursive = false): array
     {

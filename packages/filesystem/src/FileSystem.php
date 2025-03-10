@@ -46,6 +46,9 @@ interface FileSystem
 
     public function put(string $path, string $contents): bool;
 
+    /** @param resource $resource */
+    public function putStream(string $path, $resource): void;
+
     /** @return StorageAttributes[] */
     public function listContents(string $directory = '', bool $recursive = false): array;
 
