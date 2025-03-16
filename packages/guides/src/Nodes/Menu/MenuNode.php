@@ -26,6 +26,7 @@ use const PHP_INT_MAX;
 abstract class MenuNode extends CompoundNode
 {
     private InlineCompoundNode|null $caption = null;
+    private bool $reversed = false;
     protected const DEFAULT_DEPTH = PHP_INT_MAX;
 
     /** @param MenuEntryNode[] $menuEntries */
@@ -53,6 +54,19 @@ abstract class MenuNode extends CompoundNode
     {
         $that = clone $this;
         $that->caption = $caption;
+
+        return $that;
+    }
+
+    public function isReversed(): bool
+    {
+        return $this->reversed;
+    }
+
+    public function withReversed(bool $reversed): MenuNode
+    {
+        $that = clone $this;
+        $that->reversed = $reversed;
 
         return $that;
     }
