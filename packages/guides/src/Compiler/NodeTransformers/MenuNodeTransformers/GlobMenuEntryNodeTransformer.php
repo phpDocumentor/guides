@@ -49,6 +49,10 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         $globExclude = explode(',', $currentMenu->getOption('globExclude') . '');
         $menuEntries = [];
         foreach ($documentEntries as $documentEntry) {
+            if ($documentEntry->isOrphan()) {
+                continue;
+            }
+
             if (
                 !self::matches($documentEntry->getFile(), $entryNode, $currentPath, $globExclude)
             ) {

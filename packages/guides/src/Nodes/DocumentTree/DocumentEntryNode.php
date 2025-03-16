@@ -34,6 +34,7 @@ final class DocumentEntryNode extends EntryNode
         private readonly TitleNode $titleNode,
         private readonly bool $isRoot = false,
         private array $additionalData = [],
+        private bool $orphan = false,
     ) {
     }
 
@@ -107,6 +108,11 @@ final class DocumentEntryNode extends EntryNode
     public function getAdditionalData(string $key): Node|null
     {
         return $this->additionalData[$key] ?? null;
+    }
+
+    public function isOrphan(): bool
+    {
+        return $this->orphan;
     }
 
     public function addAdditionalData(string $key, Node $value): void
