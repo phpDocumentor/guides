@@ -66,6 +66,7 @@ final class DocumentEntryRegistrationTransformer implements NodeTransformer
             $node->getTitle() ?? TitleNode::emptyNode(),
             $node->isRoot(),
             $additionalData,
+            $node->isOrphan(),
         );
         $compilerContext->getProjectNode()->addDocumentEntry($entry);
 
