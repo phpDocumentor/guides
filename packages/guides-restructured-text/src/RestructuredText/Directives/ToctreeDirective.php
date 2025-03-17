@@ -32,6 +32,43 @@ use phpDocumentor\Guides\Settings\SettingsManager;
  * which could be resolved by using https://github.com/phpDocumentor/guides/pull/21?
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
+ *
+ * Parameters:
+ *
+ * :caption:
+ *      (Text with inline markup)
+ *      Caption to be displayed above the menu
+ *
+ * :depth:
+ *     (integer)
+ *     Maximum depth of the menu to display. Does not affect other menus.
+ *
+ * :glob:
+ *     (bool)
+ *     If true glob patterns containing stars are considered during menu building.
+ *     The entries are added to the Document Tree. Orphans are ignored
+ *
+ * :globExclude:
+ *     (comma separated string list)
+ *     paths to be excluded from the glob patterns
+ *
+ * :hidden:
+ *     (bool)
+ *     The menu will not be displayed within the content and is only used to
+ *     change the global document tree.
+ *
+ * :reversed:
+ *     (bool)
+ *     Display documents in reversed order. They are also added to the document
+ *     tree in reversed order and will be displayed in that order where ever a menu
+ *     is displayed
+ *
+ * :titlesonly:
+ *     Do not display the headlines of the current or sub documents, only display
+ *     page titles.
+ *
+ * :maxdepth:
+ *     Synonym of :depth:, depth prevails if both are set.
  */
 final class ToctreeDirective extends BaseDirective
 {
@@ -74,6 +111,10 @@ final class ToctreeDirective extends BaseDirective
             $blockContextOfCaption = new BlockContext($blockContext->getDocumentParserContext(), (string) $options['caption']->getValue());
             $inlineNode = $this->startingRule->apply($blockContextOfCaption);
             $tocNode = $tocNode->withCaption($inlineNode);
+        }
+
+        if ($directive->getOptionBool('reversed')) {
+            $tocNode = $tocNode->withReversed(true);
         }
 
         return $tocNode;

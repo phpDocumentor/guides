@@ -66,6 +66,12 @@ final class DocumentEntryNode extends EntryNode
         return $this->entries;
     }
 
+    /** @param array<DocumentEntryNode|ExternalEntryNode> $entries */
+    public function setMenuEntries(array $entries): void
+    {
+        $this->entries = $entries;
+    }
+
     /** @return SectionEntryNode[] */
     public function getSections(): array
     {
