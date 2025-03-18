@@ -68,7 +68,7 @@
         "phpunit/phpunit": "^10.5",
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^1.2.10",
-        "squizlabs/php_codesniffer": "^3.11",
+        "squizlabs/php_codesniffer": "^3.12",
         "symfony/finder": "^6.4.8",
         "symplify/phpstan-rules": "^13.0"
     },
