@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\EmbeddedFrame;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -36,6 +37,11 @@ use function array_filter;
  * - string allow The allow attribute of the iframe, default is 'encrypted-media; picture-in-picture; web-share'
  * - bool allowfullscreen Whether the video should be allowed to go fullscreen, default is true
  */
+#[Option('width', type: OptionType::Integer, default: 560, description: 'Width of the video')]
+#[Option('title', type: OptionType::String, description: 'Title of the video')]
+#[Option('height', type: OptionType::Integer, default: 315, description: 'Height of the video')]
+#[Option('allow', type: OptionType::String, default: 'encrypted-media; picture-in-picture; web-share', description: 'Allow attribute of the iframe')]
+#[Option('allowfullscreen', type: OptionType::Boolean, default: true, description: 'Whether the video should be allowed to go fullscreen')]
 final class YoutubeDirective extends BaseDirective
 {
     public function getName(): string
@@ -51,16 +57,6 @@ final class YoutubeDirective extends BaseDirective
             'https://www.youtube-nocookie.com/embed/' . $directive->getData(),
         );
 
-        return $node->withOptions(
-            array_filter(
-                [
-                    'width' => $directive->getOption('width')->getValue() ?? 560,
-                    'title' => $directive->getOption('title')->getValue(),
-                    'height' => $directive->getOption('height')->getValue() ?? 315,
-                    'allow' => $directive->getOption('allow')->getValue() ?? 'encrypted-media; picture-in-picture; web-share',
-                    'allowfullscreen' => (bool) ($directive->getOption('allowfullscreen')->getValue() ?? true),
-                ],
-            ),
-        );
+        return $node->withOptions($this->readAllOptions($directive));
     }
 }

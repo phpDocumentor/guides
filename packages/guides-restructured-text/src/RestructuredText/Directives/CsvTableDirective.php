@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
