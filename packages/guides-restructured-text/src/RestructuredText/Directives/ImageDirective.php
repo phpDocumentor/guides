@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -37,6 +38,14 @@ use const FILTER_VALIDATE_URL;
  *      :width: 100
  *      :title: An image
  */
+#[Option(name: 'width', description: 'Width of the image in pixels')]
+#[Option(name: 'height', description: 'Height of the image in pixels')]
+#[Option(name: 'alt', description: 'Alternative text for the image')]
+#[Option(name: 'scale', description: 'Scale of the image, e.g. 0.5 for half size')]
+#[Option(name: 'target', description: 'Target for the image, e.g. a link to the image')]
+#[Option(name: 'class', description: 'CSS class to apply to the image')]
+#[Option(name: 'name', description: 'Name of the image, used for references')]
+#[Option(name: 'align', description: 'Alignment of the image, e.g. left, right, center')]
 final class ImageDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/9dUrzu/3 */
@@ -67,8 +76,11 @@ final class ImageDirective extends BaseDirective
             ),
         );
         if ($directive->hasOption('target')) {
-            $targetReference = (string) $directive->getOption('target')->getValue();
-            $node->setTarget($this->resolveLinkTarget($targetReference));
+            $node->setTarget(
+                $this->resolveLinkTarget(
+                    $this->readOption($directive, 'target')
+                ),
+            );
         }
 
         return $node;
