@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
@@ -36,6 +37,9 @@ use function array_map;
  */
 abstract class BaseDirective
 {
+    /** @var array<string, Option|null> Cache of Option attributes indexed by option name */
+    private array $optionAttributeCache;
+
     /**
      * Get the directive name
      */
@@ -94,4 +98,87 @@ abstract class BaseDirective
     {
         return array_map(static fn (DirectiveOption $option): bool|float|int|string|null => $option->getValue(), $options);
     }
+
+    /**
+     * Gets an option value from a directive based on attribute configuration.
+     *
+     * Looks up the option in the directive and returns its value converted to the
+     * appropriate type based on the Option attribute defined on this directive class.
+     * If the option is not present in the directive, returns the default value from the attribute.
+     *
+     * @param Directive $directive The directive containing the options
+     * @param string $optionName The name of the option to retrieve
+     *
+     * @return mixed The option value converted to the appropriate type, or the default value
+     */
+    final protected function readOption(Directive $directive, string $optionName): mixed
+    {
+        $optionAttribute = $this->findOptionAttribute($optionName);
+
+        return $this->getOptionValue($directive, $optionAttribute);
+    }
+
+    final protected function readAllOptions(Directive $directive): array
+    {
+        $this->initialize();
+
+        return array_map(
+            fn (Option $option) => $this->getOptionValue($directive, $option),
+            $this->optionAttributeCache
+        );
+    }
+
+    private function getOptionValue(Directive $directive, Option|null $option): mixed
+    {
+        if ($option === null) {
+            return null;
+        }
+
+        if (!$directive->hasOption($option->name)) {
+            return $option->default;
+        }
+
+        $directiveOption = $directive->getOption($option->name);
+        $value = $directiveOption->getValue();
+
+        return match ($option->type) {
+            OptionType::Integer => (int) $value,
+            OptionType::Boolean => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
+            OptionType::String => (string) $value,
+            OptionType::Array => (array) $value,
+            default => $value,
+        };
+    }
+
+
+    /**
+     * Finds the Option attribute for the given option name on the current class.
+     *
+     * @param string $optionName The option name to look for
+     *
+     * @return Option|null The Option attribute if found, null otherwise
+     */
+    private function findOptionAttribute(string $optionName): ?Option
+    {
+        $this->initialize();
+
+        return $this->optionAttributeCache[$optionName] ?? null;
+    }
+
+    private function initialize(): void
+    {
+        if (isset($this->optionAttributeCache)) {
+            return;
+        }
+
+        $reflection = new \ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Option::class);
+        $this->optionAttributeCache = [];
+        foreach ($attributes as $attribute) {
+            $option = $attribute->newInstance();
+            $this->optionAttributeCache[$option->name] = $option;
+        }
+    }
 }
+
+

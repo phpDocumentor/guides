@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
@@ -27,6 +28,8 @@ use function explode;
 use function sprintf;
 use function str_replace;
 
+#[Option(name: 'literal', description: 'If set, the contents will be rendered as a literal block.')]
+#[Option(name: 'code', description: 'If set, the contents will be rendered as a code block with the specified language.')]
 final class IncludeDirective extends BaseDirective
 {
     public function __construct(private readonly DocumentRule $startingRule)
