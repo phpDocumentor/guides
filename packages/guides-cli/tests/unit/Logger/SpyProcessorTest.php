@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Cli\Logger;
 
+use DateTimeImmutable;
+use Monolog\Level;
+use Monolog\LogRecord;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
 
 final class SpyProcessorTest extends TestCase
 {
@@ -27,7 +31,21 @@ final class SpyProcessorTest extends TestCase
     public function testItKnowsWhenALogIsEmitted(): void
     {
         $process = new SpyProcessor();
-        $process(['channel' => 'test', 'level_name' => 'warning']);
+        $process(new LogRecord(new DateTimeImmutable(), 'test', Level::Warning, 'test message'));
         self::assertTrue($process->hasBeenCalled());
+    }
+
+    public function testItKnowsWhenAErrorIsEmitted(): void
+    {
+        $process = new SpyProcessor();
+        $process(new LogRecord(new DateTimeImmutable(), 'test', Level::Error, 'test message'));
+        self::assertTrue($process->hasBeenCalled());
+    }
+
+    public function testIsNotCalledWhenLevelIsTolow(): void
+    {
+        $process = new SpyProcessor(LogLevel::ERROR);
+        $process(new LogRecord(new DateTimeImmutable(), 'test', Level::Warning, 'test message'));
+        self::assertFalse($process->hasBeenCalled());
     }
 }
