@@ -26,6 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *      This is a note admonition.
  * ```
  */
+#[Attributes\Directive(name: 'note')]
 final class NoteDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
