@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Settings;
 
 use phpDocumentor\FileSystem\Finder\Exclude;
+use Psr\Log\LogLevel;
 
 final class ProjectSettings
 {
@@ -32,6 +33,8 @@ final class ProjectSettings
     /** @var string[]  */
     private array $outputFormats = ['html'];
     private string $logPath = 'php://stder';
+
+    /** @var LogLevel::*|null */
     private string|null $failOnError = null;
     private bool $showProgressBar = true;
     private bool $linksRelative = false;
@@ -135,11 +138,13 @@ final class ProjectSettings
         return $this->failOnError !== null;
     }
 
+    /** @return LogLevel::* */
     public function getFailOnError(): string|null
     {
         return $this->failOnError;
     }
 
+    /** @param LogLevel::* $logLevel */
     public function setFailOnError(string $logLevel): void
     {
         $this->failOnError = $logLevel;

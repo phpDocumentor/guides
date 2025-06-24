@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Cli\Logger;
 
+use Monolog\Level;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 use Psr\Log\LogLevel;
@@ -27,9 +28,16 @@ use function strtolower;
 final class SpyProcessor implements ProcessorInterface
 {
     private bool $hasBeenCalled = false;
+    private Level $level;
 
-    public function __construct(private string|null $level = LogLevel::WARNING)
+    /** @param LogLevel::* $level */
+    public function __construct(string|null $level = LogLevel::WARNING)
     {
+        if ($level === null) {
+            $level = LogLevel::WARNING;
+        }
+
+        $this->level = Level::fromName(strtolower($level));
     }
 
     public function hasBeenCalled(): bool
@@ -37,9 +45,9 @@ final class SpyProcessor implements ProcessorInterface
         return $this->hasBeenCalled;
     }
 
-    public function __invoke(array|LogRecord $record): array|LogRecord
+    public function __invoke(LogRecord $record): LogRecord
     {
-        if (strtolower($record['level_name']) === $this->level) {
+        if ($this->level->includes($record->level)) {
             $this->hasBeenCalled = true;
         }
 

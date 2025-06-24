@@ -256,7 +256,7 @@ final class Run extends Command
         }
 
         if ($settings->isFailOnError()) {
-            $spyProcessor = new SpyProcessor($settings->getFailOnError());
+            $spyProcessor = new SpyProcessor($settings->getFailOnError() ?? LogLevel::WARNING);
             $this->logger->pushProcessor($spyProcessor);
         }
 
