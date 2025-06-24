@@ -40,10 +40,29 @@ abstract class BaseDirective
     /** @var array<string, Option|null> Cache of Option attributes indexed by option name */
     private array $optionAttributeCache;
 
+    private string $name;
+
+    private array $aliases;
+
     /**
      * Get the directive name
      */
-    abstract public function getName(): string;
+    public function getName(): string
+    {
+        if (isset($this->name)) {
+            return $this->name;
+        }
+
+        $reflection = new \ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        if (count($attributes) === 0) {
+            throw new \LogicException('Directive class must have a Directive attribute');
+        }
+
+        $this->name = $attributes[0]->newInstance()->name;
+        return $this->name;
+    }
 
     /**
      * Allow a directive to be registered under multiple names.
@@ -54,7 +73,35 @@ abstract class BaseDirective
      */
     public function getAliases(): array
     {
-        return [];
+        if (isset($this->aliases)) {
+            return $this->aliases;
+        }
+
+        $reflection = new \ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+        $this->aliases = [];
+        if (count($attributes) !== 0) {
+            $this->aliases = $attributes[0]->newInstance()->aliases;
+        }
+
+        return $this->aliases;
+    }
+
+    /**
+     * Returns whether this directive has been upgraded to a new version.
+     *
+     * In the new version of directives, the processing is done during the compile phase.
+     * This method only exists to allow for backward compatibility with directives that
+     * were written before the upgrade.
+     *
+     * @internal
+     */
+    final public function isUpgraded(): bool
+    {
+        $reflection = new \ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        return count($attributes) === 1;
     }
 
     /**
@@ -87,6 +134,11 @@ abstract class BaseDirective
         Directive $directive,
     ): Node {
         return new GenericNode($directive->getVariable(), $directive->getData());
+    }
+
+    public function createNode(Directive $directive): Node|null
+    {
+        return null;
     }
 
     /**

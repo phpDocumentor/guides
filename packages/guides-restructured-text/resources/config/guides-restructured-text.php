@@ -374,6 +374,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
         ->set(InlineMarkupRule::class)
+
+        ->set(\phpDocumentor\Guides\RestructuredText\Compiler\Passes\DirectiveProcessPass::class)
+        ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
+        ->tag('phpdoc.guides.compiler.nodeTransformers')
         ->set(DefaultCodeNodeOptionMapper::class)
         ->alias(CodeNodeOptionMapper::class, DefaultCodeNodeOptionMapper::class);
 };
