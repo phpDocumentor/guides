@@ -52,7 +52,7 @@
     "require-dev": {
         "ext-dom": "*",
         "ext-libxml": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
         "doctrine/coding-standard": "^13.0",
         "fakerphp/faker": "^1.24",
         "fig/log-test": "^1.0",
