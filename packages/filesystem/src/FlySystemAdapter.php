@@ -92,4 +92,9 @@ class FlySystemAdapter implements FileSystem
     {
         return $this->filesystem->find($specification);
     }
+
+    public function isDirectory(string $path): bool
+    {
+        return $this->filesystem->isDirectory($path);
+    }
 }

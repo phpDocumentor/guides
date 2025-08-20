@@ -75,4 +75,9 @@ class FlysystemV1 implements Filesystem
             yield new \phpDocumentor\FileSystem\FlysystemV1\StorageAttributes($file);
         }
     }
+
+    public function isDirectory(string $path): bool
+    {
+        return $this->filesystem->directoryExists($path);
+    }
 }

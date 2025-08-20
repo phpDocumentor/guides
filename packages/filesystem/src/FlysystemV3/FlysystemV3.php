@@ -35,6 +35,11 @@ final class FlysystemV3 implements FileSystem
         return $this->filesystem->has($path);
     }
 
+    public function isDirectory(string $path): bool
+    {
+        return $this->filesystem->directoryExists($path);
+    }
+
     public function readStream(string $path): mixed
     {
         return $this->filesystem->readStream($path);
