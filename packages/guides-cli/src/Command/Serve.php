@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Cli\Command;
 
-use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\Tactician\CommandBus;
 use phpDocumentor\FileSystem\FlySystemAdapter;
+use phpDocumentor\Guides\Cli\Internal\HttpHandler;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
+use phpDocumentor\Guides\Cli\Internal\UpdatePageServer;
 use phpDocumentor\Guides\Cli\Watcher\FileModifiedEvent;
 use phpDocumentor\Guides\Cli\Watcher\INotifyWatcher;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Ratchet\App;
 use React\EventLoop\Loop;
-use React\Http\HttpServer;
-use React\Http\Message\Response;
-use React\Socket\SocketServer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Routing\Route;
 use function function_exists;
 use function sprintf;
-use function trim;
 
 final class Serve extends Command
 {
+    private UpdatePageServer $wsServer;
+
     public function __construct(
         private EventDispatcherInterface $dispatcher,
         private SettingsBuilder $settingsBuilder,
         private CommandBus $commandBus,
     ) {
         parent::__construct('serve');
+        $this->wsServer = new UpdatePageServer();
     }
 
     protected function configure(): void
@@ -73,6 +74,9 @@ final class Serve extends Command
                     ),
                 );
                 $output->writeln('Rerendering completed.');
+
+                // Notify connected clients that they should reload
+                $this->wsServer->sendUpdate();
             },
         );
 
@@ -86,7 +90,6 @@ final class Serve extends Command
             ),
         );
 
-
         $dir = $input->getOption('output');
         if ($dir === null) {
             $output->writeln('<error>Please specify an output directory using --output option</error>');
@@ -96,53 +99,38 @@ final class Serve extends Command
 
         $files = FlySystemAdapter::createForPath($dir);
 
-        $http = new HttpServer(static function (ServerRequestInterface $request) use ($output, $files) {
-            $output->writeln(
-                sprintf(
-                    'Received request for %s from %s',
-                    $request->getUri(),
-                    $request->getServerParams()['REMOTE_ADDR'] ?? 'unknown',
-                ),
-            );
+        // Create HTTP handler for serving files
+        $httpHandler = new HttpHandler($output, $files);
 
-            $requestPath = trim($request->getUri()->getPath(), '/');
+        // Setup the Ratchet App with routes
+        $app = new App('localhost', 1337, '0.0.0.0', $loop);
 
-            $output->writeln(sprintf(
-                'Request path: %s',
-                $requestPath,
-            ));
+        // Add WebSocket route at /ws
+        $app->route('/ws', $this->wsServer, ['*']);
 
-            $detector = new ExtensionMimeTypeDetector();
-            if ($files->isDirectory($requestPath)) {
-                $requestPath .= '/index.html';
-            }
+        // Add root path first
+        $app->route('/', $httpHandler, ['*']);
 
-            if ($files->has($requestPath)) {
-                return Response::html(
-                    $files->read($requestPath) ?: '',
-                )->withHeader(
-                    'Content-Type',
-                    $detector->detectMimeTypeFromPath($requestPath) ?? 'text/plain',
-                );
-            }
+        // Add HTTP server for all other routes - use a different pattern syntax
+        $app->routes->add('catch-all', new Route(
+            '/{url}',
+            ['_controller' => $httpHandler],
+            ['url' => '.+'],
+            [],
+            'localhost',
+            [],
+            ['GET'],
+        ));
 
-            return Response::html(
-                "page not found!\n",
-            )->withStatus(404);
-        });
-
-        $socket = new SocketServer('0.0.0.0:1337', [], $loop);
-        $http->listen($socket);
-
-        $output->writeln(sprintf('Server running at http://127.0.0.1:1337'));
+        $output->writeln(sprintf('Server running at http://localhost:1337'));
+        $output->writeln('WebSocket server running at ws://localhost:1337/ws');
         $output->writeln('Press Ctrl+C to stop the server');
 
         // Handle SIGINT (Ctrl+C) gracefully if PCNTL extension is available
         if (function_exists('pcntl_signal')) {
             // 2 is the signal number for SIGINT (Ctrl+C)
-            pcntl_signal(2, static function () use ($loop, $socket, $output): void {
+            pcntl_signal(2, static function () use ($loop, $output): void {
                 $output->writeln('Shutting down server...');
-                $socket->close();
                 $loop->stop();
                 $output->writeln('Server stopped');
                 exit(0);
@@ -151,14 +139,7 @@ final class Serve extends Command
             $output->writeln('Note: PCNTL extension not available, Ctrl+C handling may not work properly');
         }
 
-        // Create a periodic timer to ensure the loop regularly processes events
-        // This helps in processing signals even when there are no other events
-        $loop->addPeriodicTimer(0.5, static function (): void {
-            // This empty callback just ensures the loop wakes up regularly
-            // which improves the responsiveness to signals
-        });
-
-        $loop->run();
+        $app->run();
 
         return Command::SUCCESS;
     }

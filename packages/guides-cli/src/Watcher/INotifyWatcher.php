@@ -39,19 +39,31 @@ class INotifyWatcher
             }
 
             $path = $this->watchDescriptors[$event['wd']]['path'];
-            switch ($event['mask']) {
-                case IN_MODIFY:
-                    $this->dispatcher->dispatch(new FileModifiedEvent($path));
-                    break;
-                case IN_CREATE:
-                    //$this->dispatcher->dispatch(new FileCreatedEvent($path, $event['name']));
-                    break;
-                case IN_DELETE:
-                    //$this->dispatcher->dispatch(new FileDeletedEvent($path, $event['name']));
-                    break;
-                default:
-                    var_dump('Unhandled event mask: ' . $event['mask']);
+
+            // File modified event - triggered by direct modification
+            if ($event['mask'] & IN_MODIFY) {
+                $this->dispatcher->dispatch(new FileModifiedEvent($path));
+                return;
             }
+
+            // File closed after writing - common on macOS/Orbstack
+            if ($event['mask'] & IN_CLOSE_WRITE) {
+                $this->dispatcher->dispatch(new FileModifiedEvent($path));
+                return;
+            }
+
+            if ($event['mask'] & IN_CREATE) {
+                //$this->dispatcher->dispatch(new FileCreatedEvent($path, $event['name']));
+                return;
+            }
+
+            if ($event['mask'] & IN_DELETE) {
+                //$this->dispatcher->dispatch(new FileDeletedEvent($path, $event['name']));
+                return;
+            }
+
+            // Log unhandled event types for debugging
+            var_dump('Unhandled event mask: ' . $event['mask']);
         }
     }
 
@@ -65,7 +77,12 @@ class INotifyWatcher
             $this->loop->addReadStream($this->inotify, $this);
         }
 
-        $descriptor = inotify_add_watch($this->inotify, $this->inputPath . DIRECTORY_SEPARATOR . $path, IN_MODIFY | IN_CREATE | IN_DELETE);
+        // Add IN_CLOSE_WRITE to the watch mask to support macOS/Orbstack
+        $descriptor = inotify_add_watch(
+            $this->inotify,
+            $this->inputPath . DIRECTORY_SEPARATOR . $path,
+            IN_MODIFY | IN_CLOSE_WRITE | IN_CREATE | IN_DELETE
+        );
         $this->watchDescriptors[$descriptor] = ['path' => $path];
     }
 }
