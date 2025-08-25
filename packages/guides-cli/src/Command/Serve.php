@@ -2,9 +2,19 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Cli\Command;
 
 use League\Tactician\CommandBus;
+use Monolog\Handler\ErrorLogHandler;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\ServerFactory;
@@ -12,6 +22,7 @@ use phpDocumentor\Guides\Cli\Internal\Watcher\FileModifiedEvent;
 use phpDocumentor\Guides\Cli\Internal\Watcher\INotifyWatcher;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\Loop;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,6 +34,7 @@ use function sprintf;
 final class Serve extends Command
 {
     public function __construct(
+        private LoggerInterface $logger,
         private EventDispatcherInterface $dispatcher,
         private SettingsBuilder $settingsBuilder,
         private CommandBus $commandBus,
@@ -41,6 +53,7 @@ final class Serve extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM));
         // Enable tick processing for signal handling
         declare(ticks=1);
 

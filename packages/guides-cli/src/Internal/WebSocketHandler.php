@@ -2,8 +2,18 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Cli\Internal;
 
+use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\RFC6455\Messaging\MessageInterface;
 use Ratchet\WebSocket\MessageComponentInterface;
@@ -12,9 +22,10 @@ use Throwable;
 
 final class WebSocketHandler implements MessageComponentInterface
 {
-    private $clients;
+    /** @var SplObjectStorage<ConnectionInterface, null> */
+    private SplObjectStorage $clients;
 
-    public function __construct()
+    public function __construct(private LoggerInterface $logger)
     {
         $this->clients = new SplObjectStorage();
     }
@@ -22,15 +33,13 @@ final class WebSocketHandler implements MessageComponentInterface
     public function onOpen(ConnectionInterface $conn): void
     {
         $this->clients->attach($conn);
-        echo "New connection! ({$conn->resourceId})\n";
+        $this->logger->info('New WebSocket connection {resourceId}', ['resourceId' => $conn->resourceId]);
     }
 
     public function onClose(ConnectionInterface $conn): void
     {
-        // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
-
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        $this->logger->info('WebSocket connection {resourceId} has disconnected', ['resourceId' => $conn->resourceId]);
     }
 
     public function onError(ConnectionInterface $conn, Throwable $e): void

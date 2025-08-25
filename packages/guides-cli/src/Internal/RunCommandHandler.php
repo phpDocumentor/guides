@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Cli\Internal;
 
 use Flyfinder\Path;
@@ -17,19 +26,26 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Symfony\Component\Console\Input\InputInterface;
+
+use function array_map;
+use function array_reduce;
+use function array_shift;
+use function assert;
+use function method_exists;
 
 class RunCommandHandler
 {
     public function __construct(
         private CommandBus $commandBus,
         private ThemeManager $themeManager,
-    )
-    {
+    ) {
     }
 
+    /** @return DocumentNode[] */
     public function handle(RunCommand $command): array
     {
         $settings = $command->settings;

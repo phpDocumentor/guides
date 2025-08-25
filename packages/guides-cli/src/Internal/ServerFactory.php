@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Cli\Internal;
 
 use phpDocumentor\FileSystem\FlySystemAdapter;
@@ -19,7 +28,7 @@ final class ServerFactory
     public function createWebserver(FlySystemAdapter $files, LoopInterface|null $loop, string $host, string $listen, int $port): Server
     {
         $httpHandler = new HttpHandler($this->logger, $files);
-        $wsServer = new WebSocketHandler();
+        $wsServer = new WebSocketHandler($this->logger);
         $host = 'localhost';
 
 
