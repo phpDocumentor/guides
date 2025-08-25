@@ -33,6 +33,7 @@
         "symfony/console": "^5.4 || ^6.3 || ^7.0",
         "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
         "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0",
+        "cboden/ratchet": "^0.4.4",
         "react/http": "^v1.11",
         "react/socket": "^v1.16",
         "league/mime-type-detection": "^1.16"
