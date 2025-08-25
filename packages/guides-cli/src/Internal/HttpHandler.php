@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Cli\Internal;
 
 use GuzzleHttp\Psr7\Message;
@@ -77,6 +86,7 @@ final class HttpHandler implements HttpServerInterface
 
             $conn->send(Message::toString(new Response(200, $headers, $content)));
             $conn->close();
+
             return;
         }
 
@@ -118,8 +128,7 @@ EOT;
         $this->close($conn, 500);
     }
 
-    /** @param string $msg */
-    public function onMessage(ConnectionInterface $from, $msg): void
+    public function onMessage(ConnectionInterface $from, string $msg): void
     {
         // TODO: Implement onMessage() method.
     }
