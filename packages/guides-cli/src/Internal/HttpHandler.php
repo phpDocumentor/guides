@@ -9,9 +9,10 @@ use GuzzleHttp\Psr7\Response;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use Psr\Http\Message\RequestInterface;
+use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\Http\CloseResponseTrait;
 use Ratchet\Http\HttpServerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
 use function sprintf;
@@ -21,10 +22,12 @@ use function trim;
 
 final class HttpHandler implements HttpServerInterface
 {
+    use CloseResponseTrait;
+
     private ExtensionMimeTypeDetector $detector;
 
     public function __construct(
-        private OutputInterface $output,
+        private LoggerInterface $logger,
         private FlySystemAdapter $files,
     ) {
         $this->detector = new ExtensionMimeTypeDetector();
@@ -39,7 +42,7 @@ final class HttpHandler implements HttpServerInterface
         }
 
         $path = $request->getUri()->getPath();
-        $this->output->writeln(
+        $this->logger->info(
             sprintf(
                 'Received request for %s from %s',
                 $path,
@@ -54,11 +57,6 @@ final class HttpHandler implements HttpServerInterface
         if ($requestPath === '') {
             $requestPath = 'index.html';
         }
-
-        $this->output->writeln(sprintf(
-            'Request path: %s',
-            $requestPath,
-        ));
 
         if ($this->files->isDirectory($requestPath)) {
             $requestPath .= '/index.html';
@@ -78,16 +76,17 @@ final class HttpHandler implements HttpServerInterface
             ];
 
             $conn->send(Message::toString(new Response(200, $headers, $content)));
-        } else {
-            $content = '<!DOCTYPE html><html><body><h1>404 - Page Not Found</h1></body></html>';
-            $headers = [
-                'Content-Type' => 'text/html',
-                'Content-Length' => strlen($content),
-            ];
-
-            $conn->send(Message::toString(new Response(404, $headers, $content)));
+            $conn->close();
+            return;
         }
 
+        $content = '<!DOCTYPE html><html><body><h1>404 - Page Not Found</h1></body></html>';
+        $headers = [
+            'Content-Type' => 'text/html',
+            'Content-Length' => strlen($content),
+        ];
+
+        $conn->send(Message::toString(new Response(404, $headers, $content)));
         $conn->close();
     }
 
@@ -109,17 +108,18 @@ EOT;
         return str_replace('</body>', $injection . '</body>', $html);
     }
 
-    function onClose(ConnectionInterface $conn): void
+    public function onClose(ConnectionInterface $conn): void
     {
-        // TODO: Implement onClose() method.
+        $this->close($conn);
     }
 
-    function onError(ConnectionInterface $conn, Throwable $e): void
+    public function onError(ConnectionInterface $conn, Throwable $e): void
     {
-        // TODO: Implement onError() method.
+        $this->close($conn, 500);
     }
 
-    function onMessage(ConnectionInterface $from, $msg): void
+    /** @param string $msg */
+    public function onMessage(ConnectionInterface $from, $msg): void
     {
         // TODO: Implement onMessage() method.
     }
