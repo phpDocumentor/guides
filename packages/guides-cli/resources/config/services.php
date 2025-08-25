@@ -11,6 +11,7 @@ use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
 use phpDocumentor\Guides\Cli\Command\SettingsBuilder;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\RunCommandHandler;
+use phpDocumentor\Guides\Cli\Internal\ServerFactory;
 use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -56,5 +57,6 @@ return static function (ContainerConfigurator $container): void {
         ->set(SettingsBuilder::class)
         ->set(RunCommandHandler::class)
         ->tag('phpdoc.guides.command', ['command' => RunCommand::class])
+        ->set(ServerFactory::class)
         ;
 };

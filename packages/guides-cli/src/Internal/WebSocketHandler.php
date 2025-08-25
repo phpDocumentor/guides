@@ -10,7 +10,7 @@ use Ratchet\WebSocket\MessageComponentInterface;
 use SplObjectStorage;
 use Throwable;
 
-final class UpdatePageServer implements MessageComponentInterface
+final class WebSocketHandler implements MessageComponentInterface
 {
     private $clients;
 
@@ -19,13 +19,13 @@ final class UpdatePageServer implements MessageComponentInterface
         $this->clients = new SplObjectStorage();
     }
 
-    function onOpen(ConnectionInterface $conn): void
+    public function onOpen(ConnectionInterface $conn): void
     {
         $this->clients->attach($conn);
         echo "New connection! ({$conn->resourceId})\n";
     }
 
-    function onClose(ConnectionInterface $conn): void
+    public function onClose(ConnectionInterface $conn): void
     {
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
@@ -33,7 +33,7 @@ final class UpdatePageServer implements MessageComponentInterface
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
-    function onError(ConnectionInterface $conn, Throwable $e): void
+    public function onError(ConnectionInterface $conn, Throwable $e): void
     {
         $conn->close();
     }

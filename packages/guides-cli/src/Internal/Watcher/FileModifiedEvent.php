@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Cli\Watcher;
+namespace phpDocumentor\Guides\Cli\Internal\Watcher;
 
 final class FileModifiedEvent
 {

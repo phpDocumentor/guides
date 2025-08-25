@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace phpDocumentor\Guides\Cli\Watcher;
+namespace phpDocumentor\Guides\Cli\Internal\Watcher;
 
+use Evenement\EventEmitter;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use React\EventLoop\LoopInterface;
 
