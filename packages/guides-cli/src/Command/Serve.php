@@ -20,7 +20,14 @@ use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\ServerFactory;
 use phpDocumentor\Guides\Cli\Internal\Watcher\FileModifiedEvent;
 use phpDocumentor\Guides\Cli\Internal\Watcher\INotifyWatcher;
+use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostParseDocument;
+use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
+use phpDocumentor\Guides\Handlers\ParseFileCommand;
+use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
+use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\DocumentListIterator;
+use phpDocumentor\Guides\Renderer\DocumentTreeIterator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Loop;
@@ -91,36 +98,80 @@ final class Serve extends Command
             },
         );
 
+        $this->settingsBuilder->overrideWithInput($input);
+
+        $settings = $this->settingsBuilder->getSettings();
+        $projectNode = $this->settingsBuilder->createProjectNode();
+        $sourceFileSystem = FlySystemAdapter::createForPath($settings->getInput());
+
+        $documents = $this->commandBus->handle(
+            new RunCommand(
+                $settings,
+                $projectNode,
+                $input,
+            ),
+        );
+
         $this->dispatcher->addListener(
             FileModifiedEvent::class,
-            function (FileModifiedEvent $event) use ($app, $input, $output): void {
+            function (FileModifiedEvent $event) use ($sourceFileSystem, $projectNode, $settings, $app, $output): void {
                 $output->writeln(
                     sprintf(
                         'File modified: %s, rerendering...',
                         $event->path,
                     ),
                 );
-                $this->commandBus->handle(
-                    new RunCommand(
-                        $this->settingsBuilder->getSettings(),
-                        $this->settingsBuilder->createProjectNode(),
-                        $input,
+                $file = substr($event->path, 0, -4);
+
+                $documents[$file] = $this->commandBus->handle(
+                    new ParseFileCommand(
+                        $sourceFileSystem,
+                        '',
+                        $file,
+                        $settings->getInputFormat(),
+                        1,
+                        $projectNode,
+                        true,
                     ),
                 );
+
+                $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
+                $destinationFileSystem = FlySystemAdapter::createForPath($settings->getOutput());
+
+                $outputFormats = $settings->getOutputFormats();
+
+                $documentIterator = new DocumentListIterator(
+                    new DocumentTreeIterator(
+                        [$projectNode->getRootDocumentEntry()],
+                        $documents,
+                    ),
+                    $documents,
+                );
+
+                //foreach ($outputFormats as $format) {
+
+                    $renderContext = RenderContext::forProject(
+                        $projectNode,
+                        $documents,
+                        $sourceFileSystem,
+                        $destinationFileSystem,
+                        '/',
+                        'html',
+                    )->withIterator($documentIterator);
+
+                    $this->commandBus->handle(
+                        new RenderDocumentCommand(
+                            $documents[$file],
+                            $renderContext->withDocument($documents[$file]),
+                        ),
+                    );
+                //}
+
                 $output->writeln('Rerendering completed.');
                 $app->notifyClients();
             },
         );
 
-        $this->settingsBuilder->overrideWithInput($input);
-
-        $this->commandBus->handle(
-            new RunCommand(
-                $this->settingsBuilder->getSettings(),
-                $this->settingsBuilder->createProjectNode(),
-                $input,
-            ),
-        );
 
         $output->writeln(sprintf('Server running at http://localhost:1337'));
         $output->writeln('WebSocket server running at ws://localhost:1337/ws');
