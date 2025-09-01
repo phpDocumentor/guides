@@ -128,7 +128,7 @@ EOT;
         $this->close($conn, 500);
     }
 
-    public function onMessage(ConnectionInterface $from, string $msg): void
+    public function onMessage(ConnectionInterface $from, $msg): void
     {
         // TODO: Implement onMessage() method.
     }
