@@ -1,6 +1,6 @@
 {
-    "name": "phpdocumentor/guides-cli",
-    "description": "Allows you to run phpDocumentor Guides as a stand alone application as console command",
+    "name": "phpdocumentor/dev-server",
+    "description": "A php development server with live reloading to preview your documentation",
     "type": "project",
     "license": "MIT",
     "config": {
@@ -8,12 +8,12 @@
     },
     "autoload": {
         "psr-4": {
-            "phpDocumentor\\Guides\\Cli\\": "src/"
+            "phpDocumentor\\DevServer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "phpDocumentor\\Guides\\": [
+            "phpDocumentor\\DevServer\\": [
                 "tests/unit/"
             ]
         }
@@ -26,20 +26,19 @@
     ],
     "require": {
         "php": "^8.1",
+        "ext-inotify": "*",
+        "ext-pcntl": "*",
         "monolog/monolog": "^3.0",
-        "phpdocumentor/guides": "^1.0 || ^2.0",
-        "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
+        "phpdocumentor/guides": "^1.0",
         "symfony/config": "^5.4 || ^6.3 || ^7.0",
         "symfony/console": "^5.4 || ^6.3 || ^7.0",
         "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
-        "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0"
+        "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0",
+        "cboden/ratchet": "0.4.x@dev",
+        "react/http": "^v1.11",
+        "react/socket": "^v1.16",
+        "league/mime-type-detection": "^1.16"
     },
-    "suggest": {
-        "phpdocumentor/dev-server": "Allows you to run a development server with live reloading to preview your documentation"
-    },
-    "bin": [
-        "bin/guides"
-    ],
     "extra": {
         "branch-alias": {
             "dev-main": "1.x-dev"

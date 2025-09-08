@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Cli\Internal;
+namespace phpDocumentor\DevServer\Internal;
 
 use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;

@@ -11,19 +11,21 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Cli\Internal;
+namespace phpDocumentor\DevServer;
 
+use phpDocumentor\DevServer\Internal\HttpHandler;
+use phpDocumentor\DevServer\Internal\WebSocketHandler;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use Psr\Log\LoggerInterface;
 use Ratchet\App;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\Route;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class ServerFactory
 {
     public function __construct(
         private LoggerInterface $logger,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 

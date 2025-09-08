@@ -11,10 +11,11 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Cli\Internal;
+namespace phpDocumentor\DevServer;
 
 use Closure;
-use phpDocumentor\Guides\Cli\Internal\Watcher\INotifyWatcher;
+use phpDocumentor\DevServer\Internal\WebSocketHandler;
+use phpDocumentor\DevServer\Watcher\INotifyWatcher;
 use Psr\Log\LoggerInterface;
 use Ratchet\App;
 use React\EventLoop\Loop;

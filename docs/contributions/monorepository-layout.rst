@@ -25,3 +25,4 @@ Consequences:
   not in the component repositories.
 
 The components are located under the ``packages`` directory.
+

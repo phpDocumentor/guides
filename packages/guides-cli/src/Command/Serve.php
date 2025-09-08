@@ -16,10 +16,10 @@ namespace phpDocumentor\Guides\Cli\Command;
 use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Logger;
+use phpDocumentor\DevServer\ServerFactory;
+use phpDocumentor\DevServer\Watcher\FileModifiedEvent;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
-use phpDocumentor\Guides\Cli\Internal\ServerFactory;
-use phpDocumentor\Guides\Cli\Internal\Watcher\FileModifiedEvent;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
@@ -95,7 +95,7 @@ final class Serve extends Command
             $inputDir,
             $files,
             $host,
-            '0.0,0.0',
+            '0.0.0.0',
             $port,
         );
 

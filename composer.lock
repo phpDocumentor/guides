@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a61fb1ec55001a6d4db59fd4dbd2da5",
+    "content-hash": "a9696c07532a3cf6a3725d6018d0426e",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1557,6 +1557,61 @@
             "time": "2024-08-07T15:39:19+00:00"
         },
         {
+            "name": "phpdocumentor/dev-server",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/dev-server",
+                "reference": "25171ecf69d992bc210efdbf5da6b664d0bc7c37"
+            },
+            "require": {
+                "cboden/ratchet": "0.4.x@dev",
+                "ext-inotify": "*",
+                "ext-pcntl": "*",
+                "league/mime-type-detection": "^1.16",
+                "monolog/monolog": "^3.0",
+                "php": "^8.1",
+                "phpdocumentor/guides": "^1.0 || ^2.0",
+                "react/http": "^v1.11",
+                "react/socket": "^v1.16",
+                "symfony/config": "^5.4 || ^6.3 || ^7.0",
+                "symfony/console": "^5.4 || ^6.3 || ^7.0",
+                "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
+                "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\DevServer\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\DevServer\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jaapio",
+                    "email": "jaap@phpdoc.org"
+                }
+            ],
+            "description": "A php development server with live reloading to preview your documentation",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "phpdocumentor/filesystem",
             "version": "dev-main",
             "dist": {
@@ -1717,17 +1772,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "783ce201a182ac9b920edc873389d9027a56f050"
+                "reference": "01b63176c171294709d3f7b71eb35d3a02d40d21"
             },
             "require": {
-                "cboden/ratchet": "0.4.x@dev",
-                "league/mime-type-detection": "^1.16",
                 "monolog/monolog": "^3.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
-                "react/http": "^v1.11",
-                "react/socket": "^v1.16",
                 "symfony/config": "^5.4 || ^6.3 || ^7.0",
                 "symfony/console": "^5.4 || ^6.3 || ^7.0",
                 "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
@@ -8403,6 +8454,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "cboden/ratchet": 20,
+        "phpdocumentor/dev-server": 20,
         "phpdocumentor/filesystem": 20,
         "phpdocumentor/guides": 20,
         "phpdocumentor/guides-cli": 20,

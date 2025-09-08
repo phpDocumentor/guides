@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @link https://phpdoc.org
  */
 
-namespace phpDocumentor\Guides\Cli\Internal\Watcher;
+namespace phpDocumentor\DevServer\Watcher;
 
 final class FileModifiedEvent
 {
