@@ -18,11 +18,16 @@ use React\EventLoop\LoopInterface;
 use RuntimeException;
 
 use function inotify_add_watch;
+use function inotify_init;
 use function inotify_read;
 use function stream_set_blocking;
 use function var_dump;
 
 use const DIRECTORY_SEPARATOR;
+use const IN_CLOSE_WRITE;
+use const IN_CREATE;
+use const IN_DELETE;
+use const IN_MODIFY;
 
 class INotifyWatcher
 {

@@ -21,6 +21,8 @@ use Ratchet\App;
 use React\EventLoop\Loop;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+use const SIGINT;
+
 class Server
 {
     private INotifyWatcher $watcher;
@@ -38,7 +40,8 @@ class Server
             $logger->info('Shutting down server...');
             $loop->stop();
             $logger->info('Server stopped');
-            exit(0);
+
+            exit(0); // phpcs:ignore
         });
     }
 
