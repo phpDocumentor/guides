@@ -54,10 +54,12 @@ return static function (ContainerConfigurator $container): void {
         ->set(RunCommandHandler::class)
         ->tag('phpdoc.guides.command', ['command' => RunCommand::class]);
 
-    if (class_exists(ServerFactory::class)) {
-        $container->services()->defaults()->autowire()->set(ServerFactory::class)
-            ->set(Serve::class)
-            ->public()
-            ->tag('phpdoc.guides.cli.command');
+    if (!class_exists(ServerFactory::class)) {
+        return;
     }
+
+    $container->services()->defaults()->autowire()->set(ServerFactory::class)
+        ->set(Serve::class)
+        ->public()
+        ->tag('phpdoc.guides.cli.command');
 };

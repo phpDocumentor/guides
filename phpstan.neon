@@ -35,6 +35,7 @@ parameters:
         - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
 
   paths:
+    - packages/dev-server/src
     - packages/filesystem/src
     - packages/guides/src
     - packages/guides-code/src

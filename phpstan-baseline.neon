@@ -1,6 +1,26 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\|string\\> given\\.$#"
+			count: 1
+			path: packages/dev-server/src/Internal/HttpHandler.php
+
+		-
+			message: "#^Method phpDocumentor\\\\DevServer\\\\Internal\\\\WebSocketHandler\\:\\:onMessage\\(\\) has parameter \\$msg with no value type specified in iterable type Ratchet\\\\RFC6455\\\\Messaging\\\\MessageInterface\\.$#"
+			count: 1
+			path: packages/dev-server/src/Internal/WebSocketHandler.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:addListener\\(\\)\\.$#"
+			count: 1
+			path: packages/dev-server/src/Server.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between resource and false will always evaluate to false\\.$#"
+			count: 1
+			path: packages/dev-server/src/Watcher/INotifyWatcher.php
+
+		-
 			message: "#^Call to function is_countable\\(\\) with array will always evaluate to true\\.$#"
 			count: 2
 			path: packages/guides-cli/src/Command/Run.php
@@ -46,11 +66,6 @@ parameters:
 			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
 
 		-
-			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\|string\\> given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/HttpHandler.php
-
-		-
 			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'getExcludes' will always evaluate to true\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Internal/RunCommandHandler.php
@@ -69,21 +84,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Internal/RunCommandHandler.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:addListener\\(\\)\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/Server.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between resource and false will always evaluate to false\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/Watcher/INotifyWatcher.php
-
-		-
-			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Internal\\\\WebSocketHandler\\:\\:onMessage\\(\\) has parameter \\$msg with no value type specified in iterable type Ratchet\\\\RFC6455\\\\Messaging\\\\MessageInterface\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/WebSocketHandler.php
 
 		-
 			message: "#^Method phpDocumentor\\\\Guides\\\\Markdown\\\\Parsers\\\\InlineParsers\\\\AbstractInlineTextDecoratorParser\\<TValue of phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\:\\:createInlineNode\\(\\) invoked with 3 parameters, 2 required\\.$#"
