@@ -1,4 +1,4 @@
-PHP_BIN = docker run -it --rm --user $$(id -u):$$(id -g) -v${PWD}:/opt/project -w /opt/project php:8.2-cli php -d memory_limit=1024M
+PHP_BIN = docker run -it --rm --user $$(id -u):$$(id -g) -v${PWD}:/opt/project -w /opt/project php:8.4-cli php -d memory_limit=1024M
 PHP_DOC = docker run --rm -v ${PWD}:/data -w /data phpdoc/phpdoc:3-unstable
 
 .PHONY: help
