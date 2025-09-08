@@ -27,6 +27,7 @@ use const DIRECTORY_SEPARATOR;
 use const IN_CLOSE_WRITE;
 use const IN_CREATE;
 use const IN_DELETE;
+use const IN_IGNORED;
 use const IN_MODIFY;
 
 class INotifyWatcher
@@ -83,6 +84,10 @@ class INotifyWatcher
 
             if ($event['mask'] & IN_DELETE) {
                 //$this->dispatcher->dispatch(new FileDeletedEvent($path, $event['name']));
+                return;
+            }
+
+            if ($event['mask'] & IN_IGNORED) {
                 return;
             }
 
