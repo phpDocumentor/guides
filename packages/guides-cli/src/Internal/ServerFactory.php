@@ -16,29 +16,30 @@ namespace phpDocumentor\Guides\Cli\Internal;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use Psr\Log\LoggerInterface;
 use Ratchet\App;
-use React\EventLoop\LoopInterface;
 use Symfony\Component\Routing\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class ServerFactory
 {
-    public function __construct(private LoggerInterface $logger)
-    {
+    public function __construct(
+        private LoggerInterface $logger,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
-    public function createWebserver(FlySystemAdapter $files, LoopInterface|null $loop, string $host, string $listen, int $port): Server
-    {
-        $httpHandler = new HttpHandler($this->logger, $files);
+    public function createDevServer(
+        string $soureDirectory,
+        FlySystemAdapter $files,
+        string $host,
+        string $listen,
+        int $port,
+    ): Server {
+        $httpHandler = new HttpHandler($files);
         $wsServer = new WebSocketHandler($this->logger);
-        $host = 'localhost';
 
-
-        // Setup the Ratchet App with routes
-        $app = new App($host, $port, $listen, $loop);
-
-        // Add WebSocket route at /ws
+        $app = new App($host, $port, $listen);
         $app->route('/ws', $wsServer, ['*']);
 
-        // Add HTTP server for all other routes - use a different pattern syntax
         $app->routes->add('catch-all', new Route(
             '/{url}',
             ['_controller' => $httpHandler],
@@ -46,6 +47,6 @@ final class ServerFactory
             methods: ['GET'],
         ));
 
-        return new Server($app, $wsServer);
+        return new Server($app, $wsServer, $this->eventDispatcher, $this->logger, $soureDirectory);
     }
 }

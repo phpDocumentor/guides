@@ -33,13 +33,13 @@ final class WebSocketHandler implements MessageComponentInterface
     public function onOpen(ConnectionInterface $conn): void
     {
         $this->clients->attach($conn);
-        $this->logger->info('New WebSocket connection {resourceId}', ['resourceId' => $conn->resourceId]);
+        $this->logger->info('New WebSocket connection');
     }
 
     public function onClose(ConnectionInterface $conn): void
     {
         $this->clients->detach($conn);
-        $this->logger->info('WebSocket connection {resourceId} has disconnected', ['resourceId' => $conn->resourceId]);
+        $this->logger->info('WebSocket connection has disconnected');
     }
 
     public function onError(ConnectionInterface $conn, Throwable $e): void

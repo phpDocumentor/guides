@@ -6,52 +6,37 @@ parameters:
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
-			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'getExcludes' will always evaluate to true\\.$#"
+			message: "#^Property phpDocumentor\\\\Guides\\\\Cli\\\\Command\\\\Run\\:\\:\\$themeManager is never read, only written\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/Run.php
 
 		-
 			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'setExcludes' will always evaluate to true\\.$#"
 			count: 1
-			path: packages/guides-cli/src/Command/Run.php
+			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
 			message: "#^Cannot cast mixed to string\\.$#"
 			count: 6
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
-			message: "#^Parameter \\#1 \\$documents of class phpDocumentor\\\\Guides\\\\Handlers\\\\CompileDocumentsCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
+			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
 			message: "#^Parameter \\#1 \\$outputFormats of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setOutputFormats\\(\\) expects array\\<string\\>, mixed given\\.$#"
 			count: 1
-			path: packages/guides-cli/src/Command/Run.php
+			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
 			message: "#^Parameter \\#1 \\$showProgressBar of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setShowProgressBar\\(\\) expects bool, mixed given\\.$#"
 			count: 1
-			path: packages/guides-cli/src/Command/Run.php
+			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
 			count: 1
-			path: packages/guides-cli/src/Command/Run.php
+			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
-			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:ignoreExtraKeys\\(\\)\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Config/Configuration.php
-
-		-
-			message: "#^Parameter \\#1 \\$configs \\(array\\<string\\>\\) of method phpDocumentor\\\\Guides\\\\Cli\\\\DependencyInjection\\\\ApplicationExtension\\:\\:load\\(\\) should be compatible with parameter \\$configs \\(array\\<array\\>\\) of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\ExtensionInterface\\:\\:load\\(\\)$#"
+			message: "#^Parameter \\#1 \\$configs \\(array\\<string\\>\\) of method phpDocumentor\\\\Guides\\\\Cli\\\\DependencyInjection\\\\ApplicationExtension\\:\\:load\\(\\) should be contravariant with parameter \\$configs \\(array\\) of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\ExtensionInterface\\:\\:load\\(\\)$#"
 			count: 2
 			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
 
@@ -61,29 +46,49 @@ parameters:
 			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
 
 		-
-			message: "#^Cannot call method end\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\|string\\> given\\.$#"
 			count: 1
-			path: packages/guides-code/src/Code/DependencyInjection/CodeExtension.php
+			path: packages/guides-cli/src/Internal/HttpHandler.php
 
 		-
-			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
+			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'getExcludes' will always evaluate to true\\.$#"
 			count: 1
-			path: packages/guides-graphs/src/Graphs/DependencyInjection/Configuration.php
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
 
 		-
-			message: "#^Parameter \\#1 \\$configuration of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\Extension\\:\\:processConfiguration\\(\\) expects Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface, Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface\\|null given\\.$#"
+			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Internal\\\\RunCommandHandler\\:\\:handle\\(\\) should return array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\> but returns mixed\\.$#"
 			count: 1
-			path: packages/guides-graphs/src/Graphs/DependencyInjection/GraphsExtension.php
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: "#^Parameter \\#1 \\$documents of class phpDocumentor\\\\Guides\\\\Handlers\\\\CompileDocumentsCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:addListener\\(\\)\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Internal/Server.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between resource and false will always evaluate to false\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Internal/Watcher/INotifyWatcher.php
+
+		-
+			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Internal\\\\WebSocketHandler\\:\\:onMessage\\(\\) has parameter \\$msg with no value type specified in iterable type Ratchet\\\\RFC6455\\\\Messaging\\\\MessageInterface\\.$#"
+			count: 1
+			path: packages/guides-cli/src/Internal/WebSocketHandler.php
 
 		-
 			message: "#^Method phpDocumentor\\\\Guides\\\\Markdown\\\\Parsers\\\\InlineParsers\\\\AbstractInlineTextDecoratorParser\\<TValue of phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\:\\:createInlineNode\\(\\) invoked with 3 parameters, 2 required\\.$#"
 			count: 2
 			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
-
-		-
-			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
 
 		-
 			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
@@ -129,16 +134,6 @@ parameters:
 			message: "#^Used function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
 			count: 1
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:prototype\\(\\)\\.$#"
-			count: 1
-			path: packages/guides/src/DependencyInjection/GuidesExtension.php
-
-		-
-			message: "#^Cannot call method scalarNode\\(\\) on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface\\|null\\.$#"
-			count: 1
-			path: packages/guides/src/DependencyInjection/GuidesExtension.php
 
 		-
 			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\AbstractLinkInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"

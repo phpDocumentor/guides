@@ -78,6 +78,11 @@ class FlysystemV1 implements Filesystem
 
     public function isDirectory(string $path): bool
     {
-        return $this->filesystem->directoryExists($path);
+        $metadata = $this->filesystem->getMetadata($path);
+        if ($metadata === false) {
+            return false;
+        }
+
+        return $metadata['type'] === 'dir';
     }
 }

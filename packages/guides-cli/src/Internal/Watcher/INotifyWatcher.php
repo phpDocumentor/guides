@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Cli\Internal\Watcher;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use React\EventLoop\LoopInterface;
+use RuntimeException;
 
 use function inotify_add_watch;
 use function inotify_read;
@@ -25,8 +26,8 @@ use const DIRECTORY_SEPARATOR;
 
 class INotifyWatcher
 {
-    /** @var resource|false */
-    private mixed $inotify = false;
+    /** @var resource|null */
+    private mixed $inotify = null;
 
     /** @var array<int, array{path: string}> */
     private array $watchDescriptors;
@@ -40,6 +41,10 @@ class INotifyWatcher
 
     public function __invoke(): void
     {
+        if ($this->inotify === null) {
+            throw new RuntimeException('No inotify watcher');
+        }
+
         $events = inotify_read($this->inotify);
         if ($events === false) {
             return;
@@ -83,8 +88,15 @@ class INotifyWatcher
 
     public function addPath(string $path): void
     {
-        if ($this->inotify === false) {
-            $this->inotify = inotify_init();
+        if (isset($this->inotify) === false) {
+            $inotify = inotify_init();
+
+            if ($inotify === false) {
+                throw new RuntimeException('Failed to initialize inotify');
+            }
+
+            $this->inotify = $inotify;
+
             stream_set_blocking($this->inotify, false);
 
             // wait for any file events by reading from inotify handler asynchronously

@@ -15,34 +15,35 @@ namespace phpDocumentor\Guides\Cli\Command;
 
 use League\Tactician\CommandBus;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\ServerFactory;
 use phpDocumentor\Guides\Cli\Internal\Watcher\FileModifiedEvent;
-use phpDocumentor\Guides\Cli\Internal\Watcher\INotifyWatcher;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostParseDocument;
 use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\DocumentListIterator;
 use phpDocumentor\Guides\Renderer\DocumentTreeIterator;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\LoggerInterface;
-use React\EventLoop\Loop;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function assert;
+use function is_int;
+use function is_string;
 use function sprintf;
+use function substr;
 
 final class Serve extends Command
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private EventDispatcherInterface $dispatcher,
+        private readonly Logger $logger,
         private SettingsBuilder $settingsBuilder,
         private CommandBus $commandBus,
         private ServerFactory $serverFactory,
@@ -55,46 +56,53 @@ final class Serve extends Command
         $this->settingsBuilder->configureCommand($this);
         $this->addOption('host', null, InputOption::VALUE_REQUIRED, 'Hostname to serve on', 'localhost');
         $this->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'Port to run the server on', 1337);
-        $this->addOption('listen', 'l', InputOption::VALUE_REQUIRED, 'Address to listen on', '0.0.0.0');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM));
-        // Enable tick processing for signal handling
-        declare(ticks=1);
-
-        $loop = Loop::get();
-        $loop->addSignal(SIGINT, static function () use ($loop, $output): void {
-            $output->writeln('Shutting down server...');
-            $loop->stop();
-            $output->writeln('Server stopped');
-            exit(0);
-        });
-
 
         $dir = $input->getOption('output');
-        if ($dir === null) {
+        if (!is_string($dir)) {
             $output->writeln('<error>Please specify an output directory using --output option</error>');
 
             return Command::FAILURE;
         }
 
+        $inputDir = $input->getArgument('input');
+        if (!is_string($inputDir)) {
+            $output->writeln('<error>Please specify an input directory using the input argument</error>');
+
+            return Command::FAILURE;
+        }
+
+        $host = $input->getOption('host');
+        if (!is_string($host)) {
+            $output->writeln('<error>Please specify a valid host using --host option</error>');
+
+            return Command::FAILURE;
+        }
+
+        $port = $input->getOption('port');
+        if (!is_int($port)) {
+            $output->writeln('<error>Please specify a valid port using --port option</error>');
+
+            return Command::FAILURE;
+        }
+
         $files = FlySystemAdapter::createForPath($dir);
-        $app =  $this->serverFactory->createWebserver(
+        $app =  $this->serverFactory->createDevServer(
+            $inputDir,
             $files,
-            $loop,
-            $input->getOption('host'),
-            $input->getOption('listen'),
-            (int) $input->getOption('port'),
+            $host,
+            '0.0,0.0',
+            $port,
         );
 
-        $watcher = new InotifyWatcher($loop, $this->dispatcher, $input->getArgument('input'));
-
-        $this->dispatcher->addListener(
+        $app->addListener(
             PostParseDocument::class,
-            static function (PostParseDocument $event) use ($watcher): void {
-                $watcher->addPath($event->getOriginalFileName());
+            static function (PostParseDocument $event) use ($app): void {
+                $app->watch($event->getOriginalFileName());
             },
         );
 
@@ -104,6 +112,7 @@ final class Serve extends Command
         $projectNode = $this->settingsBuilder->createProjectNode();
         $sourceFileSystem = FlySystemAdapter::createForPath($settings->getInput());
 
+        /** @var array<string, DocumentNode> $documents */
         $documents = $this->commandBus->handle(
             new RunCommand(
                 $settings,
@@ -112,9 +121,9 @@ final class Serve extends Command
             ),
         );
 
-        $this->dispatcher->addListener(
+        $app->addListener(
             FileModifiedEvent::class,
-            function (FileModifiedEvent $event) use ($sourceFileSystem, $projectNode, $settings, $app, $output): void {
+            function (FileModifiedEvent $event) use ($documents, $sourceFileSystem, $projectNode, $settings, $app, $output): void {
                 $output->writeln(
                     sprintf(
                         'File modified: %s, rerendering...',
@@ -123,7 +132,7 @@ final class Serve extends Command
                 );
                 $file = substr($event->path, 0, -4);
 
-                $documents[$file] = $this->commandBus->handle(
+                $document = $this->commandBus->handle(
                     new ParseFileCommand(
                         $sourceFileSystem,
                         '',
@@ -134,11 +143,13 @@ final class Serve extends Command
                         true,
                     ),
                 );
+                assert($document instanceof DocumentNode);
 
+                $documents[$file] = $document;
+
+                /** @var array<string, DocumentNode> $documents */
                 $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
                 $destinationFileSystem = FlySystemAdapter::createForPath($settings->getOutput());
-
-                $outputFormats = $settings->getOutputFormats();
 
                 $documentIterator = new DocumentListIterator(
                     new DocumentTreeIterator(
@@ -148,33 +159,34 @@ final class Serve extends Command
                     $documents,
                 );
 
-                //foreach ($outputFormats as $format) {
+                $renderContext = RenderContext::forProject(
+                    $projectNode,
+                    $documents,
+                    $sourceFileSystem,
+                    $destinationFileSystem,
+                    '/',
+                    'html',
+                )->withIterator($documentIterator);
 
-                    $renderContext = RenderContext::forProject(
-                        $projectNode,
-                        $documents,
-                        $sourceFileSystem,
-                        $destinationFileSystem,
-                        '/',
-                        'html',
-                    )->withIterator($documentIterator);
-
-                    $this->commandBus->handle(
-                        new RenderDocumentCommand(
-                            $documents[$file],
-                            $renderContext->withDocument($documents[$file]),
-                        ),
-                    );
-                //}
+                $this->commandBus->handle(
+                    new RenderDocumentCommand(
+                        $documents[$file],
+                        $renderContext->withDocument($documents[$file]),
+                    ),
+                );
 
                 $output->writeln('Rerendering completed.');
                 $app->notifyClients();
             },
         );
 
-
-        $output->writeln(sprintf('Server running at http://localhost:1337'));
-        $output->writeln('WebSocket server running at ws://localhost:1337/ws');
+        $output->writeln(
+            sprintf(
+                'Server running at http://%s:%d',
+                $host,
+                $port,
+            ),
+        );
         $output->writeln('Press Ctrl+C to stop the server');
 
         $app->run();

@@ -18,13 +18,11 @@ use GuzzleHttp\Psr7\Response;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Http\CloseResponseTrait;
 use Ratchet\Http\HttpServerInterface;
 use Throwable;
 
-use function sprintf;
 use function str_replace;
 use function strlen;
 use function trim;
@@ -36,7 +34,6 @@ final class HttpHandler implements HttpServerInterface
     private ExtensionMimeTypeDetector $detector;
 
     public function __construct(
-        private LoggerInterface $logger,
         private FlySystemAdapter $files,
     ) {
         $this->detector = new ExtensionMimeTypeDetector();
@@ -51,13 +48,6 @@ final class HttpHandler implements HttpServerInterface
         }
 
         $path = $request->getUri()->getPath();
-        $this->logger->info(
-            sprintf(
-                'Received request for %s from %s',
-                $path,
-                $conn->remoteAddress,
-            ),
-        );
 
         // Remove leading slash and any route parameters
         $requestPath = trim($path, '/');
@@ -81,7 +71,7 @@ final class HttpHandler implements HttpServerInterface
 
             $headers = [
                 'Content-Type' => $this->detector->detectMimeTypeFromPath($requestPath) ?? 'text/plain',
-                'Content-Length' => strlen($content),
+                'Content-Length' => (string) strlen($content),
             ];
 
             $conn->send(Message::toString(new Response(200, $headers, $content)));
@@ -128,6 +118,8 @@ EOT;
         $this->close($conn, 500);
     }
 
+    /** @param string $msg */
+    // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function onMessage(ConnectionInterface $from, $msg): void
     {
         // TODO: Implement onMessage() method.

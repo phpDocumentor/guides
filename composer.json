@@ -65,6 +65,7 @@
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-strict-rules": "^1.6",
+        "phpstan/phpstan-symfony": "^1.4",
         "phpstan/phpstan-webmozart-assert": "^1.2",
         "phpunit/phpunit": "^10.5",
         "qossmic/deptrac-shim": "^1.0.2",
