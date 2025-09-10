@@ -21,6 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "phpDocumentor\\DevServer\\": ["packages/dev-server/tests/unit/"],
             "phpDocumentor\\Guides\\": ["packages/guides/tests/unit/", "tests/"],
             "phpDocumentor\\Guides\\Cli\\": "packages/guides-cli/tests/unit",
             "phpDocumentor\\Guides\\Code\\": "packages/guides-code/tests/unit",
@@ -37,7 +38,9 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "cboden/ratchet": "0.4.x@dev",
         "doctrine/deprecations": "^1.1",
+        "phpdocumentor/dev-server": "^1.0 || ^1.0@dev",
         "phpdocumentor/filesystem": "^1.0 || ^1.0@dev",
         "phpdocumentor/flyfinder": "^1.1 || ^2.0",
         "phpdocumentor/guides": "^1.0 || ^1.0@dev",
@@ -64,6 +67,7 @@
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-strict-rules": "^1.6",
+        "phpstan/phpstan-symfony": "^1.4",
         "phpstan/phpstan-webmozart-assert": "^1.2",
         "phpunit/phpunit": "^10.5",
         "qossmic/deptrac-shim": "^1.0.2",

@@ -3,10 +3,15 @@
 declare(strict_types=1);
 
 use Monolog\Logger;
+use phpDocumentor\DevServer\ServerFactory;
 use phpDocumentor\Guides\Cli\Application;
 use phpDocumentor\Guides\Cli\Command\ProgressBarSubscriber;
 use phpDocumentor\Guides\Cli\Command\Run;
+use phpDocumentor\Guides\Cli\Command\Serve;
+use phpDocumentor\Guides\Cli\Command\SettingsBuilder;
 use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
+use phpDocumentor\Guides\Cli\Internal\RunCommand;
+use phpDocumentor\Guides\Cli\Internal\RunCommandHandler;
 use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -44,5 +49,17 @@ return static function (ContainerConfigurator $container): void {
         ->set(WorkingDirectorySwitcher::class)
         ->tag('event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => '__invoke'])
 
-        ->set(ProgressBarSubscriber::class);
+        ->set(ProgressBarSubscriber::class)
+        ->set(SettingsBuilder::class)
+        ->set(RunCommandHandler::class)
+        ->tag('phpdoc.guides.command', ['command' => RunCommand::class]);
+
+    if (!class_exists(ServerFactory::class)) {
+        return;
+    }
+
+    $container->services()->defaults()->autowire()->set(ServerFactory::class)
+        ->set(Serve::class)
+        ->public()
+        ->tag('phpdoc.guides.cli.command');
 };

@@ -30,6 +30,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "8.2"
+          extensions: "inotify, pcntl"
 
       - name: "Set COMPOSER_ROOT_VERSION"
         run: |

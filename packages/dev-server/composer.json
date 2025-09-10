@@ -1,0 +1,45 @@
+{
+    "name": "phpdocumentor/dev-server",
+    "description": "A php development server with live reloading to preview your documentation",
+    "type": "project",
+    "license": "MIT",
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\DevServer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpDocumentor\\DevServer\\": [
+                "tests/unit/"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "jaapio",
+            "email": "jaap@phpdoc.org"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-inotify": "*",
+        "ext-pcntl": "*",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "phpdocumentor/filesystem": "^1.0",
+        "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0",
+        "symfony/routing": "^5.4 || ^6.3 || ^7.0",
+        "cboden/ratchet": "0.4.x@dev",
+        "react/http": "^v1.11",
+        "react/socket": "^v1.16",
+        "league/mime-type-detection": "^1.16"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    }
+}

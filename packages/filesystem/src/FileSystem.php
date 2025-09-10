@@ -54,4 +54,6 @@ interface FileSystem
 
     /** @return StorageAttributes[] */
     public function find(SpecificationInterface $specification): iterable;
+
+    public function isDirectory(string $path): bool;
 }

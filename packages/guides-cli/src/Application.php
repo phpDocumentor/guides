@@ -16,11 +16,13 @@ namespace phpDocumentor\Guides\Cli;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 use function count;
 use function getcwd;
 use function is_array;
+use function is_string;
 use function iterator_to_array;
 
 final class Application extends BaseApplication
@@ -62,5 +64,23 @@ final class Application extends BaseApplication
         ));
 
         return $definition;
+    }
+
+    protected function getCommandName(InputInterface $input): string|null
+    {
+        if ($input->hasArgument('command') === false) {
+            return parent::getCommandName($input);
+        }
+
+        $command = $input->getArgument('command');
+        if ($command === null) {
+            return 'run';
+        }
+
+        if (is_string($command)) {
+            return $command;
+        }
+
+        return null;
     }
 }

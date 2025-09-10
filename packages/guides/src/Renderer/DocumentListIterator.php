@@ -18,6 +18,7 @@ use Generator;
 use Iterator;
 use OutOfRangeException;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use RecursiveIteratorIterator;
 use WeakMap;
 use WeakReference;
@@ -58,6 +59,18 @@ final class DocumentListIterator implements Iterator
         foreach ($documents as $document) {
             $this->unseenDocuments[$document] = true;
         }
+    }
+
+    /** @param DocumentNode[] $documents */
+    public static function create(DocumentEntryNode $getRootDocumentEntry, array $documents): self
+    {
+        return new self(
+            new DocumentTreeIterator(
+                [$getRootDocumentEntry],
+                $documents,
+            ),
+            $documents,
+        );
     }
 
     public function next(): void

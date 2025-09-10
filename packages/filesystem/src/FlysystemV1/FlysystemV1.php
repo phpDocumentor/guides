@@ -75,4 +75,14 @@ class FlysystemV1 implements Filesystem
             yield new \phpDocumentor\FileSystem\FlysystemV1\StorageAttributes($file);
         }
     }
+
+    public function isDirectory(string $path): bool
+    {
+        $metadata = $this->filesystem->getMetadata($path);
+        if ($metadata === false) {
+            return false;
+        }
+
+        return $metadata['type'] === 'dir';
+    }
 }

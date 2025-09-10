@@ -34,6 +34,9 @@
         "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
         "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0"
     },
+    "suggest": {
+        "phpdocumentor/dev-server": "Allows you to run a development server with live reloading to preview your documentation"
+    },
     "bin": [
         "bin/guides"
     ],
