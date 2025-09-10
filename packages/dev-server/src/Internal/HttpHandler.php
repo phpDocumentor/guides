@@ -35,6 +35,7 @@ final class HttpHandler implements HttpServerInterface
 
     public function __construct(
         private FlySystemAdapter $files,
+        private string $indexFile = 'index.html',
     ) {
         $this->detector = new ExtensionMimeTypeDetector();
     }
@@ -54,11 +55,11 @@ final class HttpHandler implements HttpServerInterface
 
         // For empty path (root) serve index.html
         if ($requestPath === '') {
-            $requestPath = 'index.html';
+            $requestPath = $this->indexFile;
         }
 
         if ($this->files->isDirectory($requestPath)) {
-            $requestPath .= '/index.html';
+            $requestPath .= '/' . $this->indexFile;
         }
 
         if ($this->files->has($requestPath)) {

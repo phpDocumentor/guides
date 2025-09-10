@@ -35,8 +35,9 @@ final class ServerFactory
         string $host,
         string $listen,
         int $port,
+        string $indexFile = 'index.html',
     ): Server {
-        $httpHandler = new HttpHandler($files);
+        $httpHandler = new HttpHandler($files, $indexFile);
         $wsServer = new WebSocketHandler($this->logger);
 
         $app = new App($host, $port, $listen);

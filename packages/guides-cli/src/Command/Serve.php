@@ -90,6 +90,9 @@ final class Serve extends Command
             return Command::FAILURE;
         }
 
+        $this->settingsBuilder->overrideWithInput($input);
+        $settings = $this->settingsBuilder->getSettings();
+
         $files = FlySystemAdapter::createForPath($dir);
         $app =  $this->serverFactory->createDevServer(
             $inputDir,
@@ -97,6 +100,7 @@ final class Serve extends Command
             $host,
             '0.0.0.0',
             $port,
+            $settings->getIndexName(),
         );
 
         $app->addListener(
@@ -106,9 +110,6 @@ final class Serve extends Command
             },
         );
 
-        $this->settingsBuilder->overrideWithInput($input);
-
-        $settings = $this->settingsBuilder->getSettings();
         $projectNode = $this->settingsBuilder->createProjectNode();
         $sourceFileSystem = FlySystemAdapter::createForPath($settings->getInput());
 
