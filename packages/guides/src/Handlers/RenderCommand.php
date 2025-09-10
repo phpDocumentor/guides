@@ -18,7 +18,6 @@ use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Renderer\DocumentListIterator;
-use phpDocumentor\Guides\Renderer\DocumentTreeIterator;
 
 final class RenderCommand
 {
@@ -33,11 +32,8 @@ final class RenderCommand
         private readonly ProjectNode $projectNode,
         private readonly string $destinationPath = '/',
     ) {
-        $this->documentIterator = new DocumentListIterator(
-            new DocumentTreeIterator(
-                [$this->projectNode->getRootDocumentEntry()],
-                $this->documentArray,
-            ),
+        $this->documentIterator = DocumentListIterator::create(
+            $this->projectNode->getRootDocumentEntry(),
             $this->documentArray,
         );
     }

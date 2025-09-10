@@ -28,7 +28,6 @@ use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\DocumentListIterator;
-use phpDocumentor\Guides\Renderer\DocumentTreeIterator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -152,11 +151,8 @@ final class Serve extends Command
                 $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
                 $destinationFileSystem = FlySystemAdapter::createForPath($settings->getOutput());
 
-                $documentIterator = new DocumentListIterator(
-                    new DocumentTreeIterator(
-                        [$projectNode->getRootDocumentEntry()],
-                        $documents,
-                    ),
+                $documentIterator = DocumentListIterator::create(
+                    $projectNode->getRootDocumentEntry(),
                     $documents,
                 );
 
