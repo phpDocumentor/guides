@@ -61,14 +61,15 @@ final class DocumentListIterator implements Iterator
         }
     }
 
-    public static function create(DocumentEntryNode $getRootDocumentEntry, array $documentArray): self
+    /** @param DocumentNode[] $documents */
+    public static function create(DocumentEntryNode $getRootDocumentEntry, array $documents): self
     {
         return new self(
             new DocumentTreeIterator(
                 [$getRootDocumentEntry],
-                $documentArray,
+                $documents,
             ),
-            $documentArray,
+            $documents,
         );
     }
 
