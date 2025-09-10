@@ -1,6 +1,11 @@
 {
   "sub-splits": [
     {
+      "name": "dev-server",
+      "directory": "packages/dev-server",
+      "target": "git@github.com:phpDocumentor/dev-server.git"
+    },
+    {
       "name": "guides-core",
       "directory": "packages/guides",
       "target": "git@github.com:phpDocumentor/guides-core.git"
