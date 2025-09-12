@@ -74,15 +74,15 @@ final class SettingsBuilder
             $settings->setInputFormat((string) $input->getOption('input-format'));
         }
 
-        if ($input->hasOption('log-path')) {
+        if ($input->getOption('log-path')) {
             $settings->setLogPath((string) $input->getOption('log-path'));
         }
 
-        if ($input->hasOption('fail-on-error')) {
+        if ($input->getOption('fail-on-error')) {
             $settings->setFailOnError(LogLevel::ERROR);
         }
 
-        if ($input->hasOption('fail-on-log')) {
+        if ($input->getOption('fail-on-log')) {
             $settings->setFailOnError(LogLevel::WARNING);
         }
 
