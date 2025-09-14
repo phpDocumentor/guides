@@ -29,13 +29,14 @@ final class ServerFactory
     ) {
     }
 
+    /** @param string|string[] $indexFile */
     public function createDevServer(
         string $soureDirectory,
         FlySystemAdapter $files,
         string $host,
         string $listen,
         int $port,
-        string $indexFile = 'index.html',
+        string|array $indexFile = 'index.html',
     ): Server {
         $httpHandler = new HttpHandler($files, $indexFile);
         $wsServer = new WebSocketHandler($this->logger);
