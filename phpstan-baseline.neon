@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\|string\\> given\\.$#"
+			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\<1, max\\>\\|string\\> given\\.$#"
 			count: 1
 			path: packages/dev-server/src/Internal/HttpHandler.php
 

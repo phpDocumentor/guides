@@ -19,25 +19,18 @@ use Monolog\Logger;
 use phpDocumentor\DevServer\ServerFactory;
 use phpDocumentor\DevServer\Watcher\FileModifiedEvent;
 use phpDocumentor\FileSystem\FlySystemAdapter;
+use phpDocumentor\Guides\Cli\DevServer\RerenderListener;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
-use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Event\PostParseDocument;
-use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
-use phpDocumentor\Guides\Handlers\ParseFileCommand;
-use phpDocumentor\Guides\Handlers\RenderDocumentCommand;
 use phpDocumentor\Guides\Nodes\DocumentNode;
-use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\Renderer\DocumentListIterator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function assert;
 use function is_int;
 use function is_string;
 use function sprintf;
-use function substr;
 
 final class Serve extends Command
 {
@@ -123,58 +116,7 @@ final class Serve extends Command
 
         $app->addListener(
             FileModifiedEvent::class,
-            function (FileModifiedEvent $event) use ($documents, $sourceFileSystem, $projectNode, $settings, $app, $output): void {
-                $output->writeln(
-                    sprintf(
-                        'File modified: %s, rerendering...',
-                        $event->path,
-                    ),
-                );
-                $file = substr($event->path, 0, -4);
-
-                $document = $this->commandBus->handle(
-                    new ParseFileCommand(
-                        $sourceFileSystem,
-                        '',
-                        $file,
-                        $settings->getInputFormat(),
-                        1,
-                        $projectNode,
-                        true,
-                    ),
-                );
-                assert($document instanceof DocumentNode);
-
-                $documents[$file] = $document;
-
-                /** @var array<string, DocumentNode> $documents */
-                $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($projectNode)));
-                $destinationFileSystem = FlySystemAdapter::createForPath($settings->getOutput());
-
-                $documentIterator = DocumentListIterator::create(
-                    $projectNode->getRootDocumentEntry(),
-                    $documents,
-                );
-
-                $renderContext = RenderContext::forProject(
-                    $projectNode,
-                    $documents,
-                    $sourceFileSystem,
-                    $destinationFileSystem,
-                    '/',
-                    'html',
-                )->withIterator($documentIterator);
-
-                $this->commandBus->handle(
-                    new RenderDocumentCommand(
-                        $documents[$file],
-                        $renderContext->withDocument($documents[$file]),
-                    ),
-                );
-
-                $output->writeln('Rerendering completed.');
-                $app->notifyClients();
-            },
+            new RerenderListener($output, $this->commandBus, $sourceFileSystem, $settings, $projectNode, $documents, $app),
         );
 
         $output->writeln(

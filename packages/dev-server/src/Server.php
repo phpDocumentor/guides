@@ -60,7 +60,7 @@ class Server
         $this->watcher->addPath($path);
     }
 
-    public function addListener(string $event, Closure $param): void
+    public function addListener(string $event, Closure|callable $param): void
     {
         $this->eventDispatcher->addListener($event, $param);
     }
