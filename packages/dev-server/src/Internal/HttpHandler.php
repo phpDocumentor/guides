@@ -23,6 +23,7 @@ use Ratchet\Http\CloseResponseTrait;
 use Ratchet\Http\HttpServerInterface;
 use Throwable;
 
+use function is_array;
 use function str_replace;
 use function strlen;
 use function trim;
@@ -33,9 +34,10 @@ final class HttpHandler implements HttpServerInterface
 
     private ExtensionMimeTypeDetector $detector;
 
+    /** @param string|string[] $indexFile */
     public function __construct(
         private FlySystemAdapter $files,
-        private string $indexFile = 'index.html',
+        private string|array $indexFile = 'index.html',
     ) {
         $this->detector = new ExtensionMimeTypeDetector();
     }
@@ -53,13 +55,17 @@ final class HttpHandler implements HttpServerInterface
         // Remove leading slash and any route parameters
         $requestPath = trim($path, '/');
 
-        // For empty path (root) serve index.html
-        if ($requestPath === '') {
-            $requestPath = $this->indexFile;
-        }
-
-        if ($this->files->isDirectory($requestPath)) {
-            $requestPath .= '/' . $this->indexFile;
+        if ($requestPath === '' || $this->files->isDirectory($requestPath)) {
+            if (is_array($this->indexFile)) {
+                foreach ($this->indexFile as $indexFile) {
+                    if ($this->files->has(trim($requestPath . '/' . $indexFile, '/'))) {
+                        $requestPath = trim($requestPath . '/' . $indexFile, '/');
+                        break;
+                    }
+                }
+            } else {
+                $requestPath .= '/' . $this->indexFile;
+            }
         }
 
         if ($this->files->has($requestPath)) {
@@ -81,7 +87,9 @@ final class HttpHandler implements HttpServerInterface
             return;
         }
 
-        $content = '<!DOCTYPE html><html><body><h1>404 - Page Not Found</h1></body></html>';
+        $content = '<!DOCTYPE html><html><body><h1>404 - Page Not Found</h1>
+<p>Path ' . $requestPath . ' does not exist</p>
+</body></html>';
         $headers = [
             'Content-Type' => 'text/html',
             'Content-Length' => strlen($content),
@@ -95,7 +103,7 @@ final class HttpHandler implements HttpServerInterface
     {
         //Read html and inject script before closing body tag
         $injection = <<<'EOT'
-<script>    
+<script>
     const socket = new WebSocket('ws://' + window.location.host + '/ws');
     socket.addEventListener('message', function (event) {
         if (event.data === 'update') {
