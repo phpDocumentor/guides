@@ -28,8 +28,13 @@ use function trim;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#anonymous-hyperlinks
  */
-final class AnonymousReferenceRule extends ReferenceRule
+final class AnonymousReferenceRule extends ReferenceRule implements CachableInlineRule
 {
+    public function getToken(): int
+    {
+        return InlineLexer::ANONYMOUSE_REFERENCE;
+    }
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::ANONYMOUSE_REFERENCE;
