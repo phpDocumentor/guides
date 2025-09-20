@@ -23,8 +23,13 @@ use function substr;
 /**
  * Rule for literals such as ``something``
  */
-final class LiteralRule extends AbstractInlineRule
+final class LiteralRule extends AbstractInlineRule implements CachableInlineRule
 {
+    public function getToken(): int
+    {
+        return InlineLexer::LITERAL;
+    }
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::LITERAL;

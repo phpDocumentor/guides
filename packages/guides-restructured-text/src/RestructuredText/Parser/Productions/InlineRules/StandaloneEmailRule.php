@@ -26,8 +26,13 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
  *
  * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#standalone-hyperlinks
  */
-final class StandaloneEmailRule extends ReferenceRule
+final class StandaloneEmailRule extends ReferenceRule implements CachableInlineRule
 {
+    public function getToken(): int
+    {
+        return InlineLexer::EMAIL;
+    }
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::EMAIL;
