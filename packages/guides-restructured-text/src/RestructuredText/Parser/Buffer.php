@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use function array_pop;
-use function array_walk;
 use function count;
 use function implode;
 use function ltrim;
