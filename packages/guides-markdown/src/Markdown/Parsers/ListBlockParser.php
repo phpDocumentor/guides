@@ -49,7 +49,13 @@ final class ListBlockParser extends AbstractBlockParser
             }
 
             if ($commonMarkNode instanceof ListBlock) {
-                return new ListNode($content, $content[0]->isOrdered());
+                $start = $commonMarkNode->getListData()->start;
+
+                return new ListNode(
+                    $content,
+                    $content[0]->isOrdered(),
+                    $start !== null && $start !== 1 ? (string) $start : null,
+                );
             }
 
             $this->logger->warning(sprintf('"%s" node is not yet supported in context %s. ', $commonMarkNode::class, 'List'));
