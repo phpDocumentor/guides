@@ -14,3 +14,10 @@ Lorem Ipsum Dolor
 
     1. This is an indented numbered list.
     #. This is the second item.
+
+1. First
+2. Second
+
+Intermediary text or image.
+
+3. Third
