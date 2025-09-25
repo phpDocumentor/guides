@@ -16,8 +16,11 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 use Exception;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\CachableInlineRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 
+use function array_filter;
+use function array_key_exists;
 use function usort;
 
 /** @internal */
@@ -26,11 +29,21 @@ class InlineParser
     /** @var InlineRule[] */
     private array $rules;
 
+    /** @var array<InlineLexer::*, CachableInlineRule> */
+    private array $cache = [];
+
     /** @param iterable<InlineRule> $inlineRules */
     public function __construct(iterable $inlineRules)
     {
-        $this->rules = [...$inlineRules];
+        $this->rules = array_filter([...$inlineRules], static fn ($rule) => $rule instanceof CachableInlineRule === false);
         usort($this->rules, static fn (InlineRule $a, InlineRule $b): int => $a->getPriority() > $b->getPriority() ? -1 : 1);
+        foreach ($inlineRules as $rule) {
+            if (!($rule instanceof CachableInlineRule)) {
+                continue;
+            }
+
+            $this->cache[$rule->getToken()] = $rule;
+        }
     }
 
     public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
@@ -44,7 +57,9 @@ class InlineParser
         while ($lexer->token !== null) {
             foreach ($this->rules as $inlineRule) {
                 $node = null;
-                if ($inlineRule->applies($lexer)) {
+                if (array_key_exists($lexer->token->type ?? -1, $this->cache)) {
+                    $node = $this->cache[$lexer->token->type]->apply($blockContext, $lexer);
+                } elseif ($inlineRule->applies($lexer)) {
                     $node = $inlineRule->apply($blockContext, $lexer);
                 }
 
