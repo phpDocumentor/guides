@@ -18,8 +18,8 @@ use Countable;
 use Iterator;
 use IteratorAggregate;
 
+use function array_key_exists;
 use function count;
-use function in_array;
 use function sort;
 
 use const SORT_FLAG_CASE;
