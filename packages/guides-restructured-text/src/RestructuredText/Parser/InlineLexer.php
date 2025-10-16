@@ -19,8 +19,14 @@ use ReflectionClass;
 
 use function array_column;
 use function array_flip;
+use function ctype_alnum;
+use function ctype_space;
 use function parse_url;
 use function preg_match;
+use function str_ends_with;
+use function str_replace;
+use function strlen;
+use function substr;
 
 use const PHP_URL_SCHEME;
 
@@ -111,6 +117,7 @@ final class InlineLexer extends AbstractLexer
     {
         $type = match ($value) {
             '`' => self::BACKTICK,
+            '``' => self::DOUBLE_BACKTICK,
             '**' => self::STRONG_DELIMITER,
             '*' => self::EMPHASIS_DELIMITER,
             '|' => self::VARIABLE_DELIMITER,
@@ -130,8 +137,20 @@ final class InlineLexer extends AbstractLexer
         }
 
         // $value is already a tokenized part. Therefore, we have to match against the complete String here.
-        if (preg_match('/^\\\\[\s\S]$/i', $value)) {
+        if (str_ends_with($value, '__') && ctype_alnum(str_replace('-', '', substr($value, 0, -2)))) {
+            return self::ANONYMOUSE_REFERENCE;
+        }
+
+        if (str_ends_with($value, '_') && ctype_alnum(str_replace('-', '', substr($value, 0, -1)))) {
+            return self::NAMED_REFERENCE;
+        }
+
+        if (strlen($value) === 2 && $value[0] === '\\') {
             return self::ESCAPED_SIGN;
+        }
+
+        if (strlen($value) === 1 && ctype_space($value)) {
+            return self::WHITESPACE;
         }
 
         if (preg_match('/^``.+``(?!`)$/i', $value)) {
@@ -144,18 +163,6 @@ final class InlineLexer extends AbstractLexer
 
         if (preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/i', $value)) {
             return self::EMAIL;
-        }
-
-        if (preg_match('/^[a-z0-9-]+_{2}$/i', $value)) {
-            return self::ANONYMOUSE_REFERENCE;
-        }
-
-        if (preg_match('/^[a-z0-9-]+_{1}$/i', $value)) {
-            return self::NAMED_REFERENCE;
-        }
-
-        if (preg_match('/^\s$/i', $value)) {
-            return self::WHITESPACE;
         }
 
         return self::WORD;

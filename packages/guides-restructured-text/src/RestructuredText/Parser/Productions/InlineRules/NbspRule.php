@@ -20,8 +20,13 @@ use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 /**
  * Rule to parse for non-breaking spaces: a~b
  */
-final class NbspRule extends ReferenceRule
+final class NbspRule extends AbstractInlineRule implements CachableInlineRule
 {
+    public function getToken(): int
+    {
+        return InlineLexer::NBSP;
+    }
+
     public function applies(InlineLexer $lexer): bool
     {
         return $lexer->token?->type === InlineLexer::NBSP;

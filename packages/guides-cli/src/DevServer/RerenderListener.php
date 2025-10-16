@@ -70,12 +70,9 @@ final class RerenderListener
         );
         assert($document instanceof DocumentNode);
 
-        $documents = $this->documents;
-        $documents[$file] = $document;
-
         /** @var array<string, DocumentNode> $documents */
-        $documents = $this->commandBus->handle(new CompileDocumentsCommand($documents, new CompilerContext($this->projectNode)));
-        $this->documents = $documents;
+        $documents = $this->commandBus->handle(new CompileDocumentsCommand([$file => $document], new CompilerContext($this->projectNode)));
+        $this->documents[$file] = $documents[$file];
         $destinationFileSystem = FlySystemAdapter::createForPath($this->settings->getOutput());
 
         $documentIterator = DocumentListIterator::create(

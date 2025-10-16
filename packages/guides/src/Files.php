@@ -18,8 +18,8 @@ use Countable;
 use Iterator;
 use IteratorAggregate;
 
+use function array_key_exists;
 use function count;
-use function in_array;
 use function sort;
 
 use const SORT_FLAG_CASE;
@@ -33,17 +33,18 @@ final class Files implements IteratorAggregate, Countable
 
     public function add(string $filename): void
     {
-        if (in_array($filename, $this->files, true)) {
+        if (array_key_exists($filename, $this->files)) {
             return;
         }
 
-        $this->files[] = $filename;
-        sort($this->files, SORT_NATURAL | SORT_FLAG_CASE);
+        $this->files[$filename] = $filename;
     }
 
     /** @return Iterator<string> */
     public function getIterator(): Iterator
     {
+        sort($this->files, SORT_NATURAL | SORT_FLAG_CASE);
+
         return new ArrayIterator($this->files);
     }
 

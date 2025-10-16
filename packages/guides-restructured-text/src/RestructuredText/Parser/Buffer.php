@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use function array_pop;
-use function array_walk;
 use function count;
 use function implode;
 use function ltrim;
@@ -103,21 +102,29 @@ final class Buffer
 
     public function trimLines(): void
     {
-        array_walk($this->lines, static function (&$value): void {
-            $value = trim($value);
-        });
+        foreach ($this->lines as $i => $line) {
+            $this->lines[$i] = trim($line);
+        }
     }
 
     private function unIndent(): void
     {
+        if ($this->unindentStrategy === UnindentStrategy::NONE) {
+            return;
+        }
+
         $indentation = $this->detectIndentation();
-        array_walk($this->lines, static function (&$value) use ($indentation): void {
-            if (strlen($value) < $indentation) {
-                return;
+        if ($indentation === 0) {
+            return;
+        }
+
+        foreach ($this->lines as $i => $line) {
+            if (strlen($line) < $indentation) {
+                continue;
             }
 
-            $value = substr($value, $indentation);
-        });
+            $this->lines[$i] = substr($line, $indentation);
+        }
     }
 
     private function detectIndentation(): int
