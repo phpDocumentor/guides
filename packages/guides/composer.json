@@ -34,6 +34,7 @@
         "symfony/clock": "^6.4.8",
         "symfony/html-sanitizer": "^6.4.8",
         "symfony/http-client": "^6.4.9",
+        "symfony/polyfill-php84": "^1.33.0",
         "symfony/string": "^6.4.9",
         "symfony/translation-contracts": "^3.5.1",
         "twig/twig": "~2.15 || ^3.0",

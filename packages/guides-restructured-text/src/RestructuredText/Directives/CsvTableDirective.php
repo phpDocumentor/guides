@@ -33,7 +33,6 @@ use function count;
 use function explode;
 use function implode;
 use function is_string;
-use function method_exists;
 use function strval;
 use function trim;
 
@@ -79,18 +78,10 @@ final class CsvTableDirective extends BaseDirective
                 return new GenericNode('csv-table');
             }
 
-            if (method_exists(Reader::class, 'from')) {
-                $csv = Reader::from($csvStream);
-            } else {
-                $csv = Reader::createFromStream($csvStream);
-            }
+            $csv = Reader::from($csvStream);
         } else {
             $lines = $blockContext->getDocumentIterator()->toArray();
-            if (method_exists(Reader::class, 'fromString')) {
-                $csv = Reader::fromString(implode("\n", $lines));
-            } else {
-                $csv = Reader::createFromString(implode("\n", $lines));
-            }
+            $csv = Reader::fromString(implode("\n", $lines));
         }
 
         if ($directive->getOption('header-rows')->getValue() !== null) {
@@ -99,11 +90,7 @@ final class CsvTableDirective extends BaseDirective
 
         $header = null;
         if ($directive->hasOption('header')) {
-            if (method_exists(Reader::class, 'fromString')) {
-                $headerCsv = Reader::fromString($directive->getOption('header')->toString());
-            } else {
-                $headerCsv = Reader::createFromString($directive->getOption('header')->toString());
-            }
+            $headerCsv = Reader::fromString($directive->getOption('header')->toString());
 
             $header = new TableRow();
             foreach ($headerCsv->first() as $column) {

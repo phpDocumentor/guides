@@ -29,13 +29,15 @@ use phpDocumentor\Guides\Renderer\DocumentListIterator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_find_key;
 use function assert;
+use function current;
 use function sprintf;
 use function substr;
 
 final class RerenderListener
 {
-    /** @param array<string, DocumentNode> $documents */
+    /** @param DocumentNode[] $documents */
     public function __construct(
         private readonly OutputInterface $output,
         private readonly CommandBus $commandBus,
@@ -72,7 +74,16 @@ final class RerenderListener
 
         /** @var array<string, DocumentNode> $documents */
         $documents = $this->commandBus->handle(new CompileDocumentsCommand([$file => $document], new CompilerContext($this->projectNode)));
-        $this->documents[$file] = $documents[$file];
+        $key = array_find_key($this->documents, static fn (DocumentNode $entry) => $entry->getFilePath() === $document->getFilePath());
+        $document = current($documents);
+        assert($document instanceof DocumentNode);
+        if ($key === null) {
+            // If the document is new, we add it to the list with its file path as key
+            $this->documents[] = $document;
+        } else {
+            $this->documents[$key] = $document;
+        }
+
         $destinationFileSystem = FlySystemAdapter::createForPath($this->settings->getOutput());
 
         $documentIterator = DocumentListIterator::create(
