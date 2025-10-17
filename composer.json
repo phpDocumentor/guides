@@ -50,7 +50,8 @@
         "phpdocumentor/guides-markdown": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-restructured-text": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-theme-bootstrap": "^1.0 || ^1.0@dev",
-        "phpdocumentor/guides-theme-rst": "^1.0 || ^1.0@dev"
+        "phpdocumentor/guides-theme-rst": "^1.0 || ^1.0@dev",
+        "symfony/polyfill-php84": "^1.33"
     },
     "require-dev": {
         "ext-dom": "*",

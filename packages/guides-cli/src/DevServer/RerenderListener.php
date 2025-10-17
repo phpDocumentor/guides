@@ -29,7 +29,9 @@ use phpDocumentor\Guides\Renderer\DocumentListIterator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_find_key;
 use function assert;
+use function current;
 use function sprintf;
 use function substr;
 
@@ -72,7 +74,8 @@ final class RerenderListener
 
         /** @var array<string, DocumentNode> $documents */
         $documents = $this->commandBus->handle(new CompileDocumentsCommand([$file => $document], new CompilerContext($this->projectNode)));
-        $this->documents[$file] = $documents[$file];
+        $key = array_find_key($this->documents, static fn (DocumentNode $entry) => $entry->getFilePath() === $document->getFilePath());
+        $this->documents[$key] = current($documents);
         $destinationFileSystem = FlySystemAdapter::createForPath($this->settings->getOutput());
 
         $documentIterator = DocumentListIterator::create(
