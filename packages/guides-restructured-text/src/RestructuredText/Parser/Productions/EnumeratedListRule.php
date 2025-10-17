@@ -27,12 +27,15 @@ use function count;
 use function ltrim;
 use function mb_strlen;
 use function mb_substr;
+use function ord;
 use function preg_match;
 use function sprintf;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function strpos;
+use function strtolower;
+use function strtoupper;
 use function trim;
 
 /**
@@ -119,8 +122,8 @@ final class EnumeratedListRule implements Rule
         $start = null;
         $orderType = null;
         if (isset($items[0])) {
-            $start = $items[0]->getOrderNumber();
             $orderType = $items[0]->getOrderType();
+            $start = (string) $this->getStartValue($items[0]->getOrderNumber(), $orderType);
         }
 
         return new ListNode($items, true, $start, $orderType);
@@ -244,5 +247,59 @@ final class EnumeratedListRule implements Rule
         }
 
         return '';
+    }
+
+    private function getStartValue(string|null $firstItemNumber, string|null $orderType): int|null
+    {
+        if ($firstItemNumber === null) {
+            return null;
+        }
+
+        if ($orderType === 'auto_number' . $this->markerSuffix($firstItemNumber)) {
+            return null;
+        }
+
+        if (preg_match('/^\d+$/', $firstItemNumber)) {
+            return (int) $firstItemNumber;
+        }
+
+        if (preg_match('/^' . self::ROMAN_NUMBER . '$/i', $firstItemNumber, $m)) {
+            $roman = strtoupper($m[1]);
+            $map = [
+                'M' => 1000,
+                'CM' => 900,
+                'D' => 500,
+                'CD' => 400,
+                'C' => 100,
+                'XC' => 90,
+                'L' => 50,
+                'XL' => 40,
+                'X' => 10,
+                'IX' => 9,
+                'V' => 5,
+                'IV' => 4,
+                'I' => 1,
+            ];
+
+            $number = 0;
+            $i = 0;
+            while ($i < strlen($roman)) {
+                foreach ($map as $symbol => $value) {
+                    if (str_starts_with(mb_substr($roman, $i), $symbol)) {
+                        $number += $value;
+                        $i += strlen($symbol);
+                        break;
+                    }
+                }
+            }
+
+            return $number;
+        }
+
+        if (preg_match('/^[a-z]$/i', $firstItemNumber)) {
+            return ord(strtolower($firstItemNumber)) - ord('a') + 1;
+        }
+
+        return 1;
     }
 }

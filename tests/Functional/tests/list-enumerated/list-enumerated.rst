@@ -23,9 +23,9 @@ Using right-parenthesis:
 
 This is an enumerated list using letters:
 
-a. First
-b. Second
-c. Third
+g. First
+h. Second
+i. Third
 
 This is an roman list using letters:
 
