@@ -37,7 +37,7 @@ use function substr;
 
 final class RerenderListener
 {
-    /** @param array<string, DocumentNode> $documents */
+    /** @param DocumentNode[] $documents */
     public function __construct(
         private readonly OutputInterface $output,
         private readonly CommandBus $commandBus,
@@ -75,7 +75,15 @@ final class RerenderListener
         /** @var array<string, DocumentNode> $documents */
         $documents = $this->commandBus->handle(new CompileDocumentsCommand([$file => $document], new CompilerContext($this->projectNode)));
         $key = array_find_key($this->documents, static fn (DocumentNode $entry) => $entry->getFilePath() === $document->getFilePath());
-        $this->documents[$key] = current($documents);
+        $document = current($documents);
+        assert($document instanceof DocumentNode);
+        if ($key === null) {
+            // If the document is new, we add it to the list with its file path as key
+            $this->documents[] = $document;
+        } else {
+            $this->documents[$key] = $document;
+        }
+
         $destinationFileSystem = FlySystemAdapter::createForPath($this->settings->getOutput());
 
         $documentIterator = DocumentListIterator::create(

@@ -103,8 +103,8 @@ final class FieldListRule implements Rule
     {
         if (preg_match('/^:([^:]+):( (.*)|)$/mUsi', $line, $match) > 0) {
             return [
-                $match[1] ?? '',
-                $match[2] ?? '',
+                $match[1],
+                $match[2],
             ];
         }
 

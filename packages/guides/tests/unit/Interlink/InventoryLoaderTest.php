@@ -44,8 +44,6 @@ final class InventoryLoaderTest extends TestCase
     private JsonLoader&MockObject $jsonLoader;
     private DefaultInventoryRepository $inventoryRepository;
     private RenderContext&MockObject $renderContext;
-    /** @var array<string, mixed> */
-    private array $json;
 
     protected function setUp(): void
     {
@@ -65,9 +63,10 @@ final class InventoryLoaderTest extends TestCase
     {
         $jsonString = file_get_contents($filename);
         assertIsString($jsonString);
-        $this->json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
+        /** @var array<array-key, mixed> $json */
+        $json = (array) json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
         $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
-        $this->inventoryLoader->loadInventoryFromJson($inventory, $this->json);
+        $this->inventoryLoader->loadInventoryFromJson($inventory, $json);
         $this->inventoryRepository->addInventory('somekey', $inventory);
         $this->inventoryRepository->addInventory('some-key', $inventory);
     }
@@ -82,7 +81,9 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryIsLoadedExactlyOnce(): void
     {
-        $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn($this->json);
+        $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willReturn(
+            ['dummy' => 'data', 'items' => []],
+        );
         $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
