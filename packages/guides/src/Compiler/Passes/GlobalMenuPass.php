@@ -70,7 +70,7 @@ final class GlobalMenuPass implements CompilerPass
         }
 
         if ($rootDocument === null) {
-            return [];
+            return $documents;
         }
 
         $menuNodes = [];
