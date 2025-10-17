@@ -47,7 +47,7 @@ final class EnumeratedListRule implements Rule
     private const ROMAN_NUMBER = '((?:M{0,3})(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3}))(?<!^)';
     private const NUMBER = '(\d+|#)';
 
-    private const ALPHABETIC = '[a-z]';
+    private const ALPHABETIC = '([a-z])';
 
     private const LIST_MARKER = '(^%s([\.)])(?:\s+|$)|^[(]%s[)](?:\s+|$))';
 
@@ -144,8 +144,8 @@ final class EnumeratedListRule implements Rule
         }
 
         return [
-            'marker' => trim($m[1]),
-            'marker_type' => $this->getMarkerType($m[1]),
+            'marker' => trim($m[0]),
+            'marker_type' => $this->getMarkerType($m[0]),
             'indenting' => $m[0] === $line ? 1 : mb_strlen($m[0]),
         ];
     }
@@ -161,7 +161,7 @@ final class EnumeratedListRule implements Rule
             return false;
         }
 
-        $normalizedMarker = $this->getMarkerType($m[1]);
+        $normalizedMarker = $this->getMarkerType($m[0]);
 
         if ($normalizedMarker === 'unknown') {
             return false;
@@ -220,6 +220,10 @@ final class EnumeratedListRule implements Rule
 
         if (preg_match('/' . sprintf(self::LIST_MARKER, self::ROMAN_NUMBER, self::ROMAN_NUMBER) . '/', $marker)) {
             return 'roman' . $this->markerSuffix($marker);
+        }
+
+        if (preg_match('/' . sprintf(self::LIST_MARKER, self::ALPHABETIC, self::ALPHABETIC) . '/', $marker)) {
+            return 'alphabetic' . $this->markerSuffix($marker);
         }
 
         return 'unknown';
