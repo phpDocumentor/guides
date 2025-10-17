@@ -154,6 +154,10 @@ final class ProjectNode extends CompoundNode
         }
 
         if (isset($this->internalLinkTargets[$linkType][$anchorName]) && $linkType !== 'std:title') {
+            if ($this->internalLinkTargets[$linkType][$anchorName]->getDocumentPath() === $target->getDocumentPath()) {
+                return;
+            }
+
             throw new DuplicateLinkAnchorException(sprintf('Duplicate anchor "%s". There is already another anchor of that name in document "%s"', $anchorName, $this->internalLinkTargets[$linkType][$anchorName]->getDocumentPath()));
         }
 
