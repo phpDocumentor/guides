@@ -102,8 +102,8 @@ final class RerenderListener
 
         $this->commandBus->handle(
             new RenderDocumentCommand(
-                $this->documents[$file],
-                $renderContext->withDocument($this->documents[$file]),
+                $this->documents[$key],
+                $renderContext->withDocument($this->documents[$key]),
             ),
         );
 
