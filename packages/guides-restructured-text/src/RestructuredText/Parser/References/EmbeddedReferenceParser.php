@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\References;
 
 use function preg_match;
+use function str_replace;
 use function trim;
 
 trait EmbeddedReferenceParser
 {
     /**
-     * https://regex101.com/r/KadqKx/1
+     * https://regex101.com/r/8O8N3h/2
      */
-    private string $referenceRegex = '/^(.*?)(<([^<]+)>)?$/s';
+    private string $referenceRegex = '/^(.*?)((?<!\\\\)<([^<]+)(?<!\\\\)>)?$/s';
 
     private function extractEmbeddedReference(string $text): ReferenceData
     {
@@ -37,6 +38,9 @@ trait EmbeddedReferenceParser
             $text = null;
         }
 
-        return new ReferenceData($reference, $text);
+        return new ReferenceData(
+            str_replace(['\\<', '\\>'], ['<', '>'], $reference),
+            $text,
+        );
     }
 }
