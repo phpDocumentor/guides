@@ -127,7 +127,7 @@ class DocumentParserContext
             $name = array_shift($this->anonymous);
         }
 
-        $this->links[$name] = trim($url);
+        $this->links[$name ?? ''] = trim($url);
     }
 
     public function resetAnonymousStack(): void
