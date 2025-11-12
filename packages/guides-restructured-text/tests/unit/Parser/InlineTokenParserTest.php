@@ -174,6 +174,10 @@ final class InlineTokenParserTest extends TestCase
                 '`myref`_',
                 new InlineCompoundNode([new HyperLinkNode('myref', 'myref')]),
             ],
+            'Named Reference, escaped phrase' => [
+                '`myref \<foo\>`_',
+                new InlineCompoundNode([new HyperLinkNode('myref <foo>', 'myref <foo>')]),
+            ],
             'Named Reference, Phrased, With URL' => [
                 '`myref <https://test.com>`_',
                 new InlineCompoundNode([new HyperLinkNode('myref', 'https://test.com')]),

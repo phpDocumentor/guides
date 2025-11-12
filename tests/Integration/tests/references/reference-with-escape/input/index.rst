@@ -1,6 +1,4 @@
-.. _anchor:
-
-the \<head\>
+the <head>
 ============
 
-See also :ref:`the \<head\> of this file <anchor>` or `the \<head\>`_.
+See also this is a complex reference `the \<head\>`_.
