@@ -29,6 +29,7 @@ use function strlen;
 use function substr;
 
 use const PHP_URL_SCHEME;
+use const PHP_VERSION_ID;
 
 /** @extends AbstractLexer<int, string> */
 final class InlineLexer extends AbstractLexer
@@ -99,7 +100,11 @@ final class InlineLexer extends AbstractLexer
 
         $class = new ReflectionClass(AbstractLexer::class);
         $property = $class->getProperty('tokens');
-        $property->setAccessible(true);
+        //phpcs:ignore SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator.RequiredNumericLiteralSeparator
+        if (PHP_VERSION_ID < 80500) {
+            $property->setAccessible(true);
+        }
+
         /** @var array<int, string> $tokens */
         $tokens = $property->getValue($this);
 
