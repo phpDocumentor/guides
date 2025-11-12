@@ -104,15 +104,38 @@ final class HttpHandler implements HttpServerInterface
         //Read html and inject script before closing body tag
         $injection = <<<'EOT'
 <script>
-    const socket = new WebSocket('ws://' + window.location.host + '/ws');
+    const socket = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws');
     socket.addEventListener('message', function (event) {
         if (event.data === 'update') {
-            console.log('Reloading page due to server change...');
+            console.log('Reloading page due to server change... Stored scrollPosition: ' + window.scrollY);
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+            sessionStorage.setItem('scrollURL', window.location.href);
             window.location.reload();
         }
     });
-</script>
-EOT;
+
+    // Restore scroll position after page loads. Note that sessionStorage is
+    // browser-tab specific, so multiple instances should not affect each other.
+    window.addEventListener('load', function() {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        const scrollURL = sessionStorage.getItem('scrollURL');
+
+        // Only restore if we're on the same URL (hot reload, not navigation)
+        if (scrollPosition !== null && scrollURL === window.location.href) {
+            console.log('Prepare to restore scrollPosition to: ' + scrollPosition);
+
+            // Use setTimeout to override hash scrolling that happens after load
+            setTimeout(function() {
+                console.log('Restoring scrollPosition to: ' + scrollPosition);
+                window.scrollTo(0, parseInt(scrollPosition));
+            }, 10);
+        }
+
+        // Ensure local scroll position is reset, so other reloads to not carry state.
+        sessionStorage.removeItem('scrollPosition');
+        sessionStorage.removeItem('scrollURL');
+    });
+</script>EOT;
 
         return str_replace('</body>', $injection . '</body>', $html);
     }
