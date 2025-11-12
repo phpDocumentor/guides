@@ -135,7 +135,8 @@ final class HttpHandler implements HttpServerInterface
         sessionStorage.removeItem('scrollPosition');
         sessionStorage.removeItem('scrollURL');
     });
-</script>EOT;
+</script>
+EOT;
 
         return str_replace('</body>', $injection . '</body>', $html);
     }
