@@ -29,10 +29,10 @@
         "monolog/monolog": "^3.0",
         "phpdocumentor/guides": "^1.0 || ^2.0",
         "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
-        "symfony/config": "^5.4 || ^6.3 || ^7.0",
-        "symfony/console": "^5.4 || ^6.3 || ^7.0",
-        "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
-        "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0"
+        "symfony/config": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+        "symfony/console": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+        "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+        "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0 || ^8.0"
     },
     "suggest": {
         "phpdocumentor/dev-server": "Allows you to run a development server with live reloading to preview your documentation"
