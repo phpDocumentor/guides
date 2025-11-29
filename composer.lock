@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4f2249a4df181b4b16ca359010029a6",
+    "content-hash": "ca3ea9c081086512ad25ab19f6399264",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1564,7 +1564,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/dev-server",
-                "reference": "92dfa3b91481d9e8681afad7366965a2a316feb1"
+                "reference": "e6ca50208343f466039ed057fcdec6a8a96f01db"
             },
             "require": {
                 "cboden/ratchet": "0.4.x@dev",
@@ -1576,8 +1576,8 @@
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "react/http": "^v1.11",
                 "react/socket": "^v1.16",
-                "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0",
-                "symfony/routing": "^5.4 || ^6.3 || ^7.0"
+                "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+                "symfony/routing": "^5.4 || ^6.3 || ^7.0 || ^8.0"
             },
             "type": "project",
             "extra": {
@@ -1715,7 +1715,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "1ffea65aede47acbf6aa967163c4d3b5585bcc84"
+                "reference": "569c35aee270c467111959c7e4311d1d13eb82df"
             },
             "require": {
                 "doctrine/deprecations": "^1.1",
@@ -1728,11 +1728,11 @@
                 "phpdocumentor/filesystem": "^1.7.4",
                 "phpdocumentor/flyfinder": "^1.1 || ^2.0",
                 "psr/event-dispatcher": "^1.0",
-                "symfony/clock": "^6.4.8",
-                "symfony/html-sanitizer": "^6.4.8",
-                "symfony/http-client": "^6.4.9",
+                "symfony/clock": "^6.4.8 || ^7.4 || ^8",
+                "symfony/html-sanitizer": "^6.4.8 || ^7.4 || ^8",
+                "symfony/http-client": "^6.4.9 || ^7.4 || ^8",
                 "symfony/polyfill-php84": "^1.33.0",
-                "symfony/string": "^6.4.9",
+                "symfony/string": "^6.4.9 || ^7.4 || ^8",
                 "symfony/translation-contracts": "^3.5.1",
                 "twig/twig": "~2.15 || ^3.0",
                 "webmozart/assert": "^1.11"
@@ -1773,17 +1773,17 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "3a4b6638205f05d0c8b617290bfd677499ed388e"
+                "reference": "129e2a05e223ed1d9dee140bb1f39a23424d3042"
             },
             "require": {
                 "monolog/monolog": "^3.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
-                "symfony/config": "^5.4 || ^6.3 || ^7.0",
-                "symfony/console": "^5.4 || ^6.3 || ^7.0",
-                "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0",
-                "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0"
+                "symfony/config": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+                "symfony/console": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+                "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0 || ^8.0",
+                "symfony/event-dispatcher": "^5.4 || ^6.3 || ^7.0 || ^8.0"
             },
             "suggest": {
                 "phpdocumentor/dev-server": "Allows you to run a development server with live reloading to preview your documentation"
@@ -1868,14 +1868,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "d1762770c0293909a8112fb659e05b0ca94942b8"
+                "reference": "572c91982e3f3256688fd84305951c6143d502e1"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
-                "symfony/process": "^5.4 || ^6.3 || ^7.0",
+                "symfony/process": "^5.4 || ^6.3 || ^7.0 || ^8.0",
                 "twig/twig": "~2.0 || ^3.0"
             },
             "suggest": {
@@ -1914,13 +1914,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
-                "reference": "cfd9426a8dfd8168edc7911978d00cb6ff607130"
+                "reference": "b68c5dbb93b12ea1e9e4526b1e0debc225af8155"
             },
             "require": {
                 "league/commonmark": "^2.4",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
-                "symfony/yaml": "^6.4 || ^7.0"
+                "symfony/yaml": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1955,11 +1955,11 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "c1fbb5c5c2b6a74160eb8d29310b022a1830a3c7"
+                "reference": "72eb9213863dcec1603d22f6701aca271fd3ba7a"
             },
             "require": {
                 "doctrine/lexer": "^3.0",
-                "league/csv": "^9.10.0",
+                "league/csv": "^9.27.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "webmozart/assert": "^1.11"
@@ -3982,16 +3982,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v6.4.26",
+            "version": "v6.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "369241591d92bb5dfb4c6ccd6ee94378a45b1521"
+                "reference": "b03d11e015552a315714c127d8d1e0f9e970ec88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/369241591d92bb5dfb4c6ccd6ee94378a45b1521",
-                "reference": "369241591d92bb5dfb4c6ccd6ee94378a45b1521",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/b03d11e015552a315714c127d8d1e0f9e970ec88",
+                "reference": "b03d11e015552a315714c127d8d1e0f9e970ec88",
                 "shasum": ""
             },
             "require": {
@@ -4039,7 +4039,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v6.4.26"
+                "source": "https://github.com/symfony/http-foundation/tree/v6.4.29"
             },
             "funding": [
                 {
@@ -4059,7 +4059,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-16T08:22:30+00:00"
+            "time": "2025-11-08T16:40:12+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -8620,5 +8620,5 @@
     "platform-overrides": {
         "php": "8.1.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
