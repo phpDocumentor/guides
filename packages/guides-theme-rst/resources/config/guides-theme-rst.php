@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $container): void {
         /*
         ->load(
             'phpDocumentor\\Guides\RstTheme\\NodeRenderers\\Rst\\',
-            '%vendor_dir%/phpdocumentor/guides-rst-theme/src/RstTheme/NodeRenderers/Rst',
+            '../../src/RstTheme/NodeRenderers/Rst',
         )
         ->tag('phpdoc.guides.noderenderer.rst')
         */

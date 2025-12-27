@@ -93,13 +93,27 @@
 
     <xsd:complexType name="sanitizer">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
-            <xsd:element name="allow-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="allow-element" type="element-option" minOccurs="0" maxOccurs="unbounded" />
             <xsd:element name="block-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
             <xsd:element name="drop-element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
-            <xsd:element name="allow-attribute" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
-            <xsd:element name="drop-attribute" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="allow-attribute" type="attribute-option" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="drop-attribute" type="attribute-option" minOccurs="0" maxOccurs="unbounded" />
         </xsd:choice>
 
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="element-option">
+        <xsd:sequence>
+            <xsd:element name="attribute" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="attribute-option">
+        <xsd:sequence>
+            <xsd:element name="element" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
         <xsd:attribute name="name" type="xsd:string" use="required" />
     </xsd:complexType>
 </xsd:schema>
