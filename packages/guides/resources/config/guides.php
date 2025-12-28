@@ -92,16 +92,16 @@ return static function (ContainerConfigurator $container): void {
 
         ->load(
             'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\',
-            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/*Transformer.php',
+            '../../src/Compiler/NodeTransformers/*Transformer.php',
         )
         ->load(
             'phpDocumentor\\Guides\\Compiler\\NodeTransformers\\MenuNodeTransformers\\',
-            '%vendor_dir%/phpdocumentor/guides/src/Compiler/NodeTransformers/MenuNodeTransformers/*Transformer.php',
+            '../../src/Compiler/NodeTransformers/MenuNodeTransformers/*Transformer.php',
         )
 
         ->load(
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
-            '%vendor_dir%/phpdocumentor/guides/src/Compiler/Passes/*Pass.php',
+            '../../src/Compiler/Passes/*Pass.php',
         )
 
         ->set(InternalMenuEntryNodeTransformer::class)

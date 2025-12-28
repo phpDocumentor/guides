@@ -149,16 +149,16 @@ return static function (ContainerConfigurator $container): void {
 
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\Parser\\Productions\\InlineRules\\',
-            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules',
+            '../../src/RestructuredText/Parser/Productions/InlineRules',
         )
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\Html\\',
-            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/Html',
+            '../../src/RestructuredText/NodeRenderers/Html',
         )
         ->tag('phpdoc.guides.noderenderer.html')
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\NodeRenderers\\LaTeX\\',
-            '%vendor_dir%/phpdocumentor/guides-restructured-text/src/RestructuredText/NodeRenderers/LaTeX',
+            '../../src/RestructuredText/NodeRenderers/LaTeX',
         )
         ->tag('phpdoc.guides.noderenderer.tex')
 

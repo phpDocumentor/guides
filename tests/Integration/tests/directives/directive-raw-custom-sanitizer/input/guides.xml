@@ -7,7 +7,7 @@
     <project title="Project Title" version="6.4"/>
     <raw-node sanitizer-name="custom" >
         <sanitizer name="custom">
-            <allow-element>p</allow-element>
+            <allow-element name="p"/>
             <block-element>div</block-element>
             <drop-element>h2</drop-element>
         </sanitizer>
