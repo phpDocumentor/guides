@@ -114,6 +114,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\GenericReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\MathTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\NbspTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\SpanTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
@@ -172,6 +173,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ApiClassTextRole::class)
         ->set(MathTextRole::class)
         ->set(LiteralTextRole::class)
+        ->set(NbspTextRole::class)
         ->set(SpanTextRole::class)
 
         ->set(GeneralDirective::class)
