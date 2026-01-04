@@ -21,13 +21,21 @@ use Symfony\Component\Process\Process;
 use function array_merge;
 use function file_get_contents;
 use function file_put_contents;
+use function is_dir;
+use function mkdir;
 use function sys_get_temp_dir;
 use function tempnam;
 
 final class PlantumlRenderer implements DiagramRenderer
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly string $plantUmlBinaryPath)
-    {
+    private readonly string $tempDirectory;
+
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly string $plantUmlBinaryPath,
+        string|null $tempDirectory = null,
+    ) {
+        $this->tempDirectory = $tempDirectory ?? sys_get_temp_dir() . '/phpdocumentor';
     }
 
     public function render(RenderContext $renderContext, string $diagram): string|null
@@ -45,7 +53,11 @@ $diagram
 @enduml
 PUML;
 
-        $pumlFileLocation = tempnam(sys_get_temp_dir() . '/phpdocumentor', 'pu_');
+        if (!is_dir($this->tempDirectory)) {
+            mkdir($this->tempDirectory, 0o755, true);
+        }
+
+        $pumlFileLocation = tempnam($this->tempDirectory, 'pu_');
         file_put_contents($pumlFileLocation, $output);
         try {
             $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);
