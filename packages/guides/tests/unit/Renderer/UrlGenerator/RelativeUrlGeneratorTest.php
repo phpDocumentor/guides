@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\Exception\InvalidUrlException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -128,5 +129,14 @@ final class RelativeUrlGeneratorTest extends TestCase
                 'anchor' => '',
             ],
         ];
+    }
+
+    public function testGenerateInternalUrlThrowsOnAbsoluteUrl(): void
+    {
+        $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
+        $renderContext = $this->createMock(RenderContext::class);
+
+        $this->expectException(InvalidUrlException::class);
+        $urlGenerator->generateInternalUrl($renderContext, 'https://example.com/page.html');
     }
 }
