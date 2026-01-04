@@ -32,6 +32,10 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 
     public function createFileUrl(RenderContext $context, string $filename, string|null $anchor = null): string
     {
+        if ($filename === '') {
+            return '#' . ($anchor ?? '');
+        }
+
         return $filename . '.' . $context->getOutputFormat() .
             ($anchor !== null ? '#' . $anchor : '');
     }

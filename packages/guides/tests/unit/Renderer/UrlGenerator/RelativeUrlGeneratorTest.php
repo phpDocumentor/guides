@@ -113,14 +113,12 @@ final class RelativeUrlGeneratorTest extends TestCase
                 'filename' => '',
                 'outputFormat' => 'html',
                 'anchor' => 'anchor',
-                'skip' => 'Empty filenames are not supported',
             ],
             'Empty File with empty anchor' => [
                 'expected' => '#',
                 'filename' => '',
                 'outputFormat' => 'html',
                 'anchor' => null,
-                'skip' => 'Empty filenames are not supported',
             ],
         ];
     }
