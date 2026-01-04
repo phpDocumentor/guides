@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
-use Exception;
 use League\Uri\BaseUri;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\Exception\InvalidUrlException;
 
 use function filter_var;
 use function sprintf;
@@ -55,15 +55,20 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
             return $reference;
         }
 
+        // Pass through email addresses (for mailto: link generation)
         if (filter_var($reference, FILTER_VALIDATE_EMAIL) !== false) {
             return $reference;
         }
 
+        // If reference is already a known document, it's already canonical - use directly
         if ($context->getProjectNode()->findDocumentEntry($reference) !== null) {
-            // todo: this is a hack, existing documents are expected to be handled like absolute links in some places
-            $reference = '/' . $reference;
+            return $this->generateInternalUrl(
+                $context,
+                $this->createFileUrl($context, $reference, $anchor),
+            );
         }
 
+        // Otherwise, resolve relative reference to canonical path
         $canonicalUrl = $this->documentNameResolver->canonicalUrl(
             $context->getDirName(),
             $reference,
@@ -80,7 +85,7 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
         string $canonicalUrl,
     ): string {
         if (!$this->isRelativeUrl($canonicalUrl)) {
-            throw new Exception(sprintf('%s::%s may only be applied to relative URLs, %s cannot be handled', self::class, __METHOD__, $canonicalUrl));
+            throw new InvalidUrlException(sprintf('%s::%s may only be applied to relative URLs, %s cannot be handled', self::class, __METHOD__, $canonicalUrl));
         }
 
         return $this->generateInternalPathFromRelativeUrl($renderContext, $canonicalUrl);
