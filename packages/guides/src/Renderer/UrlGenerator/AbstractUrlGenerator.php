@@ -32,12 +32,13 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 
     public function createFileUrl(RenderContext $context, string $filename, string|null $anchor = null): string
     {
+        $anchorSuffix = $anchor !== null && $anchor !== '' ? '#' . $anchor : '';
+
         if ($filename === '') {
-            return '#' . ($anchor ?? '');
+            return $anchorSuffix !== '' ? $anchorSuffix : '#';
         }
 
-        return $filename . '.' . $context->getOutputFormat() .
-            ($anchor !== null ? '#' . $anchor : '');
+        return $filename . '.' . $context->getOutputFormat() . $anchorSuffix;
     }
 
     abstract public function generateInternalPathFromRelativeUrl(

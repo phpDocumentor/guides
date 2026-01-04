@@ -72,15 +72,10 @@ final class RelativeUrlGeneratorTest extends TestCase
     }
 
     #[DataProvider('fileUrlProvider')]
-    public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null, string $skip = ''): void
+    public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null): void
     {
-        if ($skip !== '') {
-            self::markTestSkipped($skip);
-        }
-
         $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
         $renderContext = $this->createMock(RenderContext::class);
-        $renderContext->method('getCurrentFileName')->willReturn($filename);
         $renderContext->method('getOutputFormat')->willReturn($outputFormat);
         self::assertSame($expected, $urlGenerator->createFileUrl($renderContext, $filename, $anchor));
     }
@@ -114,11 +109,23 @@ final class RelativeUrlGeneratorTest extends TestCase
                 'outputFormat' => 'html',
                 'anchor' => 'anchor',
             ],
-            'Empty File with empty anchor' => [
+            'Empty File with null anchor' => [
                 'expected' => '#',
                 'filename' => '',
                 'outputFormat' => 'html',
                 'anchor' => null,
+            ],
+            'Empty File with empty string anchor' => [
+                'expected' => '#',
+                'filename' => '',
+                'outputFormat' => 'html',
+                'anchor' => '',
+            ],
+            'File with empty string anchor' => [
+                'expected' => 'file.html',
+                'filename' => 'file',
+                'outputFormat' => 'html',
+                'anchor' => '',
             ],
         ];
     }
