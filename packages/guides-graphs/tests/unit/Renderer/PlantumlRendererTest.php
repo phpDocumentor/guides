@@ -17,6 +17,8 @@ use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
+use function array_map;
+use function glob;
 use function rmdir;
 use function sys_get_temp_dir;
 use function uniqid;
@@ -42,6 +44,7 @@ final class PlantumlRendererTest extends TestCase
         self::assertDirectoryExists($tempDir);
 
         // Clean up
+        array_map('unlink', glob($tempDir . '/*') ?: []);
         @rmdir($tempDir);
     }
 }

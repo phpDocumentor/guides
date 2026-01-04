@@ -25,6 +25,7 @@ use function is_dir;
 use function mkdir;
 use function sys_get_temp_dir;
 use function tempnam;
+use function unlink;
 
 final class PlantumlRenderer implements DiagramRenderer
 {
@@ -53,11 +54,25 @@ $diagram
 @enduml
 PUML;
 
-        if (!is_dir($this->tempDirectory)) {
-            mkdir($this->tempDirectory, 0o755, true);
+        if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory, 0o755, true) && !is_dir($this->tempDirectory)) {
+            $this->logger->error(
+                'Failed to create temp directory: ' . $this->tempDirectory,
+                $renderContext->getLoggerInformation(),
+            );
+
+            return null;
         }
 
         $pumlFileLocation = tempnam($this->tempDirectory, 'pu_');
+        if ($pumlFileLocation === false) {
+            $this->logger->error(
+                'Failed to create temporary file for diagram',
+                $renderContext->getLoggerInformation(),
+            );
+
+            return null;
+        }
+
         file_put_contents($pumlFileLocation, $output);
         try {
             $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);
@@ -86,6 +101,11 @@ PUML;
             return null;
         }
 
-        return file_get_contents($pumlFileLocation . '.svg') ?: null;
+        $svg = file_get_contents($pumlFileLocation . '.svg') ?: null;
+
+        @unlink($pumlFileLocation);
+        @unlink($pumlFileLocation . '.svg');
+
+        return $svg;
     }
 }
