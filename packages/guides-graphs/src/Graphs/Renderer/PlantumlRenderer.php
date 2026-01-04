@@ -28,10 +28,14 @@ use function tempnam;
 
 final class PlantumlRenderer implements DiagramRenderer
 {
-    public const TEMP_SUBDIRECTORY = '/phpdocumentor';
+    private readonly string $tempDirectory;
 
-    public function __construct(private readonly LoggerInterface $logger, private readonly string $plantUmlBinaryPath)
-    {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly string $plantUmlBinaryPath,
+        string|null $tempDirectory = null,
+    ) {
+        $this->tempDirectory = $tempDirectory ?? sys_get_temp_dir() . '/phpdocumentor';
     }
 
     public function render(RenderContext $renderContext, string $diagram): string|null
@@ -49,12 +53,11 @@ $diagram
 @enduml
 PUML;
 
-        $tempDir = sys_get_temp_dir() . self::TEMP_SUBDIRECTORY;
-        if (!is_dir($tempDir)) {
-            mkdir($tempDir, 0o755, true);
+        if (!is_dir($this->tempDirectory)) {
+            mkdir($this->tempDirectory, 0o755, true);
         }
 
-        $pumlFileLocation = tempnam($tempDir, 'pu_');
+        $pumlFileLocation = tempnam($this->tempDirectory, 'pu_');
         file_put_contents($pumlFileLocation, $output);
         try {
             $process = new Process([$this->plantUmlBinaryPath, '-tsvg', $pumlFileLocation], __DIR__, null, null, 600.0);

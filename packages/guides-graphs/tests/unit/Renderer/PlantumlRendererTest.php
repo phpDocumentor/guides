@@ -17,29 +17,21 @@ use phpDocumentor\Guides\RenderContext;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-use function is_dir;
 use function rmdir;
 use function sys_get_temp_dir;
+use function uniqid;
 
 final class PlantumlRendererTest extends TestCase
 {
-    /** @runInSeparateProcess */
     public function testRenderCreatesTempDirectoryWhenMissing(): void
     {
-        $tempDir = sys_get_temp_dir() . PlantumlRenderer::TEMP_SUBDIRECTORY;
+        $tempDir = sys_get_temp_dir() . '/plantuml-test-' . uniqid();
 
-        // Remove the directory if it exists to test creation
-        if (is_dir($tempDir)) {
-            @rmdir($tempDir);
-        }
-
-        // Skip if we can't remove it (contains files from other processes)
-        if (is_dir($tempDir)) {
-            self::markTestSkipped('Cannot remove temp directory - it contains files from other processes');
-        }
+        // Ensure the directory does not exist
+        self::assertDirectoryDoesNotExist($tempDir);
 
         // Use a non-existent binary path - the render will fail but directory should be created first
-        $renderer = new PlantumlRenderer(new NullLogger(), '/non/existent/plantuml');
+        $renderer = new PlantumlRenderer(new NullLogger(), '/non/existent/plantuml', $tempDir);
 
         $renderContext = $this->createMock(RenderContext::class);
         $renderContext->method('getLoggerInformation')->willReturn([]);
