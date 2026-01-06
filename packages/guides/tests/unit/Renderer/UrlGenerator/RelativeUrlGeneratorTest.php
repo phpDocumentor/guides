@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
+use phpDocumentor\Guides\Renderer\UrlGenerator\Exception\InvalidUrlException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -72,15 +73,10 @@ final class RelativeUrlGeneratorTest extends TestCase
     }
 
     #[DataProvider('fileUrlProvider')]
-    public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null, string $skip = ''): void
+    public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null): void
     {
-        if ($skip !== '') {
-            self::markTestSkipped($skip);
-        }
-
         $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
         $renderContext = $this->createMock(RenderContext::class);
-        $renderContext->method('getCurrentFileName')->willReturn($filename);
         $renderContext->method('getOutputFormat')->willReturn($outputFormat);
         self::assertSame($expected, $urlGenerator->createFileUrl($renderContext, $filename, $anchor));
     }
@@ -113,15 +109,34 @@ final class RelativeUrlGeneratorTest extends TestCase
                 'filename' => '',
                 'outputFormat' => 'html',
                 'anchor' => 'anchor',
-                'skip' => 'Empty filenames are not supported',
             ],
-            'Empty File with empty anchor' => [
+            'Empty File with null anchor' => [
                 'expected' => '#',
                 'filename' => '',
                 'outputFormat' => 'html',
                 'anchor' => null,
-                'skip' => 'Empty filenames are not supported',
+            ],
+            'Empty File with empty string anchor' => [
+                'expected' => '#',
+                'filename' => '',
+                'outputFormat' => 'html',
+                'anchor' => '',
+            ],
+            'File with empty string anchor' => [
+                'expected' => 'file.html',
+                'filename' => 'file',
+                'outputFormat' => 'html',
+                'anchor' => '',
             ],
         ];
+    }
+
+    public function testGenerateInternalUrlThrowsOnAbsoluteUrl(): void
+    {
+        $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
+        $renderContext = $this->createMock(RenderContext::class);
+
+        $this->expectException(InvalidUrlException::class);
+        $urlGenerator->generateInternalUrl($renderContext, 'https://example.com/page.html');
     }
 }
