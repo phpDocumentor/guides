@@ -293,9 +293,8 @@ RST;
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
     }
 
-    public function testNotEndingWithWhiteLine(): never
+    public function testNotEndingWithWhiteLine(): void
     {
-        self::markTestSkipped('Not correct yet');
         $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
@@ -310,8 +309,12 @@ SOME more text here
 RST;
 
         $context = $this->createContext($input);
-        $this->rule->apply($context);
+        $table = $this->rule->apply($context);
 
-        self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
+        // Table should parse correctly even without trailing blank line
+        assert($table instanceof TableNode);
+        self::assertCount(3, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
     }
 }
