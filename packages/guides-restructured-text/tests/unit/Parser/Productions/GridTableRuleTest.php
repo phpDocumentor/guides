@@ -294,4 +294,24 @@ RST;
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
     }
+
+    public function testTableAtEndOfFile(): void
+    {
+        $input = <<<'RST'
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should parse correctly at EOF without trailing blank line
+        assert($table instanceof TableNode);
+        self::assertCount(1, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
 }
