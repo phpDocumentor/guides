@@ -137,15 +137,15 @@ final class GridTableRule implements Rule
 
     private function isColumnDefinitionLine(string $line): bool
     {
-        return $this->isDefintionLine($line, '-');
+        return $this->isDefinitionLine($line, '-');
     }
 
     private function isHeaderDefinitionLine(string $line): bool
     {
-        return $this->isDefintionLine($line, '=');
+        return $this->isDefinitionLine($line, '=');
     }
 
-    private function isDefintionLine(string $line, string $char): bool
+    private function isDefinitionLine(string $line, string $char): bool
     {
         return preg_match('/^(?:\+' . $char . '+)+\+$/', trim($line)) > 0;
     }
