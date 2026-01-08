@@ -314,4 +314,25 @@ RST;
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
     }
+
+    public function testTableFollowedByIndentedText(): void
+    {
+        $input = <<<'RST'
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
+    Indented text here
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should parse correctly with indented text following (not a table row)
+        assert($table instanceof TableNode);
+        self::assertCount(1, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
 }
