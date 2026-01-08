@@ -59,7 +59,6 @@ final class GridTableRule implements Rule
         $context->pushSeparatorLine($tableSeparatorLineConfig);
 
         $lineLength = mb_strlen($line);
-        $headerRows = 0;
         $lineNumber = 1;
 
         while ($documentIterator->getNextLine() !== null) {
