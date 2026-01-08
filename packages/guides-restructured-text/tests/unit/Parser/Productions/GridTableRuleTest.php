@@ -85,9 +85,7 @@ final class GridTableRuleTest extends RuleTestCase
      * @param non-empty-list<TableRow> $rows
      * @param non-empty-list<TableRow> $headers
      */
-    #[DataProvider('prettyTableBasicsProvider')]
-    #[DataProvider('gridTableWithColSpanProvider')]
-    #[DataProvider('gridTableWithRowSpanProvider')]
+    #[DataProvider('tableCreationProvider')]
     public function testSimpleTableCreation(string $input, array $rows, array $headers): void
     {
         $context = $this->createContext($input);
@@ -98,6 +96,22 @@ final class GridTableRuleTest extends RuleTestCase
         self::assertEquals($rows, $table->getData());
         self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
         self::assertEquals($headers, $table->getHeaders());
+    }
+
+    /** @return Generator<mixed[]> */
+    public static function tableCreationProvider(): Generator
+    {
+        foreach (self::prettyTableBasicsProvider() as $data) {
+            yield $data;
+        }
+
+        foreach (self::gridTableWithColSpanProvider() as $data) {
+            yield $data;
+        }
+
+        foreach (self::gridTableWithRowSpanProvider() as $data) {
+            yield $data;
+        }
     }
 
     /** @return Generator<mixed[]> */
@@ -148,6 +162,7 @@ RST;
         yield [$input, [$headerRow, $row1, $row2, $row3], []];
     }
 
+    /** @return Generator<mixed[]> */
     public static function gridTableWithColSpanProvider(): Generator
     {
         $input = <<<'RST'
@@ -197,6 +212,7 @@ RST;
         yield [$input, [$row1, $row2], [$headerRow]];
     }
 
+    /** @return Generator<mixed[]> */
     public static function gridTableWithRowSpanProvider(): Generator
     {
         $input = <<<'RST'
