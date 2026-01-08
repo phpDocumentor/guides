@@ -370,4 +370,23 @@ RST;
         self::assertCount(1, $table->getData());
         self::assertFalse($this->logger->hasErrorRecords());
     }
+
+    public function testTableFollowedByDirective(): void
+    {
+        $input = <<<'RST'
++-------+-------+
+| A     | B     |
++-------+-------+
+.. note::
+   This is a note.
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should terminate before directive without error
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
 }
