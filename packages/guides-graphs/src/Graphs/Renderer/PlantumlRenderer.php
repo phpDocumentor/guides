@@ -54,7 +54,7 @@ $diagram
 @enduml
 PUML;
 
-        if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory, 0o755, true) && !is_dir($this->tempDirectory)) {
+        if (!$this->ensureDirectoryExists($this->tempDirectory)) {
             $this->logger->error(
                 'Failed to create temp directory: ' . $this->tempDirectory,
                 $renderContext->getLoggerInformation(),
@@ -107,5 +107,25 @@ PUML;
         @unlink($pumlFileLocation . '.svg');
 
         return $svg;
+    }
+
+    /**
+     * Ensures the directory exists, handling race conditions safely.
+     *
+     * @return bool True if directory exists or was created, false on failure
+     */
+    private function ensureDirectoryExists(string $directory): bool
+    {
+        if (is_dir($directory)) {
+            return true;
+        }
+
+        // Attempt to create the directory (suppress warning if concurrent process creates it)
+        if (@mkdir($directory, 0o755, true)) {
+            return true;
+        }
+
+        // mkdir failed - check if another process created it (race condition)
+        return is_dir($directory);
     }
 }
