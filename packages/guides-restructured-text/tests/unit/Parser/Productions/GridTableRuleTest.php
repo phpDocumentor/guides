@@ -22,7 +22,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuil
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\Test\TestLogger;
 
-use function assert;
 use function count;
 use function current;
 
@@ -91,7 +90,7 @@ final class GridTableRuleTest extends RuleTestCase
         $context = $this->createContext($input);
 
         $table = $this->rule->apply($context);
-        assert($table instanceof TableNode);
+        self::assertInstanceOf(TableNode::class, $table);
 
         self::assertEquals($rows, $table->getData());
         self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
@@ -305,7 +304,7 @@ RST;
         $table = $this->rule->apply($context);
 
         // Table should parse correctly even without trailing blank line
-        assert($table instanceof TableNode);
+        self::assertInstanceOf(TableNode::class, $table);
         self::assertCount(3, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
@@ -325,7 +324,7 @@ RST;
         $table = $this->rule->apply($context);
 
         // Table should parse correctly at EOF without trailing blank line
-        assert($table instanceof TableNode);
+        self::assertInstanceOf(TableNode::class, $table);
         self::assertCount(1, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
@@ -346,7 +345,7 @@ RST;
         $table = $this->rule->apply($context);
 
         // Table should parse correctly with indented text following (not a table row)
-        assert($table instanceof TableNode);
+        self::assertInstanceOf(TableNode::class, $table);
         self::assertCount(1, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
