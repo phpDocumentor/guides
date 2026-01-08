@@ -231,29 +231,6 @@ RST;
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
     }
 
-    public function gridTableFollowUpTextProvider(): Generator
-    {
-        $input = <<<'RST'
-+-----------------------------------+---------------+
-| Property                          | Data Type     |
-+===================================+===============+
-| keywords                          | string        |
-+-----------------------------------+---------------+
-
-Some text
-RST;
-
-        $headerRow = new TableRow();
-        $headerRow->addColumn(self::createColumnNode('Property'));
-        $headerRow->addColumn(self::createColumnNode('Data Type'));
-
-        $row3 = new TableRow();
-        $row3->addColumn(self::createColumnNode('keywords'));
-        $row3->addColumn(self::createColumnNode('string'));
-
-        yield [$input, [$row3], [$headerRow]];
-    }
-
     public function testTableNotClosed(): void
     {
         $input = <<<'RST'
