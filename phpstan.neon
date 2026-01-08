@@ -17,10 +17,6 @@ parameters:
     # FlyFinder plugin adds a find method to FlySystem's Filesystem
     - '#Call to an undefined method League\\Flysystem\\FilesystemInterface\|phpDocumentor\\FileSystem\\FileSystem::find\(\)#'
 
-    -
-      message: '#Unreachable statement - code above always terminates\.#'
-      path: packages/guides-restructured-text/tests/unit/Parser/Productions/GridTableRuleTest.php
-
     - message: '#Return type .* of method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\InlineMarkupRule::apply\(\) should be covariant with return type .*#'
 
     # https://github.com/doctrine/lexer/pull/109
