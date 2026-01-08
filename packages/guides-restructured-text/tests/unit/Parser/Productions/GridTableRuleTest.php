@@ -79,10 +79,8 @@ final class GridTableRuleTest extends RuleTestCase
     }
 
     /**
-     * First 2 simple table cases are broken, headers are not detected correctly?
-     *
      * @param non-empty-list<TableRow> $rows
-     * @param non-empty-list<TableRow> $headers
+     * @param list<TableRow> $headers
      */
     #[DataProvider('tableCreationProvider')]
     public function testSimpleTableCreation(string $input, array $rows, array $headers): void
