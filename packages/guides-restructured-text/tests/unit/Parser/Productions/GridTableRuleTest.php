@@ -350,4 +350,24 @@ RST;
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
     }
+
+    public function testConsecutiveTablesWithoutBlankLine(): void
+    {
+        $input = <<<'RST'
++-------+-------+
+| A     | B     |
++-------+-------+
++-------+-------+
+| C     | D     |
++-------+-------+
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // First table should terminate at its closing separator without consuming next table
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
 }
