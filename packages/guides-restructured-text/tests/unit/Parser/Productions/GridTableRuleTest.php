@@ -22,7 +22,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuil
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\Test\TestLogger;
 
-use function assert;
 use function count;
 use function current;
 
@@ -80,24 +79,36 @@ final class GridTableRuleTest extends RuleTestCase
     }
 
     /**
-     * First 2 simple table cases are broken, headers are not detected correctly?
-     *
      * @param non-empty-list<TableRow> $rows
-     * @param non-empty-list<TableRow> $headers
+     * @param list<TableRow> $headers
      */
-    #[DataProvider('prettyTableBasicsProvider')]
-    #[DataProvider('gridTableWithColSpanProvider')]
-    #[DataProvider('gridTableWithRowSpanProvider')]
+    #[DataProvider('tableCreationProvider')]
     public function testSimpleTableCreation(string $input, array $rows, array $headers): void
     {
         $context = $this->createContext($input);
 
         $table = $this->rule->apply($context);
-        assert($table instanceof TableNode);
+        self::assertInstanceOf(TableNode::class, $table);
 
         self::assertEquals($rows, $table->getData());
         self::assertEquals(count(current($rows)->getColumns()), $table->getCols());
         self::assertEquals($headers, $table->getHeaders());
+    }
+
+    /** @return Generator<mixed[]> */
+    public static function tableCreationProvider(): Generator
+    {
+        foreach (self::prettyTableBasicsProvider() as $data) {
+            yield $data;
+        }
+
+        foreach (self::gridTableWithColSpanProvider() as $data) {
+            yield $data;
+        }
+
+        foreach (self::gridTableWithRowSpanProvider() as $data) {
+            yield $data;
+        }
     }
 
     /** @return Generator<mixed[]> */
@@ -148,6 +159,7 @@ RST;
         yield [$input, [$headerRow, $row1, $row2, $row3], []];
     }
 
+    /** @return Generator<mixed[]> */
     public static function gridTableWithColSpanProvider(): Generator
     {
         $input = <<<'RST'
@@ -197,6 +209,7 @@ RST;
         yield [$input, [$row1, $row2], [$headerRow]];
     }
 
+    /** @return Generator<mixed[]> */
     public static function gridTableWithRowSpanProvider(): Generator
     {
         $input = <<<'RST'
@@ -229,29 +242,6 @@ RST;
         $row3->addColumn(self::createColumnNode('string'));
 
         yield [$input, [$row1, $row2, $row3], [$headerRow]];
-    }
-
-    public function gridTableFollowUpTextProvider(): Generator
-    {
-        $input = <<<'RST'
-+-----------------------------------+---------------+
-| Property                          | Data Type     |
-+===================================+===============+
-| keywords                          | string        |
-+-----------------------------------+---------------+
-
-Some text
-RST;
-
-        $headerRow = new TableRow();
-        $headerRow->addColumn(self::createColumnNode('Property'));
-        $headerRow->addColumn(self::createColumnNode('Data Type'));
-
-        $row3 = new TableRow();
-        $row3->addColumn(self::createColumnNode('keywords'));
-        $row3->addColumn(self::createColumnNode('string'));
-
-        yield [$input, [$row3], [$headerRow]];
     }
 
     public function testTableNotClosed(): void
@@ -293,9 +283,8 @@ RST;
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
     }
 
-    public function testNotEndingWithWhiteLine(): never
+    public function testNotEndingWithWhiteLine(): void
     {
-        self::markTestSkipped('Not correct yet');
         $input = <<<'RST'
 +-----------------------------------+---------------+
 | Property                          | Data Type     |
@@ -310,8 +299,92 @@ SOME more text here
 RST;
 
         $context = $this->createContext($input);
-        $this->rule->apply($context);
+        $table = $this->rule->apply($context);
 
-        self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
+        // Table should parse correctly even without trailing blank line
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(3, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
+
+    public function testTableAtEndOfFile(): void
+    {
+        $input = <<<'RST'
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should parse correctly at EOF without trailing blank line
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
+
+    public function testTableFollowedByIndentedText(): void
+    {
+        $input = <<<'RST'
++-----------------------------------+---------------+
+| Property                          | Data Type     |
++===================================+===============+
+| description                       | string        |
++-----------------------------------+---------------+
+    Indented text here
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should parse correctly with indented text following (not a table row)
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertCount(1, $table->getHeaders());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
+
+    public function testConsecutiveTablesWithoutBlankLine(): void
+    {
+        $input = <<<'RST'
++-------+-------+
+| A     | B     |
++-------+-------+
++-------+-------+
+| C     | D     |
++-------+-------+
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // First table should terminate at its closing separator without consuming next table
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
+
+    public function testTableFollowedByDirective(): void
+    {
+        $input = <<<'RST'
++-------+-------+
+| A     | B     |
++-------+-------+
+.. note::
+   This is a note.
+RST;
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        // Table should terminate before directive without error
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(1, $table->getData());
+        self::assertFalse($this->logger->hasErrorRecords());
     }
 }

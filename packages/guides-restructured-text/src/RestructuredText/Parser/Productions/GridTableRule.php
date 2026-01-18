@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 use function mb_strlen;
 use function preg_match;
 use function sprintf;
+use function str_starts_with;
 use function strlen;
 use function trim;
 
@@ -58,7 +59,6 @@ final class GridTableRule implements Rule
         $context->pushSeparatorLine($tableSeparatorLineConfig);
 
         $lineLength = mb_strlen($line);
-        $headerRows = 0;
         $lineNumber = 1;
 
         while ($documentIterator->getNextLine() !== null) {
@@ -95,8 +95,11 @@ final class GridTableRule implements Rule
             if ($this->isColumnDefinitionLine($documentIterator->current())) {
                 $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '-');
                 $context->pushSeparatorLine($separatorLineConfig);
-                // if an empty line follows a separator line, then it is the end of the table
-                if (LinesIterator::isEmptyLine($documentIterator->peek())) {
+
+                $nextLine = $documentIterator->peek();
+
+                // Table ends if next line is empty or not a valid table row
+                if (LinesIterator::isEmptyLine($nextLine) || !$this->isTableRowLine($nextLine)) {
                     break;
                 }
 
@@ -134,16 +137,21 @@ final class GridTableRule implements Rule
 
     private function isColumnDefinitionLine(string $line): bool
     {
-        return $this->isDefintionLine($line, '-');
+        return $this->isDefinitionLine($line, '-');
     }
 
     private function isHeaderDefinitionLine(string $line): bool
     {
-        return $this->isDefintionLine($line, '=');
+        return $this->isDefinitionLine($line, '=');
     }
 
-    private function isDefintionLine(string $line, string $char): bool
+    private function isDefinitionLine(string $line, string $char): bool
     {
         return preg_match('/^(?:\+' . $char . '+)+\+$/', trim($line)) > 0;
+    }
+
+    private function isTableRowLine(string|null $line): bool
+    {
+        return $line !== null && str_starts_with(trim($line), '|');
     }
 }
