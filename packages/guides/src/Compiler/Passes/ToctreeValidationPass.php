@@ -68,6 +68,7 @@ final class ToctreeValidationPass implements CompilerPass
 
     public function isMissingInToctree(DocumentEntryNode $documentEntry, ProjectNode $projectNode): bool
     {
-        return $documentEntry->getParent() === null && $documentEntry !== $projectNode->getRootDocumentEntry();
+        return $documentEntry->getParent() === null
+            && $documentEntry->getFile() !== $projectNode->getRootDocumentEntry()->getFile();
     }
 }
