@@ -21,9 +21,16 @@ use function count;
 
 /**
  * Decorator to add pre-rendering logic to node renderers.
+ *
+ * Note: Caching assumes PreNodeRenderer::supports() only checks the node's
+ * class type, not instance-specific properties. If a PreNodeRenderer needs
+ * to check node properties, caching by class would return incorrect results.
  */
 final class PreNodeRendererFactory implements NodeRendererFactory
 {
+    /** @var array<class-string<Node>, NodeRenderer<Node>> */
+    private array $cache = [];
+
     public function __construct(
         private readonly NodeRendererFactory $innerFactory,
         /** @var iterable<PreNodeRenderer> */
@@ -33,6 +40,12 @@ final class PreNodeRendererFactory implements NodeRendererFactory
 
     public function get(Node $node): NodeRenderer
     {
+        // Cache by node class to avoid repeated preRenderer iteration
+        $nodeFqcn = $node::class;
+        if (isset($this->cache[$nodeFqcn])) {
+            return $this->cache[$nodeFqcn];
+        }
+
         $preRenderers = [];
         foreach ($this->preRenderers as $preRenderer) {
             if (!$preRenderer->supports($node)) {
@@ -43,9 +56,9 @@ final class PreNodeRendererFactory implements NodeRendererFactory
         }
 
         if (count($preRenderers) === 0) {
-            return $this->innerFactory->get($node);
+            return $this->cache[$nodeFqcn] = $this->innerFactory->get($node);
         }
 
-        return new PreRenderer($this->innerFactory->get($node), $preRenderers);
+        return $this->cache[$nodeFqcn] = new PreRenderer($this->innerFactory->get($node), $preRenderers);
     }
 }
