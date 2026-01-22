@@ -25,10 +25,8 @@ use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
-use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
-use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Settings\ProjectSettings;
@@ -110,13 +108,11 @@ final class FunctionalTest extends ApplicationTestCase
 
             $parser = $this->getContainer()->get(Parser::class);
             assert($parser instanceof Parser);
-            $document = $parser->parse($rst);
-            $documentEntry = new DocumentEntryNode($document->getFilePath(), $document->getTitle() ?? TitleNode::fromString(''), true);
+            $document = $parser->parse($rst)->withIsRoot(true);
 
             $compiler = $this->getContainer()->get(Compiler::class);
             assert($compiler instanceof Compiler);
             $projectNode = new ProjectNode();
-            $projectNode->setDocumentEntries([$documentEntry]);
             $compiler->run([$document], new CompilerContext($projectNode));
 
             $inputFilesystem = FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter()));

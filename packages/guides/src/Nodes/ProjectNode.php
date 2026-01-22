@@ -47,7 +47,10 @@ final class ProjectNode extends CompoundNode
     /** @var array<string, array<string, InternalTarget>> */
     private array $internalLinkTargets = [];
 
-    /** @var DocumentEntryNode[] */
+    /** Cached root document entry for O(1) lookup */
+    private DocumentEntryNode|null $rootDocumentEntry = null;
+
+    /** @var array<string, DocumentEntryNode> */
     private array $documentEntries = [];
     private DateTimeImmutable $lastRendered;
 
@@ -182,6 +185,11 @@ final class ProjectNode extends CompoundNode
 
     public function addDocumentEntry(DocumentEntryNode $documentEntry): void
     {
+        // Cache root for O(1) lookup
+        if ($documentEntry->isRoot()) {
+            $this->rootDocumentEntry = $documentEntry;
+        }
+
         $this->documentEntries[$documentEntry->getFile()] = $documentEntry;
     }
 
@@ -193,10 +201,8 @@ final class ProjectNode extends CompoundNode
 
     public function getRootDocumentEntry(): DocumentEntryNode
     {
-        foreach ($this->documentEntries as $documentEntry) {
-            if ($documentEntry->isRoot()) {
-                return $documentEntry;
-            }
+        if ($this->rootDocumentEntry !== null) {
+            return $this->rootDocumentEntry;
         }
 
         throw new Exception('No root document entry was found');
@@ -205,10 +211,9 @@ final class ProjectNode extends CompoundNode
     /** @throws DocumentEntryNotFound */
     public function getDocumentEntry(string $file): DocumentEntryNode
     {
-        foreach ($this->documentEntries as $documentEntry) {
-            if ($documentEntry->getFile() === $file) {
-                return $documentEntry;
-            }
+        // O(1) lookup by file path
+        if (isset($this->documentEntries[$file])) {
+            return $this->documentEntries[$file];
         }
 
         throw new DocumentEntryNotFound('No document Entry found for file ' . $file);
@@ -217,7 +222,12 @@ final class ProjectNode extends CompoundNode
     /** @param DocumentEntryNode[] $documentEntries */
     public function setDocumentEntries(array $documentEntries): void
     {
-        $this->documentEntries = $documentEntries;
+        $this->documentEntries = [];
+        $this->rootDocumentEntry = null;
+
+        foreach ($documentEntries as $entry) {
+            $this->addDocumentEntry($entry);
+        }
     }
 
     public function findDocumentEntry(string $filePath): DocumentEntryNode|null
@@ -228,6 +238,7 @@ final class ProjectNode extends CompoundNode
     public function reset(): void
     {
         $this->documentEntries = [];
+        $this->rootDocumentEntry = null;
     }
 
     public function getLastRendered(): DateTimeImmutable
