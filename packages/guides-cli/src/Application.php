@@ -24,6 +24,7 @@ use function getcwd;
 use function is_array;
 use function is_string;
 use function iterator_to_array;
+use function method_exists;
 
 final class Application extends BaseApplication
 {
@@ -34,7 +35,13 @@ final class Application extends BaseApplication
 
         $commands = is_array($commands) ? $commands : iterator_to_array($commands);
         foreach ($commands as $command) {
-            $this->add($command);
+            // Use addCommand() for Symfony 7.4+ (add() deprecated), with fallback for older versions
+            if (method_exists(BaseApplication::class, 'addCommand')) {
+                /** @phpstan-ignore method.notFound (method exists only in Symfony 7.4+) */
+                $this->addCommand($command);
+            } else {
+                $this->add($command);
+            }
         }
 
         if (count($commands) !== 1) {
