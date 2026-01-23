@@ -30,6 +30,9 @@ class RenderContext
     /** @var DocumentNode[] */
     private array $allDocuments;
 
+    /** @var array<string, DocumentNode> */
+    private array $documentsByFile = [];
+
     private string $outputFilePath = '';
 
     private Renderer\DocumentListIterator $iterator;
@@ -44,7 +47,10 @@ class RenderContext
     ) {
     }
 
-    /** @param DocumentNode[] $allDocumentNodes */
+    /**
+     * @param DocumentNode[] $allDocumentNodes
+     * @param array<string, DocumentNode>|null $documentsByFile Pre-built hash map for reuse
+     */
     public static function forDocument(
         DocumentNode $documentNode,
         array $allDocumentNodes,
@@ -53,6 +59,7 @@ class RenderContext
         string $destinationPath,
         string $ouputFormat,
         ProjectNode $projectNode,
+        array|null $documentsByFile = null,
     ): self {
         $self = new self(
             $destinationPath,
@@ -65,14 +72,29 @@ class RenderContext
 
         $self->document = $documentNode;
         $self->allDocuments = $allDocumentNodes;
-        $self->outputFilePath =  $documentNode->getFilePath() . '.' . $ouputFormat;
+
+        // Use pre-built hash map if provided, otherwise build it
+        if ($documentsByFile !== null) {
+            $self->documentsByFile = $documentsByFile;
+        } else {
+            foreach ($allDocumentNodes as $doc) {
+                if (!$doc->hasDocumentEntry()) {
+                    continue;
+                }
+
+                $self->documentsByFile[$doc->getDocumentEntry()->getFile()] = $doc;
+            }
+        }
+
+        $self->outputFilePath = $documentNode->getFilePath() . '.' . $ouputFormat;
 
         return $self;
     }
 
     public function withDocument(DocumentNode $documentNode): self
     {
-        return self::forDocument(
+        // Pass existing hash map to avoid redundant construction
+        $context = self::forDocument(
             $documentNode,
             $this->allDocuments,
             $this->origin,
@@ -80,7 +102,10 @@ class RenderContext
             $this->destinationPath,
             $this->outputFormat,
             $this->projectNode,
-        )->withIterator($this->getIterator());
+            $this->documentsByFile,
+        );
+
+        return $context->withIterator($this->getIterator());
     }
 
     public function getDocument(): DocumentNode
@@ -121,6 +146,14 @@ class RenderContext
         );
 
         $self->allDocuments = $allDocumentNodes;
+        // Build hash map for O(1) document lookup
+        foreach ($allDocumentNodes as $doc) {
+            if (!$doc->hasDocumentEntry()) {
+                continue;
+            }
+
+            $self->documentsByFile[$doc->getDocumentEntry()->getFile()] = $doc;
+        }
 
         return $self;
     }
@@ -222,10 +255,10 @@ class RenderContext
 
     public function getDocumentNodeForEntry(DocumentEntryNode $entryNode): DocumentNode
     {
-        foreach ($this->allDocuments as $child) {
-            if ($child->getDocumentEntry() === $entryNode) {
-                return $child;
-            }
+        // O(1) lookup using hash map instead of O(n) iteration
+        $file = $entryNode->getFile();
+        if (isset($this->documentsByFile[$file])) {
+            return $this->documentsByFile[$file];
         }
 
         throw new Exception('No document was found for document entry ' . $entryNode->getFile());

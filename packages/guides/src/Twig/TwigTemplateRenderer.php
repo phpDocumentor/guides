@@ -19,6 +19,8 @@ use Twig\Error\LoaderError;
 
 final class TwigTemplateRenderer implements TemplateRenderer
 {
+    private RenderContext|null $lastContext = null;
+
     public function __construct(private readonly EnvironmentBuilder $environmentBuilder)
     {
     }
@@ -27,8 +29,13 @@ final class TwigTemplateRenderer implements TemplateRenderer
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();
-        $twig->addGlobal('env', $context);
-        $twig->addGlobal('debugInformation', $context->getLoggerInformation());
+
+        // Only update globals when context changes (once per document, not per template)
+        if ($this->lastContext !== $context) {
+            $this->lastContext = $context;
+            $twig->addGlobal('env', $context);
+            $twig->addGlobal('debugInformation', $context->getLoggerInformation());
+        }
 
         return $twig->render($template, $params);
     }
