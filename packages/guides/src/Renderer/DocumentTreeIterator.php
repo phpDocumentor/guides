@@ -41,8 +41,9 @@ final class DocumentTreeIterator implements RecursiveIterator
 
     public function current(): DocumentNode
     {
+        $file = $this->levelNodes[$this->position]->getFile();
         foreach ($this->documents as $document) {
-            if ($document->getDocumentEntry() === $this->levelNodes[$this->position]) {
+            if ($document->getDocumentEntry()->getFile() === $file) {
                 return $document;
             }
         }
