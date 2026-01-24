@@ -222,8 +222,9 @@ class RenderContext
 
     public function getDocumentNodeForEntry(DocumentEntryNode $entryNode): DocumentNode
     {
+        $file = $entryNode->getFile();
         foreach ($this->allDocuments as $child) {
-            if ($child->getDocumentEntry() === $entryNode) {
+            if ($child->getDocumentEntry()->getFile() === $file) {
                 return $child;
             }
         }

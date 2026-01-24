@@ -62,8 +62,9 @@ final class GlobalMenuPass implements CompilerPass
         }
 
         $rootDocument = null;
+        $rootFile = $rootDocumentEntry->getFile();
         foreach ($documents as $document) {
-            if ($document->getDocumentEntry() === $rootDocumentEntry) {
+            if ($document->getDocumentEntry()->getFile() === $rootFile) {
                 $rootDocument = $document;
                 break;
             }
