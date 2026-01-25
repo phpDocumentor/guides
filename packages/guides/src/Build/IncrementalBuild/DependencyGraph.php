@@ -44,7 +44,11 @@ use function sprintf;
  */
 final class DependencyGraph
 {
-    /** Maximum number of documents allowed in the graph to prevent memory exhaustion */
+    /**
+     * Maximum number of documents allowed in the graph to prevent memory exhaustion.
+     * Consistent with IncrementalBuildCache::MAX_EXPORTS, DirtyPropagator::MAX_PROPAGATION_VISITS,
+     * and PropagationResult::MAX_DOCUMENTS.
+     */
     private const MAX_DOCUMENTS = 100_000;
 
     /** Maximum number of imports per document to prevent memory exhaustion */
