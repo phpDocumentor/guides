@@ -485,4 +485,80 @@ final class DependencyGraphTest extends TestCase
         // Should return false when limit is reached
         self::assertFalse($graph->addImport('docNew', 'docTarget'));
     }
+
+    /**
+     * Stress test: verify graph operations work correctly near MAX_DOCUMENTS limit.
+     *
+     * This test creates a graph with 1000 documents (scaled down from 100k for
+     * test performance) and verifies that all operations work correctly at scale.
+     *
+     * @group stress
+     */
+    public function testStressTestNearMaxDocumentsLimit(): void
+    {
+        $graph = new DependencyGraph();
+        $docCount = 1000; // Scaled down from MAX_DOCUMENTS (100k) for test speed
+
+        // Create a chain of dependencies: doc0 <- doc1 <- doc2 <- ... <- doc999
+        // This creates a worst-case propagation scenario (linear chain)
+        for ($i = 1; $i < $docCount; $i++) {
+            $result = $graph->addImport('doc' . $i, 'doc' . ($i - 1));
+            self::assertTrue($result, 'Failed to add import at index ' . $i);
+        }
+
+        // Verify graph stats
+        $stats = $graph->getStats();
+        self::assertSame($docCount, $stats['documents']);
+        self::assertSame($docCount - 1, $stats['edges']);
+
+        // Verify propagation from root finds all dependents
+        $dirty = $graph->propagateDirty(['doc0']);
+        self::assertCount($docCount, $dirty, 'Propagation should find all documents in chain');
+
+        // Verify propagation from middle finds downstream only
+        $midpoint = (int) ($docCount / 2);
+        $dirty = $graph->propagateDirty(['doc' . $midpoint]);
+        self::assertCount($docCount - $midpoint, $dirty, 'Propagation should find downstream documents');
+
+        // Verify serialization round-trip preserves graph
+        $serialized = $graph->toArray();
+        $restored = DependencyGraph::fromArray($serialized);
+        self::assertSame($stats, $restored->getStats());
+
+        // Verify removal works correctly
+        $graph->removeDocument('doc' . $midpoint);
+        $stats = $graph->getStats();
+        self::assertSame($docCount - 1, $stats['documents']);
+    }
+
+    /**
+     * Stress test: verify graph handles fan-out pattern (one doc referenced by many).
+     *
+     * @group stress
+     */
+    public function testStressTestFanOutPattern(): void
+    {
+        $graph = new DependencyGraph();
+        $fanOutCount = 500; // Number of documents importing from a single source
+
+        // Create fan-out: many documents import from 'shared'
+        for ($i = 0; $i < $fanOutCount; $i++) {
+            $result = $graph->addImport('consumer' . $i, 'shared');
+            self::assertTrue($result);
+        }
+
+        // Verify all consumers are dependents of 'shared'
+        $dependents = $graph->getDependents('shared');
+        self::assertCount($fanOutCount, $dependents);
+
+        // Verify propagation from 'shared' finds all consumers
+        $dirty = $graph->propagateDirty(['shared']);
+        self::assertCount($fanOutCount + 1, $dirty); // +1 for 'shared' itself
+
+        // Verify iterator version produces same results
+        $dirtyIterator = iterator_to_array($graph->propagateDirtyIterator(['shared']));
+        sort($dirty);
+        sort($dirtyIterator);
+        self::assertSame($dirty, $dirtyIterator);
+    }
 }
