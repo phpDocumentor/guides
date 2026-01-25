@@ -14,3 +14,5 @@ it in some other way that is not possible with the ``guides`` command line tool.
    extensions/index
    compiler
    directive
+   incremental-builds
+   incremental-builds-architecture
