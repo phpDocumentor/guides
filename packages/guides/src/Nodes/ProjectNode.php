@@ -148,6 +148,12 @@ final class ProjectNode extends CompoundNode
         return $this->citationTargets[$name] ?? null;
     }
 
+    /** @return array<string, CitationTarget> */
+    public function getAllCitationTargets(): array
+    {
+        return $this->citationTargets;
+    }
+
     /** @throws DuplicateLinkAnchorException */
     public function addLinkTarget(string $anchorName, InternalTarget $target): void
     {
