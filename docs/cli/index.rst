@@ -45,6 +45,7 @@ to learn more about the configuration.
     :hidden:
 
     configuration
+    parallel-processing
 
 Extending
 =========
