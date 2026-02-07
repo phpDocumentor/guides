@@ -22,6 +22,7 @@ use phpDocumentor\Guides\MarkupLanguageParser;
 use phpDocumentor\Guides\Nodes\CodeNode;
 
 use function assert;
+use function count;
 use function explode;
 
 /** @extends AbstractBlockParser<CodeNode> */
@@ -32,8 +33,11 @@ final class CodeBlockParser extends AbstractBlockParser
         assert($current instanceof IndentedCode || $current instanceof FencedCode);
         $walker->next();
         $codeNode = new CodeNode(explode("\n", $current->getLiteral()));
-        if ($current instanceof FencedCode && $current->getInfo() !== null) {
-            $codeNode = $codeNode->withOptions(['caption' => $current->getInfo()]);
+        if ($current instanceof FencedCode) {
+            $infoWords = $current->getInfoWords();
+            if (count($infoWords) !== 0 && $infoWords[0] !== '') {
+                $codeNode->setLanguage($infoWords[0]);
+            }
         }
 
         return $codeNode;

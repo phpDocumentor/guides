@@ -15,7 +15,7 @@
 }
 ```
 
-## Fenced Code Block with caption
+## Fenced Code Block with language
 
 ```pseudocode
 procedure startSwinging(swing, child)
@@ -24,3 +24,10 @@ procedure startSwinging(swing, child)
        waitForNextIteration()
    end while
 end procedure
+```
+
+## Fenced Code Block with PHP
+
+```php
+echo "Hello world!";
+```
