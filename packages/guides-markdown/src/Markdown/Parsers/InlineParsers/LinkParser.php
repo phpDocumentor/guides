@@ -22,7 +22,9 @@ use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use Psr\Log\LoggerInterface;
 
 use function assert;
+use function explode;
 use function filter_var;
+use function str_contains;
 use function str_ends_with;
 use function substr;
 
@@ -49,10 +51,19 @@ final class LinkParser extends AbstractInlineTextDecoratorParser
     {
         assert($commonMarkNode instanceof Link);
 
-        $url =  $commonMarkNode->getUrl();
+        $url = $commonMarkNode->getUrl();
+        $anchor = '';
+        if (str_contains($url, '#')) {
+            $exploded = explode('#', $url, 2);
+            $url = $exploded[0];
+            $anchor = '#' . $exploded[1];
+        }
+
         if (str_ends_with($url, '.md') && filter_var($url, FILTER_VALIDATE_URL) === false) {
             $url = substr($url, 0, -3);
         }
+
+        $url .= $anchor;
 
         return new HyperLinkNode($content ? [new PlainTextInlineNode($content)] : $children, $url);
     }
