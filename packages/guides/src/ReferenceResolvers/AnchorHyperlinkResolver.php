@@ -21,11 +21,14 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function count;
+use function str_starts_with;
 
 /**
  * Resolves references with an anchor URL.
  *
- * A link is an anchor if it starts with a hashtag
+ * Looks up the anchor in the project's internal targets and produces a
+ * canonical URL. For fragment-only references (starting with #) that don't
+ * match any known target, falls back to a bare fragment URL.
  */
 final class AnchorHyperlinkResolver implements ReferenceResolver
 {
@@ -49,6 +52,12 @@ final class AnchorHyperlinkResolver implements ReferenceResolver
         if ($target === null) {
             $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);
             if ($target === null) {
+                if (str_starts_with($node->getTargetReference(), '#')) {
+                    $node->setUrl($node->getTargetReference());
+
+                    return true;
+                }
+
                 return false;
             }
         }
