@@ -51,3 +51,5 @@ Document Title
 .. admonition::
 
    Generic admonition content.
+
+..  hint:: Lorem Ipsum Dolor.
