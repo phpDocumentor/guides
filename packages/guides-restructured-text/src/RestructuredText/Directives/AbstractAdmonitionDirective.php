@@ -16,9 +16,12 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+
+use function array_unshift;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
@@ -36,11 +39,17 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
+        $children = $collectionNode->getChildren();
+
+        if ($directive->getDataNode() !== null) {
+            array_unshift($children, new ParagraphNode([$directive->getDataNode()]));
+        }
+
         return new AdmonitionNode(
             $this->name,
-            $directive->getDataNode(),
+            null,
             $this->text,
-            $collectionNode->getChildren(),
+            $children,
         );
     }
 
