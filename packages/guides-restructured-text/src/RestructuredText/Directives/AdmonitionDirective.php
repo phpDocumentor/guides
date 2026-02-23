@@ -50,6 +50,12 @@ final class AdmonitionDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
+        // The title argument is required per the RST spec.
+        // Skip rendering if no title is provided.
+        if ($directive->getData() === '') {
+            return null;
+        }
+
         $name = trim(
             preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($directive->getData())) ?? '',
             '-',

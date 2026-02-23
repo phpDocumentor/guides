@@ -1,18 +1,23 @@
-{% if name == 'caution' %}
+{% if name == 'attention' %}
+    {% include "body/admonitions/attention.html.twig" %}
+{% elseif name == 'caution' %}
     {% include "body/admonitions/caution.html.twig" %}
-{% endif %}
-{% if name == 'important' %}
+{% elseif name == 'danger' %}
+    {% include "body/admonitions/danger.html.twig" %}
+{% elseif name == 'error' %}
+    {% include "body/admonitions/error.html.twig" %}
+{% elseif name == 'important' %}
     {% include "body/admonitions/important.html.twig" %}
-{% endif %}
-{% if name == 'note' %}
+{% elseif name == 'note' %}
     {% include "body/admonitions/note.html.twig" %}
-{% endif %}
-{% if name == 'warning' %}
+{% elseif name == 'warning' %}
     {% include "body/admonitions/warning.html.twig" %}
-{% endif %}
-{% if name == 'tip' or name == 'hint' %}
+{% elseif name == 'tip' %}
     {% include "body/admonitions/tip.html.twig" %}
-{% endif %}
-{% if name == 'seealso' %}
+{% elseif name == 'hint' %}
+    {% include "body/admonitions/hint.html.twig" %}
+{% elseif name == 'seealso' %}
     {% include "body/admonitions/seealso.html.twig" %}
+{% else %}
+    {% include "body/admonitions/generic.html.twig" %}
 {% endif %}
