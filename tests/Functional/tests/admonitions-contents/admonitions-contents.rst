@@ -10,3 +10,10 @@ Testing various supported formats:
 
 .. note::
    This is the first line of content
+
+.. warning:: This is a standalone warning.
+
+.. tip:: This is the first line.
+
+   - Item one
+   - Item two
