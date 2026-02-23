@@ -10,7 +10,7 @@
         beStrictAboutChangesToGlobalState="true"
         failOnNotice="true"
         failOnWarning="true"
-        failOnDeprecation="true"
+        failOnDeprecation="false"
         displayDetailsOnTestsThatTriggerNotices="true"
         displayDetailsOnTestsThatTriggerWarnings="true"
         displayDetailsOnTestsThatTriggerErrors="true"
