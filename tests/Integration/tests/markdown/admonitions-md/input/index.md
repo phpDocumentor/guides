@@ -14,3 +14,9 @@
 
 > [!CAUTION]
 > Advises about risks or negative outcomes of certain actions.
+
+> [!NOTE]
+> You can add two types of expenses to your reimbursement:
+> 
+> * **Receipt:** Any invoice or receipt that is applicable for reimbursement.
+> * **Driven kilometers:** Travel by private car, reimbursed at a per-kilometer rate.
