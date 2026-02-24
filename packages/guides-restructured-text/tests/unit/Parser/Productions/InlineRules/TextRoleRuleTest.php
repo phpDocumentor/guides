@@ -51,6 +51,27 @@ final class TextRoleRuleTest extends TestCase
             'con`tent',
             'con\`tent',
         ];
+
+        yield 'role with escaped backslash' => [
+            ':role:`a\\\\b`',
+            'role',
+            'a\\b',
+            'a\\b',
+        ];
+
+        yield 'role with escaped backtick at end' => [
+            ':role:`text\\``',
+            'role',
+            'text`',
+            'text`',
+        ];
+
+        yield 'role with only escaped backtick' => [
+            ':role:`\\``',
+            'role',
+            '`',
+            '`',
+        ];
     }
 
     #[DataProvider('roleFormatProvider')]
@@ -126,5 +147,39 @@ final class TextRoleRuleTest extends TestCase
          * @phpstan-ignore-next-line
          */
         self::assertSame($expectedRawContent, $node->rawContent);
+    }
+
+    /** @return Generator<string, array{string}> */
+    public static function unterminatedRoleProvider(): Generator
+    {
+        yield 'unterminated role with non-backtick escape at end' => [':role:`content\T'];
+
+        yield 'unterminated role with escaped backslash at end' => [':role:`content\\\\'];
+    }
+
+    #[DataProvider('unterminatedRoleProvider')]
+    public function testUnterminatedRoleRollsBack(string $input): void
+    {
+        $textRoleFactory = $this->createMock(TextRoleFactory::class);
+        $textRoleFactory->expects(self::never())->method('getTextRole');
+
+        $lexer = new InlineLexer();
+        $lexer->setInput($input);
+        $lexer->moveNext();
+        $lexer->moveNext();
+
+        $textRoleRule = new TextRoleRule();
+        self::assertTrue($textRoleRule->applies($lexer));
+        $documentParserContext = new DocumentParserContext(
+            self::createStub(ParserContext::class),
+            $textRoleFactory,
+            self::createStub(MarkupLanguageParser::class),
+        );
+        $node = $textRoleRule->apply(
+            new BlockContext($documentParserContext, ''),
+            $lexer,
+        );
+
+        self::assertNull($node);
     }
 }
