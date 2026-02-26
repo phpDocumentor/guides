@@ -80,7 +80,7 @@ final class InlineLexerTest extends TestCase
             ],
             'Escaped double backtick' => [
                 '\\``git@github.com`',
-                [InlineLexer::ESCAPED_SIGN],
+                [InlineLexer::BACKSLASH],
             ],
         ];
     }

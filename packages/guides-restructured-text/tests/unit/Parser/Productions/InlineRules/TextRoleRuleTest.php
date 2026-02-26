@@ -51,6 +51,27 @@ final class TextRoleRuleTest extends TestCase
             'con`tent',
             'con\`tent',
         ];
+
+        yield 'role with escaped backslash' => [
+            ':role:`a\\\\b`',
+            'role',
+            'a\\b',
+            'a\\\\b',
+        ];
+
+        yield 'role with escaped backtick at end' => [
+            ':role:`text\``',
+            'role',
+            'text`',
+            'text\`',
+        ];
+
+        yield 'role with only escaped backtick' => [
+            ':role:`\``',
+            'role',
+            '`',
+            '\`',
+        ];
     }
 
     #[DataProvider('roleFormatProvider')]

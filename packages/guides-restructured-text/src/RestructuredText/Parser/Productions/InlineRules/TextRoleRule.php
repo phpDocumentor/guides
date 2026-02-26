@@ -17,8 +17,6 @@ use phpDocumentor\Guides\Nodes\Inline\InlineNodeInterface;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineLexer;
 
-use function substr;
-
 /**
  * Rule to parse for text roles such as ``:ref:`something` `
  */
@@ -77,9 +75,11 @@ final class TextRoleRule extends AbstractInlineRule
                     $rawPart .= $token->value;
 
                     break;
-                case InlineLexer::ESCAPED_SIGN:
-                    $part .= substr($token->value, 1);
+                case InlineLexer::BACKSLASH:
                     $rawPart .= $token->value;
+                    $lexer->moveNext();
+                    $part .= $lexer->token->value;
+                    $rawPart .= $lexer->token->value;
 
                     break;
                 default:

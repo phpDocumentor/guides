@@ -48,6 +48,11 @@ final class EmphasisRule extends AbstractInlineRule
 
                     return new EmphasisInlineNode([new PlainTextInlineNode($text)]);
 
+                case InlineLexer::BACKSLASH:
+                    $lexer->moveNext();
+                    $text .= $lexer->token->value;
+
+                    break;
                 default:
                     $text .= $token->value;
             }

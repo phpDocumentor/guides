@@ -43,6 +43,6 @@ final class LiteralTextRole extends BaseTextRole
         string $content,
         string $rawContent,
     ): GenericTextRoleInlineNode {
-        return new GenericTextRoleInlineNode('literal', $rawContent, $this->getClass());
+        return new GenericTextRoleInlineNode('literal', $content, $this->getClass());
     }
 }
