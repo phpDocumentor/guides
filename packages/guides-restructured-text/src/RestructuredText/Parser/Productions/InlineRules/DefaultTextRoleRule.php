@@ -49,6 +49,12 @@ final class DefaultTextRoleRule extends AbstractInlineRule
                         ->getDefaultTextRole()
                         ->processNode($blockContext->getDocumentParserContext(), '', $text, $text);
 
+                case InlineLexer::BACKSLASH:
+                    $lexer->moveNext();
+
+                    $text .= $lexer->token->value;
+
+                    break;
                 default:
                     $text .= $token->value;
             }
