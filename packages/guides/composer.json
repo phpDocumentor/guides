@@ -31,6 +31,8 @@
         "phpdocumentor/flyfinder": "^1.1 || ^2.0",
         "phpdocumentor/filesystem": "^1.7.4",
         "psr/event-dispatcher": "^1.0",
+        "psr/simple-cache": "^3.0",
+        "symfony/cache": "^6.4.8 || ^7.4 || ^8",
         "symfony/clock": "^6.4.8 || ^7.4 || ^8",
         "symfony/html-sanitizer": "^6.4.8 || ^7.4 || ^8",
         "symfony/http-client": "^6.4.9 || ^7.4 || ^8",
