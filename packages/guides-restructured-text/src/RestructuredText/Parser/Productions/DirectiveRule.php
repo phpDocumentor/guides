@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -84,10 +85,15 @@ final class DirectiveRule implements Rule
         }
 
         $this->parseDirectiveContent($directive, $blockContext);
+        $this->interpretDirectiveOptions($documentIterator, $directive);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
+        if ($directiveHandler->isUpgraded()) {
+            //What do we do with the content of the directive?
+            // Child nodes need to be parsed. and the content needs to be collected as a string.
+            return new DirectiveNode($directive);
+        }
 
-        $this->interpretDirectiveOptions($documentIterator, $directive);
         $buffer = $this->collectDirectiveContents($documentIterator);
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
