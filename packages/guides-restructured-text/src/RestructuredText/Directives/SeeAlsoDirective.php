@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
 /**
@@ -26,6 +27,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *      This is a seealso admonition.
  * ```
  */
+#[Directive(name: 'seealso')]
 final class SeeAlsoDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

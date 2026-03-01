@@ -78,7 +78,7 @@ final class ImageDirective extends BaseDirective
         if ($directive->hasOption('target')) {
             $node->setTarget(
                 $this->resolveLinkTarget(
-                    $this->readOption($directive, 'target')
+                    $this->readOption($directive, 'target'),
                 ),
             );
         }

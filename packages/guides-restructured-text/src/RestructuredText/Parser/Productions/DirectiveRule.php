@@ -49,12 +49,16 @@ final class DirectiveRule implements Rule
     /** @var array<string, DirectiveHandler> */
     private array $directives;
 
-    /** @param iterable<DirectiveHandler> $directives */
+    /**
+     * @param iterable<DirectiveHandler> $directives
+     * @param Rule<Node>|null $startingRule
+     */
     public function __construct(
         private readonly InlineMarkupRule $inlineMarkupRule,
         private readonly LoggerInterface $logger,
         private readonly GeneralDirective $generalDirective,
         iterable $directives = [],
+        private readonly Rule|null $startingRule = null,
     ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
@@ -88,13 +92,14 @@ final class DirectiveRule implements Rule
         $this->interpretDirectiveOptions($documentIterator, $directive);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
-        if ($directiveHandler->isUpgraded()) {
-            //What do we do with the content of the directive?
-            // Child nodes need to be parsed. and the content needs to be collected as a string.
-            return new DirectiveNode($directive);
-        }
-
         $buffer = $this->collectDirectiveContents($documentIterator);
+
+        if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
+            return $this->startingRule->apply(
+                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
+                new DirectiveNode($directive),
+            );
+        }
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
