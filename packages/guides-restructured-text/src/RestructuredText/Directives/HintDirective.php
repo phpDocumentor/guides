@@ -26,6 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *      This is a hint admonition.
  * ```
  */
+#[Attributes\Directive(name: 'hint')]
 final class HintDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

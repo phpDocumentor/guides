@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
@@ -53,8 +54,18 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         );
     }
 
-    final public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node|null
     {
-        return $this->name;
+        $children = $directiveNode->getChildren();
+        if ($directiveNode->getDirective()->getDataNode() !== null) {
+            array_unshift($children, new ParagraphNode([$directiveNode->getDirective()->getDataNode()]));
+        }
+
+        return new AdmonitionNode(
+            $directiveNode->getDirective()->getName(),
+            null,
+            $this->text,
+            $children,
+        );
     }
 }
