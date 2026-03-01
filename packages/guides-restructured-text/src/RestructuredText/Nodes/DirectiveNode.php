@@ -2,17 +2,27 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
-use phpDocumentor\Guides\Nodes\AbstractNode;
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
-/** @extends AbstractNode<Directive> */
-final class DirectiveNode extends AbstractNode
+/** @extends CompoundNode<Node> */
+final class DirectiveNode extends CompoundNode
 {
-    public function __construct(private Directive $directive)
+    public function __construct(private readonly Directive $directive)
     {
-
+        parent::__construct();
     }
 
     public function getDirective(): Directive

@@ -13,14 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use LogicException;
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use ReflectionClass;
 
 use function array_map;
+use function count;
+use function filter_var;
+
+use const FILTER_VALIDATE_BOOL;
 
 /**
  * A directive is like a function you can call or apply to a block
@@ -37,11 +44,12 @@ use function array_map;
  */
 abstract class BaseDirective
 {
-    /** @var array<string, Option|null> Cache of Option attributes indexed by option name */
+    /** @var array<string, Option> Cache of Option attributes indexed by option name */
     private array $optionAttributeCache;
 
     private string $name;
 
+    /** @var string[] */
     private array $aliases;
 
     /**
@@ -53,14 +61,15 @@ abstract class BaseDirective
             return $this->name;
         }
 
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Attributes\Directive::class);
 
         if (count($attributes) === 0) {
-            throw new \LogicException('Directive class must have a Directive attribute');
+            throw new LogicException('Directive class must have a Directive attribute');
         }
 
         $this->name = $attributes[0]->newInstance()->name;
+
         return $this->name;
     }
 
@@ -77,7 +86,7 @@ abstract class BaseDirective
             return $this->aliases;
         }
 
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Attributes\Directive::class);
         $this->aliases = [];
         if (count($attributes) !== 0) {
@@ -98,7 +107,7 @@ abstract class BaseDirective
      */
     final public function isUpgraded(): bool
     {
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Attributes\Directive::class);
 
         return count($attributes) === 1;
@@ -136,7 +145,7 @@ abstract class BaseDirective
         return new GenericNode($directive->getVariable(), $directive->getData());
     }
 
-    public function createNode(Directive $directive): Node|null
+    public function createNode(DirectiveNode $directiveNode): Node|null
     {
         return null;
     }
@@ -170,13 +179,14 @@ abstract class BaseDirective
         return $this->getOptionValue($directive, $optionAttribute);
     }
 
+    /** @return array<string, mixed> */
     final protected function readAllOptions(Directive $directive): array
     {
         $this->initialize();
 
         return array_map(
             fn (Option $option) => $this->getOptionValue($directive, $option),
-            $this->optionAttributeCache
+            $this->optionAttributeCache,
         );
     }
 
@@ -198,10 +208,8 @@ abstract class BaseDirective
             OptionType::Boolean => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
             OptionType::String => (string) $value,
             OptionType::Array => (array) $value,
-            default => $value,
         };
     }
-
 
     /**
      * Finds the Option attribute for the given option name on the current class.
@@ -210,7 +218,7 @@ abstract class BaseDirective
      *
      * @return Option|null The Option attribute if found, null otherwise
      */
-    private function findOptionAttribute(string $optionName): ?Option
+    private function findOptionAttribute(string $optionName): Option|null
     {
         $this->initialize();
 
@@ -223,7 +231,7 @@ abstract class BaseDirective
             return;
         }
 
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Option::class);
         $this->optionAttributeCache = [];
         foreach ($attributes as $attribute) {
@@ -232,5 +240,3 @@ abstract class BaseDirective
         }
     }
 }
-
-

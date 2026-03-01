@@ -113,7 +113,7 @@ final class FunctionalTest extends ApplicationTestCase
             $compiler = $this->getContainer()->get(Compiler::class);
             assert($compiler instanceof Compiler);
             $projectNode = new ProjectNode();
-            $compiler->run([$document], new CompilerContext($projectNode));
+            [$document] = $compiler->run([$document], new CompilerContext($projectNode));
 
             $inputFilesystem = FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter()));
             $inputFilesystem->put('img/test-image.jpg', 'Some image');

@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\RestructuredText\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -13,7 +22,12 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Psr\Log\LoggerInterface;
 
-class DirectiveProcessPass implements NodeTransformer
+use function strtolower;
+
+use const PHP_INT_MAX;
+
+/** @implements NodeTransformer<DirectiveNode> */
+final class DirectiveProcessPass implements NodeTransformer
 {
     /** @var array<string, DirectiveHandler> */
     private array $directives;
@@ -44,7 +58,14 @@ class DirectiveProcessPass implements NodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
-        return $this->getDirectiveHandler($node->getDirective())->createNode($node->getDirective());
+        $newNode = $this->getDirectiveHandler($node->getDirective())->createNode($node);
+        if ($newNode === null) {
+            return null;
+        }
+
+        $newNode->setClasses($node->getClasses());
+
+        return $newNode;
     }
 
     private function getDirectiveHandler(Directive $directive): DirectiveHandler
