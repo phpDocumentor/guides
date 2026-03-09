@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use League\Tactician\CommandBus;
+use phpDocumentor\Guides\Build\IncrementalBuild\ContentHasher;
+use phpDocumentor\Guides\Build\IncrementalBuild\IncrementalBuildState;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerPass;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
@@ -252,5 +254,9 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$environmentBuilder', new Reference(EnvironmentBuilder::class))
 
         ->set('phpdoc.guides.raw_node.sanitizer.default', HtmlSanitizerConfig::class)
-        ->call('allowSafeElements', [], true);
+        ->call('allowSafeElements', [], true)
+
+        // Incremental build infrastructure
+        ->set(ContentHasher::class)
+        ->set(IncrementalBuildState::class);
 };
