@@ -28,16 +28,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *
  * The legacy name `versionchanged` is supported as an alias.
  */
+#[Attributes\Directive(name: 'version-changed', aliases: ['versionchanged'])]
 final class VersionChangedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
     {
         parent::__construct($startingRule, 'version-changed', 'versionchanged', 'Changed in version %s');
-    }
-
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return ['versionchanged'];
     }
 }

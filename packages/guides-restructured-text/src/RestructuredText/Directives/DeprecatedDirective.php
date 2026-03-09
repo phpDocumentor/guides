@@ -28,16 +28,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *
  * The legacy name `deprecated` is supported as an alias.
  */
+#[Attributes\Directive(name: 'version-deprecated', aliases: ['deprecated'])]
 final class DeprecatedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
     {
         parent::__construct($startingRule, 'version-deprecated', 'deprecated', 'Deprecated since version %s');
-    }
-
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return ['deprecated'];
     }
 }

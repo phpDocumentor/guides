@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -30,17 +31,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  * ..  breadcrumb::
  * ```
  */
+#[Attributes\Directive(name: 'breadcrumb')]
 final class BreadcrumbDirective extends BaseDirective
 {
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node|null
     {
-        return 'breadcrumb';
-    }
-
-    public function processNode(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
         return new BreadCrumbNode();
     }
 }

@@ -20,9 +20,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /** @extends CompoundNode<Node> */
 final class DirectiveNode extends CompoundNode
 {
-    public function __construct(private readonly Directive $directive)
+    public function __construct(private readonly Directive $directive, array $children = [])
     {
-        parent::__construct();
+        parent::__construct($children);
     }
 
     public function getDirective(): Directive
