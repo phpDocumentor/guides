@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
+use phpDocumentor\Guides\Compiler\ReverseNodeTransformer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
@@ -27,7 +28,7 @@ use function strtolower;
 use const PHP_INT_MAX;
 
 /** @implements NodeTransformer<DirectiveNode> */
-final class DirectiveProcessPass implements NodeTransformer
+final class DirectiveProcessPass implements ReverseNodeTransformer
 {
     /** @var array<string, DirectiveHandler> */
     private array $directives;

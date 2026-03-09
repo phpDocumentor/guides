@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -46,22 +47,32 @@ final class AdmonitionDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node|null {
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node|null
+    {
         // The title argument is required per the RST spec.
         // Skip rendering if no title is provided.
-        if ($directive->getData() === '') {
+        if ($directiveNode->getDirective()->getData() === '') {
             return null;
         }
 
         $name = trim(
-            preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($directive->getData())) ?? '',
+            preg_replace('/[^0-9a-zA-Z]+/', '-', strtolower($directiveNode->getDirective()->getData())) ?? '',
             '-',
         );
 
         return new AdmonitionNode(
             $name,
-            $directive->getDataNode(),
-            $directive->getData(),
-            $collectionNode->getChildren(),
+            $directiveNode->getDirective()->getDataNode(),
+            $directiveNode->getDirective()->getData(),
+            $directiveNode->getChildren(),
             true,
         );
     }
