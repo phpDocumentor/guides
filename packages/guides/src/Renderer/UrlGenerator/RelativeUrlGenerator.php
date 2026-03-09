@@ -26,18 +26,28 @@ use function str_repeat;
 
 final class RelativeUrlGenerator extends AbstractUrlGenerator
 {
+    /** @var array<string, string> */
+    private array $pathCache = [];
+
     public function generateInternalPathFromRelativeUrl(
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
-        $currentPathUri = Uri::new($renderContext->getOutputFilePath());
+        $outputFilePath = $renderContext->getOutputFilePath();
+        $cacheKey = $outputFilePath . '|' . $canonicalUrl;
+
+        if (isset($this->pathCache[$cacheKey])) {
+            return $this->pathCache[$cacheKey];
+        }
+
+        $currentPathUri = Uri::new($outputFilePath);
         $canonicalUrlUri = Uri::new($canonicalUrl);
 
         $canonicalAnchor = $canonicalUrlUri->getFragment();
 
         // If the paths are the same, include the anchor
         if ($currentPathUri->getPath() === $canonicalUrlUri->getPath()) {
-            return '#' . $canonicalAnchor;
+            return $this->pathCache[$cacheKey] = '#' . $canonicalAnchor;
         }
 
         // Split paths into arrays
@@ -66,6 +76,6 @@ final class RelativeUrlGenerator extends AbstractUrlGenerator
             $relativePath .= '#' . $canonicalAnchor;
         }
 
-        return $relativePath;
+        return $this->pathCache[$cacheKey] = $relativePath;
     }
 }
