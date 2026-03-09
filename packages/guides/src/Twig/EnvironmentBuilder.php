@@ -23,12 +23,22 @@ final class EnvironmentBuilder
 {
     private Environment $environment;
 
-    /** @param ExtensionInterface[] $extensions */
-    public function __construct(ThemeManager $themeManager, iterable $extensions = [])
-    {
+    /**
+     * @param ExtensionInterface[] $extensions
+     * @param string|false $cacheDir Directory for compiled Twig templates, or false to disable caching
+     */
+    public function __construct(
+        ThemeManager $themeManager,
+        iterable $extensions = [],
+        string|false $cacheDir = false,
+    ) {
         $this->environment = new Environment(
             $themeManager->getFilesystemLoader(),
-            ['debug' => true],
+            [
+                'debug' => true,
+                'cache' => $cacheDir,
+                'auto_reload' => true,
+            ],
         );
         $this->environment->addExtension(new DebugExtension());
 
