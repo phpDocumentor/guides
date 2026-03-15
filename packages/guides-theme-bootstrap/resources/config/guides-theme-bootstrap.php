@@ -10,8 +10,6 @@ use phpDocumentor\Guides\Bootstrap\Directives\CardGridDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\CardGroupDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\CardHeaderDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\CardImageDirective;
-use phpDocumentor\Guides\Bootstrap\Directives\TabDirective;
-use phpDocumentor\Guides\Bootstrap\Directives\TabsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DirectiveContentRule;
@@ -36,7 +34,5 @@ return static function (ContainerConfigurator $container): void {
         ->set(CardHeaderDirective::class)
         ->set(CardImageDirective::class)
         ->set(CardGroupDirective::class)
-        ->set(CardGridDirective::class)
-        ->set(TabDirective::class)
-        ->set(TabsDirective::class);
+        ->set(CardGridDirective::class);
 };

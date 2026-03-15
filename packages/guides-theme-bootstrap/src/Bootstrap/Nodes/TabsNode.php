@@ -13,30 +13,24 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Bootstrap\Nodes;
 
-use phpDocumentor\Guides\Nodes\InlineCompoundNode;
-use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
+use Doctrine\Deprecations\Deprecation;
+use phpDocumentor\Guides\RestructuredText\Nodes\TabsNode as RstTabsNode;
 
-final class TabsNode extends GeneralDirectiveNode
-{
-    /** @param AbstractTabNode[] $tabs */
-    public function __construct(
-        protected readonly string $name,
-        protected readonly string $plainContent,
-        protected readonly InlineCompoundNode $content,
-        private readonly string $key,
-        private array $tabs,
-    ) {
-        parent::__construct($name, $plainContent, $content, $tabs);
-    }
+use function class_exists;
 
-    /** @return AbstractTabNode[] */
-    public function getTabs(): array
+Deprecation::trigger(
+    'phpDocumentor/guides-theme-bootstrap',
+    'https://github.com/phpDocumentor/guides/issues/1320',
+    'The "%s" class is deprecated, use "%s" instead.',
+    TabsNode::class,
+    RstTabsNode::class,
+);
+
+class_exists(RstTabsNode::class);
+
+// @phpstan-ignore if.alwaysFalse
+if (false) {
+    final class TabsNode
     {
-        return $this->tabs;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
     }
 }

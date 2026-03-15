@@ -16,6 +16,8 @@ namespace phpDocumentor\Guides\RestructuredText\DependencyInjection;
 use phpDocumentor\Guides\RestructuredText\DependencyInjection\Compiler\TextRolePass;
 use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\OptionNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\TabNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\TabsNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -69,7 +71,8 @@ final class ReStructuredTextExtension extends Extension implements
                     template(VersionChangeNode::class, 'body/version-change.html.twig'),
                     template(ConfvalNode::class, 'body/directive/confval.tex.twig', 'tex'),
                     template(OptionNode::class, 'body/directive/option.html.twig'),
-
+                    template(TabNode::class, 'body/directive/tab.html.twig'),
+                    template(TabsNode::class, 'body/directive/tabs.html.twig'),
                 ],
             ],
         );

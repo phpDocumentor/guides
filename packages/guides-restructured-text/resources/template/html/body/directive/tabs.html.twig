@@ -1,0 +1,14 @@
+<div class="tabs">
+    <ul>
+        {% for tab in node.tabs -%}
+            <li><button type="button" data-tabs="{{ node.key }}" data-target="{{ node.key }}-{{ tab.key }}" class="{{ tab.active ? 'active' }}">{{ renderNode(tab.content) }}</button></li>
+        {%- endfor %}
+    </ul>
+    <div class="tab-content" id="tab-content-{{ node.key }}">
+        {% for tab in node.tabs -%}
+            <div class="tab {{- tab.active ? ' active' }}" id="{{ node.key }}-{{ tab.key }}">
+                {{- renderNode(tab.value) -}}
+            </div>
+        {%- endfor %}
+    </div>
+</div>
