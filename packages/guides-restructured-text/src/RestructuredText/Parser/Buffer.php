@@ -27,6 +27,9 @@ use const PHP_INT_MAX;
 
 final class Buffer
 {
+    /** @var bool Whether unIndent() has already been called */
+    private bool $unindented = false;
+
     /** @param string[] $lines */
     public function __construct(
         private array $lines = [],
@@ -56,11 +59,13 @@ final class Buffer
 
     public function push(string $line): void
     {
+        $this->unindented = false;
         $this->lines[] = $line;
     }
 
     public function set(int $key, string $line): void
     {
+        $this->unindented = false;
         $this->lines[$key] = $line;
     }
 
@@ -81,6 +86,8 @@ final class Buffer
 
     public function pop(): string|null
     {
+        $this->unindented = false;
+
         return array_pop($this->lines);
     }
 
@@ -97,6 +104,7 @@ final class Buffer
 
     public function clear(): void
     {
+        $this->unindented = false;
         $this->lines = [];
     }
 
@@ -109,12 +117,18 @@ final class Buffer
 
     private function unIndent(): void
     {
+        if ($this->unindented) {
+            return;
+        }
+
         if ($this->unindentStrategy === UnindentStrategy::NONE) {
             return;
         }
 
         $indentation = $this->detectIndentation();
         if ($indentation === 0) {
+            $this->unindented = true;
+
             return;
         }
 
@@ -125,6 +139,8 @@ final class Buffer
 
             $this->lines[$i] = substr($line, $indentation);
         }
+
+        $this->unindented = true;
     }
 
     private function detectIndentation(): int
