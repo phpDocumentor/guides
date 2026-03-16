@@ -37,7 +37,7 @@ jobs:
           echo "COMPOSER_ROOT_VERSION=1.x-dev" >> $GITHUB_ENV
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v3"
+        uses: "ramsey/composer-install@v4"
         with:
           dependency-versions: "highest"
 
