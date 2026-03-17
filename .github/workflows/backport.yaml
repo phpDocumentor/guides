@@ -11,7 +11,7 @@ jobs:
     if: "${{ github.event.pull_request.merged == true }}"
     steps:
       - name: "Backport Action"
-        uses: "sorenlouv/backport-github-action@v10.4.0"
+        uses: "sorenlouv/backport-github-action@v11.0.0"
         with:
           github_token: "${{ secrets.BOT_TOKEN }}"
           auto_backport_label_prefix: "auto-backport-to-"
