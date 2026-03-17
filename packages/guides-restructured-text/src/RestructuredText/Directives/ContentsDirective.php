@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -25,6 +26,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * Displays a table of content of the current page
  */
+#[Option(name: 'local', type: OptionType::Boolean, description: 'If set, the table of contents will only include sections that are local to the current document.', default: false)]
+#[Option(name: 'depth', description: 'The maximum depth of the table of contents.')]
 final class ContentsDirective extends BaseDirective
 {
     public function __construct(
@@ -51,6 +54,6 @@ final class ContentsDirective extends BaseDirective
         return (new ContentMenuNode([new SectionMenuEntryNode($absoluteUrl)]))
             ->withOptions($this->optionsToArray($options))
             ->withCaption($directive->getDataNode())
-            ->withLocal($directive->hasOption('local'));
+            ->withLocal($this->readOption($directive, 'local'));
     }
 }
