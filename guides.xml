@@ -15,4 +15,5 @@
     <ignored_domain>php</ignored_domain>
     <extension class="phpDocumentor\Guides\Bootstrap"/>
     <extension class="phpDocumentor\Guides\Code"/>
+    <extension class="phpDocumentor\Guides\Graphs"/>
 </guides>

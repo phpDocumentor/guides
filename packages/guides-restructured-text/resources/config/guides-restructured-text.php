@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use phpDocumentor\Guides\Graphs\Directives\UmlDirective;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
@@ -238,7 +237,6 @@ return static function (ContainerConfigurator $container): void {
         ->bind('$startingRule', service(InlineMarkupRule::class))
         ->set(MenuDirective::class)
         ->set(TodoDirective::class)
-        ->set(UmlDirective::class)
         ->set(VersionAddedDirective::class)
         ->set(VersionChangedDirective::class)
         ->set(WarningDirective::class)
