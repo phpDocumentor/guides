@@ -48,7 +48,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\SectionauthorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SeeAlsoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SidebarDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\TabDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TableDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\TabsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TestLoggerDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TipDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TitleDirective;
@@ -232,6 +234,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(TableDirective::class)
         ->set(TestLoggerDirective::class)
         ->set(TipDirective::class)
+        ->set(TabDirective::class)
+        ->set(TabsDirective::class)
         ->set(TitleDirective::class)
         ->set(ToctreeDirective::class)
         ->bind('$startingRule', service(InlineMarkupRule::class))

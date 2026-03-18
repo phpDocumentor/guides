@@ -20,11 +20,12 @@ use phpDocumentor\Guides\Nodes\Node;
 /**
  * A catch-all directive Node containing all information about the original directive in rst.
  *
- * @extends CompoundNode<Node>
+ * @template TValue of Node = Node
+ * @extends CompoundNode<TValue>
  */
 class GeneralDirectiveNode extends CompoundNode
 {
-    /** @param list<Node> $value */
+    /** @param list<TValue> $value */
     public function __construct(
         private readonly string $name,
         private readonly string $plainContent,

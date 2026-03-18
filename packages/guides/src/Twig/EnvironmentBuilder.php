@@ -30,6 +30,8 @@ final class EnvironmentBuilder
             $themeManager->getFilesystemLoader(),
             ['debug' => true],
         );
+        $this->environment->addGlobal('env', null);
+        $this->environment->addGlobal('debugInformation', null);
         $this->environment->addExtension(new DebugExtension());
 
         foreach ($extensions as $extension) {
@@ -41,6 +43,8 @@ final class EnvironmentBuilder
     public function setEnvironmentFactory(callable $factory): void
     {
         $this->environment = $factory();
+        $this->environment->addGlobal('env', null);
+        $this->environment->addGlobal('debugInformation', null);
     }
 
     public function setContext(RenderContext $context): void
