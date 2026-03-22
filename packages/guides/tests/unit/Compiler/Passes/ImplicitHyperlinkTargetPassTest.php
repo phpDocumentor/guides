@@ -21,49 +21,29 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 final class ImplicitHyperlinkTargetPassTest extends TestCase
 {
     public function testAllImplicitUniqueSections(): void
     {
         $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
-        $slugger = new AsciiSlugger();
-        foreach (['Document 1', 'Section A', 'Section B'] as $titles) {
-            $document->addChildNode(
+        $documentSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $document->addChildNode($documentSection);
+        foreach (['Document 1' => 'document-1', 'Section A' => 'section-a', 'Section B' => 'section-b'] as $title => $id) {
+            $documentSection->addChildNode(
                 new SectionNode(
-                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
-                ),
-            );
-            $expected->addChildNode(
-                new SectionNode(
-                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($title), 1, $id),
                 ),
             );
         }
 
-        $pass = new ImplicitHyperlinkTargetPass();
-        $resultDocuments = $pass->run([clone $document], new CompilerContext(new ProjectNode()));
-
-        self::assertEquals([$expected], $resultDocuments);
-    }
-
-    public function testImplicitWithConflict(): void
-    {
-        $document = new DocumentNode('1', 'index');
         $expected = new DocumentNode('1', 'index');
-        $slugger = new AsciiSlugger();
-
-        foreach (['Document 1', 'Section A', 'Section A'] as $titles) {
-            $document->addChildNode(
+        $expectedSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $expected->addChildNode($expectedSection);
+        foreach (['Document 1' => 'document-1', 'Section A' => 'section-a', 'Section B' => 'section-b'] as $title => $id) {
+            $expectedSection->addChildNode(
                 new SectionNode(
-                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
-                ),
-            );
-            $expected->addChildNode(
-                new SectionNode(
-                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($titles), 1, $slugger->slug($titles)->lower()->toString()),
+                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($title), 1, $id),
                 ),
             );
         }
@@ -71,35 +51,45 @@ final class ImplicitHyperlinkTargetPassTest extends TestCase
         $pass = new ImplicitHyperlinkTargetPass();
         $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
-        $section = $expected->getNodes()[2];
-        self::assertInstanceOf(SectionNode::class, $section);
-        $section->getTitle()->setId('section-a-1');
-
         self::assertEquals([$expected], $resultDocuments);
     }
 
-    public function testExplicit(): void
+    public function testImplicitWithConflict(): void
     {
         $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
+        $documentSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $document->addChildNode($documentSection);
+        foreach (['Document 1' => 'document-1', 'Section A' => 'section-a'] as $title => $id) {
+            $documentSection->addChildNode(
+                new SectionNode(
+                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($title), 1, $id),
+                ),
+            );
+        }
 
-        $document->addChildNode(new SectionNode(
-            new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Document 1'), 1, 'document-1'),
-        ));
-        $expected->addChildNode(new SectionNode(
-            new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Document 1'), 1, 'document-1'),
-        ));
-
-        $document->addChildNode(new AnchorNode('custom-anchor'));
-        $expected->addChildNode(new AnchorNode('removed'));
-        $expected = $expected->removeNode(1);
-
-        $document->addChildNode(
-            new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a')),
+        $documentSection->addChildNode(
+            new SectionNode(
+                new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a'),
+            ),
         );
-        $expectedTitle = new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a');
-        $expectedTitle->setId('custom-anchor');
-        $expected->addChildNode(new SectionNode($expectedTitle));
+
+        $expected = new DocumentNode('1', 'index');
+        $expectedSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $expected->addChildNode($expectedSection);
+        foreach (['Document 1' => 'document-1', 'Section A' => 'section-a'] as $title => $id) {
+            $expectedSection->addChildNode(
+                new SectionNode(
+                    new TitleNode(InlineCompoundNode::getPlainTextInlineNode($title), 1, $id),
+                ),
+            );
+        }
+
+        $expectedSection->addChildNode(
+            new SectionNode(
+                // conflict in ID, "-1" is added
+                new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a-1'),
+            ),
+        );
 
         $pass = new ImplicitHyperlinkTargetPass();
         $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));
@@ -110,25 +100,27 @@ final class ImplicitHyperlinkTargetPassTest extends TestCase
     public function testExplicitHasPriorityOverImplicit(): void
     {
         $document = new DocumentNode('1', 'index');
-        $expected = new DocumentNode('1', 'index');
-
-        $document->addChildNode(
+        $documentSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $document->addChildNode($documentSection);
+        $documentSection->addChildNode(
             new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Document 1'), 1, 'document-1')),
         );
-        $expectedTitle = new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Document 1'), 1, 'document-1');
-        $expectedTitle->setId('document-1-1');
-        $expected->addChildNode(new SectionNode($expectedTitle));
-
-        $document->addChildNode(new AnchorNode('document-1'));
-        $expected->addChildNode(new AnchorNode('removed'));
-        $expected = $expected->removeNode(1);
-
-        $document->addChildNode(
+        $documentSection->addChildNode(new AnchorNode('document-1'));
+        $documentSection->addChildNode(
             new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a')),
         );
-        $expectedTitle = new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a');
-        $expectedTitle->setId('document-1');
-        $expected->addChildNode(new SectionNode($expectedTitle));
+
+        $expected = new DocumentNode('1', 'index');
+        $expectedSection = new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Index'), 1, 'index'));
+        $expected->addChildNode($expectedSection);
+        $expectedSection->addChildNode(
+            // "document-1" is claimed by an explicit reference anchor, implicit reference gets the "-1" suffix
+            new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Document 1'), 1, 'document-1-1')),
+        );
+        $expectedSection->addChildNode(new AnchorNode('document-1'));
+        $expectedSection->addChildNode(
+            new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Section A'), 1, 'section-a')),
+        );
 
         $pass = new ImplicitHyperlinkTargetPass();
         $resultDocuments = $pass->run([$document], new CompilerContext(new ProjectNode()));

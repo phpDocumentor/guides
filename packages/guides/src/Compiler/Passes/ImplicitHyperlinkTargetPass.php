@@ -25,9 +25,7 @@ use function array_map;
 use function array_merge;
 use function current;
 use function in_array;
-use function key;
 use function next;
-use function prev;
 
 /**
  * Resolves the hyperlink target for each section in the document.
@@ -50,44 +48,42 @@ final class ImplicitHyperlinkTargetPass implements CompilerPass
             $knownReferences = $this->fetchExplicitReferences($document);
 
             $nodes = $document->getNodes();
-            $node = current($nodes);
-            do {
-                if ($node instanceof AnchorNode) {
-                    // override implicit section reference if an anchor precedes the section
-                    $key = key($nodes);
-                    $section = next($nodes);
-                    if (!$section instanceof SectionNode) {
-                        prev($nodes);
-                        continue;
-                    }
+            $this->deduplicateSectionIds($nodes, $knownReferences);
 
-                    $section->getTitle()->setId($node->getValue());
-                    if ($key !== null) {
-                        $document = $document->removeNode($key);
-                    }
+            return $document;
+        }, $documents);
+    }
 
-                    continue;
-                }
-
-                if (!($node instanceof SectionNode)) {
-                    continue;
-                }
-
+    /**
+     * @param array<int, Node> $nodes
+     * @param list<string>     $knownIds
+     *
+     * @return list<string>
+     */
+    private function deduplicateSectionIds(array $nodes, array $knownIds): array
+    {
+        $node = current($nodes);
+        do {
+            if ($node instanceof SectionNode) {
                 $realId = $sectionId = $node->getTitle()->getId();
 
                 // resolve conflicting references by appending an increasing number
                 $i = 1;
-                while (in_array($realId, $knownReferences, true)) {
+                while (in_array($realId, $knownIds, true)) {
                     $realId = $sectionId . '-' . ($i++);
                 }
 
                 $node->getTitle()->setId($realId);
-                $knownReferences[] = $realId;
-            //phpcs:ignore SlevomatCodingStandard.ControlStructures.AssignmentInCondition.AssignmentInCondition
-            } while ($node = next($nodes));
+                $knownIds[] = $realId;
+            }
 
-            return $document;
-        }, $documents);
+            if ($node instanceof CompoundNode) {
+                $knownIds = $this->deduplicateSectionIds($node->getChildren(), $knownIds);
+            }
+        //phpcs:ignore SlevomatCodingStandard.ControlStructures.AssignmentInCondition.AssignmentInCondition
+        } while ($node = next($nodes));
+
+        return $knownIds;
     }
 
     /** @return string[] */

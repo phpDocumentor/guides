@@ -16,7 +16,7 @@ Link image to external URL
     :target: https://example.org/
 
 Link image to email
-==========================
+===================
 
 .. image:: /images/hero2-illustration.svg
     :width: 400
