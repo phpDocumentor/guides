@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RestructuredText\Compiler\Passes\DirectiveProcessPass;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
@@ -279,6 +280,7 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => ParagraphRule::PRIORITY + 1])
         ->set(DirectiveRule::class)
         ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
+        ->arg('$startingRule', service(DirectiveContentRule::class))
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => DirectiveRule::PRIORITY])
         ->set(CommentRule::class)
         ->tag('phpdoc.guides.parser.rst.body_element', ['priority' => CommentRule::PRIORITY])
@@ -376,6 +378,10 @@ return static function (ContainerConfigurator $container): void {
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
         ->set(InlineMarkupRule::class)
+
+        ->set(DirectiveProcessPass::class)
+        ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
+        ->tag('phpdoc.guides.compiler.nodeTransformers')
         ->set(DefaultCodeNodeOptionMapper::class)
         ->alias(CodeNodeOptionMapper::class, DefaultCodeNodeOptionMapper::class);
 };
