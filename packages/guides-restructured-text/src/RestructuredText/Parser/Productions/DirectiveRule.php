@@ -95,10 +95,22 @@ final class DirectiveRule implements Rule
         $buffer = $this->collectDirectiveContents($documentIterator);
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
-            return $this->startingRule->apply(
+            $node = $this->startingRule->apply(
                 new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
                 new DirectiveNode($directive),
             );
+
+            if ($node === null) {
+                return null;
+            }
+
+            if ($directive->getVariable() === '') {
+                return $node;
+            }
+
+            $blockContext->getDocumentParserContext()->getDocument()->addVariable($directive->getVariable(), $node);
+
+            return null;
         }
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
