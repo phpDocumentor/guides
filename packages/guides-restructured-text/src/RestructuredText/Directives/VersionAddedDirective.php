@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
+#[Attributes\Directive(name: 'versionadded')]
 final class VersionAddedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
