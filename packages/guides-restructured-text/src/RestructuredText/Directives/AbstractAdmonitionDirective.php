@@ -51,11 +51,16 @@ abstract class AbstractAdmonitionDirective extends SubDirective
 
     public function createNode(DirectiveNode $directiveNode): Node|null
     {
+        $children = $directiveNode->getChildren();
+        if ($directiveNode->getDirective()->getDataNode() !== null) {
+            array_unshift($children, new ParagraphNode([$directiveNode->getDirective()->getDataNode()]));
+        }
+
         return new AdmonitionNode(
             $directiveNode->getDirective()->getName(),
-            $directiveNode->getDirective()->getDataNode(),
+            null,
             $this->text,
-            $directiveNode->getChildren(),
+            $children,
         );
     }
 }
