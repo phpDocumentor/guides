@@ -34,6 +34,10 @@ use const PHP_VERSION_ID;
 /** @extends AbstractLexer<int, string> */
 final class InlineLexer extends AbstractLexer
 {
+    public function __construct(private readonly bool $disableLegacyTilde = false)
+    {
+    }
+
     public const WORD = 1;
     public const UNDERSCORE = 2;
     public const ANONYMOUS_END = 3;
@@ -131,7 +135,7 @@ final class InlineLexer extends AbstractLexer
             '#' => self::OCTOTHORPE,
             '[' => self::ANNOTATION_START,
             ']' => self::ANNOTATION_END,
-            '~' => self::NBSP,
+            '~' => $this->disableLegacyTilde ? null : self::NBSP,
             '\\' => self::BACKSLASH,
             default => null,
         };

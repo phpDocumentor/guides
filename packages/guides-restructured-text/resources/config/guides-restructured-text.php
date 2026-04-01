@@ -373,6 +373,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(DocumentRule::class)
         ->set(InlineParser::class)
         ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
+        ->arg('$disableLegacyTilde', true)
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
         ->set(InlineMarkupRule::class)
