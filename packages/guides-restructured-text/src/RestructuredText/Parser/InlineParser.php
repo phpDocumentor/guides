@@ -33,7 +33,10 @@ class InlineParser
     private array $cache = [];
 
     /** @param iterable<InlineRule> $inlineRules */
-    public function __construct(iterable $inlineRules)
+    public function __construct(
+        iterable $inlineRules,
+        private readonly bool $disableLegacyTilde = false,
+    )
     {
         $this->rules = array_filter([...$inlineRules], static fn ($rule) => $rule instanceof CachableInlineRule === false);
         usort($this->rules, static fn (InlineRule $a, InlineRule $b): int => $a->getPriority() > $b->getPriority() ? -1 : 1);
@@ -48,7 +51,7 @@ class InlineParser
 
     public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
     {
-        $lexer = new InlineLexer();
+        $lexer = new InlineLexer($this->disableLegacyTilde);
         $lexer->setInput($content);
         $lexer->moveNext();
         $lexer->moveNext();
