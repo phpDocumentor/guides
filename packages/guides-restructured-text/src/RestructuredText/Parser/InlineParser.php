@@ -36,8 +36,7 @@ class InlineParser
     public function __construct(
         iterable $inlineRules,
         private readonly bool $disableLegacyTilde = false,
-    )
-    {
+    ) {
         $this->rules = array_filter([...$inlineRules], static fn ($rule) => $rule instanceof CachableInlineRule === false);
         usort($this->rules, static fn (InlineRule $a, InlineRule $b): int => $a->getPriority() > $b->getPriority() ? -1 : 1);
         foreach ($inlineRules as $rule) {
