@@ -6,6 +6,8 @@ Text Roles
 
 Text roles can be used to style content inline. Some text roles have advanced processing such as reference resolving.
 
+For external project references using inventory ids, see :doc:`interlinks`.
+
 You can also :ref:`add your own custom text roles <custom_text_roles>`.
 
 Currently the following text roles are implemented:

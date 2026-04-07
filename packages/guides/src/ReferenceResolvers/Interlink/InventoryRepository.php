@@ -23,5 +23,6 @@ interface InventoryRepository
 
     public function hasInventory(string $key): bool;
 
+    /** @deprecated Implement {@see InventoryLinkResolver::resolveInventoryLink()} to resolve interlink targets in one call. */
     public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory|null;
 }

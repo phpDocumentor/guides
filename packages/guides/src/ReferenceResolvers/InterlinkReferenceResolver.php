@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryRepository;
 use phpDocumentor\Guides\RenderContext;
 
@@ -37,17 +38,29 @@ final class InterlinkReferenceResolver implements ReferenceResolver
             return false;
         }
 
-        $inventory = $this->inventoryRepository->getInventory($node, $renderContext, $messages);
-        if ($inventory === null) {
-            return false;
+        if ($this->inventoryRepository instanceof InventoryLinkResolver) {
+            $resolvedInventoryLink = $this->inventoryRepository->resolveInventoryLink($node, $renderContext, $messages);
+            if ($resolvedInventoryLink === null) {
+                return false;
+            }
+
+            $baseUrl = $resolvedInventoryLink->getBaseUrl();
+            $link = $resolvedInventoryLink->getLink();
+        } else {
+            $inventory = $this->inventoryRepository->getInventory($node, $renderContext, $messages);
+            if ($inventory === null) {
+                return false;
+            }
+
+            $link = $this->inventoryRepository->getLink($node, $renderContext, $messages);
+            if ($link === null) {
+                return false;
+            }
+
+            $baseUrl = $inventory->getBaseUrl();
         }
 
-        $link = $this->inventoryRepository->getLink($node, $renderContext, $messages);
-        if ($link === null) {
-            return false;
-        }
-
-        $node->setUrl($inventory->getBaseUrl() . $link->getPath());
+        $node->setUrl($baseUrl . $link->getPath());
         if ($node instanceof CompoundNode) {
             if (count($node->getChildren()) === 0) {
                 $node->addChildNode(new PlainTextInlineNode($link->getTitle()));

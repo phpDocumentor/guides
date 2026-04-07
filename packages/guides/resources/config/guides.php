@@ -30,6 +30,7 @@ use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\ReferenceResolvers\EmailReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 use phpDocumentor\Guides\ReferenceResolvers\ImageReferenceResolverPreRender;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\ChainedInventoryLinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryRepository;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLoader;
@@ -74,7 +75,8 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 
 return static function (ContainerConfigurator $container): void {
     $container->parameters()
-        ->set('phpdoc.guides.base_template_paths', [__DIR__ . '/../../../guides/resources/template/html']);
+        ->set('phpdoc.guides.base_template_paths', [__DIR__ . '/../../../guides/resources/template/html'])
+        ->set('phpdoc.guides.interlink.default_repository.enabled', true);
 
     $container->services()
         ->defaults()
@@ -129,8 +131,13 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeTraverser::class)
 
-        ->set(InventoryRepository::class, DefaultInventoryRepository::class)
+        ->set(DefaultInventoryRepository::class)
         ->arg('$inventoryConfigs', param('phpdoc.guides.inventories'))
+        ->arg('$enabled', param('phpdoc.guides.interlink.default_repository.enabled'))
+        ->tag('phpdoc.guides.interlink_resolver')
+
+        ->set(InventoryRepository::class, ChainedInventoryLinkResolver::class)
+        ->arg('$repositories', tagged_iterator('phpdoc.guides.interlink_resolver'))
 
         ->set(InventoryLoader::class, DefaultInventoryLoader::class)
 
