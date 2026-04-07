@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
-/** @coversDefaultClass \phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode */
+#[CoversClass(DefinitionListItemNode::class)]
+#[CoversMethod(DefinitionListItemNode::class, '__construct')]
+#[CoversMethod(DefinitionListItemNode::class, 'getTerm')]
+#[CoversMethod(DefinitionListItemNode::class, 'getClassifiers')]
 final class DefinitionListTermTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::getTerm
-     */
     public function testTheDefinitionTermTextIsAvailable(): void
     {
         $term = new InlineCompoundNode([]);
@@ -32,10 +33,6 @@ final class DefinitionListTermTest extends TestCase
         self::assertSame($term, $definitionListTerm->getTerm());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getClassifiers
-     */
     public function testClassifiersAreMadeAvailable(): void
     {
         $term = new InlineCompoundNode([]);
@@ -46,7 +43,6 @@ final class DefinitionListTermTest extends TestCase
         self::assertSame([$classifier], $definitionListTerm->getClassifiers());
     }
 
-    /** @covers ::__construct */
     public function testDefinitionsAreMadeAvailable(): void
     {
         $term = new InlineCompoundNode([]);
