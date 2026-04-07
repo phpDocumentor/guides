@@ -22,6 +22,7 @@ use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\DefaultInventoryRepository;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\Inventory;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLink;
+use phpDocumentor\Guides\ReferenceResolvers\Interlink\InventoryLinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\Interlink\JsonLoader;
 use phpDocumentor\Guides\ReferenceResolvers\Messages;
 use phpDocumentor\Guides\ReferenceResolvers\SluggerAnchorNormalizer;
@@ -73,10 +74,11 @@ final class InventoryLoaderTest extends TestCase
 
     public function testInventoryLoaderLoadsInventory(): void
     {
-        $node = new DocReferenceNode('SomeDocument', [], 'somekey');
-        $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
-        self::assertTrue($inventory instanceof Inventory);
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        $node = new ReferenceNode('modindex', [], 'somekey');
+        self::assertInstanceOf(InventoryLinkResolver::class, $this->inventoryRepository);
+        $resolved = $this->inventoryRepository->resolveInventoryLink($node, $this->renderContext, new Messages());
+        self::assertNotNull($resolved);
+        self::assertNotSame('', $resolved->getBaseUrl());
     }
 
     public function testInventoryIsLoadedExactlyOnce(): void
@@ -93,10 +95,11 @@ final class InventoryLoaderTest extends TestCase
     public function testInventoryLoaderAcceptsNull(): void
     {
         $this->loadObjectsJsonInv(__DIR__ . '/fixtures/null-in-objects.inv.json');
-        $node = new DocReferenceNode('SomeDocument', [], 'somekey');
-        $inventory = $this->inventoryRepository->getInventory($node, $this->renderContext, new Messages());
-        self::assertTrue($inventory instanceof Inventory);
-        self::assertGreaterThan(1, count($inventory->getGroups()));
+        $node = new ReferenceNode('modindex', [], 'somekey');
+        self::assertInstanceOf(InventoryLinkResolver::class, $this->inventoryRepository);
+        $resolved = $this->inventoryRepository->resolveInventoryLink($node, $this->renderContext, new Messages());
+        self::assertNotNull($resolved);
+        self::assertNotSame('', $resolved->getBaseUrl());
     }
 
     #[DataProvider('rawAnchorProvider')]
@@ -178,5 +181,18 @@ final class InventoryLoaderTest extends TestCase
         yield 'docs are not slugged' => [
             new DocReferenceNode('Page1-Subpage1', [], 'somekey'),
         ];
+    }
+
+    public function testDisabledRepositoryNeverClaimsInventory(): void
+    {
+        $disabledRepository = new DefaultInventoryRepository(
+            new SluggerAnchorNormalizer(),
+            $this->inventoryLoader,
+            [['id' => 'somekey', 'url' => 'https://example.com/']],
+            false,
+        );
+
+        self::assertFalse($disabledRepository->hasInventory('somekey'));
+        self::assertFalse($disabledRepository->hasInventory('some-key'));
     }
 }

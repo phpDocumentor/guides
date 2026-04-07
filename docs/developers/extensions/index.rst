@@ -36,3 +36,4 @@ Some ways to extend the guides:
     structure
     templates
     text-roles
+    interlinks
