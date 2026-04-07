@@ -34,6 +34,24 @@ final class InlineLexerTest extends TestCase
         }
     }
 
+    public function testTildeIsNbspByDefault(): void
+    {
+        $lexer = new InlineLexer();
+        $lexer->setInput('~');
+        $lexer->moveNext();
+        $lexer->moveNext();
+        assertEquals(InlineLexer::NBSP, $lexer->token?->type);
+    }
+
+    public function testTildeIsWordWhenLegacyTildeDisabled(): void
+    {
+        $lexer = new InlineLexer(disableLegacyTilde: true);
+        $lexer->setInput('~');
+        $lexer->moveNext();
+        $lexer->moveNext();
+        assertEquals(InlineLexer::WORD, $lexer->token?->type);
+    }
+
     /** @return array<string, array<string | int[]>> */
     public static function inlineLexerProvider(): array
     {
