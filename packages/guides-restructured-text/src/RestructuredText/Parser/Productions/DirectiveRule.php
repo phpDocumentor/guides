@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -48,12 +49,16 @@ final class DirectiveRule implements Rule
     /** @var array<string, DirectiveHandler> */
     private array $directives;
 
-    /** @param iterable<DirectiveHandler> $directives */
+    /**
+     * @param iterable<DirectiveHandler> $directives
+     * @param Rule<Node>|null $startingRule
+     */
     public function __construct(
         private readonly InlineMarkupRule $inlineMarkupRule,
         private readonly LoggerInterface $logger,
         private readonly GeneralDirective $generalDirective,
         iterable $directives = [],
+        private readonly Rule|null $startingRule = null,
     ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
@@ -84,11 +89,29 @@ final class DirectiveRule implements Rule
         }
 
         $this->parseDirectiveContent($directive, $blockContext);
+        $this->interpretDirectiveOptions($documentIterator, $directive);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
-
-        $this->interpretDirectiveOptions($documentIterator, $directive);
         $buffer = $this->collectDirectiveContents($documentIterator);
+
+        if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
+            $node = $this->startingRule->apply(
+                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
+                new DirectiveNode($directive),
+            );
+
+            if ($node === null) {
+                return null;
+            }
+
+            if ($directive->getVariable() === '') {
+                return $node;
+            }
+
+            $blockContext->getDocumentParserContext()->getDocument()->addVariable($directive->getVariable(), $node);
+
+            return null;
+        }
 
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {

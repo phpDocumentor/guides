@@ -48,14 +48,14 @@ final class VariableInlineNodeTransformer implements NodeTransformer
         $nodeReplacement ??= $compilerContext->getProjectNode()->getVariable($node->getValue(), null);
 
         if ($nodeReplacement instanceof Node) {
-            $node->setChild($nodeReplacement);
-        } else {
-            $this->logger->warning(
-                'No replacement was found for variable |' . $node->getValue() . '|',
-                $compilerContext->getLoggerInformation(),
-            );
-            $node->setChild(new PlainTextInlineNode('|' . $node->getValue() . '|'));
+            return $nodeReplacement;
         }
+
+        $this->logger->warning(
+            'No replacement was found for variable |' . $node->getValue() . '|',
+            $compilerContext->getLoggerInformation(),
+        );
+        $node->setChild(new PlainTextInlineNode('|' . $node->getValue() . '|'));
 
         return $node;
     }
