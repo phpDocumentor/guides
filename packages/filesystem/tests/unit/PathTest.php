@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\FileSystem;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @coversDefaultClass Path */
+#[CoversClass(Path::class)]
 final class PathTest extends TestCase
 {
     public function testItCanContainALocationOnAStorageService(): void
