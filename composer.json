@@ -30,7 +30,8 @@
                 "packages/guides-restructured-text/tests/unit",
                 "packages/guides-restructured-text/tests/benchmarks/"
             ],
-            "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit"
+            "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit",
+            "phpDocumentor\\Guides\\Pages\\": "packages/guides-pages/tests/unit"
         }
     },
     "require": {
@@ -48,6 +49,7 @@
         "phpdocumentor/guides-code": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-graphs": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-markdown": "^1.0 || ^1.0@dev",
+        "phpdocumentor/guides-pages": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-restructured-text": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-theme-bootstrap": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-theme-rst": "^1.0 || ^1.0@dev",
