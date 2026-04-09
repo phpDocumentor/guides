@@ -23,6 +23,18 @@ use function trim;
 
 final class DocumentNameResolver implements DocumentNameResolverInterface
 {
+    /** @var array<string, string> */
+    private array $absoluteUrlCache = [];
+
+    /** @var array<string, string> */
+    private array $canonicalUrlCache = [];
+
+    /** @var array<string, bool> */
+    private array $isAbsoluteCache = [];
+
+    /** @var array<string, bool> */
+    private array $isAbsolutePathCache = [];
+
     /**
      * Returns the absolute path, including prefixing '/'.
      *
@@ -31,20 +43,31 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
      */
     public function absoluteUrl(string $basePath, string $url): string
     {
-        $uri = BaseUri::from($url);
-        if ($uri->isAbsolute()) {
-            return $url;
+        $cacheKey = $basePath . '|' . $url;
+        if (isset($this->absoluteUrlCache[$cacheKey])) {
+            return $this->absoluteUrlCache[$cacheKey];
         }
 
-        if ($uri->isAbsolutePath()) {
-            return $url;
+        // Cache URI analysis results separately by URL
+        if (!isset($this->isAbsoluteCache[$url])) {
+            $uri = BaseUri::from($url);
+            $this->isAbsoluteCache[$url] = $uri->isAbsolute();
+            $this->isAbsolutePathCache[$url] = $uri->isAbsolutePath();
+        }
+
+        if ($this->isAbsoluteCache[$url]) {
+            return $this->absoluteUrlCache[$cacheKey] = $url;
+        }
+
+        if ($this->isAbsolutePathCache[$url]) {
+            return $this->absoluteUrlCache[$cacheKey] = $url;
         }
 
         if ($basePath === '/') {
-            return $basePath . $url;
+            return $this->absoluteUrlCache[$cacheKey] = $basePath . $url;
         }
 
-        return '/' . trim($basePath, '/') . '/' . $url;
+        return $this->absoluteUrlCache[$cacheKey] = '/' . trim($basePath, '/') . '/' . $url;
     }
 
     /**
@@ -57,8 +80,13 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
      */
     public function canonicalUrl(string $basePath, string $url): string
     {
+        $cacheKey = $basePath . '|' . $url;
+        if (isset($this->canonicalUrlCache[$cacheKey])) {
+            return $this->canonicalUrlCache[$cacheKey];
+        }
+
         if ($url[0] === '/') {
-            return ltrim($url, '/');
+            return $this->canonicalUrlCache[$cacheKey] = ltrim($url, '/');
         }
 
         $dirNameParts = explode('/', $basePath);
@@ -78,6 +106,6 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
             $urlPass1[] = $part;
         }
 
-        return ltrim(implode('/', $dirNameParts) . '/' . implode('/', $urlPass1), '/');
+        return $this->canonicalUrlCache[$cacheKey] = ltrim(implode('/', $dirNameParts) . '/' . implode('/', $urlPass1), '/');
     }
 }
