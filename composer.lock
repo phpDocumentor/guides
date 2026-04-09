@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca3ea9c081086512ad25ab19f6399264",
+    "content-hash": "0c81a2574c7d906c8327fcf849c10447",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1969,6 +1969,46 @@
                 "MIT"
             ],
             "description": "Adds Markdown support to the phpDocumentor's Guides library.",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-pages",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-pages",
+                "reference": "ba1d6c7257cbe1e49ef9e325ccabaa7f7e6ed1b8"
+            },
+            "require": {
+                "php": "^8.1",
+                "phpdocumentor/guides": "^1.0 || ^2.0",
+                "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds a simple static-page output format to the phpDocumentor's Guides library, allowing users to author standalone pages in their preferred documentation format.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -8633,6 +8673,7 @@
         "phpdocumentor/guides-code": 20,
         "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-markdown": 20,
+        "phpdocumentor/guides-pages": 20,
         "phpdocumentor/guides-restructured-text": 20,
         "phpdocumentor/guides-theme-bootstrap": 20,
         "phpdocumentor/guides-theme-rst": 20
