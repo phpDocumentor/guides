@@ -14,33 +14,38 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Pages\EventListener;
 
 use phpDocumentor\Guides\Event\PostRenderProcess;
+use phpDocumentor\Guides\NodeRenderers\DelegatingNodeRenderer;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Pages\Nodes\RenderablePageInterface;
 use phpDocumentor\Guides\Pages\PagesRegistry;
 use phpDocumentor\Guides\RenderContext;
-use phpDocumentor\Guides\TemplateRenderer;
 use Psr\Log\LoggerInterface;
 
 use function ltrim;
 use function sprintf;
 
 /**
- * Renders compiled standalone pages after the main documentation has been rendered.
+ * Renders all standalone pages and content-type items — including overview
+ * pages — after the main documentation has been rendered.
  *
  * Triggered by {@see PostRenderProcess}, this listener:
  *
- * 1. Guards against non-HTML output formats and returns early if the format is not HTML.
- * 2. Iterates over all {@see PageNode}s stored in the {@see PagesRegistry} by
- *    {@see ParsePagesListener}.
- * 3. Renders each page using the "structure/page.html.twig" template via the
- *    shared {@see TemplateRenderer}.
- * 4. Writes the rendered HTML to the destination filesystem provided by the
- *    {@see \phpDocumentor\Guides\Handlers\RenderCommand}.
+ * 1. Guards against non-HTML output formats.
+ * 2. Iterates over **all renderables** ({@see PagesRegistry::getAllRenderables()})
+ *    and delegates each one to the format-specific
+ *    {@see DelegatingNodeRenderer} (`page` format), which in turn dispatches to
+ *    {@see \phpDocumentor\Guides\Pages\NodeRenderers\Html\PageNodeRenderer}.
+ *    This includes {@see \phpDocumentor\Guides\Pages\Nodes\ContentTypeOverviewNode}
+ *    instances created during the parse phase by
+ *    {@see \phpDocumentor\Guides\Pages\EventListener\ParseContentTypeListener}.
+ *    Template resolution is entirely node-driven — no template logic lives here.
+ * 3. Writes each rendered HTML file to the destination filesystem.
  */
 final class RenderPagesListener
 {
     public function __construct(
         private readonly PagesRegistry $registry,
-        private readonly TemplateRenderer $templateRenderer,
+        private readonly DelegatingNodeRenderer $delegatingRenderer,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -53,39 +58,42 @@ final class RenderPagesListener
             return;
         }
 
-        $origin      = $command->getOrigin();
-        $destination = $command->getDestination();
-        $projectNode = $command->getProjectNode();
+        $origin        = $command->getOrigin();
+        $destination   = $command->getDestination();
+        $projectNode   = $command->getProjectNode();
         $documentArray = $command->getDocumentArray();
 
+        // Render all pages, content-type items, and overview pages
+        foreach ($this->registry->getAllRenderables() as $renderable) {
+            $context = $this->buildContext($renderable, $origin, $destination, $projectNode, $documentArray);
 
-        foreach ($this->registry->getPages() as $pageNode) {
-            // Build a thin DocumentNode purely for RenderContext compatibility
-            $tempDoc = new DocumentNode($pageNode->getFilePath(), $pageNode->getFilePath());
+            $html = $this->delegatingRenderer->render($renderable, $context);
 
-            $context = RenderContext::forDocument(
-                $tempDoc,
-                $documentArray,
-                $origin,
-                $destination,
-                '/',
-                'html',
-                $projectNode,
-            )->withOutputFilePath($pageNode->getOutputPath() . '.html');
-
-            $html = $this->templateRenderer->renderTemplate(
-                $context,
-                'structure/page.html.twig',
-                [
-                    'node'  => $pageNode,
-                    'title' => $pageNode->getPageTitle(),
-                ],
-            );
-
-            $outputPath = ltrim($pageNode->getOutputPath() . '.html', '/');
+            $outputPath = ltrim($renderable->getOutputPath() . '.html', '/');
             $destination->put($outputPath, $html);
 
             $this->logger->info(sprintf('[guides-pages] Rendered page to "%s"', $outputPath));
         }
+    }
+
+    /** @param array<string, DocumentNode> $documentArray */
+    private function buildContext(
+        RenderablePageInterface $renderable,
+        mixed $origin,
+        mixed $destination,
+        mixed $projectNode,
+        array $documentArray,
+    ): RenderContext {
+        $tempDoc = new DocumentNode($renderable->getFilePath(), $renderable->getFilePath());
+
+        return RenderContext::forDocument(
+            $tempDoc,
+            $documentArray,
+            $origin,
+            $destination,
+            '/',
+            'html',
+            $projectNode,
+        )->withOutputFilePath($renderable->getOutputPath() . '.html');
     }
 }

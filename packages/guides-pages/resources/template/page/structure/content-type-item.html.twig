@@ -1,0 +1,17 @@
+{% extends "structure/layout.html.twig" %}
+
+{% block head %}
+    {%- for headerNode in node.headerNodes -%}
+        {{ renderNode(headerNode) }}
+    {%- endfor -%}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {%- if node.date is not null -%}
+        <time datetime="{{ node.date|date('Y-m-d') }}">{{ node.date|date('F j, Y') }}</time>
+    {%- endif -%}
+    {% for child in node.children -%}
+        {{ renderNode(child) }}
+    {%~ endfor -%}
+{% endblock %}

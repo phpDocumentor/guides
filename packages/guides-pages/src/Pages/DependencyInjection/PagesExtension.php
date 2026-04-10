@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Pages\DependencyInjection;
 
+use phpDocumentor\Guides\Pages\Collection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,10 +21,14 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
+use function array_is_list;
 use function array_keys;
 use function array_map;
 use function array_values;
 use function dirname;
+use function is_array;
+use function ltrim;
+use function phpDocumentor\Guides\DependencyInjection\templateArray;
 
 /**
  * Symfony DI extension for the guides-pages package.
@@ -54,6 +59,19 @@ final class PagesExtension extends Extension implements PrependExtensionInterfac
             $config['source_directory'],
         );
 
+        // Normalize collections: default overview_title to source_directory when
+        // empty, then wrap each entry in a Collection value object.
+        $collections = [];
+        foreach ($config['collections'] as $collection) {
+            if ($collection['overview_title'] === '') {
+                $collection['overview_title'] = $collection['source_directory'];
+            }
+
+            $collections[] = Collection::fromArray($collection);
+        }
+
+        $container->setParameter('phpdoc.guides.pages.collections', $collections);
+
         $loader = new PhpFileLoader(
             $container,
             new FileLocator(dirname(__DIR__, 3) . '/resources/config'),
@@ -70,34 +88,43 @@ final class PagesExtension extends Extension implements PrependExtensionInterfac
 
     public function prepend(ContainerBuilder $container): void
     {
-        $templateMap = require dirname(__DIR__, 3) . '/resources/template/page/template.php';
-
         $sourceDirectory = 'pages';
+        $collectionSourceDirs = [];
         foreach ($container->getExtensionConfig($this->getAlias()) as $config) {
-            if (!isset($config['source_directory']) || $config['source_directory'] === '') {
+            if (isset($config['source_directory']) && $config['source_directory'] !== '') {
+                $sourceDirectory = $config['source_directory'];
+            }
+
+            if (!isset($config['collection'])) {
                 continue;
             }
 
-            $sourceDirectory = $config['source_directory'];
+            $collections = is_array($config['collection']) && array_is_list($config['collection'])
+                ? $config['collection']
+                : [$config['collection']];
+
+            foreach ($collections as $collection) {
+                $dir = $collection['source_directory'] ?? $collection['source-directory'] ?? null;
+                if ($dir === null || $dir === '') {
+                    continue;
+                }
+
+                $collectionSourceDirs[] = ltrim($dir, '/');
+            }
+        }
+
+        $excludePaths = [$sourceDirectory . '/*'];
+        foreach ($collectionSourceDirs as $dir) {
+            $excludePaths[] = $dir . '/*';
         }
 
         $container->prependExtensionConfig('guides', [
-            'templates' => array_map(
-                static fn (string $node, string $file): array => [
-                    'node'   => $node,
-                    'file'   => $file,
-                    'format' => 'page',
-                ],
-                array_keys($templateMap),
-                array_values($templateMap),
-            ),
+           // 'templates' => templateArray(require dirname(__DIR__, 3) . '/resources/template/page/template.php'),
             'base_template_paths' => [
                 dirname(__DIR__, 3) . '/resources/template/page',
             ],
 
-            'exclude' => [
-                'paths' => [$sourceDirectory . '/*'],
-            ],
+            'exclude' => ['paths' => $excludePaths],
         ]);
     }
 }
