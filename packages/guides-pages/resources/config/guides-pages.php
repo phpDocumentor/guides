@@ -6,11 +6,13 @@ use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PostRenderProcess;
 use phpDocumentor\Guides\FileCollector;
+use phpDocumentor\Guides\Pages\EventListener\ParseContentTypeListener;
 use phpDocumentor\Guides\Pages\EventListener\ParsePagesListener;
 use phpDocumentor\Guides\Pages\EventListener\RenderPagesListener;
 use phpDocumentor\Guides\Pages\NodeRenderers\Html\PageNodeRenderer;
 use phpDocumentor\Guides\Pages\PagesRegistry;
 use phpDocumentor\Guides\Pages\Renderer\PageRenderer;
+use phpDocumentor\Guides\Pages\RestructeredText\Parser\Productions\FieldList\ContentTypeTemplateRule;
 use phpDocumentor\Guides\Pages\RestructeredText\Parser\Productions\FieldList\PageDestinationRule;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -47,9 +49,23 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('event_listener', ['event' => PostParseProcess::class])
 
+        ->set(ParseContentTypeListener::class)
+        ->args([
+            '$commandBus'    => service(CommandBus::class),
+            '$fileCollector' => inline_service(FileCollector::class)->autowire(),
+            '$collections'   => param('phpdoc.guides.pages.collections'),
+        ])
+        ->tag('event_listener', ['event' => PostParseProcess::class])
+
         ->set(RenderPagesListener::class)
+        ->args([
+            '$delegatingRenderer' => service('phpdoc.guides.noderenderer.delegating.page'),
+        ])
         ->tag('event_listener', ['event' => PostRenderProcess::class])
 
         ->set(PageDestinationRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(ContentTypeTemplateRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist');
 };

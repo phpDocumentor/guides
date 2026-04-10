@@ -13,6 +13,12 @@ declare(strict_types=1);
  * precedence order means this package's templates are checked first).
  */
 
+use phpDocumentor\Guides\Pages\Nodes\ContentTypeItemNode;
+use phpDocumentor\Guides\Pages\Nodes\ContentTypeOverviewNode;
 use phpDocumentor\Guides\Pages\Nodes\PageNode;
 
-return [PageNode::class => 'structure/page.html.twig'];
+return [
+    PageNode::class                => 'structure/page.html.twig',
+    ContentTypeItemNode::class     => 'structure/content-type-item.html.twig',
+    ContentTypeOverviewNode::class => 'structure/content-type-overview.html.twig',
+];

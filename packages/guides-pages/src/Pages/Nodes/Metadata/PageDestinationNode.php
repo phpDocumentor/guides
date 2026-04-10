@@ -26,8 +26,6 @@ use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
  *
  * The value stored is the output path **relative to the output root**, without
  * a file extension (e.g. `"about/company"`).
- *
- * @extends MetadataNode<string>
  */
 final class PageDestinationNode extends MetadataNode
 {

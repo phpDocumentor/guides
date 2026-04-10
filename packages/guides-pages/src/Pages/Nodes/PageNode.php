@@ -38,7 +38,7 @@ use function array_values;
  *
  * @extends AbstractNode<Node[]>
  */
-final class PageNode extends AbstractNode
+final class PageNode extends AbstractNode implements RenderablePageInterface
 {
     /**
      * Where this page should be written relative to the output root.

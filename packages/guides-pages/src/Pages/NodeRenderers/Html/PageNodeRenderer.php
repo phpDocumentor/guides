@@ -15,7 +15,9 @@ namespace phpDocumentor\Guides\Pages\NodeRenderers\Html;
 
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\Pages\Nodes\PageNode;
+use phpDocumentor\Guides\Pages\Nodes\ContentTypeItemNode;
+use phpDocumentor\Guides\Pages\Nodes\ContentTypeOverviewNode;
+use phpDocumentor\Guides\Pages\Nodes\RenderablePageInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
 
@@ -23,20 +25,27 @@ use function assert;
 use function is_a;
 
 /**
- * Renders a {@see PageNode} as a self-contained HTML page for the "page" output format.
+ * Renders any {@see RenderablePageInterface} node — static pages, content-type
+ * items, and collection overview pages — for the "page" output format.
  *
- * The template used is `structure/page.html.twig`, provided by this package under
- * `resources/template/page/`. The template receives:
+ * Template resolution is fully node-driven:
  *
- * - `node`  — the {@see PageNode} being rendered
- * - `title` — the page title (may be null)
+ * - {@see ContentTypeOverviewNode}: uses {@see ContentTypeOverviewNode::getTemplate()},
+ *   which holds the `overview_template` value from `guides.xml`.
+ * - {@see ContentTypeItemNode}: uses {@see ContentTypeItemNode::getItemTemplate()},
+ *   which is either the per-item `:page-template:` RST field or the
+ *   collection-level `item_template` stamped on by
+ *   {@see \phpDocumentor\Guides\Pages\EventListener\ParseContentTypeListener}.
+ *   Falls back to `structure/content-type-item.html.twig`.
+ * - All other {@see RenderablePageInterface} nodes (including {@see PageNode}):
+ *   `structure/page.html.twig`.
  *
- * @template T as Node
- * @implements NodeRenderer<PageNode>
+ * @implements NodeRenderer<RenderablePageInterface>
  */
 final class PageNodeRenderer implements NodeRenderer
 {
-    private string $template = 'structure/page.html.twig';
+    private const DEFAULT_PAGE_TEMPLATE     = 'structure/page.html.twig';
+    private const DEFAULT_ITEM_TEMPLATE     = 'structure/content-type-item.html.twig';
 
     public function __construct(
         private readonly TemplateRenderer $renderer,
@@ -45,21 +54,36 @@ final class PageNodeRenderer implements NodeRenderer
 
     public function supports(string $nodeFqcn): bool
     {
-        return $nodeFqcn === PageNode::class || is_a($nodeFqcn, PageNode::class, true);
+        return is_a($nodeFqcn, RenderablePageInterface::class, true);
     }
 
-    /** @param T $node */
     public function render(Node $node, RenderContext $renderContext): string
     {
-        assert($node instanceof PageNode);
+        assert($node instanceof RenderablePageInterface);
 
-        return $this->renderer->renderTemplate(
-            $renderContext,
-            $this->template,
-            [
-                'node'  => $node,
-                'title' => $node->getPageTitle(),
-            ],
-        );
+        $template = $this->resolveTemplate($node);
+        $params   = [
+            'node'  => $node,
+            'title' => $node->getPageTitle(),
+        ];
+
+        if ($node instanceof ContentTypeOverviewNode) {
+            $params['items'] = $node->getItems();
+        }
+
+        return $this->renderer->renderTemplate($renderContext, $template, $params);
+    }
+
+    private function resolveTemplate(RenderablePageInterface $node): string
+    {
+        if ($node instanceof ContentTypeOverviewNode) {
+            return $node->getTemplate();
+        }
+
+        if ($node instanceof ContentTypeItemNode) {
+            return $node->getItemTemplate() ?? self::DEFAULT_ITEM_TEMPLATE;
+        }
+
+        return self::DEFAULT_PAGE_TEMPLATE;
     }
 }
