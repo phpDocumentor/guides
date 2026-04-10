@@ -22,13 +22,9 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 use function array_is_list;
-use function array_keys;
-use function array_map;
-use function array_values;
 use function dirname;
 use function is_array;
 use function ltrim;
-use function phpDocumentor\Guides\DependencyInjection\templateArray;
 
 /**
  * Symfony DI extension for the guides-pages package.
@@ -119,7 +115,6 @@ final class PagesExtension extends Extension implements PrependExtensionInterfac
         }
 
         $container->prependExtensionConfig('guides', [
-           // 'templates' => templateArray(require dirname(__DIR__, 3) . '/resources/template/page/template.php'),
             'base_template_paths' => [
                 dirname(__DIR__, 3) . '/resources/template/page',
             ],
