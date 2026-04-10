@@ -308,6 +308,7 @@ final class ContentTypeItemNode extends AbstractNode implements RenderablePageIn
     {
         return $this->summary;
     }
+
     /**
      * Parses a raw date string (expected format `Y-m-d`) into a
      * {@see DateTimeImmutable}, returning `null` for empty or non-conforming

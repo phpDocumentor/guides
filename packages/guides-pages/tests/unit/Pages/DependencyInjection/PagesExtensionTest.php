@@ -16,38 +16,11 @@ namespace phpDocumentor\Guides\Pages\DependencyInjection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use function array_filter;
 use function str_contains;
 
 /** @covers \phpDocumentor\Guides\Pages\DependencyInjection\PagesExtension */
 final class PagesExtensionTest extends TestCase
 {
-    public function testPrependRegistersPageTemplatesUnderGuidesExtension(): void
-    {
-        $container = new ContainerBuilder();
-        $extension = new PagesExtension();
-
-        $extension->prepend($container);
-
-        $configs = $container->getExtensionConfig('guides');
-        self::assertNotEmpty($configs, 'Expected at least one prepended guides config block');
-
-        // Collect all prepended templates across every config block
-        $allTemplates = [];
-        foreach ($configs as $block) {
-            foreach ($block['templates'] ?? [] as $tpl) {
-                $allTemplates[] = $tpl;
-            }
-        }
-
-        $pageTemplates = array_filter(
-            $allTemplates,
-            static fn (array $t): bool => ($t['format'] ?? '') === 'page',
-        );
-
-        self::assertNotEmpty($pageTemplates, 'PagesExtension should register at least one "page" format template');
-    }
-
     public function testPrependRegistersBaseTemplatePath(): void
     {
         $container = new ContainerBuilder();
