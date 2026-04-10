@@ -1,0 +1,20 @@
+{% extends "structure/layout.html.twig" %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+<ul class="content-type-overview">
+    {% for item in items %}
+    <li class="content-type-overview__item">
+        <a href="{{ item.outputPath|split('/')|last }}.html">
+            {{- item.pageTitle ?? item.outputPath|split('/')|last -}}
+        </a>
+        {%- if item.date is not null -%}
+            <time datetime="{{ item.date|date('Y-m-d') }}"> — {{ item.date|date('F j, Y') }}</time>
+        {%- endif -%}
+        {%- if item.summary is not null -%}
+            {{ renderNode(item.summary) }}
+        {%- endif -%}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
