@@ -79,4 +79,9 @@ final class FlysystemV3 implements FileSystem
             yield new FileAttributes($file);
         }
     }
+
+    public function lastModified(string $path): int
+    {
+        return $this->filesystem->lastModified($path);
+    }
 }

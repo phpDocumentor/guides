@@ -56,4 +56,7 @@ interface FileSystem
     public function find(SpecificationInterface $specification): iterable;
 
     public function isDirectory(string $path): bool;
+
+    /** return the unix timestamp file was modified. */
+    public function lastModified(string $path): int;
 }

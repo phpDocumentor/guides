@@ -16,6 +16,7 @@ namespace phpDocumentor\FileSystem\FlysystemV1;
 use Flyfinder\Finder;
 use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FileNotFoundException;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\FileSystem\StorageAttributes;
 
@@ -84,5 +85,15 @@ class FlysystemV1 implements Filesystem
         }
 
         return $metadata['type'] === 'dir';
+    }
+
+    public function lastModified(string $path): int
+    {
+        $timestamp = $this->filesystem->getTimestamp($path);
+        if ($timestamp === false) {
+            throw new FileNotFoundException('File not found: ' . $path);
+        }
+
+        return $timestamp;
     }
 }
