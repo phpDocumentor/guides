@@ -97,4 +97,9 @@ class FlySystemAdapter implements FileSystem
     {
         return $this->filesystem->isDirectory($path);
     }
+
+    public function lastModified(string $path): int
+    {
+        return $this->filesystem->lastModified($path);
+    }
 }
