@@ -44,13 +44,19 @@ final class AnchorHyperlinkResolver implements ReferenceResolver
         }
 
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        $projectNode = $renderContext->getProjectNode();
+        $currentDocumentPath = $renderContext->getDocument()->getFilePath();
+
+        // Prefer an anchor that lives on the current page: RST anonymous references such as
+        // `Heading 1`_ are page-local by nature, and falling through to the global index would
+        // pick up a same-named section from another document.
+        $target = $projectNode->getInternalTargetForDocument($reducedAnchor, $currentDocumentPath)
+            ?? $projectNode->getInternalTargetForDocument($reducedAnchor, $currentDocumentPath, SectionNode::STD_TITLE)
+            ?? $projectNode->getInternalTarget($reducedAnchor)
+            ?? $projectNode->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);
 
         if ($target === null) {
-            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);
-            if ($target === null) {
-                return false;
-            }
+            return false;
         }
 
         $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getAnchor()));
