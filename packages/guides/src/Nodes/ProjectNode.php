@@ -47,9 +47,6 @@ final class ProjectNode extends CompoundNode
     /** @var array<string, array<string, InternalTarget>> */
     private array $internalLinkTargets = [];
 
-    /** @var array<string, array<string, array<string, InternalTarget>>> documentPath => linkType => anchor => target */
-    private array $documentScopedTargets = [];
-
     /** Cached root document entry for O(1) lookup */
     private DocumentEntryNode|null $rootDocumentEntry = null;
 
@@ -168,7 +165,6 @@ final class ProjectNode extends CompoundNode
         }
 
         $this->internalLinkTargets[$linkType][$anchorName] = $target;
-        $this->documentScopedTargets[$target->getDocumentPath()][$linkType][$anchorName] = $target;
     }
 
     public function hasInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): bool
@@ -179,19 +175,6 @@ final class ProjectNode extends CompoundNode
     public function getInternalTarget(string $anchorName, string $linkType = SectionNode::STD_LABEL): InternalTarget|null
     {
         return $this->internalLinkTargets[$linkType][$anchorName] ?? null;
-    }
-
-    /**
-     * Returns the target registered for an anchor that belongs to the given document, or null when
-     * no document-scoped target exists. Use this when the lookup should prefer the current page
-     * before falling back to the global {@see self::getInternalTarget()} index.
-     */
-    public function getInternalTargetForDocument(
-        string $anchorName,
-        string $documentPath,
-        string $linkType = SectionNode::STD_LABEL,
-    ): InternalTarget|null {
-        return $this->documentScopedTargets[$documentPath][$linkType][$anchorName] ?? null;
     }
 
     /** @return array<string, array<string, InternalTarget>> */
