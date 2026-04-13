@@ -44,7 +44,11 @@ final class AnchorHyperlinkResolver implements ReferenceResolver
         }
 
         $reducedAnchor = $this->anchorReducer->reduceAnchor($node->getTargetReference());
-        $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        $target = $renderContext->getCurrentDocumentEntry()?->getInternalTarget($reducedAnchor);
+
+        if ($target === null) {
+            $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor);
+        }
 
         if ($target === null) {
             $target = $renderContext->getProjectNode()->getInternalTarget($reducedAnchor, SectionNode::STD_TITLE);

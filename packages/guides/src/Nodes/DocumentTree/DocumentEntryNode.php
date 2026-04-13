@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\DocumentTree;
 
+use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -99,9 +100,7 @@ final class DocumentEntryNode extends EntryNode
             if ($sectionNode->getId() === $sectionEntryNode->getId()) {
                 return $sectionEntryNode;
             }
-        }
 
-        foreach ($this->sections as $sectionEntryNode) {
             $subsection = $sectionEntryNode->findSectionEntry($sectionNode);
             if ($subsection !== null) {
                 return $subsection;
@@ -124,5 +123,38 @@ final class DocumentEntryNode extends EntryNode
     public function addAdditionalData(string $key, Node $value): void
     {
         $this->additionalData[$key] = $value;
+    }
+
+    /** Returns the internal target for heading id if exists */
+    public function getInternalTarget(string $id): InternalTarget|null
+    {
+        $entry = $this->findSectionEntryById($id, $this->sections);
+
+        if ($entry === null) {
+            return null;
+        }
+
+        return new InternalTarget(
+            $this->getFile(),
+            $id,
+            $entry->getTitle()->toString(),
+        );
+    }
+
+    /** @param SectionEntryNode[] $sectionEntries */
+    private function findSectionEntryById(string $id, array $sectionEntries): SectionEntryNode|null
+    {
+        foreach ($sectionEntries as $entry) {
+            if ($entry->getId() === $id) {
+                return $entry;
+            }
+
+            $entry = $this->findSectionEntryById($id, $entry->getChildren());
+            if ($entry !== null) {
+                return $entry;
+            }
+        }
+
+        return null;
     }
 }
