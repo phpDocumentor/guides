@@ -91,6 +91,7 @@ final class ParseDirectoryCommand
         return isset($this->exclude);
     }
 
+    /** @internal Used by {@see ParseDirectoryHandler} to dispatch without triggering the deprecation on {@see self::getExcludedSpecification()}. */
     public function hasExcludedSpecification(): bool
     {
         return isset($this->excludedSpecification);
