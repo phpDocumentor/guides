@@ -24,7 +24,6 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use function mb_strlen;
 use function min;
-use function preg_match;
 use function trim;
 
 /**
@@ -45,7 +44,7 @@ final class TitleRule implements Rule
         $line = $blockContext->getDocumentIterator()->current();
         $nextLine = $blockContext->getDocumentIterator()->getNextLine();
 
-        if ($this->isExplicitMarkup($line)) {
+        if (LineChecker::isExplicitMarkup($line)) {
             return false;
         }
 
@@ -112,17 +111,5 @@ final class TitleRule implements Rule
         }
 
         return $letter ?? '';
-    }
-
-    /**
-     * RST explicit markup blocks (anchors, comments, directives, ...) start with two
-     * dots followed by whitespace, or are a lonely `..`. Such a line must never be
-     * treated as a section title, even if the next line happens to look like an underline.
-     *
-     * @see https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
-     */
-    private function isExplicitMarkup(string $line): bool
-    {
-        return preg_match('/^\.\.(?:\s|$)/', $line) === 1;
     }
 }

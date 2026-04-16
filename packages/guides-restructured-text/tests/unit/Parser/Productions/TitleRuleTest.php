@@ -59,6 +59,8 @@ final class TitleRuleTest extends RuleTestCase
         yield 'anchor with single space' => [".. _foo:\n========\n"];
         yield 'anchor with double space' => ["..  _foo:\n========\n"];
         yield 'anchor with tab' => [".. \t_foo:\n========\n"];
+        yield 'anchor above level-2 underline' => [".. _foo:\n--------\n"];
+        yield 'phrase reference anchor' => [".. _`Foo Bar`:\n==============\n"];
         yield 'directive' => [".. note::\n=========\n"];
         yield 'comment' => [".. some comment\n===============\n"];
         yield 'lonely double dot' => ["..\n==\n"];
