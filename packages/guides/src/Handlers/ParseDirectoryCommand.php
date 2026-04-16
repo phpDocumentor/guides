@@ -34,10 +34,12 @@ final class ParseDirectoryCommand
     ) {
         if ($excludedSpecification instanceof SpecificationInterface) {
             Deprecation::trigger(
-                'phpDocumentor/guides',
+                'phpdocumentor/guides',
                 'https://github.com/phpDocumentor/guides/issues/1209',
-                'Passing ' . $excludedSpecification::class . ' to ' . self::class . 'will be deprecated,'
-                . 'use phpDocumentor\FileSystem\Finder\Exclude instead.',
+                'Passing %s to %s is deprecated, use %s instead.',
+                $excludedSpecification::class,
+                self::class,
+                Exclude::class,
             );
             $this->excludedSpecification = $excludedSpecification;
             $this->exclude = null;
@@ -67,16 +69,16 @@ final class ParseDirectoryCommand
         return $this->projectNode;
     }
 
-    /** @deprecated Specification definition on parse directory is deprecated. Use @{see self::getExclude()} instead.*/
+    /** @deprecated Specification definition on parse directory is deprecated. Use {@see self::getExclude()} instead. */
     public function getExcludedSpecification(): SpecificationInterface|null
     {
-        Deprecation::trigger(
-            'phpDocumentor/guides',
+        Deprecation::triggerIfCalledFromOutside(
+            'phpdocumentor/guides',
             'https://github.com/phpDocumentor/guides/issues/1209',
             'Specification definition on parse directory is deprecated. Use getExclude() instead.',
         );
 
-        return $this->excludedSpecification ?? null;
+        return $this->excludedSpecification;
     }
 
     public function getExclude(): Exclude
@@ -87,5 +89,10 @@ final class ParseDirectoryCommand
     public function hasExclude(): bool
     {
         return isset($this->exclude);
+    }
+
+    public function hasExcludedSpecification(): bool
+    {
+        return isset($this->excludedSpecification);
     }
 }
