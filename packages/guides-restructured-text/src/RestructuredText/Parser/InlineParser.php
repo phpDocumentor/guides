@@ -29,8 +29,17 @@ class InlineParser
     /** @var InlineRule[] */
     private array $rules;
 
-    /** @var array<InlineLexer::*, CachableInlineRule> */
+    /** @var array<int, CachableInlineRule> */
     private array $cache = [];
+
+    /**
+     * Reusable lexer instance to avoid repeated instantiation.
+     *
+     * Note: This assumes single-threaded parsing. The lexer state is fully
+     * reset via setInput() before each parse, but concurrent parsing would
+     * cause race conditions.
+     */
+    private InlineLexer $lexer;
 
     /** @param iterable<InlineRule> $inlineRules */
     public function __construct(
@@ -46,11 +55,13 @@ class InlineParser
 
             $this->cache[$rule->getToken()] = $rule;
         }
+
+        $this->lexer = new InlineLexer($this->disableLegacyTilde);
     }
 
     public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
     {
-        $lexer = new InlineLexer($this->disableLegacyTilde);
+        $lexer = $this->lexer;
         $lexer->setInput($content);
         $lexer->moveNext();
         $lexer->moveNext();
