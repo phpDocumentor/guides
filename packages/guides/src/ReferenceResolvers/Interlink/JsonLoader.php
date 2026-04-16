@@ -26,13 +26,6 @@ use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
 
-/**
- * Loads JSON data from URLs with PSR-16 caching support.
- *
- * By default, uses an in-memory ArrayAdapter for request deduplication.
- * For persistent caching across requests, inject a FilesystemAdapter or RedisAdapter.
- * For multi-tier caching (memory + disk), use Symfony's ChainAdapter.
- */
 class JsonLoader
 {
     private const CACHE_KEY_PREFIX = 'guides_inventory_';
@@ -57,11 +50,9 @@ class JsonLoader
             return $cached;
         }
 
-        // Fetch from network
         $response = $this->client->request('GET', $url);
         $data = $response->toArray();
 
-        // Store in cache (uses adapter's configured TTL)
         $this->cache->set($cacheKey, $data);
 
         return $data;
