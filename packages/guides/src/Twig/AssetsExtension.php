@@ -178,6 +178,11 @@ final class AssetsExtension extends AbstractExtension
                 return $outputPath;
             }
 
+            $destination = $renderContext->getDestination();
+            if ($destination->has($outputPath)) {
+                return $outputPath;
+            }
+
             $fileContents = $renderContext->getOrigin()->read($normalizedSourcePath);
             if ($fileContents === false) {
                 $this->logger->error(
@@ -188,7 +193,7 @@ final class AssetsExtension extends AbstractExtension
                 return $outputPath;
             }
 
-            $result = $renderContext->getDestination()->put($outputPath, $fileContents);
+            $result = $destination->put($outputPath, $fileContents);
             if ($result === false) {
                 $this->logger->error(
                     sprintf('Unable to write file "%s"', $outputPath),
