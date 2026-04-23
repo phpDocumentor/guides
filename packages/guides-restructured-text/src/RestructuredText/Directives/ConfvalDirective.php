@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\ConfvalNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -32,6 +33,11 @@ use function trim;
  *
  * https://sphinx-toolbox.readthedocs.io/en/stable/extensions/confval.html
  */
+#[Option(name: 'name', description: 'Id of the configuration value, used for linking to it.')]
+#[Option(name: 'type', description: 'Type of the configuration value, e.g. "string", "int", etc.')]
+#[Option(name: 'required', type: OptionType::Boolean, default: false, description: 'Whether the configuration value is required or not.')]
+#[Option(name: 'default', description: 'Default value of the configuration value, if any.')]
+#[Option(name: 'noindex', type: OptionType::Boolean, default: false, description: 'Whether the configuration value should not be indexed.')]
 final class ConfvalDirective extends SubDirective
 {
     public const NAME = 'confval';
@@ -80,16 +86,16 @@ final class ConfvalDirective extends SubDirective
         }
 
         if ($directive->hasOption('type')) {
-            $type = $this->inlineParser->parse($directive->getOptionString('type'), $blockContext);
+            $type = $this->inlineParser->parse($this->readOption($directive, 'type'), $blockContext);
         }
 
-        $required = $directive->getOptionBool('required');
+        $required = $this->readOption($directive, 'required');
 
         if ($directive->hasOption('default')) {
-            $default = $this->inlineParser->parse($directive->getOptionString('default'), $blockContext);
+            $default = $this->inlineParser->parse($this->readOption($directive, 'default'), $blockContext);
         }
 
-        $noindex = $directive->getOptionBool('noindex');
+        $noindex = $this->readOption($directive, 'noindex');
 
         foreach ($directive->getOptions() as $option) {
             if (in_array($option->getName(), ['type', 'required', 'default', 'noindex', 'name'], true)) {
