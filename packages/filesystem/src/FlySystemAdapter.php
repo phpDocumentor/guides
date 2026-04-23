@@ -34,11 +34,11 @@ class FlySystemAdapter implements FileSystem
     {
         if (class_exists(Local::class)) {
             /** @phpstan-ignore-next-line */
-            $filesystem = new FlysystemV1(new LeagueFilesystem(new Local($path)));
+            $filesystem = new FlysystemV1(new LeagueFilesystem(new Local($path, LOCK_EX, Local::SKIP_LINKS)));
         } else {
             $filesystem = new FlysystemV3(
                 new LeagueFilesystem(
-                    new LocalFilesystemAdapter($path),
+                    new LocalFilesystemAdapter($path, linkHandling: LocalFilesystemAdapter::SKIP_LINKS),
                 ),
             );
         }
