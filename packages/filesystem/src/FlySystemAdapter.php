@@ -23,6 +23,8 @@ use phpDocumentor\FileSystem\FlysystemV3\FlysystemV3;
 
 use function class_exists;
 
+use const LOCK_EX;
+
 class FlySystemAdapter implements FileSystem
 {
     public function __construct(
