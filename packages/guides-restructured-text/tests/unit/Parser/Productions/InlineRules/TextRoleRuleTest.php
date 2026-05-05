@@ -151,7 +151,7 @@ final class TextRoleRuleTest extends TestCase
 
     public function testApplyReturnsNullOnTrailingBackslashWithoutRaisingWarning(): void
     {
-        $input = ":role:`text\\";
+        $input = ':role:`text\\';
 
         $textRoleFactory = $this->createMock(TextRoleFactory::class);
         $textRoleFactory->expects(self::never())->method('getTextRole');
