@@ -69,7 +69,11 @@ final class ParseDirectoryHandler
             $origin,
             $currentDirectory,
             $extension,
-            $command->hasExclude() ? $command->getExclude() : $command->getExcludedSpecification(),
+            match (true) {
+                $command->hasExclude() => $command->getExclude(),
+                $command->hasExcludedSpecification() => $command->getExcludedSpecification(),
+                default => null,
+            },
         );
 
         $postCollectFilesForParsingEvent = $this->eventDispatcher->dispatch(

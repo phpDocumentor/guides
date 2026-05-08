@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use Doctrine\Deprecations\Deprecation;
 use Flyfinder\Specification\AndSpecification;
 use Flyfinder\Specification\HasExtension;
 use Flyfinder\Specification\InPath;
@@ -49,10 +50,22 @@ final class FileCollector
      * objects, and avoids adding files to the parse queue that have
      * not changed and whose direct dependencies have not changed.
      *
-     * @param SpecificationInterface|Exclude|null $excludedSpecification specification that is used to exclude specific files/directories
+     * @param SpecificationInterface|Exclude|null $excludedSpecification specification that is used to exclude specific files/directories.
+     *                                                                   Passing a {@see SpecificationInterface} is deprecated, use {@see Exclude} instead.
      */
     public function collect(FilesystemInterface|FileSystem $filesystem, string $directory, string $extension, SpecificationInterface|Exclude|null $excludedSpecification = null): Files
     {
+        if ($excludedSpecification instanceof SpecificationInterface) {
+            Deprecation::triggerIfCalledFromOutside(
+                'phpdocumentor/guides',
+                'https://github.com/phpDocumentor/guides/issues/1209',
+                'Passing %s to %s::collect() is deprecated, use %s instead.',
+                $excludedSpecification::class,
+                self::class,
+                Exclude::class,
+            );
+        }
+
         $directory = trim($directory, '/');
         $specification = $this->getSpecification($excludedSpecification, $directory, $extension);
 
