@@ -76,8 +76,12 @@ final class TextRoleRule extends AbstractInlineRule
 
                     break;
                 case InlineLexer::BACKSLASH:
-                    $rawPart .= $token->value;
                     $lexer->moveNext();
+                    if ($lexer->token === null) {
+                        break 2;
+                    }
+
+                    $rawPart .= $token->value;
                     $part .= $lexer->token->value;
                     $rawPart .= $lexer->token->value;
 
