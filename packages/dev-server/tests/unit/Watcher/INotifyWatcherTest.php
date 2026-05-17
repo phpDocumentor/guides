@@ -38,7 +38,7 @@ use function unlink;
 class INotifyWatcherTest extends TestCase
 {
     private LoopInterface $loop;
-    private MockObject|EventDispatcherInterface $dispatcher;
+    private EventDispatcherInterface&MockObject $dispatcher;
     private INotifyWatcher $watcher;
     private string $testDir;
 
