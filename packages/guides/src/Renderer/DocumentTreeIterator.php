@@ -48,7 +48,7 @@ final class DocumentTreeIterator implements RecursiveIterator
             }
         }
 
-        throw new LogicException('Could not find document for node');
+        throw new LogicException('Could not find document for node ' . $file);
     }
 
     public function next(): void

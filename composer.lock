@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca3ea9c081086512ad25ab19f6399264",
+    "content-hash": "87aac7391234cfa6568bab4bef1b3242",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1829,11 +1829,11 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
-                "reference": "9968c98c68ab630d39bd25c8b677ebe9fd537995"
+                "reference": "b36545fbc79ed5bb16fe21084a8444ea07740b68"
             },
             "require": {
                 "php": "^8.1",
-                "scrivo/highlight.php": "^9.18.0"
+                "scrivo/highlight.php": "^9.18.1.10"
             },
             "type": "library",
             "extra": {
@@ -1950,6 +1950,46 @@
             }
         },
         {
+            "name": "phpdocumentor/guides-pages",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-pages",
+                "reference": "ba1d6c7257cbe1e49ef9e325ccabaa7f7e6ed1b8"
+            },
+            "require": {
+                "php": "^8.1",
+                "phpdocumentor/guides": "^1.0 || ^2.0",
+                "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds a simple static-page output format to the phpDocumentor's Guides library, allowing users to author standalone pages in their preferred documentation format.",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "phpdocumentor/guides-restructured-text",
             "version": "dev-main",
             "dist": {
@@ -1997,12 +2037,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "a3ad78c3fc59928050b1ff3997a676248b0728a1"
+                "reference": "8d2607bb61a807e6142839df9c36930e329c56ec"
             },
             "require": {
+                "doctrine/deprecations": "^1.1",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
-                "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0"
+                "phpdocumentor/guides-restructured-text": "^1.10 || ^2.0"
             },
             "type": "library",
             "extra": {
@@ -8601,6 +8642,7 @@
         "phpdocumentor/guides-code": 20,
         "phpdocumentor/guides-graphs": 20,
         "phpdocumentor/guides-markdown": 20,
+        "phpdocumentor/guides-pages": 20,
         "phpdocumentor/guides-restructured-text": 20,
         "phpdocumentor/guides-theme-bootstrap": 20,
         "phpdocumentor/guides-theme-rst": 20

@@ -1,0 +1,33 @@
+{
+    "name": "phpdocumentor/guides-pages",
+    "description": "Adds a simple static-page output format to the phpDocumentor's Guides library, allowing users to author standalone pages in their preferred documentation format.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": [
+                "tests/unit/"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.1",
+        "phpdocumentor/guides": "^1.0 || ^2.0",
+        "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    }
+}
