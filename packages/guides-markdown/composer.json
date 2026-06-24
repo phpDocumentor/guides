@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "phpDocumentor\\Guides\\": "src/"
+            "phpDocumentor\\Guides\\Markdown\\": "src/Markdown/"
         }
     },
     "autoload-dev": {
