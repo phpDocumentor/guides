@@ -16,9 +16,11 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\DocumentBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
+#[Option(name: 'identifier', description: 'The identifier of the document block')]
 final class DocumentBlockDirective extends SubDirective
 {
     public function getName(): string
@@ -39,7 +41,7 @@ final class DocumentBlockDirective extends SubDirective
 
         return new DocumentBlockNode(
             $collectionNode->getChildren(),
-            $identifier,
+            $this->readOption($directive, 'identifier'),
         );
     }
 }

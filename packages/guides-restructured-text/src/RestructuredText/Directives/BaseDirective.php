@@ -13,13 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use LogicException;
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use ReflectionClass;
 
 use function array_map;
+use function count;
+use function filter_var;
+
+use const FILTER_VALIDATE_BOOL;
 
 /**
  * A directive is like a function you can call or apply to a block
@@ -36,10 +44,34 @@ use function array_map;
  */
 abstract class BaseDirective
 {
+    /** @var array<string, Option> Cache of Option attributes indexed by option name */
+    private array $optionAttributeCache;
+
+    private string $name;
+
+    /** @var string[] */
+    private array $aliases;
+
     /**
      * Get the directive name
      */
-    abstract public function getName(): string;
+    public function getName(): string
+    {
+        if (isset($this->name)) {
+            return $this->name;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        if (count($attributes) === 0) {
+            throw new LogicException('Directive class must have a Directive attribute');
+        }
+
+        $this->name = $attributes[0]->newInstance()->name;
+
+        return $this->name;
+    }
 
     /**
      * Allow a directive to be registered under multiple names.
@@ -50,7 +82,35 @@ abstract class BaseDirective
      */
     public function getAliases(): array
     {
-        return [];
+        if (isset($this->aliases)) {
+            return $this->aliases;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+        $this->aliases = [];
+        if (count($attributes) !== 0) {
+            $this->aliases = $attributes[0]->newInstance()->aliases;
+        }
+
+        return $this->aliases;
+    }
+
+    /**
+     * Returns whether this directive has been upgraded to a new version.
+     *
+     * In the new version of directives, the processing is done during the compile phase.
+     * This method only exists to allow for backward compatibility with directives that
+     * were written before the upgrade.
+     *
+     * @internal
+     */
+    final public function isUpgraded(): bool
+    {
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        return count($attributes) === 1;
     }
 
     /**
@@ -85,6 +145,11 @@ abstract class BaseDirective
         return new GenericNode($directive->getVariable(), $directive->getData());
     }
 
+    public function createNode(DirectiveNode $directiveNode): Node|null
+    {
+        return null;
+    }
+
     /**
      * @param DirectiveOption[] $options
      *
@@ -93,5 +158,85 @@ abstract class BaseDirective
     protected function optionsToArray(array $options): array
     {
         return array_map(static fn (DirectiveOption $option): bool|float|int|string|null => $option->getValue(), $options);
+    }
+
+    /**
+     * Gets an option value from a directive based on attribute configuration.
+     *
+     * Looks up the option in the directive and returns its value converted to the
+     * appropriate type based on the Option attribute defined on this directive class.
+     * If the option is not present in the directive, returns the default value from the attribute.
+     *
+     * @param Directive $directive The directive containing the options
+     * @param string $optionName The name of the option to retrieve
+     *
+     * @return mixed The option value converted to the appropriate type, or the default value
+     */
+    final protected function readOption(Directive $directive, string $optionName): mixed
+    {
+        $optionAttribute = $this->findOptionAttribute($optionName);
+
+        return $this->getOptionValue($directive, $optionAttribute);
+    }
+
+    /** @return array<string, mixed> */
+    final protected function readAllOptions(Directive $directive): array
+    {
+        $this->initialize();
+
+        return array_map(
+            fn (Option $option) => $this->getOptionValue($directive, $option),
+            $this->optionAttributeCache,
+        );
+    }
+
+    private function getOptionValue(Directive $directive, Option|null $option): mixed
+    {
+        if ($option === null) {
+            return null;
+        }
+
+        if (!$directive->hasOption($option->name)) {
+            return $option->default;
+        }
+
+        $directiveOption = $directive->getOption($option->name);
+        $value = $directiveOption->getValue();
+
+        return match ($option->type) {
+            OptionType::Integer => (int) $value,
+            OptionType::Boolean => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
+            OptionType::String => (string) $value,
+            OptionType::Array => (array) $value,
+        };
+    }
+
+    /**
+     * Finds the Option attribute for the given option name on the current class.
+     *
+     * @param string $optionName The option name to look for
+     *
+     * @return Option|null The Option attribute if found, null otherwise
+     */
+    private function findOptionAttribute(string $optionName): Option|null
+    {
+        $this->initialize();
+
+        return $this->optionAttributeCache[$optionName] ?? null;
+    }
+
+    private function initialize(): void
+    {
+        if (isset($this->optionAttributeCache)) {
+            return;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Option::class);
+        $this->optionAttributeCache = [];
+        foreach ($attributes as $attribute) {
+            $option = $attribute->newInstance();
+            $this->optionAttributeCache[$option->name] = $option;
+        }
     }
 }

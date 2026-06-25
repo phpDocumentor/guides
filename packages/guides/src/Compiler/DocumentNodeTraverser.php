@@ -50,6 +50,12 @@ final class DocumentNodeTraverser
         TreeNode $shadowNode,
         CompilerContext $compilerContext,
     ): void {
+        if ($transformer instanceof ReverseNodeTransformer) {
+            foreach ($shadowNode->getChildren() as $shadowChild) {
+                $this->traverseForTransformer($transformer, $shadowChild, $compilerContext->withShadowTree($shadowChild));
+            }
+        }
+
         $node = $shadowNode->getNode();
         $supports = $transformer->supports($node);
 
@@ -60,8 +66,10 @@ final class DocumentNodeTraverser
             }
         }
 
-        foreach ($shadowNode->getChildren() as $shadowChild) {
-            $this->traverseForTransformer($transformer, $shadowChild, $compilerContext->withShadowTree($shadowChild));
+        if ($transformer instanceof ReverseNodeTransformer === false) {
+            foreach ($shadowNode->getChildren() as $shadowChild) {
+                $this->traverseForTransformer($transformer, $shadowChild, $compilerContext->withShadowTree($shadowChild));
+            }
         }
 
         if (!$supports) {

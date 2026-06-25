@@ -26,6 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *      This is a caution admonition.
  * ```
  */
+#[Attributes\Directive(name: 'caution')]
 final class CautionDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
