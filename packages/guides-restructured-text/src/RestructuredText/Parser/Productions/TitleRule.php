@@ -44,6 +44,10 @@ final class TitleRule implements Rule
         $line = $blockContext->getDocumentIterator()->current();
         $nextLine = $blockContext->getDocumentIterator()->getNextLine();
 
+        if (LineChecker::isExplicitMarkup($line)) {
+            return false;
+        }
+
         return $this->currentLineIsAnOverline($line, $nextLine)
             || $this->nextLineIsAnUnderline($line, $nextLine);
     }
