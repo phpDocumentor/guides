@@ -19,11 +19,28 @@ use function strtolower;
 
 final class SluggerAnchorNormalizer implements AnchorNormalizer
 {
+    private AsciiSlugger|null $slugger = null;
+
+    /** @var array<string, string> */
+    private array $cache = [];
+
     public function reduceAnchor(string $rawAnchor): string
     {
-        $slugger = new AsciiSlugger();
-        $slug = $slugger->slug($rawAnchor);
+        // Check cache first - same anchors are resolved many times
+        if (isset($this->cache[$rawAnchor])) {
+            return $this->cache[$rawAnchor];
+        }
 
-        return strtolower($slug->toString());
+        if ($this->slugger === null) {
+            $this->slugger = new AsciiSlugger();
+        }
+
+        $slug = $this->slugger->slug($rawAnchor);
+        $result = strtolower($slug->toString());
+
+        // Cache the result for future calls
+        $this->cache[$rawAnchor] = $result;
+
+        return $result;
     }
 }
