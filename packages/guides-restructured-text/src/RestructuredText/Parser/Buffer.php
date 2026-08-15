@@ -110,6 +110,9 @@ final class Buffer
 
     public function trimLines(): void
     {
+        // Like every other mutator: the memo only holds as long as the lines it was computed from.
+        $this->unindented = false;
+
         foreach ($this->lines as $i => $line) {
             $this->lines[$i] = trim($line);
         }
