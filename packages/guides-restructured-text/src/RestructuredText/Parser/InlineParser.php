@@ -33,13 +33,14 @@ class InlineParser
     private array $cache = [];
 
     /**
-     * Reusable lexer instance to avoid repeated instantiation.
+     * Reusable lexer instance, to avoid allocating one per parse.
      *
-     * Note: This assumes single-threaded parsing. The lexer state is fully
-     * reset via setInput() before each parse, but concurrent parsing would
-     * cause race conditions.
+     * It carries the state of exactly one parse, so it can only be handed to one parse at a time;
+     * a nested parse gets its own. See parse().
      */
     private InlineLexer $lexer;
+
+    private bool $lexerInUse = false;
 
     /** @param iterable<InlineRule> $inlineRules */
     public function __construct(
@@ -61,7 +62,25 @@ class InlineParser
 
     public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
     {
-        $lexer = $this->lexer;
+        // A rule may call back into parse() while it applies — a text role parsing its own content,
+        // for instance — and the nested call must not take the token stream away from the outer one:
+        // setInput() would replace it, and the outer rollback would then index positions that no
+        // longer exist. The shared instance is therefore only handed out while it is free.
+        $sharedLexerIsFree = !$this->lexerInUse;
+        $lexer = $sharedLexerIsFree ? $this->lexer : new InlineLexer($this->disableLegacyTilde);
+        $this->lexerInUse = true;
+
+        try {
+            return $this->parseWithLexer($lexer, $content, $blockContext);
+        } finally {
+            if ($sharedLexerIsFree) {
+                $this->lexerInUse = false;
+            }
+        }
+    }
+
+    private function parseWithLexer(InlineLexer $lexer, string $content, BlockContext $blockContext): InlineCompoundNode
+    {
         $lexer->setInput($content);
         $lexer->moveNext();
         $lexer->moveNext();
