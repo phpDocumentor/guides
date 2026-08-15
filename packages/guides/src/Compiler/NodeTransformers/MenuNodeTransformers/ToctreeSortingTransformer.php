@@ -15,13 +15,15 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
+use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
-use function array_key_first;
 use function array_reverse;
 use function array_values;
 use function count;
@@ -47,98 +49,121 @@ final class ToctreeSortingTransformer implements NodeTransformer
             return $node;
         }
 
-        $documentEntry = $compilerContext->getDocumentNode()->getDocumentEntry();
-
         if ($node->isReversed()) {
-            $entries = array_reverse($entries);
-            $node->setValue($entries);
-            $documentEntry->setMenuEntries(array_reverse($documentEntry->getMenuEntries()));
+            $node->setValue(array_reverse($entries));
         }
 
-        // The document entry's menu entries (used to build the navigation menu)
-        // are attached by separate transformers for internal and external menu
-        // entries, each running in its own full tree traversal. As a result the
-        // menu entries end up grouped by type instead of following the authored
-        // toctree order, so the navigation menu disagrees with the order shown
-        // on the page. Realign them with the toctree. Globbed toctrees are
-        // skipped: their order is defined by the glob expansion, not by an
-        // authored sequence.
-        if (!$node->hasOption('glob')) {
-            $documentEntry->setMenuEntries(
-                $this->sortMenuEntriesByToctree($entries, $documentEntry->getMenuEntries()),
-            );
+        // The document entry's menu entries (used to build the navigation menu) are attached by
+        // separate transformers for internal and external menu entries, each running in its own full
+        // tree traversal. As a result the menu entries end up grouped by type instead of following the
+        // authored toctree order, so the navigation menu disagrees with the order shown on the page.
+        // Realign them with the toctrees of the document.
+        $documentNode = $compilerContext->getDocumentNode();
+        $documentEntry = $documentNode->getDocumentEntry();
+        $sorted = $this->sortMenuEntriesByToctrees($documentNode, $documentEntry->getMenuEntries());
+
+        if ($sorted !== null) {
+            $documentEntry->setMenuEntries($sorted);
+        } elseif ($node->isReversed()) {
+            // The sorting cannot map the entries of this document — a glob toctree expands to entries
+            // no authored sequence accounts for. Reversing the menu entries wholesale is the only thing
+            // left that honours `:reversed:` there.
+            $documentEntry->setMenuEntries(array_reverse($documentEntry->getMenuEntries()));
         }
 
         return $node;
     }
 
     /**
-     * Reorders the menu entries that belong to this toctree so they follow the
-     * authored toctree order. The toctree's entries are emitted as one
-     * contiguous block at the position of its first entry; entries that belong
-     * to other toctrees of the same document keep their relative position.
-     * Applied per toctree in document order, this yields the global authored
-     * order even when a document has several toctrees.
+     * Reorders the menu entries of a document so they follow the order authored in its toctrees.
      *
-     * @param array<MenuEntryNode> $tocEntries
+     * The order is taken from all toctrees of the document at once, in document order, rather than
+     * from the toctree currently visited: the menu entries the sorting starts from are grouped by
+     * type, so a single toctree cannot tell where its own block belongs relative to the others.
+     * Running this for every toctree of the document is idempotent, and the last run sees every
+     * `:reversed:` toctree already reversed.
+     *
+     * Nothing is reordered when the entries cannot be mapped one to one — a glob toctree, whose
+     * order is defined by the expansion rather than by an authored sequence, or a menu entry that no
+     * toctree accounts for. Reordering only part of the list would be worse than not reordering it.
+     *
+     * Returns null when the entries cannot be mapped one to one.
+     *
      * @param array<DocumentEntryNode|ExternalEntryNode> $menuEntries
      *
-     * @return array<DocumentEntryNode|ExternalEntryNode>
+     * @return array<DocumentEntryNode|ExternalEntryNode>|null
      */
-    private function sortMenuEntriesByToctree(array $tocEntries, array $menuEntries): array
+    private function sortMenuEntriesByToctrees(DocumentNode $documentNode, array $menuEntries): array|null
     {
-        // Map each authored toctree entry to its position. The key match relies
-        // on the entry urls having been resolved to the document file (internal)
-        // or external url by the attach transformers (priority 4500), which run
-        // before this pass.
+        // The key match relies on the entry urls having been resolved to the document file (internal)
+        // or external url by the attach transformers (priority 4500), which run before this pass.
         $order = [];
         $position = 0;
-        foreach ($tocEntries as $tocEntry) {
-            if (!($tocEntry instanceof MenuEntryNode)) {
+        foreach (self::collectTocNodes($documentNode) as $tocNode) {
+            $tocEntries = $tocNode->getValue();
+            if (!is_array($tocEntries)) {
                 continue;
             }
 
-            $order[$tocEntry->getUrl()] = $position++;
+            foreach ($tocEntries as $tocEntry) {
+                if ($tocEntry instanceof GlobMenuEntryNode) {
+                    return null;
+                }
+
+                if (!($tocEntry instanceof MenuEntryNode)) {
+                    continue;
+                }
+
+                // An entry listed twice keeps its first authored position; the attach transformers
+                // create a single menu entry for it.
+                $order[$tocEntry->getUrl()] ??= $position++;
+            }
         }
 
         $ordered = [];
-        $matchedIndexes = [];
-        foreach ($menuEntries as $index => $menuEntry) {
+        foreach ($menuEntries as $menuEntry) {
             $key = self::menuEntryKey($menuEntry);
             if (!isset($order[$key])) {
-                continue;
+                return null;
             }
 
             $ordered[$order[$key]] = $menuEntry;
-            $matchedIndexes[$index] = true;
         }
 
-        // Safety: bail out when entries do not map one-to-one (e.g. the rare
-        // case of duplicate entries within a single toctree).
-        if ($matchedIndexes === [] || count($ordered) !== count($matchedIndexes)) {
-            return $menuEntries;
+        if (count($ordered) !== count($menuEntries)) {
+            return null;
         }
 
         ksort($ordered);
-        $ordered = array_values($ordered);
-        $firstIndex = array_key_first($matchedIndexes);
 
-        $result = [];
-        foreach ($menuEntries as $index => $menuEntry) {
-            if ($index === $firstIndex) {
-                foreach ($ordered as $orderedEntry) {
-                    $result[] = $orderedEntry;
-                }
-            }
+        return array_values($ordered);
+    }
 
-            if (isset($matchedIndexes[$index])) {
-                continue;
-            }
-
-            $result[] = $menuEntry;
+    /**
+     * Collects the toctrees of a document in document order.
+     *
+     * `DocumentNode::getTocNodes()` is filled by TocNodeTransformer at priority 1000, which runs after
+     * this pass, and `getNodes()` only looks at direct children while a toctree usually sits inside a
+     * section. So the tree is walked here.
+     *
+     * @return TocNode[]
+     */
+    private static function collectTocNodes(Node $node): array
+    {
+        $tocNodes = [];
+        if ($node instanceof TocNode) {
+            $tocNodes[] = $node;
         }
 
-        return $result;
+        if ($node instanceof CompoundNode) {
+            foreach ($node->getChildren() as $child) {
+                foreach (self::collectTocNodes($child) as $tocNode) {
+                    $tocNodes[] = $tocNode;
+                }
+            }
+        }
+
+        return $tocNodes;
     }
 
     private static function menuEntryKey(DocumentEntryNode|ExternalEntryNode $entry): string
