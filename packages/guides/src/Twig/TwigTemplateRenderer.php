@@ -15,11 +15,14 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\TemplateRenderer;
+use Twig\Environment;
 use Twig\Error\LoaderError;
 
 final class TwigTemplateRenderer implements TemplateRenderer
 {
     private RenderContext|null $lastContext = null;
+
+    private Environment|null $lastEnvironment = null;
 
     public function __construct(private readonly EnvironmentBuilder $environmentBuilder)
     {
@@ -30,9 +33,13 @@ final class TwigTemplateRenderer implements TemplateRenderer
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();
 
-        // Only update globals when context changes (once per document, not per template)
-        if ($this->lastContext !== $context) {
+        // The globals hold for as long as the environment does, so they only need setting once per
+        // document — but the environment itself can be replaced behind our back through
+        // EnvironmentBuilder::setEnvironmentFactory(), and the replacement carries none of them.
+        // The memo therefore has to cover both.
+        if ($this->lastContext !== $context || $this->lastEnvironment !== $twig) {
             $this->lastContext = $context;
+            $this->lastEnvironment = $twig;
             $twig->addGlobal('env', $context);
             $twig->addGlobal('debugInformation', $context->getLoggerInformation());
         }

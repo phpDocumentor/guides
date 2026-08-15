@@ -26,15 +26,32 @@ use function str_repeat;
 
 final class RelativeUrlGenerator extends AbstractUrlGenerator
 {
-    /** @var array<string, string> */
+    /**
+     * Relative paths computed for the document currently being rendered, keyed by canonical url.
+     *
+     * A relative path only depends on the two paths, so it may be reused — but this is a service that
+     * lives for the whole render, and every document renders a menu over the same targets. Keeping the
+     * output file in the key would let the table grow as documents times targets. It is therefore held
+     * for one document and dropped when the next one starts.
+     *
+     * @var array<string, string>
+     */
     private array $pathCache = [];
+
+    private string|null $pathCacheOutputFilePath = null;
 
     public function generateInternalPathFromRelativeUrl(
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
         $outputFilePath = $renderContext->getOutputFilePath();
-        $cacheKey = $outputFilePath . '|' . $canonicalUrl;
+
+        if ($this->pathCacheOutputFilePath !== $outputFilePath) {
+            $this->pathCache = [];
+            $this->pathCacheOutputFilePath = $outputFilePath;
+        }
+
+        $cacheKey = $canonicalUrl;
 
         if (isset($this->pathCache[$cacheKey])) {
             return $this->pathCache[$cacheKey];

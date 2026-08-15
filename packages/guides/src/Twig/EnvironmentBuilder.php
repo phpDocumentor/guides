@@ -15,12 +15,9 @@ namespace phpDocumentor\Guides\Twig;
 
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
-use Twig\Cache\FilesystemCache;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
-
-use function sys_get_temp_dir;
 
 final class EnvironmentBuilder
 {
@@ -31,10 +28,7 @@ final class EnvironmentBuilder
     {
         $this->environment = new Environment(
             $themeManager->getFilesystemLoader(),
-            [
-                'debug' => true,
-                'cache' => new FilesystemCache(sys_get_temp_dir() . '/guides-twig-cache'),
-            ],
+            ['debug' => true],
         );
         $this->environment->addGlobal('env', null);
         $this->environment->addGlobal('debugInformation', null);
