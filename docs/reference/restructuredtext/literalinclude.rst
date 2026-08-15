@@ -64,11 +64,15 @@ are included once, in the order of the file.
 ``:lines:`` is applied *after* ``:start-after:`` and ``:end-before:``, so when they are combined the numbers count
 within the marked region rather than within the whole file.
 
+``:emphasize-lines:`` in turn counts within what ``:lines:`` left over, and ``:lineno-start:`` remains a plain
+override of the first number displayed, unrelated to where the selected lines sat in the file.
+
 Prefer markers where a file has them: line numbers change with every edit above the selected region, and nothing in
 the source file records that the documentation depends on them.
 
-If the value cannot be read as a list of line numbers, or if it selects no line at all, a warning is logged and
-nothing is included.
+Every range is warned about separately when it selects no line, for example because it lies beyond the end of the
+region; the remaining ranges are still included. If the option is used without a value, or its value cannot be read
+as a list of line numbers, a warning is logged and nothing is included.
 
 Options
 =======
@@ -90,7 +94,8 @@ Options
     and ``end-before``.
 
 ``:emphasize-lines:``
-    Line numbers to be highlighted, for example ``3,5-6``. Counted within the included region.
+    Line numbers to be highlighted, for example ``3,5-6``. Counted within the included region, that is within what
+    is left after ``start-after``, ``end-before`` and ``lines``.
 
 ``:linenos:``
     Displays line numbers, starting at 1.
