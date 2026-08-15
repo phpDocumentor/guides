@@ -1,0 +1,1 @@
+Option ":end-before:" of directive "literalinclude": "// begin example" occurs in "_code/_Example.php" only above the line matched by ":start-after:", nothing was included.
