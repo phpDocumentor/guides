@@ -24,6 +24,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\EpigraphDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ErrorDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\FigureDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\GenIndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HighlightDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HighlightsDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
@@ -215,6 +216,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(IncludeDirective::class)
         ->arg('$startingRule', service(DocumentRule::class))
         ->set(IndexDirective::class)
+        ->set(GenIndexDirective::class)
         ->set(LaTeXMain::class)
         ->set(ListTableDirective::class)
         ->set(LiteralincludeDirective::class)
