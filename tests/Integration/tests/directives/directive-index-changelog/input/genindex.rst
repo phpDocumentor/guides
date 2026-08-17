@@ -1,0 +1,5 @@
+:orphan:
+:template: genindex
+
+Index
+=====
