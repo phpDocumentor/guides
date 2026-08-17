@@ -15,6 +15,9 @@ use phpDocumentor\Guides\Event\PostProjectNodeCreated;
 use phpDocumentor\Guides\EventListener\LoadSettingsFromComposer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\GenIndexNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\GenIndexRowNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\GenIndexTermNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
@@ -198,6 +201,12 @@ return static function (ContainerConfigurator $container): void {
         )
 
         ->set(DocumentNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(GenIndexNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(GenIndexTermNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(GenIndexRowNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(TemplateMetadataNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')

@@ -36,7 +36,10 @@ final class AutomaticMenuPass implements CompilerPass
 
     public function getPriority(): int
     {
-        return 20; // must be run very late
+        // Must run very late, and strictly before GlobalMenuPass (21, not the same
+        // 20): GlobalMenuPass reads the DocumentEntry parent/child tree this pass
+        // builds.
+        return 21;
     }
 
     /**
