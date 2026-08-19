@@ -36,14 +36,19 @@ final class CodeExtension extends AbstractExtension
         ];
     }
 
-    /** @param array<string, mixed> $context */
-    public function highlight(array $context, string $code, string $language = 'text'): string
+    /**
+     * `CodeNode::getLanguage()` is nullable, and templates pass it straight into this filter, so null has to be
+     * accepted here and mean the same as an omitted language.
+     *
+     * @param array<string, mixed> $context
+     */
+    public function highlight(array $context, string $code, string|null $language = null): string
     {
         $debugInformation = $context['debugInformation'] ?? [];
         if (!is_array($debugInformation)) {
             $debugInformation = [];
         }
 
-        return ($this->highlighter)($language, $code, $debugInformation)->code;
+        return ($this->highlighter)($language ?? 'text', $code, $debugInformation)->code;
     }
 }

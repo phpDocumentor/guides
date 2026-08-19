@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd">
+    <!-- The highlighting filter of this extension is where a CodeNode without a language used to abort the run -->
+    <extension class="phpDocumentor\Guides\Code" />
+</guides>
