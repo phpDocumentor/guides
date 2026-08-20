@@ -16,7 +16,8 @@
         "php": "^8.1",
         "doctrine/deprecations": "^1.1",
         "phpdocumentor/guides": "^1.0 || ^2.0",
-        "phpdocumentor/guides-restructured-text": "^1.10 || ^2.0"
+        "phpdocumentor/guides-restructured-text": "^1.10 || ^2.0",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
     },
     "extra": {
         "branch-alias": {

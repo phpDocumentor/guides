@@ -1715,7 +1715,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides",
-                "reference": "569c35aee270c467111959c7e4311d1d13eb82df"
+                "reference": "c269414036ffd1340ad67bcc9e4cad66c54b24a1"
             },
             "require": {
                 "doctrine/deprecations": "^1.1",
@@ -1728,6 +1728,7 @@
                 "phpdocumentor/filesystem": "^1.7.4",
                 "phpdocumentor/flyfinder": "^1.1 || ^2.0",
                 "psr/event-dispatcher": "^1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/clock": "^6.4.8 || ^7.4 || ^8",
                 "symfony/html-sanitizer": "^6.4.8 || ^7.4 || ^8",
                 "symfony/http-client": "^6.4.9 || ^7.4 || ^8",
@@ -1736,9 +1737,6 @@
                 "symfony/translation-contracts": "^3.5.1",
                 "twig/twig": "~2.15 || ^3.0",
                 "webmozart/assert": "^1.11"
-            },
-            "require-dev": {
-                "psr/log": "^3.0.2"
             },
             "type": "library",
             "extra": {
@@ -1773,13 +1771,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-cli",
-                "reference": "129e2a05e223ed1d9dee140bb1f39a23424d3042"
+                "reference": "b36a2d466011e38c0a9648afec67a1a1601eba99"
             },
             "require": {
                 "monolog/monolog": "^3.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/config": "^5.4 || ^6.3 || ^7.0 || ^8.0",
                 "symfony/console": "^5.4 || ^6.3 || ^7.0 || ^8.0",
                 "symfony/dependency-injection": "^5.4 || ^6.3 || ^7.0 || ^8.0",
@@ -1829,11 +1828,12 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-code",
-                "reference": "9968c98c68ab630d39bd25c8b677ebe9fd537995"
+                "reference": "46851d8bad35ffa7e7d442aaddeac5d763c14e21"
             },
             "require": {
                 "php": "^8.1",
-                "scrivo/highlight.php": "^9.18.0"
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "scrivo/highlight.php": "^9.18.1.10"
             },
             "type": "library",
             "extra": {
@@ -1868,13 +1868,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-graphs",
-                "reference": "572c91982e3f3256688fd84305951c6143d502e1"
+                "reference": "4c4c92b15973b0172548de8df09979509f04f603"
             },
             "require": {
                 "jawira/plantuml-encoding": "^1.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
                 "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/process": "^5.4 || ^6.3 || ^7.0 || ^8.0",
                 "twig/twig": "~2.0 || ^3.0"
             },
@@ -1914,12 +1915,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-markdown",
-                "reference": "b68c5dbb93b12ea1e9e4526b1e0debc225af8155"
+                "reference": "5e4223c12ba81c5a943c45fb189a777ff97a25a5"
             },
             "require": {
                 "league/commonmark": "^2.4",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/yaml": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
@@ -1955,13 +1957,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-restructured-text",
-                "reference": "72eb9213863dcec1603d22f6701aca271fd3ba7a"
+                "reference": "049588f02b220c817fb668368dc27cedf893e6dd"
             },
             "require": {
                 "doctrine/lexer": "^3.0",
                 "league/csv": "^9.27.0",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "webmozart/assert": "^1.11"
             },
             "type": "library",
@@ -1997,12 +2000,14 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/guides-theme-bootstrap",
-                "reference": "a3ad78c3fc59928050b1ff3997a676248b0728a1"
+                "reference": "e39675465c2c8f0122592654b0d102f474c9cb99"
             },
             "require": {
+                "doctrine/deprecations": "^1.1",
                 "php": "^8.1",
                 "phpdocumentor/guides": "^1.0 || ^2.0",
-                "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0"
+                "phpdocumentor/guides-restructured-text": "^1.10 || ^2.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0"
             },
             "type": "library",
             "extra": {
