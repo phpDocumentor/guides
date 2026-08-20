@@ -21,6 +21,7 @@
     },
     "require": {
         "php": "^8.1",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
         "scrivo/highlight.php": "^9.18.1.10"
     },
     "extra": {
