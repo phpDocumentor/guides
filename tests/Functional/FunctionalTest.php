@@ -15,8 +15,6 @@ namespace phpDocumentor\Guides\Functional;
 
 use DOMDocument;
 use Exception;
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Monolog\LogRecord;
@@ -40,8 +38,6 @@ use function array_filter;
 use function array_map;
 use function array_shift;
 use function assert;
-use function class_alias;
-use function class_exists;
 use function explode;
 use function file;
 use function file_exists;
@@ -60,10 +56,6 @@ use function substr;
 use function trim;
 
 use const LC_ALL;
-
-if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
-    class_alias('League\Flysystem\Memory\MemoryAdapter', 'League\Flysystem\InMemory\InMemoryFilesystemAdapter');
-}
 
 final class FunctionalTest extends ApplicationTestCase
 {
@@ -114,7 +106,7 @@ final class FunctionalTest extends ApplicationTestCase
             $projectNode = new ProjectNode();
             [$document] = $compiler->run([$document], new CompilerContext($projectNode));
 
-            $inputFilesystem = FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter()));
+            $inputFilesystem = FlySystemAdapter::createInMemory();
             $inputFilesystem->put('img/test-image.jpg', 'Some image');
 
 
@@ -130,7 +122,7 @@ final class FunctionalTest extends ApplicationTestCase
                 $document,
                 [$document],
                 $inputFilesystem,
-                FlySystemAdapter::createFromFileSystem(new Filesystem(new InMemoryFilesystemAdapter())),
+                FlySystemAdapter::createInMemory(),
                 '',
                 $format,
                 $projectNode,

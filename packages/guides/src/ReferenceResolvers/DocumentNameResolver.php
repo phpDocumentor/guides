@@ -19,7 +19,8 @@ use function array_pop;
 use function explode;
 use function implode;
 use function ltrim;
-use function trim;
+use function rtrim;
+use function str_replace;
 
 final class DocumentNameResolver implements DocumentNameResolverInterface
 {
@@ -40,11 +41,7 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
             return $url;
         }
 
-        if ($basePath === '/') {
-            return $basePath . $url;
-        }
-
-        return '/' . trim($basePath, '/') . '/' . $url;
+        return '/' . str_replace('./', '', $this->canonicalUrl($basePath, $url));
     }
 
     /**
@@ -78,6 +75,6 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
             $urlPass1[] = $part;
         }
 
-        return ltrim(implode('/', $dirNameParts) . '/' . implode('/', $urlPass1), '/');
+        return ltrim(rtrim(implode('/', $dirNameParts), '/') . '/' . implode('/', $urlPass1), '/');
     }
 }

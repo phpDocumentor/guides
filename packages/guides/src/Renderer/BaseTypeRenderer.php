@@ -33,6 +33,7 @@ abstract class BaseTypeRenderer implements TypeRenderer
             $renderCommand->getDestination(),
             $renderCommand->getDestinationPath(),
             $renderCommand->getOutputFormat(),
+            $renderCommand->getImageDestination(),
         )->withIterator($renderCommand->getDocumentIterator());
 
         foreach ($context->getIterator() as $document) {

@@ -49,6 +49,7 @@ final class InterlinkObjectsRenderer implements TypeRenderer
             $renderCommand->getDestination(),
             $renderCommand->getDestinationPath(),
             'html',
+            $renderCommand->getImageDestination(),
         )->withOutputFilePath('objects.inv.json');
 
         foreach ($renderCommand->getProjectNode()->getAllDocumentEntries() as $key => $documentEntry) {

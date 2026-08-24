@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Twig;
 
+use Doctrine\Deprecations\Deprecation;
+use InvalidArgumentException;
 use League\Uri\BaseUri;
 use League\Uri\Uri;
 use phpDocumentor\Guides\Meta\InternalTarget;
@@ -20,33 +22,69 @@ use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Stringable;
-use Throwable;
 use Twig\DeprecatedCallableInfo;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 
 use function class_exists;
+use function func_get_arg;
+use function func_num_args;
+use function get_debug_type;
 use function sprintf;
 use function trim;
 
 final class AssetsExtension extends AbstractExtension
 {
     private GlobalMenuExtension $menuExtension;
+    /** @var NodeRenderer<Node> */
+    private NodeRenderer $nodeRenderer;
+    private UrlGeneratorInterface $urlGenerator;
 
-    /** @param NodeRenderer<Node> $nodeRenderer */
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly NodeRenderer $nodeRenderer,
-        private readonly DocumentNameResolverInterface $documentNameResolver,
-        private readonly UrlGeneratorInterface $urlGenerator,
-    ) {
+    /**
+     * @param NodeRenderer<Node>    $nodeRenderer
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+    public function __construct($nodeRenderer, $urlGenerator)
+    {
+        if (func_num_args() > 2) {
+            // deprecated signature
+            $nodeRenderer = $urlGenerator;
+            $urlGenerator = func_get_arg(3);
+
+            Deprecation::trigger(
+                'phpdocumentor/guides',
+                'https://github.com/phpDocumentor/guides/issues/1389',
+                'Passing a LoggerInterface and DocumentNameResolverInterface to the constructor of "%s" is deprecated',
+                self::class,
+            );
+        }
+
+        if (!$nodeRenderer instanceof NodeRenderer) {
+            throw new InvalidArgumentException(sprintf(
+                'Parameter #1 of "%s" must be an instance of "%s", "%s" given',
+                __METHOD__,
+                NodeRenderer::class,
+                get_debug_type($nodeRenderer),
+            ));
+        }
+
+        if (!$urlGenerator instanceof UrlGeneratorInterface) {
+            throw new InvalidArgumentException(sprintf(
+                'Parameter #2 of "%s" must be an instance of "%s", "%s" given',
+                __METHOD__,
+                UrlGeneratorInterface::class,
+                get_debug_type($urlGenerator),
+            ));
+        }
+
+        $this->nodeRenderer = $nodeRenderer;
+        $this->urlGenerator = $urlGenerator;
         $this->menuExtension = new GlobalMenuExtension($this->nodeRenderer);
     }
 
@@ -95,9 +133,7 @@ final class AssetsExtension extends AbstractExtension
      */
     public function asset(array $context, string $path): string
     {
-        $outputPath = $this->copyAsset($context['env'] ?? null, $path);
-
-        return $this->urlGenerator->generateInternalUrl($context['env'] ?? null, trim($outputPath, '/'));
+        return $this->urlGenerator->generateInternalUrl($context['env'] ?? null, trim($path, '/'));
     }
 
     /**
@@ -150,59 +186,6 @@ final class AssetsExtension extends AbstractExtension
     public function renderLink(array $context, string $url, string|null $anchor = null): string
     {
         return $this->urlGenerator->generateCanonicalOutputUrl($this->getRenderContext($context), $url, $anchor);
-    }
-
-    private function copyAsset(
-        RenderContext|null $renderContext,
-        string $sourcePath,
-    ): string {
-        if (!$renderContext instanceof RenderContext) {
-            return $sourcePath;
-        }
-
-        $canonicalUrl = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $sourcePath);
-        $normalizedSourcePath = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $sourcePath);
-
-        $outputPath = $this->documentNameResolver->absoluteUrl(
-            $renderContext->getDestinationPath(),
-            $canonicalUrl,
-        );
-
-        try {
-            if ($renderContext->getOrigin()->has($normalizedSourcePath) === false) {
-                $this->logger->error(
-                    sprintf('Image reference not found "%s"', $normalizedSourcePath),
-                    $renderContext->getLoggerInformation(),
-                );
-
-                return $outputPath;
-            }
-
-            $fileContents = $renderContext->getOrigin()->read($normalizedSourcePath);
-            if ($fileContents === false) {
-                $this->logger->error(
-                    sprintf('Could not read image file "%s"', $normalizedSourcePath),
-                    $renderContext->getLoggerInformation(),
-                );
-
-                return $outputPath;
-            }
-
-            $result = $renderContext->getDestination()->put($outputPath, $fileContents);
-            if ($result === false) {
-                $this->logger->error(
-                    sprintf('Unable to write file "%s"', $outputPath),
-                    $renderContext->getLoggerInformation(),
-                );
-            }
-        } catch (Throwable $e) {
-            $this->logger->error(
-                sprintf('Unable to write file "%s", %s', $outputPath, $e->getMessage()),
-                $renderContext->getLoggerInformation(),
-            );
-        }
-
-        return $outputPath;
     }
 
     /** @param array{env: RenderContext} $context */

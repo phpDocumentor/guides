@@ -17,6 +17,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\PreRenderers\CollectImagesPreNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TemplateMetadataNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
@@ -213,6 +214,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(ReferenceResolverPreRender::class)
         ->tag('phpdoc.guides.prerenderer')
         ->set(ImageReferenceResolverPreRender::class)
+        ->tag('phpdoc.guides.prerenderer')
+        ->set(CollectImagesPreNodeRenderer::class)
         ->tag('phpdoc.guides.prerenderer')
 
         ->set(InMemoryRendererFactory::class)
