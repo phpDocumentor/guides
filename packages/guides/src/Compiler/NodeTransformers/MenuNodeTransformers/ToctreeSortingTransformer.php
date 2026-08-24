@@ -19,14 +19,13 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\ExternalEntryNode;
-use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function array_reverse;
+use function array_shift;
 use function array_values;
-use function count;
 use function is_array;
 use function ksort;
 
@@ -65,9 +64,9 @@ final class ToctreeSortingTransformer implements NodeTransformer
         if ($sorted !== null) {
             $documentEntry->setMenuEntries($sorted);
         } elseif ($node->isReversed()) {
-            // The sorting cannot map the entries of this document — a glob toctree expands to entries
-            // no authored sequence accounts for. Reversing the menu entries wholesale is the only thing
-            // left that honours `:reversed:` there.
+            // The sorting cannot map the entries of this document: a menu entry is attached that no
+            // toctree of the document accounts for. Reversing the menu entries wholesale is the only
+            // thing left that honours `:reversed:` there, and it is what this pass did before.
             $documentEntry->setMenuEntries(array_reverse($documentEntry->getMenuEntries()));
         }
 
@@ -83,11 +82,9 @@ final class ToctreeSortingTransformer implements NodeTransformer
      * Running this for every toctree of the document is idempotent, and the last run sees every
      * `:reversed:` toctree already reversed.
      *
-     * Nothing is reordered when the entries cannot be mapped one to one — a glob toctree, whose
-     * order is defined by the expansion rather than by an authored sequence, or a menu entry that no
-     * toctree accounts for. Reordering only part of the list would be worse than not reordering it.
-     *
-     * Returns null when the entries cannot be mapped one to one.
+     * Nothing is reordered when a menu entry is attached that no toctree of the document accounts
+     * for: reordering only part of the list would be worse than not reordering it. Null is returned
+     * in that case.
      *
      * @param array<DocumentEntryNode|ExternalEntryNode> $menuEntries
      *
@@ -97,7 +94,10 @@ final class ToctreeSortingTransformer implements NodeTransformer
     {
         // The key match relies on the entry urls having been resolved to the document file (internal)
         // or external url by the attach transformers (priority 4500), which run before this pass.
-        $order = [];
+        // Glob toctrees need nothing of their own here: the compiler drives its passes off a max-heap,
+        // so GlobMenuEntryNodeTransformer (priority 4000) has already replaced every GlobMenuEntryNode
+        // with the entries it expands to, and those carry the urls this matches on.
+        $positions = [];
         $position = 0;
         foreach (self::collectTocNodes($documentNode) as $tocNode) {
             $tocEntries = $tocNode->getValue();
@@ -106,32 +106,26 @@ final class ToctreeSortingTransformer implements NodeTransformer
             }
 
             foreach ($tocEntries as $tocEntry) {
-                if ($tocEntry instanceof GlobMenuEntryNode) {
-                    return null;
-                }
-
                 if (!($tocEntry instanceof MenuEntryNode)) {
                     continue;
                 }
 
-                // An entry listed twice keeps its first authored position; the attach transformers
-                // create a single menu entry for it.
-                $order[$tocEntry->getUrl()] ??= $position++;
+                // One position per occurrence, so a url listed twice can take both. Internal entries
+                // are deduplicated when they are attached, so their single menu entry takes the first
+                // occurrence and the later ones stay unused; external entries are not deduplicated,
+                // so each of them takes the next occurrence in turn.
+                $positions[$tocEntry->getUrl()][] = $position++;
             }
         }
 
         $ordered = [];
         foreach ($menuEntries as $menuEntry) {
             $key = self::menuEntryKey($menuEntry);
-            if (!isset($order[$key])) {
+            if (($positions[$key] ?? []) === []) {
                 return null;
             }
 
-            $ordered[$order[$key]] = $menuEntry;
-        }
-
-        if (count($ordered) !== count($menuEntries)) {
-            return null;
+            $ordered[array_shift($positions[$key])] = $menuEntry;
         }
 
         ksort($ordered);
