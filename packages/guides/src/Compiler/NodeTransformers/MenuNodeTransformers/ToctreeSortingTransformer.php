@@ -64,9 +64,12 @@ final class ToctreeSortingTransformer implements NodeTransformer
         if ($sorted !== null) {
             $documentEntry->setMenuEntries($sorted);
         } elseif ($node->isReversed()) {
-            // The sorting cannot map the entries of this document: a menu entry is attached that no
-            // toctree of the document accounts for. Reversing the menu entries wholesale is the only
-            // thing left that honours `:reversed:` there, and it is what this pass did before.
+            // The order cannot be derived, so reversing the menu entries wholesale is the only thing
+            // left that honours `:reversed:`, and it is what this pass did before. Nothing in the
+            // test suite reaches this branch: every menu entry is attached from a toctree of its own
+            // document, by the three call sites of attachDocumentEntriesToParents. That it is
+            // unreachable has not been proven though, and dropping it would silently drop
+            // `:reversed:` for whatever does reach it.
             $documentEntry->setMenuEntries(array_reverse($documentEntry->getMenuEntries()));
         }
 
