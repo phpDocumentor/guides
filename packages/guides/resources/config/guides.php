@@ -228,8 +228,11 @@ return static function (ContainerConfigurator $container): void {
         ->set('phpdoc.guides.output_node_renderer', OutputAwareDelegatingNodeRenderer::class)
         ->arg('$nodeRenderers', tagged_iterator('phpdoc.guides.output_node_renderer', 'format'))
 
+        ->set('phpdoc.guides.assets_url_generator', ConfigurableUrlGenerator::class)
+
         ->set(AssetsExtension::class)
         ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
+        ->arg('$urlGenerator', service('phpdoc.guides.assets_url_generator'))
         ->tag('twig.extension')
         ->autowire()
 
