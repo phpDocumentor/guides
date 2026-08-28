@@ -110,6 +110,10 @@ return static function (ContainerConfigurator $container): void {
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
             '../../src/Compiler/Passes/*Pass.php',
         )
+        ->load(
+            'phpDocumentor\\Guides\\Compiler\\Passes\\IndexCollector\\',
+            '../../src/Compiler/Passes/IndexCollector/*.php',
+        )
 
         ->set(InternalMenuEntryNodeTransformer::class)
         ->tag('phpdoc.guides.compiler.nodeTransformers')
