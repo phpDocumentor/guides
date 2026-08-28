@@ -20,6 +20,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\Metadata\NavigationTitleNode;
+use phpDocumentor\Guides\Nodes\Metadata\TemplateNode;
 
 use function array_filter;
 use function max;
@@ -75,6 +76,7 @@ final class DocumentNode extends CompoundNode
     private SectionEntryNode|null $rootSectionEntry = null;
     private bool $isRoot = false;
     private bool $orphan = false;
+    private string|null $template = null;
 
     public function __construct(
         private readonly string $hash,
@@ -142,6 +144,10 @@ final class DocumentNode extends CompoundNode
     {
         if ($node instanceof NavigationTitleNode) {
             $this->navigationTitle = $node->getValue();
+        }
+
+        if ($node instanceof TemplateNode) {
+            $this->template = $node->getValue();
         }
 
         $this->headerNodes[] = $node;
@@ -328,5 +334,10 @@ final class DocumentNode extends CompoundNode
         $this->orphan = $orphan;
 
         return $this;
+    }
+
+    public function getTemplate(): string|null
+    {
+        return $this->template;
     }
 }

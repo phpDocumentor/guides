@@ -18,6 +18,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\TemplateMetadataNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorHyperlinkResolver;
@@ -197,6 +198,8 @@ return static function (ContainerConfigurator $container): void {
         )
 
         ->set(DocumentNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->set(TemplateMetadataNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(TableNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
