@@ -1,7 +1,7 @@
-{% if node.isLink %}
+{% if node.kind.name == 'Link' %}
 {{ renderNode(node.reference) }}
 {% else %}
-<span class="index-see">{{ node.isSeeAlso ? 'see also' : 'see' }}</span>
+<span class="index-see">{{ node.kind.name == 'SeeAlso' ? 'see also' : 'see' }}</span>
 {% if node.reference %}
 {{ renderNode(node.reference) }}
 {% else %}
