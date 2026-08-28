@@ -14,6 +14,10 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
+use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexNodeBuilder;
+use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexSeeResolver;
+use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexTermMapFilter;
+use phpDocumentor\Guides\Compiler\Passes\IndexCollector\IndexEntryCollector;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Index\GenIndexNode;
 use phpDocumentor\Guides\Nodes\Index\GenIndexTerm;
@@ -44,7 +48,7 @@ final class IndexCollectorPassTest extends TestCase
                 self::anything(),
             );
 
-        $pass = new IndexCollectorPass($logger);
+        $pass = $this->createPass($logger);
         [$result] = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         $terms = $this->getGenIndexTerms($result);
@@ -66,7 +70,7 @@ final class IndexCollectorPassTest extends TestCase
                 self::anything(),
             );
 
-        $pass = new IndexCollectorPass($logger);
+        $pass = $this->createPass($logger);
         [$result] = $pass->run([$document], new CompilerContext(new ProjectNode()));
 
         $terms = $this->getGenIndexTerms($result);
@@ -85,8 +89,18 @@ final class IndexCollectorPassTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects(self::never())->method('warning');
 
-        $pass = new IndexCollectorPass($logger);
+        $pass = $this->createPass($logger);
         $pass->run([$document], new CompilerContext(new ProjectNode()));
+    }
+
+    private function createPass(LoggerInterface $logger): IndexCollectorPass
+    {
+        return new IndexCollectorPass(
+            new IndexEntryCollector($logger),
+            new GenIndexSeeResolver(),
+            new GenIndexTermMapFilter(),
+            new GenIndexNodeBuilder(),
+        );
     }
 
     /** @param IndexEntryNode[] $entries */
