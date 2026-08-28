@@ -30,21 +30,25 @@ use function trim;
  * `:template: genindex` page, this can be dropped inline anywhere and used
  * more than once, e.g. one per version directory in a changelog:
  *
- * .. genindex::
+ * ```rest
+ *   .. genindex::
  *
- * .. genindex::
- *      :scope: Changelog/12.4/
+ *   .. genindex::
+ *        :scope: Changelog/12.4/
  *
- * .. genindex::
- *      :scope: Changelog/12.4/, Changelog/12.4-security/
+ *   .. genindex::
+ *        :scope: Changelog/12.4/, Changelog/12.4-security/
+ * ```
  *
  * The A-Z letter index (jumpbox + one heading per letter) can be turned off
  * for small, e.g. per-version, listings where it adds more noise than it
  * saves navigation -- terms are then listed flat, in one table:
  *
- * .. genindex::
- *      :scope: Changelog/12.4/
- *      :no-letter-index:
+ * ```rest
+ *   .. genindex::
+ *        :scope: Changelog/12.4/
+ *        :no-letter-index:
+ * ```
  *
  * The node is populated later by IndexCollectorPass, once entries from every
  * document have been collected; at parse time it's an empty placeholder.
