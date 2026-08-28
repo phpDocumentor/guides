@@ -49,6 +49,11 @@
       "name": "filesystem",
       "directory": "packages/filesystem",
       "target": "git@github.com:phpDocumentor/filesystem.git"
+    },
+    {
+      "name": "guides-pages",
+      "directory": "packages/guides-pages",
+      "target": "git@github.com:phpDocumentor/guides-pages.git"
     }
   ]
 }
