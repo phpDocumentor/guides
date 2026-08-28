@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use RecursiveIteratorIterator;
 use WeakMap;
 use WeakReference;
+use Webmozart\Assert\Assert;
 
 /** @implements Iterator<array-key, DocumentNode> */
 final class DocumentListIterator implements Iterator
@@ -53,7 +54,9 @@ final class DocumentListIterator implements Iterator
         );
         $this->innerIterator->append($this->unseenIterator());
         if ($this->innerIterator->valid()) {
-            $this->currentDocument = WeakReference::create($this->innerIterator->current());
+            $currentDocument = $this->innerIterator->current();
+            Assert::isInstanceOf($currentDocument, DocumentNode::class);
+            $this->currentDocument = WeakReference::create($currentDocument);
         }
 
         foreach ($documents as $document) {

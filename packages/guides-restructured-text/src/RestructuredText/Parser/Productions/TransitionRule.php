@@ -38,7 +38,7 @@ final class TransitionRule implements Rule
         return $this->currentLineIsASeparator($line, $nextLine) !== null;
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
 

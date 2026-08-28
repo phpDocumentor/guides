@@ -46,7 +46,8 @@ final class GlobMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransforme
         $maxDepth = (int) $currentMenu->getOption('maxdepth', self::DEFAULT_MAX_LEVELS);
         $documentEntries = $compilerContext->getProjectNode()->getAllDocumentEntries();
         $currentPath = $compilerContext->getDocumentNode()->getFilePath();
-        $globExclude = explode(',', $currentMenu->getOption('globExclude') . '');
+        $globExcludeOption = $currentMenu->getOption('globExclude');
+        $globExclude = explode(',', is_string($globExcludeOption) ? $globExcludeOption : '');
         $menuEntries = [];
         foreach ($documentEntries as $documentEntry) {
             if ($documentEntry->isOrphan()) {

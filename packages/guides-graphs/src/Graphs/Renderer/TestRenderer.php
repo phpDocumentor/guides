@@ -19,7 +19,7 @@ use function md5;
 
 final class TestRenderer implements DiagramRenderer
 {
-    public function render(RenderContext $renderContext, string $diagram): string|null
+    public function render(RenderContext $renderContext, string $diagram): string
     {
         return md5($diagram);
     }

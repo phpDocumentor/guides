@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\SectionNode;
 
+use function array_values;
 use function assert;
 
 use const PHP_INT_MAX;
@@ -78,7 +79,7 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
             $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
         }
 
-        return $newEntryNode->getSections();
+        return array_values($newEntryNode->getSections());
     }
 
     public function getPriority(): int

@@ -78,7 +78,7 @@ final class EnumeratedListRule implements Rule
             $this->isListItemStart($documentIterator->getNextLine(), $listConfig['marker_type']);
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
 
@@ -119,12 +119,8 @@ final class EnumeratedListRule implements Rule
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
-        $start = null;
-        $orderType = null;
-        if (isset($items[0])) {
-            $orderType = $items[0]->getOrderType();
-            $start = (string) $this->getStartValue($items[0]->getOrderNumber(), $orderType);
-        }
+        $orderType = $items[0]->getOrderType();
+        $start = (string) $this->getStartValue($items[0]->getOrderNumber(), $orderType);
 
         return new ListNode($items, true, $start, $orderType);
     }

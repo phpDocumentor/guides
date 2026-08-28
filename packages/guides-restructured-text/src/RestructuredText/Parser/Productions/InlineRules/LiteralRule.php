@@ -37,7 +37,7 @@ final class LiteralRule extends AbstractInlineRule implements CachableInlineRule
 
     public function apply(BlockContext $blockContext, InlineLexer $lexer): LiteralInlineNode
     {
-        $literal = $lexer->token?->value ?? '';
+        $literal = $lexer->token->value ?? '';
         if (strlen($literal) > 4) {
             $literal = substr($literal, 2, strlen($literal) - 4);
         }

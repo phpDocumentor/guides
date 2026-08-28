@@ -25,6 +25,7 @@ use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 
 use function array_merge;
 use function array_unique;
+use function array_values;
 use function sprintf;
 
 use const DATE_RFC2822;
@@ -37,7 +38,7 @@ final class ProjectNode extends CompoundNode
      *
      * Variables like |project| and |version| are replaced globally
      *
-     * @var array<Node>
+     * @var array<string, Node>
      */
     private array $variables = [];
 
@@ -275,6 +276,6 @@ final class ProjectNode extends CompoundNode
     /** @param list<string> $keywords */
     public function addKeywords(array $keywords): void
     {
-        $this->keywords = array_unique(array_merge($this->keywords, $keywords));
+        $this->keywords = array_values(array_unique(array_merge($this->keywords, $keywords)));
     }
 }

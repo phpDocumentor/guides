@@ -15,12 +15,14 @@ namespace phpDocumentor\Guides\Markdown\Parsers\FrontMatter;
 
 use phpDocumentor\Guides\Nodes\DocumentNode;
 
+use function is_scalar;
+
 final class TitleParser implements Parser
 {
     /** {@inheritDoc} */
     public function process(DocumentNode $document, mixed $value, array $frontMatter): void
     {
-        $document->setMetaTitle('' . $value);
+        $document->setMetaTitle(is_scalar($value) ? (string) $value : '');
     }
 
     public function field(): string

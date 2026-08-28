@@ -38,9 +38,9 @@ final class StandaloneHyperlinkRule extends ReferenceRule implements CachableInl
         return $lexer->token?->type === InlineLexer::HYPERLINK;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode
     {
-        $value = $lexer->token?->value ?? '';
+        $value = $lexer->token->value ?? '';
         $node = $this->createReference($blockContext, $value, $value, false);
 
         $lexer->moveNext();

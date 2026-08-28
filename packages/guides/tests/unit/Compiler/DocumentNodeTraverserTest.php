@@ -88,7 +88,7 @@ final class DocumentNodeTraverserTest extends TestCase
                     return $this->replacement;
                 }
 
-                public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node
                 {
                     return $node;
                 }
@@ -141,7 +141,7 @@ final class DocumentNodeTraverserTest extends TestCase
                     return $node;
                 }
 
-                public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node
                 {
                     return $this->replacement;
                 }

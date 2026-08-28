@@ -35,7 +35,7 @@ final class DefaultInventoryLoader implements InventoryLoader
     ) {
     }
 
-    /** @param array<String, mixed> $json */
+    /** @param array<array-key, mixed> $json */
     public function loadInventoryFromJson(Inventory $inventory, array $json): void
     {
         foreach ($json as $groupKey => $groupArray) {
@@ -58,13 +58,16 @@ final class DefaultInventoryLoader implements InventoryLoader
                         continue;
                     }
 
-                    if (!is_scalar($linkArray[0] ?? '') || !is_scalar($linkArray[1] ?? '') || !is_scalar($linkArray[3] ?? '')) {
+                    $entry0 = $linkArray[0] ?? '';
+                    $entry1 = $linkArray[1] ?? '';
+                    $entry3 = $linkArray[3] ?? '-';
+                    if (!is_scalar($entry0) || !is_scalar($entry1) || !is_scalar($entry3)) {
                         $this->logger->warning(sprintf('Invalid Inventory entry found. Only scalar values are allowed in each entry of array "%s". ', $groupKey));
                         continue;
                     }
 
                     $reducedLinkKey = $groupAnchorNormalizer->reduceAnchor(strval($linkKey));
-                    $link = new InventoryLink(strval($linkArray[0] ?? ''), strval($linkArray[1] ?? ''), $linkArray[2], strval($linkArray[3] ?? '-'));
+                    $link = new InventoryLink(strval($entry0), strval($entry1), $linkArray[2], strval($entry3));
                     $group->addLink($reducedLinkKey, $link);
                 }
             }

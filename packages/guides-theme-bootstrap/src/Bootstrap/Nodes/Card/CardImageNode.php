@@ -19,7 +19,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 
 final class CardImageNode extends GeneralDirectiveNode
 {
-    /** @param list<Node> $value */
+    /** @param Node[] $value */
     public function __construct(
         protected readonly string $name,
         protected readonly string $plainContent,

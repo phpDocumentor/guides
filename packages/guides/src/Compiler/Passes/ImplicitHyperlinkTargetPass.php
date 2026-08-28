@@ -55,10 +55,10 @@ final class ImplicitHyperlinkTargetPass implements CompilerPass
     }
 
     /**
-     * @param array<int, Node> $nodes
-     * @param list<string>     $knownIds
+     * @param array<array-key, Node> $nodes
+     * @param array<string>          $knownIds
      *
-     * @return list<string>
+     * @return array<string>
      */
     private function deduplicateSectionIds(array $nodes, array $knownIds): array
     {

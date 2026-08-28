@@ -33,7 +33,7 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode, Optional
     public const LINK_PREFIX = 'confval-';
 
     /**
-     * @param list<Node> $value
+     * @param Node[] $value
      * @param array<string, InlineCompoundNode>  $additionalOptions
      */
     public function __construct(

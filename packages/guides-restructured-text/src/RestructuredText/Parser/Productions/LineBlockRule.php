@@ -43,7 +43,7 @@ final class LineBlockRule implements Rule
             && str_starts_with($blockContext->getDocumentIterator()->getNextLine(), '| ');
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         return $this->createLineBlock($blockContext);
     }

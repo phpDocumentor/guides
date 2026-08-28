@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\TemplateRenderer;
 
 use function is_a;
+use function is_scalar;
 use function trim;
 
 /** @implements NodeRenderer<ContainerNode> */
@@ -41,11 +42,13 @@ final class ContainerNodeRenderer implements NodeRenderer
             throw new InvalidArgumentException('Node must be an instance of ' . ContainerNode::class);
         }
 
+        $classOption = $node->getOption('class');
+
         return $this->renderer->renderTemplate(
             $renderContext,
             'body/container.html.twig',
             [
-                'class' => trim($node->getOption('class') . ' ' . $node->getClassesString()),
+                'class' => trim((is_scalar($classOption) ? (string) $classOption : '') . ' ' . $node->getClassesString()),
                 'id' => $node->getOption('name'),
                 'node' => $node->getValue(),
             ],

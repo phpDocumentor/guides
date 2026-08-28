@@ -17,7 +17,7 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class LazyNodeRendererFactory implements NodeRendererFactory
 {
-    /** @var callable */
+    /** @var callable(): NodeRendererFactory */
     private $factory;
 
     private NodeRendererFactory|null $innerFactory = null;

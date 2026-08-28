@@ -46,7 +46,7 @@ final class AnonymousPhraseRule extends ReferenceRule
             switch ($lexer->token->type) {
                 case InlineLexer::BACKTICK:
                     $lexer->moveNext();
-                    if ($lexer->token?->type !== InlineLexer::ANONYMOUS_END) {
+                    if ($lexer->token->type !== InlineLexer::ANONYMOUS_END) {
                         $this->rollback($lexer, $initialPosition ?? 0);
 
                         return null;

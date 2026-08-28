@@ -38,7 +38,7 @@ final class VariableInlineNodeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if (!$node instanceof VariableInlineNode) {
             return $node;

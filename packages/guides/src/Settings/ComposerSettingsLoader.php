@@ -16,9 +16,12 @@ namespace phpDocumentor\Guides\Settings;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 
+use function array_map;
+use function array_values;
 use function file_get_contents;
 use function implode;
 use function is_array;
+use function is_scalar;
 use function is_string;
 use function json_decode;
 use function sprintf;
@@ -61,13 +64,13 @@ final class ComposerSettingsLoader
             } elseif (is_array($composerData['license'])) {
                 $projectNode->addVariable(
                     'license',
-                    new PlainTextInlineNode(sprintf('(%s)', implode(' or ', $composerData['license']))),
+                    new PlainTextInlineNode(sprintf('(%s)', implode(' or ', array_map(static fn (mixed $license): string => is_scalar($license) ? (string) $license : '', $composerData['license'])))),
                 );
             }
         }
 
         if (isset($composerData['keywords']) && is_array($composerData['keywords'])) {
-            $projectNode->addKeywords($composerData['keywords']);
+            $projectNode->addKeywords(array_values(array_map(static fn (mixed $keyword): string => is_scalar($keyword) ? (string) $keyword : '', $composerData['keywords'])));
         }
 
         if (!isset($composerData['support']) || !is_array($composerData['support'])) {
