@@ -45,9 +45,9 @@ use function trim;
  *      see: token; access token
  *      ! main entry example
  *
- * A line may also hold several comma-separated, type-less entries at once
- * (the convention used by e.g. TYPO3's Core Changelog files), each becoming
- * its own "single" entry:
+ * A line may also hold several comma-separated, type-less entries at once,
+ * each becoming its own "single" entry -- not specific to any one project,
+ * this convention is used for example by TYPO3's Core Changelog files:
  *
  * .. index:: Backend, PHP-API, NotScanned, ext:core
  *
@@ -154,7 +154,11 @@ final class IndexDirective extends BaseDirective
             $closestDistance = $distance;
         }
 
-        if ($closestType === null || $closestDistance > self::TYPO_DISTANCE_THRESHOLD) {
+        if ($closestType === null) {
+            return;
+        }
+
+        if ($closestDistance > self::TYPO_DISTANCE_THRESHOLD) {
             return;
         }
 
