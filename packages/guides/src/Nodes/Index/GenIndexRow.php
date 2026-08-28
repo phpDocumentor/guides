@@ -38,21 +38,6 @@ final class GenIndexRow extends AbstractNode
         return $this->kind;
     }
 
-    public function isLink(): bool
-    {
-        return $this->kind === GenIndexRowKind::Link;
-    }
-
-    public function isSee(): bool
-    {
-        return $this->kind === GenIndexRowKind::See;
-    }
-
-    public function isSeeAlso(): bool
-    {
-        return $this->kind === GenIndexRowKind::SeeAlso;
-    }
-
     public function isMain(): bool
     {
         return $this->main;
