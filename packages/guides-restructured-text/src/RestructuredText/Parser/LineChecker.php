@@ -91,4 +91,15 @@ final class LineChecker
     {
         return preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $line) > 0;
     }
+
+    /**
+     * RST explicit markup blocks (anchors, comments, directives, ...) start with two
+     * dots followed by whitespace, or are a lonely `..`.
+     *
+     * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
+     */
+    public static function isExplicitMarkup(string $line): bool
+    {
+        return preg_match('/^\.\.(\s.*|)$/mUsi', $line) > 0;
+    }
 }
