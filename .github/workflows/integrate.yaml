@@ -117,3 +117,50 @@ jobs:
 
       - name: "Lint xml configs"
         run: "tools/xmllint.sh"
+
+  detect-packages:
+    name: "Detect packages"
+    runs-on: "ubuntu-22.04"
+    outputs:
+      packages: ${{ steps.detect.outputs.packages }}
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v7"
+
+      - name: "Detect packages"
+        id: detect
+        run: |
+          packages=$(ls -d packages/*/composer.json \
+            | xargs -I{} dirname {} \
+            | xargs -I{} basename {} \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
+  composer-require-checker:
+    name: "Require Checker (${{ matrix.package }})"
+    needs: "detect-packages"
+    runs-on: "ubuntu-22.04"
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.detect-packages.outputs.packages) }}
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v7"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
+          php-version: "8.2"
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v4"
+        with:
+          dependency-versions: "locked"
+          working-directory: "packages/${{ matrix.package }}"
+
+      - name: "Run composer-require-checker"
+        run: "../../.phive/composer-require-checker check"
+        working-directory: "packages/${{ matrix.package }}"
