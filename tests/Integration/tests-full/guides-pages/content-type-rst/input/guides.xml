@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
+>
+    <extension class="phpDocumentor\Guides\Pages\DependencyInjection\PagesExtension"
+               source-directory="pages">
+        <collection
+            source-directory="news"
+            overview-path="news/index"
+            overview-title="News"
+        />
+        <collection
+            source-directory="changelog"
+            overview-path="changelog/index"
+            overview-title="Changelog"
+        />
+    </extension>
+</guides>

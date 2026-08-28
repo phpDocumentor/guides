@@ -1,0 +1,14 @@
+{% extends "structure/layout.html.twig" %}
+
+{% block head %}
+    {%- for headerNode in node.headerNodes -%}
+        {{ renderNode(headerNode) }}
+    {%- endfor -%}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% for child in node.children -%}
+        {{ renderNode(child) }}
+    {%~ endfor -%}
+{% endblock %}
