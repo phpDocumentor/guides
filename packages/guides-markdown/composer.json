@@ -25,6 +25,7 @@
         "league/commonmark": "^2.4",
         "phpdocumentor/guides": "^1.0 || ^2.0",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "symfony/string": "^6.4.9 || ^7.4 || ^8",
         "symfony/yaml": "^6.4 || ^7.0 || ^8.0"
     },
     "extra": {

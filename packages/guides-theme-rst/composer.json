@@ -23,7 +23,9 @@
     "require": {
         "php": "^8.1",
         "ext-iconv": "*",
-        "phpdocumentor/guides": "^1.0 || ^2.0"
+        "phpdocumentor/guides": "^1.0 || ^2.0",
+        "symfony/polyfill-mbstring": "^1.28",
+        "twig/twig": "~2.15 || ^3.0"
     },
     "extra": {
         "branch-alias": {

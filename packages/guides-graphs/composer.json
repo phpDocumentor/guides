@@ -26,8 +26,10 @@
         "phpdocumentor/guides-restructured-text": "^1.0 || ^2.0",
         "jawira/plantuml-encoding": "^1.0",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "symfony/http-client-contracts": "^3.0",
         "symfony/process": "^5.4 || ^6.3 || ^7.0 || ^8.0",
-        "twig/twig": "~2.0 || ^3.0"
+        "twig/twig": "~2.0 || ^3.0",
+        "webmozart/assert": "^1.11"
     },
     "suggest": {
         "jawira/plantuml": "To render graphs locally using plant uml"
