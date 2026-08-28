@@ -83,7 +83,7 @@ final class IndexDirective extends BaseDirective
     ): Node|null {
         $data = trim($directive->getData());
         $lines = $data !== '' ? [$data] : $blockContext->getDocumentIterator()->toArray();
-        $lines = array_values(array_filter(array_map(trim(...), $lines), static fn (string $line): bool => $line !== ''));
+        $lines = $this->trimAndFilterEmpty($lines);
 
         $segments = [];
         foreach ($lines as $line) {
@@ -92,12 +92,25 @@ final class IndexDirective extends BaseDirective
             }
         }
 
-        $segments = array_values(array_filter(array_map(trim(...), $segments), static fn (string $segment): bool => $segment !== ''));
+        $segments = $this->trimAndFilterEmpty($segments);
 
         return new IndexNode(array_map(
             fn (string $segment): IndexEntryNode => $this->parseLine($segment, $blockContext),
             $segments,
         ));
+    }
+
+    /**
+     * @param string[] $items
+     *
+     * @return string[]
+     */
+    private function trimAndFilterEmpty(array $items): array
+    {
+        $items = array_map(trim(...), $items);
+        $items = array_filter($items, static fn (string $item): bool => $item !== '');
+
+        return array_values($items);
     }
 
     private function parseLine(string $line, BlockContext $blockContext): IndexEntryNode
