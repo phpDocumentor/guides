@@ -37,8 +37,6 @@ final class DocumentBlockDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
-        $identifier = ((string) $directive->getOption('identifier')->getValue());
-
         return new DocumentBlockNode(
             $collectionNode->getChildren(),
             $this->readOption($directive, 'identifier'),

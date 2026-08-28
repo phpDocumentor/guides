@@ -31,7 +31,7 @@ use function str_contains;
  */
 final class GeneralDirective extends SubDirective
 {
-    /** @param Rule<CollectionNode> $startingRule */
+    /** @param Rule<Node> $startingRule */
     public function __construct(
         Rule $startingRule,
         private readonly SettingsManager $settingsManager,

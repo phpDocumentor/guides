@@ -13,10 +13,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler;
 
+use phpDocumentor\Guides\Nodes\Node;
+
 /**
  * Reverse NodeTransformers are applied with child nodes first, then the parent node.
  *
  * This is useful for NodeTransformers that need to know the state of the child nodes before transforming the parent node.
+ *
+ * @template TNode of Node
+ * @extends NodeTransformer<Node>
  */
 interface ReverseNodeTransformer extends NodeTransformer
 {

@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\ReverseNodeTransformer;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
-use Psr\Log\LoggerInterface;
 
 use function array_merge;
 use function strtolower;
 
-/** @implements NodeTransformer<DirectiveNode> */
+/** @implements ReverseNodeTransformer<DirectiveNode> */
 final class DirectiveProcessPass implements ReverseNodeTransformer
 {
     /** @var array<string, DirectiveHandler> */
@@ -34,7 +32,6 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
 
     /** @param iterable<DirectiveHandler> $directives */
     public function __construct(
-        private readonly LoggerInterface $logger,
         private readonly GeneralDirective $generalDirective,
         iterable $directives = [],
     ) {
@@ -58,6 +55,10 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
 
     public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
     {
+        if ($node instanceof DirectiveNode === false) {
+            return $node;
+        }
+
         $newNode = $this->getDirectiveHandler($node->getDirective())->createNode($node);
         if ($newNode === null) {
             return null;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use function array_filter;
 use function array_unique;
 use function array_walk;
 use function implode;
@@ -77,7 +78,9 @@ abstract class AbstractNode implements Node
             // strip trailing hyphens
             $value = (string) preg_replace('/-$/', '', $value);
         });
-        $this->classes = array_filter(array_unique($classes), static function (string $value): bool { return $value !== ''; });
+        $this->classes = array_filter(array_unique($classes), static function (string $value): bool {
+            return $value !== '';
+        });
     }
 
     public function getClassesString(): string
