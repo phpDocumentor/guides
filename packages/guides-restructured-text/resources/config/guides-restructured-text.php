@@ -89,6 +89,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\Organizat
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\OrphanFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ProjectFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\RevisionFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TemplateFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\TocDepthFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\VersionFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldListRule;
@@ -352,6 +353,9 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(TocDepthFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(TemplateFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 
         ->set(VersionFieldListItemRule::class)
