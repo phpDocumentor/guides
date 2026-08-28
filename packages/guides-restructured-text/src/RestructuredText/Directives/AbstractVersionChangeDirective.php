@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use Doctrine\Deprecations\Deprecation;
+use LogicException;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -21,6 +22,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+
+use function sprintf;
 
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
@@ -60,7 +63,7 @@ abstract class AbstractVersionChangeDirective extends SubDirective
     {
         try {
             return parent::getName();
-        } catch (\LogicException) {
+        } catch (LogicException) {
             Deprecation::trigger(
                 'phpdocumentor/guides-restructured-text',
                 'TODO: link',

@@ -23,9 +23,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Psr\Log\LoggerInterface;
 
+use function array_merge;
 use function strtolower;
-
-use const PHP_INT_MAX;
 
 /** @implements NodeTransformer<DirectiveNode> */
 final class DirectiveProcessPass implements ReverseNodeTransformer
@@ -64,7 +63,7 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
             return null;
         }
 
-        $newNode->setClasses($node->getClasses());
+        $newNode->setClasses(array_merge($newNode->getClasses(), $node->getClasses()));
 
         return $newNode;
     }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use Doctrine\Deprecations\Deprecation;
 use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -56,11 +55,15 @@ abstract class AbstractAdmonitionDirective extends SubDirective
             array_unshift($children, new ParagraphNode([$directiveNode->getDirective()->getDataNode()]));
         }
 
-        return new AdmonitionNode(
+        $node = new AdmonitionNode(
             $directiveNode->getDirective()->getName(),
             null,
             $this->text,
             $children,
         );
+
+        $node->setClasses([$directiveNode->getDirective()->getOptionString('class')]);
+
+        return $node;
     }
 }

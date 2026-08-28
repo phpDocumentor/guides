@@ -15,6 +15,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
+use function strtolower;
+
 /**
  * Represents the data contained in an arbitrary directive
  *

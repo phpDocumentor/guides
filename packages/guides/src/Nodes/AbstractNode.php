@@ -77,7 +77,7 @@ abstract class AbstractNode implements Node
             // strip trailing hyphens
             $value = (string) preg_replace('/-$/', '', $value);
         });
-        $this->classes = array_unique($classes);
+        $this->classes = array_filter(array_unique($classes), static function (string $value): bool { return $value !== ''; });
     }
 
     public function getClassesString(): string
