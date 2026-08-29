@@ -105,7 +105,7 @@ final class ChainedInventoryLinkResolverTest extends TestCase
                 return $key === 'legacy';
             }
 
-            public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory|null
+            public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory
             {
                 return $this->inventory;
             }

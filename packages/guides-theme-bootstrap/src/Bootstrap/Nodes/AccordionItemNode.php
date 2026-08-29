@@ -26,7 +26,7 @@ final class AccordionItemNode extends GeneralDirectiveNode implements LinkTarget
     public const LINK_TYPE = 'std:accordion';
     public const LINK_PREFIX = 'accordion-';
 
-    /** @param list<Node> $value */
+    /** @param Node[] $value */
     public function __construct(
         protected readonly string $name,
         protected readonly string $plainContent,

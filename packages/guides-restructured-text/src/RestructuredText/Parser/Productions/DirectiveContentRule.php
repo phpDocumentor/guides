@@ -30,7 +30,7 @@ final class DirectiveContentRule implements Rule
         return true;
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $node = new CollectionNode([]);
         $documentIterator = $blockContext->getDocumentIterator();

@@ -40,7 +40,7 @@ final class SidebarDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return new SidebarNode(
             $directive->getDataNode() ?? InlineCompoundNode::getPlainTextInlineNode($directive->getData()),
             $collectionNode->getChildren(),

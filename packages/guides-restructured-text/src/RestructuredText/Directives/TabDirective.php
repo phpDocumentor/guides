@@ -42,7 +42,7 @@ final class TabDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         if (is_string($directive->getOption('key')->getValue())) {
             $key = strtolower($directive->getOption('key')->getValue());
         } else {

@@ -40,7 +40,7 @@ final class RawDirective extends BaseDirective
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return new RawNode(
             implode("\n", $blockContext->getDocumentIterator()->toArray()),
             $directive->getData(),

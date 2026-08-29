@@ -52,7 +52,7 @@ final class TitleRule implements Rule
             || $this->nextLineIsAnUnderline($line, $nextLine);
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $title = '';

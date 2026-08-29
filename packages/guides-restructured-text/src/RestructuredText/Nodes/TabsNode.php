@@ -21,7 +21,7 @@ use function class_exists;
 /** @extends GeneralDirectiveNode<AbstractTabNode> */
 final class TabsNode extends GeneralDirectiveNode
 {
-    /** @param list<AbstractTabNode> $value */
+    /** @param AbstractTabNode[] $value */
     public function __construct(
         string $name,
         string $plainContent,
@@ -32,7 +32,7 @@ final class TabsNode extends GeneralDirectiveNode
         parent::__construct($name, $plainContent, $content, $value);
     }
 
-    /** @return list<AbstractTabNode> */
+    /** @return AbstractTabNode[] */
     public function getTabs(): array
     {
         return $this->getChildren();

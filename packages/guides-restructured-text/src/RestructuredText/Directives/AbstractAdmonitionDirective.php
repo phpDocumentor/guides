@@ -38,7 +38,7 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $children = $collectionNode->getChildren();
 
         if ($directive->getDataNode() !== null) {

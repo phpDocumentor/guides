@@ -18,7 +18,7 @@ use phpDocumentor\FileSystem\StorageAttributes as StorageAttributesInterface;
 
 class StorageAttributes implements StorageAttributesInterface
 {
-    /** @param string[] $attributes */
+    /** @param array<string, mixed> $attributes */
     public function __construct(private array $attributes = [])
     {
     }

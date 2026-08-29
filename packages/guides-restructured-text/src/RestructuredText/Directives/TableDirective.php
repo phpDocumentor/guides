@@ -62,7 +62,7 @@ final class TableDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         if (count($collectionNode->getChildren()) !== 1) {
             $this->logger->warning(
                 sprintf('The table directive may contain exactly one table. %s children found', count($collectionNode->getChildren())),

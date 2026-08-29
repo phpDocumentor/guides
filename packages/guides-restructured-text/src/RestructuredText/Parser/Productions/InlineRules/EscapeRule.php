@@ -33,7 +33,7 @@ final class EscapeRule extends ReferenceRule
     {
         $lexer->moveNext();
 
-        $char = $lexer->token?->value ?? '';
+        $char = $lexer->token->value ?? '';
         $lexer->moveNext();
 
         if (preg_match('/^\s$/', $char)) {

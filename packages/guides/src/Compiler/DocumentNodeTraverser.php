@@ -26,7 +26,7 @@ final class DocumentNodeTraverser
     ) {
     }
 
-    public function traverse(DocumentNode $node, CompilerContext $compilerContext): Node|null
+    public function traverse(DocumentNode $node, CompilerContext $compilerContext): Node
     {
         foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
             if ($transformer->getPriority() !== $this->priority) {

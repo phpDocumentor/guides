@@ -30,7 +30,7 @@ final class OptionNode extends CompoundNode implements LinkTargetNode, MultipleL
     public const LINK_TYPE = 'std:option';
 
     /**
-     * @param list<Node> $value
+     * @param Node[] $value
      * @param string[]  $additionalIds
      */
     public function __construct(

@@ -23,6 +23,7 @@ use phpDocumentor\Guides\Nodes\Metadata\NavigationTitleNode;
 use phpDocumentor\Guides\Nodes\Metadata\TemplateNode;
 
 use function array_filter;
+use function array_values;
 use function max;
 use function strtolower;
 use function trim;
@@ -99,7 +100,7 @@ final class DocumentNode extends CompoundNode
      */
     public function getNodes(string $nodeType = Node::class): array
     {
-        return array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType);
+        return array_values(array_filter($this->value, static fn ($node): bool => $node instanceof $nodeType));
     }
 
     public function getNavigationTitle(): string|null

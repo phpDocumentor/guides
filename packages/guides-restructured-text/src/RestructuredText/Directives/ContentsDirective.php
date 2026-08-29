@@ -41,7 +41,7 @@ final class ContentsDirective extends BaseDirective
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $options = $directive->getOptions();
         $absoluteUrl = $this->documentNameResolver->absoluteUrl(
             $blockContext->getDocumentParserContext()->getContext()->getDirName(),

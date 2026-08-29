@@ -19,8 +19,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 
-use function array_map;
-
 /**
  * A directive is like a function you can call or apply to a block
  * It looks like:
@@ -92,6 +90,11 @@ abstract class BaseDirective
      */
     protected function optionsToArray(array $options): array
     {
-        return array_map(static fn (DirectiveOption $option): bool|float|int|string|null => $option->getValue(), $options);
+        $result = [];
+        foreach ($options as $option) {
+            $result[$option->getName()] = $option->getValue();
+        }
+
+        return $result;
     }
 }

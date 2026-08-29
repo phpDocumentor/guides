@@ -60,7 +60,7 @@ final class OptionDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $additionalIds = $this->getAdditionalIds($directive);
 
         $id = $this->anchorReducer->reduceAnchor($directive->getData());

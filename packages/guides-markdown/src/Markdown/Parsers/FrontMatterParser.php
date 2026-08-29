@@ -47,12 +47,14 @@ final class FrontMatterParser implements ParserInterface
             return new NullNode('');
         }
 
-        foreach ($frontMatter as $field => $value) {
+        /** @var array<string, mixed> $fields */
+        $fields = $frontMatter;
+        foreach ($fields as $field => $value) {
             if (!array_key_exists($field, $this->fieldParsers)) {
                 continue;
             }
 
-            $this->fieldParsers[$field]->process($parser->getDocument(), $value, $frontMatter);
+            $this->fieldParsers[$field]->process($parser->getDocument(), $value, $fields);
         }
 
         return new NullNode('');

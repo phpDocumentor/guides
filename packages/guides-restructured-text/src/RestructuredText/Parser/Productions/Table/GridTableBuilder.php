@@ -60,7 +60,7 @@ final class GridTableBuilder
         $columnRanges = $context->getColumnRanges();
         $currentSpan = 1;
         foreach ($context->getDataLines() as $rowIndex => $line) {
-            $rows[$rowIndex] = $this->extractRow($columnRanges, $line, $currentSpan);
+            $rows[(int) $rowIndex] = $this->extractRow($columnRanges, $line, $currentSpan);
         }
 
         return $rows;
@@ -86,7 +86,7 @@ final class GridTableBuilder
         return $row;
     }
 
-    /** @param list<int> $columnRanges */
+    /** @param array<int, int> $columnRanges */
     private function extractTableCell(array $columnRanges, int|null &$currentColumnStart, int|null &$previousColumnEnd, string $line, int &$currentSpan, TableRow $row): void
     {
         foreach ($columnRanges as $start => $end) {
@@ -238,7 +238,7 @@ final class GridTableBuilder
             $prevTargetColumn->incrementRowSpan();
             // mark that this column on the next row should also be added
             // to the previous row
-            $columnIndexesCurrentlyInRowspan[] = $columnIndex;
+            $columnIndexesCurrentlyInRowspan[] = (int) $columnIndex;
         }
 
         // remove the row - it's not real
@@ -399,7 +399,7 @@ final class GridTableBuilder
                 continue;
             }
 
-            $partialSeparatorRows[$rowIndex] = true;
+            $partialSeparatorRows[(int) $rowIndex] = true;
         }
 
         return $partialSeparatorRows;

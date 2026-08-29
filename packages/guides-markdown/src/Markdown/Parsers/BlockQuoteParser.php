@@ -28,7 +28,6 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function array_shift;
-use function array_values;
 use function count;
 use function is_string;
 use function sprintf;
@@ -47,7 +46,7 @@ final class BlockQuoteParser extends AbstractBlockParser
     /**
      * @param array<Node> $content
      *
-     * @phpstan-assert-if-false  non-empty-list $content
+     * @phpstan-assert-if-false  non-empty-list<Node> $content
      */
     private static function contentIsTextOnlyParagraph(array $content): bool
     {
@@ -111,7 +110,7 @@ final class BlockQuoteParser extends AbstractBlockParser
                 return new QuoteNode($content);
             }
 
-            $admonitionNode = $this->toAdmonition(array_values($content));
+            $admonitionNode = $this->toAdmonition($content);
 
             return $admonitionNode ?? new QuoteNode($content);
         }

@@ -48,7 +48,7 @@ final class TestLoggerDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $this->logger->warning('Test logging in directives', $blockContext->getLoggerInformation());
 
         return (new ContainerNode($collectionNode->getChildren()))->withOptions(['class' => $directive->getData()]);

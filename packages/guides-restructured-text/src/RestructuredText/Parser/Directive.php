@@ -30,7 +30,7 @@ final class Directive
 {
     private InlineCompoundNode|null $dataNode = null;
 
-    /** @param DirectiveOption[] $options */
+    /** @param array<string, DirectiveOption> $options */
     public function __construct(private readonly string $variable, private readonly string $name, private readonly string $data, private array $options = [])
     {
     }
@@ -50,7 +50,7 @@ final class Directive
         return $this->data;
     }
 
-    /** @return DirectiveOption[] */
+    /** @return array<string, DirectiveOption> */
     public function getOptions(): array
     {
         return $this->options;

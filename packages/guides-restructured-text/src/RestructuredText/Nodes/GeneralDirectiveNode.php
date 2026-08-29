@@ -25,7 +25,7 @@ use phpDocumentor\Guides\Nodes\Node;
  */
 class GeneralDirectiveNode extends CompoundNode
 {
-    /** @param list<TValue> $value */
+    /** @param TValue[] $value */
     public function __construct(
         private readonly string $name,
         private readonly string $plainContent,

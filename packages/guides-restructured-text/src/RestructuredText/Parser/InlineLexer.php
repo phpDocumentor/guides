@@ -120,8 +120,7 @@ final class InlineLexer extends AbstractLexer
         return [];
     }
 
-    /** @inheritDoc */
-    protected function getType(string &$value)
+    protected function getType(string &$value): int
     {
         $type = match ($value) {
             '`' => self::BACKTICK,

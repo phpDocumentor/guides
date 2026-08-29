@@ -44,7 +44,7 @@ final class RawNodeEscapeTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContext $compilerContext): Node
     {
         assert($node instanceof RawNode);
         if ($this->escapeRawNodes) {

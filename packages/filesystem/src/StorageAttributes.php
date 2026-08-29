@@ -18,6 +18,6 @@ use ArrayAccess;
 /** @extends ArrayAccess<string, mixed> */
 interface StorageAttributes extends ArrayAccess
 {
-    /** @return ($offset is 'filename' ? string : mixed)  */
+    /** @return ($offset is 'filename'|'dirname'|'basename' ? string : mixed)  */
     public function offsetGet(mixed $offset): mixed;
 }

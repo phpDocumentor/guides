@@ -36,7 +36,7 @@ abstract class AbstractVersionChangeDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return new VersionChangeNode(
             $this->type,
             $this->label,

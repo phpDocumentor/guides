@@ -48,7 +48,7 @@ final class InterlinkReferenceResolverTest extends TestCase
             {
             }
 
-            public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink|null
+            public function getLink(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): InventoryLink
             {
                 return $this->inventoryLink;
             }
@@ -58,7 +58,7 @@ final class InterlinkReferenceResolverTest extends TestCase
                 return true;
             }
 
-            public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory|null
+            public function getInventory(CrossReferenceNode $node, RenderContext $renderContext, Messages $messages): Inventory
             {
                 return $this->inventory;
             }

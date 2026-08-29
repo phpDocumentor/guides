@@ -40,9 +40,9 @@ final class NamedReferenceRule extends ReferenceRule implements CachableInlineRu
         return $lexer->token?->type === InlineLexer::NAMED_REFERENCE;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNodeInterface|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNodeInterface
     {
-        $value = rtrim($lexer->token?->value ?? '', '_');
+        $value = rtrim($lexer->token->value ?? '', '_');
         $node = $this->createReference($blockContext, $value);
 
         $lexer->moveNext();

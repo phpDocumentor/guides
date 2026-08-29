@@ -52,7 +52,7 @@ final class ClassDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $classes = explode(' ', $directive->getData());
 
         $normalizedClasses = array_map(

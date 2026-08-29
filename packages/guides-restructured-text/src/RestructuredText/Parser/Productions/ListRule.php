@@ -70,7 +70,7 @@ final class ListRule implements Rule
         return $this->isListLine($documentIterator->current());
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
 

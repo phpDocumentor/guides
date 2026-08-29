@@ -32,6 +32,7 @@ use function assert;
 use function count;
 use function explode;
 use function implode;
+use function is_scalar;
 use function is_string;
 use function strval;
 use function trim;
@@ -94,13 +95,13 @@ final class CsvTableDirective extends BaseDirective
 
             $header = new TableRow();
             foreach ($headerCsv->first() as $column) {
-                $columnNode = new TableColumn($column, 1, []);
+                $columnNode = new TableColumn(is_scalar($column) ? (string) $column : '', 1, []);
                 $header->addColumn($this->buildColumn($columnNode, $blockContext, $this->productions));
             }
         } elseif (empty($csv->getHeader()) === false) {
             $header = new TableRow();
             foreach ($csv->getHeader() as $column) {
-                $columnNode = new TableColumn($column, 1, []);
+                $columnNode = new TableColumn(is_scalar($column) ? (string) $column : '', 1, []);
                 $header->addColumn($this->buildColumn($columnNode, $blockContext, $this->productions));
             }
         }

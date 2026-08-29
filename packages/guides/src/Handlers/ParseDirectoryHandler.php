@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use League\Flysystem\FilesystemInterface;
 use League\Tactician\CommandBus;
 use phpDocumentor\FileSystem\FileSystem;
+use phpDocumentor\FileSystem\StorageAttributes;
 use phpDocumentor\Guides\Event\PostCollectFilesForParsingEvent;
 use phpDocumentor\Guides\Event\PostParseProcess;
 use phpDocumentor\Guides\Event\PreParseProcess;
@@ -80,12 +81,13 @@ final class ParseDirectoryHandler
             new PostCollectFilesForParsingEvent($command, $files),
         );
         assert($postCollectFilesForParsingEvent instanceof PostCollectFilesForParsingEvent);
-        /** @var DocumentNode[] $documents */
         $documents = [];
         foreach ($postCollectFilesForParsingEvent->getFiles() as $file) {
-            $documents[] = $this->commandBus->handle(
+            $document = $this->commandBus->handle(
                 new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode(), $indexName === $file),
             );
+            assert($document instanceof DocumentNode);
+            $documents[] = $document;
         }
 
         $postCollectFilesForParsingEvent = $this->eventDispatcher->dispatch(
@@ -110,10 +112,13 @@ final class ParseDirectoryHandler
         // with if the INDEX_FILE_NAMES entry matches. This ensures
         // that we get the file with exactly the casing that is returned
         // from the filesystem.
+        /** @var array<StorageAttributes> $contentFromFilesystem */
         $contentFromFilesystem = $filesystem->listContents($directory);
         $hashedContentFromFilesystem = [];
         foreach ($contentFromFilesystem as $itemFromFilesystem) {
-            $hashedContentFromFilesystem[$itemFromFilesystem['basename']] = true;
+            $basename = $itemFromFilesystem['basename'];
+
+            $hashedContentFromFilesystem[$basename] = true;
         }
 
         $indexFileNames = array_map('trim', explode(',', $this->settingsManager->getProjectSettings()->getIndexName()));

@@ -25,9 +25,9 @@ final class PlainTextRule implements InlineRule
         return true;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): InlineNode
     {
-        $node = new PlainTextInlineNode($lexer->token?->value ?? '');
+        $node = new PlainTextInlineNode($lexer->token->value ?? '');
         $lexer->moveNext();
 
         return $node;

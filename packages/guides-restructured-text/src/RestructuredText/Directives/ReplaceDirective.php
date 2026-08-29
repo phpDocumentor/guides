@@ -43,7 +43,7 @@ final class ReplaceDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         /** @var array<InlineCompoundNode> $children */
         $children = $collectionNode->getChildren();
         $data = $directive->getDataNode();

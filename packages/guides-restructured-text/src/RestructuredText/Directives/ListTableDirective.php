@@ -102,7 +102,7 @@ class ListTableDirective extends SubDirective
 
         $headerRows = [];
         if ($directive->getOption('header-rows')->getValue() !== null) {
-            for ($i = $directive->getOption('header-rows')->getValue(); $i > 0; $i--) {
+            for ($i = (int) $directive->getOption('header-rows')->getValue(); $i > 0; $i--) {
                 if (empty($tableData)) {
                     break;
                 }

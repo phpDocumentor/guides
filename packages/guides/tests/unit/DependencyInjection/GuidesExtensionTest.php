@@ -44,7 +44,9 @@ class GuidesExtensionTest extends TestCase
             self::assertTrue($container->hasDefinition('phpdoc.guides.raw_node.sanitizer.default'));
 
             $definition = $container->getDefinition('phpdoc.guides.raw_node.sanitizer.default');
-            $allowElementMethodCalls = array_values(array_filter($definition->getMethodCalls(), static fn (array $call) => $call[0] === 'allowElement'));
+            /** @var list<array{0: string, 1: array<mixed>}> $methodCalls */
+            $methodCalls = $definition->getMethodCalls();
+            $allowElementMethodCalls = array_values(array_filter($methodCalls, static fn (array $call): bool => $call[0] === 'allowElement'));
             self::assertCount(1, $allowElementMethodCalls);
             self::assertSame(['object', ['type', 'data', 'alt']], $allowElementMethodCalls[0][1]);
         };

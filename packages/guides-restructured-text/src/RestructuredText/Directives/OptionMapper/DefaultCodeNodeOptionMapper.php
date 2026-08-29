@@ -41,7 +41,7 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
     ) {
     }
 
-    /** @param DirectiveOption[] $directiveOptions */
+    /** @param array<string, DirectiveOption> $directiveOptions */
     public function apply(
         CodeNode $codeNode,
         array $directiveOptions,
