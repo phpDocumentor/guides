@@ -42,33 +42,30 @@ final class AnnotationRoleRule extends AbstractInlineRule
             switch ($token->type) {
                 case InlineLexer::ANNOTATION_END:
                     // `]`  found, look for `_`
-                    if (!$lexer->moveNext() && $lexer->token === null) {
+                    if ($lexer->isNextToken(InlineLexer::UNDERSCORE) === false) {
                         break 2;
                     }
 
-                    $token = $lexer->token;
-                    if ($token->type === InlineLexer::UNDERSCORE) {
-                        if (AnnotationUtility::isFootnoteKey($annotationName)) {
-                            $number = AnnotationUtility::getFootnoteNumber($annotationName);
-                            $name = AnnotationUtility::getFootnoteName($annotationName);
-                            $node = new FootnoteInlineNode(
-                                $annotationName,
-                                $name ?? '',
-                                $number ?? 0,
-                            );
-                        } else {
-                            $node = new CitationInlineNode(
-                                $annotationName,
-                                $annotationName,
-                            );
-                        }
-
-                        $lexer->moveNext();
-
-                        return $node;
+                    $lexer->moveNext();
+                    if (AnnotationUtility::isFootnoteKey($annotationName)) {
+                        $number = AnnotationUtility::getFootnoteNumber($annotationName);
+                        $name = AnnotationUtility::getFootnoteName($annotationName);
+                        $node = new FootnoteInlineNode(
+                            $annotationName,
+                            $name ?? '',
+                            $number ?? 0,
+                        );
+                    } else {
+                        $node = new CitationInlineNode(
+                            $annotationName,
+                            $annotationName,
+                        );
                     }
 
-                    break 2;
+                    $lexer->moveNext();
+
+                    return $node;
+
                 case InlineLexer::WHITESPACE:
                     // Annotation keys may not contain whitespace
                     break 2;

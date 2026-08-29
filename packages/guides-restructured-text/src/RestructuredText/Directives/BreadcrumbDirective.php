@@ -32,7 +32,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 #[Attributes\Directive(name: 'breadcrumb')]
 final class BreadcrumbDirective extends BaseDirective
 {
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode): Node
     {
         return new BreadCrumbNode();
     }

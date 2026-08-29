@@ -50,7 +50,7 @@ final class EmphasisRule extends AbstractInlineRule
 
                 case InlineLexer::BACKSLASH:
                     $lexer->moveNext();
-                    $text .= $lexer->token->value;
+                    $text .= $lexer->token?->value;
 
                     break;
                 default:

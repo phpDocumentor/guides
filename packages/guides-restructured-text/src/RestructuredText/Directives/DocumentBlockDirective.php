@@ -20,7 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
-#[Option(name: 'identifier', description: 'The identifier of the document block')]
+#[Option(name: 'identifier', type: OptionType::String, description: 'The identifier of the document block')]
 final class DocumentBlockDirective extends SubDirective
 {
     public function getName(): string

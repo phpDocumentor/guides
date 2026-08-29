@@ -15,17 +15,6 @@ parameters:
 
     - message: '#Return type .* of method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\InlineMarkupRule::apply\(\) should be covariant with return type .*#'
 
-    # https://github.com/doctrine/lexer/pull/109
-    -
-      message: '#^Result of && is always false.|Strict comparison using \=\=\= between Doctrine\\Common\\Lexer\\Token and null will always evaluate to false\.$#'
-      paths:
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnnotationRoleRule.php
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/DefaultTextRoleRule.php
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/EmphasisRule.php
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/StrongRule.php
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/TextRoleRule.php
-        - packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/VariableInlineRule.php
-
   paths:
     - packages/dev-server/src
     - packages/filesystem/src

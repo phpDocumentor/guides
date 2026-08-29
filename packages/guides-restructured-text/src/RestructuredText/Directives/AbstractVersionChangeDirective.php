@@ -77,7 +77,7 @@ abstract class AbstractVersionChangeDirective extends SubDirective
         }
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode): Node
     {
         return new VersionChangeNode(
             $this->type,

@@ -26,8 +26,12 @@ use function array_unshift;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    public function __construct(protected Rule $startingRule, private readonly string $name, private readonly string $text)
-    {
+    public function __construct(
+        protected Rule $startingRule,
+        /** @phpstan-ignore-next-line  */
+        private readonly string $name,
+        private readonly string $text,
+    ) {
         parent::__construct($startingRule);
     }
 

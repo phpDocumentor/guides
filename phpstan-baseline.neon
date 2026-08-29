@@ -76,16 +76,6 @@ parameters:
 			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between Doctrine\\\\Common\\\\Lexer\\\\Token and null will always evaluate to true\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
-
-		-
 			message: "#^Property phpDocumentor\\\\Guides\\\\RestructuredText\\\\Parser\\\\Productions\\\\ListRule\\:\\:\\$logger is never read, only written\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
