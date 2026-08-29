@@ -39,7 +39,7 @@ final class DocumentBlockDirective extends SubDirective
     ): Node {
         return new DocumentBlockNode(
             $collectionNode->getChildren(),
-            $this->readOption($directive, 'identifier'),
+            $this->readOption($directive, 'identifier') ?? '',
         );
     }
 }

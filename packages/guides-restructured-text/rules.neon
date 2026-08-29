@@ -1,0 +1,5 @@
+services:
+	-
+		class: phpDocumentor\Guides\PHPStan\Rules\ReadOptionReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension

@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Using PHPStan\\\\Testing\\\\PHPStanTestCaseTrait is not covered by backward compatibility promise\\. The trait might change in a minor PHPStan version\\.$#"
+			count: 1
+			path: packages/guides-restructured-text/tests/unit/PHPStan/ReadOptionReturnTypeExtensionTest.php
+
+		-
 			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\<1, max\\>\\|string\\> given\\.$#"
 			count: 1
 			path: packages/dev-server/src/Internal/HttpHandler.php

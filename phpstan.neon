@@ -1,5 +1,6 @@
 includes:
 	- phpstan-baseline.neon
+	- packages/guides-restructured-text/rules.neon
 parameters:
   level: max
 
