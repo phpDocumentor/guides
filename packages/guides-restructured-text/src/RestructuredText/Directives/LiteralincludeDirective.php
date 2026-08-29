@@ -16,17 +16,24 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\DefaultCodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function array_slice;
+use function array_values;
 use function count;
 use function explode;
 use function is_string;
+use function ksort;
+use function max;
+use function min;
+use function preg_match;
 use function sprintf;
 use function str_contains;
+use function trim;
 
 final class LiteralincludeDirective extends BaseDirective
 {
@@ -140,9 +147,97 @@ final class LiteralincludeDirective extends BaseDirective
                 ),
                 $blockContext->getLoggerInformation(),
             );
+
+            return [];
+        }
+
+        if ($directive->hasOption('lines')) {
+            $selection = $this->selectLineRanges($selection, $directive, $blockContext);
         }
 
         return $selection;
+    }
+
+    /**
+     * Reduces the included region to the line numbers listed in ``lines``, for example ``1,3-5,20-``.
+     *
+     * Line numbers are 1 based, ranges are inclusive and an omitted end means "up to the last line".
+     * They count within the region selected by ``start-after`` and ``end-before``, not within the file.
+     *
+     * @param string[] $lines
+     *
+     * @return string[]
+     */
+    private function selectLineRanges(array $lines, Directive $directive, BlockContext $blockContext): array
+    {
+        $specification = $this->optionValue($directive, 'lines', $blockContext);
+        if ($specification === null) {
+            return [];
+        }
+
+        if (preg_match(DefaultCodeNodeOptionMapper::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
+            $this->logger?->warning(
+                sprintf(
+                    'Invalid value for option ":lines:" of directive "literalinclude": "%s". Expected format: \'1-5, 7, 33\'. Nothing was included.',
+                    $specification,
+                ),
+                $blockContext->getLoggerInformation(),
+            );
+
+            return [];
+        }
+
+        $selected = [];
+        foreach (explode(',', $specification) as $range) {
+            $range = trim($range);
+            [$first, $last] = $this->parseRange($range, count($lines));
+
+            if ($first > $last) {
+                $this->logger?->warning(
+                    sprintf(
+                        'Option ":lines:" of directive "literalinclude": the range "%s" selects no line of "%s".',
+                        $range,
+                        $directive->getData(),
+                    ),
+                    $blockContext->getLoggerInformation(),
+                );
+
+                continue;
+            }
+
+            for ($lineNumber = $first; $lineNumber <= $last; $lineNumber++) {
+                $selected[$lineNumber] = $lines[$lineNumber - 1];
+            }
+        }
+
+        ksort($selected);
+
+        return array_values($selected);
+    }
+
+    /**
+     * Splits a single entry of the ``lines`` option into its first and last line number.
+     *
+     * Both are clamped to the lines actually available, so that a range far beyond the end of the file
+     * does not turn into a loop over the numbers the author wrote down. A first line greater than the
+     * last one means the range selects nothing.
+     *
+     * @return array{int, int}
+     */
+    private function parseRange(string $range, int $lineCount): array
+    {
+        if (!str_contains($range, '-')) {
+            $lineNumber = (int) $range;
+
+            return [max(1, $lineNumber), min($lineNumber, $lineCount)];
+        }
+
+        [$first, $last] = explode('-', $range, 2);
+
+        return [
+            max(1, (int) $first),
+            trim($last) === '' ? $lineCount : min((int) $last, $lineCount),
+        ];
     }
 
     /** Returns the text of an option, or null if the option was used without a usable value. */

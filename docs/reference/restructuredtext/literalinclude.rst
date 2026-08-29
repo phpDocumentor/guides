@@ -47,6 +47,33 @@ publish the very content it was meant to exclude. The same happens when the mark
 when the ``end-before`` text occurs only above the line matched by ``start-after``. Rendering with ``--fail-on-log``
 turns any of these warnings into a failing build.
 
+Selecting lines by number
+=========================
+
+A region can also be selected by line number, which is useful for files that have no natural marker:
+
+..  code-block::
+
+    ..  literalinclude:: Example.php
+        :language: php
+        :lines: 1,3-5,20-
+
+Line numbers start at 1, ranges are inclusive, and an omitted end means "down to the last line". Overlapping ranges
+are included once, in the order of the file.
+
+``:lines:`` is applied *after* ``:start-after:`` and ``:end-before:``, so when they are combined the numbers count
+within the marked region rather than within the whole file.
+
+``:emphasize-lines:`` in turn counts within what ``:lines:`` left over, and ``:lineno-start:`` remains a plain
+override of the first number displayed, unrelated to where the selected lines sat in the file.
+
+Prefer markers where a file has them: line numbers change with every edit above the selected region, and nothing in
+the source file records that the documentation depends on them.
+
+Every range is warned about separately when it selects no line, for example because it lies beyond the end of the
+region; the remaining ranges are still included. If the option is used without a value, or its value cannot be read
+as a list of line numbers, a warning is logged and nothing is included.
+
 Options
 =======
 
@@ -62,8 +89,13 @@ Options
 ``:end-before:``
     Text of the line the included region ends before. The line itself is not included.
 
+``:lines:``
+    Line numbers to be included, for example ``1,3-5,20-``. Counted within the region selected by ``start-after``
+    and ``end-before``.
+
 ``:emphasize-lines:``
-    Line numbers to be highlighted, for example ``3,5-6``. Counted within the included region.
+    Line numbers to be highlighted, for example ``3,5-6``. Counted within the included region, that is within what
+    is left after ``start-after``, ``end-before`` and ``lines``.
 
 ``:linenos:``
     Displays line numbers, starting at 1.
