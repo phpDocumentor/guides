@@ -45,13 +45,13 @@ final class NamedPhraseRule extends ReferenceRule
         while ($lexer->token !== null) {
             switch ($lexer->token->type) {
                 case InlineLexer::BACKTICK:
-                    $lexer->moveNext();
-                    if ($lexer->token->type !== InlineLexer::UNDERSCORE) {
+                    if ($lexer->isNextToken(InlineLexer::UNDERSCORE) === false) {
                         $this->rollback($lexer, $initialPosition ?? 0);
 
                         return null;
                     }
 
+                    $lexer->moveNext();
                     $lexer->moveNext();
 
                     $referenceData = $this->extractEmbeddedReference($value);
