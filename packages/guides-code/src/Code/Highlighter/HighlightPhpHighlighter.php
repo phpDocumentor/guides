@@ -58,7 +58,10 @@ final class HighlightPhpHighlighter implements Highlighter
             $highlightValue = $highlight->value;
             $highlightLanguage = $highlight->language;
 
-            return new HighlightResult($highlightLanguage, $highlightValue);
+            return new HighlightResult(
+                is_string($highlightLanguage) ? $highlightLanguage : $language,
+                is_string($highlightValue) ? $highlightValue : $code,
+            );
         } catch (Throwable $e) {
             $this->logger->warning(
                 <<<'MESSAGE'

@@ -83,6 +83,7 @@ class MarkupLanguageParser implements ParserInterface
     public function parse(ParserContext $parserContext, string $contents): DocumentNode
     {
         $this->parserContext = $parserContext;
+        $this->filename = $parserContext->getCurrentFileName();
 
         $this->documentParser = $this->documentParserContextFactory->create($this);
 

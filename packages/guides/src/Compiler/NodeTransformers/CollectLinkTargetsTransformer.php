@@ -32,7 +32,7 @@ use Webmozart\Assert\Assert;
 
 use function sprintf;
 
-/** @implements NodeTransformer<DocumentNode|AnchorNode|SectionNode> */
+/** @implements NodeTransformer<Node> */
 final class CollectLinkTargetsTransformer implements NodeTransformer
 {
     /** @var SplStack<DocumentNode> */
@@ -153,7 +153,7 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
         return $node;
     }
 
-    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node|null
+    public function leaveNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
             $this->documentStack->pop();

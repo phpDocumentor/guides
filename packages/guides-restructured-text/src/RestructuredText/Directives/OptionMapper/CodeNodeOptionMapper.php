@@ -23,7 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
  */
 interface CodeNodeOptionMapper
 {
-    /** @param DirectiveOption[] $directiveOptions */
+    /** @param array<string, DirectiveOption> $directiveOptions */
     public function apply(
         CodeNode $codeNode,
         array $directiveOptions,

@@ -34,7 +34,7 @@ final class DocumentBlockDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $identifier = ((string) $directive->getOption('identifier')->getValue());
 
         return new DocumentBlockNode(

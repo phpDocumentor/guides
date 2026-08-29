@@ -38,9 +38,9 @@ final class StandaloneEmailRule extends ReferenceRule implements CachableInlineR
         return $lexer->token?->type === InlineLexer::EMAIL;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode
     {
-        $value = $lexer->token?->value ?? '';
+        $value = $lexer->token->value ?? '';
         $node = $this->createReference($blockContext, $value, $value, false);
 
         $lexer->moveNext();

@@ -56,7 +56,7 @@ final class ConfigurationBlockDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $tabs = [];
         foreach ($collectionNode->getValue() as $child) {
             if (!$child instanceof CodeNode) {

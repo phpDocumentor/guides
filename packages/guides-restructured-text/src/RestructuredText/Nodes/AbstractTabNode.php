@@ -21,7 +21,7 @@ use function class_exists;
 
 abstract class AbstractTabNode extends GeneralDirectiveNode
 {
-    /** @param list<Node> $value */
+    /** @param Node[] $value */
     public function __construct(
         string $name,
         string $plainContent,

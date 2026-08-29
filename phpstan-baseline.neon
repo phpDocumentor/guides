@@ -21,16 +21,6 @@ parameters:
 			path: packages/dev-server/src/Watcher/INotifyWatcher.php
 
 		-
-			message: "#^Call to function is_countable\\(\\) with array will always evaluate to true\\.$#"
-			count: 2
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
-			message: "#^Property phpDocumentor\\\\Guides\\\\Cli\\\\Command\\\\Run\\:\\:\\$themeManager is never read, only written\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Command/Run.php
-
-		-
 			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'setExcludes' will always evaluate to true\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
@@ -54,11 +44,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
-
-		-
-			message: "#^Parameter \\#1 \\$configs \\(array\\<string\\>\\) of method phpDocumentor\\\\Guides\\\\Cli\\\\DependencyInjection\\\\ApplicationExtension\\:\\:load\\(\\) should be contravariant with parameter \\$configs \\(array\\) of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\ExtensionInterface\\:\\:load\\(\\)$#"
-			count: 2
-			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function rtrim expects string, string\\|false given\\.$#"
@@ -91,11 +76,6 @@ parameters:
 			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
 
 		-
-			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/AnonymousPhraseRule.php
-
-		-
 			message: "#^Strict comparison using \\!\\=\\= between Doctrine\\\\Common\\\\Lexer\\\\Token and null will always evaluate to true\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
@@ -104,11 +84,6 @@ parameters:
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
-
-		-
-			message: "#^Using nullsafe property access on non\\-nullable type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, string\\>\\. Use \\-\\> instead\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/NamedPhraseRule.php
 
 		-
 			message: "#^Property phpDocumentor\\\\Guides\\\\RestructuredText\\\\Parser\\\\Productions\\\\ListRule\\:\\:\\$logger is never read, only written\\.$#"
@@ -166,21 +141,407 @@ parameters:
 			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
 
 		-
-			message: "#^Property phpDocumentor\\\\Guides\\\\Renderer\\\\DocumentListIterator\\:\\:\\$currentDocument \\(WeakReference\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>\\|null\\) does not accept WeakReference\\<TIn of object\\>\\.$#"
-			count: 1
-			path: packages/guides/src/Renderer/DocumentListIterator.php
-
-		-
 			message: "#^Anonymous class extends @final class phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext\\.$#"
 			count: 1
 			path: packages/guides/tests/unit/Compiler/CompilerContextTest.php
+		-
+			message: '#^Method phpDocumentor\\Guides\\Cli\\Config\\XmlFileLoader\:\:load\(\) should return array\<array\<mixed\>\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: packages/guides-cli/src/Config/XmlFileLoader.php
 
 		-
-			message: "#^Return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\MoveAnchorTransformer\\>\\) of method class@anonymous/packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest\\.php\\:32\\:\\:getTransformers\\(\\) should be compatible with return type \\(iterable\\<phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformer\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\>\\>\\) of method phpDocumentor\\\\Guides\\\\Compiler\\\\NodeTransformers\\\\NodeTransformerFactory\\:\\:getTransformers\\(\\)$#"
+			message: '#^Cannot access offset ''event'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
-			path: packages/guides/tests/unit/Compiler/NodeTransformers/MoveAnchorTransformerTest.php
+			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
 
 		-
-			message: "#^Binary operation \"\\.\" between array\\|DateTimeImmutable\\|int\\|string\\|null and '\\: ' results in an error\\.$#"
+			message: '#^Cannot access offset ''method'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
-			path: tests/Functional/FunctionalTest.php
+			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
+
+		-
+			message: '#^Parameter \#1 \$configs \(array\<string\>\) of method phpDocumentor\\Guides\\Cli\\DependencyInjection\\ApplicationExtension\:\:load\(\) should be compatible with parameter \$configs \(array\<array\<mixed\>\>\) of method Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface\:\:load\(\)$#'
+			identifier: method.childParameterType
+			count: 2
+			path: packages/guides-cli/src/DependencyInjection/ApplicationExtension.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Cannot access offset ''class'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Parameter \#1 \$name of method phpDocumentor\\Guides\\Cli\\DependencyInjection\\ContainerFactory\:\:resolveExtensionClass\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Parameter \#2 \$config of method phpDocumentor\\Guides\\Cli\\DependencyInjection\\ContainerFactory\:\:loadExtensionConfig\(\) expects array\<mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Parameter \#2 \$values of method Symfony\\Component\\DependencyInjection\\ContainerBuilder\:\:loadFromExtension\(\) expects array\<string, mixed\>\|null, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 2
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Property phpDocumentor\\Guides\\Cli\\DependencyInjection\\ContainerFactory\:\:\$configs \(list\<array\<mixed\>\>\) does not accept array\<array\<mixed\>\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: packages/guides-code/src/Code/DependencyInjection/CodeExtension.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: packages/guides-graphs/src/Graphs/DependencyInjection/GraphsExtension.php
+
+		-
+			message: '#^Cannot access offset ''domain'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/Compiler/TextRolePass.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/Compiler/TextRolePass.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
+			message: '#^Cannot access offset ''label'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
+			message: '#^Cannot access offset ''language'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
+			message: '#^Binary operation "\." between ''phpdoc\.guides…'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Cannot access offset ''file'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Cannot access offset ''format'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Cannot access offset ''node'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Parameter \#3 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/NodeRendererPass.php
+
+		-
+			message: '#^Cannot access offset ''format'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 6
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Cannot access offset ''noderender_tag'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Parameter \#1 \$tag of method phpDocumentor\\Guides\\DependencyInjection\\Compiler\\RendererPass\:\:createDelegatingNodeRender\(\) expects array\{format\: string\}, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Parameter \#1 \$tag of method phpDocumentor\\Guides\\DependencyInjection\\Compiler\\RendererPass\:\:createNodeRendererFactory\(\) expects array\{format\: string, noderender_tag\: string\}, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Parameter \#1 \$tag of method phpDocumentor\\Guides\\DependencyInjection\\Compiler\\RendererPass\:\:createPreNodeRendererFactory\(\) expects array\{format\: string, noderender_tag\: string\}, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 6
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 6
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Binary operation "\." between ''phpdoc\.guides\.raw…'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''allow_attributes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''allow_elements'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''allow_safe_elements'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''allow_static_elements'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''attribute'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''block_elements'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''copyright'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''drop_attributes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''drop_elements'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''element'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''escape'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''extends'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''hidden'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''paths'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''release'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''symlinks'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''templates'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''title'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot access offset ''version'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 11
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$ignoredDomains of method phpDocumentor\\Guides\\Settings\\ProjectSettings\:\:setIgnoredDomains\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$input of function phpDocumentor\\Guides\\DependencyInjection\\templateArray expects array\<class\-string\<phpDocumentor\\Guides\\Nodes\\Node\>, string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$inventories of method phpDocumentor\\Guides\\Settings\\ProjectSettings\:\:setInventories\(\) expects array\<string, string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$name of class phpDocumentor\\Guides\\Twig\\Theme\\ThemeConfig constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$outputFormats of method phpDocumentor\\Guides\\Settings\\ProjectSettings\:\:setOutputFormats\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$paths of class phpDocumentor\\FileSystem\\Finder\\Exclude constructor expects list\<phpDocumentor\\FileSystem\\Path\|string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$rawNodeConfig of method phpDocumentor\\Guides\\DependencyInjection\\GuidesExtension\:\:configureSanitizers\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#2 \$hidden of class phpDocumentor\\FileSystem\\Finder\\Exclude constructor expects bool, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#2 \$paths of class phpDocumentor\\Guides\\Twig\\Theme\\ThemeConfig constructor expects array\<string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#3 \$extends of class phpDocumentor\\Guides\\Twig\\Theme\\ThemeConfig constructor expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#3 \$symlinks of class phpDocumentor\\FileSystem\\Finder\\Exclude constructor expects bool, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides/src/DependencyInjection/GuidesExtension.php

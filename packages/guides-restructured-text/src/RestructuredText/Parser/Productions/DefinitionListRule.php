@@ -59,7 +59,7 @@ final class DefinitionListRule implements Rule
         );
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $iterator = $blockContext->getDocumentIterator();
         $definitionListItems = [];

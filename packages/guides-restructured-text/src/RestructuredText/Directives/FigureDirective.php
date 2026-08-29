@@ -55,7 +55,7 @@ final class FigureDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $image = new ImageNode($this->documentNameResolver->absoluteUrl(
             dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath()),
             $directive->getData(),

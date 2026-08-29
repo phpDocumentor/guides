@@ -54,7 +54,7 @@ final class TabsDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $tabs = [];
         $hasActive = false;
         foreach ($collectionNode->getChildren() as $child) {

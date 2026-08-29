@@ -26,6 +26,7 @@ use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\FileSystem\Finder\SpecificationFactory;
 use phpDocumentor\FileSystem\Finder\SpecificationFactoryInterface;
 use phpDocumentor\FileSystem\Path;
+use phpDocumentor\FileSystem\StorageAttributes;
 
 use function sprintf;
 use function strlen;
@@ -34,7 +35,7 @@ use function trim;
 
 final class FileCollector
 {
-    /** @var string[][] */
+    /** @var array<string, StorageAttributes> */
     private array $fileInfos = [];
     private SpecificationFactoryInterface $specificationFactory;
 
@@ -69,7 +70,7 @@ final class FileCollector
         $directory = trim($directory, '/');
         $specification = $this->getSpecification($excludedSpecification, $directory, $extension);
 
-        /** @var array<array<string>> $files */
+        /** @var array<StorageAttributes> $files */
         $files = $filesystem->find($specification);
 
         // completely populate the splFileInfos property

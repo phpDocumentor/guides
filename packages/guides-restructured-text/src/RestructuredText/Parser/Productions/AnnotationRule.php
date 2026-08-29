@@ -46,7 +46,7 @@ final class AnnotationRule implements Rule
         return LineChecker::isAnnotation($blockContext->getDocumentIterator()->current());
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $openingLine = $documentIterator->current();

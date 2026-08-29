@@ -45,7 +45,7 @@ final class ContainerDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return (new ContainerNode($collectionNode->getChildren()))->withOptions(['class' => $directive->getData()]);
     }
 }

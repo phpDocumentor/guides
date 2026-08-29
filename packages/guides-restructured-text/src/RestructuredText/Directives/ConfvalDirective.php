@@ -62,7 +62,7 @@ final class ConfvalDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $id = $directive->getData();
         if ($directive->hasOption('name')) {
             $id = (string) $directive->getOption('name')->getValue();

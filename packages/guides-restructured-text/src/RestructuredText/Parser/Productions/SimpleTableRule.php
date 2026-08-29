@@ -47,7 +47,7 @@ final class SimpleTableRule implements Rule
     }
 
     /** {@inheritDoc} */
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $columnDefinition = $this->getColumnDefinition($documentIterator->current());

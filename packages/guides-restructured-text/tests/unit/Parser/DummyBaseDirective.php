@@ -28,7 +28,7 @@ final class DummyBaseDirective extends DirectiveHandler
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return new DummyNode($directive->getVariable(), $directive->getData(), $directive->getOptions());
     }
 }

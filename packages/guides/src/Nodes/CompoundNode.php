@@ -22,7 +22,7 @@ use function array_values;
  */
 abstract class CompoundNode extends AbstractNode
 {
-    /** @param list<TValue> $value */
+    /** @param TValue[] $value */
     public function __construct(array $value = [])
     {
         $this->value = $value;
@@ -46,10 +46,11 @@ abstract class CompoundNode extends AbstractNode
         array_unshift($this->value, $node);
     }
 
-    /** @return $this<TValue> */
+    /** @return static<TValue> */
     public function removeNode(int $key): self
     {
         $result = clone $this;
+        /** @var static<TValue> $result */
         unset($result->value[$key]);
         $result->value = array_values($result->value);
 
@@ -59,13 +60,16 @@ abstract class CompoundNode extends AbstractNode
     /**
      * @param TValue $node
      *
-     * @return $this<TValue>
+     * @return static<TValue>
      */
     public function replaceNode(int $key, Node $node): self
     {
         $result = clone $this;
         $result->value[$key] = $node;
 
-        return $result;
+        /** @var static<TValue> $replaced */
+        $replaced = $result;
+
+        return $replaced;
     }
 }

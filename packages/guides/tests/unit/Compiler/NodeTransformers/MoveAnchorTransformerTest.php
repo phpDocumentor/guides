@@ -15,9 +15,11 @@ namespace phpDocumentor\Guides\Compiler\NodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
+use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Nodes\AnchorNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
@@ -30,10 +32,10 @@ final class MoveAnchorTransformerTest extends TestCase
     protected function setUp(): void
     {
         $this->documentNodeTraverser = new DocumentNodeTraverser(new class implements NodeTransformerFactory {
-            /** @return iterable<MoveAnchorTransformer> */
+            /** @return iterable<NodeTransformer<Node>> */
             public function getTransformers(): iterable
             {
-                //phpstan:ignore-next-line
+                // @phpstan-ignore-next-line
                 yield new MoveAnchorTransformer();
             }
 

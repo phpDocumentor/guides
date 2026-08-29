@@ -53,7 +53,7 @@ final class MenuDirective extends BaseDirective
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['glob'] = new DirectiveOption('glob', true);

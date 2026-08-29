@@ -20,8 +20,6 @@ use phpDocumentor\FileSystem\FileNotFoundException;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\FileSystem\StorageAttributes;
 
-use function array_map;
-
 class FlysystemV1 implements Filesystem
 {
     private FilesystemInterface $filesystem;
@@ -62,10 +60,13 @@ class FlysystemV1 implements Filesystem
     /** @return StorageAttributes[] */
     public function listContents(string $directory = '', bool $recursive = false): array
     {
-        return array_map(
-            static fn (array $attr) => new \phpDocumentor\FileSystem\FlysystemV1\StorageAttributes($attr),
-            $this->filesystem->listContents($directory, $recursive),
-        );
+        $attributes = [];
+        /** @var array<string, mixed> $attr */
+        foreach ($this->filesystem->listContents($directory, $recursive) as $attr) {
+            $attributes[] = new \phpDocumentor\FileSystem\FlysystemV1\StorageAttributes($attr);
+        }
+
+        return $attributes;
     }
 
     /** @return StorageAttributes[] */
@@ -73,6 +74,7 @@ class FlysystemV1 implements Filesystem
     {
         /** @phpstan-ignore-next-line */
         foreach ($this->filesystem->find($specification) as $file) {
+            /** @var array<string, mixed> $file */
             yield new \phpDocumentor\FileSystem\FlysystemV1\StorageAttributes($file);
         }
     }

@@ -40,7 +40,7 @@ final class AnonymousReferenceRule extends ReferenceRule implements CachableInli
         return $lexer->token?->type === InlineLexer::ANONYMOUSE_REFERENCE;
     }
 
-    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode|null
+    public function apply(BlockContext $blockContext, InlineLexer $lexer): AbstractLinkInlineNode
     {
         $node = $this->createAnonymousReference(
             $blockContext,

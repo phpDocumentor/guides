@@ -39,7 +39,6 @@ use Throwable;
 use function array_filter;
 use function array_map;
 use function array_shift;
-use function array_values;
 use function assert;
 use function class_alias;
 use function class_exists;
@@ -49,6 +48,7 @@ use function file_exists;
 use function file_get_contents;
 use function implode;
 use function in_array;
+use function is_string;
 use function rtrim;
 use function setlocale;
 use function sprintf;
@@ -164,12 +164,18 @@ final class FunctionalTest extends ApplicationTestCase
             assert($logHandler instanceof TestHandler);
 
             /** @var list<string> $logRecords */
-            $logRecords = array_map(
-                static fn (array|LogRecord $log) => $log['level_name'] . ': ' . $log['message'],
-                array_filter($logHandler->getRecords(), static fn (array|LogRecord $log) => $log['level'] >= Logger::WARNING &&
-                    !in_array($log['message'], self::IGNORED_WARNINGS, true)),
-            );
-            self::assertEquals($expectedLogs, array_values($logRecords));
+            $logRecords = [];
+            foreach (
+                array_filter(
+                    $logHandler->getRecords(),
+                    static fn (array|LogRecord $log): bool => $log['level'] >= Logger::WARNING &&
+                        !in_array($log['message'], self::IGNORED_WARNINGS, true),
+                ) as $log
+            ) {
+                $logRecords[] = (is_string($log['level_name']) ? $log['level_name'] : '') . ': ' . (is_string($log['message']) ? $log['message'] : '');
+            }
+
+            self::assertEquals($expectedLogs, $logRecords);
         } catch (ExpectationFailedException $e) {
             if ($skip) {
                 self::markTestIncomplete(substr($firstLine, 5) ?: '');

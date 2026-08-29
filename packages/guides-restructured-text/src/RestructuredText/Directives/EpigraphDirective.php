@@ -41,7 +41,7 @@ final class EpigraphDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         return new QuoteNode($collectionNode->getChildren(), ['epigraph']);
     }
 }

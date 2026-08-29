@@ -18,6 +18,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 use function is_array;
+use function is_string;
+use function sprintf;
 
 final class CodeExtension extends AbstractExtension
 {
@@ -44,9 +46,15 @@ final class CodeExtension extends AbstractExtension
      */
     public function highlight(array $context, string $code, string|null $language = null): string
     {
-        $debugInformation = $context['debugInformation'] ?? [];
-        if (!is_array($debugInformation)) {
-            $debugInformation = [];
+        $debugInformation = [];
+        $contextDebugInformation = $context['debugInformation'] ?? [];
+        $contextDebugInformation = is_array($contextDebugInformation) ? $contextDebugInformation : [];
+        foreach ($contextDebugInformation as $key => $value) {
+            if (!is_string($value) && $value !== null) {
+                continue;
+            }
+
+            $debugInformation[sprintf('%s', $key)] = $value;
         }
 
         return ($this->highlighter)($language ?? 'text', $code, $debugInformation)->code;

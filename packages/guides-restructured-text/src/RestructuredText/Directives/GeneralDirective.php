@@ -52,7 +52,7 @@ final class GeneralDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         if (str_contains($directive->getName(), ':')) {
             [$domainName, $directiveName] = explode(':', $directive->getName());
             if (in_array($domainName, $this->settingsManager->getProjectSettings()->getIgnoredDomains(), true)) {

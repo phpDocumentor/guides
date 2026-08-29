@@ -30,6 +30,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Webmozart\Assert\Assert;
 
 use function array_pop;
 use function count;
@@ -42,12 +43,13 @@ final class Run extends Command
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly Logger $logger,
+        /** @phpstan-ignore-next-line */
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
         private readonly ClockInterface $clock,
         private readonly EventDispatcher $eventDispatcher,
         private readonly ProgressBarSubscriber $progressBarSubscriber,
-        private SettingsBuilder $settingsBuilder,
+        private SettingsBuilder|null $settingsBuilder = null,
     ) {
         parent::__construct('run');
 
@@ -96,6 +98,7 @@ final class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        Assert::notNull($this->settingsBuilder, 'SettingsBuilder must be set before executing the command');
         $this->settingsBuilder->overrideWithInput($input);
         $projectNode = $this->settingsBuilder->createProjectNode();
         $settings = $this->settingsBuilder->getSettings();
@@ -126,8 +129,8 @@ final class Run extends Command
         if ($output->isQuiet() === false) {
             $lastFormat = '';
 
-            if ((is_countable($outputFormats) ? count($outputFormats) : 0) > 1) {
-                $lastFormat = ((is_countable($outputFormats) ? count($outputFormats) : 0) > 2 ? ',' : '') . ' and ' . strtoupper((string) array_pop($outputFormats));
+            if (count($outputFormats) > 1) {
+                $lastFormat = (count($outputFormats) > 2 ? ',' : '') . ' and ' . strtoupper((string) array_pop($outputFormats));
             }
 
             $formatsText = strtoupper(implode(', ', $outputFormats)) . $lastFormat;

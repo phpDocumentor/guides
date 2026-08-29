@@ -27,7 +27,7 @@ final class CollectAllRule implements Rule
         return true;
     }
 
-    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
+    public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
         $buffer = new Buffer();
         while ($blockContext->getDocumentIterator()->valid()) {

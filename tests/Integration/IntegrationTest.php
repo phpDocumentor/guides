@@ -74,7 +74,7 @@ final class IntegrationTest extends ApplicationTestCase
         $this->compareHtmlIntegration($outputPath, $inputPath, $expectedPath, $compareFiles, false);
     }
 
-    /** @param list<string> $compareFiles */
+    /** @param string[] $compareFiles */
     private function compareHtmlIntegration(string $outputPath, string $inputPath, string $expectedPath, array $compareFiles, bool $htmlOnlyBetweenMarkers): void
     {
         system('rm -rf ' . escapeshellarg($outputPath));
@@ -224,7 +224,6 @@ final class IntegrationTest extends ApplicationTestCase
 
     public static function getTrimmedContent(string $fileContent): string
     {
-        self::assertIsString($fileContent);
         $contentArray = explode("\n", $fileContent);
         array_walk($contentArray, static function (&$value): void {
             $value = trim($value);

@@ -17,12 +17,14 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\Metadata\AuthorNode;
 
+use function is_scalar;
+
 final class AuthorParser implements Parser
 {
     /** {@inheritDoc} */
     public function process(DocumentNode $document, mixed $value, array $frontMatter): void
     {
-        $value = '' . $value;
+        $value = is_scalar($value) ? (string) $value : '';
         $document->addHeaderNode(new AuthorNode($value, [new PlainTextInlineNode($value)]));
     }
 
