@@ -64,7 +64,7 @@ final class GenIndexDirective extends BaseDirective
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $prefixes = explode(',', $directive->getOptionString('scope'));
         $prefixes = array_values(array_filter(array_map(trim(...), $prefixes), static fn (string $prefix): bool => $prefix !== ''));
 

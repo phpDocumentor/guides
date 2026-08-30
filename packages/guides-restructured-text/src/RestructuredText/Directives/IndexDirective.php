@@ -80,7 +80,7 @@ final class IndexDirective extends BaseDirective
     public function process(
         BlockContext $blockContext,
         Directive $directive,
-    ): Node|null {
+    ): Node {
         $data = trim($directive->getData());
         $lines = $data !== '' ? [$data] : $blockContext->getDocumentIterator()->toArray();
         $lines = $this->trimAndFilterEmpty($lines);
@@ -142,20 +142,17 @@ final class IndexDirective extends BaseDirective
 
     private function warnIfLikelyTypo(string $candidate, string $line, BlockContext $blockContext): void
     {
-        $closestType = null;
-        $closestDistance = null;
-        foreach (IndexEntryType::cases() as $case) {
+        $cases = IndexEntryType::cases();
+        $closestType = $cases[0];
+        $closestDistance = levenshtein($candidate, $closestType->value);
+        foreach ($cases as $case) {
             $distance = levenshtein($candidate, $case->value);
-            if ($closestDistance !== null && $distance >= $closestDistance) {
+            if ($distance >= $closestDistance) {
                 continue;
             }
 
             $closestType = $case;
             $closestDistance = $distance;
-        }
-
-        if ($closestType === null) {
-            return;
         }
 
         if ($closestDistance > self::TYPO_DISTANCE_THRESHOLD) {
