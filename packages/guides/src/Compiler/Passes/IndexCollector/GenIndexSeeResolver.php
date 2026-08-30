@@ -30,11 +30,21 @@ final class GenIndexSeeResolver
     /** @param GenIndexTermMap $termMap */
     public function resolveSeeRows(array &$termMap): void
     {
+        $original = $termMap;
         foreach ($termMap as $key => $term) {
-            $termMap[$key]['rows'] = $this->resolveSeeRowTargets($term['rows'], $termMap);
+            $subterms = [];
             foreach ($term['subterms'] as $subKey => $subterm) {
-                $termMap[$key]['subterms'][$subKey]['rows'] = $this->resolveSeeRowTargets($subterm['rows'], $termMap);
+                $subterms[$subKey] = [
+                    'term' => $subterm['term'],
+                    'rows' => $this->resolveSeeRowTargets($subterm['rows'], $original),
+                ];
             }
+
+            $termMap[$key] = [
+                'term' => $term['term'],
+                'rows' => $this->resolveSeeRowTargets($term['rows'], $original),
+                'subterms' => $subterms,
+            ];
         }
     }
 
