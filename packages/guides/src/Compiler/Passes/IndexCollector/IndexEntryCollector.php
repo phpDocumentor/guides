@@ -92,8 +92,8 @@ final class IndexEntryCollector
         $this->flatten($document, $flat);
 
         $found = [];
-        foreach ($flat as $index => [$type, $node]) {
-            if ($type !== 'index') {
+        foreach ($flat as $index => [, $node]) {
+            if (!$node instanceof IndexNode) {
                 continue;
             }
 
