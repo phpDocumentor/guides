@@ -21,3 +21,11 @@
 .. version-deprecated:: 2.7
 
     Don't use this feature, it was deprecated using the new directive name.
+
+.. version-removed:: 3.0
+
+    This feature was removed.
+
+.. versionremoved:: 3.1
+
+    This feature was removed using the legacy alias.

@@ -59,6 +59,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\ToctreeDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\TodoDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionAddedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\VersionChangedDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\VersionRemovedDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\WarningDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\YoutubeDirective;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
@@ -245,6 +246,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(TodoDirective::class)
         ->set(VersionAddedDirective::class)
         ->set(VersionChangedDirective::class)
+        ->set(VersionRemovedDirective::class)
         ->set(WarningDirective::class)
         ->set(YoutubeDirective::class)
 
