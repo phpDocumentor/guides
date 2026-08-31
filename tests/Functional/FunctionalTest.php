@@ -109,12 +109,10 @@ final class FunctionalTest extends ApplicationTestCase
             $inputFilesystem = FlySystemAdapter::createInMemory();
             $inputFilesystem->put('img/test-image.jpg', 'Some image');
 
-
             $projectSettings = new ProjectSettings();
             $projectSettings->setLinksRelative(false);
 
-            $settingsManager = $this->createMock(SettingsManager::class);
-            $settingsManager->method('getProjectSettings')->willReturn($projectSettings);
+            $settingsManager = new SettingsManager($projectSettings);
 
             /** @var NodeRenderer<Node> $renderer */
             $renderer = $this->getContainer()->get('phpdoc.guides.output_node_renderer');
