@@ -46,7 +46,6 @@ use function is_array;
 use function is_int;
 use function is_string;
 use function pathinfo;
-use function trim;
 use function var_export;
 
 final class GuidesExtension extends Extension implements CompilerPassInterface, ConfigurationInterface, PrependExtensionInterface
@@ -57,6 +56,14 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
         $rootNode = $treeBuilder->getRootNode();
         assert($rootNode instanceof ArrayNodeDefinition);
 
+        // XmlFileLoader hands version/release over as strings, but
+        // ContainerFactory::loadExtensionConfig() feeds a raw PHP array into this same tree, where the
+        // value can be a native float — and `(string) 3.0` is "3". var_export keeps the literal;
+        // null passes through so the isset() below sees "not configured" rather than "NULL".
+        $keepNonStringLiteral = static fn ($value) => $value === null || is_string($value) || is_int($value)
+            ? $value
+            : var_export($value, true);
+
         $rootNode
             ->fixXmlConfig('template')
             ->fixXmlConfig('inventory', 'inventories')
@@ -65,40 +72,10 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                     ->children()
                         ->scalarNode('title')->end()
                         ->scalarNode('version')
-                            ->beforeNormalization()
-                            ->always(
-                                // We need to revert the phpize call in XmlUtils. Version is always a string!
-                                static function ($value) {
-                                    if (!is_int($value) && !is_string($value)) {
-                                        return var_export($value, true);
-                                    }
-
-                                    if (is_string($value)) {
-                                        return trim($value, "'");
-                                    }
-
-                                    return $value;
-                                },
-                            )
-                            ->end()
+                            ->beforeNormalization()->always($keepNonStringLiteral)->end()
                         ->end()
                         ->scalarNode('release')
-                            ->beforeNormalization()
-                            ->always(
-                            // We need to revert the phpize call in XmlUtils. Version is always a string!
-                                static function ($value) {
-                                    if (!is_int($value) && !is_string($value)) {
-                                        return var_export($value, true);
-                                    }
-
-                                    if (is_string($value)) {
-                                        return trim($value, "'");
-                                    }
-
-                                    return $value;
-                                },
-                            )
-                            ->end()
+                            ->beforeNormalization()->always($keepNonStringLiteral)->end()
                         ->end()
                         ->scalarNode('copyright')->end()
                     ->end()
