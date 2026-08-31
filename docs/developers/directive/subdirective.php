@@ -2,28 +2,23 @@
 
 namespace YourExtension\Directives;
 
-use phpDocumentor\Guides\RestructuredText\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Nodes\SubDirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\SubDirectiveParser;
-use phpDocumentor\Guides\RestructuredText\Parser\SubDirectiveParserFactory;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionType;
+use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
+use phpDocumentor\Guides\Nodes\Node;
 
+#[Directive(name: 'example')]
+#[Option(name: 'option1', type: OptionType::Boolean, description: 'An example option', default: false)]
 class ExampleSubDirective extends SubDirective
 {
-    public function getName(): string
+    public function createNode(\phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode $directiveNode): Node
     {
-        return 'example';
-    }
-
-    final protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node|null {
         return new ExampleNode(
-            $this->name,
-            $directive->getDataNode(),
+            $this->readOption($directiveNode, 'option1'),
+            $directiveNode->getDataNode(),
             $this->text,
-            $collectionNode->getChildren(),
+            $directiveNode->getChildren(),
         );
     }
 }

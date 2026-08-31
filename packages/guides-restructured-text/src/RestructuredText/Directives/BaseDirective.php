@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use Doctrine\Deprecations\Deprecation;
 use LogicException;
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -110,7 +111,18 @@ abstract class BaseDirective
         $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Attributes\Directive::class);
 
-        return count($attributes) === 1;
+        if (count($attributes) !== 1) {
+            Deprecation::trigger(
+                'phpdocumentor/guide-restructured-text',
+                'https://github.com/phpDocumentor/guides/issues/1373',
+                'Directive class "%s" must have a Directive attribute. This directive needs to be upgraded.',
+                $this->getName(),
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
