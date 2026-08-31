@@ -22,7 +22,7 @@ final class Option
     public function __construct(
         public readonly string $name,
         public readonly OptionType $type = OptionType::String,
-        public readonly mixed $default = null,
+        public readonly bool|string|int|float|null $default = null,
         public readonly string $description = '',
         public readonly string|null $example = null,
     ) {

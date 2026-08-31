@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
-/** @implements Rule<Node> */
+/** @implements Rule<CollectionNode> */
 final class DirectiveContentRule implements Rule
 {
     public function __construct(private readonly RuleContainer $bodyElements)

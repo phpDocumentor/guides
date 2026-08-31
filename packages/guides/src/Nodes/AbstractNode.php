@@ -26,13 +26,13 @@ abstract class AbstractNode implements Node
     /** @var string[] */
     protected array $classes = [];
 
-    /** @var array<string, scalar|null> */
+    /** @var array<string, scalar|scalar[]|null> */
     protected array $options = [];
 
     /** @var TValue */
     protected $value;
 
-    /** @return array<string, scalar|null> */
+    /** @return array<string, scalar|scalar[]|null> */
     public function getOptions(): array
     {
         return $this->options;
@@ -89,7 +89,7 @@ abstract class AbstractNode implements Node
     }
 
     /**
-     * @param array<string, scalar|null> $options
+     * @param array<string, scalar|scalar[]|null> $options
      *
      * @return static
      */

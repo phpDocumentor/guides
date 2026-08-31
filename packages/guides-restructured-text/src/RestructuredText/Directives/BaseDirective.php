@@ -184,7 +184,7 @@ abstract class BaseDirective
         return $this->getOptionValue($directive, $optionAttribute);
     }
 
-    /** @return array<string, bool|float|int|string|null> */
+    /** @return array<string, scalar|scalar[]|null> */
     final protected function readAllOptions(Directive $directive): array
     {
         $this->initialize();
@@ -195,7 +195,8 @@ abstract class BaseDirective
         );
     }
 
-    private function getOptionValue(Directive $directive, Option|null $option): mixed
+    /** @return scalar|scalar[]|null */
+    private function getOptionValue(Directive $directive, Option|null $option): bool|float|int|string|array|null
     {
         if ($option === null) {
             return null;
