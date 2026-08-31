@@ -37,7 +37,10 @@ final class DirectiveRuleTest extends RuleTestCase
         $this->rule = new DirectiveRule(
             $this->givenInlineMarkupRule(),
             new Logger('test'),
-            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createMock(SettingsManager::class)),
+            new GeneralDirective(
+                new DirectiveContentRule(new RuleContainer()),
+                self::createStub(SettingsManager::class),
+            ),
             [$this->directiveHandler],
         );
     }

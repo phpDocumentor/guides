@@ -1,149 +1,59 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#2 \\$headers of class GuzzleHttp\\\\Psr7\\\\Response constructor expects array\\<array\\<string\\>\\|string\\>, array\\<string, int\\<1, max\\>\\|string\\> given\\.$#"
+			message: '#^Parameter \#2 \$headers of class GuzzleHttp\\Psr7\\Response constructor expects array\<array\<string\>\|string\>, array\<string, int\<1, max\>\|string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: packages/dev-server/src/Internal/HttpHandler.php
 
 		-
-			message: "#^Method phpDocumentor\\\\DevServer\\\\Internal\\\\WebSocketHandler\\:\\:onMessage\\(\\) has parameter \\$msg with no value type specified in iterable type Ratchet\\\\RFC6455\\\\Messaging\\\\MessageInterface\\.$#"
+			message: '#^Method phpDocumentor\\DevServer\\Internal\\WebSocketHandler\:\:onMessage\(\) has parameter \$msg with no value type specified in iterable type Ratchet\\RFC6455\\Messaging\\MessageInterface\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: packages/dev-server/src/Internal/WebSocketHandler.php
 
 		-
-			message: "#^Call to an undefined method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:addListener\\(\\)\\.$#"
+			message: '#^Call to an undefined method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface\:\:addListener\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: packages/dev-server/src/Server.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between resource and false will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between resource and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: packages/dev-server/src/Watcher/INotifyWatcher.php
 
 		-
-			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'setExcludes' will always evaluate to true\\.$#"
+			message: '#^Call to function method_exists\(\) with phpDocumentor\\Guides\\Settings\\ProjectSettings and ''setExcludes'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
-			message: "#^Cannot cast mixed to string\\.$#"
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
 			count: 6
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
-			message: "#^Parameter \\#1 \\$outputFormats of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setOutputFormats\\(\\) expects array\\<string\\>, mixed given\\.$#"
+			message: '#^Parameter \#1 \$outputFormats of method phpDocumentor\\Guides\\Settings\\ProjectSettings\:\:setOutputFormats\(\) expects array\<string\>, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
-			message: "#^Parameter \\#1 \\$showProgressBar of method phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings\\:\\:setShowProgressBar\\(\\) expects bool, mixed given\\.$#"
+			message: '#^Parameter \#1 \$showProgressBar of method phpDocumentor\\Guides\\Settings\\ProjectSettings\:\:setShowProgressBar\(\) expects bool, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: packages/guides-cli/src/Command/SettingsBuilder.php
 
-		-
-			message: "#^Parameter \\#1 \\$string of function rtrim expects string, string\\|false given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
-
-		-
-			message: "#^Call to function method_exists\\(\\) with phpDocumentor\\\\Guides\\\\Settings\\\\ProjectSettings and 'getExcludes' will always evaluate to true\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/RunCommandHandler.php
-
-		-
-			message: "#^Method phpDocumentor\\\\Guides\\\\Cli\\\\Internal\\\\RunCommandHandler\\:\\:handle\\(\\) should return array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\> but returns mixed\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/RunCommandHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$documents of class phpDocumentor\\\\Guides\\\\Handlers\\\\CompileDocumentsCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/RunCommandHandler.php
-
-		-
-			message: "#^Parameter \\#2 \\$documentArray of class phpDocumentor\\\\Guides\\\\Handlers\\\\RenderCommand constructor expects array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\DocumentNode\\>, mixed given\\.$#"
-			count: 1
-			path: packages/guides-cli/src/Internal/RunCommandHandler.php
-
-		-
-			message: "#^Method phpDocumentor\\\\Guides\\\\Markdown\\\\Parsers\\\\InlineParsers\\\\AbstractInlineTextDecoratorParser\\<TValue of phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\:\\:createInlineNode\\(\\) invoked with 3 parameters, 2 required\\.$#"
-			count: 2
-			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
-
-		-
-			message: "#^Strict comparison using \\!\\=\\= between Doctrine\\\\Common\\\\Lexer\\\\Token and null will always evaluate to true\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/InlineRules/InternalReferenceRule.php
-
-		-
-			message: "#^Property phpDocumentor\\\\Guides\\\\RestructuredText\\\\Parser\\\\Productions\\\\ListRule\\:\\:\\$logger is never read, only written\\.$#"
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between 'phpDocumentor\\\\\\\\Guides\\\\\\\\Compiler\\\\\\\\CompilerContext' and 'phpDocumentor\\\\\\\\Guides\\\\\\\\Compiler\\\\\\\\CompilerContext' will always evaluate to true\\.$#"
-			count: 1
-			path: packages/guides/src/Compiler/CompilerContext.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: packages/guides/src/Compiler/CompilerContext.php
-
-		-
-			message: "#^Function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
-			count: 2
-			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
-
-		-
-			message: "#^Used function Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\tagged_iterator not found\\.$#"
-			count: 1
-			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
-
-		-
-			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\AbstractLinkInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
-			count: 3
-			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
-
-		-
-			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\AbstractLinkInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
-			count: 1
-			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
-
-		-
-			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\EmphasisInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
-			count: 2
-			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
-
-		-
-			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\EmphasisInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
-			count: 1
-			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
-
-		-
-			message: "#^Parameter \\#1 \\$value \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\|string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\StrongInlineNode\\:\\:setValue\\(\\) should be contravariant with parameter \\$value \\(mixed\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Node\\:\\:setValue\\(\\)$#"
-			count: 2
-			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
-
-		-
-			message: "#^Return type \\(string\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\StrongInlineNode\\:\\:getValue\\(\\) should be compatible with return type \\(array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\) of method phpDocumentor\\\\Guides\\\\Nodes\\\\AbstractNode\\<array\\<phpDocumentor\\\\Guides\\\\Nodes\\\\Inline\\\\InlineNodeInterface\\>\\>\\:\\:getValue\\(\\)$#"
-			count: 1
-			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
-
-		-
-			message: "#^Anonymous class extends @final class phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext\\.$#"
-			count: 1
-			path: packages/guides/tests/unit/Compiler/CompilerContextTest.php
 		-
 			message: '#^Method phpDocumentor\\Guides\\Cli\\Config\\XmlFileLoader\:\:load\(\) should return array\<array\<mixed\>\> but returns array\<mixed\>\.$#'
 			identifier: return.type
@@ -193,6 +103,12 @@ parameters:
 			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
 
 		-
+			message: '#^Parameter \#1 \$string of function rtrim expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
+
+		-
 			message: '#^Parameter \#2 \$config of method phpDocumentor\\Guides\\Cli\\DependencyInjection\\ContainerFactory\:\:loadExtensionConfig\(\) expects array\<mixed\>, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -211,6 +127,30 @@ parameters:
 			path: packages/guides-cli/src/DependencyInjection/ContainerFactory.php
 
 		-
+			message: '#^Call to function method_exists\(\) with phpDocumentor\\Guides\\Settings\\ProjectSettings and ''getExcludes'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: '#^Method phpDocumentor\\Guides\\Cli\\Internal\\RunCommandHandler\:\:handle\(\) should return array\<phpDocumentor\\Guides\\Nodes\\DocumentNode\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: '#^Parameter \#1 \$documents of class phpDocumentor\\Guides\\Handlers\\CompileDocumentsCommand constructor expects array\<phpDocumentor\\Guides\\Nodes\\DocumentNode\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
+			message: '#^Parameter \#2 \$documentArray of class phpDocumentor\\Guides\\Handlers\\RenderCommand constructor expects array\<phpDocumentor\\Guides\\Nodes\\DocumentNode\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: packages/guides-cli/src/Internal/RunCommandHandler.php
+
+		-
 			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 1
@@ -221,6 +161,12 @@ parameters:
 			identifier: argument.type
 			count: 3
 			path: packages/guides-graphs/src/Graphs/DependencyInjection/GraphsExtension.php
+
+		-
+			message: '#^Method phpDocumentor\\Guides\\Markdown\\Parsers\\InlineParsers\\AbstractInlineTextDecoratorParser\<TValue of phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\:\:createInlineNode\(\) invoked with 3 parameters, 2 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: packages/guides-markdown/src/Markdown/Parsers/InlineParsers/AbstractInlineTextDecoratorParser.php
 
 		-
 			message: '#^Cannot access offset ''domain'' on mixed\.$#'
@@ -257,6 +203,36 @@ parameters:
 			identifier: offsetAccess.invalidOffset
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
+
+		-
+			message: '#^Method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\DirectiveContentRule\:\:apply\(\) should return phpDocumentor\\Guides\\Nodes\\CollectionNode but returns phpDocumentor\\Guides\\Nodes\\CollectionNode\|TParent of phpDocumentor\\Guides\\Nodes\\CompoundNode\.$#'
+			identifier: return.type
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/DirectiveContentRule.php
+
+		-
+			message: '#^Property phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\ListRule\:\:\$logger is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
+
+		-
+			message: '#^Using PHPStan\\Testing\\PHPStanTestCaseTrait is not covered by backward compatibility promise\. The trait might change in a minor PHPStan version\.$#'
+			identifier: phpstanApi.trait
+			count: 1
+			path: packages/guides-restructured-text/tests/unit/PHPStan/ReadOptionReturnTypeExtensionTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ''phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext'' and ''phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext'' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: packages/guides/src/Compiler/CompilerContext.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: packages/guides/src/Compiler/CompilerContext.php
 
 		-
 			message: '#^Binary operation "\." between ''phpdoc\.guides…'' and mixed results in an error\.$#'
@@ -307,6 +283,12 @@ parameters:
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
 
 		-
+			message: '#^Function Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\tagged_iterator not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
 			message: '#^Parameter \#1 \$tag of method phpDocumentor\\Guides\\DependencyInjection\\Compiler\\RendererPass\:\:createDelegatingNodeRender\(\) expects array\{format\: string\}, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -328,6 +310,12 @@ parameters:
 			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 6
+			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
+
+		-
+			message: '#^Used function Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\tagged_iterator not found\.$#'
+			identifier: function.notFound
+			count: 1
 			path: packages/guides/src/DependencyInjection/Compiler/RendererPass.php
 
 		-
@@ -545,3 +533,45 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: packages/guides/src/DependencyInjection/GuidesExtension.php
+
+		-
+			message: '#^Parameter \#1 \$value \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\|string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\AbstractLinkInlineNode\:\:setValue\(\) should be contravariant with parameter \$value \(mixed\) of method phpDocumentor\\Guides\\Nodes\\Node\:\:setValue\(\)$#'
+			identifier: method.childParameterType
+			count: 3
+			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
+
+		-
+			message: '#^Return type \(string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\AbstractLinkInlineNode\:\:getValue\(\) should be compatible with return type \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\) of method phpDocumentor\\Guides\\Nodes\\AbstractNode\<array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\>\:\:getValue\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: packages/guides/src/Nodes/Inline/AbstractLinkInlineNode.php
+
+		-
+			message: '#^Parameter \#1 \$value \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\|string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\EmphasisInlineNode\:\:setValue\(\) should be contravariant with parameter \$value \(mixed\) of method phpDocumentor\\Guides\\Nodes\\Node\:\:setValue\(\)$#'
+			identifier: method.childParameterType
+			count: 2
+			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
+
+		-
+			message: '#^Return type \(string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\EmphasisInlineNode\:\:getValue\(\) should be compatible with return type \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\) of method phpDocumentor\\Guides\\Nodes\\AbstractNode\<array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\>\:\:getValue\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: packages/guides/src/Nodes/Inline/EmphasisInlineNode.php
+
+		-
+			message: '#^Parameter \#1 \$value \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\|string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\StrongInlineNode\:\:setValue\(\) should be contravariant with parameter \$value \(mixed\) of method phpDocumentor\\Guides\\Nodes\\Node\:\:setValue\(\)$#'
+			identifier: method.childParameterType
+			count: 2
+			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
+
+		-
+			message: '#^Return type \(string\) of method phpDocumentor\\Guides\\Nodes\\Inline\\StrongInlineNode\:\:getValue\(\) should be compatible with return type \(array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\) of method phpDocumentor\\Guides\\Nodes\\AbstractNode\<array\<phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\>\:\:getValue\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: packages/guides/src/Nodes/Inline/StrongInlineNode.php
+
+		-
+			message: '#^Anonymous class extends @final class phpDocumentor\\Guides\\Compiler\\CompilerContext\.$#'
+			identifier: class.extendsFinalByPhpDoc
+			count: 1
+			path: packages/guides/tests/unit/Compiler/CompilerContextTest.php

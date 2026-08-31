@@ -32,7 +32,7 @@ final class DirectiveContentRule implements Rule
 
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node
     {
-        $node = new CollectionNode([]);
+        $node = $on ?? new CollectionNode([]);
         $documentIterator = $blockContext->getDocumentIterator();
         // We explicitly do not use foreach, but rather the cursors of the DocumentIterator
         // this is done because we are transitioning to a method where a Substate can take the current
@@ -40,7 +40,7 @@ final class DirectiveContentRule implements Rule
         while ($documentIterator->valid()) {
             $this->bodyElements->apply($blockContext, $node);
         }
-        
+
         return $node;
     }
 }

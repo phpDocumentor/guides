@@ -26,6 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
  *      This is a danger admonition.
  * ```
  */
+#[Attributes\Directive(name: 'danger')]
 class DangerDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)

@@ -15,6 +15,8 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
+use function strtolower;
+
 /**
  * Represents the data contained in an arbitrary directive
  *
@@ -42,7 +44,7 @@ final class Directive
 
     public function getName(): string
     {
-        return $this->name;
+        return strtolower($this->name);
     }
 
     public function getData(): string
@@ -60,7 +62,7 @@ final class Directive
     {
         $this->options[$value->getName()] = $value;
     }
-    
+
     public function hasOption(string $name): bool
     {
         return isset($this->options[$name]);

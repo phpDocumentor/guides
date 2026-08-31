@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
@@ -25,8 +26,12 @@ use function array_unshift;
 
 abstract class AbstractAdmonitionDirective extends SubDirective
 {
-    public function __construct(protected Rule $startingRule, private readonly string $name, private readonly string $text)
-    {
+    public function __construct(
+        protected Rule $startingRule,
+        /** @phpstan-ignore-next-line  */
+        private readonly string $name,
+        private readonly string $text,
+    ) {
         parent::__construct($startingRule);
     }
 
@@ -38,23 +43,31 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
-    ): Node {
-        $children = $collectionNode->getChildren();
+    ): Node|null {
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
 
-        if ($directive->getDataNode() !== null) {
-            array_unshift($children, new ParagraphNode([$directive->getDataNode()]));
+    public function createNode(DirectiveNode $directiveNode): Node|null
+    {
+        $children = $directiveNode->getChildren();
+        if ($directiveNode->getDirective()->getDataNode() !== null) {
+            array_unshift($children, new ParagraphNode([$directiveNode->getDirective()->getDataNode()]));
         }
 
-        return new AdmonitionNode(
-            $this->name,
+        $node = new AdmonitionNode(
+            $directiveNode->getDirective()->getName(),
             null,
             $this->text,
             $children,
         );
-    }
 
-    final public function getName(): string
-    {
-        return $this->name;
+        $node->setClasses([$directiveNode->getDirective()->getOptionString('class')]);
+
+        return $node;
     }
 }

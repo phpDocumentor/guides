@@ -49,3 +49,60 @@ All you need to do is create a node and add the content.
     :caption: your-extension/Directive/ExampleDirective.php
     :lineos:
 
+Reading directive options
+=========================
+
+A directive can declare the options it accepts using the repeatable
+:php:class:`\phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option` attribute on the directive class.
+Each option has a ``name``, a ``type`` (one of the
+:php:class:`\phpDocumentor\Guides\RestructuredText\Directives\OptionType` enum cases and ``String`` by default) and
+an optional ``default`` value that is returned when the option is not present on the directive:
+
+.. code-block:: php
+    :caption: your-extension/Directive/ExampleDirective.php
+
+    use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+    use phpDocumentor\Guides\RestructuredText\Directives\OptionType;
+
+    #[Option(name: 'title', description: 'The title of the node')]
+    #[Option(name: 'count', type: OptionType::Integer, default: 3, description: 'How many entries to render')]
+    #[Option(name: 'enabled', type: OptionType::Boolean, default: true)]
+    final class ExampleDirective extends SubDirective
+    {
+        // ...
+    }
+
+Inside the directive you fetch a single option with
+:php:method:`\phpDocumentor\Guides\RestructuredText\Directives\BaseDirective::readOption()`:
+
+.. code-block:: php
+
+    $title = $this->readOption($directive, 'title');   // string|null
+    $count = $this->readOption($directive, 'count');   // int
+    $enabled = $this->readOption($directive, 'enabled'); // bool
+
+``readOption()`` returns a value typed according to the matching ``#[Option]`` attribute:
+
+- an ``OptionType::String`` option returns ``string``, ``OptionType::Integer`` returns ``int``,
+  ``OptionType::Boolean`` returns ``bool`` and ``OptionType::Array`` returns ``array``;
+- when the option declares a ``default``, the default's type is added to the return type, so an
+  option without a ``default`` returns ``<type>|null``;
+- when no matching ``#[Option]`` attribute can be found for the given name, the return type is ``mixed``.
+
+Static analysis
+---------------
+
+The return type of ``readOption()`` is inferred by a PHPStan
+``DynamicMethodReturnTypeExtension`` shipped with the ``phpdocumentor/guides-restructured-text`` package. To
+enable it, require the package and include its rule set in your ``phpstan.neon``:
+
+.. code-block:: yaml
+    :caption: phpstan.neon
+
+    includes:
+        - vendor/phpdocumentor/guides-restructured-text/rules.neon
+
+With the rule enabled, PHPStan reports type mismatches when a directive uses an option in a way that
+is incompatible with its declared ``#[Option]`` type (for example passing a possibly-``null`` ``string|null``
+title to a method that requires a ``string``).
+

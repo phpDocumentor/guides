@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\VersionChangeNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -23,14 +24,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
-    /**
-     * @param string $name the directive's name, as matched in the .rst source; may differ from $type so
-     *                      that renaming a directive does not also change the CSS class of its rendered output
-     * @param string $type the type passed to VersionChangeNode, also used as the rendered CSS class
-     */
+    /** @param string $type the type passed to VersionChangeNode, also used as the rendered CSS class */
     public function __construct(
         protected Rule $startingRule,
-        private readonly string $name,
         private readonly string $type,
         private readonly string $label,
     ) {
@@ -46,16 +42,21 @@ abstract class AbstractVersionChangeDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
-        return new VersionChangeNode(
-            $this->type,
-            $this->label,
-            $directive->getData(),
-            $collectionNode->getChildren(),
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
         );
     }
 
-    final public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return $this->name;
+        return new VersionChangeNode(
+            $this->type,
+            $this->label,
+            $directiveNode->getDirective()->getData(),
+            $directiveNode->getChildren(),
+        );
     }
 }
