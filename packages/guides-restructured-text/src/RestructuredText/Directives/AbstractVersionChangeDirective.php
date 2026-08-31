@@ -23,8 +23,17 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 /** @see https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-versionadded */
 abstract class AbstractVersionChangeDirective extends SubDirective
 {
-    public function __construct(protected Rule $startingRule, private readonly string $type, private readonly string $label)
-    {
+    /**
+     * @param string $name the directive's name, as matched in the .rst source; may differ from $type so
+     *                      that renaming a directive does not also change the CSS class of its rendered output
+     * @param string $type the type passed to VersionChangeNode, also used as the rendered CSS class
+     */
+    public function __construct(
+        protected Rule $startingRule,
+        private readonly string $name,
+        private readonly string $type,
+        private readonly string $label,
+    ) {
         parent::__construct($startingRule);
     }
 
@@ -47,6 +56,6 @@ abstract class AbstractVersionChangeDirective extends SubDirective
 
     final public function getName(): string
     {
-        return $this->type;
+        return $this->name;
     }
 }
