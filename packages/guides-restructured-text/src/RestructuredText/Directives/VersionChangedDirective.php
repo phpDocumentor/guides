@@ -33,6 +33,6 @@ final class VersionChangedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
     {
-        parent::__construct($startingRule, 'version-changed', 'versionchanged', 'Changed in version %s');
+        parent::__construct($startingRule, 'versionchanged', 'Changed in version %s');
     }
 }

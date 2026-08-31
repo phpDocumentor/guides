@@ -33,6 +33,6 @@ final class DeprecatedDirective extends AbstractVersionChangeDirective
 {
     public function __construct(protected Rule $startingRule)
     {
-        parent::__construct($startingRule, 'version-deprecated', 'deprecated', 'Deprecated since version %s');
+        parent::__construct($startingRule, 'deprecated', 'Deprecated since version %s');
     }
 }
