@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Functional;
 
+use DOMDocument;
 use Exception;
-use Gajus\Dindent\Indenter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use Monolog\Handler\TestHandler;
@@ -49,7 +49,9 @@ use function file_get_contents;
 use function implode;
 use function in_array;
 use function is_string;
-use function rtrim;
+use function libxml_clear_errors;
+use function libxml_use_internal_errors;
+use function preg_replace;
 use function setlocale;
 use function sprintf;
 use function str_replace;
@@ -65,8 +67,6 @@ if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
 
 final class FunctionalTest extends ApplicationTestCase
 {
-    private const SKIP_INDENTER_FILES = ['code-block-diff'];
-
     private const IGNORED_WARNINGS = ['Document has no title'];
 
     protected function setUp(): void
@@ -81,7 +81,6 @@ final class FunctionalTest extends ApplicationTestCase
         string $format,
         string $rst,
         string $expected,
-        bool $useIndenter = true,
         array $expectedLogs = [],
     ): void {
         $expectedLines = explode("\n", $expected);
@@ -146,19 +145,40 @@ final class FunctionalTest extends ApplicationTestCase
                 );
             }
 
-            if ($format === 'html' && $useIndenter) {
-                $indenter = new Indenter();
-                $rendered = $indenter->indent($rendered);
-            }
-
             if (isset($expectedExceptionMessage)) {
                 return;
             }
 
-            self::assertSame(
-                $this->trimTrailingWhitespace($expected),
-                $this->trimTrailingWhitespace($rendered),
-            );
+            if ($format === 'html') {
+                $rendered = $this->removeRedundantWhitespaceFromHtml($rendered);
+                $expected = $this->removeRedundantWhitespaceFromHtml($expected);
+
+                $previousUseInternalErrors = libxml_use_internal_errors(true);
+                try {
+                    $expectedDom = new DOMDocument();
+                    $expectedDom->loadHTML($expected);
+                    $expectedDom->preserveWhiteSpace = false;
+
+                    $actualDom = new DOMDocument();
+                    $actualDom->loadHTML($rendered);
+                    $actualDom->preserveWhiteSpace = false;
+
+                    $expectedHtml = $expectedDom->saveHTML();
+                    $actualHtml = $actualDom->saveHTML();
+
+                    self::assertIsString($expectedHtml);
+                    self::assertIsString($actualHtml);
+
+                    self::assertXmlStringEqualsXmlString($expectedHtml, $actualHtml);
+                } catch (Throwable) {
+                    self::assertSame(trim($expected), trim($rendered));
+                } finally {
+                    libxml_clear_errors();
+                    libxml_use_internal_errors($previousUseInternalErrors);
+                }
+            } else {
+                self::assertSame(trim($expected), trim($rendered));
+            }
 
             $logHandler = $this->getContainer()->get(TestHandler::class);
             assert($logHandler instanceof TestHandler);
@@ -227,8 +247,6 @@ final class FunctionalTest extends ApplicationTestCase
 
                 $expected = $file->getContents();
 
-                $useIndenter = !in_array($basename, self::SKIP_INDENTER_FILES, true);
-
                 $logFile = $file->getPath() . '/' . $file->getFilenameWithoutExtension() . '.log';
                 $logs = [];
                 if (file_exists($logFile)) {
@@ -237,21 +255,20 @@ final class FunctionalTest extends ApplicationTestCase
                     $logs = array_map(trim(...), $logFileContent);
                 }
 
-                $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $useIndenter, $logs];
+                $tests[$basename . '_' . $format] = [$basename, $format, $rst, trim($expected), $logs];
             }
         }
 
         return $tests;
     }
 
-    private function trimTrailingWhitespace(string $string): string
+    private function removeRedundantWhitespaceFromHtml(string $html): string
     {
-        $lines = explode("\n", $string);
+        $html = implode("\n", array_map('trim', explode("\n", $html)));
+        $html = preg_replace('#\s+#', ' ', $html) ?? $html;
+        $html = preg_replace('#\s<#', '<', $html) ?? $html;
+        $html = preg_replace('#>\s#', '>', $html) ?? $html;
 
-        $lines = array_map(static function (string $line): string {
-            return rtrim($line);
-        }, $lines);
-
-        return trim(implode("\n", $lines));
+        return $html;
     }
 }
