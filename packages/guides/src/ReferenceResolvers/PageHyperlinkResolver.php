@@ -20,6 +20,8 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
 
 use function count;
+use function explode;
+use function str_contains;
 use function str_ends_with;
 use function strlen;
 use function substr;
@@ -46,7 +48,15 @@ final class PageHyperlinkResolver implements ReferenceResolver
             return false;
         }
 
-        $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $node->getTargetReference());
+        $targetReference = $node->getTargetReference();
+        $anchor = '';
+        if (str_contains($targetReference, '#')) {
+            $exploded = explode('#', $targetReference, 2);
+            $targetReference = $exploded[0];
+            $anchor = '#' . $exploded[1];
+        }
+
+        $canonicalDocumentName = $this->documentNameResolver->canonicalUrl($renderContext->getDirName(), $targetReference);
         if (str_ends_with($canonicalDocumentName, '.' . $renderContext->getOutputFormat())) {
             $canonicalDocumentName = substr($canonicalDocumentName, 0, 0 - strlen('.' . $renderContext->getOutputFormat()));
         }
@@ -56,7 +66,7 @@ final class PageHyperlinkResolver implements ReferenceResolver
             return false;
         }
 
-        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $document->getFile()));
+        $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $document->getFile()) . $anchor);
         if (count($node->getChildren()) === 0) {
             $node->addChildNode(new PlainTextInlineNode($document->getTitle()->toString()));
         }
