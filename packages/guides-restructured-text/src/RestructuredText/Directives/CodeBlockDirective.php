@@ -49,7 +49,7 @@ final class CodeBlockDirective extends BaseDirective
     /** {@inheritDoc} */
     public function getAliases(): array
     {
-        return ['code', 'parsed-literal'];
+        return ['code', 'parsed-literal', 'sourcecode'];
     }
 
     /** {@inheritDoc} */
