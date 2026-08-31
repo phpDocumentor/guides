@@ -15,13 +15,9 @@ namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DefinitionListItemNode::class)]
-#[CoversMethod(DefinitionListItemNode::class, '__construct')]
-#[CoversMethod(DefinitionListItemNode::class, 'getTerm')]
-#[CoversMethod(DefinitionListItemNode::class, 'getClassifiers')]
 final class DefinitionListTermTest extends TestCase
 {
     public function testTheDefinitionTermTextIsAvailable(): void

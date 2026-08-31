@@ -23,14 +23,9 @@ namespace phpDocumentor\Guides\Nodes;
  */
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ListItemNode::class)]
-#[CoversMethod(ListItemNode::class, '__construct')]
-#[CoversMethod(ListItemNode::class, 'getPrefix')]
-#[CoversMethod(ListItemNode::class, 'isOrdered')]
-#[CoversMethod(ListItemNode::class, 'getValue')]
 final class ListItemNodeTest extends TestCase
 {
     public function testPrefixingCharacterTypeOfListAndContentsOfItemCanBeRecorded(): void

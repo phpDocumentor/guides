@@ -23,13 +23,9 @@ namespace phpDocumentor\Guides\Nodes;
  */
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(SeparatorNode::class)]
-#[CoversMethod(SeparatorNode::class, '__construct')]
-#[CoversMethod(SeparatorNode::class, 'getLevel')]
-#[CoversMethod(SeparatorNode::class, 'getValue')]
 final class SeparatorNodeTest extends TestCase
 {
     public function testASeparatorCanBeDefinedWithALevel(): void

@@ -16,15 +16,12 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 
 #[UsesClass(LinesIterator::class)]
-#[CoversMethod(ParagraphRule::class, '__construct')]
-#[CoversMethod(ParagraphRule::class, 'apply')]
-#[CoversMethod(ParagraphRule::class, 'applies')]
-#[CoversMethod(ParagraphRule::class, 'isWhiteline')]
+#[CoversClass(ParagraphRule::class)]
 final class ParagraphRuleTest extends RuleTestCase
 {
     #[DataProvider('paragraphProvider')]
