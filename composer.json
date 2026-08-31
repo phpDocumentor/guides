@@ -62,7 +62,6 @@
         "doctrine/coding-standard": "^13.0",
         "fakerphp/faker": "^1.24",
         "fig/log-test": "^1.0",
-        "gajus/dindent": "^2.0.1",
         "jangregor/phpstan-prophecy": "^2.3",
         "league/csv": "^9.0",
         "league/flysystem-memory": "^1.0 || ^3.29",
