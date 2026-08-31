@@ -80,6 +80,11 @@ final class PageHyperlinkResolverTest extends TestCase
                 'input' => 'some-document#anchor',
                 'path' => 'some-document',
             ],
+            'withMultipleHashes' => [
+                'expected' => 'some-document#anchor#extra',
+                'input' => 'some-document#anchor#extra',
+                'path' => 'some-document',
+            ],
         ];
     }
 }
