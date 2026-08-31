@@ -170,4 +170,15 @@ final class InlineLexer extends AbstractLexer
 
         return self::WORD;
     }
+
+    /**
+     * Moves to the next token in the input string.
+     *
+     * @phpstan-impure
+     * @phpstan-assert-if-true !null $this->lookahead
+     */
+    public function moveNext(): bool
+    {
+        return parent::moveNext();
+    }
 }
