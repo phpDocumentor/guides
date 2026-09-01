@@ -19,8 +19,10 @@ use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 
+use function explode;
 use function filter_var;
 use function preg_replace;
+use function str_contains;
 use function str_ends_with;
 use function str_replace;
 use function substr;
@@ -37,13 +39,22 @@ abstract class ReferenceRule extends AbstractInlineRule
         $reference = str_replace("\n", ' ', $reference);
         $reference = trim(preg_replace('/\s+/', ' ', $reference) ?? '');
 
+        $anchor = '';
+        if (str_contains($reference, '#')) {
+            $exploded = explode('#', $reference, 2);
+            $reference = $exploded[0];
+            $anchor = '#' . $exploded[1];
+        }
+
         if (str_ends_with($reference, '.rst') && filter_var($reference, FILTER_VALIDATE_URL) === false) {
-            $reference = substr($reference, 0, -4);
+            $reference = substr($reference, 0, -4) . $anchor;
 
             $text ??= $reference;
 
             return new DocReferenceNode($reference, $text !== '' ? [new PlainTextInlineNode($text)] : []);
         }
+
+        $reference .= $anchor;
 
         if ($registerLink && $text !== null) {
             $blockContext->getDocumentParserContext()->setLink($text, $reference);
