@@ -19,6 +19,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Testing\PHPStanTestCaseTrait;
 use PHPStan\Type\VerbosityLevel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ReadOptionReturnTypeExtensionTest extends TestCase
@@ -45,7 +46,7 @@ final class ReadOptionReturnTypeExtensionTest extends TestCase
         ];
     }
 
-    /** @dataProvider optionTypeProvider */
+    #[DataProvider('optionTypeProvider')]
     public function testResolvesDeclaredOptionTypes(string $optionName, string $expectedType): void
     {
         $type = $this->subject->resolveReturnType($this->fixtureReflection(), $optionName);

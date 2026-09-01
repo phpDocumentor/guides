@@ -22,17 +22,12 @@ namespace phpDocumentor\Guides\Nodes;
  * @link https://phpdoc.org
  */
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @coversDefaultClass \phpDocumentor\Guides\Nodes\ListItemNode */
+#[CoversClass(ListItemNode::class)]
 final class ListItemNodeTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::getPrefix
-     * @covers ::isOrdered
-     * @covers ::getValue
-     */
     public function testPrefixingCharacterTypeOfListAndContentsOfItemCanBeRecorded(): void
     {
         $contents = [

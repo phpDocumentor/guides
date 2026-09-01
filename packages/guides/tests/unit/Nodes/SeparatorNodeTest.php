@@ -22,16 +22,12 @@ namespace phpDocumentor\Guides\Nodes;
  * @link https://phpdoc.org
  */
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @coversDefaultClass \phpDocumentor\Guides\Nodes\SeparatorNode */
+#[CoversClass(SeparatorNode::class)]
 final class SeparatorNodeTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::getLevel
-     * @covers ::getValue
-     */
     public function testASeparatorCanBeDefinedWithALevel(): void
     {
         $node = new SeparatorNode(2);
