@@ -21,9 +21,6 @@ use function str_starts_with;
  * Restricts a (already see-resolved) term map to rows originating from a
  * document under one of a set of path prefixes -- used for a `.. genindex::`
  * directive's `:scope:` option.
- *
- * @phpstan-import-type GenIndexTermMap from IndexEntryCollector
- * @phpstan-import-type GenIndexRowData from IndexEntryCollector
  */
 final class GenIndexTermMapFilter
 {
@@ -34,48 +31,45 @@ final class GenIndexTermMapFilter
      * outside the visible scope still links correctly, it just isn't itself
      * listed as a separate row here.
      *
-     * @param GenIndexTermMap $termMap
      * @param string[] $pathPrefixes
-     *
-     * @return GenIndexTermMap
      */
-    public function filterTermMap(array $termMap, array $pathPrefixes): array
+    public function filterTermMap(GenIndexTermMap $termMap, array $pathPrefixes): GenIndexTermMap
     {
-        $filtered = [];
+        $filtered = new GenIndexTermMap();
         foreach ($termMap as $key => $term) {
-            $rows = $this->filterRowsByPath($term['rows'], $pathPrefixes);
+            $rows = $this->filterRowsByPath($term->getRows(), $pathPrefixes);
 
             $subterms = [];
-            foreach ($term['subterms'] as $subKey => $subterm) {
-                $subRows = $this->filterRowsByPath($subterm['rows'], $pathPrefixes);
+            foreach ($term->getSubterms() as $subKey => $subterm) {
+                $subRows = $this->filterRowsByPath($subterm->getRows(), $pathPrefixes);
                 if ($subRows === []) {
                     continue;
                 }
 
-                $subterms[$subKey] = ['term' => $subterm['term'], 'rows' => $subRows];
+                $subterms[$subKey] = new GenIndexTermData($subterm->getTerm(), $subRows);
             }
 
             if ($rows === [] && $subterms === []) {
                 continue;
             }
 
-            $filtered[$key] = ['term' => $term['term'], 'rows' => $rows, 'subterms' => $subterms];
+            $filtered->set($key, new GenIndexTermData($term->getTerm(), $rows, $subterms));
         }
 
         return $filtered;
     }
 
     /**
-     * @param array<int, GenIndexRowData> $rows
+     * @param GenIndexRowData[] $rows
      * @param string[] $pathPrefixes
      *
-     * @return array<int, GenIndexRowData>
+     * @return GenIndexRowData[]
      */
     private function filterRowsByPath(array $rows, array $pathPrefixes): array
     {
-        return array_values(array_filter($rows, static function (array $row) use ($pathPrefixes): bool {
+        return array_values(array_filter($rows, static function (GenIndexRowData $row) use ($pathPrefixes): bool {
             foreach ($pathPrefixes as $prefix) {
-                if (str_starts_with($row['filePath'], $prefix)) {
+                if (str_starts_with($row->filePath, $prefix)) {
                     return true;
                 }
             }
