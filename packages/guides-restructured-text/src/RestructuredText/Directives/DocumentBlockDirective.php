@@ -20,14 +20,10 @@ use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
+#[Attributes\Directive(name: 'documentblock', synchronous: true)]
 #[Option(name: 'identifier', type: OptionType::String, description: 'The identifier of the document block')]
 final class DocumentBlockDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'documentblock';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive

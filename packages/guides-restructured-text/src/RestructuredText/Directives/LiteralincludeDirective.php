@@ -35,17 +35,13 @@ use function sprintf;
 use function str_contains;
 use function trim;
 
+#[Attributes\Directive(name: 'literalinclude', synchronous: true)]
 final class LiteralincludeDirective extends BaseDirective
 {
     public function __construct(
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
         private readonly LoggerInterface|null $logger = null,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'literalinclude';
     }
 
     /** {@inheritDoc} */

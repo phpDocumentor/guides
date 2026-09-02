@@ -34,6 +34,7 @@ use function dirname;
  *
  *      Here is an awesome caption
  */
+#[Attributes\Directive(name: 'figure', synchronous: true)]
 #[Option(name: 'width', description: 'Width of the image in pixels')]
 #[Option(name: 'height', description: 'Height of the image in pixels')]
 #[Option(name: 'alt', description: 'Alternative text for the image')]
@@ -49,11 +50,6 @@ final class FigureDirective extends SubDirective
         protected Rule $startingRule,
     ) {
         parent::__construct($startingRule);
-    }
-
-    public function getName(): string
-    {
-        return 'figure';
     }
 
     /** {@inheritDoc}

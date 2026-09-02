@@ -21,13 +21,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /**
  * Marks the document as LaTeX main
  */
+#[Attributes\Directive(name: 'latex-main', synchronous: true)]
 final class LaTeXMain extends BaseDirective
 {
-    public function getName(): string
-    {
-        return 'latex-main';
-    }
-
     /** {@inheritDoc} */
     public function processNode(
         BlockContext $blockContext,

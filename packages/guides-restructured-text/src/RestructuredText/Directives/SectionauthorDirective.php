@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 
 use function preg_match;
 
+#[Attributes\Directive(name: 'sectionauthor', aliases: ['codeauthor'], synchronous: true)]
 final class SectionauthorDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/vGy4Uu/1 */
@@ -29,23 +30,6 @@ final class SectionauthorDirective extends BaseDirective
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'sectionauthor';
-    }
-
-    /**
-     * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
-     *
-     * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
-     *
-     * @return string[]
-     */
-    public function getAliases(): array
-    {
-        return ['codeauthor'];
     }
 
     /** {@inheritDoc}

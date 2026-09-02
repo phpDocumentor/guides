@@ -29,16 +29,12 @@ use function trim;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#role
  */
+#[Attributes\Directive(name: 'role', synchronous: true)]
 final class RoleDirective extends ActionDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'role';
     }
 
     public function processAction(

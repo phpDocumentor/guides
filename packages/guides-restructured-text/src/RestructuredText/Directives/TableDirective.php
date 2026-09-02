@@ -43,6 +43,7 @@ use function strval;
  *     | Row 2, Column 1 | Row 2, Column 2 |
  *     +-----------------+-----------------+
  */
+#[Attributes\Directive(name: 'table', synchronous: true)]
 final class TableDirective extends SubDirective
 {
     public function __construct(
@@ -50,11 +51,6 @@ final class TableDirective extends SubDirective
         private LoggerInterface $logger,
     ) {
         parent::__construct($startingRule);
-    }
-
-    public function getName(): string
-    {
-        return 'table';
     }
 
     /** {@inheritDoc} */

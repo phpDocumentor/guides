@@ -70,6 +70,7 @@ use phpDocumentor\Guides\Settings\SettingsManager;
  * :maxdepth:
  *     Synonym of :depth:, depth prevails if both are set.
  */
+#[Attributes\Directive(name: 'toctree', synchronous: true)]
 final class ToctreeDirective extends BaseDirective
 {
     private SettingsManager $settingsManager;
@@ -82,11 +83,6 @@ final class ToctreeDirective extends BaseDirective
     ) {
         // if for backward compatibility reasons no settings manager was passed, use the defaults
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
-    }
-
-    public function getName(): string
-    {
-        return 'toctree';
     }
 
     /** {@inheritDoc} */

@@ -29,6 +29,7 @@ use function assert;
 use function get_debug_type;
 use function sprintf;
 
+#[Attributes\Directive(name: 'configuration-block', synchronous: true)]
 final class ConfigurationBlockDirective extends SubDirective
 {
     private SluggerInterface $slugger;
@@ -45,11 +46,6 @@ final class ConfigurationBlockDirective extends SubDirective
         parent::__construct($startingRule);
 
         $this->slugger = new AsciiSlugger();
-    }
-
-    public function getName(): string
-    {
-        return 'configuration-block';
     }
 
     protected function processSub(

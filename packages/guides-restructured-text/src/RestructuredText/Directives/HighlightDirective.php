@@ -21,13 +21,9 @@ use function trim;
 /**
  * https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-highlight
  */
+#[Attributes\Directive(name: 'highlight', synchronous: true)]
 final class HighlightDirective extends ActionDirective
 {
-    public function getName(): string
-    {
-        return 'highlight';
-    }
-
     public function processAction(
         BlockContext $blockContext,
         Directive $directive,

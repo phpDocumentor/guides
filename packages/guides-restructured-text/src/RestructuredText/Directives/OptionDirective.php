@@ -32,6 +32,7 @@ use function str_contains;
  *
  * https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#directive-option
  */
+#[Attributes\Directive(name: 'option', synchronous: true)]
 final class OptionDirective extends SubDirective
 {
     public const NAME = 'option';
@@ -45,11 +46,6 @@ final class OptionDirective extends SubDirective
         parent::__construct($startingRule);
 
         $genericLinkProvider->addGenericLink(self::NAME, OptionNode::LINK_TYPE);
-    }
-
-    public function getName(): string
-    {
-        return self::NAME;
     }
 
     /** {@inheritDoc}

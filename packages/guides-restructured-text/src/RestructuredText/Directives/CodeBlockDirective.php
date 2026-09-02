@@ -33,23 +33,13 @@ use function trim;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
+#[Attributes\Directive(name: 'code-block', aliases: ['code', 'parsed-literal', 'sourcecode'], synchronous: true)]
 final class CodeBlockDirective extends BaseDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'code-block';
-    }
-
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return ['code', 'parsed-literal', 'sourcecode'];
     }
 
     /** {@inheritDoc} */

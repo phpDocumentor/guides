@@ -25,25 +25,14 @@ use function array_map;
 use function array_merge;
 use function explode;
 
+/**
+ * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
+ *
+ * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
+ */
+#[Attributes\Directive(name: 'class', aliases: ['rst-class'], synchronous: true)]
 final class ClassDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'class';
-    }
-
-    /**
-     * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
-     *
-     * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
-     *
-     * @return string[]
-     */
-    public function getAliases(): array
-    {
-        return ['rst-class'];
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive

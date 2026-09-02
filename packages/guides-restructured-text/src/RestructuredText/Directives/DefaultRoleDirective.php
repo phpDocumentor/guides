@@ -21,13 +21,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#default-role
  */
+#[Attributes\Directive(name: 'default-role', synchronous: true)]
 final class DefaultRoleDirective extends ActionDirective
 {
-    public function getName(): string
-    {
-        return 'default-role';
-    }
-
     public function processAction(
         BlockContext $blockContext,
         Directive $directive,

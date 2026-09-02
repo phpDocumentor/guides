@@ -27,13 +27,9 @@ use function preg_replace;
 use function str_replace;
 use function strtolower;
 
+#[Attributes\Directive(name: 'tab', synchronous: true)]
 final class TabDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'tab';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive

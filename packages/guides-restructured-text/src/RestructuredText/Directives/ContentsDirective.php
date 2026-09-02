@@ -26,6 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * Displays a table of content of the current page
  */
+#[Attributes\Directive(name: 'contents', synchronous: true)]
 #[Option(name: 'local', type: OptionType::Boolean, description: 'If set, the table of contents will only include sections that are local to the current document.', default: false)]
 #[Option(name: 'depth', description: 'The maximum depth of the table of contents.')]
 final class ContentsDirective extends BaseDirective
@@ -33,11 +34,6 @@ final class ContentsDirective extends BaseDirective
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'contents';
     }
 
     /** {@inheritDoc} */

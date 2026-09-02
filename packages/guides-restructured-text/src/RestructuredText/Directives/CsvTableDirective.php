@@ -45,17 +45,13 @@ use function trim;
  *    :widths: 30, 70
  *    :header-rows: 1
  */
+#[Attributes\Directive(name: 'csv-table', synchronous: true)]
 final class CsvTableDirective extends BaseDirective
 {
     public function __construct(
         private RuleContainer $productions,
         private LoggerInterface $logger,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'csv-table';
     }
 
     /** {@inheritDoc} */

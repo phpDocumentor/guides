@@ -32,6 +32,7 @@ use function count;
  *
  * By default, it displays a menu of the pages on level 1 up to level 2.
  */
+#[Attributes\Directive(name: 'menu', synchronous: true)]
 final class MenuDirective extends BaseDirective
 {
     private SettingsManager $settingsManager;
@@ -42,11 +43,6 @@ final class MenuDirective extends BaseDirective
     ) {
         // if for backward compatibility reasons no settings manager was passed, use the defaults
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
-    }
-
-    public function getName(): string
-    {
-        return 'menu';
     }
 
     /** {@inheritDoc} */

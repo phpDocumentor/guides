@@ -23,13 +23,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  * .. meta::
  *      :key: value
  */
+#[Attributes\Directive(name: 'meta', synchronous: true)]
 final class MetaDirective extends ActionDirective
 {
-    public function getName(): string
-    {
-        return 'meta';
-    }
-
     public function processAction(BlockContext $blockContext, Directive $directive): void
     {
         $document = $blockContext->getDocumentParserContext()->getDocument();

@@ -30,22 +30,12 @@ use Psr\Log\LoggerInterface;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
+#[Attributes\Directive(name: 'math', synchronous: true)]
 final class MathDirective extends BaseDirective
 {
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'math';
-    }
-
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return [];
     }
 
     /** {@inheritDoc} */

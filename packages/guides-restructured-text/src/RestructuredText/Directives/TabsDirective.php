@@ -28,6 +28,7 @@ use function class_alias;
 use function class_exists;
 use function is_string;
 
+#[Attributes\Directive(name: 'tabs', synchronous: true)]
 final class TabsDirective extends SubDirective
 {
     private int $tabsCounter = 0;
@@ -39,11 +40,6 @@ final class TabsDirective extends SubDirective
         private readonly AnchorNormalizer $anchorReducer,
     ) {
         parent::__construct($startingRule);
-    }
-
-    public function getName(): string
-    {
-        return 'tabs';
     }
 
     /** {@inheritDoc}

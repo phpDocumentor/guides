@@ -21,13 +21,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * .. title:: Page title
  */
+#[Attributes\Directive(name: 'title', synchronous: true)]
 final class TitleDirective extends ActionDirective
 {
-    public function getName(): string
-    {
-        return 'title';
-    }
-
     public function processAction(BlockContext $blockContext, Directive $directive): void
     {
         $document = $blockContext->getDocumentParserContext()->getDocument();

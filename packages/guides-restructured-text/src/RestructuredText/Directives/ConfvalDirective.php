@@ -33,6 +33,7 @@ use function trim;
  *
  * https://sphinx-toolbox.readthedocs.io/en/stable/extensions/confval.html
  */
+#[Attributes\Directive(name: 'confval', synchronous: true)]
 #[Option(name: 'name', description: 'Id of the configuration value, used for linking to it.')]
 #[Option(name: 'type', description: 'Type of the configuration value, e.g. "string", "int", etc.')]
 #[Option(name: 'required', type: OptionType::Boolean, default: false, description: 'Whether the configuration value is required or not.')]
@@ -53,11 +54,6 @@ final class ConfvalDirective extends SubDirective
         parent::__construct($startingRule);
 
         $genericLinkProvider->addGenericLink(self::NAME, ConfvalNode::LINK_TYPE, ConfvalNode::LINK_PREFIX);
-    }
-
-    public function getName(): string
-    {
-        return self::NAME;
     }
 
     /** {@inheritDoc}

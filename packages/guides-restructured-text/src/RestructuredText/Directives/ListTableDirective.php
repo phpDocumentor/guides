@@ -33,6 +33,7 @@ use function explode;
 use function sprintf;
 use function strval;
 
+#[Attributes\Directive(name: 'list-table', synchronous: true)]
 class ListTableDirective extends SubDirective
 {
     public function __construct(
@@ -40,11 +41,6 @@ class ListTableDirective extends SubDirective
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct($startingRule);
-    }
-
-    public function getName(): string
-    {
-        return 'list-table';
     }
 
     /** {@inheritDoc} */

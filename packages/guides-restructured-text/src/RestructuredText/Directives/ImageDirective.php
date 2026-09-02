@@ -38,6 +38,7 @@ use const FILTER_VALIDATE_URL;
  *      :width: 100
  *      :title: An image
  */
+#[Attributes\Directive(name: 'image', synchronous: true)]
 #[Option(name: 'width', description: 'Width of the image in pixels')]
 #[Option(name: 'height', description: 'Height of the image in pixels')]
 #[Option(name: 'alt', description: 'Alternative text for the image')]
@@ -57,11 +58,6 @@ final class ImageDirective extends BaseDirective
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'image';
     }
 
     /** {@inheritDoc} */

@@ -28,17 +28,13 @@ use function explode;
 use function sprintf;
 use function str_replace;
 
+#[Attributes\Directive(name: 'include', synchronous: true)]
 #[Option(name: 'literal', description: 'If set, the contents will be rendered as a literal block.')]
 #[Option(name: 'code', description: 'If set, the contents will be rendered as a code block with the specified language.')]
 final class IncludeDirective extends BaseDirective
 {
     public function __construct(private readonly DocumentRule $startingRule)
     {
-    }
-
-    public function getName(): string
-    {
-        return 'include';
     }
 
     /** {@inheritDoc} */
