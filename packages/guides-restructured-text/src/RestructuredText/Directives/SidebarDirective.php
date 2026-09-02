@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -25,13 +26,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#sidebar
  */
+#[Attributes\Directive(name: 'sidebar')]
 final class SidebarDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'sidebar';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive
@@ -41,9 +38,21 @@ final class SidebarDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node
+    {
+        $directive = $directiveNode->getDirective();
+
         return new SidebarNode(
             $directive->getDataNode() ?? InlineCompoundNode::getPlainTextInlineNode($directive->getData()),
-            $collectionNode->getChildren(),
+            $directiveNode->getChildren(),
         );
     }
 }

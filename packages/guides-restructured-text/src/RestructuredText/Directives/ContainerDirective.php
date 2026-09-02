@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -24,19 +25,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#container
  */
+#[Attributes\Directive(name: 'container', aliases: ['div'])]
 final class ContainerDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'container';
-    }
-
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return ['div'];
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive
@@ -46,6 +37,17 @@ final class ContainerDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
-        return (new ContainerNode($collectionNode->getChildren()))->withOptions(['class' => $directive->getData()]);
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node
+    {
+        return (new ContainerNode($directiveNode->getChildren()))
+            ->withOptions(['class' => $directiveNode->getDirective()->getData()]);
     }
 }

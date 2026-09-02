@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -26,13 +27,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#pull-quote
  */
+#[Attributes\Directive(name: 'pull-quote')]
 final class PullQuoteDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'pull-quote';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive
@@ -42,6 +39,16 @@ final class PullQuoteDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
-        return new QuoteNode($collectionNode->getChildren(), ['pull-quote']);
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node
+    {
+        return new QuoteNode($directiveNode->getChildren(), ['pull-quote']);
     }
 }

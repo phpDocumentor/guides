@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\ReplacementNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -28,25 +29,31 @@ use function count;
  *
  * .. |test| replace:: The Test String!
  */
+#[Attributes\Directive(name: 'replace')]
 final class ReplaceDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'replace';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive
      */
-    final protected function processSub(
+    protected function processSub(
         BlockContext $blockContext,
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node
+    {
         /** @var array<InlineCompoundNode> $children */
-        $children = $collectionNode->getChildren();
-        $data = $directive->getDataNode();
+        $children = $directiveNode->getChildren();
+        $data = $directiveNode->getDirective()->getDataNode();
         if ($data !== null) {
             if (count($children) > 0) {
                 $children[] = new ParagraphNode([$data]);

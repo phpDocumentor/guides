@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
@@ -25,13 +26,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#highlights
  */
+#[Attributes\Directive(name: 'highlights')]
 final class HighlightsDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'highlights';
-    }
-
     /** {@inheritDoc}
      *
      * @param Directive $directive
@@ -41,6 +38,16 @@ final class HighlightsDirective extends SubDirective
         CollectionNode $collectionNode,
         Directive $directive,
     ): Node {
-        return new QuoteNode($collectionNode->getChildren(), ['highlights']);
+        return $this->createNode(
+            new DirectiveNode(
+                $directive,
+                $collectionNode->getChildren(),
+            ),
+        );
+    }
+
+    public function createNode(DirectiveNode $directiveNode): Node
+    {
+        return new QuoteNode($directiveNode->getChildren(), ['highlights']);
     }
 }
