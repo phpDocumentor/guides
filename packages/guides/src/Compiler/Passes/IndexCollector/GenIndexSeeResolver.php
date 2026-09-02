@@ -20,77 +20,68 @@ use function trim;
 
 /**
  * Points every `see`/`seealso` row at the anchor of the term it targets.
- *
- * @phpstan-import-type GenIndexTermMap from IndexEntryCollector
- * @phpstan-import-type GenIndexTermData from IndexEntryCollector
- * @phpstan-import-type GenIndexRowData from IndexEntryCollector
  */
 final class GenIndexSeeResolver
 {
-    /** @param GenIndexTermMap $termMap */
-    public function resolveSeeRows(array &$termMap): void
+    public function resolveSeeRows(GenIndexTermMap $termMap): GenIndexTermMap
     {
-        $original = $termMap;
+        $resolved = new GenIndexTermMap();
         foreach ($termMap as $key => $term) {
             $subterms = [];
-            foreach ($term['subterms'] as $subKey => $subterm) {
-                $subterms[$subKey] = [
-                    'term' => $subterm['term'],
-                    'rows' => $this->resolveSeeRowTargets($subterm['rows'], $original),
-                ];
+            foreach ($term->getSubterms() as $subKey => $subterm) {
+                $subterms[$subKey] = new GenIndexTermData(
+                    $subterm->getTerm(),
+                    $this->resolveSeeRowTargets($subterm->getRows(), $termMap),
+                );
             }
 
-            $termMap[$key] = [
-                'term' => $term['term'],
-                'rows' => $this->resolveSeeRowTargets($term['rows'], $original),
-                'subterms' => $subterms,
-            ];
+            $resolved->set($key, new GenIndexTermData(
+                $term->getTerm(),
+                $this->resolveSeeRowTargets($term->getRows(), $termMap),
+                $subterms,
+            ));
         }
+
+        return $resolved;
     }
 
     /**
-     * @param array<int, GenIndexRowData> $rows
-     * @param GenIndexTermMap $termMap
+     * @param GenIndexRowData[] $rows
      *
-     * @return array<int, GenIndexRowData>
+     * @return GenIndexRowData[]
      */
-    private function resolveSeeRowTargets(array $rows, array $termMap): array
+    private function resolveSeeRowTargets(array $rows, GenIndexTermMap $termMap): array
     {
         foreach ($rows as $index => $row) {
-            if ($row['kind'] === GenIndexRowKind::Link) {
+            if ($row->kind === GenIndexRowKind::Link) {
                 continue;
             }
 
-            $targetKey = $this->normalize($row['seeText'] ?? '');
-            $targetLinkRow = $this->findFirstLinkRow($termMap[$targetKey] ?? null);
+            $targetKey = $this->normalize($row->seeText ?? '');
+            $targetLinkRow = $this->findFirstLinkRow($termMap->get($targetKey));
             if ($targetLinkRow === null) {
                 continue;
             }
 
-            $rows[$index]['anchor'] = $targetLinkRow['anchor'];
+            $rows[$index] = $row->withAnchor($targetLinkRow->anchor);
         }
 
         return $rows;
     }
 
-    /**
-     * @param GenIndexTermData|null $term
-     *
-     * @return GenIndexRowData|null
-     */
-    private function findFirstLinkRow(array|null $term): array|null
+    private function findFirstLinkRow(GenIndexTermData|null $term): GenIndexRowData|null
     {
         if ($term === null) {
             return null;
         }
 
-        $row = $this->findFirstLinkRowInRows($term['rows']);
+        $row = $this->findFirstLinkRowInRows($term->getRows());
         if ($row !== null) {
             return $row;
         }
 
-        foreach ($term['subterms'] as $subterm) {
-            $row = $this->findFirstLinkRowInRows($subterm['rows']);
+        foreach ($term->getSubterms() as $subterm) {
+            $row = $this->findFirstLinkRowInRows($subterm->getRows());
             if ($row !== null) {
                 return $row;
             }
@@ -99,15 +90,11 @@ final class GenIndexSeeResolver
         return null;
     }
 
-    /**
-     * @param array<int, GenIndexRowData> $rows
-     *
-     * @return GenIndexRowData|null
-     */
-    private function findFirstLinkRowInRows(array $rows): array|null
+    /** @param GenIndexRowData[] $rows */
+    private function findFirstLinkRowInRows(array $rows): GenIndexRowData|null
     {
         foreach ($rows as $row) {
-            if ($row['kind'] === GenIndexRowKind::Link) {
+            if ($row->kind === GenIndexRowKind::Link) {
                 return $row;
             }
         }

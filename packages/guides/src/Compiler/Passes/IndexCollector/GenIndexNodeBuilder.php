@@ -25,19 +25,11 @@ use function usort;
 /**
  * Turns a (already see-resolved) term map into a sorted `GenIndexTerm` node
  * tree.
- *
- * @phpstan-import-type GenIndexTermMap from IndexEntryCollector
- * @phpstan-import-type GenIndexTermData from IndexEntryCollector
- * @phpstan-import-type GenIndexRowData from IndexEntryCollector
  */
 final class GenIndexNodeBuilder
 {
-    /**
-     * @param GenIndexTermMap $termMap
-     *
-     * @return GenIndexTerm[]
-     */
-    public function toTermNodes(array $termMap): array
+    /** @return GenIndexTerm[] */
+    public function toTermNodes(GenIndexTermMap $termMap): array
     {
         $terms = [];
         foreach ($termMap as $data) {
@@ -49,21 +41,20 @@ final class GenIndexNodeBuilder
         return $terms;
     }
 
-    /** @param GenIndexTermData $data */
-    private function toTermNode(array $data): GenIndexTerm
+    private function toTermNode(GenIndexTermData $data): GenIndexTerm
     {
         $subterms = [];
-        foreach ($data['subterms'] as $subtermData) {
-            $subterms[] = $this->toTermNode(['term' => $subtermData['term'], 'rows' => $subtermData['rows'], 'subterms' => []]);
+        foreach ($data->getSubterms() as $subtermData) {
+            $subterms[] = $this->toTermNode(new GenIndexTermData($subtermData->getTerm(), $subtermData->getRows()));
         }
 
         usort($subterms, static fn (GenIndexTerm $a, GenIndexTerm $b): int => strcasecmp($a->getTerm(), $b->getTerm()));
 
-        return new GenIndexTerm($data['term'], $this->toRowNodes($data['rows']), $subterms);
+        return new GenIndexTerm($data->getTerm(), $this->toRowNodes($data->getRows()), $subterms);
     }
 
     /**
-     * @param array<int, GenIndexRowData> $rows
+     * @param GenIndexRowData[] $rows
      *
      * @return GenIndexRow[]
      */
@@ -71,21 +62,21 @@ final class GenIndexNodeBuilder
     {
         usort(
             $rows,
-            static fn (array $a, array $b): int => ($a['kind'] === GenIndexRowKind::Link ? 1 : 0) <=> ($b['kind'] === GenIndexRowKind::Link ? 1 : 0),
+            static fn (GenIndexRowData $a, GenIndexRowData $b): int => ($a->kind === GenIndexRowKind::Link ? 1 : 0) <=> ($b->kind === GenIndexRowKind::Link ? 1 : 0),
         );
 
         $nodes = [];
         foreach ($rows as $row) {
             $reference = null;
-            if ($row['anchor'] !== null) {
-                $text = $row['kind'] === GenIndexRowKind::Link ? $row['title'] : $row['seeText'];
-                $reference = new ReferenceNode($row['anchor'], [new PlainTextInlineNode($text ?? '')]);
-                if ($row['main']) {
+            if ($row->anchor !== null) {
+                $text = $row->kind === GenIndexRowKind::Link ? $row->title : $row->seeText;
+                $reference = new ReferenceNode($row->anchor, [new PlainTextInlineNode($text ?? '')]);
+                if ($row->main) {
                     $reference->setClasses(['main-entry']);
                 }
             }
 
-            $nodes[] = new GenIndexRow($row['kind'], $row['main'], $reference, $row['seeText']);
+            $nodes[] = new GenIndexRow($row->kind, $row->main, $reference, $row->seeText);
         }
 
         return $nodes;

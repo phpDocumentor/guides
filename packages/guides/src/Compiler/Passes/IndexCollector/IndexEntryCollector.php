@@ -32,26 +32,17 @@ use function trim;
 /**
  * Walks every document for `.. index::` entries and expands each one into
  * term/subterm rows, following Sphinx's `pair`/`triple`/`module` conventions.
- *
- * @phpstan-type GenIndexRowData array{kind: GenIndexRowKind, main: bool, anchor: string|null, title: string|null, seeText: string|null, filePath: string}
- * @phpstan-type GenIndexSubtermData array{term: string, rows: array<int, GenIndexRowData>}
- * @phpstan-type GenIndexTermData array{term: string, rows: array<int, GenIndexRowData>, subterms: array<string, GenIndexSubtermData>}
- * @phpstan-type GenIndexTermMap array<string, GenIndexTermData>
- */
+2 */
 final class IndexEntryCollector
 {
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
 
-    /**
-     * @param DocumentNode[] $documents
-     *
-     * @return GenIndexTermMap
-     */
-    public function collectAll(array $documents): array
+    /** @param DocumentNode[] $documents */
+    public function collectAll(array $documents): GenIndexTermMap
     {
-        $termMap = [];
+        $termMap = new GenIndexTermMap();
         foreach ($documents as $document) {
             foreach ($this->collectFromDocument($document) as [$entry, $anchor, $title]) {
                 $this->expandEntry($entry, $anchor, $title, $termMap, $document);
@@ -177,21 +168,12 @@ final class IndexEntryCollector
     /**
      * Expands one parsed `.. index::` line into one or more term/subterm
      * insertions, following Sphinx's `pair`/`triple`/`module` conventions.
-     *
-     * @param GenIndexTermMap $termMap
      */
-    private function expandEntry(IndexEntryNode $entry, string|null $anchor, string $title, array &$termMap, DocumentNode $document): void
+    private function expandEntry(IndexEntryNode $entry, string|null $anchor, string $title, GenIndexTermMap $termMap, DocumentNode $document): void
     {
         $parts = $entry->getParts();
         $filePath = $document->getFilePath();
-        $row = [
-            'kind' => GenIndexRowKind::Link,
-            'main' => $entry->isMain(),
-            'anchor' => $anchor,
-            'title' => $title,
-            'seeText' => null,
-            'filePath' => $filePath,
-        ];
+        $row = new GenIndexRowData(GenIndexRowKind::Link, $entry->isMain(), $anchor, $title, null, $filePath);
 
         switch ($entry->getType()) {
             case IndexEntryType::Single:
@@ -236,14 +218,14 @@ final class IndexEntryCollector
             case IndexEntryType::SeeAlso:
                 $this->checkPartCount($entry, 2, 2, $document);
                 if (count($parts) >= 2) {
-                    $seeRow = [
-                        'kind' => $entry->getType() === IndexEntryType::See ? GenIndexRowKind::See : GenIndexRowKind::SeeAlso,
-                        'main' => false,
-                        'anchor' => null,
-                        'title' => null,
-                        'seeText' => $parts[1],
-                        'filePath' => $filePath,
-                    ];
+                    $seeRow = new GenIndexRowData(
+                        $entry->getType() === IndexEntryType::See ? GenIndexRowKind::See : GenIndexRowKind::SeeAlso,
+                        false,
+                        null,
+                        null,
+                        $parts[1],
+                        $filePath,
+                    );
                     $this->addEntry($termMap, $parts[0], null, $seeRow);
                 }
 
@@ -294,29 +276,19 @@ final class IndexEntryCollector
         );
     }
 
-    /**
-     * @param GenIndexTermMap $termMap
-     * @param GenIndexRowData $row
-     */
-    private function addEntry(array &$termMap, string $term, string|null $subterm, array $row): void
+    private function addEntry(GenIndexTermMap $termMap, string $term, string|null $subterm, GenIndexRowData $row): void
     {
         $key = $this->normalize($term);
-        if (!isset($termMap[$key])) {
-            $termMap[$key] = ['term' => $term, 'rows' => [], 'subterms' => []];
-        }
+        $termData = $termMap->getOrCreateTerm($key, $term);
 
         if ($subterm === null) {
-            $termMap[$key]['rows'][] = $row;
+            $termData->addRow($row);
 
             return;
         }
 
         $subKey = $this->normalize($subterm);
-        if (!isset($termMap[$key]['subterms'][$subKey])) {
-            $termMap[$key]['subterms'][$subKey] = ['term' => $subterm, 'rows' => []];
-        }
-
-        $termMap[$key]['subterms'][$subKey]['rows'][] = $row;
+        $termData->getOrCreateSubterm($subKey, $subterm)->addRow($row);
     }
 
     private function normalize(string $term): string
