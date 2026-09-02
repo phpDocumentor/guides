@@ -72,11 +72,11 @@ final class IndexCollectorPass implements CompilerPass
     public function run(array $documents, CompilerContextInterface $compilerContext): array
     {
         $termMap = $this->collector->collectAll($documents);
-        if ($termMap === []) {
+        if ($termMap->isEmpty()) {
             return $documents;
         }
 
-        $this->seeResolver->resolveSeeRows($termMap);
+        $termMap = $this->seeResolver->resolveSeeRows($termMap);
         $terms = $this->nodeBuilder->toTermNodes($termMap);
 
         foreach ($documents as $document) {
