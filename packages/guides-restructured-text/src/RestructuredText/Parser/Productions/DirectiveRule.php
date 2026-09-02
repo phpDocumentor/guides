@@ -94,7 +94,7 @@ final class DirectiveRule implements Rule
         $directiveHandler = $this->getDirectiveHandler($directive);
         $buffer = $this->collectDirectiveContents($documentIterator);
 
-        if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
+        if ($this->startingRule !== null && $directiveHandler->isUpgraded() && !$directiveHandler->isSynchronous()) {
             $node = $this->startingRule->apply(
                 new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
                 new DirectiveNode($directive),

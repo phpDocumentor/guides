@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#container
  */
+#[Attributes\Directive(name: 'testlogger', synchronous: true)]
 final class TestLoggerDirective extends SubDirective
 {
     public function __construct(
@@ -33,11 +34,6 @@ final class TestLoggerDirective extends SubDirective
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct($startingRule);
-    }
-
-    public function getName(): string
-    {
-        return 'testlogger';
     }
 
     /** {@inheritDoc}

@@ -29,13 +29,9 @@ use function implode;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#raw-data-pass-through
  */
+#[Attributes\Directive(name: 'raw', synchronous: true)]
 final class RawDirective extends BaseDirective
 {
-    public function getName(): string
-    {
-        return 'raw';
-    }
-
     /** {@inheritDoc} */
     public function process(
         BlockContext $blockContext,

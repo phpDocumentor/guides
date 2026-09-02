@@ -53,6 +53,8 @@ abstract class BaseDirective
     /** @var string[] */
     private array $aliases;
 
+    private bool $synchronous;
+
     /**
      * Get the directive name
      */
@@ -123,6 +125,29 @@ abstract class BaseDirective
         }
 
         return true;
+    }
+
+    /**
+     * Whether this directive keeps processing synchronously at parse time via
+     * process()/processSub(), rather than deferring node creation to createNode()
+     * at compile time. Opted into per-directive via #[Directive(synchronous: true)]
+     * for directives whose logic depends on parse-time-only state that createNode()
+     * has no access to (e.g. BlockContext for logging, file paths, or raw content).
+     *
+     * @internal
+     */
+    final public function isSynchronous(): bool
+    {
+        if (isset($this->synchronous)) {
+            return $this->synchronous;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        $this->synchronous = count($attributes) === 1 && $attributes[0]->newInstance()->synchronous;
+
+        return $this->synchronous;
     }
 
     /**
