@@ -53,6 +53,8 @@ abstract class BaseDirective
     /** @var string[] */
     private array $aliases;
 
+    private bool $rawContent;
+
     /**
      * Get the directive name
      */
@@ -123,6 +125,28 @@ abstract class BaseDirective
         }
 
         return true;
+    }
+
+    /**
+     * Whether this directive's body should be captured as literal source text
+     * (DirectiveNode::getRawContent()) instead of being parsed into child nodes.
+     * Opted into via #[Directive(rawContent: true)] for directives whose content
+     * isn't reStructuredText.
+     *
+     * @internal
+     */
+    final public function usesRawContent(): bool
+    {
+        if (isset($this->rawContent)) {
+            return $this->rawContent;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        $this->rawContent = count($attributes) === 1 && $attributes[0]->newInstance()->rawContent;
+
+        return $this->rawContent;
     }
 
     /**

@@ -96,14 +96,20 @@ final class DirectiveRule implements Rule
         $buffer = $this->collectDirectiveContents($documentIterator);
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
-            $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key());
-            $directiveNode = new DirectiveNode($directive);
-            $node = $this->startingRule->apply($subBlockContext, $directiveNode);
-            // Captured only after the sub-parse has fully consumed $subBlockContext's
-            // content, matching what a directive's own logging call would have seen
-            // under the old (non-upgraded) dispatch, where content is always parsed
-            // before the directive's own code runs.
-            $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation()));
+            $rawContent = $buffer->getLinesString();
+
+            if ($directiveHandler->usesRawContent()) {
+                $node = new DirectiveNode($directive, rawContent: $rawContent);
+            } else {
+                $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key());
+                $directiveNode = new DirectiveNode($directive, rawContent: $rawContent);
+                $node = $this->startingRule->apply($subBlockContext, $directiveNode);
+                // Captured only after the sub-parse has fully consumed $subBlockContext's
+                // content, matching what a directive's own logging call would have seen
+                // under the old (non-upgraded) dispatch, where content is always parsed
+                // before the directive's own code runs.
+                $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation()));
+            }
 
             if ($node === null) {
                 return null;

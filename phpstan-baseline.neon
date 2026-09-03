@@ -325,12 +325,6 @@ parameters:
 			path: packages/guides/src/DependencyInjection/GuidesExtension.php
 
 		-
-			message: '#^Binary operation "\." between ''phpdoc\.guides\.raw…'' and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: packages/guides/src/DependencyInjection/GuidesExtension.php
-
-		-
 			message: '#^Cannot access an offset on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 2
