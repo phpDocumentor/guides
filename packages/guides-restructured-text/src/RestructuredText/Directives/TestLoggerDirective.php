@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
@@ -26,6 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#container
  */
+#[Attributes\Directive(name: 'testlogger')]
 final class TestLoggerDirective extends SubDirective
 {
     public function __construct(
@@ -35,22 +34,11 @@ final class TestLoggerDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'testlogger';
-    }
+        $this->logger->warning('Test logging in directives', $directiveNode->getLoggerInformation());
 
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        $this->logger->warning('Test logging in directives', $blockContext->getLoggerInformation());
-
-        return (new ContainerNode($collectionNode->getChildren()))->withOptions(['class' => $directive->getData()]);
+        return (new ContainerNode($directiveNode->getChildren()))
+            ->withOptions(['class' => $directiveNode->getDirective()->getData()]);
     }
 }

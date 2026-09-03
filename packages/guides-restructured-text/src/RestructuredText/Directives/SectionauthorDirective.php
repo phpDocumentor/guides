@@ -15,12 +15,17 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\AuthorNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use Psr\Log\LoggerInterface;
 
 use function preg_match;
 
+/**
+ * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
+ *
+ * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
+ */
+#[Attributes\Directive(name: 'sectionauthor', aliases: ['codeauthor'])]
 final class SectionauthorDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/vGy4Uu/1 */
@@ -31,41 +36,19 @@ final class SectionauthorDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node|null
     {
-        return 'sectionauthor';
-    }
-
-    /**
-     * When the default domain contains a class directive, this directive will be shadowed. Therefore, Sphinx re-exports it as rst-class.
-     *
-     * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
-     *
-     * @return string[]
-     */
-    public function getAliases(): array
-    {
-        return ['codeauthor'];
-    }
-
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node|null {
+        $directive = $directiveNode->getDirective();
         $input = $directive->getData();
         $directiveName = $directive->getName();
         if ($input === '') {
-            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $blockContext->getLoggerInformation());
+            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getLoggerInformation());
 
             return null;
         }
 
         if (!preg_match(self::NAME_EMAIL_REGEX, $input, $matches)) {
-            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $blockContext->getLoggerInformation());
+            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getLoggerInformation());
 
             return null;
         }

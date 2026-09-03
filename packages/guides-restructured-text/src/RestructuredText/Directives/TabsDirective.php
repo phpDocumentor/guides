@@ -18,9 +18,8 @@ use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\RestructuredText\Nodes\AbstractTabNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\TabsNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
@@ -28,6 +27,7 @@ use function class_alias;
 use function class_exists;
 use function is_string;
 
+#[Attributes\Directive(name: 'tabs')]
 final class TabsDirective extends SubDirective
 {
     private int $tabsCounter = 0;
@@ -41,23 +41,12 @@ final class TabsDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'tabs';
-    }
-
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
+        $directive = $directiveNode->getDirective();
         $tabs = [];
         $hasActive = false;
-        foreach ($collectionNode->getChildren() as $child) {
+        foreach ($directiveNode->getChildren() as $child) {
             if ($child instanceof AbstractTabNode) {
                 if ($child->isActive()) {
                     if (!$hasActive) {
@@ -72,7 +61,7 @@ final class TabsDirective extends SubDirective
             } else {
                 $this->logger->warning(
                     'The "tabs" directive may only contain children of type "tab". The following node was found: ' . $child::class,
-                    $blockContext->getLoggerInformation(),
+                    $directiveNode->getLoggerInformation(),
                 );
             }
         }

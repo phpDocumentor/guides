@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\TabNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function class_alias;
 use function class_exists;
@@ -27,22 +25,13 @@ use function preg_replace;
 use function str_replace;
 use function strtolower;
 
+#[Attributes\Directive(name: 'tab')]
 final class TabDirective extends SubDirective
 {
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'tab';
-    }
+        $directive = $directiveNode->getDirective();
 
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
         if (is_string($directive->getOption('key')->getValue())) {
             $key = strtolower($directive->getOption('key')->getValue());
         } else {
@@ -59,7 +48,7 @@ final class TabDirective extends SubDirective
             $directive->getDataNode() ?? new InlineCompoundNode(),
             $key,
             $active,
-            $collectionNode->getChildren(),
+            $directiveNode->getChildren(),
         );
     }
 }

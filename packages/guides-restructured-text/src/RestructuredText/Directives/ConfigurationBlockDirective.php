@@ -18,8 +18,7 @@ use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Configuration\ConfigurationBlockNode;
 use phpDocumentor\Guides\Nodes\Configuration\ConfigurationTab;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -29,6 +28,7 @@ use function assert;
 use function get_debug_type;
 use function sprintf;
 
+#[Attributes\Directive(name: 'configuration-block')]
 final class ConfigurationBlockDirective extends SubDirective
 {
     private SluggerInterface $slugger;
@@ -47,22 +47,14 @@ final class ConfigurationBlockDirective extends SubDirective
         $this->slugger = new AsciiSlugger();
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'configuration-block';
-    }
-
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
         $tabs = [];
-        foreach ($collectionNode->getValue() as $child) {
+        foreach ($directiveNode->getChildren() as $child) {
             if (!$child instanceof CodeNode) {
                 $this->logger->warning(
                     sprintf('The ".. configuration-block::" directive only supports code blocks, "%s" given.', get_debug_type($child)),
-                    $blockContext->getLoggerInformation(),
+                    $directiveNode->getLoggerInformation(),
                 );
 
                 continue;
