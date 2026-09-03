@@ -19,13 +19,9 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
-
-use function implode;
 
 /**
  * Renders a raw block, example:
@@ -47,17 +43,6 @@ final class RawDirective extends BaseDirective
         HtmlSanitizerConfig $htmlSanitizerConfig,
     ) {
         $this->htmlSanitizer = new HtmlSanitizer($htmlSanitizerConfig);
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        return $this->createNode(new DirectiveNode(
-            $directive,
-            rawContent: implode("\n", $blockContext->getDocumentIterator()->toArray()),
-        ));
     }
 
     public function createNode(DirectiveNode $directiveNode): Node
