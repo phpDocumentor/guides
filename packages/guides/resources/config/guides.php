@@ -20,6 +20,10 @@ use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TemplateMetadataNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\TemplateNodeRenderer;
+use phpDocumentor\Guides\Nodes\Index\GenIndexNode;
+use phpDocumentor\Guides\Nodes\Index\GenIndexRow;
+use phpDocumentor\Guides\Nodes\Index\GenIndexTerm;
 use phpDocumentor\Guides\Parser;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorHyperlinkResolver;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
@@ -105,6 +109,10 @@ return static function (ContainerConfigurator $container): void {
         ->load(
             'phpDocumentor\\Guides\\Compiler\\Passes\\',
             '../../src/Compiler/Passes/*Pass.php',
+        )
+        ->load(
+            'phpDocumentor\\Guides\\Compiler\\Passes\\IndexCollector\\',
+            '../../src/Compiler/Passes/IndexCollector/*.php',
         )
 
         ->set(InternalMenuEntryNodeTransformer::class)
@@ -199,6 +207,18 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DocumentNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
+        ->set('phpdoc.guides.noderenderer.genindex', TemplateNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->arg('$template', 'body/genindex.html.twig')
+        ->arg('$nodeClass', GenIndexNode::class)
+        ->set('phpdoc.guides.noderenderer.genindex_term', TemplateNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->arg('$template', 'body/genindex/term.html.twig')
+        ->arg('$nodeClass', GenIndexTerm::class)
+        ->set('phpdoc.guides.noderenderer.genindex_row', TemplateNodeRenderer::class)
+        ->tag('phpdoc.guides.noderenderer.html')
+        ->arg('$template', 'body/genindex/row.html.twig')
+        ->arg('$nodeClass', GenIndexRow::class)
         ->set(TemplateMetadataNodeRenderer::class)
         ->tag('phpdoc.guides.noderenderer.html')
         ->set(TableNodeRenderer::class)

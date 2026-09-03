@@ -1,0 +1,10 @@
+{% if node.kind.name == 'Link' %}
+{{ renderNode(node.reference) }}
+{% else %}
+<span class="index-see">{{ node.kind.name == 'SeeAlso' ? 'see also' : 'see' }}</span>
+{% if node.reference %}
+{{ renderNode(node.reference) }}
+{% else %}
+{{ node.seeText }}
+{% endif %}
+{% endif %}
