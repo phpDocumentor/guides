@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * Divs a sub document in a div with a given class or set of classes.
@@ -29,23 +26,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 #[Attributes\Directive(name: 'sidebar')]
 final class SidebarDirective extends SubDirective
 {
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        return $this->createNode(
-            new DirectiveNode(
-                $directive,
-                $collectionNode->getChildren(),
-            ),
-        );
-    }
-
     public function createNode(DirectiveNode $directiveNode): Node
     {
         $directive = $directiveNode->getDirective();

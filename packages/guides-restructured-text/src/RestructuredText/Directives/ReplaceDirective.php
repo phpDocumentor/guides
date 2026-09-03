@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\Nodes\ReplacementNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function count;
 
@@ -32,23 +29,6 @@ use function count;
 #[Attributes\Directive(name: 'replace')]
 final class ReplaceDirective extends SubDirective
 {
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        return $this->createNode(
-            new DirectiveNode(
-                $directive,
-                $collectionNode->getChildren(),
-            ),
-        );
-    }
-
     public function createNode(DirectiveNode $directiveNode): Node
     {
         /** @var array<InlineCompoundNode> $children */

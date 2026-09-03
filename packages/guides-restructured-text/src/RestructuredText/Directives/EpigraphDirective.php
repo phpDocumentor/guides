@@ -13,12 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * An epigraph is an apposite (suitable, apt, or pertinent) short inscription,
@@ -30,23 +27,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 #[Attributes\Directive(name: 'epigraph')]
 final class EpigraphDirective extends SubDirective
 {
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        return $this->createNode(
-            new DirectiveNode(
-                $directive,
-                $collectionNode->getChildren(),
-            ),
-        );
-    }
-
     public function createNode(DirectiveNode $directiveNode): Node
     {
         return new QuoteNode($directiveNode->getChildren(), ['epigraph']);
