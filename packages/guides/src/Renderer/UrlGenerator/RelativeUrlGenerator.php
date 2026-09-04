@@ -26,18 +26,45 @@ use function str_repeat;
 
 final class RelativeUrlGenerator extends AbstractUrlGenerator
 {
+    /**
+     * Relative paths computed for the document currently being rendered, keyed by canonical url.
+     *
+     * A relative path only depends on the two paths, so it may be reused — but this is a service that
+     * lives for the whole render, and every document renders a menu over the same targets. Keeping the
+     * output file in the key would let the table grow as documents times targets. It is therefore held
+     * for one document and dropped when the next one starts.
+     *
+     * @var array<string, string>
+     */
+    private array $pathCache = [];
+
+    private string|null $pathCacheOutputFilePath = null;
+
     public function generateInternalPathFromRelativeUrl(
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
-        $currentPathUri = Uri::new($renderContext->getOutputFilePath());
+        $outputFilePath = $renderContext->getOutputFilePath();
+
+        if ($this->pathCacheOutputFilePath !== $outputFilePath) {
+            $this->pathCache = [];
+            $this->pathCacheOutputFilePath = $outputFilePath;
+        }
+
+        $cacheKey = $canonicalUrl;
+
+        if (isset($this->pathCache[$cacheKey])) {
+            return $this->pathCache[$cacheKey];
+        }
+
+        $currentPathUri = Uri::new($outputFilePath);
         $canonicalUrlUri = Uri::new($canonicalUrl);
 
         $canonicalAnchor = $canonicalUrlUri->getFragment();
 
         // If the paths are the same, include the anchor
         if ($currentPathUri->getPath() === $canonicalUrlUri->getPath()) {
-            return '#' . $canonicalAnchor;
+            return $this->pathCache[$cacheKey] = '#' . $canonicalAnchor;
         }
 
         // Split paths into arrays
@@ -66,6 +93,6 @@ final class RelativeUrlGenerator extends AbstractUrlGenerator
             $relativePath .= '#' . $canonicalAnchor;
         }
 
-        return $relativePath;
+        return $this->pathCache[$cacheKey] = $relativePath;
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRendererCachableSupports;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -23,12 +24,17 @@ use Webmozart\Assert\Assert;
 use function array_merge;
 use function sprintf;
 
-final class ReferenceResolverPreRender implements PreNodeRenderer
+final class ReferenceResolverPreRender implements PreNodeRenderer, PreNodeRendererCachableSupports
 {
     public function __construct(
         private readonly DelegatingReferenceResolver $referenceResolver,
         private readonly LoggerInterface $logger,
     ) {
+    }
+
+    public function cacheSupport(): bool
+    {
+        return true;
     }
 
     public function supports(Node $node): bool

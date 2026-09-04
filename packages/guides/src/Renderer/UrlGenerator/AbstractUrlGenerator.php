@@ -26,6 +26,9 @@ use const FILTER_VALIDATE_URL;
 
 abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 {
+    /** @var array<string, bool> */
+    private array $relativeUrlCache = [];
+
     public function __construct(private readonly DocumentNameResolverInterface $documentNameResolver)
     {
     }
@@ -93,7 +96,11 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 
     private function isRelativeUrl(string $url): bool
     {
-        return BaseUri::from($url)->isRelativePath();
+        if (isset($this->relativeUrlCache[$url])) {
+            return $this->relativeUrlCache[$url];
+        }
+
+        return $this->relativeUrlCache[$url] = BaseUri::from($url)->isRelativePath();
     }
 
     public function getCurrentFileUrl(RenderContext $renderContext): string
