@@ -15,15 +15,15 @@ namespace phpDocumentor\Guides\Bootstrap\Directives;
 
 use phpDocumentor\Guides\Bootstrap\Nodes\AccordionItemNode;
 use phpDocumentor\Guides\Bootstrap\Nodes\AccordionNode;
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
+#[Directive(name: 'accordion')]
 class AccordionDirective extends SubDirective
 {
     public const NAME = 'accordion';
@@ -35,30 +35,23 @@ class AccordionDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return self::NAME;
-    }
+        $directive = $directiveNode->getDirective();
 
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node|null {
-        $originalChildren = $collectionNode->getChildren();
         $children = [];
-        foreach ($originalChildren as $child) {
+        foreach ($directiveNode->getChildren() as $child) {
             if ($child instanceof AccordionItemNode) {
                 $children[] = $child;
             } else {
-                $this->logger->warning('An accordion may only accordion-items. ', $blockContext->getLoggerInformation());
+                $this->logger->warning('An accordion may only accordion-items. ', $directiveNode->getSourceLocation()->toLoggerInformation());
             }
         }
 
         $id = $directive->getOption('name')->toString();
         if ($id === '') {
             $id = 'accordion';
-            $this->logger->warning('An accordion must have a unique name as parameter. ', $blockContext->getLoggerInformation());
+            $this->logger->warning('An accordion must have a unique name as parameter. ', $directiveNode->getSourceLocation()->toLoggerInformation());
         }
 
         return new AccordionNode(

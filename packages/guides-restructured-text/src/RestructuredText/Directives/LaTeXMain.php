@@ -15,24 +15,16 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\MainNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 
 /**
  * Marks the document as LaTeX main
  */
+#[Attributes\Directive(name: 'latex-main')]
 final class LaTeXMain extends BaseDirective
 {
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'latex-main';
-    }
-
-    /** {@inheritDoc} */
-    public function processNode(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        return new MainNode($directive->getData());
+        return new MainNode($directiveNode->getDirective()->getData());
     }
 }
