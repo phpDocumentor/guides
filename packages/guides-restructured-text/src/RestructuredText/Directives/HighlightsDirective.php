@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 
 /**
  * Highlights summarize the main points of a document or section, often consisting of a list.
@@ -25,22 +23,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#highlights
  */
+#[Attributes\Directive(name: 'highlights')]
 final class HighlightsDirective extends SubDirective
 {
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'highlights';
-    }
-
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        return new QuoteNode($collectionNode->getChildren(), ['highlights']);
+        return new QuoteNode($directiveNode->getChildren(), ['highlights']);
     }
 }

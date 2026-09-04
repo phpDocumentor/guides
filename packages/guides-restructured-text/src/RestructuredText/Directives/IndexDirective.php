@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+#[Attributes\Directive(name: 'index')]
 final class IndexDirective extends SubDirective
 {
-    public function getName(): string
-    {
-        return 'index';
-    }
 }

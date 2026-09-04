@@ -13,37 +13,26 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\SidebarNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * Divs a sub document in a div with a given class or set of classes.
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#sidebar
  */
+#[Attributes\Directive(name: 'sidebar')]
 final class SidebarDirective extends SubDirective
 {
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'sidebar';
-    }
+        $directive = $directiveNode->getDirective();
 
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
         return new SidebarNode(
             $directive->getDataNode() ?? InlineCompoundNode::getPlainTextInlineNode($directive->getData()),
-            $collectionNode->getChildren(),
+            $directiveNode->getChildren(),
         );
     }
 }
