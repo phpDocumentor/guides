@@ -4,3 +4,4 @@
 /output/
 /build/
 /.phpdoc/
+/.deptrac.cache
