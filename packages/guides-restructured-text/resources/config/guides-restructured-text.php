@@ -229,6 +229,9 @@ return static function (ContainerConfigurator $container): void {
         ->set(OptionDirective::class)
         ->set(PullQuoteDirective::class)
         ->set(RawDirective::class)
+        ->arg('$escapeRawNodes', param('phpdoc.guides.raw_node.escape'))
+        ->arg('$htmlSanitizerConfig', service('phpdoc.guides.raw_node.sanitizer.default'))
+
         ->set(ReplaceDirective::class)
         ->set(RoleDirective::class)
         ->set(SectionauthorDirective::class)

@@ -408,6 +408,20 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
         (new ParserRulesPass())->process($container);
         (new NodeRendererPass())->process($container);
         (new RendererPass())->process($container);
+
+        // Guarded because this core package must not depend on
+        // guides-restructured-text, and its RawDirective service is only
+        // registered once that package's own extension has loaded.
+        $rawDirectiveId = 'phpDocumentor\\Guides\\RestructuredText\\Directives\\RawDirective';
+        if (!$container->hasParameter('phpdoc.guides.raw_node.sanitizer_name') || !$container->hasDefinition($rawDirectiveId)) {
+            return;
+        }
+
+        $sanitizerName = $container->getParameter('phpdoc.guides.raw_node.sanitizer_name');
+        assert(is_string($sanitizerName));
+
+        $container->getDefinition($rawDirectiveId)
+            ->setArgument('$htmlSanitizerConfig', new Reference('phpdoc.guides.raw_node.sanitizer.' . $sanitizerName));
     }
 
     /** @param mixed[] $config */
@@ -438,9 +452,17 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
     /** @param array<string, mixed> $rawNodeConfig */
     private function configureSanitizers(array $rawNodeConfig, ContainerBuilder $container): void
     {
-        if ($rawNodeConfig['sanitizer_name'] ?? false) {
+        $sanitizerName = $rawNodeConfig['sanitizer_name'] ?? false;
+        if (is_string($sanitizerName) && $sanitizerName !== '') {
             $container->getDefinition(RawNodeEscapeTransformer::class)
-                ->setArgument('$htmlSanitizerConfig', new Reference('phpdoc.guides.raw_node.sanitizer.' . $rawNodeConfig['sanitizer_name']));
+                ->setArgument('$htmlSanitizerConfig', new Reference('phpdoc.guides.raw_node.sanitizer.' . $sanitizerName));
+
+            // Stored for process(): guides-restructured-text's RawDirective (which
+            // registers its own service after this extension's load() runs) needs
+            // the same override, since RawDirective's node is only created at
+            // compile time -- too late for RawNodeEscapeTransformer to act on it.
+            // See #1378.
+            $container->setParameter('phpdoc.guides.raw_node.sanitizer_name', $sanitizerName);
         }
 
         if (!is_array($rawNodeConfig['sanitizers'] ?? false)) {

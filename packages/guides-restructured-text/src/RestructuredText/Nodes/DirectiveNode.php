@@ -22,9 +22,18 @@ final class DirectiveNode extends CompoundNode
 {
     private DirectiveSourceLocation $sourceLocation;
 
-    /** @param Node[] $children */
-    public function __construct(private readonly Directive $directive, array $children = [])
-    {
+    /**
+     * @param Node[] $children
+     * @param string $rawContent the directive's content exactly as written, before
+     *     it was parsed into $children -- available to createNode() for directives
+     *     that need the literal source text (e.g. raw passthrough) rather than (or
+     *     alongside) the parsed node tree
+     */
+    public function __construct(
+        private readonly Directive $directive,
+        array $children = [],
+        private readonly string $rawContent = '',
+    ) {
         parent::__construct($children);
 
         $this->sourceLocation = new DirectiveSourceLocation();
@@ -48,5 +57,10 @@ final class DirectiveNode extends CompoundNode
     public function getSourceLocation(): DirectiveSourceLocation
     {
         return $this->sourceLocation;
+    }
+
+    public function getRawContent(): string
+    {
+        return $this->rawContent;
     }
 }
