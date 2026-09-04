@@ -100,6 +100,9 @@ final class DirectiveRule implements Rule
 
             if ($directiveHandler->usesRawContent()) {
                 $node = new DirectiveNode($directive, rawContent: $rawContent);
+                $node->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation(
+                    (new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key()))->getLoggerInformation(),
+                ));
             } else {
                 $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key());
                 $directiveNode = new DirectiveNode($directive, rawContent: $rawContent);
