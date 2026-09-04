@@ -54,7 +54,7 @@ final class ConfigurationBlockDirective extends SubDirective
             if (!$child instanceof CodeNode) {
                 $this->logger->warning(
                     sprintf('The ".. configuration-block::" directive only supports code blocks, "%s" given.', get_debug_type($child)),
-                    $directiveNode->getLoggerInformation(),
+                    $directiveNode->getSourceLocation()->toLoggerInformation(),
                 );
 
                 continue;

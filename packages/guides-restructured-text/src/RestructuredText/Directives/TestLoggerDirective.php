@@ -36,7 +36,7 @@ final class TestLoggerDirective extends SubDirective
 
     public function createNode(DirectiveNode $directiveNode): Node
     {
-        $this->logger->warning('Test logging in directives', $directiveNode->getLoggerInformation());
+        $this->logger->warning('Test logging in directives', $directiveNode->getSourceLocation()->toLoggerInformation());
 
         return (new ContainerNode($directiveNode->getChildren()))
             ->withOptions(['class' => $directiveNode->getDirective()->getData()]);

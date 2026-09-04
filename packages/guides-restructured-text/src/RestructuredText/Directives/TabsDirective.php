@@ -61,7 +61,7 @@ final class TabsDirective extends SubDirective
             } else {
                 $this->logger->warning(
                     'The "tabs" directive may only contain children of type "tab". The following node was found: ' . $child::class,
-                    $directiveNode->getLoggerInformation(),
+                    $directiveNode->getSourceLocation()->toLoggerInformation(),
                 );
             }
         }

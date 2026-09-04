@@ -42,13 +42,13 @@ final class SectionauthorDirective extends BaseDirective
         $input = $directive->getData();
         $directiveName = $directive->getName();
         if ($input === '') {
-            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getLoggerInformation());
+            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getSourceLocation()->toLoggerInformation());
 
             return null;
         }
 
         if (!preg_match(self::NAME_EMAIL_REGEX, $input, $matches)) {
-            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getLoggerInformation());
+            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getSourceLocation()->toLoggerInformation());
 
             return null;
         }

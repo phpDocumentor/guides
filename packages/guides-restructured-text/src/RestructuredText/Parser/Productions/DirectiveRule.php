@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveSourceLocation;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -102,7 +103,7 @@ final class DirectiveRule implements Rule
             // content, matching what a directive's own logging call would have seen
             // under the old (non-upgraded) dispatch, where content is always parsed
             // before the directive's own code runs.
-            $directiveNode->setLoggerInformation($subBlockContext->getLoggerInformation());
+            $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation()));
 
             if ($node === null) {
                 return null;
