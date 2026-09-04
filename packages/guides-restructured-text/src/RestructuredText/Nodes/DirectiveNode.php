@@ -20,14 +20,33 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 /** @extends CompoundNode<Node> */
 final class DirectiveNode extends CompoundNode
 {
+    private DirectiveSourceLocation $sourceLocation;
+
     /** @param Node[] $children */
     public function __construct(private readonly Directive $directive, array $children = [])
     {
         parent::__construct($children);
+
+        $this->sourceLocation = new DirectiveSourceLocation();
     }
 
     public function getDirective(): Directive
     {
         return $this->directive;
+    }
+
+    /**
+     * Set once the directive's content has been fully parsed -- available to
+     * createNode() for directives that need to log a warning about their own
+     * content, since createNode() itself has no access to BlockContext.
+     */
+    public function setSourceLocation(DirectiveSourceLocation $sourceLocation): void
+    {
+        $this->sourceLocation = $sourceLocation;
+    }
+
+    public function getSourceLocation(): DirectiveSourceLocation
+    {
+        return $this->sourceLocation;
     }
 }

@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveSourceLocation;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
@@ -95,10 +96,14 @@ final class DirectiveRule implements Rule
         $buffer = $this->collectDirectiveContents($documentIterator);
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
-            $node = $this->startingRule->apply(
-                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
-                new DirectiveNode($directive),
-            );
+            $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key());
+            $directiveNode = new DirectiveNode($directive);
+            $node = $this->startingRule->apply($subBlockContext, $directiveNode);
+            // Captured only after the sub-parse has fully consumed $subBlockContext's
+            // content, matching what a directive's own logging call would have seen
+            // under the old (non-upgraded) dispatch, where content is always parsed
+            // before the directive's own code runs.
+            $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation()));
 
             if ($node === null) {
                 return null;
