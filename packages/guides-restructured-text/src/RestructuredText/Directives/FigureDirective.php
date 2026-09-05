@@ -19,11 +19,8 @@ use phpDocumentor\Guides\Nodes\ImageNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-
-use function dirname;
 
 /**
  * Renders an image, example :
@@ -42,6 +39,7 @@ use function dirname;
 #[Option(name: 'class', description: 'CSS class to apply to the image')]
 #[Option(name: 'name', description: 'Name of the image, used for references')]
 #[Option(name: 'align', description: 'Alignment of the image, e.g. left, right, center')]
+#[Attributes\Directive(name: 'figure')]
 final class FigureDirective extends SubDirective
 {
     public function __construct(
@@ -51,22 +49,12 @@ final class FigureDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'figure';
-    }
+        $directive = $directiveNode->getDirective();
 
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
         $image = new ImageNode($this->documentNameResolver->absoluteUrl(
-            dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath()),
+            (string) $directiveNode->getSourceLocation()->documentDirectory,
             $directive->getData(),
         ));
         $scalarOptions = $this->optionsToArray($directive->getOptions());
@@ -81,6 +69,6 @@ final class FigureDirective extends SubDirective
             'align' => $scalarOptions['align'] ?? null,
         ]);
 
-        return new FigureNode($image, new CollectionNode($collectionNode->getChildren()));
+        return new FigureNode($image, new CollectionNode($directiveNode->getChildren()));
     }
 }
