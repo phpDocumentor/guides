@@ -21,10 +21,8 @@ use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 
-use function dirname;
 use function filter_var;
 use function preg_match;
 
@@ -46,6 +44,7 @@ use const FILTER_VALIDATE_URL;
 #[Option(name: 'class', description: 'CSS class to apply to the image')]
 #[Option(name: 'name', description: 'Name of the image, used for references')]
 #[Option(name: 'align', description: 'Alignment of the image, e.g. left, right, center')]
+#[Attributes\Directive(name: 'image')]
 final class ImageDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/9dUrzu/3 */
@@ -59,19 +58,13 @@ final class ImageDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'image';
-    }
+        $directive = $directiveNode->getDirective();
 
-    /** {@inheritDoc} */
-    public function processNode(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
         $node = new ImageNode(
             $this->documentNameResolver->absoluteUrl(
-                dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath()),
+                (string) $directiveNode->getSourceLocation()->documentDirectory,
                 $directive->getData(),
             ),
         );
