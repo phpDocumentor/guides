@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
+use League\Tactician\CommandBus;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Compiler\Compiler;
@@ -34,6 +35,7 @@ final class TestExtension extends Extension implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
+        $container->getDefinition(CommandBus::class)->setPublic(true);
         $container->getDefinition(Parser::class)->setPublic(true);
         $container->getDefinition(Compiler::class)->setPublic(true);
         $container->getDefinition('phpdoc.guides.output_node_renderer')->setPublic(true);

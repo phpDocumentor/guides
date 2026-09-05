@@ -17,7 +17,9 @@ use Flyfinder\Specification\SpecificationInterface;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem as LeagueFilesystem;
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Memory\MemoryAdapter;
 use phpDocumentor\FileSystem\FlysystemV1\FlysystemV1;
 use phpDocumentor\FileSystem\FlysystemV3\FlysystemV3;
 
@@ -53,6 +55,16 @@ class FlySystemAdapter implements FileSystem
         }
 
         return new self(new FlysystemV3($filesystem));
+    }
+
+    public static function createInMemory(): self
+    {
+        if (class_exists(MemoryAdapter::class)) {
+            // @phpstan-ignore-next-line
+            return self::createFromFileSystem(new LeagueFilesystem(new MemoryAdapter()));
+        }
+
+        return self::createFromFileSystem(new LeagueFilesystem(new InMemoryFilesystemAdapter()));
     }
 
     public function has(string $path): bool

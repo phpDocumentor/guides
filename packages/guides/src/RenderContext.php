@@ -17,6 +17,7 @@ use Exception;
 use League\Flysystem\FilesystemInterface;
 use LogicException;
 use phpDocumentor\FileSystem\FileSystem;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -39,6 +40,7 @@ class RenderContext
         private readonly string|null $currentFileName,
         private readonly FilesystemInterface|FileSystem $origin,
         private readonly FilesystemInterface|FileSystem $destination,
+        private readonly FileSystem $imageDestination,
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
     ) {
@@ -53,12 +55,14 @@ class RenderContext
         string $destinationPath,
         string $ouputFormat,
         ProjectNode $projectNode,
+        FileSystem|null $imageDestination = null,
     ): self {
         $self = new self(
             $destinationPath,
             $documentNode->getFilePath(),
             $origin,
             $destination,
+            $imageDestination ?? ($destination instanceof FilesystemInterface ? FlySystemAdapter::createFromFileSystem($destination) : $destination),
             $ouputFormat,
             $projectNode,
         );
@@ -80,6 +84,7 @@ class RenderContext
             $this->destinationPath,
             $this->outputFormat,
             $this->projectNode,
+            $this->imageDestination,
         )->withIterator($this->getIterator());
     }
 
@@ -110,12 +115,14 @@ class RenderContext
         FilesystemInterface|FileSystem $destination,
         string $destinationPath,
         string $ouputFormat,
+        FileSystem|null $imageDestination = null,
     ): self {
         $self = new self(
             $destinationPath,
             null,
             $origin,
             $destination,
+            $imageDestination ?? ($destination instanceof FilesystemInterface ? FlySystemAdapter::createFromFileSystem($destination) : $destination),
             $ouputFormat,
             $projectNode,
         );
@@ -213,6 +220,11 @@ class RenderContext
     public function getDestination(): FilesystemInterface|FileSystem
     {
         return $this->destination;
+    }
+
+    public function getImageDestination(): FileSystem
+    {
+        return $this->imageDestination;
     }
 
     public function getProjectNode(): ProjectNode
