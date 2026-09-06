@@ -89,7 +89,7 @@ final class DirectiveRule implements Rule
             return null;
         }
 
-        $this->parseDirectiveContent($directive, $blockContext);
+        $this->parseDirectiveValue($directive, $blockContext);
         $this->interpretDirectiveOptions($documentIterator, $directive);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
@@ -162,7 +162,14 @@ final class DirectiveRule implements Rule
         return null;
     }
 
-    private function parseDirectiveContent(Directive $directive, BlockContext $blockContext): void
+    /**
+     * Parses the directive's own value -- the text right after `::`, e.g. the
+     * "image.jpg" in `.. figure:: image.jpg` -- as inline markup. This is
+     * unrelated to the directive's body/content, the indented block that
+     * follows on later lines, which {@see collectDirectiveContents()} collects
+     * separately regardless of what happens here.
+     */
+    private function parseDirectiveValue(Directive $directive, BlockContext $blockContext): void
     {
         if ($directive->getData() === '') {
             return;
