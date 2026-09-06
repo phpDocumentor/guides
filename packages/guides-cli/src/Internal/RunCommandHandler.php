@@ -26,9 +26,11 @@ use phpDocumentor\Guides\Handlers\CompileDocumentsCommand;
 use phpDocumentor\Guides\Handlers\ParseDirectoryCommand;
 use phpDocumentor\Guides\Handlers\ParseFileCommand;
 use phpDocumentor\Guides\Handlers\RenderCommand;
+use phpDocumentor\Guides\Logging\DeduplicatingLogger;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 use function array_map;
@@ -42,6 +44,7 @@ class RunCommandHandler
     public function __construct(
         private CommandBus $commandBus,
         private ThemeManager $themeManager,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -95,6 +98,10 @@ class RunCommandHandler
                     $projectNode,
                 ),
             );
+        }
+
+        if ($this->logger instanceof DeduplicatingLogger) {
+            $this->logger->logSuppressedSummary();
         }
 
         return $documents;
