@@ -17,6 +17,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryType;
 use phpDocumentor\Guides\Nodes\Index\IndexNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -37,10 +38,7 @@ final class IndexDirectiveTest extends RuleTestCase
     #[DataProvider('typoProvider')]
     public function testLikelyTypoLogsWarning(string $typo, string $suggestion): void
     {
-        $node = $this->directive->process(
-            $this->createContext(''),
-            new Directive('', 'index', $typo . ': foo'),
-        );
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', $typo . ': foo')));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertCount(1, $node->getEntries());
@@ -63,10 +61,7 @@ final class IndexDirectiveTest extends RuleTestCase
 
     public function testUnrelatedLiteralColonDoesNotLogAnything(): void
     {
-        $node = $this->directive->process(
-            $this->createContext(''),
-            new Directive('', 'index', 'ext:core'),
-        );
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'ext:core')));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertFalse($this->logHandler->hasWarningRecords());
@@ -74,10 +69,7 @@ final class IndexDirectiveTest extends RuleTestCase
 
     public function testKnownEntryTypeDoesNotLogAnything(): void
     {
-        $node = $this->directive->process(
-            $this->createContext(''),
-            new Directive('', 'index', 'single: foo'),
-        );
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: foo')));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertFalse($this->logHandler->hasWarningRecords());
