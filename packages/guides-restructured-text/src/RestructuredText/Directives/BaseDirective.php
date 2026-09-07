@@ -56,6 +56,8 @@ abstract class BaseDirective
 
     private bool $rawContent;
 
+    private DirectiveValueType $valueType;
+
     /**
      * Get the directive name
      */
@@ -148,6 +150,27 @@ abstract class BaseDirective
         $this->rawContent = count($attributes) === 1 && $attributes[0]->newInstance()->rawContent;
 
         return $this->rawContent;
+    }
+
+    /**
+     * What kind of value this directive accepts right after `::` -- see
+     * {@see DirectiveValueType}. Defaults to Inline, matching every directive's
+     * behavior before this was introduced.
+     *
+     * @internal
+     */
+    final public function getValueType(): DirectiveValueType
+    {
+        if (isset($this->valueType)) {
+            return $this->valueType;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        $this->valueType = count($attributes) === 1 ? $attributes[0]->newInstance()->valueType : DirectiveValueType::Inline;
+
+        return $this->valueType;
     }
 
     /**

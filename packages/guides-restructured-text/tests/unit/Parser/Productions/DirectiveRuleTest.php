@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
@@ -20,7 +21,11 @@ use phpDocumentor\Guides\RestructuredText\Directives\CodeBlockDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyBaseDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\DummyBooleanValueDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\DummyEmptyValueDirective;
+use phpDocumentor\Guides\RestructuredText\Parser\DummyIntegerValueDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
+use phpDocumentor\Guides\RestructuredText\Parser\DummyStringValueDirective;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -63,6 +68,161 @@ final class DirectiveRuleTest extends RuleTestCase
     {
         $context = $this->createContext('.. dummy:: data');
         self::assertInstanceOf(DummyNode::class, $this->rule->apply($context));
+    }
+
+    public function testDefaultValueTypeParsesValueAsInlineMarkup(): void
+    {
+        $context = $this->createContext('.. dummy:: data');
+        $node = $this->rule->apply($context);
+        self::assertInstanceOf(DummyNode::class, $node);
+        self::assertEquals('inline:data', $node->getValue());
+    }
+
+    public function testStringValueTypeDoesNotParseValueAsInlineMarkup(): void
+    {
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            new Logger('test'),
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyStringValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-string:: data');
+        $node = $rule->apply($context);
+        self::assertInstanceOf(DummyNode::class, $node);
+        self::assertEquals('raw:data', $node->getValue());
+    }
+
+    public function testEmptyValueTypeWarnsWhenGivenAValue(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyEmptyValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-empty:: unexpected value');
+        $node = $rule->apply($context);
+
+        self::assertInstanceOf(DummyNode::class, $node);
+        self::assertEquals('raw:unexpected value', $node->getValue());
+        self::assertTrue($testHandler->hasWarningThatContains('does not accept a value'));
+    }
+
+    public function testEmptyValueTypeDoesNotWarnWithoutAValue(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyEmptyValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-empty::');
+        $rule->apply($context);
+
+        self::assertFalse($testHandler->hasWarningRecords());
+    }
+
+    public function testIntegerValueTypeWarnsWhenValueIsNotNumeric(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyIntegerValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-integer:: not-a-number');
+        $node = $rule->apply($context);
+
+        // Diagnostic only -- the raw value still reaches the directive
+        // unchanged, and is never inline-parsed regardless of validity.
+        self::assertInstanceOf(DummyNode::class, $node);
+        self::assertEquals('raw:not-a-number', $node->getValue());
+        self::assertTrue($testHandler->hasWarningThatContains('expects an integer value'));
+    }
+
+    public function testIntegerValueTypeDoesNotWarnWhenValueIsNumeric(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyIntegerValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-integer:: 42');
+        $rule->apply($context);
+
+        self::assertFalse($testHandler->hasWarningRecords());
+    }
+
+    public function testIntegerValueTypeDoesNotWarnWithoutAValue(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyIntegerValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-integer::');
+        $rule->apply($context);
+
+        self::assertFalse($testHandler->hasWarningRecords());
+    }
+
+    public function testBooleanValueTypeWarnsWhenValueIsNotBoolean(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyBooleanValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-boolean:: maybe');
+        $rule->apply($context);
+
+        self::assertTrue($testHandler->hasWarningThatContains('expects a boolean value'));
+    }
+
+    public function testBooleanValueTypeDoesNotWarnWhenValueIsBoolean(): void
+    {
+        $testHandler = new TestHandler();
+        $logger = new Logger('test');
+        $logger->pushHandler($testHandler);
+        $rule = new DirectiveRule(
+            $this->givenInlineMarkupRule(),
+            $logger,
+            new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createStub(SettingsManager::class)),
+            [new DummyBooleanValueDirective()],
+        );
+
+        $context = $this->createContext('.. dummy-boolean:: true');
+        $rule->apply($context);
+
+        self::assertFalse($testHandler->hasWarningRecords());
     }
 
     public function testApplySetsEmptyOptionTrue(): void
