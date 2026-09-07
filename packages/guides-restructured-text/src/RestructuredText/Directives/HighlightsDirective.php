@@ -23,7 +23,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
  *
  * https://docutils.sourceforge.io/docs/ref/rst/directives.html#highlights
  */
-#[Attributes\Directive(name: 'highlights')]
+#[Attributes\Directive(name: 'highlights', valueType: ValueType::Empty)]
 final class HighlightsDirective extends SubDirective
 {
     public function createNode(DirectiveNode $directiveNode): Node
