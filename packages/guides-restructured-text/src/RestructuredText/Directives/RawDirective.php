@@ -32,7 +32,7 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
  *
  * @link https://docutils.sourceforge.io/docs/ref/rst/directives.html#raw-data-pass-through
  */
-#[Attributes\Directive(name: 'raw', rawContent: true)]
+#[Attributes\Directive(name: 'raw', rawContent: true, valueType: ValueType::String)]
 final class RawDirective extends BaseDirective
 {
     private readonly HtmlSanitizer $htmlSanitizer;
