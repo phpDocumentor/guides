@@ -41,6 +41,8 @@ use phpDocumentor\Guides\Nodes\Metadata\AuthorsNode;
 use phpDocumentor\Guides\Nodes\Metadata\ContactNode;
 use phpDocumentor\Guides\Nodes\Metadata\CopyrightNode;
 use phpDocumentor\Guides\Nodes\Metadata\DateNode;
+use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
+use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetaNode;
 use phpDocumentor\Guides\Nodes\Metadata\NoCommentsNode;
 use phpDocumentor\Guides\Nodes\Metadata\NoSearchNode;
@@ -115,4 +117,7 @@ return [
     RevisionNode::class => 'structure/header/blank.html.twig',
     TocDepthNode::class => 'structure/header/blank.html.twig',
     VersionNode::class => 'structure/header/blank.html.twig',
+    // Consumed by DocumentNode::getLanguage()/getDirection(), set as <html> attributes instead
+    LanguageNode::class => 'structure/header/blank.html.twig',
+    DirectionNode::class => 'structure/header/blank.html.twig',
 ];
