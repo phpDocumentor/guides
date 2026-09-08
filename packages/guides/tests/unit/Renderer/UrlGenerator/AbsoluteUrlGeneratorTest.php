@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Renderer\UrlGenerator;
 
-use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
@@ -89,8 +89,8 @@ final class AbsoluteUrlGeneratorTest extends TestCase
         $context = RenderContext::forDocument(
             $documentNode,
             [$documentNode],
-            self::createStub(FilesystemInterface::class),
-            self::createStub(FilesystemInterface::class),
+            FlySystemAdapter::createInMemory(),
+            FlySystemAdapter::createInMemory(),
             $destinationPath,
             'txt',
             $projectNode,

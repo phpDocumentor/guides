@@ -34,6 +34,7 @@ final class LatexRenderer implements TypeRenderer
             $renderCommand->getDestination(),
             $renderCommand->getDestinationPath(),
             'tex',
+            $renderCommand->getImageDestination(),
         )->withIterator($renderCommand->getDocumentIterator());
 
         $context->getDestination()->put(

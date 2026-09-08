@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Handlers;
 
 use League\Flysystem\FilesystemInterface;
 use phpDocumentor\FileSystem\FileSystem;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Renderer\DocumentListIterator;
@@ -22,6 +23,7 @@ use phpDocumentor\Guides\Renderer\DocumentListIterator;
 final class RenderCommand
 {
     private DocumentListIterator $documentIterator;
+    private FileSystem $imageDestination;
 
     /** @param DocumentNode[] $documentArray */
     public function __construct(
@@ -31,11 +33,13 @@ final class RenderCommand
         private readonly FilesystemInterface|FileSystem $destination,
         private readonly ProjectNode $projectNode,
         private readonly string $destinationPath = '/',
+        FileSystem|null $imageDestination = null,
     ) {
         $this->documentIterator = DocumentListIterator::create(
             $this->projectNode->getRootDocumentEntry(),
             $this->documentArray,
         );
+        $this->imageDestination = $imageDestination ?? ($destination instanceof FilesystemInterface ? FlySystemAdapter::createFromFileSystem($destination) : $destination);
     }
 
     public function getOutputFormat(): string
@@ -67,6 +71,11 @@ final class RenderCommand
     public function getDestinationPath(): string
     {
         return $this->destinationPath;
+    }
+
+    public function getImageDestination(): FileSystem
+    {
+        return $this->imageDestination;
     }
 
     public function getProjectNode(): ProjectNode

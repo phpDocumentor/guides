@@ -19,6 +19,7 @@ use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\Renderer\UrlGenerator\ExternalUrlGenerator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeConfig;
@@ -140,6 +141,7 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                     ->end()
                     ->scalarPrototype()->end()
                 ->end()
+                ->scalarNode('assets_base_uri')->end()
                 ->arrayNode('ignored_domain')
                     ->defaultValue([])
                     ->beforeNormalization()
@@ -335,6 +337,15 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
 
         if (isset($config['links_are_relative'])) {
             $projectSettings->setLinksRelative((bool) $config['links_are_relative']);
+        }
+
+        if (isset($config['assets_base_uri'])) {
+            $container->register(ExternalUrlGenerator::class)
+                ->setDecoratedService('phpdoc.guides.assets_url_generator')
+                ->setArguments([
+                    '$urlGenerator' => '.inner',
+                    '$baseUri' => $config['assets_base_uri'],
+                ]);
         }
 
         if (isset($config['show_progress'])) {
