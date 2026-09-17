@@ -15,9 +15,11 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\MathNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use Psr\Log\LoggerInterface;
+
+use function explode;
+use function preg_replace;
 
 /**
  * Renders a code block, example:
@@ -30,6 +32,7 @@ use Psr\Log\LoggerInterface;
  *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
  */
+#[Attributes\Directive(name: 'math', rawContent: true)]
 final class MathDirective extends BaseDirective
 {
     public function __construct(
@@ -37,30 +40,20 @@ final class MathDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node|null
     {
-        return 'math';
-    }
+        // Matches LinesIterator::load()'s preserveSpace handling, which the old
+        // dispatch's BlockContext ran the same raw content through -- only leading
+        // and trailing blank lines are stripped, indentation within is untouched.
+        $rawContent = (string) preg_replace('/^\n+/', '', $directiveNode->getRawContent());
+        $rawContent = (string) preg_replace('/\n+$/', '', $rawContent);
 
-    /** {@inheritDoc} */
-    public function getAliases(): array
-    {
-        return [];
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node|null {
-        if ($blockContext->getDocumentIterator()->isEmpty()) {
-            $this->logger->warning('The math directive has no content. Did you properly indent the code? ', $blockContext->getLoggerInformation());
+        if ($rawContent === '') {
+            $this->logger->warning('The math directive has no content. Did you properly indent the code? ', $directiveNode->getSourceLocation()->toLoggerInformation());
 
             return null;
         }
 
-        return new MathNode(
-            $blockContext->getDocumentIterator()->toArray(),
-        );
+        return new MathNode(explode("\n", $rawContent));
     }
 }
