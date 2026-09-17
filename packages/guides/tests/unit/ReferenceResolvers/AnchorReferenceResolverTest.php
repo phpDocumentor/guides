@@ -75,6 +75,7 @@ final class AnchorReferenceResolverTest extends TestCase
         $input = new ReferenceNode('lorem-ipsum');
         $messages = new Messages();
         self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
         self::assertSame('Some Title', $input->toString());
     }
 
@@ -84,6 +85,7 @@ final class AnchorReferenceResolverTest extends TestCase
         $input = new ReferenceNode('lorem-ipsum');
         $messages = new Messages();
         self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
         self::assertSame('lorem-ipsum', $input->toString());
     }
 }

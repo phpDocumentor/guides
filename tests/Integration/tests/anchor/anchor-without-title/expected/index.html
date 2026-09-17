@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Anchor without a title</title>
+
+</head>
+<body>
+<!-- content start -->
+    <div class="section" id="anchor-without-a-title">
+            <h1>Anchor without a title</h1>
+            
+<div class="admonition note">
+            <a id="label-without-section"></a>
+    <p>A label declared inside a directive body: its parent in the tree is not a
+section, so the target carries no title.</p>
+
+</div>
+            
+    <p>Reference to the label: <a href="/index.html#label-without-section">label-without-section</a></p>
+
+            <div class="section" id="a-section-carrying-a-label">
+            <a id="label-on-a-section"></a>
+            <h2>A section carrying a label</h2>
+            
+    <p>Reference to the section: <a href="/index.html#label-on-a-section">A section carrying a label</a></p>
+
+    </div>
+    </div>
+<!-- content end -->
+</body>
+</html>
