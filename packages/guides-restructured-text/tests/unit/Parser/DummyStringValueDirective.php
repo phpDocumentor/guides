@@ -14,17 +14,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive as DirectiveAttribute;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
+use phpDocumentor\Guides\RestructuredText\Directives\ValueType;
 
-final class DummyBaseDirective extends DirectiveHandler
+#[DirectiveAttribute(name: 'dummy-string', valueType: ValueType::String)]
+final class DummyStringValueDirective extends DirectiveHandler
 {
-    private string $name = 'dummy';
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
     public function process(
         BlockContext $blockContext,
         Directive $directive,

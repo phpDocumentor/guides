@@ -25,7 +25,7 @@ use function preg_match;
  *
  * See https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rstclass
  */
-#[Attributes\Directive(name: 'sectionauthor', aliases: ['codeauthor'])]
+#[Attributes\Directive(name: 'sectionauthor', aliases: ['codeauthor'], valueType: ValueType::String)]
 final class SectionauthorDirective extends BaseDirective
 {
     /** @see https://regex101.com/r/vGy4Uu/1 */

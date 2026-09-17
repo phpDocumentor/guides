@@ -37,11 +37,11 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  * - bool allowfullscreen Whether the video should be allowed to go fullscreen, default is true
  */
 #[Attributes\Directive(name: 'youtube')]
-#[Option('width', type: OptionType::Integer, default: 560, description: 'Width of the video')]
-#[Option('title', type: OptionType::String, description: 'Title of the video')]
-#[Option('height', type: OptionType::Integer, default: 315, description: 'Height of the video')]
-#[Option('allow', type: OptionType::String, default: 'encrypted-media; picture-in-picture; web-share', description: 'Allow attribute of the iframe')]
-#[Option('allowfullscreen', type: OptionType::Boolean, default: true, description: 'Whether the video should be allowed to go fullscreen')]
+#[Option('width', type: ValueType::Integer, default: 560, description: 'Width of the video')]
+#[Option('title', type: ValueType::String, description: 'Title of the video')]
+#[Option('height', type: ValueType::Integer, default: 315, description: 'Height of the video')]
+#[Option('allow', type: ValueType::String, default: 'encrypted-media; picture-in-picture; web-share', description: 'Allow attribute of the iframe')]
+#[Option('allowfullscreen', type: ValueType::Boolean, default: true, description: 'Whether the video should be allowed to go fullscreen')]
 final class YoutubeDirective extends BaseDirective
 {
     public function process(
