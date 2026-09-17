@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Compiler\NodeTransformers\RawNodeEscapeTransformer;
 use phpDocumentor\Guides\DependencyInjection\Compiler\NodeRendererPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\ParserRulesPass;
 use phpDocumentor\Guides\DependencyInjection\Compiler\RendererPass;
+use phpDocumentor\Guides\Logging\LogDeduplicationLevel;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Renderer\UrlGenerator\ExternalUrlGenerator;
 use phpDocumentor\Guides\Settings\ProjectSettings;
@@ -155,6 +156,13 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                 ->scalarNode('log_path')->end()
                 ->scalarNode('fail_on_log')->end()
                 ->scalarNode('fail_on_error')->end()
+                ->scalarNode('log_deduplication')
+                    ->defaultValue(LogDeduplicationLevel::Message->value)
+                    ->validate()
+                        ->ifTrue(static fn (string $value): bool => LogDeduplicationLevel::tryFrom($value) === null)
+                        ->thenInvalid('The value must be one of: none, exact, message.')
+                    ->end()
+                ->end()
                 ->scalarNode('show_progress')->end()
                 ->scalarNode('links_are_relative')->end()
                 ->scalarNode('max_menu_depth')->end()
@@ -389,6 +397,7 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
         $container->setParameter('phpdoc.guides.node_templates', $config['templates']);
         $container->setParameter('phpdoc.guides.inventories', $config['inventories']);
         $container->setParameter('phpdoc.guides.raw_node.escape', $config['raw_node']['escape'] ?? false);
+        $container->setParameter('phpdoc.guides.log_deduplication', (string) $config['log_deduplication']);
 
         if ($config['raw_node'] ?? false) {
             $this->configureSanitizers($config['raw_node'], $container);

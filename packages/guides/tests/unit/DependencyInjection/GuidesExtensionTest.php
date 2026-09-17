@@ -86,5 +86,19 @@ class GuidesExtensionTest extends TestCase
             ],
             $sanitizerAssertions,
         ];
+
+        yield 'log_deduplication default' => [
+            [[]],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('message', $container->getParameter('phpdoc.guides.log_deduplication'));
+            },
+        ];
+
+        yield 'log_deduplication explicit' => [
+            [['log_deduplication' => 'exact']],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('exact', $container->getParameter('phpdoc.guides.log_deduplication'));
+            },
+        ];
     }
 }
