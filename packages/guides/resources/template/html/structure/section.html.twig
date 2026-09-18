@@ -1,4 +1,4 @@
-<div class="section{% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.title.id }}">
+<div class="section{% if node.classes %} {{ node.classesString }}{% endif %}" id="{{ node.title.id }}"{% if node.indexTerms %} data-guides-index-terms="{{ node.indexTerms|join(',') }}"{% endif %}>
     {% for childNode in node.children %}
         {{ renderNode(childNode) }}
     {% endfor %}
