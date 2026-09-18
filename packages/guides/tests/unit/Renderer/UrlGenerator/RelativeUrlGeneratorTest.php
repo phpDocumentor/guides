@@ -72,6 +72,20 @@ final class RelativeUrlGeneratorTest extends TestCase
         ];
     }
 
+    public function testGenerateInternalUrlFollowsTheDocumentBeingRendered(): void
+    {
+        $urlGenerator = new RelativeUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
+
+        $firstDocument = $this->createMock(RenderContext::class);
+        $firstDocument->method('getOutputFilePath')->willReturn('directory/anotherFile.html');
+
+        $secondDocument = $this->createMock(RenderContext::class);
+        $secondDocument->method('getOutputFilePath')->willReturn('directory/subdirectory/anotherFile');
+
+        self::assertSame('../file.html', $urlGenerator->generateInternalUrl($firstDocument, 'file.html'));
+        self::assertSame('../../file.html', $urlGenerator->generateInternalUrl($secondDocument, 'file.html'));
+    }
+
     #[DataProvider('fileUrlProvider')]
     public function testCreateFileUrl(string $expected, string $filename, string $outputFormat = 'html', string|null $anchor = null): void
     {
