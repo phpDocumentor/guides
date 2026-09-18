@@ -51,7 +51,12 @@ final class AnchorReferenceResolver implements ReferenceResolver
 
         $node->setUrl($this->urlGenerator->generateCanonicalOutputUrl($renderContext, $target->getDocumentPath(), $target->getPrefix() . $target->getAnchor()));
         if (count($node->getChildren()) === 0) {
-            $node->addChildNode(new PlainTextInlineNode($target->getTitle() ?? ''));
+            // A target only carries a title when it is a section, or an anchor whose parent
+            // in the shadow tree is one. A label declared anywhere else - inside a directive
+            // body, for instance - has none, and an empty string leaves the link without an
+            // accessible name. Fall back to what the author wrote, as the unresolved-reference
+            // marker does, so the link always says where it goes.
+            $node->addChildNode(new PlainTextInlineNode($target->getTitle() ?? $node->getTargetReference()));
         }
 
         return true;
