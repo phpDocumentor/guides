@@ -51,8 +51,11 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
      *
      * The result is reused for every further link with the same canonical URL in that document, so
      * it may depend on the render context only through the output file path and the destination
-     * path. An implementation that reads anything else from the context has to say so, because the
-     * memo in {@see self::generateInternalUrl()} is dropped on those two alone.
+     * path: the memo in {@see self::generateInternalUrl()} is dropped on those two alone. Anything
+     * else that decides the path has to be constant for the whole render - as the link style read
+     * by {@see ConfigurableUrlGenerator} is, being set when the container is compiled. An
+     * implementation that cannot hold to this overrides {@see self::generateInternalUrl()} and
+     * calls the computation directly.
      */
     abstract public function generateInternalPathFromRelativeUrl(
         RenderContext $renderContext,
@@ -112,7 +115,15 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
             throw new InvalidUrlException(sprintf('%s::%s may only be applied to relative URLs, %s cannot be handled', self::class, __METHOD__, $canonicalUrl));
         }
 
-        return $this->internalUrlCache[$canonicalUrl] = $this->generateInternalPathFromRelativeUrl($renderContext, $canonicalUrl);
+        $internalUrl = $this->generateInternalPathFromRelativeUrl($renderContext, $canonicalUrl);
+
+        // A subclass may render something of its own while it computes, and that nested call can arrive
+        // here with another document, replacing the table below us. Only store what still belongs to it.
+        if ($this->internalUrlCacheKey === $cacheKey) {
+            $this->internalUrlCache[$canonicalUrl] = $internalUrl;
+        }
+
+        return $internalUrl;
     }
 
     private function isRelativeUrl(string $url): bool
