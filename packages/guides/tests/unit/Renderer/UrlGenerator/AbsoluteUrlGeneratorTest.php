@@ -28,6 +28,22 @@ use function md5;
 
 final class AbsoluteUrlGeneratorTest extends TestCase
 {
+    public function testGenerateInternalUrlFollowsTheDestinationPath(): void
+    {
+        $urlGenerator = new AbsoluteUrlGenerator(self::createStub(DocumentNameResolverInterface::class));
+
+        $firstDestination = $this->createMock(RenderContext::class);
+        $firstDestination->method('getOutputFilePath')->willReturn('file.html');
+        $firstDestination->method('getDestinationPath')->willReturn('/guides');
+
+        $secondDestination = $this->createMock(RenderContext::class);
+        $secondDestination->method('getOutputFilePath')->willReturn('file.html');
+        $secondDestination->method('getDestinationPath')->willReturn('/other');
+
+        self::assertSame('/guides/target.html', $urlGenerator->generateInternalUrl($firstDestination, 'target.html'));
+        self::assertSame('/other/target.html', $urlGenerator->generateInternalUrl($secondDestination, 'target.html'));
+    }
+
     #[DataProvider('generateAbsoluteInternalUrlProvider')]
     public function testGenerateAbsoluteInternalUrl(string $expected, string $canonicalUrl, string $destinationPath): void
     {

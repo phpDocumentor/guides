@@ -26,6 +26,11 @@ use const FILTER_VALIDATE_URL;
 
 abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 {
+    /** @var array<string, string> */
+    private array $internalUrlCache = [];
+
+    private string|null $internalUrlCacheKey = null;
+
     public function __construct(private readonly DocumentNameResolverInterface $documentNameResolver)
     {
     }
@@ -41,6 +46,14 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
         return $filename . '.' . $context->getOutputFormat() . $anchorSuffix;
     }
 
+    /**
+     * Turn a canonical URL into the path to write into the document being rendered.
+     *
+     * The result is reused for every further link with the same canonical URL in that document, so
+     * it may depend on the render context only through the output file path and the destination
+     * path. An implementation that reads anything else from the context has to say so, because the
+     * memo in {@see self::generateInternalUrl()} is dropped on those two alone.
+     */
     abstract public function generateInternalPathFromRelativeUrl(
         RenderContext $renderContext,
         string $canonicalUrl,
@@ -84,11 +97,22 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
         RenderContext $renderContext,
         string $canonicalUrl,
     ): string {
+        $cacheKey = $renderContext->getOutputFilePath() . "\0" . $renderContext->getDestinationPath();
+
+        if ($this->internalUrlCacheKey !== $cacheKey) {
+            $this->internalUrlCache = [];
+            $this->internalUrlCacheKey = $cacheKey;
+        }
+
+        if (isset($this->internalUrlCache[$canonicalUrl])) {
+            return $this->internalUrlCache[$canonicalUrl];
+        }
+
         if (!$this->isRelativeUrl($canonicalUrl)) {
             throw new InvalidUrlException(sprintf('%s::%s may only be applied to relative URLs, %s cannot be handled', self::class, __METHOD__, $canonicalUrl));
         }
 
-        return $this->generateInternalPathFromRelativeUrl($renderContext, $canonicalUrl);
+        return $this->internalUrlCache[$canonicalUrl] = $this->generateInternalPathFromRelativeUrl($renderContext, $canonicalUrl);
     }
 
     private function isRelativeUrl(string $url): bool
