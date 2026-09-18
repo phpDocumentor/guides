@@ -50,6 +50,8 @@ final class ContainerNodeRenderer implements NodeRenderer
             [
                 'class' => trim((is_scalar($classOption) ? (string) $classOption : '') . ' ' . $node->getClassesString()),
                 'id' => $node->getOption('name'),
+                'lang' => $node->getOption('lang'),
+                'dir' => $node->getOption('dir'),
                 'node' => $node->getValue(),
             ],
         );

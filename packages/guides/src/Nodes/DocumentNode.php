@@ -18,6 +18,8 @@ use phpDocumentor\Guides\Meta\FootnoteTarget;
 use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
+use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
+use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\Metadata\NavigationTitleNode;
 use phpDocumentor\Guides\Nodes\Metadata\TemplateNode;
@@ -78,6 +80,8 @@ final class DocumentNode extends CompoundNode
     private bool $isRoot = false;
     private bool $orphan = false;
     private string|null $template = null;
+    private string|null $language = null;
+    private string|null $direction = null;
 
     public function __construct(
         private readonly string $hash,
@@ -149,6 +153,14 @@ final class DocumentNode extends CompoundNode
 
         if ($node instanceof TemplateNode) {
             $this->template = $node->getValue();
+        }
+
+        if ($node instanceof LanguageNode) {
+            $this->language = $node->getValue();
+        }
+
+        if ($node instanceof DirectionNode) {
+            $this->direction = $node->getValue();
         }
 
         $this->headerNodes[] = $node;
@@ -340,5 +352,15 @@ final class DocumentNode extends CompoundNode
     public function getTemplate(): string|null
     {
         return $this->template;
+    }
+
+    public function getLanguage(): string|null
+    {
+        return $this->language;
+    }
+
+    public function getDirection(): string|null
+    {
+        return $this->direction;
     }
 }
