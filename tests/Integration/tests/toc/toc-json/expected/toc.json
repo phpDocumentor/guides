@@ -1,0 +1,37 @@
+{
+    "project": {
+        "title": "Table of contents",
+        "version": "2.0"
+    },
+    "pages": [
+        {
+            "path": "index",
+            "html": "index.html",
+            "title": "Table of contents",
+            "anchor": "toc-start",
+            "pages": [
+                {
+                    "path": "Chapter/Index",
+                    "html": "Chapter/Index.html",
+                    "title": "Chapter",
+                    "anchor": "toc-chapter",
+                    "pages": [
+                        {
+                            "path": "Chapter/Page",
+                            "html": "Chapter/Page.html",
+                            "title": "A page with no label",
+                            "anchor": "a-page-with-no-label"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "orphan": true,
+            "path": "Orphan",
+            "html": "Orphan.html",
+            "title": "Orphan",
+            "anchor": "toc-orphan"
+        }
+    ]
+}
