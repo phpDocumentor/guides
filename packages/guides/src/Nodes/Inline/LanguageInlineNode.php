@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Inline;
 
+use phpDocumentor\Guides\Nodes\TextDirection;
+
 final class LanguageInlineNode extends GenericTextRoleInlineNode
 {
     public const TYPE = 'lang';
 
     public function __construct(
         private readonly string|null $language,
-        private readonly string|null $direction,
+        private readonly TextDirection|null $direction,
         string $text,
         string $class = '',
     ) {
@@ -31,7 +33,7 @@ final class LanguageInlineNode extends GenericTextRoleInlineNode
         return $this->language;
     }
 
-    public function getDirection(): string|null
+    public function getDirection(): TextDirection|null
     {
         return $this->direction;
     }

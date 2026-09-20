@@ -84,14 +84,26 @@ final class ContainerDirectiveTest extends TestCase
         self::assertSame('my-class', $node->getOption('class'));
     }
 
-    public function testInvalidDirWarnsButIsStillApplied(): void
+    public function testDirIsReadRegardlessOfCase(): void
+    {
+        $directive = new Directive('', 'container', '', ['dir' => new DirectiveOption('dir', 'RTL')]);
+
+        $node = $this->directive->createNode(new DirectiveNode($directive));
+
+        self::assertInstanceOf(ContainerNode::class, $node);
+        self::assertSame('rtl', $node->getOption('dir'));
+        self::assertFalse($this->logHandler->hasWarningRecords());
+    }
+
+    public function testInvalidDirWarnsAndFallsBackToAuto(): void
     {
         $directive = new Directive('', 'container', '', ['dir' => new DirectiveOption('dir', 'sideways')]);
 
         $node = $this->directive->createNode(new DirectiveNode($directive));
 
         self::assertInstanceOf(ContainerNode::class, $node);
-        self::assertSame('sideways', $node->getOption('dir'));
+        // Rather than a "dir" attribute the browser cannot act on.
+        self::assertSame('auto', $node->getOption('dir'));
         self::assertTrue($this->logHandler->hasWarningThatContains(
             'expects one of "ltr", "rtl" or "auto", but was given "sideways"',
         ));

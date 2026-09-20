@@ -16,17 +16,15 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
+use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use Psr\Log\LoggerInterface;
 
-use function in_array;
 use function sprintf;
 use function strtolower;
 
 final class DirFieldListItemRule implements FieldListItemRule
 {
-    private const VALID_DIRECTIONS = ['ltr', 'rtl', 'auto'];
-
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
@@ -38,15 +36,18 @@ final class DirFieldListItemRule implements FieldListItemRule
 
     public function apply(FieldListItemNode $fieldListItemNode, BlockContext $blockContext): MetadataNode
     {
-        $direction = $fieldListItemNode->getPlaintextContent();
-        if (!in_array($direction, self::VALID_DIRECTIONS, true)) {
+        $written = $fieldListItemNode->getPlaintextContent();
+        $direction = TextDirection::tryFromUserInput($written);
+        if ($direction === null) {
             $this->logger->warning(
                 sprintf(
                     'The "dir" field expects one of "ltr", "rtl" or "auto", but was given "%s".',
-                    $direction,
+                    $written,
                 ),
                 $blockContext->getLoggerInformation(),
             );
+
+            $direction = TextDirection::Auto;
         }
 
         return new DirectionNode($direction);

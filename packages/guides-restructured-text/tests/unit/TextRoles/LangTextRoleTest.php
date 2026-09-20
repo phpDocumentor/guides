@@ -16,6 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Inline\LanguageInlineNode;
+use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use PHPUnit\Framework\TestCase;
@@ -60,7 +61,7 @@ final class LangTextRoleTest extends TestCase
 
         self::assertInstanceOf(LanguageInlineNode::class, $inline);
         self::assertSame('ar', $inline->getLanguage());
-        self::assertSame('rtl', $inline->getDirection());
+        self::assertSame(TextDirection::Rtl, $inline->getDirection());
         self::assertSame('مثال عربي', $inline->getContent());
         self::assertFalse($this->logHandler->hasWarningRecords());
     }
@@ -76,12 +77,13 @@ final class LangTextRoleTest extends TestCase
         ));
     }
 
-    public function testInvalidDirectionWarnsButIsStillApplied(): void
+    public function testInvalidDirectionWarnsAndFallsBackToAuto(): void
     {
         $inline = $this->subject->processNode($this->documentParserContext, 'lang', 'text (ar, sideways)', 'text (ar, sideways)');
 
         self::assertInstanceOf(LanguageInlineNode::class, $inline);
-        self::assertSame('sideways', $inline->getDirection());
+        // Rather than a "dir" attribute the browser cannot act on.
+        self::assertSame(TextDirection::Auto, $inline->getDirection());
         self::assertTrue($this->logHandler->hasWarningThatContains(
             'expects the direction to be one of "ltr", "rtl" or "auto", but was given "sideways"',
         ));

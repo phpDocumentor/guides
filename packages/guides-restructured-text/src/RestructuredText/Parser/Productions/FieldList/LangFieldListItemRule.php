@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
+use phpDocumentor\Guides\Nodes\Language;
 use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -25,8 +26,6 @@ use function strtolower;
 
 final class LangFieldListItemRule implements FieldListItemRule
 {
-    private const LANGUAGE_TAG_PATTERN = '/^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8})*$/';
-
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
@@ -40,7 +39,7 @@ final class LangFieldListItemRule implements FieldListItemRule
     public function apply(FieldListItemNode $fieldListItemNode, BlockContext $blockContext): MetadataNode
     {
         $language = $fieldListItemNode->getPlaintextContent();
-        if (preg_match(self::LANGUAGE_TAG_PATTERN, $language) !== 1) {
+        if (preg_match(Language::PATTERN, $language) !== 1) {
             $this->logger->warning(
                 sprintf(
                     'The "lang" field expects a BCP 47 language tag (e.g. "en", "en-US"), but was given "%s".',

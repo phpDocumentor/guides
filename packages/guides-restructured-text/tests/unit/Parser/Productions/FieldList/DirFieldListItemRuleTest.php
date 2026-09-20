@@ -17,6 +17,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
+use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
 
 final class DirFieldListItemRuleTest extends RuleTestCase
@@ -44,16 +45,27 @@ final class DirFieldListItemRuleTest extends RuleTestCase
         $node = $this->rule->apply(new FieldListItemNode('dir', 'rtl'), $this->createContext(''));
 
         self::assertInstanceOf(DirectionNode::class, $node);
+        self::assertSame(TextDirection::Rtl, $node->getDirection());
         self::assertSame('rtl', $node->getValue());
         self::assertFalse($this->logHandler->hasWarningRecords());
     }
 
-    public function test_invalid_direction_warns_but_is_still_applied(): void
+    public function test_it_reads_a_direction_regardless_of_case(): void
+    {
+        $node = $this->rule->apply(new FieldListItemNode('dir', 'RTL'), $this->createContext(''));
+
+        self::assertInstanceOf(DirectionNode::class, $node);
+        self::assertSame(TextDirection::Rtl, $node->getDirection());
+        self::assertFalse($this->logHandler->hasWarningRecords());
+    }
+
+    public function test_invalid_direction_warns_and_falls_back_to_auto(): void
     {
         $node = $this->rule->apply(new FieldListItemNode('dir', 'sideways'), $this->createContext(''));
 
         self::assertInstanceOf(DirectionNode::class, $node);
-        self::assertSame('sideways', $node->getValue());
+        // Rather than a "dir" attribute the browser cannot act on.
+        self::assertSame(TextDirection::Auto, $node->getDirection());
         self::assertTrue($this->logHandler->hasWarningThatContains(
             'expects one of "ltr", "rtl" or "auto", but was given "sideways"',
         ));
