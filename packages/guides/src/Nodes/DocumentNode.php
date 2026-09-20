@@ -81,7 +81,7 @@ final class DocumentNode extends CompoundNode
     private bool $orphan = false;
     private string|null $template = null;
     private string|null $language = null;
-    private string|null $direction = null;
+    private TextDirection|null $direction = null;
 
     public function __construct(
         private readonly string $hash,
@@ -160,7 +160,7 @@ final class DocumentNode extends CompoundNode
         }
 
         if ($node instanceof DirectionNode) {
-            $this->direction = $node->getValue();
+            $this->direction = $node->getDirection();
         }
 
         $this->headerNodes[] = $node;
@@ -359,7 +359,7 @@ final class DocumentNode extends CompoundNode
         return $this->language;
     }
 
-    public function getDirection(): string|null
+    public function getDirection(): TextDirection|null
     {
         return $this->direction;
     }
