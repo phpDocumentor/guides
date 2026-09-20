@@ -1,0 +1,22 @@
+{
+    "project": {
+        "title": "Not every format is a page",
+        "version": "2.0"
+    },
+    "pages": [
+        {
+            "path": "index",
+            "html": "index.html",
+            "title": "Not every format is a page",
+            "anchor": "not-every-format-is-a-page",
+            "pages": [
+                {
+                    "path": "Page",
+                    "html": "Page.html",
+                    "title": "A page",
+                    "anchor": "a-page"
+                }
+            ]
+        }
+    ]
+}

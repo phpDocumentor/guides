@@ -54,6 +54,11 @@
       "name": "guides-pages",
       "directory": "packages/guides-pages",
       "target": "git@github.com:phpDocumentor/guides-pages.git"
+    },
+    {
+      "name": "guides-machine-readable",
+      "directory": "packages/guides-machine-readable",
+      "target": "git@github.com:phpDocumentor/guides-machine-readable.git"
     }
   ]
 }
