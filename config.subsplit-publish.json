@@ -54,6 +54,11 @@
       "name": "guides-pages",
       "directory": "packages/guides-pages",
       "target": "git@github.com:phpDocumentor/guides-pages.git"
+    },
+    {
+      "name": "guides-llms",
+      "directory": "packages/guides-llms",
+      "target": "git@github.com:phpDocumentor/guides-llms.git"
     }
   ]
 }

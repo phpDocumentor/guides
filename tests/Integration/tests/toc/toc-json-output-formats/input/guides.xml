@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides packages/guides-cli/resources/schema/guides.xsd"
+>
+    <extension class="phpDocumentor\Guides\Llms\DependencyInjection\LlmsExtension"/>
+    <project title="Not every format is a page" version="2.0"/>
+    <output-format>html</output-format>
+    <output-format>tex</output-format>
+    <output-format>interlink</output-format>
+</guides>
