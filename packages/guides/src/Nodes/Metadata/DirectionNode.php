@@ -13,13 +13,20 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes\Metadata;
 
+use phpDocumentor\Guides\Nodes\TextDirection;
+
 /**
  * Sets the text direction of the document, e.g. `:dir: rtl`, used as the HTML dir attribute.
  */
 final class DirectionNode extends MetadataNode
 {
-    public function __construct(string $direction)
+    public function __construct(private readonly TextDirection $direction)
     {
-        parent::__construct($direction);
+        parent::__construct($direction->value);
+    }
+
+    public function getDirection(): TextDirection
+    {
+        return $this->direction;
     }
 }
