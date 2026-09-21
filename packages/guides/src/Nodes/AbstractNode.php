@@ -32,10 +32,36 @@ abstract class AbstractNode implements Node
     /** @var TValue */
     protected $value;
 
+    /** @var array<string, DataNode> */
+    private array $metaData = [];
+
     /** @return array<string, scalar|scalar[]|null> */
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    /**
+     * Attaches data about this node that is not part of its content.
+     *
+     * Rendered as a `data-*` attribute where the node's template asks for
+     * it. A name that is already taken gets the new values added to the ones
+     * it has, rather than replaced by them. {@see DataNode}
+     */
+    public function addMetaData(DataNode $data): void
+    {
+        $existing = $this->metaData[$data->getName()] ?? null;
+
+        // Merged into a new node rather than into the existing one: a cloned
+        // node shares these objects with the original, and must not see data
+        // attached to the original after the clone was made.
+        $this->metaData[$data->getName()] = $existing === null ? $data : $existing->merge($data);
+    }
+
+    /** @return array<string, DataNode> keyed by name */
+    public function getMetaData(): array
+    {
+        return $this->metaData;
     }
 
     /** @param TValue $value */

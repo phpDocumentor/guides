@@ -36,10 +36,10 @@ use phpDocumentor\Guides\Nodes\Node;
  *   GenIndexDirective (`.. genindex::`), wherever it was written, with
  *   either the full tree or -- if the directive was given a `:scope:` -- a
  *   subset filtered to documents under that path prefix;
- * - records each entry's own term(s) directly on the SectionNode it resolved
- *   to (SectionNode::addIndexTerm()), independent of genindex entirely, so a
- *   theme's section template can render them as e.g. a search-key data
- *   attribute (see structure/section.html.twig);
+ * - attaches each entry's own term(s) to the SectionNode it resolved to, as
+ *   metadata (see IndexNode::TERMS_DATA_NAME), independent of genindex
+ *   entirely, so the section renders them as a `data-*` attribute a search
+ *   tool can read;
  * - registers a `.. index::` block given a `:name:` as a link target, so a
  *   `:ref:` can point at the section its entries are filed under.
  *

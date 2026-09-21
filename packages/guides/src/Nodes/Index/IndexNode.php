@@ -31,6 +31,12 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
  */
 final class IndexNode extends AbstractNode
 {
+    /**
+     * The data a section carries its index terms under, rendered as
+     * `data-guides-index-terms="installation,configuration"`.
+     */
+    public const TERMS_DATA_NAME = 'guides-index-terms';
+
     /** @param IndexEntryNode[] $entries */
     public function __construct(private readonly array $entries, private readonly string|null $name = null)
     {
