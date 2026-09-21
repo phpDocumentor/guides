@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ node.language|default('en') }}"{% if node.direction %} dir="{{ node.direction.value }}"{% endif %}>
 <head>
     <title>{{ title }}
         {%- if title!=null and env.projectNode.title!=null %} - {% endif -%}
