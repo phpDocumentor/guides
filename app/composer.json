@@ -1,0 +1,19 @@
+{
+    "name": "phpdocumentor/guides-app",
+    "description": "phpDocumentor Guides CLI Application",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "ext-pagefind": "*",
+        "phpdocumentor/guides-cli": "^1.8"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    }
+}
+
