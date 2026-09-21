@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Index\IndexEntryType;
 use phpDocumentor\Guides\Nodes\Index\IndexNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -65,6 +66,25 @@ final class IndexDirectiveTest extends RuleTestCase
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertFalse($this->logHandler->hasWarningRecords());
+    }
+
+    public function testNameOptionIsCarriedOnTheNode(): void
+    {
+        $directive = new Directive('', 'index', 'single: installation', ['name' => new DirectiveOption('name', 'install-entry')]);
+
+        $node = $this->directive->createNode(new DirectiveNode($directive));
+
+        self::assertInstanceOf(IndexNode::class, $node);
+        self::assertSame('install-entry', $node->getName());
+        self::assertCount(1, $node->getEntries());
+    }
+
+    public function testWithoutANameTheNodeIsNoTarget(): void
+    {
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: installation')));
+
+        self::assertInstanceOf(IndexNode::class, $node);
+        self::assertNull($node->getName());
     }
 
     public function testKnownEntryTypeDoesNotLogAnything(): void
