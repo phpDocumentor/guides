@@ -79,17 +79,8 @@ final class IndexEntryCollector
      */
     private function collectFromDocument(DocumentNode $document): array
     {
-        $flat = [];
-        $this->flatten($document, $flat);
-
         $found = [];
-        foreach ($flat as $index => [, $node]) {
-            if (!$node instanceof IndexNode) {
-                continue;
-            }
-
-            $section = $this->findNextSection($flat, $index) ?? $this->findRootSection($document);
-            [$anchor, $title] = $this->resolveAnchor($section, $document);
+        foreach ($this->placements($document) as [$node, $section, $anchor, $title]) {
             foreach ($node->getEntries() as $entry) {
                 $found[] = [$entry, $anchor, $title];
                 foreach ($entry->getParts() as $part) {
@@ -99,6 +90,35 @@ final class IndexEntryCollector
         }
 
         return $found;
+    }
+
+    /**
+     * Every `.. index::` block in a document, with the section its entries are
+     * filed under and the anchor and title that section is linked by.
+     *
+     * The one answer to "where does this index block point", shared by the
+     * index itself and by anything else that has to agree with it -- a
+     * `:name:` target, for one, must land where the index entries do.
+     *
+     * @return list<array{0: IndexNode, 1: SectionNode|null, 2: string|null, 3: string}>
+     */
+    public function placements(DocumentNode $document): array
+    {
+        $flat = [];
+        $this->flatten($document, $flat);
+
+        $placements = [];
+        foreach ($flat as $index => [, $node]) {
+            if (!$node instanceof IndexNode) {
+                continue;
+            }
+
+            $section = $this->findNextSection($flat, $index) ?? $this->findRootSection($document);
+            [$anchor, $title] = $this->resolveAnchor($section, $document);
+            $placements[] = [$node, $section, $anchor, $title];
+        }
+
+        return $placements;
     }
 
     /** @param array<int, array{0: string, 1: Node}> $flat */

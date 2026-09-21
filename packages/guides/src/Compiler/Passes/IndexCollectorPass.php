@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexNodeBuilder;
 use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexSeeResolver;
 use phpDocumentor\Guides\Compiler\Passes\IndexCollector\GenIndexTermMapFilter;
 use phpDocumentor\Guides\Compiler\Passes\IndexCollector\IndexEntryCollector;
+use phpDocumentor\Guides\Compiler\Passes\IndexCollector\IndexTargetRegistrar;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Index\GenIndexNode;
@@ -38,14 +39,17 @@ use phpDocumentor\Guides\Nodes\Node;
  * - records each entry's own term(s) directly on the SectionNode it resolved
  *   to (SectionNode::addIndexTerm()), independent of genindex entirely, so a
  *   theme's section template can render them as e.g. a search-key data
- *   attribute (see structure/section.html.twig).
+ *   attribute (see structure/section.html.twig);
+ * - registers a `.. index::` block given a `:name:` as a link target, so a
+ *   `:ref:` can point at the section its entries are filed under.
  *
  * The actual work is split across collaborators in the IndexCollector
  * namespace: {@see IndexEntryCollector} collects and expands `.. index::`
  * entries into a term map, {@see GenIndexSeeResolver} points `see`/`seealso`
  * rows at their target's anchor, {@see GenIndexTermMapFilter} scopes a term
- * map to a `:scope:` path prefix, and {@see GenIndexNodeBuilder} turns a
- * term map into the sorted node tree. This class only orchestrates them.
+ * map to a `:scope:` path prefix, {@see GenIndexNodeBuilder} turns a term
+ * map into the sorted node tree, and {@see IndexTargetRegistrar} registers
+ * named blocks as link targets. This class only orchestrates them.
  */
 final class IndexCollectorPass implements CompilerPass
 {
@@ -54,6 +58,7 @@ final class IndexCollectorPass implements CompilerPass
         private readonly GenIndexSeeResolver $seeResolver,
         private readonly GenIndexTermMapFilter $termMapFilter,
         private readonly GenIndexNodeBuilder $nodeBuilder,
+        private readonly IndexTargetRegistrar $targetRegistrar,
     ) {
     }
 
@@ -71,6 +76,10 @@ final class IndexCollectorPass implements CompilerPass
      */
     public function run(array $documents, CompilerContextInterface $compilerContext): array
     {
+        // Before the early return below: a named block is a link target
+        // whether or not it contributes any entries to the index.
+        $this->targetRegistrar->registerAll($documents, $compilerContext->getProjectNode());
+
         $termMap = $this->collector->collectAll($documents);
         if ($termMap->isEmpty()) {
             return $documents;

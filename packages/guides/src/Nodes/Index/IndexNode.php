@@ -23,14 +23,23 @@ use phpDocumentor\Guides\Nodes\AbstractNode;
  * dedicated renderer. Collected project-wide by IndexCollectorPass to build
  * the genindex page.
  *
+ * A `:name:` on the directive makes the entries a target a `:ref:` can point
+ * at. The name is only carried here; it is registered once the compiler knows
+ * which section the entries are filed under, and points at that section.
+ *
  * @extends AbstractNode<array<never>>
  */
 final class IndexNode extends AbstractNode
 {
     /** @param IndexEntryNode[] $entries */
-    public function __construct(private readonly array $entries)
+    public function __construct(private readonly array $entries, private readonly string|null $name = null)
     {
         $this->value = [];
+    }
+
+    public function getName(): string|null
+    {
+        return $this->name;
     }
 
     /** @return IndexEntryNode[] */

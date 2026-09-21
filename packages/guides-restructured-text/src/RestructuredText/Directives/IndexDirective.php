@@ -17,6 +17,7 @@ use phpDocumentor\Guides\Nodes\Index\IndexEntryNode;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryType;
 use phpDocumentor\Guides\Nodes\Index\IndexNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +25,7 @@ use function array_filter;
 use function array_map;
 use function array_values;
 use function explode;
+use function is_string;
 use function levenshtein;
 use function mb_strpos;
 use function mb_substr;
@@ -53,9 +55,16 @@ use function trim;
  * The directive itself is invisible in the rendered page; entries are
  * collected project-wide to build the `genindex` page.
  *
+ * A `:name:` makes the entries a target a `:ref:` can link to, landing on the
+ * section they are filed under:
+ *
+ * .. index:: single: installation
+ *    :name: install-entry
+ *
  * @link https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-index
  */
 #[Attributes\Directive(name: 'index', rawContent: true)]
+#[Option(name: 'name', description: 'Makes the entries a target a :ref: can link to, landing on the section they are filed under.')]
 final class IndexDirective extends BaseDirective
 {
     /**
@@ -87,10 +96,15 @@ final class IndexDirective extends BaseDirective
 
         $segments = $this->trimAndFilterEmpty($segments);
 
-        return new IndexNode(array_map(
-            fn (string $segment): IndexEntryNode => $this->parseLine($segment, $directiveNode),
-            $segments,
-        ));
+        $name = $this->readOption($directive, 'name');
+
+        return new IndexNode(
+            array_map(
+                fn (string $segment): IndexEntryNode => $this->parseLine($segment, $directiveNode),
+                $segments,
+            ),
+            is_string($name) && $name !== '' ? $name : null,
+        );
     }
 
     /**
