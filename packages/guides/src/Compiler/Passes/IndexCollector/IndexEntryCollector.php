@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Compiler\Passes\IndexCollector;
 
+use phpDocumentor\Guides\Nodes\DataNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Index\GenIndexRowKind;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryNode;
@@ -83,9 +84,7 @@ final class IndexEntryCollector
         foreach ($this->placements($document) as [$node, $section, $anchor, $title]) {
             foreach ($node->getEntries() as $entry) {
                 $found[] = [$entry, $anchor, $title];
-                foreach ($entry->getParts() as $part) {
-                    $section?->addIndexTerm($part);
-                }
+                $section?->addMetaData(new DataNode(IndexNode::TERMS_DATA_NAME, $entry->getParts()));
             }
         }
 
