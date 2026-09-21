@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\Index\GenIndexNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 
 use function array_filter;
@@ -53,14 +54,26 @@ use function trim;
  * document have been collected; at parse time it's an empty placeholder.
  */
 #[Attributes\Directive(name: 'genindex')]
+#[Option(
+    name: 'scope',
+    default: '',
+    description: 'Comma-separated document path prefixes the listing is limited to. Lists the whole project when left out.',
+    example: 'Changelog/12.4/, Changelog/12.4-security/',
+)]
+#[Option(
+    name: 'no-letter-index',
+    type: OptionType::Boolean,
+    default: false,
+    description: 'Lists the terms flat in a single table, without the A-Z jumpbox and the heading per letter.',
+)]
 final class GenIndexDirective extends BaseDirective
 {
     public function createNode(DirectiveNode $directiveNode): Node
     {
         $directive = $directiveNode->getDirective();
-        $prefixes = explode(',', $directive->getOptionString('scope'));
+        $prefixes = explode(',', $this->readOption($directive, 'scope'));
         $prefixes = array_values(array_filter(array_map(trim(...), $prefixes), static fn (string $prefix): bool => $prefix !== ''));
 
-        return new GenIndexNode([], $prefixes, !$directive->hasOption('no-letter-index'));
+        return new GenIndexNode([], $prefixes, !$this->readOption($directive, 'no-letter-index'));
     }
 }
