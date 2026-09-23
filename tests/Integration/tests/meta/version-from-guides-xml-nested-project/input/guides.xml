@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides
+    xmlns="https://www.phpdoc.org/guides"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+>
+    <!-- The schema lets an extension carry arbitrary child elements. A <project> among them
+         must not be read as the project configuration of the documentation. -->
+    <extension class="phpDocumentor\Guides\Bootstrap">
+        <project title="Nested" version="9.9" release="9.9.9"/>
+    </extension>
+    <project
+            title="Render guides"
+            version="0.10"
+            release="0.10.0"
+    />
+</guides>

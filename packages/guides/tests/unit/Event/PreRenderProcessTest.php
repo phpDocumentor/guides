@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Event;
 
-use League\Flysystem\FilesystemInterface;
+use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Handlers\RenderCommand;
 use phpDocumentor\Guides\Handlers\RenderHandler;
 use phpDocumentor\Guides\Nodes\DocumentNode;
@@ -45,8 +45,8 @@ final class PreRenderProcessTest extends TestCase
         return new RenderCommand(
             'html',
             [$document],
-            $this->createMock(FilesystemInterface::class),
-            $this->createMock(FilesystemInterface::class),
+            FlySystemAdapter::createInMemory(),
+            FlySystemAdapter::createInMemory(),
             $projectNode,
         );
     }

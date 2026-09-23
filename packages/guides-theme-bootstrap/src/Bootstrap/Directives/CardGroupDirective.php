@@ -15,15 +15,15 @@ namespace phpDocumentor\Guides\Bootstrap\Directives;
 
 use phpDocumentor\Guides\Bootstrap\Nodes\CardGroupNode;
 use phpDocumentor\Guides\Bootstrap\Nodes\CardNode;
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
 use phpDocumentor\Guides\RestructuredText\Directives\SubDirective;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
+#[Directive(name: 'card-group')]
 class CardGroupDirective extends SubDirective
 {
     public function __construct(
@@ -33,24 +33,16 @@ class CardGroupDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'card-group';
-    }
+        $directive = $directiveNode->getDirective();
 
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node|null {
-        $title = null;
-        $originalChildren = $collectionNode->getChildren();
         $children = [];
-        foreach ($originalChildren as $child) {
+        foreach ($directiveNode->getChildren() as $child) {
             if ($child instanceof CardNode) {
                 $children[] = $child;
             } else {
-                $this->logger->warning('A card-group may only contain cards. ', $blockContext->getLoggerInformation());
+                $this->logger->warning('A card-group may only contain cards. ', $directiveNode->getSourceLocation()->toLoggerInformation());
             }
         }
 

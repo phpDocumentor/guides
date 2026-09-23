@@ -32,6 +32,7 @@ use Psr\Log\LoggerInterface;
 use Throwable;
 
 use function array_merge;
+use function dirname;
 use function explode;
 use function filter_var;
 use function is_numeric;
@@ -104,9 +105,16 @@ final class DirectiveRule implements Rule
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
             $rawContent = $buffer->getLinesString();
+            // Fixed for this document's entire parse (unlike e.g. the code-block
+            // default language), so safe to snapshot once here for createNode() to
+            // resolve asset-relative paths (images, includes) with later.
+            $documentDirectory = dirname($blockContext->getDocumentParserContext()->getContext()->getCurrentAbsolutePath());
 
             if ($directiveHandler->usesRawContent()) {
                 $node = new DirectiveNode($directive, rawContent: $rawContent);
+                $node->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation(
+                    (new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key()))->getLoggerInformation(),
+                ));
             } else {
                 $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key());
                 $directiveNode = new DirectiveNode($directive, rawContent: $rawContent);
@@ -115,7 +123,7 @@ final class DirectiveRule implements Rule
                 // content, matching what a directive's own logging call would have seen
                 // under the old (non-upgraded) dispatch, where content is always parsed
                 // before the directive's own code runs.
-                $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation()));
+                $directiveNode->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation($subBlockContext->getLoggerInformation(), $documentDirectory));
             }
 
             if ($node === null) {

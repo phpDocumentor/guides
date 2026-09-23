@@ -16,8 +16,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use Psr\Log\LoggerInterface;
 
@@ -43,6 +42,7 @@ use function strval;
  *     | Row 2, Column 1 | Row 2, Column 2 |
  *     +-----------------+-----------------+
  */
+#[Attributes\Directive(name: 'table')]
 final class TableDirective extends SubDirective
 {
     public function __construct(
@@ -52,34 +52,28 @@ final class TableDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode): Node
     {
-        return 'table';
-    }
+        $directive = $directiveNode->getDirective();
+        $children = $directiveNode->getChildren();
 
-    /** {@inheritDoc} */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node {
-        if (count($collectionNode->getChildren()) !== 1) {
+        if (count($children) !== 1) {
             $this->logger->warning(
-                sprintf('The table directive may contain exactly one table. %s children found', count($collectionNode->getChildren())),
-                $blockContext->getLoggerInformation(),
+                sprintf('The table directive may contain exactly one table. %s children found', count($children)),
+                $directiveNode->getSourceLocation()->toLoggerInformation(),
             );
 
-            return $collectionNode;
+            return new CollectionNode($children);
         }
 
-        $tableNode = $collectionNode->getChildren()[0];
+        $tableNode = $children[0];
         if (!$tableNode instanceof TableNode) {
             $this->logger->warning(
                 sprintf('The table directive may contain exactly one table. A node of type %s was found. ', $tableNode::class),
-                $blockContext->getLoggerInformation(),
+                $directiveNode->getSourceLocation()->toLoggerInformation(),
             );
 
-            return $collectionNode;
+            return new CollectionNode($children);
         }
 
         $options = $this->optionsToArray($directive->getOptions());

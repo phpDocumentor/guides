@@ -17,6 +17,7 @@ use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\DocumentNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuEntryRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\MenuNodeRenderer;
+use phpDocumentor\Guides\NodeRenderers\Html\PreRenderers\CollectImagesPreNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TableNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\Html\TemplateMetadataNodeRenderer;
 use phpDocumentor\Guides\NodeRenderers\OutputAwareDelegatingNodeRenderer;
@@ -214,6 +215,8 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.prerenderer')
         ->set(ImageReferenceResolverPreRender::class)
         ->tag('phpdoc.guides.prerenderer')
+        ->set(CollectImagesPreNodeRenderer::class)
+        ->tag('phpdoc.guides.prerenderer')
 
         ->set(InMemoryRendererFactory::class)
         ->arg('$renderSets', tagged_iterator('phpdoc.renderer.typerenderer', 'format'))
@@ -225,8 +228,11 @@ return static function (ContainerConfigurator $container): void {
         ->set('phpdoc.guides.output_node_renderer', OutputAwareDelegatingNodeRenderer::class)
         ->arg('$nodeRenderers', tagged_iterator('phpdoc.guides.output_node_renderer', 'format'))
 
+        ->set('phpdoc.guides.assets_url_generator', ConfigurableUrlGenerator::class)
+
         ->set(AssetsExtension::class)
         ->arg('$nodeRenderer', service('phpdoc.guides.output_node_renderer'))
+        ->arg('$urlGenerator', service('phpdoc.guides.assets_url_generator'))
         ->tag('twig.extension')
         ->autowire()
 
