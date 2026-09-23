@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\DependencyInjection;
 
+use phpDocumentor\Guides\Settings\ProjectSettings;
+use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -86,5 +88,56 @@ class GuidesExtensionTest extends TestCase
             ],
             $sanitizerAssertions,
         ];
+
+        // ContainerFactory::loadExtensionConfig() feeds a raw PHP array into this tree without going
+        // through XmlFileLoader, so a native float never meets the string handling that lives there.
+        // `(string) 3.0` is "3": the trailing zero has to survive this path on its own.
+        yield 'project version and release as float' => [
+            [['project' => ['version' => 3.0, 'release' => 3.0]]],
+            static function (ContainerBuilder $container): void {
+                $settings = self::projectSettings($container);
+                self::assertSame('3.0', $settings->getVersion());
+                self::assertSame('3.0', $settings->getRelease());
+            },
+        ];
+
+        yield 'project version as string keeps its own form' => [
+            [['project' => ['version' => '0.10']]],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('0.10', self::projectSettings($container)->getVersion());
+            },
+        ];
+
+        // An explicit null means "not configured", so the default has to survive it. Turning it into
+        // a literal renders the string "NULL" as the project version.
+        yield 'project version as null leaves the default' => [
+            [['project' => ['version' => null]]],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('', self::projectSettings($container)->getVersion());
+            },
+        ];
+    }
+
+    /** Reads back the ProjectSettings the extension hands to the SettingsManager definition. */
+    private static function projectSettings(ContainerBuilder $container): ProjectSettings
+    {
+        $calls = [];
+        foreach ($container->getDefinition(SettingsManager::class)->getMethodCalls() as $call) {
+            self::assertIsArray($call);
+
+            if ($call[0] !== 'setProjectSettings') {
+                continue;
+            }
+
+            $calls[] = $call;
+        }
+
+        self::assertCount(1, $calls);
+        $arguments = $calls[0][1];
+        self::assertIsArray($arguments);
+        $settings = $arguments[0];
+        self::assertInstanceOf(ProjectSettings::class, $settings);
+
+        return $settings;
     }
 }

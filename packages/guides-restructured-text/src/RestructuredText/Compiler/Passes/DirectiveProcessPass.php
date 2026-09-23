@@ -22,6 +22,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function array_merge;
+use function explode;
+use function is_string;
 use function strtolower;
 
 /** @implements ReverseNodeTransformer<DirectiveNode> */
@@ -66,7 +68,25 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
 
         $newNode->setClasses(array_merge($newNode->getClasses(), $node->getClasses()));
 
-        return $newNode;
+        // Matches DirectiveRule::postProcessNode() for the old (non-upgraded)
+        // dispatch: apply directive options createNode() didn't already consume
+        // itself as node options (`:class:` becomes CSS classes instead). Node
+        // options createNode() already set explicitly always win on collision.
+        $optionsForNode = [];
+        foreach ($node->getDirective()->getOptions() as $option) {
+            if (!is_string($option->getValue())) {
+                continue;
+            }
+
+            if ($option->getName() === 'class') {
+                $newNode->setClasses(array_merge($newNode->getClasses(), explode(' ', $option->getValue())));
+                continue;
+            }
+
+            $optionsForNode[$option->getName()] = $option->getValue();
+        }
+
+        return $newNode->withOptions(array_merge($optionsForNode, $newNode->getOptions()));
     }
 
     private function getDirectiveHandler(Directive $directive): DirectiveHandler
