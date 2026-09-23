@@ -1,0 +1,19 @@
+<!-- content start -->
+<div class="section" id="breaking-67890-removed-widgetloader" data-guides-index-terms="Backend,NotScanned,ext:core">
+<h1>Breaking: #67890 - Removed WidgetLoader</h1>
+<div class="section" id="what-was-removed">
+<h2>What Was Removed</h2>
+<p>The legacy <code>WidgetLoader</code> class has been removed in favor of the new
+Widget API.</p>
+</div>
+<div class="section" id="consequences">
+<h2>Consequences</h2>
+<p>Any code still calling <code>WidgetLoader::load()</code> will fail with a fatal
+error.</p>
+</div>
+<div class="section" id="affected-installations">
+<h2>Affected Installations</h2>
+<p>Installations with extensions that use the old hook-based widget mechanism.</p>
+</div>
+</div>
+<!-- content end -->

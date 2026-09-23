@@ -20,6 +20,7 @@ use League\Uri\Uri;
 use phpDocumentor\Guides\Meta\InternalTarget;
 use phpDocumentor\Guides\Meta\Target;
 use phpDocumentor\Guides\NodeRenderers\NodeRenderer;
+use phpDocumentor\Guides\Nodes\AbstractNode;
 use phpDocumentor\Guides\Nodes\BreadCrumbNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -35,8 +36,12 @@ use function class_exists;
 use function func_get_arg;
 use function func_num_args;
 use function get_debug_type;
+use function htmlspecialchars;
 use function sprintf;
 use function trim;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 final class AssetsExtension extends AbstractExtension
 {
@@ -103,6 +108,7 @@ final class AssetsExtension extends AbstractExtension
             ),
             new TwigFunction('renderTarget', $this->renderTarget(...), ['is_safe' => ['html'], 'needs_context' => true]),
             new TwigFunction('renderOrderedListType', $this->renderOrderedListType(...), ['is_safe' => ['html'], 'needs_context' => false]),
+            new TwigFunction('renderDataAttributes', $this->renderDataAttributes(...), ['is_safe' => ['html'], 'needs_context' => false]),
         ];
     }
 
@@ -197,6 +203,29 @@ final class AssetsExtension extends AbstractExtension
         }
 
         return $renderContext;
+    }
+
+    /**
+     * The data attached to a node, as ` data-name="value"` attributes to put
+     * inside its opening tag -- nothing at all when it has none.
+     * {@see \phpDocumentor\Guides\Nodes\DataNode}
+     */
+    public function renderDataAttributes(Node $node): string
+    {
+        if (!$node instanceof AbstractNode) {
+            return '';
+        }
+
+        $attributes = '';
+        foreach ($node->getMetaData() as $data) {
+            $attributes .= sprintf(
+                ' data-%s="%s"',
+                htmlspecialchars($data->getName(), ENT_QUOTES | ENT_HTML5),
+                htmlspecialchars($data->toString(), ENT_QUOTES | ENT_HTML5),
+            );
+        }
+
+        return $attributes;
     }
 
     public function renderOrderedListType(string $listType): string
