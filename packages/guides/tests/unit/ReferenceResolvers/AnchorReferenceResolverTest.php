@@ -35,6 +35,10 @@ final class AnchorReferenceResolverTest extends TestCase
         $internalTarget = new InternalTarget('some-path', 'some-name');
         $this->projectNode = new ProjectNode('some-name');
         $this->projectNode->addLinkTarget('reduced-anchor', $internalTarget);
+        $this->projectNode->addLinkTarget(
+            'titled-anchor',
+            new InternalTarget('some-path', 'some-name', 'Some Title'),
+        );
         $this->anchorReducer = $this->createMock(AnchorNormalizer::class);
         $this->renderContext = $this->createMock(RenderContext::class);
         $this->renderContext->expects(self::once())->method('getProjectNode')->willReturn($this->projectNode);
@@ -63,5 +67,25 @@ final class AnchorReferenceResolverTest extends TestCase
         self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
         self::assertEmpty($messages->getWarnings());
         self::assertEquals('canonical-url', $input->getUrl());
+    }
+
+    public function testTitledTargetIsUsedAsLinkText(): void
+    {
+        $this->anchorReducer->expects(self::once())->method('reduceAnchor')->willReturn('titled-anchor');
+        $input = new ReferenceNode('lorem-ipsum');
+        $messages = new Messages();
+        self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
+        self::assertSame('Some Title', $input->toString());
+    }
+
+    public function testTargetWithoutTitleFallsBackToTheTargetReference(): void
+    {
+        $this->anchorReducer->expects(self::once())->method('reduceAnchor')->willReturn('reduced-anchor');
+        $input = new ReferenceNode('lorem-ipsum');
+        $messages = new Messages();
+        self::assertTrue($this->subject->resolve($input, $this->renderContext, $messages));
+        self::assertEmpty($messages->getWarnings());
+        self::assertSame('lorem-ipsum', $input->toString());
     }
 }
