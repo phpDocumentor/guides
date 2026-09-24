@@ -132,6 +132,7 @@ final class FieldListRule implements Rule
     ): void {
         $buffer = new Buffer();
         $documentIterator = $blockContext->getDocumentIterator();
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key());
         $nextLine = $documentIterator->getNextLine();
         if ($nextLine !== null && !self::isFieldLine($nextLine)) {
             $indenting = mb_strlen($nextLine) - mb_strlen(trim($nextLine));
@@ -174,7 +175,7 @@ final class FieldListRule implements Rule
             $blockContext->getDocumentParserContext(),
             $firstLine . "\n" . $buffer->getLinesString(),
             false,
-            $documentIterator->key(),
+            $lineOffset,
         );
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $fieldListItemNode);
