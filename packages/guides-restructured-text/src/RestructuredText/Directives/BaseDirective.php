@@ -55,6 +55,8 @@ abstract class BaseDirective
 
     private bool $rawContent;
 
+    private ValueType $valueType;
+
     /**
      * Get the directive name
      */
@@ -147,6 +149,27 @@ abstract class BaseDirective
         $this->rawContent = count($attributes) === 1 && $attributes[0]->newInstance()->rawContent;
 
         return $this->rawContent;
+    }
+
+    /**
+     * What kind of value this directive accepts right after `::` -- see
+     * {@see ValueType}. Defaults to Inline, matching every directive's
+     * behavior before this was introduced.
+     *
+     * @internal
+     */
+    final public function getValueType(): ValueType
+    {
+        if (isset($this->valueType)) {
+            return $this->valueType;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        $this->valueType = count($attributes) === 1 ? $attributes[0]->newInstance()->valueType : ValueType::Inline;
+
+        return $this->valueType;
     }
 
     /**
@@ -246,10 +269,13 @@ abstract class BaseDirective
         $value = $directiveOption->getValue();
 
         return match ($option->type) {
-            OptionType::Integer => (int) $value,
-            OptionType::Boolean => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
-            OptionType::String => (string) $value,
-            OptionType::Array => (array) $value,
+            ValueType::Integer => (int) $value,
+            ValueType::Boolean, ValueType::Empty => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
+            ValueType::Array => (array) $value,
+            // Inline, Path and Url have no option-specific handling yet -- Inline in
+            // particular would need BlockContext threaded through readOption(), which
+            // options don't have access to today. Treated as a plain string for now.
+            ValueType::String, ValueType::Inline, ValueType::Path, ValueType::Url => (string) $value,
         };
     }
 

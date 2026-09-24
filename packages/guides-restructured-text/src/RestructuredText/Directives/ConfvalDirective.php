@@ -35,9 +35,9 @@ use function trim;
  */
 #[Option(name: 'name', description: 'Id of the configuration value, used for linking to it.')]
 #[Option(name: 'type', description: 'Type of the configuration value, e.g. "string", "int", etc.')]
-#[Option(name: 'required', type: OptionType::Boolean, default: false, description: 'Whether the configuration value is required or not.')]
+#[Option(name: 'required', type: ValueType::Boolean, default: false, description: 'Whether the configuration value is required or not.')]
 #[Option(name: 'default', description: 'Default value of the configuration value, if any.')]
-#[Option(name: 'noindex', type: OptionType::Boolean, default: false, description: 'Whether the configuration value should not be indexed.')]
+#[Option(name: 'noindex', type: ValueType::Boolean, default: false, description: 'Whether the configuration value should not be indexed.')]
 final class ConfvalDirective extends SubDirective
 {
     public const NAME = 'confval';
