@@ -77,7 +77,9 @@ final class ListRule implements Rule
         $buffer = new Buffer();
         //First line sets the listmarker of the list, and the indentation of the current item.
         $listConfig = $this->getItemConfig($documentIterator->current());
+        $itemLineOffset = null;
         if (trim($documentIterator->current()) !== $listConfig['marker']) {
+            $itemLineOffset = $blockContext->getLineOffset($documentIterator->key());
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
@@ -91,8 +93,9 @@ final class ListRule implements Rule
 
             if ($this->isListItemStart($documentIterator->current())) {
                 $listConfig = $this->getItemConfig($documentIterator->current());
-                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
+                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext, $itemLineOffset);
                 $buffer = new Buffer();
+                $itemLineOffset = null;
             }
 
             // the list item offset is determined by the offset of the first text.
@@ -107,10 +110,11 @@ final class ListRule implements Rule
                 continue;
             }
 
+            $itemLineOffset ??= $blockContext->getLineOffset($documentIterator->key());
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
-        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
+        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext, $itemLineOffset);
 
         return new ListNode($items, false);
     }
@@ -159,10 +163,10 @@ final class ListRule implements Rule
     }
 
     /** @param array{marker: string, indenting: int} $listConfig */
-    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext): ListItemNode
+    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext, int|null $lineOffset): ListItemNode
     {
         $listItem = new ListItemNode($listConfig['marker'], false, []);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $lineOffset ?? $blockContext->getLineOffset($blockContext->getDocumentIterator()->key()));
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $listItem);
         }
