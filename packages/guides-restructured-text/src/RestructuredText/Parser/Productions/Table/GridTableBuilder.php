@@ -316,12 +316,12 @@ final class GridTableBuilder
 
         $headers = [];
         foreach ($tableNode->getHeaders() as $row) {
-            $headers[] = $this->buildRow($row, $blockContext, $productions);
+            $headers[] = $this->buildRow($row, $blockContext, $productions, $tableParserContext->getLineOffset());
         }
 
         $rows = [];
         foreach ($tableNode->getData() as $row) {
-            $rows[] = $this->buildRow($row, $blockContext, $productions);
+            $rows[] = $this->buildRow($row, $blockContext, $productions, $tableParserContext->getLineOffset());
         }
 
         return new TableNode($rows, $headers);
@@ -331,10 +331,11 @@ final class GridTableBuilder
         TableRow $row,
         BlockContext $blockContext,
         RuleContainer $productions,
+        int $lineOffset,
     ): TableRow {
         $newRow = new TableRow();
         foreach ($row->getColumns() as $col) {
-            $newRow->addColumn($this->buildColumn($col, $blockContext, $productions));
+            $newRow->addColumn($this->buildColumn($col, $blockContext, $productions, $lineOffset));
         }
 
         return $newRow;
@@ -344,9 +345,11 @@ final class GridTableBuilder
         TableColumn $col,
         BlockContext $blockContext,
         RuleContainer $productions,
+        int $lineOffset,
     ): TableColumn {
         $content = $col->getContent();
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getDocumentIterator()->key());
+        // Rows don't keep the lines they were parsed from, so cell content is located at the table's first line
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $lineOffset);
         while ($subContext->getDocumentIterator()->valid()) {
             $productions->apply($subContext, $col);
         }

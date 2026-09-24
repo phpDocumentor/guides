@@ -19,12 +19,16 @@ use OutOfBoundsException;
 use function chr;
 use function count;
 use function explode;
+use function ltrim;
 use function max;
 use function mb_strpos;
 use function preg_replace;
+use function rtrim;
 use function sprintf;
 use function str_repeat;
 use function str_replace;
+use function strlen;
+use function substr_count;
 use function trim;
 
 /** @implements Iterator<string> */
@@ -36,18 +40,34 @@ final class LinesIterator implements Iterator
     private int $position = 0;
     private int $peek = 1;
 
+    private int $leadingLinesRemoved = 0;
+
     public function load(string $document, bool $preserveSpace = false): void
     {
         if (!$preserveSpace) {
-            $document = trim($this->prepareDocument($document));
+            $document = $this->prepareDocument($document);
+            $trimmed = ltrim($document);
+            // prepareDocument() added one leading newline itself
+            $this->leadingLinesRemoved = max(0, substr_count($document, "\n", 0, strlen($document) - strlen($trimmed)) - 1);
+            $document = rtrim($trimmed);
         } else {
             // only remove empty lines at start and end
-            $document = preg_replace('/^\n+/', '', $document);
-            $document = preg_replace('/\n+$/', '', (string) $document);
+            $trimmed = ltrim($document, "\n");
+            $this->leadingLinesRemoved = strlen($document) - strlen($trimmed);
+            $document = preg_replace('/\n+$/', '', $trimmed);
         }
 
         $this->lines = explode("\n", (string) $document);
         $this->rewind();
+    }
+
+    /**
+     * Number of empty lines removed from the start of the document by load(),
+     * so that line numbers can still be mapped back to the loaded document.
+     */
+    public function getLeadingLinesRemoved(): int
+    {
+        return $this->leadingLinesRemoved;
     }
 
     public function getNextLine(): string|null

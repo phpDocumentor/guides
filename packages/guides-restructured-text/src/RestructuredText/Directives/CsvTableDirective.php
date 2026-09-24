@@ -137,7 +137,7 @@ final class CsvTableDirective extends BaseDirective
         RuleContainer $productions,
     ): TableColumn {
         $content = $col->getContent();
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getDocumentIterator()->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getLineOffset(0));
         while ($subContext->getDocumentIterator()->valid()) {
             $productions->apply($subContext, $col);
         }

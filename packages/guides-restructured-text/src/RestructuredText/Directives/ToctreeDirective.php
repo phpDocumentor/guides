@@ -108,7 +108,7 @@ final class ToctreeDirective extends BaseDirective
         $tocNode =  (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
 
         if (isset($options['caption'])) {
-            $blockContextOfCaption = new BlockContext($blockContext->getDocumentParserContext(), (string) $options['caption']->getValue());
+            $blockContextOfCaption = new BlockContext($blockContext->getDocumentParserContext(), (string) $options['caption']->getValue(), false, $blockContext->getLineOffset(0));
             $inlineNode = $this->startingRule->apply($blockContextOfCaption);
             $tocNode = $tocNode->withCaption($inlineNode);
         }
