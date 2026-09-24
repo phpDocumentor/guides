@@ -29,6 +29,16 @@ final class ParserContext
     private array $errors = [];
     private int $headerRows = 0;
 
+    /** @param int $lineOffset {@see \phpDocumentor\Guides\RestructuredText\Parser\BlockContext::getLineOffset()} of the table's first line */
+    public function __construct(private readonly int $lineOffset = 0)
+    {
+    }
+
+    public function getLineOffset(): int
+    {
+        return $this->lineOffset;
+    }
+
     public function addError(string $message): void
     {
         $this->errors[] = $message;

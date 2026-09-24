@@ -51,6 +51,7 @@ final class AnnotationRule implements Rule
         $documentIterator = $blockContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
         [$annotationKey, $content] = $this->analyzeOpeningLine($openingLine);
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key());
         
         $name = '';
         $buffer = new Buffer();
@@ -63,8 +64,9 @@ final class AnnotationRule implements Rule
         ) {
             $documentIterator->next();
             if (LineChecker::isAnnotation($documentIterator->current())) {
-                $nodes[] = $this->createAnnotationNode($annotationKey, $buffer, $blockContext, $documentIterator, $name);
+                $nodes[] = $this->createAnnotationNode($annotationKey, $buffer, $blockContext, $lineOffset, $name);
                 $openingLine = $documentIterator->current();
+                $lineOffset = $blockContext->getLineOffset($documentIterator->key());
                 [$annotationKey, $content] = $this->analyzeOpeningLine($openingLine);
                 $buffer = new Buffer();
                 $buffer->push($content);
@@ -73,7 +75,7 @@ final class AnnotationRule implements Rule
             }
         }
 
-        $nodes[] = $this->createAnnotationNode($annotationKey, $buffer, $blockContext, $documentIterator, $name);
+        $nodes[] = $this->createAnnotationNode($annotationKey, $buffer, $blockContext, $lineOffset, $name);
 
         if ($documentIterator->getNextLine() !== null) {
             $documentIterator->next();
@@ -86,7 +88,7 @@ final class AnnotationRule implements Rule
         string $annotationKey,
         Buffer $buffer,
         BlockContext $blockContext,
-        LinesIterator $documentIterator,
+        int $lineOffset,
         string &$name,
     ): AnnotationNode {
         if (!AnnotationUtility::isFootnoteKey($annotationKey)) {
@@ -107,7 +109,7 @@ final class AnnotationRule implements Rule
                 $blockContext->getDocumentParserContext(),
                 $buffer->getLinesString(),
                 false,
-                $documentIterator->key(),
+                $lineOffset,
             ),
             $node,
         );

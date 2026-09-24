@@ -72,12 +72,13 @@ final class LineBlockRule implements Rule
     }
 
     /** @return CompoundNode<InlineNodeInterface> */
-    private function createLine(BlockContext $blockContext, Buffer $buffer): CompoundNode
+    private function createLine(BlockContext $blockContext, Buffer $buffer, int $lineOffset): CompoundNode
     {
         $line = $this->inlineMarkupRule->apply(new BlockContext(
             $blockContext->getDocumentParserContext(),
             $buffer->getLinesString(),
             true,
+            $lineOffset,
         ));
 
         if ($line->getChildren() === []) {
@@ -107,8 +108,9 @@ final class LineBlockRule implements Rule
 
             $child = new ContainerNode();
             $child->setClasses(['line']);
+            $lineOffset = $blockContext->getLineOffset($blockContext->getDocumentIterator()->key());
             $buffer = $this->collectContentLines($blockContext);
-            $child->addChildNode($this->createLine($blockContext, $buffer));
+            $child->addChildNode($this->createLine($blockContext, $buffer, $lineOffset));
             $lineBlock->addChildNode($child);
         }
 

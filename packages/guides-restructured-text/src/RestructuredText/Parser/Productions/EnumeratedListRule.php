@@ -85,7 +85,9 @@ final class EnumeratedListRule implements Rule
         $buffer = new Buffer();
         //First line sets the listmarker of the list, and the indentation of the current item.
         $listConfig = $this->getItemConfig($documentIterator->current());
+        $itemLineOffset = null;
         if (trim($documentIterator->current()) !== $listConfig['marker']) {
+            $itemLineOffset = $blockContext->getLineOffset($documentIterator->key());
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
@@ -98,9 +100,10 @@ final class EnumeratedListRule implements Rule
             $documentIterator->next();
 
             if ($this->isListItemStart($documentIterator->current())) {
-                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
+                $items[] = $this->parseListItem($listConfig, $buffer, $blockContext, $itemLineOffset);
                 $listConfig = $this->getItemConfig($documentIterator->current());
                 $buffer = new Buffer();
+                $itemLineOffset = null;
             }
 
             // the list item offset is determined by the offset of the first text.
@@ -115,10 +118,11 @@ final class EnumeratedListRule implements Rule
                 continue;
             }
 
+            $itemLineOffset ??= $blockContext->getLineOffset($documentIterator->key());
             $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
         }
 
-        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext);
+        $items[] = $this->parseListItem($listConfig, $buffer, $blockContext, $itemLineOffset);
         $orderType = $items[0]->getOrderType();
         $start = (string) $this->getStartValue($items[0]->getOrderNumber(), $orderType);
 
@@ -174,7 +178,7 @@ final class EnumeratedListRule implements Rule
     }
 
     /** @param array{marker: string, indenting: int, marker_type: string} $listConfig */
-    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext): ListItemNode
+    private function parseListItem(array $listConfig, Buffer $buffer, BlockContext $blockContext, int|null $lineOffset): ListItemNode
     {
         $marker = trim($listConfig['marker'], '.()');
         $orderNumber = null;
@@ -183,7 +187,7 @@ final class EnumeratedListRule implements Rule
         }
 
         $listItem = new ListItemNode($marker, false, [], $orderNumber);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $blockContext->getDocumentIterator()->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $lineOffset ?? $blockContext->getLineOffset($blockContext->getDocumentIterator()->key()));
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $listItem);
         }
