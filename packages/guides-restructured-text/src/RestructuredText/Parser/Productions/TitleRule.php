@@ -66,6 +66,7 @@ final class TitleRule implements Rule
             $title = trim($documentIterator->current()); // Title with over and underlines may be indented
         }
 
+        $titleLineNumber = $blockContext->getCurrentLineNumber();
         $underlineLetter = $this->nextLineIsAnUnderline($documentIterator->current(), $documentIterator->getNextLine());
         if ($underlineLetter !== '') {
             if (($overlineLetter === '' || $overlineLetter === $underlineLetter)) {
@@ -82,7 +83,7 @@ final class TitleRule implements Rule
         $level = $blockContext->getDocumentParserContext()->getLevel($overlineLetter, $underlineLetter);
 
         return new TitleNode(
-            $this->inlineTokenParser->parse($title, $blockContext),
+            $this->inlineTokenParser->parse($title, $blockContext, $titleLineNumber),
             $level,
             (new AsciiSlugger())->slug($title)->lower()->toString(),
         );

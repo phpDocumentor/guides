@@ -26,6 +26,9 @@ abstract class AbstractLinkInlineNode extends InlineCompoundNode implements Link
 
     private string $url = '';
 
+    /** @var array<string, int|string> */
+    private array $loggerInformation = [];
+
     /** @param InlineNodeInterface[] $children */
     public function __construct(
         private readonly string $type,
@@ -76,6 +79,23 @@ abstract class AbstractLinkInlineNode extends InlineCompoundNode implements Link
             'targetReference' => $this->getTargetReference(),
             'value' => $this->toString(),
         ];
+    }
+
+    /**
+     * Source location (file, line) of the link, for warnings logged after
+     * parsing, like a reference that cannot be resolved.
+     *
+     * @param array<string, int|string> $loggerInformation
+     */
+    public function setLoggerInformation(array $loggerInformation): void
+    {
+        $this->loggerInformation = $loggerInformation;
+    }
+
+    /** @return array<string, int|string> */
+    public function getLoggerInformation(): array
+    {
+        return $this->loggerInformation;
     }
 
     public function getType(): string
