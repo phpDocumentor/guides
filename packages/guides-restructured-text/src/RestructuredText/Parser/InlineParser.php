@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Exception;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\CachableInlineRule;
@@ -21,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineR
 
 use function array_filter;
 use function array_key_exists;
+use function substr_count;
 use function usort;
 
 /** @internal */
@@ -48,8 +50,13 @@ class InlineParser
         }
     }
 
-    public function parse(string $content, BlockContext $blockContext): InlineCompoundNode
+    /**
+     * @param int|null $firstLineNumber Line in the source file $content starts on, defaults to the current line of
+     *                                  $blockContext
+     */
+    public function parse(string $content, BlockContext $blockContext, int|null $firstLineNumber = null): InlineCompoundNode
     {
+        $firstLineNumber ??= $blockContext->getCurrentLineNumber();
         $lexer = new InlineLexer($this->disableLegacyTilde);
         $lexer->setInput($content);
         $lexer->moveNext();
@@ -57,6 +64,7 @@ class InlineParser
         $nodes = [];
         $previous = null;
         while ($lexer->token !== null) {
+            $position = $lexer->token->position;
             foreach ($this->rules as $inlineRule) {
                 $node = null;
                 if (array_key_exists($lexer->token->type ?? -1, $this->cache)) {
@@ -67,6 +75,12 @@ class InlineParser
 
                 if ($node === null) {
                     continue;
+                }
+
+                if ($node instanceof AbstractLinkInlineNode && $node->getLoggerInformation() === []) {
+                    $loggerInformation = $blockContext->getDocumentParserContext()->getLoggerInformation();
+                    $loggerInformation['currentLineNumber'] = $firstLineNumber + substr_count($content, "\n", 0, $position);
+                    $node->setLoggerInformation($loggerInformation);
                 }
 
                 if ($previous instanceof PlainTextInlineNode && $node instanceof PlainTextInlineNode) {

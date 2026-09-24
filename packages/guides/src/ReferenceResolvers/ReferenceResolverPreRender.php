@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRenderer;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
@@ -48,7 +49,11 @@ final class ReferenceResolverPreRender implements PreNodeRenderer
                     $node->getTargetReference(),
                     $renderContext->getCurrentFileName(),
                 ),
-                array_merge($renderContext->getLoggerInformation(), $messages->getLastWarning()?->getDebugInfo() ?? []),
+                array_merge(
+                    $node instanceof AbstractLinkInlineNode ? $node->getLoggerInformation() : [],
+                    $renderContext->getLoggerInformation(),
+                    $messages->getLastWarning()?->getDebugInfo() ?? [],
+                ),
             );
         }
 

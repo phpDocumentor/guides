@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\ImageNode;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
-use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
@@ -69,17 +69,15 @@ final class ImageDirective extends BaseDirective
             ),
         );
         if ($directive->hasOption('target')) {
-            $node->setTarget(
-                $this->resolveLinkTarget(
-                    $directive->getOptionString('target'),
-                ),
-            );
+            $target = $this->resolveLinkTarget($directive->getOptionString('target'));
+            $target->setLoggerInformation($directiveNode->getSourceLocation()->toLoggerInformation());
+            $node->setTarget($target);
         }
 
         return $node;
     }
 
-    private function resolveLinkTarget(string $targetReference): LinkInlineNode
+    private function resolveLinkTarget(string $targetReference): AbstractLinkInlineNode
     {
         if (filter_var($targetReference, FILTER_VALIDATE_EMAIL)) {
             return new HyperLinkNode([], $targetReference);

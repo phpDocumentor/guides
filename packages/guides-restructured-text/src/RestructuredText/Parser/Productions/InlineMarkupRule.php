@@ -66,9 +66,10 @@ final class InlineMarkupRule implements Rule
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): CompoundNode|InlineCompoundNode
     {
         $documentIterator = $blockContext->getDocumentIterator();
+        $firstLineNumber = $blockContext->getCurrentLineNumber();
         $buffer = $this->collectContent($documentIterator);
 
-        $node = $this->inlineTokenParser->parse($buffer->getLinesString(), $blockContext);
+        $node = $this->inlineTokenParser->parse($buffer->getLinesString(), $blockContext, $firstLineNumber);
 
         if ($on !== null) {
             $on->setValue([$node]);
