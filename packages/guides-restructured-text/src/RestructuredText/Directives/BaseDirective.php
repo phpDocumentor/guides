@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use Doctrine\Deprecations\Deprecation;
 use LogicException;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\GenericNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
@@ -181,7 +182,7 @@ abstract class BaseDirective
         return new GenericNode($directive->getVariable(), $directive->getData());
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node|null
     {
         return null;
     }

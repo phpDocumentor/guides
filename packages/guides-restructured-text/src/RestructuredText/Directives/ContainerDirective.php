@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -25,7 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 #[Attributes\Directive(name: 'container', aliases: ['div'])]
 final class ContainerDirective extends SubDirective
 {
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         return (new ContainerNode($directiveNode->getChildren()))
             ->withOptions(['class' => $directiveNode->getDirective()->getData()]);

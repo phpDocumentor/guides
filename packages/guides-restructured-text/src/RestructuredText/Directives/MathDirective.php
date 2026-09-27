@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\MathNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -40,7 +41,7 @@ final class MathDirective extends BaseDirective
     ) {
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node|null
     {
         // Matches LinesIterator::load()'s preserveSpace handling, which the old
         // dispatch's BlockContext ran the same raw content through -- only leading

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Configuration\ConfigurationBlockNode;
@@ -47,7 +48,7 @@ final class ConfigurationBlockDirective extends SubDirective
         $this->slugger = new AsciiSlugger();
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         $tabs = [];
         foreach ($directiveNode->getChildren() as $child) {

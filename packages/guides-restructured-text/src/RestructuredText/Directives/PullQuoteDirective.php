@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\QuoteNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -27,7 +28,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 #[Attributes\Directive(name: 'pull-quote')]
 final class PullQuoteDirective extends SubDirective
 {
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         return new QuoteNode($directiveNode->getChildren(), ['pull-quote']);
     }
