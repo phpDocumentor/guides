@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\AuthorNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -36,7 +37,7 @@ final class SectionauthorDirective extends BaseDirective
     ) {
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node|null
     {
         $directive = $directiveNode->getDirective();
         $input = $directive->getData();

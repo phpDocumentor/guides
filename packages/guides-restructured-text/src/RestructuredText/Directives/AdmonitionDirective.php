@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\AdmonitionNode;
-use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 use function preg_replace;
 use function strtolower;
@@ -38,24 +36,7 @@ use function trim;
 #[Attributes\Directive(name: 'admonition')]
 final class AdmonitionDirective extends SubDirective
 {
-    /** {@inheritDoc}
-     *
-     * @param Directive $directive
-     */
-    protected function processSub(
-        BlockContext $blockContext,
-        CollectionNode $collectionNode,
-        Directive $directive,
-    ): Node|null {
-        return $this->createNode(
-            new DirectiveNode(
-                $directive,
-                $collectionNode->getChildren(),
-            ),
-        );
-    }
-
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node|null
     {
         // The title argument is required per the RST spec.
         // Skip rendering if no title is provided.

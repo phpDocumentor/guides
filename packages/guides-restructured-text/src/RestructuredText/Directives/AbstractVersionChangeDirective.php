@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -50,7 +51,7 @@ abstract class AbstractVersionChangeDirective extends SubDirective
         );
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface|null $compilerContext = null): Node
     {
         return new VersionChangeNode(
             $this->type,

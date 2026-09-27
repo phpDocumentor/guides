@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\MainNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -23,7 +24,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 #[Attributes\Directive(name: 'latex-main')]
 final class LaTeXMain extends BaseDirective
 {
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         return new MainNode($directiveNode->getDirective()->getData());
     }

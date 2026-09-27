@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\Bootstrap\Directives;
 
 use phpDocumentor\Guides\Bootstrap\Nodes\CardGroupNode;
 use phpDocumentor\Guides\Bootstrap\Nodes\CardNode;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
@@ -33,7 +34,7 @@ class CardGroupDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         $directive = $directiveNode->getDirective();
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\AdmonitionNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -52,7 +53,7 @@ abstract class AbstractAdmonitionDirective extends SubDirective
         );
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node|null
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface|null $compilerContext = null): Node|null
     {
         $children = $directiveNode->getChildren();
         if ($directiveNode->getDirective()->getDataNode() !== null) {

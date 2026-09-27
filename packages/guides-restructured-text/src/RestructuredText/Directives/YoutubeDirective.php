@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\EmbeddedFrame;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 
 /**
  * This directive is used to embed a youtube video in the document.
@@ -44,14 +43,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 #[Option('allowfullscreen', type: OptionType::Boolean, default: true, description: 'Whether the video should be allowed to go fullscreen')]
 final class YoutubeDirective extends BaseDirective
 {
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): EmbeddedFrame {
-        return $this->createNode(new DirectiveNode($directive));
-    }
-
-    public function createNode(DirectiveNode $directiveNode): EmbeddedFrame
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): EmbeddedFrame
     {
         $node = new EmbeddedFrame(
             'https://www.youtube-nocookie.com/embed/' . $directiveNode->getDirective()->getData(),

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -34,7 +35,7 @@ final class TestLoggerDirective extends SubDirective
         parent::__construct($startingRule);
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         $this->logger->warning('Test logging in directives', $directiveNode->getSourceLocation()->toLoggerInformation());
 

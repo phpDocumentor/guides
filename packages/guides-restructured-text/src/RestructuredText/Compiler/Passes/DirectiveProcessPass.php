@@ -61,7 +61,7 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
             return $node;
         }
 
-        $newNode = $this->getDirectiveHandler($node->getDirective())->createNode($node);
+        $newNode = $this->getDirectiveHandler($node->getDirective())->createNode($node, $compilerContext);
         if ($newNode === null) {
             return null;
         }
