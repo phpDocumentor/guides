@@ -27,8 +27,14 @@ final class TwigTemplateRenderer implements TemplateRenderer
     public function renderTemplate(RenderContext $context, string $template, array $params = []): string
     {
         $twig = $this->environmentBuilder->getTwigEnvironment();
-        $twig->addGlobal('env', $context);
-        $twig->addGlobal('debugInformation', $context->getLoggerInformation());
+
+        // A render calls this once per node, nearly always with the context already set. Ask the
+        // environment rather than remembering what was set last: it can be replaced, and the global
+        // overwritten, from outside (EnvironmentBuilder::setEnvironmentFactory() and ::setContext()).
+        if (($twig->getGlobals()['env'] ?? null) !== $context) {
+            $twig->addGlobal('env', $context);
+            $twig->addGlobal('debugInformation', $context->getLoggerInformation());
+        }
 
         return $twig->render($template, $params);
     }
