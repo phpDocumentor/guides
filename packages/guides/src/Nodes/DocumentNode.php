@@ -286,6 +286,11 @@ final class DocumentNode extends CompoundNode
         return null;
     }
 
+    public function hasDocumentEntry(): bool
+    {
+        return $this->documentEntry !== null;
+    }
+
     public function getDocumentEntry(): DocumentEntryNode
     {
         if ($this->documentEntry === null) {

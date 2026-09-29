@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides;
 
+use ArrayObject;
 use Exception;
 use League\Flysystem\FilesystemInterface;
 use LogicException;
@@ -31,6 +32,14 @@ class RenderContext
     /** @var DocumentNode[] */
     private array $allDocuments;
 
+    /**
+     * The documents by file, built on the first lookup and shared with every context derived through
+     * {@see self::withDocument()}, so that one render builds it once.
+     *
+     * @var ArrayObject<string, DocumentNode>
+     */
+    private ArrayObject $documentsByFile;
+
     private string $outputFilePath = '';
 
     private Renderer\DocumentListIterator $iterator;
@@ -44,6 +53,7 @@ class RenderContext
         private readonly string $outputFormat,
         private readonly ProjectNode $projectNode,
     ) {
+        $this->documentsByFile = new ArrayObject();
     }
 
     /** @param DocumentNode[] $allDocumentNodes */
@@ -76,7 +86,7 @@ class RenderContext
 
     public function withDocument(DocumentNode $documentNode): self
     {
-        return self::forDocument(
+        $context = self::forDocument(
             $documentNode,
             $this->allDocuments,
             $this->origin,
@@ -85,7 +95,10 @@ class RenderContext
             $this->outputFormat,
             $this->projectNode,
             $this->imageDestination,
-        )->withIterator($this->getIterator());
+        );
+        $context->documentsByFile = $this->documentsByFile;
+
+        return $context->withIterator($this->getIterator());
     }
 
     public function getDocument(): DocumentNode
@@ -234,11 +247,19 @@ class RenderContext
 
     public function getDocumentNodeForEntry(DocumentEntryNode $entryNode): DocumentNode
     {
-        $file = $entryNode->getFile();
-        foreach ($this->allDocuments as $child) {
-            if ($child->getDocumentEntry()->getFile() === $file) {
-                return $child;
+        if ($this->documentsByFile->count() === 0) {
+            foreach ($this->allDocuments as $child) {
+                if (!$child->hasDocumentEntry()) {
+                    continue;
+                }
+
+                $this->documentsByFile[$child->getDocumentEntry()->getFile()] ??= $child;
             }
+        }
+
+        $document = $this->documentsByFile[$entryNode->getFile()] ?? null;
+        if ($document !== null) {
+            return $document;
         }
 
         throw new Exception('No document was found for document entry ' . $entryNode->getFile());
