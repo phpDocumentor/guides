@@ -25,6 +25,17 @@ use function str_replace;
 final class DocumentNameResolver implements DocumentNameResolverInterface
 {
     /**
+     * Canonical urls computed so far, keyed by base path and url.
+     *
+     * This table lives for the whole render and is never dropped: its entries are asked for again from
+     * document after document, so it grows with the distinct pairs of a project, not with its calls -
+     * 8,704 pairs for 294,026 calls on the 1003 documents of TYPO3CMS-Reference-CoreApi.
+     *
+     * @var array<string, string>
+     */
+    private array $canonicalUrlCache = [];
+
+    /**
      * Returns the absolute path, including prefixing '/'.
      *
      * This method will, by design, return an absolute path including the prefixing slash. The slash will make it clear
@@ -53,6 +64,11 @@ final class DocumentNameResolver implements DocumentNameResolverInterface
      * resolving.
      */
     public function canonicalUrl(string $basePath, string $url): string
+    {
+        return $this->canonicalUrlCache[$basePath . "\0" . $url] ??= $this->computeCanonicalUrl($basePath, $url);
+    }
+
+    private function computeCanonicalUrl(string $basePath, string $url): string
     {
         if ($url[0] === '/') {
             return ltrim($url, '/');

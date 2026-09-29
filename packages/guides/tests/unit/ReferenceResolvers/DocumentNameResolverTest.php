@@ -25,6 +25,24 @@ final class DocumentNameResolverTest extends TestCase
         self::assertSame($result, $documentNameResolver->canonicalUrl($basePath, $url));
     }
 
+    public function testCanonicalUrlsStayApartOnOneInstance(): void
+    {
+        $documentNameResolver = new DocumentNameResolver();
+        $cases = [
+            ...self::canonicalUrlProvider(),
+            // Would share a key if base path and url were joined by a separator either may contain.
+            ['basePath' => 'dir|sub', 'url' => 'file', 'result' => 'dir|sub/file'],
+            ['basePath' => 'dir', 'url' => 'sub|file', 'result' => 'dir/sub|file'],
+        ];
+
+        // The second pass is answered from what the first one stored.
+        for ($pass = 1; $pass <= 2; $pass++) {
+            foreach ($cases as $case) {
+                self::assertSame($case['result'], $documentNameResolver->canonicalUrl($case['basePath'], $case['url']));
+            }
+        }
+    }
+
     /** @return string[][] */
     public static function canonicalUrlProvider(): array
     {
