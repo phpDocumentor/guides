@@ -19,6 +19,7 @@ use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\Exception\InvalidUrlException;
 
 use function filter_var;
+use function preg_match;
 use function sprintf;
 
 use const FILTER_VALIDATE_EMAIL;
@@ -26,6 +27,8 @@ use const FILTER_VALIDATE_URL;
 
 abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 {
+    private const PLAIN_RELATIVE_PATH = '~^(?!/)[\x21-\x39\x3B-\x7E]+\z~';
+
     public function __construct(private readonly DocumentNameResolverInterface $documentNameResolver)
     {
     }
@@ -93,6 +96,15 @@ abstract class AbstractUrlGenerator implements UrlGeneratorInterface
 
     private function isRelativeUrl(string $url): bool
     {
+        // Printable ASCII without a colon, not starting with a slash, has neither a scheme nor an
+        // authority and so is a relative path, and League\Uri parses all of it without complaint;
+        // AbstractUrlGeneratorIsRelativeUrlTest holds the two to the same answer. Canonical urls are
+        // nearly always of this form, so most links skip the full parse. Anything else is still
+        // decided by League\Uri, including the input it refuses with an exception.
+        if (preg_match(self::PLAIN_RELATIVE_PATH, $url) === 1) {
+            return true;
+        }
+
         return BaseUri::from($url)->isRelativePath();
     }
 
