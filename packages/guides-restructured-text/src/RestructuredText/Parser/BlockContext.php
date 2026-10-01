@@ -69,7 +69,7 @@ final class BlockContext
             return $this->lineOffset;
         }
 
-        $lastKey = count($this->documentIterator->toArray()) - 1;
+        $lastKey = count($this->documentIterator) - 1;
 
         return $this->getLineOffset(max(0, min($this->documentIterator->key(), $lastKey))) + 1;
     }
