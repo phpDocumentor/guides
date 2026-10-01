@@ -84,6 +84,7 @@ final class DirectiveRule implements Rule
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $openingLine = $documentIterator->current();
+        $openingLineOffset = $blockContext->getLineOffset($documentIterator->key());
         $directive = $this->parseDirective($openingLine);
 
         if ($directive === null) {
@@ -94,7 +95,12 @@ final class DirectiveRule implements Rule
         $this->interpretDirectiveOptions($documentIterator, $directive);
 
         $directiveHandler = $this->getDirectiveHandler($directive);
+        $contentLineOffset = $blockContext->getLineOffset($documentIterator->key() + 1);
         $buffer = $this->collectDirectiveContents($documentIterator);
+        if (trim($buffer->getLinesString()) === '') {
+            // Without content, locate the directive itself: empty contents report the line before them
+            $contentLineOffset = $openingLineOffset + 1;
+        }
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
             $rawContent = $buffer->getLinesString();
@@ -106,10 +112,10 @@ final class DirectiveRule implements Rule
             if ($directiveHandler->usesRawContent()) {
                 $node = new DirectiveNode($directive, rawContent: $rawContent);
                 $node->setSourceLocation(DirectiveSourceLocation::fromLoggerInformation(
-                    (new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key()))->getLoggerInformation(),
+                    (new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $contentLineOffset))->getLoggerInformation(),
                 ));
             } else {
-                $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $documentIterator->key());
+                $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $contentLineOffset);
                 $directiveNode = new DirectiveNode($directive, rawContent: $rawContent);
                 $node = $this->startingRule->apply($subBlockContext, $directiveNode);
                 // Captured only after the sub-parse has fully consumed $subBlockContext's
@@ -135,7 +141,7 @@ final class DirectiveRule implements Rule
         // Processing the Directive, the handler is responsible for adding the right Nodes to the document.
         try {
             $node = $directiveHandler->process(
-                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $documentIterator->key()),
+                new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), true, $contentLineOffset),
                 $directive,
             );
 
@@ -183,7 +189,7 @@ final class DirectiveRule implements Rule
             return;
         }
 
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData(), false, $blockContext->getDocumentIterator()->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData(), false, $blockContext->getLineOffset($blockContext->getDocumentIterator()->key()));
         $inlineNode = $this->inlineMarkupRule->apply(
             $subContext,
             null,
