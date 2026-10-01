@@ -54,7 +54,7 @@ final class GridTableRule implements Rule
         $line = $documentIterator->current();
 
         $tableSeparatorLineConfig = $this->tableLineConfig($line, '-');
-        $context = new ParserContext();
+        $context = new ParserContext($blockContext->getLineOffset($documentIterator->key()));
         $context->pushSeparatorLine($tableSeparatorLineConfig);
         $context->pushSeparatorLine($tableSeparatorLineConfig);
 

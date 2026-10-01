@@ -55,6 +55,7 @@ final class BlockQuoteRule implements Rule
         $documentIterator = $blockContext->getDocumentIterator();
         $buffer = new Buffer();
         $documentIterator->next();
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key());
         $indent = mb_strlen($documentIterator->current()) - mb_strlen(trim($documentIterator->current()));
         $buffer->push($documentIterator->current());
 
@@ -68,7 +69,9 @@ final class BlockQuoteRule implements Rule
             return null;
         }
 
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), (new Buffer($lines))->getLinesString());
+        $lineOffset += $buffer->count() - count($lines);
+
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), (new Buffer($lines))->getLinesString(), false, $lineOffset);
 
         $collectionNode = $this->startingRule->apply($subContext);
 
