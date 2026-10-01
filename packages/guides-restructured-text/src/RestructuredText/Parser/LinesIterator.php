@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use Countable;
 use Iterator;
 use OutOfBoundsException;
 
@@ -32,7 +33,7 @@ use function substr_count;
 use function trim;
 
 /** @implements Iterator<string> */
-final class LinesIterator implements Iterator
+final class LinesIterator implements Iterator, Countable
 {
     /** @var string[] */
     private array $lines = [];
@@ -47,8 +48,8 @@ final class LinesIterator implements Iterator
         if (!$preserveSpace) {
             $document = $this->prepareDocument($document);
             $trimmed = ltrim($document);
-            // prepareDocument() added one leading newline itself
-            $this->leadingLinesRemoved = max(0, substr_count($document, "\n", 0, strlen($document) - strlen($trimmed)) - 1);
+            // prepareDocument() added one leading newline itself; a blank document has no first line to map
+            $this->leadingLinesRemoved = $trimmed === '' ? 0 : substr_count($document, "\n", 0, strlen($document) - strlen($trimmed)) - 1;
             $document = rtrim($trimmed);
         } else {
             // only remove empty lines at start and end
@@ -152,6 +153,11 @@ final class LinesIterator implements Iterator
     public function toArray(): array
     {
         return $this->lines;
+    }
+
+    public function count(): int
+    {
+        return count($this->lines);
     }
 
     public function isEmpty(): bool
