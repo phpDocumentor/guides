@@ -83,7 +83,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\ContactFi
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\CopyrightFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DateFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DedicationFieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\DirFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\FieldListItemRule;
+use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\LangFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NavigationTitleFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NocommentsFieldListItemRule;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList\NosearchFieldListItemRule;
@@ -116,10 +118,13 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\DocReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericReferenceTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\LangTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\LiteralTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\LtrTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\MathTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\NbspTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\ReferenceTextRole;
+use phpDocumentor\Guides\RestructuredText\TextRoles\RtlTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\SpanTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
@@ -179,6 +184,9 @@ return static function (ContainerConfigurator $container): void {
         ->set(LiteralTextRole::class)
         ->set(NbspTextRole::class)
         ->set(SpanTextRole::class)
+        ->set(RtlTextRole::class)
+        ->set(LtrTextRole::class)
+        ->set(LangTextRole::class)
 
         ->set(GeneralDirective::class)
         ->set(AdmonitionDirective::class)
@@ -334,6 +342,18 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(DedicationFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
+
+        ->set(DirFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+        ->args([
+            '$logger' => service(LoggerInterface::class),
+        ])
+
+        ->set(LangFieldListItemRule::class)
+        ->tag('phpdoc.guides.parser.rst.fieldlist')
+        ->args([
+            '$logger' => service(LoggerInterface::class),
+        ])
 
         ->set(NavigationTitleFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
