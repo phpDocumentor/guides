@@ -26,7 +26,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
  *
  * Displays a table of content of the current page
  */
-#[Option(name: 'local', type: OptionType::Boolean, description: 'If set, the table of contents will only include sections that are local to the current document.', default: false)]
+#[Option(name: 'local', type: ValueType::Boolean, description: 'If set, the table of contents will only include sections that are local to the current document.', default: false)]
 #[Option(name: 'depth', description: 'The maximum depth of the table of contents.')]
 final class ContentsDirective extends BaseDirective
 {

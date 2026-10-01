@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\ValueType;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveSourceLocation;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -33,11 +34,16 @@ use Throwable;
 use function array_merge;
 use function dirname;
 use function explode;
+use function filter_var;
+use function is_numeric;
 use function is_string;
 use function preg_match;
 use function sprintf;
 use function strtolower;
 use function trim;
+
+use const FILTER_NULL_ON_FAILURE;
+use const FILTER_VALIDATE_BOOL;
 
 /**
  * @link https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#directives
@@ -90,10 +96,11 @@ final class DirectiveRule implements Rule
             return null;
         }
 
-        $this->parseDirectiveValue($directive, $blockContext);
+        $directiveHandler = $this->getDirectiveHandler($directive);
+
+        $this->parseDirectiveValue($directive, $blockContext, $directiveHandler);
         $this->interpretDirectiveOptions($documentIterator, $directive);
 
-        $directiveHandler = $this->getDirectiveHandler($directive);
         $buffer = $this->collectDirectiveContents($documentIterator);
 
         if ($this->startingRule !== null && $directiveHandler->isUpgraded()) {
@@ -171,24 +178,61 @@ final class DirectiveRule implements Rule
     }
 
     /**
-     * Parses the directive's own value -- the text right after `::`, e.g. the
-     * "image.jpg" in `.. figure:: image.jpg` -- as inline markup. This is
-     * unrelated to the directive's body/content, the indented block that
-     * follows on later lines, which {@see collectDirectiveContents()} collects
-     * separately regardless of what happens here.
+     * Validates and, only for {@see ValueType::Inline}, parses the
+     * directive's own value -- the text right after `::`, e.g. the
+     * "image.jpg" in `.. figure:: image.jpg`. This is unrelated to the
+     * directive's body/content, the indented block that follows on later
+     * lines, which {@see collectDirectiveContents()} collects separately
+     * regardless of what happens here.
      */
-    private function parseDirectiveValue(Directive $directive, BlockContext $blockContext): void
+    private function parseDirectiveValue(Directive $directive, BlockContext $blockContext, DirectiveHandler $directiveHandler): void
     {
-        if ($directive->getData() === '') {
+        $valueType = $directiveHandler->getValueType();
+
+        $this->validateDirectiveValue($directive, $blockContext, $valueType);
+
+        $data = $directive->getData();
+        if ($valueType !== ValueType::Inline || $data === '') {
             return;
         }
 
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $directive->getData(), false, $blockContext->getDocumentIterator()->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $data, false, $blockContext->getDocumentIterator()->key());
         $inlineNode = $this->inlineMarkupRule->apply(
             $subContext,
             null,
         );
         $directive->setDataNode($inlineNode);
+    }
+
+    /**
+     * Warns when a directive's value doesn't look like what its declared
+     * {@see ValueType} expects. Diagnostic only -- an invalid value is still
+     * passed through as-is via Directive::getData(), nothing here rewrites
+     * or rejects it. A value type is never required (an empty value is
+     * always allowed except for Empty, which requires it), so only a
+     * non-empty value gets checked against its declared shape.
+     */
+    private function validateDirectiveValue(Directive $directive, BlockContext $blockContext, ValueType $valueType): void
+    {
+        $data = $directive->getData();
+        $problem = null;
+
+        if ($valueType === ValueType::Empty && $data !== '') {
+            $problem = 'does not accept a value';
+        } elseif ($valueType === ValueType::Integer && $data !== '' && !is_numeric($data)) {
+            $problem = 'expects an integer value';
+        } elseif ($valueType === ValueType::Boolean && $data !== '' && filter_var($data, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) === null) {
+            $problem = 'expects a boolean value';
+        }
+
+        if ($problem === null) {
+            return;
+        }
+
+        $this->logger->warning(
+            sprintf('The "%s" directive %s, but was given "%s".', $directive->getName(), $problem, $data),
+            $blockContext->getLoggerInformation(),
+        );
     }
 
     /**
