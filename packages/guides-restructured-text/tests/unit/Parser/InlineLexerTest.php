@@ -52,6 +52,33 @@ final class InlineLexerTest extends TestCase
         assertEquals(InlineLexer::WORD, $lexer->token?->type);
     }
 
+    /**
+     * Inline rules roll back to the character offset of the token they started at. Tokens longer than one character,
+     * like a URL or `**`, make offsets differ from token indexes, which doctrine/lexer's own resetPosition() reads
+     * differently by version.
+     */
+    public function testResetPositionReturnsToTheTokenAtThatOffset(): void
+    {
+        $lexer = new InlineLexer();
+        $lexer->setInput('see https://example.org and **strong `unclosed :role: here');
+        $lexer->moveNext();
+        $lexer->moveNext();
+
+        $positions = [];
+        while ($lexer->token !== null) {
+            $positions[] = $lexer->token->position;
+            $lexer->moveNext();
+        }
+
+        foreach ($positions as $position) {
+            $lexer->resetPosition($position);
+            $lexer->moveNext();
+            $lexer->moveNext();
+
+            self::assertSame($position, $lexer->token?->position);
+        }
+    }
+
     /** @return array<string, array<string | int[]>> */
     public static function inlineLexerProvider(): array
     {

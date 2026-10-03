@@ -92,7 +92,14 @@ final class InlineLexer extends AbstractLexer
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function resetPosition($position = 0): void
     {
-        parent::resetPosition($this->tokenPositions[$position]);
+        // doctrine/lexer reads the argument as a token index before 3.0.3 and as a character offset since
+        // (doctrine/lexer#53, fixed by doctrine/lexer#176). Both agree on 0, so reset to the start and move on to
+        // the token index.
+        parent::resetPosition(0);
+
+        for ($index = $this->tokenPositions[$position]; $index > 0; $index--) {
+            parent::moveNext();
+        }
     }
 
     /** @param string $input */
