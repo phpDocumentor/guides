@@ -18,8 +18,13 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
+use Psr\Log\LoggerInterface;
 
+use function preg_match;
+use function sprintf;
 use function str_starts_with;
+use function strlen;
+use function substr;
 use function trim;
 
 /**
@@ -31,6 +36,16 @@ final class CommentRule implements Rule
 {
     public const PRIORITY = 60;
 
+    /**
+     * A directive name, e.g. "confval", "code-block" or "php:method", directly followed by "::" and more text. Without
+     * whitespace after "::" the block is no directive, so it ends up as a comment.
+     */
+    private const DIRECTIVE_WITHOUT_SPACE_PATTERN = '/^\.\.\s+[a-zA-Z][\w:-]*?::\S/';
+
+    public function __construct(private readonly LoggerInterface $logger)
+    {
+    }
+
     public function applies(BlockContext $blockContext): bool
     {
         return $this->isComment($blockContext->getDocumentIterator()->current());
@@ -39,16 +54,45 @@ final class CommentRule implements Rule
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $blockContext->getDocumentIterator();
+        $this->warnAboutDirectiveWithoutSpace($blockContext);
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
 
         while ($documentIterator->getNextLine() !== null && $this->isCommentLine($documentIterator->getNextLine())) {
             $documentIterator->next();
+            // Consecutive comments are consumed as one block, check each of them
+            if ($this->isComment($documentIterator->current())) {
+                $this->warnAboutDirectiveWithoutSpace($blockContext);
+            }
+
             $buffer->push($documentIterator->current());
         }
 
         // TODO: Would we want to keep a comment as a Node in the AST?
         return null;
+    }
+
+    /**
+     * A typo like ".. confval::name" silently drops the whole block, as it is no directive, so it is ignored as a
+     * comment. Real comments practically never start with a name directly followed by "::" and more text.
+     */
+    private function warnAboutDirectiveWithoutSpace(BlockContext $blockContext): void
+    {
+        $line = trim($blockContext->getDocumentIterator()->current());
+        if (preg_match(self::DIRECTIVE_WITHOUT_SPACE_PATTERN, $line, $matches) !== 1) {
+            return;
+        }
+
+        // The match ends with the first character after "::"
+        $afterSeparator = strlen($matches[0]) - 1;
+        $this->logger->warning(
+            sprintf(
+                'The comment "%s" looks like a directive without a space after "::"; it is ignored. Write "%s".',
+                trim(substr($line, 2)),
+                substr($line, 0, $afterSeparator) . ' ' . substr($line, $afterSeparator),
+            ),
+            $blockContext->getLoggerInformation(),
+        );
     }
 
     private function isCommentLine(string|null $line): bool
