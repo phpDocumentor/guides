@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryType;
 use phpDocumentor\Guides\Nodes\Index\IndexNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -39,7 +40,7 @@ final class IndexDirectiveTest extends RuleTestCase
     #[DataProvider('typoProvider')]
     public function testLikelyTypoLogsWarning(string $typo, string $suggestion): void
     {
-        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', $typo . ': foo')));
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', $typo . ': foo')), self::createStub(CompilerContextInterface::class));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertCount(1, $node->getEntries());
@@ -62,7 +63,7 @@ final class IndexDirectiveTest extends RuleTestCase
 
     public function testUnrelatedLiteralColonDoesNotLogAnything(): void
     {
-        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'ext:core')));
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'ext:core')), self::createStub(CompilerContextInterface::class));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertFalse($this->logHandler->hasWarningRecords());
@@ -72,7 +73,7 @@ final class IndexDirectiveTest extends RuleTestCase
     {
         $directive = new Directive('', 'index', 'single: installation', ['name' => new DirectiveOption('name', 'install-entry')]);
 
-        $node = $this->directive->createNode(new DirectiveNode($directive));
+        $node = $this->directive->createNode(new DirectiveNode($directive), self::createStub(CompilerContextInterface::class));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertSame('install-entry', $node->getName());
@@ -81,7 +82,7 @@ final class IndexDirectiveTest extends RuleTestCase
 
     public function testWithoutANameTheNodeIsNoTarget(): void
     {
-        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: installation')));
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: installation')), self::createStub(CompilerContextInterface::class));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertNull($node->getName());
@@ -89,7 +90,7 @@ final class IndexDirectiveTest extends RuleTestCase
 
     public function testKnownEntryTypeDoesNotLogAnything(): void
     {
-        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: foo')));
+        $node = $this->directive->createNode(new DirectiveNode(new Directive('', 'index', 'single: foo')), self::createStub(CompilerContextInterface::class));
 
         self::assertInstanceOf(IndexNode::class, $node);
         self::assertFalse($this->logHandler->hasWarningRecords());

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Index\GenIndexNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
@@ -68,7 +69,7 @@ use function trim;
 )]
 final class GenIndexDirective extends BaseDirective
 {
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         $directive = $directiveNode->getDirective();
         $prefixes = explode(',', $this->readOption($directive, 'scope'));

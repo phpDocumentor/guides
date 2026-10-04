@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryNode;
 use phpDocumentor\Guides\Nodes\Index\IndexEntryType;
 use phpDocumentor\Guides\Nodes\Index\IndexNode;
@@ -80,7 +81,7 @@ final class IndexDirective extends BaseDirective
     {
     }
 
-    public function createNode(DirectiveNode $directiveNode): Node
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
         $directive = $directiveNode->getDirective();
         $data = trim($directive->getData());
