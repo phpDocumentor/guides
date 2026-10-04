@@ -63,7 +63,7 @@ final class LiteralBlockRule implements Rule
         }
 
         //TODO this is a bug, we need LiteralBlockNode here
-        return new CodeNode($lines, $blockContext->getDocumentParserContext()->getCodeBlockDefaultLanguage());
+        return new CodeNode($lines);
     }
 
     private function isBlockLine(string|null $line): bool

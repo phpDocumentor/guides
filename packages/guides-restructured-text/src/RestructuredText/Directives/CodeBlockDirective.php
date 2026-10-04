@@ -69,8 +69,6 @@ final class CodeBlockDirective extends BaseDirective
 
         if (trim($directive->getData()) !== '') {
             $node->setLanguage(trim($directive->getData()));
-        } else {
-            $node->setLanguage($blockContext->getDocumentParserContext()->getCodeBlockDefaultLanguage());
         }
 
         $this->codeNodeOptionMapper->apply($node, $directive->getOptions(), $blockContext);

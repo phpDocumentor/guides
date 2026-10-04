@@ -13,21 +13,12 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes as RST;
 
 /**
  * Todo directives are treated as comments, omitting all content or options
  */
-final class TodoDirective extends ActionDirective
+#[RST\Directive(name: 'todo')]
+final class TodoDirective extends BaseDirective
 {
-    public function getName(): string
-    {
-        return 'todo';
-    }
-
-    public function processAction(BlockContext $blockContext, Directive $directive): void
-    {
-        // Todo directives are treated as comments
-    }
 }

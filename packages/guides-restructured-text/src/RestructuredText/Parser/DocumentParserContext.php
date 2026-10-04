@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use Doctrine\Deprecations\Deprecation;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
@@ -109,13 +110,39 @@ class DocumentParserContext
         return $this->textRoleFactoryForDocument;
     }
 
+    /**
+     * @deprecated The default code-block language is now tracked by the compiler using
+     *     {@see \phpDocumentor\Guides\Nodes\HighlightNode} and
+     *     {@see \phpDocumentor\Guides\Nodes\ConsumesDefaultHighlightLanguage}. This method will be removed in a
+     *     future release.
+     */
     public function getCodeBlockDefaultLanguage(): string
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'phpdocumentor/guide-restructured-text',
+            'https://github.com/phpDocumentor/guides/issues/1411',
+            'DocumentParserContext::getCodeBlockDefaultLanguage() is deprecated, the default highlight '
+            . 'language is now applied by the compiler.',
+        );
+
         return $this->codeBlockDefaultLanguage;
     }
 
+    /**
+     * @deprecated The default code-block language is now tracked by the compiler using
+     *     {@see \phpDocumentor\Guides\Nodes\HighlightNode} and
+     *     {@see \phpDocumentor\Guides\Nodes\ConsumesDefaultHighlightLanguage}. This method will be removed in a
+     *     future release.
+     */
     public function setCodeBlockDefaultLanguage(string $codeBlockDefaultLanguage): void
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'phpdocumentor/guide-restructured-text',
+            'https://github.com/phpDocumentor/guides/issues/1411',
+            'DocumentParserContext::setCodeBlockDefaultLanguage() is deprecated, the default highlight '
+            . 'language is now applied by the compiler.',
+        );
+
         $this->codeBlockDefaultLanguage = $codeBlockDefaultLanguage;
     }
 
