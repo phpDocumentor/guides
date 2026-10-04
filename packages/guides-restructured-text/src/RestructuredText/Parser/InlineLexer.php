@@ -15,10 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Doctrine\Common\Lexer\AbstractLexer;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
-use ReflectionClass;
 
-use function array_column;
-use function array_flip;
 use function ctype_alnum;
 use function ctype_space;
 use function parse_url;
@@ -29,7 +26,6 @@ use function strlen;
 use function substr;
 
 use const PHP_URL_SCHEME;
-use const PHP_VERSION_ID;
 
 /** @extends AbstractLexer<int, string> */
 final class InlineLexer extends AbstractLexer
@@ -59,15 +55,6 @@ final class InlineLexer extends AbstractLexer
     public const VARIABLE_DELIMITER = 24;
     public const BACKSLASH = 25;
 
-    /**
-     * Map between string position and position in token list.
-     *
-     * @link https://github.com/doctrine/lexer/issues/53
-     *
-     * @var array<int, int>
-     */
-    private array $tokenPositions = [];
-
     /** @return string[] */
     protected function getCatchablePatterns(): array
     {
@@ -86,32 +73,6 @@ final class InlineLexer extends AbstractLexer
             '\\*',
             '\b(?<!:)[a-z0-9\\.\-+]{2,}:\\/\\/[-a-zA-Z0-9@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9@%_\\+~#&\\/=]', // standalone hyperlinks
         ];
-    }
-
-    /** @param int $position */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    public function resetPosition($position = 0): void
-    {
-        parent::resetPosition($this->tokenPositions[$position]);
-    }
-
-    /** @param string $input */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-    protected function scan($input): void
-    {
-        parent::scan($input);
-
-        $class = new ReflectionClass(AbstractLexer::class);
-        $property = $class->getProperty('tokens');
-        //phpcs:ignore SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator.RequiredNumericLiteralSeparator
-        if (PHP_VERSION_ID < 80500) {
-            $property->setAccessible(true);
-        }
-
-        /** @var array<int, string> $tokens */
-        $tokens = $property->getValue($this);
-
-        $this->tokenPositions = array_flip(array_column($tokens, 'position'));
     }
 
     /** @return string[] */
