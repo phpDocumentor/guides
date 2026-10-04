@@ -33,5 +33,28 @@ parameters:
     - tests/ApplicationTestCase.php
     - tests/Functional/FunctionalTest.php
     - tests/Integration/IntegrationTest.php
+    - tests/Architecture
 
   tmpDir: .cache/phpstan/
+
+services:
+  -
+    class: phpDocumentor\Guides\Architecture\CliArchitectureTest
+    tags:
+      - phpat.test
+  -
+    class: phpDocumentor\Guides\Architecture\GuidesArchitectureTest
+    tags:
+      - phpat.test
+  -
+    class: phpDocumentor\Guides\Architecture\RestructuredTextArchitectureTest
+    tags:
+      - phpat.test
+  -
+    class: phpDocumentor\Guides\Architecture\MarkdownArchitectureTest
+    tags:
+      - phpat.test
+  -
+    class: phpDocumentor\Guides\Architecture\GraphsArchitectureTest
+    tags:
+      - phpat.test

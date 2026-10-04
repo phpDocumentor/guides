@@ -14,7 +14,7 @@ fix-code-style: add-license
 	$(PHP_BIN) vendor/bin/phpcbf
 
 .PHONY: static-code-analysis
-static-code-analysis: vendor phpstan test-architecture ## Runs a static code analysis with phpstan/phpstan and vimeo/psalm
+static-code-analysis: vendor phpstan ## Runs a static code analysis with phpstan/phpstan, including architecture rules (phpat)
 
 .PHONY: phpstan-baseline
 phpstan-baseline:
@@ -66,10 +66,6 @@ cleanup-build:
 .PHONY: cleanup-cache
 cleanup-cache:
 	@sudo rm -rf .phpunit.cache
-
-.PHONY: test-architecture
-test-architecture: vendor ## Runs deptrac to enfore architecural rules
-	$(PHP_BIN) ./vendor/bin/deptrac --config-file deptrac.packages.yaml --cache-file=.cache/.deptrac.cache
 
 vendor: composer.json composer.lock
 	composer validate --no-check-publish
