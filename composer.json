@@ -31,6 +31,7 @@
                 "packages/guides-restructured-text/tests/unit",
                 "packages/guides-restructured-text/tests/benchmarks/"
             ],
+            "phpDocumentor\\Guides\\RestructuredText\\Architecture\\": "packages/guides-restructured-text/tests/Architecture",
             "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit",
             "phpDocumentor\\Guides\\Pages\\": "packages/guides-pages/tests/unit"
         }

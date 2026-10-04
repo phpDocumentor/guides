@@ -58,3 +58,7 @@ services:
     class: phpDocumentor\Guides\Architecture\GraphsArchitectureTest
     tags:
       - phpat.test
+  -
+    class: phpDocumentor\Guides\RestructuredText\Architecture\DirectiveArchitectureTest
+    tags:
+      - phpat.test
