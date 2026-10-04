@@ -20,6 +20,9 @@ Unit tests:
   Sometimes it's enough to test a single class in isolation. The unittests are part of the packages the test subject is
   located in. They are located in the ``tests`` directory. The tests are named after the class they are testing.
 
+Next to these three levels, the project also has :doc:`architecture tests </contributions/architecture-tests>`. Instead
+of verifying behaviour, they verify that the boundaries between (and within) packages are respected.
+
 Integration tests
 =================
 

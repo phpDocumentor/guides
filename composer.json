@@ -23,6 +23,7 @@
         "psr-4": {
             "phpDocumentor\\DevServer\\": ["packages/dev-server/tests/unit/"],
             "phpDocumentor\\Guides\\": ["packages/guides/tests/unit/", "tests/"],
+            "phpDocumentor\\Guides\\Architecture\\": "tests/Architecture",
             "phpDocumentor\\Guides\\Cli\\": "packages/guides-cli/tests/unit",
             "phpDocumentor\\Guides\\Code\\": "packages/guides-code/tests/unit",
             "phpDocumentor\\Guides\\Graphs\\": "packages/guides-graphs/tests/unit",
@@ -30,6 +31,7 @@
                 "packages/guides-restructured-text/tests/unit",
                 "packages/guides-restructured-text/tests/benchmarks/"
             ],
+            "phpDocumentor\\Guides\\RestructuredText\\Architecture\\": "packages/guides-restructured-text/tests/Architecture",
             "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit",
             "phpDocumentor\\Guides\\Pages\\": "packages/guides-pages/tests/unit"
         }
@@ -65,6 +67,7 @@
         "jangregor/phpstan-prophecy": "^2.3",
         "league/csv": "^9.0",
         "league/flysystem-memory": "^1.0 || ^3.29",
+        "phpat/phpat": "^0.12.5",
         "phpbench/phpbench": "^1.4",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",
@@ -72,7 +75,6 @@
         "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^10.5 || ^12.0",
-        "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^2.6",
         "squizlabs/php_codesniffer": "^3.13",
         "symfony/finder": "^6.4.8 || ^7.4 || ^8",
