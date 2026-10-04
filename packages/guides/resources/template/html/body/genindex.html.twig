@@ -1,0 +1,52 @@
+{% if node.showLetterIndex %}
+{% set currentLetter = null %}
+<div class="genindex-jumpbox">
+{% for term in node.terms %}
+{% set letter = term.term|slice(0, 1)|upper %}
+{% if letter != currentLetter %}
+    <a href="#{{ letter }}">{{ letter }}</a>
+{% set currentLetter = letter %}
+{% endif %}
+{% endfor %}
+</div>
+
+{% set currentLetter = null %}
+{% for term in node.terms %}
+{% set letter = term.term|slice(0, 1)|upper %}
+{% if letter != currentLetter %}
+{% if currentLetter is not null %}
+            </dl>
+        </td>
+    </tr>
+</table>
+{% endif %}
+
+<h2 id="{{ letter }}">{{ letter }}</h2>
+
+<table class="indextable genindextable">
+    <tr>
+        <td>
+            <dl>
+{% set currentLetter = letter %}
+{% endif %}
+{{ renderNode(term) }}
+{% endfor %}
+{% if currentLetter is not null %}
+            </dl>
+        </td>
+    </tr>
+</table>
+{% endif %}
+{% elseif node.terms|length %}
+<table class="indextable genindextable">
+    <tr>
+        <td>
+            <dl>
+{% for term in node.terms %}
+{{ renderNode(term) }}
+{% endfor %}
+            </dl>
+        </td>
+    </tr>
+</table>
+{% endif %}
