@@ -83,10 +83,10 @@ final class DefinitionListRule implements Rule
         $parts = explode(' : ', $term);
         $term = ltrim(array_shift($parts), '\\');
         $definitionListItem = new DefinitionListItemNode(
-            $this->inlineMarkupRule->apply(new BlockContext($blockContext->getDocumentParserContext(), $term, false, $documentIterator->key())),
+            $this->inlineMarkupRule->apply(new BlockContext($blockContext->getDocumentParserContext(), $term, false, $blockContext->getLineOffset($documentIterator->key()))),
             array_map(
                 fn ($classification): InlineCompoundNode => $this->inlineMarkupRule->apply(
-                    new BlockContext($blockContext->getDocumentParserContext(), $classification, false, $documentIterator->key()),
+                    new BlockContext($blockContext->getDocumentParserContext(), $classification, false, $blockContext->getLineOffset($documentIterator->key())),
                 ),
                 $parts,
             ),
@@ -111,6 +111,7 @@ final class DefinitionListRule implements Rule
     {
         $buffer = new Buffer();
         $documentIterator = $blockContext->getDocumentIterator();
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key() + 1);
         while (LinesIterator::isBlockLine($documentIterator->getNextLine(), $indenting)) {
             $documentIterator->next();
             $emptyLinesBelongToDefinition = false;
@@ -131,7 +132,7 @@ final class DefinitionListRule implements Rule
         }
 
         $node = new DefinitionNode([]);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $lineOffset);
         while ($subContext->getDocumentIterator()->valid()) {
             $this->bodyElements->apply($subContext, $node);
         }
