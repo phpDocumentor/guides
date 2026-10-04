@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of phpDocumentor.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @link https://phpdoc.org
+ */
+
 namespace phpDocumentor\Guides\Architecture;
 
 use PHPat\Selector\Selector;
@@ -11,21 +20,22 @@ use PHPat\Test\PHPat;
 /**
  * Boundary rules for the `guides-restructured-text` package.
  *
- * Mirrors the former deptrac "RST" layer: RST may only depend on the core engine.
+ * RST may only depend on itself, the core engine, or code that lives outside this
+ * repository (vendor libraries, PHP built-ins).
  */
 final class RestructuredTextArchitectureTest
 {
-    public function test_rst_does_not_depend_on_cli_markdown_or_graphs(): Rule
+    public function test_rst_can_only_depend_on_guides(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::withFilepath('#/packages/guides-restructured-text/src/#', true))
-            ->shouldNot()
+            ->canOnly()
             ->dependOn()
             ->classes(
-                Selector::withFilepath('#/packages/guides-cli/src/#', true),
-                Selector::withFilepath('#/packages/guides-markdown/src/#', true),
-                Selector::withFilepath('#/packages/guides-graphs/src/#', true),
+                Selector::withFilepath('#/packages/guides-restructured-text/src/#', true),
+                Selector::withFilepath('#/packages/guides/src/#', true),
+                Selector::Not(Selector::withFilepath('#/packages/#', true)),
             )
-            ->because('the RST package may only depend on the core engine');
+            ->because('the RST package may only depend on the core engine or external code');
     }
 }
