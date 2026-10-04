@@ -19,4 +19,5 @@ enum OptionType
     case Integer;
     case Boolean;
     case Array;
+    case InlineMarkup;
 }

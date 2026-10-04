@@ -17,6 +17,7 @@ use Doctrine\Deprecations\Deprecation;
 use LogicException;
 use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\GenericNode;
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
@@ -25,7 +26,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use ReflectionClass;
 
-use function array_map;
 use function count;
 use function filter_var;
 
@@ -151,6 +151,21 @@ abstract class BaseDirective
     }
 
     /**
+     * Whether options that are not declared with a #[Option] attribute should be
+     * parsed as inline markup during parsing. Opted into via
+     * #[Directive(parseUndeclaredOptionsAsInlineMarkup: true)].
+     *
+     * @internal
+     */
+    final public function usesInlineMarkupForUndeclaredOptions(): bool
+    {
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Attributes\Directive::class);
+
+        return count($attributes) === 1 && $attributes[0]->newInstance()->parseUndeclaredOptionsAsInlineMarkup;
+    }
+
+    /**
      * This is the function called by the parser to process the directive, it can be overloaded
      * to do anything with the document, like tweaking nodes or change the parser context
      *
@@ -226,14 +241,41 @@ abstract class BaseDirective
     {
         $this->initialize();
 
-        return array_map(
-            fn (Option $option) => $this->getOptionValue($directive, $option),
-            $this->optionAttributeCache,
-        );
+        $result = [];
+        foreach ($this->optionAttributeCache as $name => $option) {
+            if ($option->type === OptionType::InlineMarkup) {
+                continue;
+            }
+
+            $value = $this->getOptionValue($directive, $option);
+            if ($value instanceof InlineCompoundNode) {
+                continue;
+            }
+
+            $result[$name] = $value;
+        }
+
+        return $result;
     }
 
-    /** @return scalar|scalar[]|null */
-    private function getOptionValue(Directive $directive, Option|null $option): bool|float|int|string|array|null
+    /**
+     * Returns the Option attributes declared on this directive class, indexed by
+     * option name.
+     *
+     * @internal used by DirectiveRule to decide which options need to be parsed
+     *     as inline markup during parsing
+     *
+     * @return array<string, Option>
+     */
+    final public function getOptionAttributes(): array
+    {
+        $this->initialize();
+
+        return $this->optionAttributeCache;
+    }
+
+    /** @return scalar|scalar[]|InlineCompoundNode|null */
+    private function getOptionValue(Directive $directive, Option|null $option): bool|float|int|string|array|InlineCompoundNode|null
     {
         if ($option === null) {
             return null;
@@ -251,6 +293,7 @@ abstract class BaseDirective
             OptionType::Boolean => $value === null || filter_var($value, FILTER_VALIDATE_BOOL),
             OptionType::String => (string) $value,
             OptionType::Array => (array) $value,
+            OptionType::InlineMarkup => $directiveOption->getNode(),
         };
     }
 

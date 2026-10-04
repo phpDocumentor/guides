@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\Nodes\InlineCompoundNode;
+
 use function is_bool;
 use function is_string;
 use function strtolower;
@@ -21,6 +23,8 @@ use function trim;
 
 final class DirectiveOption
 {
+    private InlineCompoundNode|null $node = null;
+
     public function __construct(private readonly string $name, private string|int|float|bool|null $value = null)
     {
     }
@@ -60,5 +64,15 @@ final class DirectiveOption
     public function appendValue(string $append): void
     {
         $this->value = ((string) $this->value) . $append;
+    }
+
+    public function setNode(InlineCompoundNode $node): void
+    {
+        $this->node = $node;
+    }
+
+    public function getNode(): InlineCompoundNode|null
+    {
+        return $this->node;
     }
 }

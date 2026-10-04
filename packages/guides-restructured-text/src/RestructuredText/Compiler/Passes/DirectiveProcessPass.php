@@ -101,6 +101,6 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
 
     public function getPriority(): int
     {
-        return 100;
+        return 6000;
     }
 }

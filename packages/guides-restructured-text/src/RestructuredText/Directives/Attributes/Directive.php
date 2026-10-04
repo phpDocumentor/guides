@@ -26,11 +26,17 @@ final class Directive
      *     raw HTML/LaTeX passthrough). Parsing such content as RST would corrupt it
      *     (e.g. a line that looks like a section title gets misinterpreted), so it's
      *     skipped entirely rather than parsed and discarded.
+     * @param bool $parseUndeclaredOptionsAsInlineMarkup If set, options that are not
+     *     declared with a #[Option] attribute are parsed as inline markup during
+     *     parsing, just like options explicitly declared with
+     *     OptionType::InlineMarkup. Useful for directives that accept arbitrary,
+     *     free-form options (e.g. confval's additional fields).
      */
     public function __construct(
         public readonly string $name,
         public readonly array $aliases = [],
         public readonly bool $rawContent = false,
+        public readonly bool $parseUndeclaredOptionsAsInlineMarkup = false,
     ) {
     }
 }
