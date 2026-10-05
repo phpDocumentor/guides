@@ -19,6 +19,8 @@ use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\Test\TestLogger;
 
@@ -29,11 +31,13 @@ final class GridTableRuleTest extends RuleTestCase
 {
     private GridTableRule $rule;
     private TestLogger $logger;
+    private ViolationReporter $violationReporter;
 
     protected function setUp(): void
     {
         $this->logger = new TestLogger();
-        $this->rule = new GridTableRule($this->logger, $this->givenCollectAllRuleContainer(), new GridTableBuilder($this->logger));
+        $this->violationReporter = new LoggingViolationReporter($this->logger);
+        $this->rule = new GridTableRule($this->givenCollectAllRuleContainer(), new GridTableBuilder($this->violationReporter));
     }
 
     private static function createColumnNode(string $content, int $colSpan = 1): TableColumn
@@ -44,7 +48,7 @@ final class GridTableRuleTest extends RuleTestCase
     #[DataProvider('tableStartProvider')]
     public function testApplies(string $input): void
     {
-        $parser = $this->createContext($input);
+        $parser = $this->createContext($input, $this->violationReporter);
 
         self::assertTrue($this->rule->applies($parser));
     }
@@ -62,7 +66,7 @@ final class GridTableRuleTest extends RuleTestCase
     #[DataProvider('nonTableStartProvider')]
     public function testDoesNotApply(string $input): void
     {
-        $parser = $this->createContext($input);
+        $parser = $this->createContext($input, $this->violationReporter);
 
         self::assertFalse($this->rule->applies($parser));
     }
@@ -85,7 +89,7 @@ final class GridTableRuleTest extends RuleTestCase
     #[DataProvider('tableCreationProvider')]
     public function testSimpleTableCreation(string $input, array $rows, array $headers): void
     {
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
 
         $table = $this->rule->apply($context);
         self::assertInstanceOf(TableNode::class, $table);
@@ -257,7 +261,7 @@ RST;
 | keywords                          | string        
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $this->rule->apply($context);
 
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table'));
@@ -277,7 +281,7 @@ RST;
 +-----------------------------------+---------------+
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $this->rule->apply($context);
 
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
@@ -298,7 +302,7 @@ RST;
 SOME more text here
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $table = $this->rule->apply($context);
 
         // Table should parse correctly even without trailing blank line
@@ -318,7 +322,7 @@ RST;
 +-----------------------------------+---------------+
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $table = $this->rule->apply($context);
 
         // Table should parse correctly at EOF without trailing blank line
@@ -339,7 +343,7 @@ RST;
     Indented text here
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $table = $this->rule->apply($context);
 
         // Table should parse correctly with indented text following (not a table row)
@@ -360,7 +364,7 @@ RST;
 +-------+-------+
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $table = $this->rule->apply($context);
 
         // First table should terminate at its closing separator without consuming next table
@@ -379,7 +383,7 @@ RST;
    This is a note.
 RST;
 
-        $context = $this->createContext($input);
+        $context = $this->createContext($input, $this->violationReporter);
         $table = $this->rule->apply($context);
 
         // Table should terminate before directive without error

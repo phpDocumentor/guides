@@ -21,6 +21,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
 use PHPUnit\Framework\TestCase;
 
 final class ContainerDirectiveTest extends TestCase
@@ -34,7 +35,7 @@ final class ContainerDirectiveTest extends TestCase
         $this->logHandler = new TestHandler();
         $logger = new Logger('test');
         $logger->pushHandler($this->logHandler);
-        $this->directive = new ContainerDirective($this->createStub(Rule::class), $logger);
+        $this->directive = new ContainerDirective($this->createStub(Rule::class), new LoggingViolationReporter($logger));
         $this->compilerContext = $this->createStub(CompilerContextInterface::class);
     }
 

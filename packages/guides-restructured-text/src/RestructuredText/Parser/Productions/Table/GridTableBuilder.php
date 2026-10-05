@@ -22,7 +22,8 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function array_map;
 use function array_reverse;
@@ -37,7 +38,7 @@ use function trim;
 
 final class GridTableBuilder
 {
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private readonly ViolationReporter $violationReporter)
     {
     }
 
@@ -171,7 +172,7 @@ final class GridTableBuilder
             try {
                 $row->absorbRowContent($targetRow);
             } catch (InvalidTableStructure $e) {
-                $this->logger->error($e->getMessage());
+                $this->violationReporter->report(Violation::error('rst.table.malformed', $e->getMessage()));
             }
 
             $nextRowCounter++;
@@ -308,7 +309,7 @@ final class GridTableBuilder
                     $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                     $tableAsString,
                 );
-                $this->logger->error($message, $blockContext->getLoggerInformation());
+                $this->violationReporter->report(Violation::error('rst.table.malformed', $message, $blockContext->getLoggerInformation()));
             }
 
             return null;

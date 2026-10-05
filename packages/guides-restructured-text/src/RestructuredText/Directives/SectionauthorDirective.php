@@ -17,7 +17,8 @@ use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\AuthorNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function preg_match;
 
@@ -33,7 +34,7 @@ final class SectionauthorDirective extends BaseDirective
     public const NAME_EMAIL_REGEX = '/^(?P<name>[\w\s]+)(?: <(?P<email>[^>]+)>)?$/';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly ViolationReporter $violationReporter,
     ) {
     }
 
@@ -43,13 +44,13 @@ final class SectionauthorDirective extends BaseDirective
         $input = $directive->getData();
         $directiveName = $directive->getName();
         if ($input === '') {
-            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getSourceLocation()->toLoggerInformation());
+            $this->violationReporter->report(Violation::warning('rst.sectionauthor.invalid', '`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getSourceLocation()->toLoggerInformation()));
 
             return null;
         }
 
         if (!preg_match(self::NAME_EMAIL_REGEX, $input, $matches)) {
-            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getSourceLocation()->toLoggerInformation());
+            $this->violationReporter->report(Violation::warning('rst.sectionauthor.invalid', 'Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getSourceLocation()->toLoggerInformation()));
 
             return null;
         }

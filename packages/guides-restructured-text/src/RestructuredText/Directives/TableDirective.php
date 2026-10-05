@@ -19,7 +19,8 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function array_map;
 use function count;
@@ -48,7 +49,7 @@ final class TableDirective extends SubDirective
 {
     public function __construct(
         protected Rule $startingRule,
-        private LoggerInterface $logger,
+        private ViolationReporter $violationReporter,
     ) {
         parent::__construct($startingRule);
     }
@@ -59,20 +60,22 @@ final class TableDirective extends SubDirective
         $children = $directiveNode->getChildren();
 
         if (count($children) !== 1) {
-            $this->logger->warning(
+            $this->violationReporter->report(Violation::warning(
+                'rst.table-directive.invalid-content',
                 sprintf('The table directive may contain exactly one table. %s children found', count($children)),
                 $directiveNode->getSourceLocation()->toLoggerInformation(),
-            );
+            ));
 
             return new CollectionNode($children);
         }
 
         $tableNode = $children[0];
         if (!$tableNode instanceof TableNode) {
-            $this->logger->warning(
+            $this->violationReporter->report(Violation::warning(
+                'rst.table-directive.invalid-content',
                 sprintf('The table directive may contain exactly one table. A node of type %s was found. ', $tableNode::class),
                 $directiveNode->getSourceLocation()->toLoggerInformation(),
-            );
+            ));
 
             return new CollectionNode($children);
         }

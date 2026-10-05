@@ -13,18 +13,15 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\TextRoles;
 
-use Monolog\Logger;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use PHPUnit\Framework\TestCase;
 
 final class DefaultTextRoleFactoryTest extends TestCase
 {
-    private Logger $logger;
     private DefaultTextRoleFactory $defaultTextRoleFactory;
 
     public function setUp(): void
     {
-        $this->logger = new Logger('test');
         $this->defaultTextRoleFactory = new DefaultTextRoleFactory(
             new GenericTextRole($this->createMock(SettingsManager::class)),
             new LiteralTextRole(),
@@ -41,14 +38,14 @@ final class DefaultTextRoleFactoryTest extends TestCase
 
     public function testRegisteredTextRoleIsReturned(): void
     {
-        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole($this->logger));
+        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole());
         $textRole = $this->defaultTextRoleFactory->getTextRole('abbreviation');
         self::assertInstanceOf(AbbreviationTextRole::class, $textRole);
     }
 
     public function testRegisteredTextRoleIsCaseInSensitive(): void
     {
-        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole($this->logger));
+        $this->defaultTextRoleFactory->registerTextRole(new AbbreviationTextRole());
         $textRole = $this->defaultTextRoleFactory->getTextRole('ABbreviation');
         self::assertInstanceOf(AbbreviationTextRole::class, $textRole);
     }

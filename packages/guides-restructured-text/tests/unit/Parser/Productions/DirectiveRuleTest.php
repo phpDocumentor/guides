@@ -27,6 +27,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DummyIntegerValueDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DummyStringValueDirective;
 use phpDocumentor\Guides\Settings\SettingsManager;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function array_values;
@@ -105,7 +106,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyEmptyValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-empty:: unexpected value');
+        $context = $this->createContext('.. dummy-empty:: unexpected value', new LoggingViolationReporter($logger));
         $node = $rule->apply($context);
 
         self::assertInstanceOf(DummyNode::class, $node);
@@ -125,7 +126,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyEmptyValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-empty::');
+        $context = $this->createContext('.. dummy-empty::', new LoggingViolationReporter($logger));
         $rule->apply($context);
 
         self::assertFalse($testHandler->hasWarningRecords());
@@ -143,7 +144,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyIntegerValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-integer:: not-a-number');
+        $context = $this->createContext('.. dummy-integer:: not-a-number', new LoggingViolationReporter($logger));
         $node = $rule->apply($context);
 
         // Diagnostic only -- the raw value still reaches the directive
@@ -165,7 +166,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyIntegerValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-integer:: 42');
+        $context = $this->createContext('.. dummy-integer:: 42', new LoggingViolationReporter($logger));
         $rule->apply($context);
 
         self::assertFalse($testHandler->hasWarningRecords());
@@ -183,7 +184,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyIntegerValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-integer::');
+        $context = $this->createContext('.. dummy-integer::', new LoggingViolationReporter($logger));
         $rule->apply($context);
 
         self::assertFalse($testHandler->hasWarningRecords());
@@ -201,7 +202,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyBooleanValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-boolean:: maybe');
+        $context = $this->createContext('.. dummy-boolean:: maybe', new LoggingViolationReporter($logger));
         $rule->apply($context);
 
         self::assertTrue($testHandler->hasWarningThatContains('expects a boolean value'));
@@ -219,7 +220,7 @@ final class DirectiveRuleTest extends RuleTestCase
             [new DummyBooleanValueDirective()],
         );
 
-        $context = $this->createContext('.. dummy-boolean:: true');
+        $context = $this->createContext('.. dummy-boolean:: true', new LoggingViolationReporter($logger));
         $rule->apply($context);
 
         self::assertFalse($testHandler->hasWarningRecords());
@@ -272,12 +273,11 @@ NOWDOC);
     #[DataProvider('codeBlockValueProvider')]
     public function testCodeBlockValue(string $input, string $expectedValue): void
     {
-        $logger = new Logger('test');
         $this->rule = new DirectiveRule(
             $this->givenInlineMarkupRule(),
             new Logger('test'),
             new GeneralDirective(new DirectiveContentRule(new RuleContainer()), self::createMock(SettingsManager::class)),
-            [$this->directiveHandler, new CodeBlockDirective($logger, $this->createMock(CodeNodeOptionMapper::class))],
+            [$this->directiveHandler, new CodeBlockDirective($this->createMock(CodeNodeOptionMapper::class))],
         );
         $context = $this->createContext($input);
         $node = $this->rule->apply($context);

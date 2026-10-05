@@ -19,10 +19,13 @@ use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
 use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 final class DirFieldListItemRuleTest extends RuleTestCase
 {
     private TestHandler $logHandler;
+    private ViolationReporter $violationReporter;
     private DirFieldListItemRule $rule;
 
     protected function setUp(): void
@@ -30,7 +33,8 @@ final class DirFieldListItemRuleTest extends RuleTestCase
         $this->logHandler = new TestHandler();
         $logger = new Logger('test');
         $logger->pushHandler($this->logHandler);
-        $this->rule = new DirFieldListItemRule($logger);
+        $this->violationReporter = new LoggingViolationReporter($logger);
+        $this->rule = new DirFieldListItemRule();
     }
 
     public function test_it_applies_to_a_dir_field_regardless_of_case(): void
@@ -42,7 +46,7 @@ final class DirFieldListItemRuleTest extends RuleTestCase
 
     public function test_it_creates_a_direction_node_with_a_valid_value(): void
     {
-        $node = $this->rule->apply(new FieldListItemNode('dir', 'rtl'), $this->createContext(''));
+        $node = $this->rule->apply(new FieldListItemNode('dir', 'rtl'), $this->createContext('', $this->violationReporter));
 
         self::assertInstanceOf(DirectionNode::class, $node);
         self::assertSame(TextDirection::Rtl, $node->getDirection());
@@ -52,7 +56,7 @@ final class DirFieldListItemRuleTest extends RuleTestCase
 
     public function test_it_reads_a_direction_regardless_of_case(): void
     {
-        $node = $this->rule->apply(new FieldListItemNode('dir', 'RTL'), $this->createContext(''));
+        $node = $this->rule->apply(new FieldListItemNode('dir', 'RTL'), $this->createContext('', $this->violationReporter));
 
         self::assertInstanceOf(DirectionNode::class, $node);
         self::assertSame(TextDirection::Rtl, $node->getDirection());
@@ -61,7 +65,7 @@ final class DirFieldListItemRuleTest extends RuleTestCase
 
     public function test_invalid_direction_warns_and_falls_back_to_auto(): void
     {
-        $node = $this->rule->apply(new FieldListItemNode('dir', 'sideways'), $this->createContext(''));
+        $node = $this->rule->apply(new FieldListItemNode('dir', 'sideways'), $this->createContext('', $this->violationReporter));
 
         self::assertInstanceOf(DirectionNode::class, $node);
         // Rather than a "dir" attribute the browser cannot act on.

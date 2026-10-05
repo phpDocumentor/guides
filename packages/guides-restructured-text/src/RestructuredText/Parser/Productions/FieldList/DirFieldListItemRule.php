@@ -18,17 +18,13 @@ use phpDocumentor\Guides\Nodes\Metadata\DirectionNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
 
 use function sprintf;
 use function strtolower;
 
 final class DirFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(private readonly LoggerInterface $logger)
-    {
-    }
-
     public function applies(FieldListItemNode $fieldListItemNode): bool
     {
         return strtolower($fieldListItemNode->getTerm()) === 'dir';
@@ -39,13 +35,14 @@ final class DirFieldListItemRule implements FieldListItemRule
         $written = $fieldListItemNode->getPlaintextContent();
         $direction = TextDirection::tryFromUserInput($written);
         if ($direction === null) {
-            $this->logger->warning(
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                'rst.metadata.invalid-dir',
                 sprintf(
                     'The "dir" field expects one of "ltr", "rtl" or "auto", but was given "%s".',
                     $written,
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             $direction = TextDirection::Auto;
         }

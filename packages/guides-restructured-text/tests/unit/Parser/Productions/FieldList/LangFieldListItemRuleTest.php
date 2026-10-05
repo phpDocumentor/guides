@@ -18,10 +18,13 @@ use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 final class LangFieldListItemRuleTest extends RuleTestCase
 {
     private TestHandler $logHandler;
+    private ViolationReporter $violationReporter;
     private LangFieldListItemRule $rule;
 
     protected function setUp(): void
@@ -29,7 +32,8 @@ final class LangFieldListItemRuleTest extends RuleTestCase
         $this->logHandler = new TestHandler();
         $logger = new Logger('test');
         $logger->pushHandler($this->logHandler);
-        $this->rule = new LangFieldListItemRule($logger);
+        $this->violationReporter = new LoggingViolationReporter($logger);
+        $this->rule = new LangFieldListItemRule();
     }
 
     public function test_it_applies_to_a_lang_field_regardless_of_case(): void
@@ -41,7 +45,7 @@ final class LangFieldListItemRuleTest extends RuleTestCase
 
     public function test_it_creates_a_language_node_with_the_given_value(): void
     {
-        $node = $this->rule->apply(new FieldListItemNode('lang', 'ar'), $this->createContext(''));
+        $node = $this->rule->apply(new FieldListItemNode('lang', 'ar'), $this->createContext('', $this->violationReporter));
 
         self::assertInstanceOf(LanguageNode::class, $node);
         self::assertSame('ar', $node->getValue());
@@ -50,7 +54,7 @@ final class LangFieldListItemRuleTest extends RuleTestCase
 
     public function test_invalid_language_warns_but_is_still_applied(): void
     {
-        $node = $this->rule->apply(new FieldListItemNode('lang', 'not a language'), $this->createContext(''));
+        $node = $this->rule->apply(new FieldListItemNode('lang', 'not a language'), $this->createContext('', $this->violationReporter));
 
         self::assertInstanceOf(LanguageNode::class, $node);
         self::assertSame('not a language', $node->getValue());

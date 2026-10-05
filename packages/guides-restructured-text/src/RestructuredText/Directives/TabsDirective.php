@@ -22,7 +22,8 @@ use phpDocumentor\Guides\RestructuredText\Nodes\AbstractTabNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\TabsNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function class_alias;
 use function class_exists;
@@ -36,7 +37,7 @@ final class TabsDirective extends SubDirective
     /** @param Rule<CollectionNode> $startingRule */
     public function __construct(
         protected Rule $startingRule,
-        private readonly LoggerInterface $logger,
+        private readonly ViolationReporter $violationReporter,
         private readonly AnchorNormalizer $anchorReducer,
     ) {
         parent::__construct($startingRule);
@@ -60,10 +61,11 @@ final class TabsDirective extends SubDirective
 
                 $tabs[] = $child;
             } else {
-                $this->logger->warning(
+                $this->violationReporter->report(Violation::warning(
+                    'rst.tabs.invalid-content',
                     'The "tabs" directive may only contain children of type "tab". The following node was found: ' . $child::class,
                     $directiveNode->getSourceLocation()->toLoggerInformation(),
-                );
+                ));
             }
         }
 

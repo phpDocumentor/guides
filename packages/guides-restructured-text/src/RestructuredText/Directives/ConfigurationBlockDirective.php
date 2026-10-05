@@ -21,7 +21,8 @@ use phpDocumentor\Guides\Nodes\Configuration\ConfigurationTab;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -39,7 +40,7 @@ final class ConfigurationBlockDirective extends SubDirective
      * @param array<string, string> $languageLabels
      */
     public function __construct(
-        private LoggerInterface $logger,
+        private ViolationReporter $violationReporter,
         Rule $startingRule,
         private readonly array $languageLabels = [],
     ) {
@@ -53,10 +54,11 @@ final class ConfigurationBlockDirective extends SubDirective
         $tabs = [];
         foreach ($directiveNode->getChildren() as $child) {
             if (!$child instanceof CodeNode) {
-                $this->logger->warning(
+                $this->violationReporter->report(Violation::warning(
+                    'rst.configuration-block.invalid-content',
                     sprintf('The ".. configuration-block::" directive only supports code blocks, "%s" given.', get_debug_type($child)),
                     $directiveNode->getSourceLocation()->toLoggerInformation(),
-                );
+                ));
 
                 continue;
             }

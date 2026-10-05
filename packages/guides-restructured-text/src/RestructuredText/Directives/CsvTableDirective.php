@@ -23,7 +23,7 @@ use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
 
 use function array_filter;
 use function array_map;
@@ -49,7 +49,6 @@ final class CsvTableDirective extends BaseDirective
 {
     public function __construct(
         private RuleContainer $productions,
-        private LoggerInterface $logger,
     ) {
     }
 
@@ -71,10 +70,11 @@ final class CsvTableDirective extends BaseDirective
                 ->readStream((string) $directive->getOption('file')->getValue());
 
             if ($csvStream === false) {
-                $this->logger->error(
+                $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::error(
+                    'rst.csv-table.file-not-readable',
                     'Unable to read CSV file {file}',
                     array_merge(['file' => $directive->getOption('file')->getValue()], $blockContext->getLoggerInformation()),
-                );
+                ));
 
                 return new GenericNode('csv-table');
             }

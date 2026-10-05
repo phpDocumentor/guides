@@ -22,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class IndexDirectiveTest extends RuleTestCase
@@ -34,7 +35,7 @@ final class IndexDirectiveTest extends RuleTestCase
         $this->logHandler = new TestHandler();
         $logger = new Logger('test');
         $logger->pushHandler($this->logHandler);
-        $this->directive = new IndexDirective($logger);
+        $this->directive = new IndexDirective(new LoggingViolationReporter($logger));
     }
 
     #[DataProvider('typoProvider')]
