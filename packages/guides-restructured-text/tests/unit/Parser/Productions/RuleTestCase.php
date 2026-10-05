@@ -25,6 +25,8 @@ use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
+use phpDocumentor\Guides\Validation\NullViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use PHPUnit\Framework\TestCase;
 
 abstract class RuleTestCase extends TestCase
@@ -42,7 +44,7 @@ abstract class RuleTestCase extends TestCase
         self::assertEquals($expected, $rest);
     }
 
-    protected function createContext(string $input): BlockContext
+    protected function createContext(string $input, ViolationReporter|null $violationReporter = null): BlockContext
     {
         $parserContext = new ParserContext(
             new ProjectNode(),
@@ -51,6 +53,7 @@ abstract class RuleTestCase extends TestCase
             1,
             self::createStub(FilesystemInterface::class),
             new DocumentNameResolver(),
+            $violationReporter ?? new NullViolationReporter(),
         );
         $documentParserContext = new DocumentParserContext(
             $parserContext,

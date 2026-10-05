@@ -39,6 +39,8 @@ final class Serve extends Command
         private SettingsBuilder $settingsBuilder,
         private CommandBus $commandBus,
         private ServerFactory $serverFactory,
+        /** Logger on the "validation" channel, gets the same handler as $logger */
+        private readonly Logger|null $validationLogger = null,
     ) {
         parent::__construct('serve');
     }
@@ -52,7 +54,9 @@ final class Serve extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM));
+        $handler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM);
+        $this->logger->pushHandler($handler);
+        $this->validationLogger?->pushHandler($handler);
 
         $dir = $input->getOption('output');
         if (!is_string($dir)) {
