@@ -12,6 +12,7 @@ use phpDocumentor\Guides\Cli\Command\SettingsBuilder;
 use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\RunCommandHandler;
+use phpDocumentor\Guides\Logging\DeduplicatingLogger;
 use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -36,7 +37,11 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(Logger::class)
         ->arg('$name', 'app')
-        ->alias(LoggerInterface::class, Logger::class)
+
+        ->set(DeduplicatingLogger::class)
+        ->arg('$logger', service(Logger::class))
+        ->arg('$level', '%phpdoc.guides.log_deduplication%')
+        ->alias(LoggerInterface::class, DeduplicatingLogger::class)
 
         ->set(EventDispatcher::class)
         ->alias(EventDispatcherInterface::class, EventDispatcher::class)

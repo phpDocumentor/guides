@@ -116,6 +116,20 @@ class GuidesExtensionTest extends TestCase
                 self::assertSame('', self::projectSettings($container)->getVersion());
             },
         ];
+
+        yield 'log_deduplication default' => [
+            [[]],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('none', $container->getParameter('phpdoc.guides.log_deduplication'));
+            },
+        ];
+
+        yield 'log_deduplication explicit' => [
+            [['log_deduplication' => 'exact']],
+            static function (ContainerBuilder $container): void {
+                self::assertSame('exact', $container->getParameter('phpdoc.guides.log_deduplication'));
+            },
+        ];
     }
 
     /** Reads back the ProjectSettings the extension hands to the SettingsManager definition. */

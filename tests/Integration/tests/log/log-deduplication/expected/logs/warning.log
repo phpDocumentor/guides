@@ -1,0 +1,4 @@
+app.WARNING: No template found for rendering directive "unique-directive". Expected template "body/directive/unique-directive.html.twig" {"rst-file":"index"} []
+app.WARNING: No template found for rendering directive "duplicate-directive". Expected template "body/directive/duplicate-directive.html.twig" {"rst-file":"index"} []
+app.WARNING: No template found for rendering directive "shared-directive". Expected template "body/directive/shared-directive.html.twig" {"rst-file":"index"} []
+app.WARNING: 2 further log message(s) were suppressed as duplicates of an earlier message. [] []
