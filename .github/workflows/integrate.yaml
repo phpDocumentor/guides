@@ -58,27 +58,6 @@ jobs:
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
       composer-root-version: "1.x-dev"
 
-  architecture:
-    name: "Check architecture"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v7"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.25.1"
-        with:
-          coverage: "none"
-          php-version: "8.2"
-          extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
-
-      - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v4"
-        with:
-          dependency-versions: "locked"
-          composer-options: "--prefer-dist"
-
-      - name: "Check package level"
-        run: "vendor/bin/deptrac --config-file deptrac.packages.yaml --formatter=github-actions"
-
   unit-tests:
     name: "Unit test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.9"

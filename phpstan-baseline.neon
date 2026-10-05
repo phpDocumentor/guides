@@ -163,6 +163,12 @@ parameters:
 			path: packages/guides-graphs/src/Graphs/DependencyInjection/GraphsExtension.php
 
 		-
+			message: '#^phpDocumentor\\Guides\\Graphs\\Directives\\UmlDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-graphs/src/Graphs/Directives/UmlDirective.php
+
+		-
 			message: '#^Method phpDocumentor\\Guides\\Markdown\\Parsers\\InlineParsers\\AbstractInlineTextDecoratorParser\<TValue of phpDocumentor\\Guides\\Nodes\\Inline\\InlineNodeInterface\>\:\:createInlineNode\(\) invoked with 3 parameters, 2 required\.$#'
 			identifier: arguments.count
 			count: 2
@@ -205,6 +211,120 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/DependencyInjection/ReStructuredTextExtension.php
 
 		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ClassDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/ClassDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\CodeBlockDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/CodeBlockDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ConfvalDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/ConfvalDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ContentsDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/ContentsDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\CsvTableDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/CsvTableDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\DefaultRoleDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/DefaultRoleDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\DocumentBlockDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/DocumentBlockDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\GeneralDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/GeneralDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\HighlightDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/HighlightDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\IncludeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/IncludeDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ListTableDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/ListTableDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\LiteralincludeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/LiteralincludeDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\MenuDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/MenuDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\MetaDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/MetaDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\OptionDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/OptionDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\RoleDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/RoleDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\TitleDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/TitleDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ToctreeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/ToctreeDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\TodoDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/src/RestructuredText/Directives/TodoDirective.php
+
+		-
 			message: '#^Method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\DirectiveContentRule\:\:apply\(\) should return phpDocumentor\\Guides\\Nodes\\CollectionNode but returns phpDocumentor\\Guides\\Nodes\\CollectionNode\|TParent of phpDocumentor\\Guides\\Nodes\\CompoundNode\.$#'
 			identifier: return.type
 			count: 1
@@ -217,10 +337,52 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Parser/Productions/ListRule.php
 
 		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\PHPStan\\ReadOptionFixtureDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/tests/unit/PHPStan/ReadOptionFixtureDirective.php
+
+		-
 			message: '#^Using PHPStan\\Testing\\PHPStanTestCaseTrait is not covered by backward compatibility promise\. The trait might change in a minor PHPStan version\.$#'
 			identifier: phpstanApi.trait
 			count: 1
 			path: packages/guides-restructured-text/tests/unit/PHPStan/ReadOptionReturnTypeExtensionTest.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\RestructuredText\\Parser\\DummyBaseDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-restructured-text/tests/unit/Parser/DummyBaseDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\Bootstrap\\Directives\\AccordionItemDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-theme-bootstrap/src/Bootstrap/Directives/AccordionItemDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\Bootstrap\\Directives\\CardDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-theme-bootstrap/src/Bootstrap/Directives/CardDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\Bootstrap\\Directives\\CardFooterDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-theme-bootstrap/src/Bootstrap/Directives/CardFooterDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\Bootstrap\\Directives\\CardHeaderDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-theme-bootstrap/src/Bootstrap/Directives/CardHeaderDirective.php
+
+		-
+			message: '#^phpDocumentor\\Guides\\Bootstrap\\Directives\\CardImageDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
+			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
+			count: 1
+			path: packages/guides-theme-bootstrap/src/Bootstrap/Directives/CardImageDirective.php
 
 		-
 			message: '#^Strict comparison using \=\=\= between ''phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext'' and ''phpDocumentor\\\\Guides\\\\Compiler\\\\CompilerContext'' will always evaluate to true\.$#'

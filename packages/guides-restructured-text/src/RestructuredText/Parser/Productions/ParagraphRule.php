@@ -48,6 +48,7 @@ final class ParagraphRule implements Rule
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): ParagraphNode|null
     {
         $documentIterator = $blockContext->getDocumentIterator();
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key());
 
         $buffer = new Buffer();
         $buffer->push($documentIterator->current());
@@ -87,7 +88,7 @@ final class ParagraphRule implements Rule
         }
 
         return $this->inlineMarkupRule->apply(
-            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $documentIterator->key()),
+            new BlockContext($blockContext->getDocumentParserContext(), $buffer->getLinesString(), false, $lineOffset),
             new ParagraphNode(),
         );
     }

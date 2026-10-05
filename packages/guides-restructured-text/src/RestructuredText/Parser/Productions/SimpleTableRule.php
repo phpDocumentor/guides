@@ -129,6 +129,7 @@ final class SimpleTableRule implements Rule
     private function tryParseRow(BlockContext $blockContext, array $columnDefinitions): TableRow
     {
         $documentIterator = $blockContext->getDocumentIterator();
+        $lineOffset = $blockContext->getLineOffset($documentIterator->key());
         $cellContents = [];
         $line = $documentIterator->current();
         foreach ($columnDefinitions as $column => $columnDefinition) {
@@ -181,7 +182,7 @@ final class SimpleTableRule implements Rule
 
         $row = new TableRow();
         foreach ($cellContents as $content) {
-            $row->addColumn($this->createColumn($content, $blockContext, 1));
+            $row->addColumn($this->createColumn($content, $blockContext, 1, $lineOffset));
         }
 
         return $row;
@@ -191,13 +192,14 @@ final class SimpleTableRule implements Rule
         string $content,
         BlockContext $blockContext,
         int $colspan,
+        int $lineOffset,
     ): TableColumn {
         if (trim($content) === '\\') {
             $content = '';
         }
 
         $column = new TableColumn(trim($content), $colspan);
-        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $blockContext->getDocumentIterator()->key());
+        $subContext = new BlockContext($blockContext->getDocumentParserContext(), $content, false, $lineOffset);
         while ($subContext->getDocumentIterator()->valid()) {
             $this->productions->apply($subContext, $column);
         }

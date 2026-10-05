@@ -1,0 +1,15 @@
+<dt>{{ node.term }}</dt>
+{% for row in node.rows %}
+<dd>
+{{ renderNode(row) }}
+</dd>
+{% endfor %}
+{% if node.subterms|length %}
+<dd>
+    <dl>
+{% for subterm in node.subterms %}
+{{ renderNode(subterm) }}
+{% endfor %}
+    </dl>
+</dd>
+{% endif %}
