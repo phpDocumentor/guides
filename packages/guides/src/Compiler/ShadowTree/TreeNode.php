@@ -200,6 +200,21 @@ final class TreeNode
         return null;
     }
 
+    /**
+     * Shadow trees are reference cycles (child to parent and to root), so without this
+     * they're only freed by the cycle collector, which also has to walk the whole AST.
+     */
+    public function release(): void
+    {
+        foreach ($this->children as $child) {
+            $child->release();
+        }
+
+        $this->children = [];
+        $this->parent = null;
+        unset($this->root);
+    }
+
     public function isLastChildOfParent(): bool
     {
         if ($this->parent === null) {
