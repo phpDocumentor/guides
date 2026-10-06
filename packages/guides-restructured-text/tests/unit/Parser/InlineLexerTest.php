@@ -17,7 +17,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
-use function trim;
 
 final class InlineLexerTest extends TestCase
 {
@@ -106,24 +105,56 @@ final class InlineLexerTest extends TestCase
     #[DataProvider('hyperlinkProvider')]
     public function testHyperlinkEndsBeforeParenthesis(string $url): void
     {
-        $input = '(text in parenthesis ' . $url . ').';
-        $lexer = new InlineLexer();
+        self::assertSame(
+            [
+                ['(text', InlineLexer::WORD],
+                [' ', InlineLexer::WHITESPACE],
+                ['in', InlineLexer::WORD],
+                [' ', InlineLexer::WHITESPACE],
+                ['parenthesis', InlineLexer::WORD],
+                [' ', InlineLexer::WHITESPACE],
+                [$url, InlineLexer::HYPERLINK],
+                [').', InlineLexer::WORD],
+            ],
+            self::tokenize('(text in parenthesis ' . $url . ').'),
+        );
+    }
 
+    public function testTextBetweenSpecialCharactersIsASingleToken(): void
+    {
+        self::assertSame(
+            [
+                ['Hello', InlineLexer::WORD],
+                [' ', InlineLexer::WHITESPACE],
+                ['|', InlineLexer::VARIABLE_DELIMITER],
+                ['var', InlineLexer::WORD],
+                ['|', InlineLexer::VARIABLE_DELIMITER],
+                ['~', InlineLexer::NBSP],
+                ['[', InlineLexer::ANNOTATION_START],
+                ['#', InlineLexer::OCTOTHORPE],
+                ['note', InlineLexer::WORD],
+                [']', InlineLexer::ANNOTATION_END],
+                ['_', InlineLexer::UNDERSCORE],
+            ],
+            self::tokenize('Hello |var|~[#note]_'),
+        );
+    }
+
+    /** @return list<array{string, int|null}> */
+    private static function tokenize(string $input): array
+    {
+        $lexer = new InlineLexer();
         $lexer->setInput($input);
         $lexer->moveNext();
+        $lexer->moveNext();
 
-        for ($i = 0; $i < 21; $i++) {
+        $tokens = [];
+        while ($lexer->token !== null) {
+            $tokens[] = [$lexer->token->value, $lexer->token->type];
             $lexer->moveNext();
-            assertEquals(
-                trim($input[$i]) === '' ? InlineLexer::WHITESPACE : InlineLexer::WORD,
-                $lexer->token?->type,
-            );
-            assertEquals($input[$i], $lexer->token?->value);
         }
 
-        $lexer->moveNext();
-        assertEquals(InlineLexer::HYPERLINK, $lexer->token?->type);
-        assertEquals($url, $lexer->token?->value);
+        return $tokens;
     }
 
     /** @return array<string, array<string>> */
