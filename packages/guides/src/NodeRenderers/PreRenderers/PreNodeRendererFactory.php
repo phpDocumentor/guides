@@ -24,6 +24,9 @@ use function count;
  */
 final class PreNodeRendererFactory implements NodeRendererFactory
 {
+    /** @var array<PreNodeRenderer>|null */
+    private array|null $resolvedPreRenderers = null;
+
     public function __construct(
         private readonly NodeRendererFactory $innerFactory,
         /** @var iterable<PreNodeRenderer> */
@@ -33,8 +36,10 @@ final class PreNodeRendererFactory implements NodeRendererFactory
 
     public function get(Node $node): NodeRenderer
     {
+        $this->resolvedPreRenderers ??= [...$this->preRenderers];
+
         $preRenderers = [];
-        foreach ($this->preRenderers as $preRenderer) {
+        foreach ($this->resolvedPreRenderers as $preRenderer) {
             if (!$preRenderer->supports($node)) {
                 continue;
             }
