@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\ReferenceResolvers;
 
 use phpDocumentor\Guides\NodeRenderers\PreRenderers\PreNodeRenderer;
 use phpDocumentor\Guides\Nodes\ImageNode;
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RenderContext;
 use Psr\Log\LoggerInterface;
@@ -53,7 +54,11 @@ final class ImageReferenceResolverPreRender implements PreNodeRenderer
                     $referenceLinkNode->getTargetReference(),
                     $renderContext->getCurrentFileName(),
                 ),
-                array_merge($renderContext->getLoggerInformation(), $messages->getLastWarning()?->getDebugInfo() ?? []),
+                array_merge(
+                    $referenceLinkNode instanceof AbstractLinkInlineNode ? $referenceLinkNode->getLoggerInformation() : [],
+                    $renderContext->getLoggerInformation(),
+                    $messages->getLastWarning()?->getDebugInfo() ?? [],
+                ),
             );
         }
 
