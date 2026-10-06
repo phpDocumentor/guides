@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use function implode;
 
-final class CodeNode extends TextNode
+final class CodeNode extends TextNode implements ConsumesDefaultHighlightLanguage
 {
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;

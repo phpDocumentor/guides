@@ -259,12 +259,6 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Directives/GeneralDirective.php
 
 		-
-			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\HighlightDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
-			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Directives/HighlightDirective.php
-
-		-
 			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\IncludeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
 			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
 			count: 1
@@ -317,12 +311,6 @@ parameters:
 			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Directives/ToctreeDirective.php
-
-		-
-			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\TodoDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
-			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Directives/TodoDirective.php
 
 		-
 			message: '#^Method phpDocumentor\\Guides\\RestructuredText\\Parser\\Productions\\DirectiveContentRule\:\:apply\(\) should return phpDocumentor\\Guides\\Nodes\\CollectionNode but returns phpDocumentor\\Guides\\Nodes\\CollectionNode\|TParent of phpDocumentor\\Guides\\Nodes\\CompoundNode\.$#'
