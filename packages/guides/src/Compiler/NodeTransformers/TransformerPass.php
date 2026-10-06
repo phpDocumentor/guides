@@ -45,6 +45,7 @@ final class TransformerPass implements CompilerPass
 
             $compilerContext = $compilerContext->withDocumentShadowTree($document);
             $documents[$key] = $this->documentNodeTraverser->traverse($document, $compilerContext);
+            $compilerContext->getShadowTree()->release();
         }
 
         return array_filter($documents, static fn ($document): bool => $document instanceof DocumentNode);

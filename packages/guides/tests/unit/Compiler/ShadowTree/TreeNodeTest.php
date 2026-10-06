@@ -20,6 +20,10 @@ use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\SectionNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
+use WeakReference;
+
+use function gc_disable;
+use function gc_enable;
 
 final class TreeNodeTest extends TestCase
 {
@@ -90,5 +94,21 @@ final class TreeNodeTest extends TestCase
         self::assertInstanceOf(CompoundNode::class, $treeNode->getNode());
         self::assertSame($treeNode->getNode()->getChildren()[0], $treeNode->getChildren()[0]->getNode());
         self::assertSame($treeNode->getNode(), $treeNode->getRoot()->getNode());
+    }
+
+    public function testReleaseFreesTheTreeWithoutTheCycleCollector(): void
+    {
+        $treeNode = TreeNode::createFromDocument($this->documentNode);
+        $leaf = WeakReference::create($treeNode->getChildren()[0]->getChildren()[0]);
+
+        gc_disable();
+        try {
+            $treeNode->release();
+            unset($treeNode);
+
+            self::assertNull($leaf->get());
+        } finally {
+            gc_enable();
+        }
     }
 }
