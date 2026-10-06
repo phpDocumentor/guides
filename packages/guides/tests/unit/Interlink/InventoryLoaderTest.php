@@ -15,6 +15,9 @@ namespace phpDocumentor\Guides\Interlink;
 
 use Generator;
 use JsonException;
+use LogicException;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\Inline\CrossReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\ReferenceNode;
@@ -31,6 +34,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use RuntimeException;
+use Symfony\Component\HttpClient\Exception\JsonException as HttpClientJsonException;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function count;
 use function file_get_contents;
@@ -90,6 +98,69 @@ final class InventoryLoaderTest extends TestCase
         $this->inventoryLoader->loadInventory($inventory);
         $this->inventoryLoader->loadInventory($inventory);
         self::assertGreaterThan(1, count($inventory->getGroups()));
+    }
+
+    public function testUnreachableInventoryIsReportedOnceAndNotRequestedAgain(): void
+    {
+        $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')
+            ->willThrowException(new TransportException('Could not resolve host: example.com'));
+        $logHandler = new TestHandler();
+        $inventoryLoader = new DefaultInventoryLoader(
+            new Logger('test', [$logHandler]),
+            $this->jsonLoader,
+            new SluggerAnchorNormalizer(),
+        );
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
+
+        $inventoryLoader->loadInventory($inventory);
+        $inventoryLoader->loadInventory($inventory);
+
+        self::assertFalse($inventory->isLoaded());
+        self::assertCount(1, $logHandler->getRecords());
+        self::assertSame(
+            'Interlink inventory could not be loaded: Could not resolve host: example.com',
+            $logHandler->getRecords()[0]->message,
+        );
+    }
+
+    public function testInventoryThatIsNoJsonIsReported(): void
+    {
+        $this->jsonLoader->method('loadJsonFromUrl')
+            ->willThrowException(new HttpClientJsonException('Syntax error'));
+        $logHandler = new TestHandler();
+        $inventoryLoader = new DefaultInventoryLoader(
+            new Logger('test', [$logHandler]),
+            $this->jsonLoader,
+            new SluggerAnchorNormalizer(),
+        );
+
+        $inventoryLoader->loadInventory(new Inventory('https://example.com/', new SluggerAnchorNormalizer()));
+
+        self::assertTrue($logHandler->hasWarningThatContains('Interlink inventory could not be loaded: Syntax error'));
+    }
+
+    public function testInventoryNotFoundIsRequestedOnlyOnce(): void
+    {
+        $notFound = new class ('HTTP/2 404 returned for "https://example.com/objects.inv.json".') extends RuntimeException implements ClientExceptionInterface {
+            public function getResponse(): ResponseInterface
+            {
+                throw new LogicException('Not needed in this test');
+            }
+        };
+        $this->jsonLoader->expects(self::once())->method('loadJsonFromUrl')->willThrowException($notFound);
+        $logHandler = new TestHandler();
+        $inventoryLoader = new DefaultInventoryLoader(
+            new Logger('test', [$logHandler]),
+            $this->jsonLoader,
+            new SluggerAnchorNormalizer(),
+        );
+        $inventory = new Inventory('https://example.com/', new SluggerAnchorNormalizer());
+
+        $inventoryLoader->loadInventory($inventory);
+        $inventoryLoader->loadInventory($inventory);
+
+        self::assertCount(1, $logHandler->getRecords());
+        self::assertStringStartsWith('Interlink inventory not found: HTTP/2 404', $logHandler->getRecords()[0]->message);
     }
 
     public function testInventoryLoaderAcceptsNull(): void

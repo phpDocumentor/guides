@@ -16,7 +16,8 @@ namespace phpDocumentor\Guides\ReferenceResolvers\Interlink;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
 use phpDocumentor\Guides\ReferenceResolvers\NullAnchorNormalizer;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 use function count;
 use function is_array;
@@ -27,6 +28,14 @@ use function strval;
 
 final class DefaultInventoryLoader implements InventoryLoader
 {
+    /**
+     * URLs that could not be loaded in this run, so they are not requested
+     * again for every link into the same inventory.
+     *
+     * @var array<string, true>
+     */
+    private array $failedUrls = [];
+
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly JsonLoader $jsonLoader,
@@ -85,12 +94,23 @@ final class DefaultInventoryLoader implements InventoryLoader
             return;
         }
 
+        $url = $inventory->getBaseUrl() . $this->pathToJson;
+        if (isset($this->failedUrls[$url])) {
+            return;
+        }
+
         try {
-            $json = $this->jsonLoader->loadJsonFromUrl($inventory->getBaseUrl() . $this->pathToJson);
+            $json = $this->jsonLoader->loadJsonFromUrl($url);
 
             $this->loadInventoryFromJson($inventory, $json);
-        } catch (ClientException $exception) {
+        } catch (ClientExceptionInterface $exception) {
+            $this->failedUrls[$url] = true;
             $this->logger->warning('Interlink inventory not found: ' . $exception->getMessage());
+        } catch (ExceptionInterface $exception) {
+            // Unreachable host, timeout, server error or a response that is no
+            // JSON: the links into this inventory stay unresolved, the run goes on.
+            $this->failedUrls[$url] = true;
+            $this->logger->warning('Interlink inventory could not be loaded: ' . $exception->getMessage());
         }
     }
 }
