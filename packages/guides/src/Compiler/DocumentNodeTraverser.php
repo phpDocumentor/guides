@@ -20,6 +20,9 @@ use phpDocumentor\Guides\Nodes\Node;
 
 final class DocumentNodeTraverser
 {
+    /** @var array<int, list<NodeTransformer<Node>>> */
+    private array $transformersByPriority = [];
+
     public function __construct(
         private readonly NodeTransformerFactory $nodeTransformerFactory,
         private readonly int $priority,
@@ -28,15 +31,31 @@ final class DocumentNodeTraverser
 
     public function traverse(DocumentNode $node, CompilerContext $compilerContext): Node
     {
-        foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
-            if ($transformer->getPriority() !== $this->priority) {
-                continue;
-            }
-
+        foreach ($this->getTransformersForPriority($this->priority) as $transformer) {
             $this->traverseForTransformer($transformer, $compilerContext->getShadowTree(), $compilerContext);
         }
 
         return $compilerContext->getShadowTree()->getNode();
+    }
+
+    /** @return list<NodeTransformer<Node>> */
+    private function getTransformersForPriority(int $priority): array
+    {
+        if (isset($this->transformersByPriority[$priority])) {
+            return $this->transformersByPriority[$priority];
+        }
+
+        $transformers = [];
+
+        foreach ($this->nodeTransformerFactory->getTransformers() as $transformer) {
+            if ($transformer->getPriority() !== $priority) {
+                continue;
+            }
+
+            $transformers[] = $transformer;
+        }
+
+        return $this->transformersByPriority[$priority] = $transformers;
     }
 
     /**
