@@ -20,7 +20,6 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\Cachabl
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineRules\InlineRule;
 
 use function array_filter;
-use function array_key_exists;
 use function usort;
 
 /** @internal */
@@ -57,10 +56,11 @@ class InlineParser
         $nodes = [];
         $previous = null;
         while ($lexer->token !== null) {
+            $cachedRule = $this->cache[$lexer->token->type ?? -1] ?? null;
             foreach ($this->rules as $inlineRule) {
                 $node = null;
-                if (array_key_exists($lexer->token->type ?? -1, $this->cache)) {
-                    $node = $this->cache[$lexer->token->type]->apply($blockContext, $lexer);
+                if ($cachedRule !== null) {
+                    $node = $cachedRule->apply($blockContext, $lexer);
                 } elseif ($inlineRule->applies($lexer)) {
                     $node = $inlineRule->apply($blockContext, $lexer);
                 }
