@@ -43,19 +43,19 @@ final class TreeNode
     public static function createFromDocument(DocumentNode $document): self
     {
         $node = new self($document);
+        $node->root = $node;
         $node->setChildren(self::createFromCompoundNode($document, $node));
-        $node->setRoot($node);
 
         return $node;
     }
 
     /**
      * @param CompoundNode<Node> $node
-     * @param self<Node>|self<DocumentNode>|null $parent
+     * @param self<Node>|self<DocumentNode> $parent
      *
      * @return TreeNode<Node>[]
      */
-    private static function createFromCompoundNode(CompoundNode $node, self|null $parent): array
+    private static function createFromCompoundNode(CompoundNode $node, self $parent): array
     {
         $children = [];
         foreach ($node->getChildren() as $child) {
@@ -67,15 +67,16 @@ final class TreeNode
 
     /**
      * @param TValue $node
-     * @param self<Node>|self<DocumentNode>|null $parent
+     * @param self<Node>|self<DocumentNode> $parent
      *
      * @return TreeNode<TValue>
      *
      * @template TValue of Node
      */
-    private static function createFromNode(Node $node, self|null $parent = null): self
+    private static function createFromNode(Node $node, self $parent): self
     {
         $treeNode = new self($node, $parent);
+        $treeNode->root = $parent->root;
         if ($node instanceof CompoundNode === false) {
             return $treeNode;
         }
@@ -101,15 +102,6 @@ final class TreeNode
         return $this->root;
     }
 
-    /** @param self<DocumentNode> $root */
-    private function setRoot(self $root): void
-    {
-        $this->root = $root;
-        foreach ($this->children as $child) {
-            $child->setRoot($root);
-        }
-    }
-
     /** @return TNode */
     public function getNode(): Node
     {
@@ -128,9 +120,7 @@ final class TreeNode
             throw new LogicException('Cannot add a child to a non-compound node');
         }
 
-        $shadowNode = self::createFromNode($child, $this);
-        $shadowNode->setRoot($this->root);
-        $this->children[] = $shadowNode;
+        $this->children[] = self::createFromNode($child, $this);
         $this->node->addChildNode($child);
     }
 
@@ -140,9 +130,7 @@ final class TreeNode
             throw new LogicException('Cannot add a child to a non-compound node');
         }
 
-        $shadowNode = self::createFromNode($child, $this);
-        $shadowNode->setRoot($this->root);
-        array_unshift($this->children, $shadowNode);
+        array_unshift($this->children, self::createFromNode($child, $this));
         $this->node->pushChildNode($child);
     }
 

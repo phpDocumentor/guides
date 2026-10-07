@@ -22,6 +22,9 @@ use function sort;
 
 final class CustomNodeTransformerFactory implements NodeTransformerFactory
 {
+    /** @var array<NodeTransformer<Node>>|null */
+    private array|null $resolvedTransformers = null;
+
     /** @param iterable<NodeTransformer<Node>> $transformers */
     public function __construct(private readonly iterable $transformers)
     {
@@ -30,7 +33,7 @@ final class CustomNodeTransformerFactory implements NodeTransformerFactory
     /** @return iterable<NodeTransformer<Node>> */
     public function getTransformers(): iterable
     {
-        return $this->transformers;
+        return $this->resolvedTransformers ??= [...$this->transformers];
     }
 
     /** @return int[] */
