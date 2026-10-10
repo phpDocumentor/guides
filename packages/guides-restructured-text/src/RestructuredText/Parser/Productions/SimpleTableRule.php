@@ -23,12 +23,19 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use Psr\Log\LoggerInterface;
 
+use function array_filter;
+use function array_map;
+use function array_values;
 use function count;
+use function implode;
 use function mb_substr;
 use function preg_match;
+use function preg_match_all;
 use function sprintf;
 use function strlen;
 use function trim;
+
+use const PREG_OFFSET_CAPTURE;
 
 /** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
@@ -130,20 +137,99 @@ final class SimpleTableRule implements Rule
     {
         $documentIterator = $blockContext->getDocumentIterator();
         $lineOffset = $blockContext->getLineOffset($documentIterator->key());
-        $cellContents = [];
-        $line = $documentIterator->current();
-        foreach ($columnDefinitions as $column => $columnDefinition) {
-            $cellContents[$column] = mb_substr($line, $columnDefinition['start'], $columnDefinition['length']);
-            if ($columnDefinition['start'] + $columnDefinition['length'] >= strlen($line)) {
-                continue;
+        $lines = [$documentIterator->current()];
+        while (
+            $documentIterator->getNextLine() !== null &&
+            $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])
+        ) {
+            $documentIterator->next();
+            $lines[] = $documentIterator->current();
+        }
+
+        // A row of dashes below a row says which of its cells span several columns
+        $cells = array_values(array_map(
+            static fn (array $columnDefinition): array => [...$columnDefinition, 'colspan' => 1],
+            $columnDefinitions,
+        ));
+        if ($this->isColspanDefinition($documentIterator->getNextLine())) {
+            $documentIterator->next();
+            $cells = $this->applyColumnSpans($blockContext, $cells, $documentIterator->current());
+        }
+
+        $this->checkGaps($blockContext, $cells, $lines[0]);
+
+        $row = new TableRow();
+        foreach ($cells as $cell) {
+            $content = [];
+            foreach ($lines as $line) {
+                $content[] = mb_substr($line, $cell['start'], $cell['length']);
             }
 
+            $row->addColumn($this->createColumn(implode("\n", $content), $blockContext, $cell['colspan'], $lineOffset));
+        }
+
+        return $row;
+    }
+
+    /**
+     * Merges the cells that a segment of the column span underline covers into one cell.
+     *
+     * @param list<array{start: int, length:int|null, colspan: int}> $cells
+     *
+     * @return list<array{start: int, length:int|null, colspan: int}>
+     */
+    private function applyColumnSpans(BlockContext $blockContext, array $cells, string $underline): array
+    {
+        preg_match_all('/-+/', $underline, $segments, PREG_OFFSET_CAPTURE);
+
+        $spannedCells = [];
+        $covered = 0;
+        foreach ($segments[0] as [$dashes, $segmentStart]) {
+            $segmentEnd = $segmentStart + strlen($dashes);
+            $spanned = array_values(array_filter(
+                $cells,
+                static fn (array $cell): bool => $cell['start'] >= $segmentStart && $cell['start'] < $segmentEnd,
+            ));
+            if ($spanned === [] || $spanned[0]['start'] !== $segmentStart) {
+                break;
+            }
+
+            $first = $spanned[0];
+            $last = $spanned[count($spanned) - 1];
+            $spannedCells[] = [
+                'start' => $first['start'],
+                'length' => $last['length'] === null ? null : $last['start'] + $last['length'] - $first['start'],
+                'colspan' => count($spanned),
+            ];
+            $covered += count($spanned);
+        }
+
+        if ($covered === count($cells)) {
+            return $spannedCells;
+        }
+
+        $this->logger->error(
+            sprintf(
+                'File "%s"; Malformed table: the column span underline "%s" does not line up with the columns',
+                $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
+                $underline,
+            ),
+            $blockContext->getLoggerInformation(),
+        );
+
+        return $cells;
+    }
+
+    /** @param list<array{start: int, length:int|null, colspan: int}> $cells */
+    private function checkGaps(BlockContext $blockContext, array $cells, string $line): void
+    {
+        foreach ($cells as $cell) {
             // if length is null, it means this is the last column and there is no gap after
-            if ($columnDefinition['length'] === null) {
+            if ($cell['length'] === null || $cell['start'] + $cell['length'] >= strlen($line)) {
                 continue;
             }
 
-            $gap = mb_substr($line, $columnDefinition['start'] + $columnDefinition['length'], 1);
+            $gap = mb_substr($line, $cell['start'] + $cell['length'], 1);
             if ($gap === ' ') {
                 continue;
             }
@@ -158,34 +244,6 @@ final class SimpleTableRule implements Rule
                 $blockContext->getLoggerInformation(),
             );
         }
-
-        while (
-            $documentIterator->getNextLine() !== null &&
-            $this->startsWithBlankCell($documentIterator, $columnDefinitions[0])
-        ) {
-            $documentIterator->next();
-            $line = $documentIterator->current();
-
-            foreach ($columnDefinitions as $column => $columnDefinition) {
-                $cellContents[$column] .= "\n" . mb_substr(
-                    $line,
-                    $columnDefinition['start'],
-                    $columnDefinition['length'],
-                );
-            }
-        }
-
-        // We detected a colspan, we will have to redo the splitting according to the new column definition.
-        if ($this->isColspanDefinition($documentIterator->getNextLine())) {
-            $documentIterator->next();
-        }
-
-        $row = new TableRow();
-        foreach ($cellContents as $content) {
-            $row->addColumn($this->createColumn($content, $blockContext, 1, $lineOffset));
-        }
-
-        return $row;
     }
 
     private function createColumn(
