@@ -68,17 +68,24 @@ final class InlineLexer extends AbstractLexer
             '_',
             '`',
             ':',
-            '|',
+            '\\|',
             '\\*\\*',
             '\\*',
             '\b(?<!:)[a-z0-9\\.\-+]{2,}:\\/\\/[-a-zA-Z0-9@:%_\\+.~#?&\\/=]*[-a-zA-Z0-9@%_\\+~#&\\/=]', // standalone hyperlinks
+            // getType() only detects these as single characters
+            '\\s',
+            '#',
+            '\\[',
+            '\\]',
+            '~',
         ];
     }
 
     /** @return string[] */
     protected function getNonCatchablePatterns(): array
     {
-        return [];
+        // An empty list makes the lexer regex end with an empty branch, which splits the input at every character
+        return ['(?!)'];
     }
 
     protected function getType(string &$value): int
