@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 
 use function mb_strlen;
 use function preg_match;
+use function rtrim;
 use function sprintf;
 use function str_starts_with;
 use function strlen;
@@ -56,7 +57,8 @@ final class GridTableRule implements Rule
     public function apply(BlockContext $blockContext, CompoundNode|null $on = null): Node|null
     {
         $documentIterator = $blockContext->getDocumentIterator();
-        $line = $documentIterator->current();
+        // Like docutils, ignore whitespace at the end of a line, which is invisible in the source
+        $line = rtrim($documentIterator->current());
 
         $tableSeparatorLineConfig = $this->tableLineConfig($line, '-');
         $context = new ParserContext($blockContext->getLineOffset($documentIterator->key()));
@@ -68,18 +70,19 @@ final class GridTableRule implements Rule
         while ($documentIterator->getNextLine() !== null) {
             $lineNumber++;
             $documentIterator->next();
+            $currentLine = rtrim($documentIterator->current());
 
-            if ($lineLength !== mb_strlen($documentIterator->current())) {
+            if ($lineLength !== mb_strlen($currentLine)) {
                 $message = sprintf(
                     "Malformed table: Line\n\n%s\n\ndoes not appear to be a complete table row",
-                    $documentIterator->current(),
+                    $currentLine,
                 );
 
                 $this->reportViolation($this->logger, Violation::error('rst.table.malformed', $message, $blockContext->getLoggerInformation()));
             }
 
-            if ($this->isHeaderDefinitionLine($documentIterator->current())) {
-                $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '=');
+            if ($this->isHeaderDefinitionLine($currentLine)) {
+                $separatorLineConfig = $this->tableLineConfig($currentLine, '=');
                 $context->pushSeparatorLine($separatorLineConfig);
                 if ($context->getHeaderRows() !== 0) {
                     $context->addError(
@@ -96,8 +99,8 @@ final class GridTableRule implements Rule
                 continue;
             }
 
-            if ($this->isColumnDefinitionLine($documentIterator->current())) {
-                $separatorLineConfig = $this->tableLineConfig($documentIterator->current(), '-');
+            if ($this->isColumnDefinitionLine($currentLine)) {
+                $separatorLineConfig = $this->tableLineConfig($currentLine, '-');
                 $context->pushSeparatorLine($separatorLineConfig);
 
                 $nextLine = $documentIterator->peek();
@@ -110,7 +113,7 @@ final class GridTableRule implements Rule
                 continue;
             }
 
-            $context->pushContentLine($documentIterator->current());
+            $context->pushContentLine($currentLine);
         }
 
         return $this->builder->buildNode($context, $blockContext, $this->productions);
