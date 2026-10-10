@@ -71,8 +71,8 @@ final class SpecificationFactoryTest extends TestCase
                     new HasExtension(['php']),
                     new NotSpecification(
                         new OrSpecification(
-                            new Glob('/src/some/path'),
-                            new Glob('/src/some/other/path'),
+                            new WithinPath('/src/some/path'),
+                            new WithinPath('/src/some/other/path'),
                         ),
                     ),
                 ),
@@ -90,7 +90,7 @@ final class SpecificationFactoryTest extends TestCase
             new AndSpecification(
                 new HasExtension(['php']),
                 new NotSpecification(
-                    new Glob('/src/some/path'),
+                    new WithinPath('/src/some/path'),
                 ),
             ),
             $specification,
@@ -128,6 +128,37 @@ final class SpecificationFactoryTest extends TestCase
                     new Glob('/PHPCompatibility/*'),
                     new Glob('/PHPCompatibility/Sniffs/'),
                 ),
+            ),
+            $specification,
+        );
+    }
+
+    public function testIgnorePathWithWildcardsStaysAGlob(): void
+    {
+        $specification = $this->fixture->create([], new Exclude(['/src/*.php', 'docs/**/*.rst']), ['php']);
+
+        $this->assertEquals(
+            new AndSpecification(
+                new HasExtension(['php']),
+                new NotSpecification(
+                    new OrSpecification(
+                        new Glob('/src/*.php'),
+                        new Glob('/docs/**/*.rst'),
+                    ),
+                ),
+            ),
+            $specification,
+        );
+    }
+
+    public function testIgnoreEverythingBelowAPathExcludesThatPath(): void
+    {
+        $specification = $this->fixture->create([], new Exclude(['_build/**/*']), ['rst']);
+
+        $this->assertEquals(
+            new AndSpecification(
+                new HasExtension(['rst']),
+                new NotSpecification(new WithinPath('/_build')),
             ),
             $specification,
         );
