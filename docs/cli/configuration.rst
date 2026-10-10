@@ -28,6 +28,21 @@ building should live in ``guides.xml`` in the current working directory.
 
 See the ``guides.xsd`` file for all available config options.
 
+Excluding files
+===============
+
+Files and directories below the input directory that should not be rendered can be excluded, in ``guides.xml`` or
+with the ``--exclude-path`` option. A path without wildcards excludes that file, or that directory with everything in
+it. A path with wildcards is a glob, where ``*`` matches within a directory and ``**/`` matches any number of
+directories.
+
+.. code-block:: xml
+
+    <exclude>
+        <path>_build</path>
+        <path>drafts/*.rst</path>
+    </exclude>
+
 Extension configuration
 =======================
 

@@ -16,9 +16,15 @@ namespace phpDocumentor\Guides;
 use Doctrine\Deprecations\Deprecation;
 use Flyfinder\Path;
 use Flyfinder\Specification\InPath;
+use League\Flysystem\Filesystem as LeagueFilesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\FileSystem\Finder\Exclude;
+use phpDocumentor\FileSystem\FlySystemAdapter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
+use function sort;
 
 final class FileCollectorTest extends TestCase
 {
@@ -64,5 +70,46 @@ final class FileCollectorTest extends TestCase
             $before + 1,
             Deprecation::getUniqueTriggeredDeprecationsCount(),
         );
+    }
+
+    /** @param list<string> $excludedPaths */
+    #[DataProvider('provideDirectoryExclusions')]
+    public function testCollectExcludesADirectoryWithEverythingInIt(array $excludedPaths): void
+    {
+        $filesystem = new LeagueFilesystem(new InMemoryFilesystemAdapter());
+        $filesystem->write('index.rst', '');
+        $filesystem->write('_build/index.rst', '');
+        $filesystem->write('_build/vendor/twig/twig/README.rst', '');
+        $filesystem->write('_build-notes.rst', '');
+
+        $files = (new FileCollector())->collect(
+            FlySystemAdapter::createFromFileSystem($filesystem),
+            '',
+            'rst',
+            new Exclude($excludedPaths),
+        );
+
+        self::assertSame(['_build-notes', 'index'], $this->sorted($files));
+    }
+
+    /** @return iterable<string, array{list<string>}> */
+    public static function provideDirectoryExclusions(): iterable
+    {
+        yield 'directory name' => [['_build']];
+        yield 'directory name with slash' => [['_build/']];
+        yield 'all files below the directory' => [['_build/**/*']];
+    }
+
+    /** @return list<string> */
+    private function sorted(Files $files): array
+    {
+        $names = [];
+        foreach ($files as $file) {
+            $names[] = $file;
+        }
+
+        sort($names);
+
+        return $names;
     }
 }
