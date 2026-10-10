@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends CompoundNode<Node> */
-class AdmonitionNode extends CompoundNode
+class AdmonitionNode extends CompoundNode implements HasAttachedNodes
 {
     /** @param Node[] $value */
     public function __construct(private readonly string $name, private readonly InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)
@@ -40,5 +40,11 @@ class AdmonitionNode extends CompoundNode
     public function isTitled(): bool
     {
         return $this->isTitled;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        return $this->title === null ? [] : ['title' => $this->title];
     }
 }

@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use function implode;
 
-final class CodeNode extends TextNode implements ConsumesDefaultHighlightLanguage
+final class CodeNode extends TextNode implements ConsumesDefaultHighlightLanguage, HasAttachedNodes
 {
     /** @var int|null The line number to start counting from and display, or null to hide line numbers */
     private int|null $startingLineNumber = null;
@@ -68,5 +68,11 @@ final class CodeNode extends TextNode implements ConsumesDefaultHighlightLanguag
     public function setEmphasizeLines(string|null $emphasizeLines): void
     {
         $this->emphasizeLines = $emphasizeLines;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        return $this->caption === null ? [] : ['caption' => $this->caption];
     }
 }

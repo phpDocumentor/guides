@@ -24,6 +24,8 @@ use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\GeneralDirectiveNode;
 
+use function array_filter;
+
 final class CardNode extends GeneralDirectiveNode implements LinkTargetNode, OptionalLinkTargetsNode, PrefixedLinkTargetNode
 {
     public const LINK_TYPE = 'std:card';
@@ -128,5 +130,20 @@ final class CardNode extends GeneralDirectiveNode implements LinkTargetNode, Opt
         $this->cardHeight = $cardHeight;
 
         return $this;
+    }
+
+    /** @return array<string, Node> */
+    public function getAttachedNodes(): array
+    {
+        return array_filter(
+            [
+                'header' => $this->cardHeader,
+                'image' => $this->cardImage,
+                'title' => $this->title,
+                ...parent::getAttachedNodes(),
+                'footer' => $this->cardFooter,
+            ],
+            static fn (Node|null $node): bool => $node !== null,
+        );
     }
 }

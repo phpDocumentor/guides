@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\LinkTargetNode;
 use phpDocumentor\Guides\Nodes\Node;
@@ -27,7 +28,7 @@ use phpDocumentor\Guides\Nodes\PrefixedLinkTargetNode;
  *
  * @extends CompoundNode<Node>
  */
-final class ConfvalNode extends CompoundNode implements LinkTargetNode, OptionalLinkTargetsNode, PrefixedLinkTargetNode
+final class ConfvalNode extends CompoundNode implements LinkTargetNode, OptionalLinkTargetsNode, PrefixedLinkTargetNode, HasAttachedNodes
 {
     public const LINK_TYPE = 'std:confval';
     public const LINK_PREFIX = 'confval-';
@@ -103,5 +104,24 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode, Optional
     public function isNoindex(): bool
     {
         return $this->noindex;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        $nodes = [];
+        if ($this->type !== null) {
+            $nodes['type'] = $this->type;
+        }
+
+        if ($this->default !== null) {
+            $nodes['default'] = $this->default;
+        }
+
+        foreach ($this->additionalOptions as $option => $value) {
+            $nodes['option-' . $option] = $value;
+        }
+
+        return $nodes;
     }
 }
