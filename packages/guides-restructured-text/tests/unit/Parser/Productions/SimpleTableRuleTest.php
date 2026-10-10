@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
+use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\RawNode;
 use phpDocumentor\Guides\Nodes\Table\TableColumn;
@@ -241,8 +242,55 @@ RST
         );
     }
 
-    private function createColumn(string $content): TableColumn
+    public function testApplyMergesTheCellsAColumnSpanUnderlineCovers(): void
     {
-        return new TableColumn($content, 1, [new RawNode($content)]);
+        $input = <<<'RST'
+=====  =====  ======
+Spans A + B   C
+------------  ------
+A      Spans B and C
+-----  -------------
+=====  =====  ======
+RST;
+
+        $row1 = new TableRow();
+        $row1->addColumn($this->createColumn('Spans A + B', 2));
+        $row1->addColumn($this->createColumn('C'));
+
+        $row2 = new TableRow();
+        $row2->addColumn($this->createColumn('A'));
+        $row2->addColumn($this->createColumn('Spans B and C', 2));
+
+        $result = $this->rule->apply($this->createContext($input), null);
+
+        self::assertEquals(new TableNode([$row1, $row2]), $result);
+    }
+
+    public function testApplyLogsAnErrorAndIgnoresAColumnSpanUnderlineOffTheColumns(): void
+    {
+        $input = <<<'RST'
+=====  =====  ======
+A      B      C
+---  ---------  ----
+=====  =====  ======
+RST;
+
+        $handler = new TestHandler();
+        $rule = new SimpleTableRule($this->givenCollectAllRuleContainer(), new Logger('test', [$handler]));
+
+        $row = new TableRow();
+        $row->addColumn($this->createColumn('A'));
+        $row->addColumn($this->createColumn('B'));
+        $row->addColumn($this->createColumn('C'));
+
+        $result = $rule->apply($this->createContext($input), null);
+
+        self::assertEquals(new TableNode([$row]), $result);
+        self::assertTrue($handler->hasErrorThatContains('does not line up with the columns'));
+    }
+
+    private function createColumn(string $content, int $colspan = 1): TableColumn
+    {
+        return new TableColumn($content, $colspan, [new RawNode($content)]);
     }
 }
