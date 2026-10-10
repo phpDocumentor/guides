@@ -100,6 +100,11 @@ final class GridTableRule implements Rule
 
                 // Table ends if next line is empty or not a valid table row
                 if (LinesIterator::isEmptyLine($nextLine) || !$this->isTableRowLine($nextLine)) {
+                    if (!LinesIterator::isNullOrEmptyLine($nextLine)) {
+                        // docutils warns about this too, and renders the following lines after the table
+                        $this->logger->warning('Blank line required after table.', $blockContext->getLoggerInformation());
+                    }
+
                     break;
                 }
 
