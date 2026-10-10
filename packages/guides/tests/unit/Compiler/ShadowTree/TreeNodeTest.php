@@ -16,7 +16,10 @@ namespace phpDocumentor\Guides\Compiler\ShadowTree;
 use Error;
 use LogicException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\DefinitionListNode;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\RawNode;
@@ -25,6 +28,7 @@ use phpDocumentor\Guides\Nodes\TitleNode;
 use PHPUnit\Framework\TestCase;
 use WeakReference;
 
+use function array_keys;
 use function count;
 use function gc_disable;
 use function gc_enable;
@@ -435,5 +439,96 @@ final class TreeNodeTest extends TestCase
         } finally {
             gc_enable();
         }
+    }
+
+    public function testCreateFromDocumentWrapsAttachedNodes(): void
+    {
+        $term = InlineCompoundNode::getPlainTextInlineNode('term');
+        $item = new DefinitionListItemNode($term, []);
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode(new DefinitionListNode($item));
+
+        $itemTree = TreeNode::createFromDocument($document)->getChildren()[0]->getChildren()[0];
+
+        self::assertSame($item, $itemTree->getNode());
+        self::assertSame([], $itemTree->getChildren());
+        self::assertSame(['term'], array_keys($itemTree->getAttachedNodes()));
+        self::assertSame($term, $itemTree->getAttachedNodes()['term']->getNode());
+        self::assertSame($itemTree, $itemTree->getAttachedNodes()['term']->getParent());
+    }
+
+    public function testReplaceChildInAnAttachedNodeChangesTheAttachedNodeItself(): void
+    {
+        $term = InlineCompoundNode::getPlainTextInlineNode('term');
+        $item = new DefinitionListItemNode($term, []);
+        $list = new DefinitionListNode($item);
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode($list);
+        $treeNode = TreeNode::createFromDocument($document);
+        $termTree = $treeNode->getChildren()[0]->getChildren()[0]->getAttachedNodes()['term'];
+        $replacement = new PlainTextInlineNode('replaced');
+
+        $termTree->replaceChild($termTree->getChildren()[0]->getNode(), $replacement);
+
+        self::assertSame([$replacement], $term->getChildren());
+        self::assertSame($term, $termTree->getNode());
+        self::assertSame($replacement, $termTree->getChildren()[0]->getNode());
+        self::assertSame($document, $treeNode->getNode());
+        self::assertSame($list, $document->getChildren()[0]);
+        self::assertSame($item, $list->getChildren()[0]);
+    }
+
+    public function testRemoveChildFromAnAttachedNodeChangesTheAttachedNodeItself(): void
+    {
+        $term = new InlineCompoundNode([new PlainTextInlineNode('first'), new PlainTextInlineNode('second')]);
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode(new DefinitionListNode(new DefinitionListItemNode($term, [])));
+        $termTree = TreeNode::createFromDocument($document)->getChildren()[0]->getChildren()[0]->getAttachedNodes()['term'];
+        $second = $term->getChildren()[1];
+
+        $termTree->removeChild($term->getChildren()[0]);
+
+        self::assertSame([$second], $term->getChildren());
+        self::assertSame($term, $termTree->getNode());
+        self::assertCount(1, $termTree->getChildren());
+    }
+
+    public function testReplaceAttachedNodeThrows(): void
+    {
+        $term = InlineCompoundNode::getPlainTextInlineNode('term');
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode(new DefinitionListNode(new DefinitionListItemNode($term, [])));
+        $itemTree = TreeNode::createFromDocument($document)->getChildren()[0]->getChildren()[0];
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Cannot replace the attached node "term"');
+
+        $itemTree->replaceChild($term, InlineCompoundNode::getPlainTextInlineNode('replaced'));
+    }
+
+    public function testRemoveAttachedNodeThrows(): void
+    {
+        $term = InlineCompoundNode::getPlainTextInlineNode('term');
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode(new DefinitionListNode(new DefinitionListItemNode($term, [])));
+        $itemTree = TreeNode::createFromDocument($document)->getChildren()[0]->getChildren()[0];
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Cannot remove the attached node "term"');
+
+        $itemTree->removeChild($term);
+    }
+
+    public function testReleaseClearsAttachedNodes(): void
+    {
+        $document = new DocumentNode('test', '/test');
+        $document->addChildNode(new DefinitionListNode(new DefinitionListItemNode(InlineCompoundNode::getPlainTextInlineNode('term'), [])));
+        $itemTree = TreeNode::createFromDocument($document)->getChildren()[0]->getChildren()[0];
+        $termTree = $itemTree->getAttachedNodes()['term'];
+
+        $itemTree->release();
+
+        self::assertSame([], $itemTree->getAttachedNodes());
+        self::assertNull($termTree->getParent());
     }
 }

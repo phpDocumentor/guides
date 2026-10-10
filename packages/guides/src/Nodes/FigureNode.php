@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes;
 
 /** @extends AbstractNode<ImageNode> */
-final class FigureNode extends AbstractNode
+final class FigureNode extends AbstractNode implements HasAttachedNodes
 {
     public function __construct(ImageNode $image, protected Node|null $document = null)
     {
@@ -29,5 +29,16 @@ final class FigureNode extends AbstractNode
     public function getDocument(): Node|null
     {
         return $this->document;
+    }
+
+    /** @return array<string, Node> */
+    public function getAttachedNodes(): array
+    {
+        $nodes = ['image' => $this->value];
+        if ($this->document !== null) {
+            $nodes['document'] = $this->document;
+        }
+
+        return $nodes;
     }
 }

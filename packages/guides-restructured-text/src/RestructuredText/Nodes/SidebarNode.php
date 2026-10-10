@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 /** @extends CompoundNode<Node> */
-final class SidebarNode extends CompoundNode
+final class SidebarNode extends CompoundNode implements HasAttachedNodes
 {
     /** {@inheritDoc} */
     public function __construct(private readonly InlineCompoundNode $title, array $value)
@@ -29,5 +30,11 @@ final class SidebarNode extends CompoundNode
     public function getTitle(): InlineCompoundNode
     {
         return $this->title;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        return ['title' => $this->title];
     }
 }

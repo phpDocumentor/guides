@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\Nodes;
 
+use phpDocumentor\Guides\Nodes\Table\TableColumn;
 use phpDocumentor\Guides\Nodes\Table\TableRow;
 
 use function count;
 use function max;
 
 /** @extends CompoundNode<Node> */
-final class TableNode extends CompoundNode
+final class TableNode extends CompoundNode implements HasAttachedNodes
 {
     /**
      * @param TableRow[] $data
@@ -71,5 +72,25 @@ final class TableNode extends CompoundNode
         $table->columnWidth = $columnWidth;
 
         return $table;
+    }
+
+    /**
+     * The cells of the header rows and then of the body rows, as
+     * "header-<row>-<column>" and "row-<row>-<column>".
+     *
+     * @return array<string, TableColumn>
+     */
+    public function getAttachedNodes(): array
+    {
+        $nodes = [];
+        foreach (['header' => $this->headers, 'row' => $this->data] as $prefix => $rows) {
+            foreach ($rows as $rowIndex => $row) {
+                foreach ($row->getColumns() as $columnIndex => $column) {
+                    $nodes[$prefix . '-' . $rowIndex . '-' . $columnIndex] = $column;
+                }
+            }
+        }
+
+        return $nodes;
     }
 }
