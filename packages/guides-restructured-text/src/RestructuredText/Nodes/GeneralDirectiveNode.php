@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Nodes;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Node;
 
@@ -23,7 +24,7 @@ use phpDocumentor\Guides\Nodes\Node;
  * @template TValue of Node = Node
  * @extends CompoundNode<TValue>
  */
-class GeneralDirectiveNode extends CompoundNode
+class GeneralDirectiveNode extends CompoundNode implements HasAttachedNodes
 {
     /** @param TValue[] $value */
     public function __construct(
@@ -48,5 +49,11 @@ class GeneralDirectiveNode extends CompoundNode
     public function getContent(): InlineCompoundNode
     {
         return $this->content;
+    }
+
+    /** @return array<string, Node> */
+    public function getAttachedNodes(): array
+    {
+        return ['content' => $this->getContent()];
     }
 }

@@ -36,6 +36,13 @@ interface and you should register it in the dependency injection container.
     the priority of the node transformer, the earlier it will be executed. Where highest priority is `PHP_INT_MAX`, lower
     number is lower priority.
 
+A node transformer visits the children of each node, and also the nodes a node keeps in properties of its own, like
+the term of a definition-list item, the caption of a code block or the cells of a table. A node that keeps such nodes
+implements :php:interface:`phpDocumentor\Guides\Nodes\HasAttachedNodes` and names them in ``getAttachedNodes()``.
+A transformer can change what is inside an attached node, but not replace or remove the attached node itself. Implement
+the interface on your own nodes too, if they keep nodes outside their children, so the node transformers reach these
+nodes as well.
+
 CompilerPass
 ============
 

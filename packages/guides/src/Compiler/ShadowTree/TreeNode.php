@@ -16,11 +16,13 @@ namespace phpDocumentor\Guides\Compiler\ShadowTree;
 use LogicException;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function array_unshift;
 use function array_values;
 use function count;
+use function sprintf;
 
 /** @template-covariant TNode of Node */
 final class TreeNode
@@ -30,6 +32,15 @@ final class TreeNode
 
     /** @var self<Node>[] */
     private array $children = [];
+
+    /** @var array<string, self<Node>> */
+    private array $attachedNodes = [];
+
+    /**
+     * An attached node is held in a property of its parent node, which cannot take a copy of
+     * it, so changes to its children are made in the attached node itself.
+     */
+    private bool $isAttached = false;
 
     private function __construct(
         /** @var TNode */
@@ -77,6 +88,13 @@ final class TreeNode
     {
         $treeNode = new self($node, $parent);
         $treeNode->root = $parent->root;
+        if ($node instanceof HasAttachedNodes) {
+            foreach ($node->getAttachedNodes() as $name => $attachedNode) {
+                $treeNode->attachedNodes[$name] = self::createFromNode($attachedNode, $treeNode);
+                $treeNode->attachedNodes[$name]->isAttached = true;
+            }
+        }
+
         if ($node instanceof CompoundNode === false) {
             return $treeNode;
         }
@@ -114,6 +132,16 @@ final class TreeNode
         return $this->children;
     }
 
+    /**
+     * The nodes the node keeps beside its children, see {@see HasAttachedNodes}.
+     *
+     * @return array<string, TreeNode<Node>>
+     */
+    public function getAttachedNodes(): array
+    {
+        return $this->attachedNodes;
+    }
+
     public function addChild(Node $child): void
     {
         if ($this->node instanceof CompoundNode === false) {
@@ -142,6 +170,8 @@ final class TreeNode
 
     public function removeChild(Node $node): void
     {
+        $this->assertNotAttached($node, 'remove');
+
         if ($this->node instanceof CompoundNode === false) {
             throw new LogicException('Cannot remove a child from a non-compound node');
         }
@@ -150,6 +180,13 @@ final class TreeNode
             if ($child->getNode() === $node) {
                 unset($this->children[$key]);
                 $child->parent = null;
+                if ($this->isAttached) {
+                    $children = $this->node->getChildren();
+                    unset($children[$key]);
+                    $this->node->setValue(array_values($children));
+                    break;
+                }
+
                 $newNode = $this->node->removeNode($key);
                 $this->parent?->replaceChild($this->node, $newNode);
                 $this->node = $newNode;
@@ -162,6 +199,8 @@ final class TreeNode
 
     public function replaceChild(Node $oldChildNode, Node $newChildNode): void
     {
+        $this->assertNotAttached($oldChildNode, 'replace');
+
         if ($this->node instanceof CompoundNode === false) {
             throw new LogicException('Cannot remove a child from a non-compound node');
         }
@@ -169,6 +208,13 @@ final class TreeNode
         foreach ($this->children as $key => $child) {
             if ($child->getNode() === $oldChildNode) {
                 $child->node = $newChildNode;
+                if ($this->isAttached) {
+                    $children = $this->node->getChildren();
+                    $children[$key] = $newChildNode;
+                    $this->node->setValue($children);
+                    break;
+                }
+
                 $newNode = $this->node->replaceNode($key, $newChildNode);
                 $this->parent?->replaceChild($this->node, $newNode);
                 $this->node = $newNode;
@@ -194,10 +240,15 @@ final class TreeNode
      */
     public function release(): void
     {
+        foreach ($this->attachedNodes as $attachedNode) {
+            $attachedNode->release();
+        }
+
         foreach ($this->children as $child) {
             $child->release();
         }
 
+        $this->attachedNodes = [];
         $this->children = [];
         $this->parent = null;
         unset($this->root);
@@ -210,5 +261,14 @@ final class TreeNode
         }
 
         return $this->parent->findPosition($this->node) === count($this->parent->getChildren()) - 1;
+    }
+
+    private function assertNotAttached(Node $node, string $action): void
+    {
+        foreach ($this->attachedNodes as $name => $attachedNode) {
+            if ($attachedNode->getNode() === $node) {
+                throw new LogicException(sprintf('Cannot %s the attached node "%s", change its children instead', $action, $name));
+            }
+        }
     }
 }
