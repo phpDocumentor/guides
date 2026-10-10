@@ -306,6 +306,7 @@ RST;
         self::assertCount(3, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
+        self::assertTrue($this->logger->hasWarningThatContains('Blank line required after table.'));
     }
 
     public function testTableAtEndOfFile(): void
@@ -326,6 +327,7 @@ RST;
         self::assertCount(1, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
+        self::assertFalse($this->logger->hasWarningRecords());
     }
 
     public function testTableFollowedByIndentedText(): void
@@ -347,6 +349,7 @@ RST;
         self::assertCount(1, $table->getData());
         self::assertCount(1, $table->getHeaders());
         self::assertFalse($this->logger->hasErrorRecords());
+        self::assertTrue($this->logger->hasWarningThatContains('Blank line required after table.'));
     }
 
     public function testConsecutiveTablesWithoutBlankLine(): void
@@ -367,6 +370,7 @@ RST;
         self::assertInstanceOf(TableNode::class, $table);
         self::assertCount(1, $table->getData());
         self::assertFalse($this->logger->hasErrorRecords());
+        self::assertTrue($this->logger->hasWarningThatContains('Blank line required after table.'));
     }
 
     public function testTableFollowedByDirective(): void
@@ -386,5 +390,6 @@ RST;
         self::assertInstanceOf(TableNode::class, $table);
         self::assertCount(1, $table->getData());
         self::assertFalse($this->logger->hasErrorRecords());
+        self::assertTrue($this->logger->hasWarningThatContains('Blank line required after table.'));
     }
 }

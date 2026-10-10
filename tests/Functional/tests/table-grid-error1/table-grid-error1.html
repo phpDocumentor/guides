@@ -1,16 +1,22 @@
-SKIP no error thrown
-Exception: Exception
-Malformed table: Line
-
-forgot a blank line
-
-does not appear to be a complete table row
-
-+-----------+----------------+----------------------------+
-| Type      | Options        | Description                |
-+===========+================+============================+
-| batch     |                | Renders a checkbox         |
-+-----------+----------------+----------------------------+
-| currency  | currency (m)   | A currency string          |
-+-----------+----------------+----------------------------+
-forgot a blank line in file "(unknown)"
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Options</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>batch</td>
+            <td>&nbsp;</td>
+            <td>Renders a checkbox</td>
+        </tr>
+        <tr>
+            <td>currency</td>
+            <td>currency (m)</td>
+            <td>A currency string</td>
+        </tr>
+    </tbody>
+</table>
+<p>forgot a blank line</p>
