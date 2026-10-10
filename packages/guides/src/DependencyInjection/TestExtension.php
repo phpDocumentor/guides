@@ -77,5 +77,11 @@ final class TestExtension extends Extension implements CompilerPassInterface
         $container->register(TestHandler::class, TestHandler::class)->setPublic(true);
         $container->getDefinition(Logger::class)
             ->addMethodCall('pushHandler', [new Reference(TestHandler::class)]);
+        if (!$container->hasDefinition('phpdoc.guides.cli.validation_logger')) {
+            return;
+        }
+
+        $container->getDefinition('phpdoc.guides.cli.validation_logger')
+            ->addMethodCall('pushHandler', [new Reference(TestHandler::class)]);
     }
 }

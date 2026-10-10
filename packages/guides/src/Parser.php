@@ -19,6 +19,8 @@ use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\Validation\NullViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
@@ -39,6 +41,7 @@ final class Parser
     public function __construct(
         private readonly DocumentNameResolverInterface $documentNameResolver,
         iterable $parserStrategies,
+        private readonly ViolationReporter $violationReporter = new NullViolationReporter(),
     ) {
         foreach ($parserStrategies as $strategy) {
             $this->registerStrategy($strategy);
@@ -117,6 +120,7 @@ final class Parser
             $initialHeaderLevel,
             $origin,
             $this->documentNameResolver,
+            $this->violationReporter,
         );
     }
 }

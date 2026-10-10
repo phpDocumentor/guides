@@ -21,7 +21,7 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
 
 use function count;
 use function mb_substr;
@@ -37,7 +37,6 @@ final class SimpleTableRule implements Rule
 
     public function __construct(
         private readonly RuleContainer $productions,
-        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -148,7 +147,8 @@ final class SimpleTableRule implements Rule
                 continue;
             }
 
-            $this->logger->error(
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::error(
+                'rst.table.malformed',
                 sprintf(
                     'File "%s"; Malformed table: content "%s" appears in the "gap" on row "%s"',
                     $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
@@ -156,7 +156,7 @@ final class SimpleTableRule implements Rule
                     $line,
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
         }
 
         while (

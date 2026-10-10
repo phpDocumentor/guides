@@ -23,7 +23,7 @@ use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
 
 use function array_map;
 use function array_shift;
@@ -37,7 +37,6 @@ class ListTableDirective extends SubDirective
 {
     public function __construct(
         protected Rule $startingRule,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct($startingRule);
     }
@@ -56,24 +55,30 @@ class ListTableDirective extends SubDirective
         $options = $this->optionsToArray($directive->getOptions());
 
         if (count($collectionNode->getChildren()) === 0) {
-            $this->logger->warning('The list-table directive is missing its content. It has to contain exactly one list with sub-lists of equal count. ', $blockContext->getLoggerInformation());
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                'rst.list-table.invalid-content',
+                'The list-table directive is missing its content. It has to contain exactly one list with sub-lists of equal count. ',
+                $blockContext->getLoggerInformation(),
+            ));
 
             return null;
         }
 
         if (count($collectionNode->getChildren()) > 1) {
-            $this->logger->warning(
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                'rst.list-table.invalid-content',
                 sprintf('The list-table must have exactly one list as sub-content. %s nodes found.', count($collectionNode->getChildren())),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
         }
 
         $subNode = $collectionNode->getChildren()[0];
         if (!$subNode instanceof ListNode) {
-            $this->logger->warning(
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                'rst.list-table.invalid-content',
                 sprintf('The list-table must have exactly one list as sub-content. A node of type %s found.', $subNode::class),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             return null;
         }
@@ -84,10 +89,11 @@ class ListTableDirective extends SubDirective
             $tableRow = new TableRow();
             foreach ($listItemNode->getChildren() as $subListNode) {
                 if (!$subListNode instanceof ListNode) {
-                    $this->logger->warning(
+                    $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                        'rst.list-table.invalid-content',
                         sprintf('The list-table must have a nested list of 2 levels. A node of type %s was found on level 2.', $subListNode::class),
                         $blockContext->getLoggerInformation(),
-                    );
+                    ));
                     continue;
                 }
 

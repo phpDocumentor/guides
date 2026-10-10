@@ -18,6 +18,8 @@ use League\Uri\BaseUri;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\Validation\NullViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function dirname;
 use function ltrim;
@@ -31,7 +33,14 @@ class ParserContext
         private readonly int $initialHeaderLevel,
         private readonly FilesystemInterface|FileSystem $origin,
         private readonly DocumentNameResolverInterface $documentNameResolver,
+        private readonly ViolationReporter $violationReporter = new NullViolationReporter(),
     ) {
+    }
+
+    /** Where to report problems found in the documentation source */
+    public function getViolationReporter(): ViolationReporter
+    {
+        return $this->violationReporter;
     }
 
     public function getProjectNode(): ProjectNode

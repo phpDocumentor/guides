@@ -20,7 +20,8 @@ use phpDocumentor\Guides\Nodes\Index\IndexNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function array_filter;
 use function array_map;
@@ -77,7 +78,7 @@ final class IndexDirective extends BaseDirective
      */
     private const TYPO_DISTANCE_THRESHOLD = 2;
 
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private readonly ViolationReporter $violationReporter)
     {
     }
 
@@ -167,7 +168,8 @@ final class IndexDirective extends BaseDirective
             return;
         }
 
-        $this->logger->warning(
+        $this->violationReporter->report(Violation::warning(
+            'rst.index.unknown-entry-type',
             sprintf(
                 '.. index:: "%s:" is not a known entry type, did you mean "%s:"? Treating it as a literal term instead: "%s"',
                 $candidate,
@@ -175,6 +177,6 @@ final class IndexDirective extends BaseDirective
                 $line,
             ),
             $directiveNode->getSourceLocation()->toLoggerInformation(),
-        );
+        ));
     }
 }

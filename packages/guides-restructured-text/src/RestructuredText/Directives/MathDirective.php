@@ -17,7 +17,8 @@ use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\MathNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function explode;
 use function preg_replace;
@@ -37,7 +38,7 @@ use function preg_replace;
 final class MathDirective extends BaseDirective
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly ViolationReporter $violationReporter,
     ) {
     }
 
@@ -50,7 +51,7 @@ final class MathDirective extends BaseDirective
         $rawContent = (string) preg_replace('/\n+$/', '', $rawContent);
 
         if ($rawContent === '') {
-            $this->logger->warning('The math directive has no content. Did you properly indent the code? ', $directiveNode->getSourceLocation()->toLoggerInformation());
+            $this->violationReporter->report(Violation::warning('rst.math.empty', 'The math directive has no content. Did you properly indent the code? ', $directiveNode->getSourceLocation()->toLoggerInformation()));
 
             return null;
         }

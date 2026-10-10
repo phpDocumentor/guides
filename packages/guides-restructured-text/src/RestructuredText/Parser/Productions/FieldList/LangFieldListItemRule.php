@@ -18,7 +18,7 @@ use phpDocumentor\Guides\Nodes\Language;
 use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
 
 use function preg_match;
 use function sprintf;
@@ -26,11 +26,6 @@ use function strtolower;
 
 final class LangFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {
-    }
-
     public function applies(FieldListItemNode $fieldListItemNode): bool
     {
         return strtolower($fieldListItemNode->getTerm()) === 'lang';
@@ -40,13 +35,14 @@ final class LangFieldListItemRule implements FieldListItemRule
     {
         $language = $fieldListItemNode->getPlaintextContent();
         if (preg_match(Language::PATTERN, $language) !== 1) {
-            $this->logger->warning(
+            $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+                'rst.metadata.invalid-lang',
                 sprintf(
                     'The "lang" field expects a BCP 47 language tag (e.g. "en", "en-US"), but was given "%s".',
                     $language,
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
         }
 
         return new LanguageNode($language);

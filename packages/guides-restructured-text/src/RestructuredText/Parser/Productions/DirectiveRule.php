@@ -28,6 +28,7 @@ use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\UnindentStrategy;
+use phpDocumentor\Guides\Validation\Violation;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -235,10 +236,11 @@ final class DirectiveRule implements Rule
             return;
         }
 
-        $this->logger->warning(
+        $blockContext->getDocumentParserContext()->getViolationReporter()->report(Violation::warning(
+            'rst.directive.invalid-value',
             sprintf('The "%s" directive %s, but was given "%s".', $directive->getName(), $problem, $data),
             $blockContext->getLoggerInformation(),
-        );
+        ));
     }
 
     /**

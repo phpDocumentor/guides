@@ -21,7 +21,8 @@ use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\ContainerNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 use function preg_match;
 use function sprintf;
@@ -47,7 +48,7 @@ final class ContainerDirective extends SubDirective
 {
     public function __construct(
         protected Rule $startingRule,
-        private readonly LoggerInterface $logger,
+        private readonly ViolationReporter $violationReporter,
     ) {
         parent::__construct($startingRule);
     }
@@ -60,14 +61,15 @@ final class ContainerDirective extends SubDirective
         if ($directive->hasOption('lang')) {
             $language = $directive->getOptionString('lang');
             if (preg_match(Language::PATTERN, $language) !== 1) {
-                $this->logger->warning(
+                $this->violationReporter->report(Violation::warning(
+                    'rst.container.invalid-lang',
                     sprintf(
                         'The "lang" option of the "%s" directive expects a BCP 47 language tag (e.g. "en", "en-US"), but was given "%s".',
                         $directive->getName(),
                         $language,
                     ),
                     $directiveNode->getSourceLocation()->toLoggerInformation(),
-                );
+                ));
             }
 
             $options['lang'] = $language;
@@ -77,14 +79,15 @@ final class ContainerDirective extends SubDirective
             $written = $directive->getOptionString('dir');
             $direction = TextDirection::tryFromUserInput($written);
             if ($direction === null) {
-                $this->logger->warning(
+                $this->violationReporter->report(Violation::warning(
+                    'rst.container.invalid-dir',
                     sprintf(
                         'The "dir" option of the "%s" directive expects one of "ltr", "rtl" or "auto", but was given "%s".',
                         $directive->getName(),
                         $written,
                     ),
                     $directiveNode->getSourceLocation()->toLoggerInformation(),
-                );
+                ));
 
                 $direction = TextDirection::Auto;
             }

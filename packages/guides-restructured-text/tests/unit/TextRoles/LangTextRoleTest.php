@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Inline\LanguageInlineNode;
 use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
 use PHPUnit\Framework\TestCase;
 
 final class LangTextRoleTest extends TestCase
@@ -32,8 +33,9 @@ final class LangTextRoleTest extends TestCase
         $this->logHandler = new TestHandler();
         $logger = new Logger('test');
         $logger->pushHandler($this->logHandler);
-        $this->subject = new LangTextRole($logger);
+        $this->subject = new LangTextRole();
         $this->documentParserContext = self::createMock(DocumentParserContext::class);
+        $this->documentParserContext->method('getViolationReporter')->willReturn(new LoggingViolationReporter($logger));
         $this->documentParserContext->method('getContext')->willReturn(
             self::createMock(ParserContext::class),
         );

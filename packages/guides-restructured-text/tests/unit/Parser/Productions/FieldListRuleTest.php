@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser\Productions;
 
-use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\FieldListNode;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
@@ -58,10 +57,10 @@ final class FieldListRuleTest extends RuleTestCase
         $fieldListItemRules[] = new NosearchFieldListItemRule();
         $fieldListItemRules[] = new OrganizationFieldListItemRule();
         $fieldListItemRules[] = new OrphanFieldListItemRule();
-        $fieldListItemRules[] = new ProjectFieldListItemRule(new Logger('test'));
+        $fieldListItemRules[] = new ProjectFieldListItemRule();
         $fieldListItemRules[] = new RevisionFieldListItemRule();
         $fieldListItemRules[] = new TocDepthFieldListItemRule();
-        $fieldListItemRules[] = new VersionFieldListItemRule(new Logger('test'));
+        $fieldListItemRules[] = new VersionFieldListItemRule();
         $this->rule = new FieldListRule($this->givenCollectAllRuleContainer(), $fieldListItemRules);
     }
 

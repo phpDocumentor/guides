@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\MarkupLanguageParser;
 use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use RuntimeException;
 
 use function array_merge;
@@ -69,6 +70,12 @@ class DocumentParserContext
     public function getContext(): ParserContext
     {
         return $this->context;
+    }
+
+    /** Where to report problems found in the documentation source */
+    public function getViolationReporter(): ViolationReporter
+    {
+        return $this->context->getViolationReporter();
     }
 
     public function getParser(): MarkupLanguageParser

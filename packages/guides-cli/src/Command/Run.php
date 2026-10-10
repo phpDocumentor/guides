@@ -50,6 +50,8 @@ final class Run extends Command
         private readonly EventDispatcher $eventDispatcher,
         private readonly ProgressBarSubscriber $progressBarSubscriber,
         private SettingsBuilder|null $settingsBuilder = null,
+        /** Logger on the "validation" channel, gets the same handlers as $logger */
+        private readonly Logger|null $validationLogger = null,
     ) {
         parent::__construct('run');
 
@@ -105,15 +107,29 @@ final class Run extends Command
 
         $logPath = $settings->getLogPath();
         if ($logPath === 'php://stder') {
-            $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING));
+            $handlers = [new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING)];
         } else {
-            $this->logger->pushHandler(new StreamHandler($logPath . '/warning.log', Logger::WARNING));
-            $this->logger->pushHandler(new StreamHandler($logPath . '/error.log', Logger::ERROR));
+            $handlers = [
+                new StreamHandler($logPath . '/warning.log', Logger::WARNING),
+                new StreamHandler($logPath . '/error.log', Logger::ERROR),
+            ];
         }
 
+        $spyProcessor = null;
         if ($settings->isFailOnError()) {
             $spyProcessor = new SpyProcessor($settings->getFailOnError() ?? LogLevel::WARNING);
-            $this->logger->pushProcessor($spyProcessor);
+        }
+
+        foreach ($this->getLoggers() as $logger) {
+            foreach ($handlers as $handler) {
+                $logger->pushHandler($handler);
+            }
+
+            if ($spyProcessor === null) {
+                continue;
+            }
+
+            $logger->pushProcessor($spyProcessor);
         }
 
         if ($output instanceof ConsoleOutputInterface && $settings->isShowProgressBar()) {
@@ -140,10 +156,20 @@ final class Run extends Command
             );
         }
 
-        if ($settings->isFailOnError() && $spyProcessor->hasBeenCalled()) {
+        if ($spyProcessor?->hasBeenCalled() === true) {
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
+    }
+
+    /** @return list<Logger> */
+    private function getLoggers(): array
+    {
+        if ($this->validationLogger === null) {
+            return [$this->logger];
+        }
+
+        return [$this->logger, $this->validationLogger];
     }
 }

@@ -13,6 +13,7 @@ use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\RunCommandHandler;
 use phpDocumentor\Guides\Logging\DeduplicatingLogger;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
 use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,7 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()->autowire()
 
         ->set(Run::class)
+        ->arg('$validationLogger', service('phpdoc.guides.cli.validation_logger'))
         ->public()
         ->tag('phpdoc.guides.cli.command')
 
@@ -42,6 +44,13 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$logger', service(Logger::class))
         ->arg('$level', '%phpdoc.guides.log_deduplication%')
         ->alias(LoggerInterface::class, DeduplicatingLogger::class)
+
+        // Violations found in the documentation source are logged on their own channel
+        ->set('phpdoc.guides.cli.validation_logger', Logger::class)
+        ->arg('$name', 'validation')
+
+        ->set(LoggingViolationReporter::class)
+        ->arg('$logger', service('phpdoc.guides.cli.validation_logger'))
 
         ->set(EventDispatcher::class)
         ->alias(EventDispatcherInterface::class, EventDispatcher::class)
@@ -65,6 +74,7 @@ return static function (ContainerConfigurator $container): void {
 
     $container->services()->defaults()->autowire()->set(ServerFactory::class)
         ->set(Serve::class)
+        ->arg('$validationLogger', service('phpdoc.guides.cli.validation_logger'))
         ->public()
         ->tag('phpdoc.guides.cli.command');
 };
