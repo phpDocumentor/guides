@@ -283,6 +283,22 @@ RST;
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table: multiple "header rows" using "===" were found'));
     }
 
+    public function testIgnoresWhitespaceAtTheEndOfALine(): void
+    {
+        $input = "+--------+--------+  \n"
+            . "| Cell 1 | Cell 2 | \n"
+            . "+--------+--------+ \n"
+            . "| Cell 3 | Cell 4 |\n"
+            . "+--------+--------+\t\n";
+
+        $context = $this->createContext($input);
+        $table = $this->rule->apply($context);
+
+        self::assertInstanceOf(TableNode::class, $table);
+        self::assertCount(2, $table->getData());
+        self::assertFalse($this->logger->hasErrorRecords());
+    }
+
     public function testNotEndingWithWhiteLine(): void
     {
         $input = <<<'RST'
