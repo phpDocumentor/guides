@@ -33,7 +33,8 @@
             ],
             "phpDocumentor\\Guides\\RestructuredText\\Architecture\\": "packages/guides-restructured-text/tests/Architecture",
             "phpDocumentor\\Guides\\Markdown\\": "packages/guides-markdown/tests/unit",
-            "phpDocumentor\\Guides\\Pages\\": "packages/guides-pages/tests/unit"
+            "phpDocumentor\\Guides\\Pages\\": "packages/guides-pages/tests/unit",
+            "phpDocumentor\\Guides\\MachineReadable\\": "packages/guides-machine-readable/tests/unit"
         }
     },
     "require": {
@@ -50,6 +51,7 @@
         "phpdocumentor/guides-cli": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-code": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-graphs": "^1.0 || ^1.0@dev",
+        "phpdocumentor/guides-machine-readable": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-markdown": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-pages": "^1.0 || ^1.0@dev",
         "phpdocumentor/guides-restructured-text": "^1.0 || ^1.0@dev",
