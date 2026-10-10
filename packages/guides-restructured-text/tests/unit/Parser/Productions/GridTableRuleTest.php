@@ -263,6 +263,21 @@ RST;
         self::assertTrue($this->logger->hasErrorThatContains('Malformed table'));
     }
 
+    public function testBordersThatDoNotCloseACellAreAnError(): void
+    {
+        $input = <<<'RST'
++-----+-----+
+| a   | b   |
++-----+--x--+
+RST;
+
+        $context = $this->createContext($input);
+        $result = $this->rule->apply($context);
+
+        self::assertNull($result);
+        self::assertTrue($this->logger->hasErrorThatContains('the borders of the cells do not form a complete table'));
+    }
+
     public function testErrorMultipleHeaderRows(): void
     {
         $input = <<<'RST'
