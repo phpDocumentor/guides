@@ -36,6 +36,8 @@ final class ProjectSettings
 
     /** @var LogLevel::*|null */
     private string|null $failOnError = null;
+    private string|null $violationFormat = null;
+    private string|null $violationFile = null;
     private bool $showProgressBar = true;
     private bool $linksRelative = false;
     private string $defaultCodeLanguage = '';
@@ -148,6 +150,34 @@ final class ProjectSettings
     public function setFailOnError(string $logLevel): void
     {
         $this->failOnError = $logLevel;
+    }
+
+    /**
+     * Format to report the problems found in the documentation source in, in addition to the log, like "github"
+     * for annotations in GitHub Actions or "gitlab" for the code quality report of GitLab CI
+     */
+    public function getViolationFormat(): string|null
+    {
+        return $this->violationFormat;
+    }
+
+    public function setViolationFormat(string|null $violationFormat): void
+    {
+        $this->violationFormat = $violationFormat;
+    }
+
+    /**
+     * File to write the report of the violation format to, for formats that write a file, like "gitlab". Each format
+     * has its own default.
+     */
+    public function getViolationFile(): string|null
+    {
+        return $this->violationFile;
+    }
+
+    public function setViolationFile(string|null $violationFile): void
+    {
+        $this->violationFile = $violationFile;
     }
 
     public function isShowProgressBar(): bool

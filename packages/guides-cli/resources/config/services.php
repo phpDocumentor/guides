@@ -12,7 +12,14 @@ use phpDocumentor\Guides\Cli\Command\SettingsBuilder;
 use phpDocumentor\Guides\Cli\Command\WorkingDirectorySwitcher;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Internal\RunCommandHandler;
+use phpDocumentor\Guides\Cli\Validation\AnnotationDetails;
+use phpDocumentor\Guides\Cli\Validation\GithubActionsViolationFormat;
+use phpDocumentor\Guides\Cli\Validation\GitlabViolationFormat;
+use phpDocumentor\Guides\Cli\Validation\ViolationFormats;
 use phpDocumentor\Guides\Logging\DeduplicatingLogger;
+use phpDocumentor\Guides\Validation\CompositeViolationReporter;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Clock\ClockInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -23,6 +30,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
@@ -42,6 +50,19 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$logger', service(Logger::class))
         ->arg('$level', '%phpdoc.guides.log_deduplication%')
         ->alias(LoggerInterface::class, DeduplicatingLogger::class)
+
+        // Problems in the documentation source are logged, and reported in the format chosen as "violation-format",
+        // out of these and the formats extensions register with the tag "phpdoc.guides.violation_format"
+        ->set(AnnotationDetails::class)
+        ->set(GithubActionsViolationFormat::class)
+        ->tag('phpdoc.guides.violation_format', ['format' => 'github'])
+        ->set(GitlabViolationFormat::class)
+        ->tag('phpdoc.guides.violation_format', ['format' => 'gitlab'])
+        ->set(ViolationFormats::class)
+        ->arg('$formats', tagged_locator('phpdoc.guides.violation_format', 'format'))
+        ->set(CompositeViolationReporter::class)
+        ->arg('$reporters', [service(LoggingViolationReporter::class), service(ViolationFormats::class)])
+        ->alias(ViolationReporter::class, CompositeViolationReporter::class)
 
         ->set(EventDispatcher::class)
         ->alias(EventDispatcherInterface::class, EventDispatcher::class)

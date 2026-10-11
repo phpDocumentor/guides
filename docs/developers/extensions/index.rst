@@ -37,4 +37,5 @@ Some ways to extend the guides:
     templates
     text-roles
     interlinks
+    violation-formats
     testing

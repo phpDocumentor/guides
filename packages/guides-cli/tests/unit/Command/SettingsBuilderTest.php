@@ -478,4 +478,26 @@ final class SettingsBuilderTest extends TestCase
         $settings = $this->settingsBuilder->getSettings();
         self::assertFalse($settings->isShowProgressBar());
     }
+
+    public function testSetViolationFormatFromOption(): void
+    {
+        $definition = clone $this->inputDefinition;
+        $definition->addOption(new InputOption('violation-format', null, InputOption::VALUE_REQUIRED));
+
+        $this->settingsBuilder->overrideWithInput(new ArrayInput(['--violation-format' => 'github'], $definition));
+
+        self::assertSame('github', $this->projectSettings->getViolationFormat());
+    }
+
+    public function testSetViolationFileFromOption(): void
+    {
+        $definition = clone $this->inputDefinition;
+        $definition->addOption(new InputOption('violation-file', null, InputOption::VALUE_REQUIRED));
+
+        $this->settingsBuilder->overrideWithInput(
+            new ArrayInput(['--violation-file' => 'build/code-quality.json'], $definition),
+        );
+
+        self::assertSame('build/code-quality.json', $this->projectSettings->getViolationFile());
+    }
 }

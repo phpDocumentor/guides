@@ -141,6 +141,8 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
                     ->end()
                 ->end()
                 ->scalarNode('show_progress')->end()
+                ->scalarNode('violation_format')->end()
+                ->scalarNode('violation_file')->end()
                 ->scalarNode('links_are_relative')->end()
                 ->scalarNode('max_menu_depth')->end()
                 ->scalarNode('automatic_menu')->end()
@@ -343,6 +345,14 @@ final class GuidesExtension extends Extension implements CompilerPassInterface, 
 
         if (isset($config['fail_on_log'])) {
             $projectSettings->setFailOnError(LogLevel::WARNING);
+        }
+
+        if (isset($config['violation_format']) && is_string($config['violation_format'])) {
+            $projectSettings->setViolationFormat($config['violation_format']);
+        }
+
+        if (isset($config['violation_file']) && is_string($config['violation_file'])) {
+            $projectSettings->setViolationFile($config['violation_file']);
         }
 
         if (isset($config['max_menu_depth'])) {

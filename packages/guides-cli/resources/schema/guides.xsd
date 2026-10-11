@@ -33,6 +33,8 @@
         <xsd:attribute name="fail-on-error" type="xsd:string"/>
         <xsd:attribute name="log-deduplication" type="xsd:string"/>
         <xsd:attribute name="show-progress" type="xsd:string"/>
+        <xsd:attribute name="violation-format" type="xsd:string"/>
+        <xsd:attribute name="violation-file" type="path"/>
         <xsd:attribute name="theme" type="xsd:string"/>
         <xsd:attribute name="default-code-language" type="xsd:string"/>
         <xsd:attribute name="links-are-relative" type="xsd:string"/>
