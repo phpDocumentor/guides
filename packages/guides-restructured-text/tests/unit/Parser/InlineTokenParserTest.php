@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
+use phpDocumentor\Guides\Nodes\Inline\AbstractLinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\CitationInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\DocReferenceNode;
 use phpDocumentor\Guides\Nodes\Inline\EmphasisInlineNode;
@@ -95,7 +96,36 @@ final class InlineTokenParserTest extends TestCase
     public function testString(string $content, InlineCompoundNode $expected): void
     {
         $result = $this->inlineTokenParser->parse($content, new BlockContext($this->documentParserContext, ''));
+        // Link nodes also carry their source location, covered by testLinkLineNumbers()
+        foreach ($result->getChildren() as $child) {
+            if (!($child instanceof AbstractLinkInlineNode)) {
+                continue;
+            }
+
+            $child->setLoggerInformation([]);
+        }
+
         self::assertEquals($expected, $result);
+    }
+
+    public function testLinkLineNumbers(): void
+    {
+        $result = $this->inlineTokenParser->parse(
+            "first line\nsecond :doc:`some/document` and\nthird myref_",
+            new BlockContext($this->documentParserContext, ''),
+            5,
+        );
+
+        $lineNumbers = [];
+        foreach ($result->getChildren() as $child) {
+            if (!($child instanceof AbstractLinkInlineNode)) {
+                continue;
+            }
+
+            $lineNumbers[$child->getTargetReference()] = $child->getLoggerInformation()['currentLineNumber'] ?? null;
+        }
+
+        self::assertSame(['some/document' => 6, 'myref' => 7], $lineNumbers);
     }
 
     /** @return array<string, array<string | InlineCompoundNode>> */
