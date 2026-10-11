@@ -74,7 +74,7 @@ jobs:
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
       composer-root-version: "1.x-dev"
 
-  integration-tests:
+  integration-tests-without-character-split:
     name: "integration test"
     uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.9"
     needs: "unit-tests"
@@ -82,6 +82,18 @@ jobs:
       test-suite: "integration"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
       composer-root-version: "1.x-dev"
+
+  integration-tests:
+    name: "integration test: disable character split"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@main"
+    needs: "unit-tests"
+    with:
+      test-suite: "integration"
+      php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
+      composer-root-version: "1.x-dev"
+      upcoming-releases: false
+      phpunit-env:
+        "PHPDOC_GUIDES_PARSER_RST_DISABLE_CHARACTER_SPLIT=\"true\""
 
   xml-lint:
     runs-on: "ubuntu-latest"

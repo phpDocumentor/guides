@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 use function dirname;
+use function getenv;
 
 class ApplicationTestCase extends TestCase
 {
@@ -58,6 +59,8 @@ class ApplicationTestCase extends TestCase
         if ($configurationFile !== null) {
             $containerFactory->addConfigFile($configurationFile);
         }
+
+        $containerFactory->setParameter('phpdoc.guides.parser.rst.disable_character_split', getenv('PHPDOC_GUIDES_PARSER_RST_DISABLE_CHARACTER_SPLIT') === 'true');
 
         $this->container = $containerFactory->create(dirname(__DIR__) . '/vendor');
     }

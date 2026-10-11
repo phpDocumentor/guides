@@ -37,4 +37,15 @@ With :issue:`103894` the new data processor :ref:`PageContentFetchingProcessor <
 has been introduced, to allow fetching page content based on the current page
 layout, taking the configured :php:`SlideMode` into account.');
     }
+
+    #[Revs([1000, 10_000])]
+    #[Iterations(5)]
+    public function benchFullParagraphWithoutLegacySplitChar(): void
+    {
+        $lexer = new InlineLexer(disableLegacySplitByCharacter: true);
+        $lexer->setInput('
+With :issue:`103894` the new data processor :ref:`PageContentFetchingProcessor <feature-103894-1716544976>`
+has been introduced, to allow fetching page content based on the current page
+layout, taking the configured :php:`SlideMode` into account.');
+    }
 }

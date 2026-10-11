@@ -141,4 +141,9 @@ final class ContainerFactory
             $this->loadExtensionConfig($extensionFqcn, $extension);
         }
     }
+
+    public function setParameter(string $string, bool $true): void
+    {
+        $this->container->setParameter($string, $true);
+    }
 }

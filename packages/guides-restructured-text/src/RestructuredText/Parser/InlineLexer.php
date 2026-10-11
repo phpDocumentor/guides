@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Parser;
 
 use Doctrine\Common\Lexer\AbstractLexer;
+use Doctrine\Deprecations\Deprecation;
 use phpDocumentor\Guides\ReferenceResolvers\ExternalReferenceResolver;
 
 use function ctype_alnum;
@@ -30,8 +31,10 @@ use const PHP_URL_SCHEME;
 /** @extends AbstractLexer<int, string> */
 final class InlineLexer extends AbstractLexer
 {
-    public function __construct(private readonly bool $disableLegacyTilde = false)
-    {
+    public function __construct(
+        private readonly bool $disableLegacyTilde = false,
+        private readonly bool $disableLegacySplitByCharacter = false,
+    ) {
     }
 
     public const WORD = 1;
@@ -85,7 +88,17 @@ final class InlineLexer extends AbstractLexer
     protected function getNonCatchablePatterns(): array
     {
         // An empty list makes the lexer regex end with an empty branch, which splits the input at every character
-        return ['(?!)'];
+        if ($this->disableLegacySplitByCharacter) {
+            return ['(?!)'];
+        }
+
+        Deprecation::trigger(
+            'phpdocumentor/guide-restructured-text',
+            'https://github.com/phpDocumentor/guides/issues/1435',
+            'The behavior of splitting by character is deprecated because of the performance impact and will be removed in a future version.',
+        );
+
+        return [];
     }
 
     protected function getType(string &$value): int

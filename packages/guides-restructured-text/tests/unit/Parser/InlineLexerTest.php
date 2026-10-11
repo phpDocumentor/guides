@@ -143,7 +143,7 @@ final class InlineLexerTest extends TestCase
     /** @return list<array{string, int|null}> */
     private static function tokenize(string $input): array
     {
-        $lexer = new InlineLexer();
+        $lexer = new InlineLexer(disableLegacySplitByCharacter: true);
         $lexer->setInput($input);
         $lexer->moveNext();
         $lexer->moveNext();

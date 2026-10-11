@@ -1,4 +1,4 @@
-PHP_BIN = docker run -it --rm --user $$(id -u):$$(id -g) -v${PWD}:/opt/project -w /opt/project php:8.4-cli php -d memory_limit=1024M
+PHP_BIN = docker run -it --rm --user $$(id -u):$$(id -g) -e PHPDOC_GUIDES_PARSER_RST_DISABLE_CHARACTER_SPLIT=$$PHPDOC_GUIDES_PARSER_RST_DISABLE_CHARACTER_SPLIT -v${PWD}:/opt/project -w /opt/project php:8.4-cli php -d memory_limit=1024M
 PHP_DOC = docker run --rm --user $$(id -u):$$(id -g) -v ${PWD}:/data -w /data phpdoc/phpdoc:3-unstable
 
 .PHONY: help
@@ -37,7 +37,7 @@ test-functional: ## Runs functional tests with phpunit/phpunit
 
 .PHONY: test-integration
 test-integration: ## Runs integration tests with phpunit/phpunit
-	$(PHP_BIN) vendor/bin/phpunit --testsuite=integration
+	PHPDOC_GUIDES_PARSER_RST_DISABLE_CHARACTER_SPLIT="true" && $(PHP_BIN) vendor/bin/phpunit --testsuite=integration
 
 .PHONY: integration-baseline
 integration-baseline: ## Copies the output files of the integration tests into the expected directories, making a new baseline.
@@ -92,3 +92,7 @@ docs-watch: ## Render documentation and watch for changes
 		$(MAKE) docs; \
 	inotifywait -qre close_write docs; \
 	done
+
+.PHONY: benchmark
+benchmark: ## Run benchmark tests
+	$(PHP_BIN) vendor/bin/phpbench run --report=aggregate

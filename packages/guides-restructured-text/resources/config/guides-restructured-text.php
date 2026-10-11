@@ -141,6 +141,9 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container): void {
+    $container->parameters()
+        ->set('phpdoc.guides.parser.rst.disable_character_split', false);
+
     $container->services()
         ->defaults()
         ->autowire()
@@ -157,7 +160,6 @@ return static function (ContainerConfigurator $container): void {
         ->tag('phpdoc.guides.parser.rst.text_role')
         ->instanceof(SubDirective::class)
         ->bind('$startingRule', service(DirectiveContentRule::class))
-
         ->load(
             'phpDocumentor\\Guides\RestructuredText\\Parser\\Productions\\InlineRules\\',
             '../../src/RestructuredText/Parser/Productions/InlineRules',
@@ -407,6 +409,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(InlineParser::class)
         ->arg('$inlineRules', tagged_iterator('phpdoc.guides.parser.rst.inline_rule'))
         ->arg('$disableLegacyTilde', false)
+        ->arg('$disableLegacySplitByCharacter', param('phpdoc.guides.parser.rst.disable_character_split'))
         ->set(GlobSearcher::class)
         ->set(ToctreeBuilder::class)
         ->set(InlineMarkupRule::class)
