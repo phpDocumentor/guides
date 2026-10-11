@@ -43,6 +43,45 @@ directories.
         <path>drafts/*.rst</path>
     </exclude>
 
+.. _violation_formats_ci:
+
+Annotations in GitHub Actions and GitLab CI
+===========================================
+
+Problems found in the documentation source, like an empty code block or a malformed table, can be shown on the lines
+of a pull request in GitHub, or of a merge request in GitLab. Set the ``violation-format`` setting in ``guides.xml``, or
+pass the ``--violation-format`` option, and run the tool from the root of the repository. The problems are still logged
+as before.
+
+GitHub Actions
+--------------
+
+With ``github``, one line per problem is printed at the end of the run, which GitHub turns into an annotation. Its title
+is the identifier of the check, like ``rst.code-block.empty``.
+
+.. code-block:: yaml
+
+    - run: vendor/bin/guides run Documentation --violation-format=github
+
+GitLab CI
+---------
+
+With ``gitlab``, the problems are written to a code quality report, ``gl-code-quality-report.json`` in the current
+working directory. Set another file with the ``violation-file`` setting or the ``--violation-file`` option. Declare the
+file as code quality report of the job, so GitLab shows the problems in the merge request:
+
+.. code-block:: yaml
+
+    docs:
+      script:
+        - vendor/bin/guides run Documentation --violation-format=gitlab
+      artifacts:
+        when: always
+        reports:
+          codequality: gl-code-quality-report.json
+
+Extensions can add more formats, see :ref:`custom_violation_formats`.
+
 Extension configuration
 =======================
 

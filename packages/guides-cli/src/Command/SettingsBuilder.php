@@ -29,6 +29,7 @@ use Symfony\Component\Console\Input\InputOption;
 use function assert;
 use function count;
 use function is_dir;
+use function is_string;
 use function method_exists;
 use function pathinfo;
 use function sprintf;
@@ -84,6 +85,16 @@ final class SettingsBuilder
 
         if ($input->hasOption('fail-on-log') && $input->getOption('fail-on-log')) {
             $settings->setFailOnError(LogLevel::WARNING);
+        }
+
+        $violationFormat = $input->hasOption('violation-format') ? $input->getOption('violation-format') : null;
+        if (is_string($violationFormat) && $violationFormat !== '') {
+            $settings->setViolationFormat($violationFormat);
+        }
+
+        $violationFile = $input->hasOption('violation-file') ? $input->getOption('violation-file') : null;
+        if (is_string($violationFile) && $violationFile !== '') {
+            $settings->setViolationFile($violationFile);
         }
 
         if (count($input->getOption('output-format')) > 0) {

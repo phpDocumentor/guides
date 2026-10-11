@@ -20,6 +20,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use phpDocumentor\Guides\Cli\Internal\RunCommand;
 use phpDocumentor\Guides\Cli\Logger\SpyProcessor;
+use phpDocumentor\Guides\Cli\Validation\ViolationFormats;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use Psr\Clock\ClockInterface;
@@ -50,6 +51,7 @@ final class Run extends Command
         private readonly EventDispatcher $eventDispatcher,
         private readonly ProgressBarSubscriber $progressBarSubscriber,
         private SettingsBuilder|null $settingsBuilder = null,
+        private readonly ViolationFormats|null $violationFormats = null,
     ) {
         parent::__construct('run');
 
@@ -74,6 +76,20 @@ final class Run extends Command
             null,
             InputOption::VALUE_NONE,
             'If set, returns a non-zero exit code as soon as any errors occur',
+        );
+
+        $this->addOption(
+            'violation-format',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Also report the problems found in the documentation source in this format, "github" for annotations in GitHub Actions or "gitlab" for the code quality report of GitLab CI',
+        );
+
+        $this->addOption(
+            'violation-file',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'File to write the report of the violation format to, for formats that write a file, like "gitlab"',
         );
 
         $this->addOption(
@@ -103,6 +119,9 @@ final class Run extends Command
         $projectNode = $this->settingsBuilder->createProjectNode();
         $settings = $this->settingsBuilder->getSettings();
 
+        // Fails before parsing when the format is unknown
+        $violationFormat = $this->violationFormats?->getChosenFormat();
+
         $logPath = $settings->getLogPath();
         if ($logPath === 'php://stder') {
             $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::WARNING));
@@ -123,6 +142,8 @@ final class Run extends Command
         $documents = $this->commandBus->handle(
             new RunCommand($settings, $projectNode, $input),
         );
+
+        $violationFormat?->finish($output);
 
         $outputFormats = $settings->getOutputFormats();
         $outputDir = $settings->getOutput();
