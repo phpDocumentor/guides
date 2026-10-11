@@ -66,7 +66,7 @@ final class InlineLexer extends AbstractLexer
             '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
             '(?<=^|\s)[a-z0-9-]+_{2}', //Inline href.
             '(?<=^|\s)[a-z0-9-]+_{1}(?=[\s\.+]|$)', //Inline href.
-            '``.+?``(?!`)',
+            '``(?s:.+?)``(?!`)',
             '_{2}',
             '_',
             '`',
@@ -137,7 +137,7 @@ final class InlineLexer extends AbstractLexer
             return self::WHITESPACE;
         }
 
-        if (preg_match('/^``.+``(?!`)$/i', $value)) {
+        if (preg_match('/^``.+``(?!`)$/is', $value)) {
             return self::LITERAL;
         }
 
