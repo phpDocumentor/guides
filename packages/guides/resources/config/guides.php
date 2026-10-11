@@ -68,6 +68,9 @@ use phpDocumentor\Guides\Twig\GlobalMenuExtension;
 use phpDocumentor\Guides\Twig\Theme\ThemeManager;
 use phpDocumentor\Guides\Twig\TrimFilesystemLoader;
 use phpDocumentor\Guides\Twig\TwigTemplateRenderer;
+use phpDocumentor\Guides\Validation\LoggingViolationReporter;
+use phpDocumentor\Guides\Validation\ViolationReporter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
@@ -130,6 +133,11 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(Parser::class)
         ->arg('$parserStrategies', tagged_iterator('phpdoc.guides.parser.markupLanguageParser'))
+
+        ->set(LoggingViolationReporter::class)
+        ->alias(ViolationReporter::class, LoggingViolationReporter::class)
+        // Classes that took a logger before violations existed accept either, and get the reporter
+        ->alias(LoggerInterface::class . '|' . ViolationReporter::class, ViolationReporter::class)
 
         ->set(Compiler::class)
         ->arg('$passes', tagged_iterator('phpdoc.guides.compiler.passes'))
