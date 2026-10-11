@@ -132,7 +132,7 @@ use phpDocumentor\Guides\RestructuredText\TextRoles\TextRoleFactory;
 use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\Settings\SettingsManager;
-use Psr\Log\LoggerInterface;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
@@ -348,13 +348,13 @@ return static function (ContainerConfigurator $container): void {
         ->set(DirFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
         ->args([
-            '$logger' => service(LoggerInterface::class),
+            '$logger' => service(ViolationReporter::class),
         ])
 
         ->set(LangFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
         ->args([
-            '$logger' => service(LoggerInterface::class),
+            '$logger' => service(ViolationReporter::class),
         ])
 
         ->set(NavigationTitleFieldListItemRule::class)
@@ -375,7 +375,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ProjectFieldListItemRule::class)
         ->tag('phpdoc.guides.parser.rst.fieldlist')
         ->args([
-            '$logger' => service(LoggerInterface::class),
+            '$logger' => service(ViolationReporter::class),
         ])
 
         ->set(RevisionFieldListItemRule::class)
@@ -389,7 +389,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(VersionFieldListItemRule::class)
         ->args([
-            '$logger' => service(LoggerInterface::class),
+            '$logger' => service(ViolationReporter::class),
         ])
         ->tag('phpdoc.guides.parser.rst.fieldlist')
 

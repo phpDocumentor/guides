@@ -16,6 +16,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function sprintf;
@@ -23,7 +26,9 @@ use function strtolower;
 
 final class ProjectFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(private readonly LoggerInterface $logger)
+    use ReportsViolations;
+
+    public function __construct(private readonly LoggerInterface|ViolationReporter $logger)
     {
     }
 
@@ -40,11 +45,11 @@ final class ProjectFieldListItemRule implements FieldListItemRule
             $currentTitle !== null
             && $currentTitle !== $newTitle
         ) {
-            $this->logger->warning(sprintf(
+            $this->reportViolation($this->logger, Violation::warning('rst.metadata.duplicate-project-title', sprintf(
                 'Project title was set more then once: %s and %s',
                 $currentTitle,
                 $newTitle,
-            ), $blockContext->getLoggerInformation());
+            ), $blockContext->getLoggerInformation()));
         }
 
         $blockContext->getDocumentParserContext()->getProjectNode()->setTitle($newTitle);

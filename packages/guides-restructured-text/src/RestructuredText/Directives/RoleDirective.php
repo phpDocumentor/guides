@@ -17,6 +17,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\TextRoles\BaseTextRole;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericTextRole;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function is_string;
@@ -31,8 +34,10 @@ use function trim;
  */
 final class RoleDirective extends ActionDirective
 {
+    use ReportsViolations;
+
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
     ) {
     }
 
@@ -54,10 +59,11 @@ final class RoleDirective extends ActionDirective
 
         $baseRole = $blockContext->getDocumentParserContext()->getTextRoleFactoryForDocument()->getTextRole($role);
         if (!$baseRole instanceof BaseTextRole) {
-            $this->logger->error(
+            $this->reportViolation($this->logger, Violation::error(
+                'rst.role.not-extendable',
                 sprintf('Text role "%s", class %s cannot be extended. ', $role, $baseRole::class),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             return;
         }

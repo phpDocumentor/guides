@@ -19,6 +19,9 @@ use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOption
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\DefaultCodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -37,9 +40,11 @@ use function trim;
 
 final class LiteralincludeDirective extends BaseDirective
 {
+    use ReportsViolations;
+
     public function __construct(
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
-        private readonly LoggerInterface|null $logger = null,
+        private readonly LoggerInterface|ViolationReporter|null $logger = null,
     ) {
     }
 
@@ -121,14 +126,15 @@ final class LiteralincludeDirective extends BaseDirective
                 if ($this->findMarker($lines, $marker, 0) === null) {
                     $this->warnMarkerNotFound($directive, 'end-before', $marker, $blockContext);
                 } else {
-                    $this->logger?->warning(
+                    $this->reportViolation($this->logger, Violation::warning(
+                        'rst.literalinclude.markers-out-of-order',
                         sprintf(
                             'Option ":end-before:" of directive "literalinclude": "%s" occurs in "%s" only above the line matched by ":start-after:", nothing was included.',
                             $marker,
                             $directive->getData(),
                         ),
                         $blockContext->getLoggerInformation(),
-                    );
+                    ));
                 }
 
                 return [];
@@ -140,13 +146,14 @@ final class LiteralincludeDirective extends BaseDirective
         $selection = array_slice($lines, $start, $end - $start);
 
         if ($selection === []) {
-            $this->logger?->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.literalinclude.empty-region',
                 sprintf(
                     'Directive "literalinclude": the region marked in "%s" is empty, nothing was included.',
                     $directive->getData(),
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             return [];
         }
@@ -176,13 +183,14 @@ final class LiteralincludeDirective extends BaseDirective
         }
 
         if (preg_match(DefaultCodeNodeOptionMapper::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
-            $this->logger?->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.literalinclude.invalid-lines',
                 sprintf(
                     'Invalid value for option ":lines:" of directive "literalinclude": "%s". Expected format: \'1-5, 7, 33\'. Nothing was included.',
                     $specification,
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             return [];
         }
@@ -193,14 +201,15 @@ final class LiteralincludeDirective extends BaseDirective
             [$first, $last] = $this->parseRange($range, count($lines));
 
             if ($first > $last) {
-                $this->logger?->warning(
+                $this->reportViolation($this->logger, Violation::warning(
+                    'rst.literalinclude.lines-out-of-range',
                     sprintf(
                         'Option ":lines:" of directive "literalinclude": the range "%s" selects no line of "%s".',
                         $range,
                         $directive->getData(),
                     ),
                     $blockContext->getLoggerInformation(),
-                );
+                ));
 
                 continue;
             }
@@ -245,10 +254,11 @@ final class LiteralincludeDirective extends BaseDirective
     {
         $value = $directive->getOption($option)->getValue();
         if (!is_string($value) || $value === '') {
-            $this->logger?->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.literalinclude.missing-option-value',
                 sprintf('Option ":%s:" of directive "literalinclude" requires a value, nothing was included.', $option),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
 
             return null;
         }
@@ -279,7 +289,8 @@ final class LiteralincludeDirective extends BaseDirective
         string $marker,
         BlockContext $blockContext,
     ): void {
-        $this->logger?->warning(
+        $this->reportViolation($this->logger, Violation::warning(
+            'rst.literalinclude.marker-not-found',
             sprintf(
                 'Option ":%s:" of directive "literalinclude": no line containing "%s" was found in "%s", nothing was included.',
                 $option,
@@ -287,6 +298,6 @@ final class LiteralincludeDirective extends BaseDirective
                 $directive->getData(),
             ),
             $blockContext->getLoggerInformation(),
-        );
+        ));
     }
 }

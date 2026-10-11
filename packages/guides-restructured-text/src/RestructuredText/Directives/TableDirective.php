@@ -19,6 +19,9 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function array_map;
@@ -46,9 +49,11 @@ use function strval;
 #[Attributes\Directive(name: 'table')]
 final class TableDirective extends SubDirective
 {
+    use ReportsViolations;
+
     public function __construct(
         protected Rule $startingRule,
-        private LoggerInterface $logger,
+        private LoggerInterface|ViolationReporter $logger,
     ) {
         parent::__construct($startingRule);
     }
@@ -59,20 +64,22 @@ final class TableDirective extends SubDirective
         $children = $directiveNode->getChildren();
 
         if (count($children) !== 1) {
-            $this->logger->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.table-directive.invalid-content',
                 sprintf('The table directive may contain exactly one table. %s children found', count($children)),
                 $directiveNode->getSourceLocation()->toLoggerInformation(),
-            );
+            ));
 
             return new CollectionNode($children);
         }
 
         $tableNode = $children[0];
         if (!$tableNode instanceof TableNode) {
-            $this->logger->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.table-directive.invalid-content',
                 sprintf('The table directive may contain exactly one table. A node of type %s was found. ', $tableNode::class),
                 $directiveNode->getSourceLocation()->toLoggerInformation(),
-            );
+            ));
 
             return new CollectionNode($children);
         }

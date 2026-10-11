@@ -16,6 +16,9 @@ namespace phpDocumentor\Guides\RestructuredText\Parser\Productions\FieldList;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\MetadataNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function sprintf;
@@ -23,7 +26,9 @@ use function strtolower;
 
 final class VersionFieldListItemRule implements FieldListItemRule
 {
-    public function __construct(private readonly LoggerInterface $logger)
+    use ReportsViolations;
+
+    public function __construct(private readonly LoggerInterface|ViolationReporter $logger)
     {
     }
 
@@ -39,11 +44,11 @@ final class VersionFieldListItemRule implements FieldListItemRule
             $currentVersion !== null
             && $currentVersion !== $fieldListItemNode->getPlaintextContent()
         ) {
-            $this->logger->warning(sprintf(
+            $this->reportViolation($this->logger, Violation::warning('rst.metadata.duplicate-project-version', sprintf(
                 'Project version was set more then once: %s and %s',
                 $currentVersion,
                 $fieldListItemNode->getPlaintextContent(),
-            ), $blockContext->getLoggerInformation());
+            ), $blockContext->getLoggerInformation()));
         }
 
         $blockContext->getDocumentParserContext()->getProjectNode()->setVersion($fieldListItemNode->getPlaintextContent());

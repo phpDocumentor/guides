@@ -28,6 +28,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\LineChecker;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\UnindentStrategy;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -52,6 +55,8 @@ use const FILTER_VALIDATE_BOOL;
  */
 final class DirectiveRule implements Rule
 {
+    use ReportsViolations;
+
     public const PRIORITY = 70;
 
     /** @var array<string, DirectiveHandler> */
@@ -67,6 +72,7 @@ final class DirectiveRule implements Rule
         private readonly GeneralDirective $generalDirective,
         iterable $directives = [],
         private readonly Rule|null $startingRule = null,
+        private readonly ViolationReporter|null $violationReporter = null,
     ) {
         foreach ($directives as $directive) {
             $this->registerDirective($directive);
@@ -235,10 +241,11 @@ final class DirectiveRule implements Rule
             return;
         }
 
-        $this->logger->warning(
+        $this->reportViolation($this->violationReporter ?? $this->logger, Violation::warning(
+            'rst.directive.invalid-value',
             sprintf('The "%s" directive %s, but was given "%s".', $directive->getName(), $problem, $data),
             $blockContext->getLoggerInformation(),
-        );
+        ));
     }
 
     /**
