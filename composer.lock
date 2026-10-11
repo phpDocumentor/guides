@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "437dc5ac8688c6e2226c3ca87da776cc",
+    "content-hash": "9fb2860a3cfa403d0f6e82c06b67b3b3",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1940,6 +1940,48 @@
                 "MIT"
             ],
             "description": "Provides Plantuml support for restructured text rendered by the phpDocumentor's Guides library.",
+            "homepage": "https://www.phpdoc.org",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "phpdocumentor/guides-machine-readable",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/guides-machine-readable",
+                "reference": "31b247479af0baa2e0348ab967bdcc44d2916b95"
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.1",
+                "phpdocumentor/guides": "^1.0 || ^2.0",
+                "psr/event-dispatcher": "^1.0",
+                "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "phpDocumentor\\Guides\\": [
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Output formats that describe a rendered manual to the tools and language models that read it, rather than to a person. Currently a \"toc\" format, writing the manual's table of contents as toc.json.",
             "homepage": "https://www.phpdoc.org",
             "transport-options": {
                 "relative": true
@@ -8663,6 +8705,7 @@
         "phpdocumentor/guides-cli": 20,
         "phpdocumentor/guides-code": 20,
         "phpdocumentor/guides-graphs": 20,
+        "phpdocumentor/guides-machine-readable": 20,
         "phpdocumentor/guides-markdown": 20,
         "phpdocumentor/guides-pages": 20,
         "phpdocumentor/guides-restructured-text": 20,
@@ -8684,5 +8727,5 @@
     "platform-overrides": {
         "php": "8.1.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
