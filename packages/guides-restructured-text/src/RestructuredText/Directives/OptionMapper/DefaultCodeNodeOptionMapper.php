@@ -18,6 +18,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\InlineMarkupRule;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function preg_match;
@@ -31,11 +34,13 @@ use function trim;
  */
 final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
 {
+    use ReportsViolations;
+
     /** @see https://regex101.com/r/czvfnV/2 */
     public const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d*)?(?:,\s*\d+(-\d*)?)*$/';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
         protected InlineMarkupRule $startingRule,
         private readonly InlineParser $inlineParser,
     ) {
@@ -80,10 +85,11 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
             $emphasizeLines = (string) $options['emphasize-lines']->getValue();
             if (!preg_match(self::LINE_NUMBER_RANGES_REGEX, $emphasizeLines)) {
                 // Input does not fit the pattern, log a warning
-                $this->logger->warning(
+                $this->reportViolation($this->logger, Violation::warning(
+                    'rst.code-block.invalid-emphasize-lines',
                     sprintf('Invalid value for option emphasize-lines: "%s". Expected format: \'1-5, 7, 33\'', $emphasizeLines),
                     $blockContext->getLoggerInformation(),
-                );
+                ));
             }
         }
 

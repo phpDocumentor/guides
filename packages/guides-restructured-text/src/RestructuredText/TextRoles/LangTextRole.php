@@ -18,6 +18,9 @@ use phpDocumentor\Guides\Nodes\Inline\LanguageInlineNode;
 use phpDocumentor\Guides\Nodes\Language;
 use phpDocumentor\Guides\Nodes\TextDirection;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function explode;
@@ -37,10 +40,12 @@ use function trim;
  */
 final class LangTextRole extends BaseTextRole
 {
+    use ReportsViolations;
+
     protected string $name = 'lang';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
     ) {
     }
 
@@ -51,10 +56,11 @@ final class LangTextRole extends BaseTextRole
         string $rawContent,
     ): InlineNode {
         if (preg_match('/([^\(]+)\(([^\)]+)\)$/', $content, $matches) !== 1) {
-            $this->logger->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.lang.missing-language',
                 'The "lang" role requires a language. Usage: :lang:`text (language)` or :lang:`text (language, direction)`',
                 $documentParserContext->getContext()->getLoggerInformation(),
-            );
+            ));
 
             return new LanguageInlineNode(null, null, $content, $this->getClass());
         }
@@ -65,24 +71,26 @@ final class LangTextRole extends BaseTextRole
         $written = isset($parts[1]) ? trim($parts[1]) : null;
 
         if (preg_match(Language::PATTERN, $language) !== 1) {
-            $this->logger->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.lang.invalid-lang',
                 sprintf(
                     'The "lang" role expects a BCP 47 language tag (e.g. "en", "en-US"), but was given "%s".',
                     $language,
                 ),
                 $documentParserContext->getContext()->getLoggerInformation(),
-            );
+            ));
         }
 
         $direction = $written === null ? null : TextDirection::tryFromUserInput($written);
         if ($written !== null && $direction === null) {
-            $this->logger->warning(
+            $this->reportViolation($this->logger, Violation::warning(
+                'rst.lang.invalid-dir',
                 sprintf(
                     'The "lang" role expects the direction to be one of "ltr", "rtl" or "auto", but was given "%s".',
                     $written,
                 ),
                 $documentParserContext->getContext()->getLoggerInformation(),
-            );
+            ));
 
             $direction = TextDirection::Auto;
         }

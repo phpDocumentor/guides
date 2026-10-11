@@ -17,6 +17,9 @@ use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\AuthorNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function preg_match;
@@ -29,11 +32,13 @@ use function preg_match;
 #[Attributes\Directive(name: 'sectionauthor', aliases: ['codeauthor'], valueType: DirectiveValueType::String)]
 final class SectionauthorDirective extends BaseDirective
 {
+    use ReportsViolations;
+
     /** @see https://regex101.com/r/vGy4Uu/1 */
     public const NAME_EMAIL_REGEX = '/^(?P<name>[\w\s]+)(?: <(?P<email>[^>]+)>)?$/';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
     ) {
     }
 
@@ -43,13 +48,13 @@ final class SectionauthorDirective extends BaseDirective
         $input = $directive->getData();
         $directiveName = $directive->getName();
         if ($input === '') {
-            $this->logger->warning('`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getSourceLocation()->toLoggerInformation());
+            $this->reportViolation($this->logger, Violation::warning('rst.sectionauthor.invalid', '`.. ' . $directiveName . ' ::` directive could not be parsed: `' . $input . '`', $directiveNode->getSourceLocation()->toLoggerInformation()));
 
             return null;
         }
 
         if (!preg_match(self::NAME_EMAIL_REGEX, $input, $matches)) {
-            $this->logger->warning('Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getSourceLocation()->toLoggerInformation());
+            $this->reportViolation($this->logger, Violation::warning('rst.sectionauthor.invalid', 'Content of `.. ' . $directiveName . ':: name <email>` must specify a name and can also specify an email', $directiveNode->getSourceLocation()->toLoggerInformation()));
 
             return null;
         }

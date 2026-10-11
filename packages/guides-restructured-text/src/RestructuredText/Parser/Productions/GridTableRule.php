@@ -21,6 +21,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\GridTableBuilder;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Table\TableSeparatorLineConfig;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function mb_strlen;
@@ -37,9 +40,11 @@ use function trim;
  */
 final class GridTableRule implements Rule
 {
+    use ReportsViolations;
+
     public const PRIORITY = 50;
 
-    public function __construct(private readonly LoggerInterface $logger, private readonly RuleContainer $productions, private readonly GridTableBuilder $builder)
+    public function __construct(private readonly LoggerInterface|ViolationReporter $logger, private readonly RuleContainer $productions, private readonly GridTableBuilder $builder)
     {
     }
 
@@ -70,7 +75,7 @@ final class GridTableRule implements Rule
                     $documentIterator->current(),
                 );
 
-                $this->logger->error($message, $blockContext->getLoggerInformation());
+                $this->reportViolation($this->logger, Violation::error('rst.table.malformed', $message, $blockContext->getLoggerInformation()));
             }
 
             if ($this->isHeaderDefinitionLine($documentIterator->current())) {

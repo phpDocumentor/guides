@@ -20,6 +20,9 @@ use phpDocumentor\Guides\Nodes\Index\IndexNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function array_filter;
@@ -68,6 +71,8 @@ use function trim;
 #[Option(name: 'name', description: 'Makes the entries a target a :ref: can link to, landing on the section they are filed under.')]
 final class IndexDirective extends BaseDirective
 {
+    use ReportsViolations;
+
     /**
      * A colon-prefixed segment whose prefix is this close (or closer) to a
      * real type name is very likely a typo of it, e.g. "sindle:" -> "single:"
@@ -77,7 +82,7 @@ final class IndexDirective extends BaseDirective
      */
     private const TYPO_DISTANCE_THRESHOLD = 2;
 
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private readonly LoggerInterface|ViolationReporter $logger)
     {
     }
 
@@ -167,7 +172,8 @@ final class IndexDirective extends BaseDirective
             return;
         }
 
-        $this->logger->warning(
+        $this->reportViolation($this->logger, Violation::warning(
+            'rst.index.unknown-entry-type',
             sprintf(
                 '.. index:: "%s:" is not a known entry type, did you mean "%s:"? Treating it as a literal term instead: "%s"',
                 $candidate,
@@ -175,6 +181,6 @@ final class IndexDirective extends BaseDirective
                 $line,
             ),
             $directiveNode->getSourceLocation()->toLoggerInformation(),
-        );
+        ));
     }
 }

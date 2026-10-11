@@ -21,6 +21,9 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function array_filter;
@@ -40,11 +43,13 @@ use const PREG_OFFSET_CAPTURE;
 /** @implements Rule<TableNode> */
 final class SimpleTableRule implements Rule
 {
+    use ReportsViolations;
+
     public const PRIORITY = 40;
 
     public function __construct(
         private readonly RuleContainer $productions,
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
     ) {
     }
 
@@ -208,14 +213,15 @@ final class SimpleTableRule implements Rule
             return $spannedCells;
         }
 
-        $this->logger->error(
+        $this->reportViolation($this->logger, Violation::error(
+            'rst.table.malformed',
             sprintf(
                 'File "%s"; Malformed table: the column span underline "%s" does not line up with the columns',
                 $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                 $underline,
             ),
             $blockContext->getLoggerInformation(),
-        );
+        ));
 
         return $cells;
     }
@@ -234,7 +240,8 @@ final class SimpleTableRule implements Rule
                 continue;
             }
 
-            $this->logger->error(
+            $this->reportViolation($this->logger, Violation::error(
+                'rst.table.malformed',
                 sprintf(
                     'File "%s"; Malformed table: content "%s" appears in the "gap" on row "%s"',
                     $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
@@ -242,7 +249,7 @@ final class SimpleTableRule implements Rule
                     $line,
                 ),
                 $blockContext->getLoggerInformation(),
-            );
+            ));
         }
     }
 

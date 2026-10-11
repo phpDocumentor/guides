@@ -19,6 +19,9 @@ use phpDocumentor\Guides\Nodes\Table\TableRow;
 use phpDocumentor\Guides\Nodes\TableNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleContainer;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function array_fill;
@@ -46,7 +49,9 @@ use const PHP_INT_MAX;
 
 final class GridTableBuilder
 {
-    public function __construct(private readonly LoggerInterface $logger)
+    use ReportsViolations;
+
+    public function __construct(private readonly LoggerInterface|ViolationReporter $logger)
     {
     }
 
@@ -281,7 +286,7 @@ final class GridTableBuilder
                     $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
                     $tableAsString,
                 );
-                $this->logger->error($message, $blockContext->getLoggerInformation());
+                $this->reportViolation($this->logger, Violation::error('rst.table.malformed', $message, $blockContext->getLoggerInformation()));
             }
 
             return null;

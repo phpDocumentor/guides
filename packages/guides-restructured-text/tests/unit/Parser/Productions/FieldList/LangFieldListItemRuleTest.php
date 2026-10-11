@@ -18,6 +18,8 @@ use Monolog\Logger;
 use phpDocumentor\Guides\Nodes\FieldLists\FieldListItemNode;
 use phpDocumentor\Guides\Nodes\Metadata\LanguageNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\RuleTestCase;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 
 final class LangFieldListItemRuleTest extends RuleTestCase
 {
@@ -57,5 +59,20 @@ final class LangFieldListItemRuleTest extends RuleTestCase
         self::assertTrue($this->logHandler->hasWarningThatContains(
             'expects a BCP 47 language tag (e.g. "en", "en-US"), but was given "not a language"',
         ));
+    }
+
+    public function test_invalid_language_is_reported_with_its_identifier(): void
+    {
+        $reporter = $this->createMock(ViolationReporter::class);
+        $reporter->expects(self::once())
+            ->method('report')
+            ->with(self::callback(
+                static fn (Violation $violation): bool => $violation->identifier === 'rst.metadata.invalid-lang',
+            ));
+
+        (new LangFieldListItemRule($reporter))->apply(
+            new FieldListItemNode('lang', 'not a language'),
+            $this->createContext(''),
+        );
     }
 }

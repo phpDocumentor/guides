@@ -18,6 +18,9 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function trim;
@@ -35,8 +38,10 @@ use function trim;
  */
 final class CodeBlockDirective extends BaseDirective
 {
+    use ReportsViolations;
+
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface|ViolationReporter $logger,
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
     ) {
     }
@@ -58,7 +63,7 @@ final class CodeBlockDirective extends BaseDirective
         Directive $directive,
     ): Node|null {
         if ($blockContext->getDocumentIterator()->isEmpty()) {
-            $this->logger->warning('The code-block has no content. Did you properly indent the code? ', $blockContext->getLoggerInformation());
+            $this->reportViolation($this->logger, Violation::warning('rst.code-block.empty', 'The code-block has no content. Did you properly indent the code? ', $blockContext->getLoggerInformation()));
 
             return null;
         }

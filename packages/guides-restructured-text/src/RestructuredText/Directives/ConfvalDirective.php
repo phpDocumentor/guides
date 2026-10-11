@@ -23,6 +23,9 @@ use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\InlineParser;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\TextRoles\GenericLinkProvider;
+use phpDocumentor\Guides\Validation\ReportsViolations;
+use phpDocumentor\Guides\Validation\Violation;
+use phpDocumentor\Guides\Validation\ViolationReporter;
 use Psr\Log\LoggerInterface;
 
 use function in_array;
@@ -40,6 +43,8 @@ use function trim;
 #[Option(name: 'noindex', type: OptionType::Boolean, default: false, description: 'Whether the configuration value should not be indexed.')]
 final class ConfvalDirective extends SubDirective
 {
+    use ReportsViolations;
+
     public const NAME = 'confval';
 
     /** @param Rule<CollectionNode> $startingRule */
@@ -48,7 +53,7 @@ final class ConfvalDirective extends SubDirective
         GenericLinkProvider $genericLinkProvider,
         private readonly AnchorNormalizer $anchorReducer,
         private readonly InlineParser $inlineParser,
-        private readonly LoggerInterface|null $logger = null,
+        private readonly LoggerInterface|ViolationReporter|null $logger = null,
     ) {
         parent::__construct($startingRule);
 
@@ -80,9 +85,7 @@ final class ConfvalDirective extends SubDirective
         $default = null;
         $additionalOptions = [];
         if (trim($directive->getData()) === '') {
-            if ($this->logger !== null) {
-                $this->logger->warning('A directive must have a title: ..  confval:: [some_title]', $blockContext->getLoggerInformation());
-            }
+            $this->reportViolation($this->logger, Violation::warning('rst.confval.missing-title', 'A directive must have a title: ..  confval:: [some_title]', $blockContext->getLoggerInformation()));
         }
 
         if ($directive->hasOption('type')) {
