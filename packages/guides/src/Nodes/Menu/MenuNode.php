@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\Menu;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
 use const PHP_INT_MAX;
@@ -23,7 +24,7 @@ use const PHP_INT_MAX;
  *
  * @extends CompoundNode<MenuEntryNode>
  */
-abstract class MenuNode extends CompoundNode
+abstract class MenuNode extends CompoundNode implements HasAttachedNodes
 {
     private InlineCompoundNode|null $caption = null;
     private bool $reversed = false;
@@ -69,5 +70,11 @@ abstract class MenuNode extends CompoundNode
         $that->reversed = $reversed;
 
         return $that;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        return $this->caption === null ? [] : ['caption' => $this->caption];
     }
 }

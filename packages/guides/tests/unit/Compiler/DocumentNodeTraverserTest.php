@@ -14,7 +14,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler;
 
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
+use phpDocumentor\Guides\Nodes\DefinitionListNode;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionListItemNode;
+use phpDocumentor\Guides\Nodes\DefinitionLists\DefinitionNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
+use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
@@ -167,6 +171,58 @@ final class DocumentNodeTraverserTest extends TestCase
             [
                 $replacement,
                 new SectionNode(new TitleNode(InlineCompoundNode::getPlainTextInlineNode('Foo'), 1, 'foo')),
+            ],
+            $actual->getChildren(),
+        );
+    }
+
+    public function testTransformsAttachedNodes(): void
+    {
+        $document = new DocumentNode('foo', '/index.rst');
+        $document->addChildNode(new DefinitionListNode(new DefinitionListItemNode(
+            InlineCompoundNode::getPlainTextInlineNode('term'),
+            [InlineCompoundNode::getPlainTextInlineNode('classifier')],
+            [new DefinitionNode([InlineCompoundNode::getPlainTextInlineNode('definition')])],
+        )));
+
+        /** @var iterable<NodeTransformer<Node>> $transformers */
+        $transformers = [
+            new /** @implements NodeTransformer<PlainTextInlineNode> */
+            class implements NodeTransformer {
+                public function enterNode(Node $node, CompilerContext $compilerContext): Node
+                {
+                    return new PlainTextInlineNode('transformed ' . $node->getValue());
+                }
+
+                public function leaveNode(Node $node, CompilerContext $compilerContext): Node
+                {
+                    return $node;
+                }
+
+                public function supports(Node $node): bool
+                {
+                    return $node instanceof PlainTextInlineNode;
+                }
+
+                public function getPriority(): int
+                {
+                    return 2000;
+                }
+            },
+        ];
+
+        $traverser = new DocumentNodeTraverser(new CustomNodeTransformerFactory($transformers), 2000);
+
+        $actual = $traverser->traverse($document, (new CompilerContext(new ProjectNode()))->withDocumentShadowTree($document));
+
+        self::assertInstanceOf(DocumentNode::class, $actual);
+        self::assertEquals(
+            [
+                new DefinitionListNode(new DefinitionListItemNode(
+                    InlineCompoundNode::getPlainTextInlineNode('transformed term'),
+                    [InlineCompoundNode::getPlainTextInlineNode('transformed classifier')],
+                    [new DefinitionNode([InlineCompoundNode::getPlainTextInlineNode('transformed definition')])],
+                )),
             ],
             $actual->getChildren(),
         );

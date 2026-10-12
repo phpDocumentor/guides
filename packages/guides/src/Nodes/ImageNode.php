@@ -15,7 +15,7 @@ namespace phpDocumentor\Guides\Nodes;
 
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 
-final class ImageNode extends TextNode
+final class ImageNode extends TextNode implements HasAttachedNodes
 {
     public LinkInlineNode|null $target = null;
 
@@ -27,5 +27,11 @@ final class ImageNode extends TextNode
     public function setTarget(LinkInlineNode|null $target): void
     {
         $this->target = $target;
+    }
+
+    /** @return array<string, LinkInlineNode> */
+    public function getAttachedNodes(): array
+    {
+        return $this->target === null ? [] : ['target' => $this->target];
     }
 }

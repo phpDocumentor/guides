@@ -93,4 +93,10 @@ final class AccordionItemNode extends GeneralDirectiveNode implements LinkTarget
     {
         return $this->show;
     }
+
+    /** @return array<string, Node> */
+    public function getAttachedNodes(): array
+    {
+        return ['title' => $this->title, ...parent::getAttachedNodes()];
+    }
 }

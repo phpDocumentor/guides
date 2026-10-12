@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Nodes\DefinitionLists;
 
 use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\HasAttachedNodes;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 
 /** @extends CompoundNode<DefinitionNode> */
-final class DefinitionListItemNode extends CompoundNode
+final class DefinitionListItemNode extends CompoundNode implements HasAttachedNodes
 {
     /**
      * @param InlineCompoundNode[] $classifiers
@@ -37,5 +38,16 @@ final class DefinitionListItemNode extends CompoundNode
     public function getClassifiers(): array
     {
         return $this->classifiers;
+    }
+
+    /** @return array<string, InlineCompoundNode> */
+    public function getAttachedNodes(): array
+    {
+        $nodes = ['term' => $this->term];
+        foreach ($this->classifiers as $key => $classifier) {
+            $nodes['classifier-' . $key] = $classifier;
+        }
+
+        return $nodes;
     }
 }
