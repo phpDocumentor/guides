@@ -5,12 +5,14 @@ declare(strict_types=1);
 use League\Tactician\CommandBus;
 use phpDocumentor\Guides\Compiler\Compiler;
 use phpDocumentor\Guides\Compiler\CompilerPass;
+use phpDocumentor\Guides\Compiler\CoreProvider;
 use phpDocumentor\Guides\Compiler\DocumentNodeTraverser;
 use phpDocumentor\Guides\Compiler\NodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\CustomNodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers\InternalMenuEntryNodeTransformer;
 use phpDocumentor\Guides\Compiler\NodeTransformers\NodeTransformerFactory;
 use phpDocumentor\Guides\Compiler\NodeTransformers\RawNodeEscapeTransformer;
+use phpDocumentor\Guides\Compiler\SubNodeAccessorRegistry;
 use phpDocumentor\Guides\Event\PostProjectNodeCreated;
 use phpDocumentor\Guides\EventListener\LoadSettingsFromComposer;
 use phpDocumentor\Guides\NodeRenderers\Html\BreadCrumbNodeRenderer;
@@ -141,6 +143,12 @@ return static function (ContainerConfigurator $container): void {
 
         ->set(Compiler::class)
         ->arg('$passes', tagged_iterator('phpdoc.guides.compiler.passes'))
+
+        ->set(CoreProvider::class)
+        ->tag('phpdoc.guides.compiler.attached_node_provider')
+
+        ->set(SubNodeAccessorRegistry::class)
+        ->arg('$providers', tagged_iterator('phpdoc.guides.compiler.attached_node_provider'))
 
         ->set(NodeTransformerFactory::class, CustomNodeTransformerFactory::class)
         ->arg('$transformers', tagged_iterator('phpdoc.guides.compiler.nodeTransformers'))

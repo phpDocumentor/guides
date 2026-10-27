@@ -39,10 +39,10 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode, Optional
     public function __construct(
         private readonly string $id,
         private readonly string $plainContent,
-        private readonly InlineCompoundNode|null $type = null,
+        private InlineCompoundNode|null $type = null,
         private readonly bool $required = false,
-        private readonly InlineCompoundNode|null $default = null,
-        private readonly array $additionalOptions = [],
+        private InlineCompoundNode|null $default = null,
+        private array $additionalOptions = [],
         array $value = [],
         private readonly bool $noindex = false,
     ) {
@@ -103,5 +103,30 @@ final class ConfvalNode extends CompoundNode implements LinkTargetNode, Optional
     public function isNoindex(): bool
     {
         return $this->noindex;
+    }
+
+    public function withType(InlineCompoundNode|null $type): self
+    {
+        $result = clone $this;
+        $result->type = $type;
+
+        return $result;
+    }
+
+    public function withDefault(InlineCompoundNode|null $default): self
+    {
+        $result = clone $this;
+        $result->default = $default;
+
+        return $result;
+    }
+
+    /** @param array<string, InlineCompoundNode> $additionalOptions */
+    public function withAdditionalOptions(array $additionalOptions): self
+    {
+        $result = clone $this;
+        $result->additionalOptions = $additionalOptions;
+
+        return $result;
     }
 }

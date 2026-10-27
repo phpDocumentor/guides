@@ -26,16 +26,23 @@ final class DocumentNodeTraverser
     public function __construct(
         private readonly NodeTransformerFactory $nodeTransformerFactory,
         private readonly int $priority,
+        private readonly SubNodeAccessorRegistry $attachedNodeRegistry = new SubNodeAccessorRegistry([]),
     ) {
     }
 
-    public function traverse(DocumentNode $node, CompilerContext $compilerContext): Node
+    public function traverse(DocumentNode $node, CompilerContext $compilerContext): DocumentNode
     {
+        $shadowTree = TreeNode::createFromDocument($node, $this->attachedNodeRegistry);
+        $compilerContext = $compilerContext->withShadowTree($shadowTree);
+
         foreach ($this->getTransformersForPriority($this->priority) as $transformer) {
-            $this->traverseForTransformer($transformer, $compilerContext->getShadowTree(), $compilerContext);
+            $this->traverseForTransformer($transformer, $shadowTree, $compilerContext);
         }
 
-        return $compilerContext->getShadowTree()->getNode();
+        $result = $shadowTree->getNode();
+        $shadowTree->release();
+
+        return $result;
     }
 
     /** @return list<NodeTransformer<Node>> */
@@ -70,7 +77,7 @@ final class DocumentNodeTraverser
         CompilerContext $compilerContext,
     ): void {
         if ($transformer instanceof ReverseNodeTransformer) {
-            foreach ($shadowNode->getChildren() as $shadowChild) {
+            foreach ($shadowNode->getTraversalChildren() as $shadowChild) {
                 $this->traverseForTransformer($transformer, $shadowChild, $compilerContext);
             }
         }
@@ -87,7 +94,7 @@ final class DocumentNodeTraverser
         }
 
         if ($transformer instanceof ReverseNodeTransformer === false) {
-            foreach ($shadowNode->getChildren() as $shadowChild) {
+            foreach ($shadowNode->getTraversalChildren() as $shadowChild) {
                 $this->traverseForTransformer($transformer, $shadowChild, $compilerContext);
             }
         }

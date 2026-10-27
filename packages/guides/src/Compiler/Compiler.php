@@ -27,6 +27,7 @@ final class Compiler
     public function __construct(
         iterable $passes,
         NodeTransformerFactory $nodeTransformerFactory,
+        SubNodeAccessorRegistry $attachedNodeRegistry = new SubNodeAccessorRegistry([]),
     ) {
         $this->passes = new SplPriorityQueue();
         foreach ($passes as $pass) {
@@ -36,7 +37,7 @@ final class Compiler
         $transformerPriorities = $nodeTransformerFactory->getPriorities();
         foreach ($transformerPriorities as $transformerPriority) {
             $this->passes->insert(
-                new TransformerPass(new DocumentNodeTraverser($nodeTransformerFactory, $transformerPriority), $transformerPriority),
+                new TransformerPass(new DocumentNodeTraverser($nodeTransformerFactory, $transformerPriority, $attachedNodeRegistry), $transformerPriority),
                 $transformerPriority,
             );
         }

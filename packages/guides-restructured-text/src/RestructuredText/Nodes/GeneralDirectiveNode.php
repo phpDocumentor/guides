@@ -29,7 +29,7 @@ class GeneralDirectiveNode extends CompoundNode
     public function __construct(
         private readonly string $name,
         private readonly string $plainContent,
-        private readonly InlineCompoundNode $content,
+        private InlineCompoundNode $content,
         array $value = [],
     ) {
         parent::__construct($value);
@@ -48,5 +48,13 @@ class GeneralDirectiveNode extends CompoundNode
     public function getContent(): InlineCompoundNode
     {
         return $this->content;
+    }
+
+    public function withContent(InlineCompoundNode $content): static
+    {
+        $result = clone $this;
+        $result->content = $content;
+
+        return $result;
     }
 }

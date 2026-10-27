@@ -14,10 +14,14 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\ShadowTree;
 
 use LogicException;
+use phpDocumentor\Guides\Compiler\ChildrenAccessor;
+use phpDocumentor\Guides\Compiler\SubNodeAccessor;
+use phpDocumentor\Guides\Compiler\SubNodeAccessorRegistry;
 use phpDocumentor\Guides\Nodes\CompoundNode;
 use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
+use function array_filter;
 use function array_unshift;
 use function array_values;
 use function count;
@@ -31,38 +35,29 @@ final class TreeNode
     /** @var self<Node>[] */
     private array $children = [];
 
+    /** @var self<Node>[] children stored in registered fields, rather than as ordinary children */
+    private array $attachedNodes = [];
+
     private function __construct(
         /** @var TNode */
         private Node $node,
         /** @var self<Node>|self<DocumentNode>|null */
         private self|null $parent = null,
+        private readonly SubNodeAccessorRegistry $attachedNodeRegistry = new SubNodeAccessorRegistry([]),
+        /** The field of the parent this node was extracted from, used to write changes back */
+        private readonly SubNodeAccessor|null $field = null,
+        private int|string|null $key = null,
     ) {
     }
 
     /** @return TreeNode<DocumentNode> */
-    public static function createFromDocument(DocumentNode $document): self
+    public static function createFromDocument(DocumentNode $document, SubNodeAccessorRegistry|null $attachedNodeRegistry = null): self
     {
-        $node = new self($document);
+        $node = new self($document, null, $attachedNodeRegistry ?? new SubNodeAccessorRegistry([]));
         $node->root = $node;
-        $node->setChildren(self::createFromCompoundNode($document, $node));
+        $node->createChildren();
 
         return $node;
-    }
-
-    /**
-     * @param CompoundNode<Node> $node
-     * @param self<Node>|self<DocumentNode> $parent
-     *
-     * @return TreeNode<Node>[]
-     */
-    private static function createFromCompoundNode(CompoundNode $node, self $parent): array
-    {
-        $children = [];
-        foreach ($node->getChildren() as $child) {
-            $children[] = self::createFromNode($child, $parent);
-        }
-
-        return $children;
     }
 
     /**
@@ -73,27 +68,32 @@ final class TreeNode
      *
      * @template TValue of Node
      */
-    private static function createFromNode(Node $node, self $parent): self
+    private static function createFromNode(Node $node, self $parent, SubNodeAccessor $field, int|string|null $key = null): self
     {
-        $treeNode = new self($node, $parent);
+        $treeNode = new self($node, $parent, $parent->attachedNodeRegistry, $field, $key);
         $treeNode->root = $parent->root;
-        if ($node instanceof CompoundNode === false) {
-            return $treeNode;
-        }
-
-        $treeNode->setChildren(self::createFromCompoundNode($node, $treeNode));
+        $treeNode->createChildren();
 
         return $treeNode;
     }
 
-    /** @param self<Node>[] $children */
-    private function setChildren(array $children): void
+    private function createChildren(): void
     {
-        foreach ($children as $child) {
-            $child->parent = $this;
+        $fields = $this->attachedNodeRegistry->getFields($this->node);
+        foreach ($fields?->all() ?? [] as $field) {
+            foreach ($field->items($this->node) as $key => $item) {
+                $this->attachedNodes[] = self::createFromNode($item, $this, $field, $key);
+            }
         }
 
-        $this->children = $children;
+        if ($this->node instanceof CompoundNode === false) {
+            return;
+        }
+
+        $field = new ChildrenAccessor();
+        foreach ($field->items($this->node) as $key => $item) {
+            $this->children[] = self::createFromNode($item, $this, $field, $key);
+        }
     }
 
     /** @return self<DocumentNode> */
@@ -114,13 +114,23 @@ final class TreeNode
         return $this->children;
     }
 
+    /**
+     * Returns the nodes stored in registered fields, followed by the ordinary children.
+     *
+     * @return self<Node>[]
+     */
+    public function getTraversalChildren(): array
+    {
+        return [...$this->attachedNodes, ...$this->children];
+    }
+
     public function addChild(Node $child): void
     {
         if ($this->node instanceof CompoundNode === false) {
             throw new LogicException('Cannot add a child to a non-compound node');
         }
 
-        $this->children[] = self::createFromNode($child, $this);
+        $this->children[] = self::createFromNode($child, $this, new ChildrenAccessor());
         $this->node->addChildNode($child);
     }
 
@@ -130,7 +140,7 @@ final class TreeNode
             throw new LogicException('Cannot add a child to a non-compound node');
         }
 
-        array_unshift($this->children, self::createFromNode($child, $this));
+        array_unshift($this->children, self::createFromNode($child, $this, new ChildrenAccessor()));
         $this->node->pushChildNode($child);
     }
 
@@ -142,39 +152,31 @@ final class TreeNode
 
     public function removeChild(Node $node): void
     {
-        if ($this->node instanceof CompoundNode === false) {
-            throw new LogicException('Cannot remove a child from a non-compound node');
+        $child = $this->findEdge($node, 'remove');
+        if ($child?->field === null) {
+            return;
         }
 
-        foreach ($this->children as $key => $child) {
-            if ($child->getNode() === $node) {
-                unset($this->children[$key]);
-                $child->parent = null;
-                $newNode = $this->node->removeNode($key);
-                $this->parent?->replaceChild($this->node, $newNode);
-                $this->node = $newNode;
-                break;
-            }
-        }
+        $newNode = $child->field->removeAt($this->node, $this->keyOf($child));
 
-        $this->children = array_values($this->children);
+        $child->parent = null;
+        $this->children = array_values(array_filter($this->children, static fn (self $c): bool => $c !== $child));
+        $this->attachedNodes = array_values(array_filter($this->attachedNodes, static fn (self $c): bool => $c !== $child));
+
+        $this->changeNode($newNode);
     }
 
     public function replaceChild(Node $oldChildNode, Node $newChildNode): void
     {
-        if ($this->node instanceof CompoundNode === false) {
-            throw new LogicException('Cannot remove a child from a non-compound node');
+        $child = $this->findEdge($oldChildNode, 'replace');
+        if ($child?->field === null) {
+            return;
         }
 
-        foreach ($this->children as $key => $child) {
-            if ($child->getNode() === $oldChildNode) {
-                $child->node = $newChildNode;
-                $newNode = $this->node->replaceNode($key, $newChildNode);
-                $this->parent?->replaceChild($this->node, $newNode);
-                $this->node = $newNode;
-                break;
-            }
-        }
+        $newNode = $child->field->replaceAt($this->node, $this->keyOf($child), $newChildNode);
+        $child->node = $newChildNode;
+
+        $this->changeNode($newNode);
     }
 
     public function findPosition(Node $node): int|null
@@ -194,10 +196,15 @@ final class TreeNode
      */
     public function release(): void
     {
+        foreach ($this->attachedNodes as $attachedNode) {
+            $attachedNode->release();
+        }
+
         foreach ($this->children as $child) {
             $child->release();
         }
 
+        $this->attachedNodes = [];
         $this->children = [];
         $this->parent = null;
         unset($this->root);
@@ -210,5 +217,58 @@ final class TreeNode
         }
 
         return $this->parent->findPosition($this->node) === count($this->parent->getChildren()) - 1;
+    }
+
+    /** @return self<Node>|null */
+    private function findEdge(Node $node, string $action): self|null
+    {
+        foreach ([...$this->attachedNodes, ...$this->children] as $child) {
+            if ($child->getNode() === $node) {
+                return $child;
+            }
+        }
+
+        if ($this->node instanceof CompoundNode === false && $this->attachedNodes === []) {
+            throw new LogicException('Cannot ' . $action . ' a child of a non-compound node');
+        }
+
+        return null;
+    }
+
+    /**
+     * Ordinary children shift when siblings are removed or pushed, so their index is derived from the
+     * current position. Other fields keep the key they were extracted with.
+     *
+     * @param self<Node> $child
+     */
+    private function keyOf(self $child): int|string|null
+    {
+        if ($child->field instanceof ChildrenAccessor) {
+            return $this->findPosition($child->node);
+        }
+
+        return $child->key;
+    }
+
+    /** Stores the new version of this node, and writes it back to the field of its parent. */
+    private function changeNode(Node $newNode): void
+    {
+        if ($this->parent === null) {
+            /** @phpstan-ignore assign.propertyType */
+            $this->node = $newNode;
+
+            return;
+        }
+
+        $parent = $this->parent;
+        $field = $this->field;
+        if ($field === null) {
+            return;
+        }
+
+        $newParent = $field->replaceAt($parent->node, $parent->keyOf($this), $newNode);
+        /** @phpstan-ignore assign.propertyType */
+        $this->node = $newNode;
+        $parent->changeNode($newParent);
     }
 }
