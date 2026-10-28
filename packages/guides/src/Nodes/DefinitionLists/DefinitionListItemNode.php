@@ -23,7 +23,7 @@ final class DefinitionListItemNode extends CompoundNode
      * @param InlineCompoundNode[] $classifiers
      * @param DefinitionNode[] $definitions
      */
-    public function __construct(private readonly InlineCompoundNode $term, private readonly array $classifiers, array $definitions = [])
+    public function __construct(private InlineCompoundNode $term, private array $classifiers, array $definitions = [])
     {
         parent::__construct($definitions);
     }
@@ -37,5 +37,22 @@ final class DefinitionListItemNode extends CompoundNode
     public function getClassifiers(): array
     {
         return $this->classifiers;
+    }
+
+    public function withTerm(InlineCompoundNode $term): self
+    {
+        $result = clone $this;
+        $result->term = $term;
+
+        return $result;
+    }
+
+    /** @param InlineCompoundNode[] $classifiers */
+    public function withClassifiers(array $classifiers): self
+    {
+        $result = clone $this;
+        $result->classifiers = $classifiers;
+
+        return $result;
     }
 }

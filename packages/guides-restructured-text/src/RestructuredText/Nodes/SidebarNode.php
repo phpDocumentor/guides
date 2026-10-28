@@ -21,7 +21,7 @@ use phpDocumentor\Guides\Nodes\Node;
 final class SidebarNode extends CompoundNode
 {
     /** {@inheritDoc} */
-    public function __construct(private readonly InlineCompoundNode $title, array $value)
+    public function __construct(private InlineCompoundNode $title, array $value)
     {
         parent::__construct($value);
     }
@@ -29,5 +29,13 @@ final class SidebarNode extends CompoundNode
     public function getTitle(): InlineCompoundNode
     {
         return $this->title;
+    }
+
+    public function withTitle(InlineCompoundNode $title): self
+    {
+        $result = clone $this;
+        $result->title = $title;
+
+        return $result;
     }
 }

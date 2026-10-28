@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use phpDocumentor\Guides\Bootstrap\Compiler\BootstrapProvider;
 use phpDocumentor\Guides\Bootstrap\Directives\AccordionDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\AccordionItemDirective;
 use phpDocumentor\Guides\Bootstrap\Directives\CardDirective;
@@ -35,4 +36,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(CardImageDirective::class)
         ->set(CardGroupDirective::class)
         ->set(CardGridDirective::class);
+
+    $container->services()
+        ->set(BootstrapProvider::class)
+        ->tag('phpdoc.guides.compiler.attached_node_provider');
 };

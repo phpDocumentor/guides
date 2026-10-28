@@ -58,9 +58,9 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(1, $context->getDocumentNode()->getChildren());
+        self::assertCount(1, $result->getChildren());
         self::assertCount(2, $section->getChildren());
         self::assertSame($node, $section->getChildren()[0]);
     }
@@ -82,9 +82,9 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(1, $context->getDocumentNode()->getChildren());
+        self::assertCount(1, $result->getChildren());
         self::assertCount(5, $section->getChildren());
         self::assertEquals($node4, $section->getChildren()[0]);
         self::assertEquals($node3, $section->getChildren()[1]);
@@ -108,10 +108,10 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(1, $context->getDocumentNode()->getChildren());
-        $updatedSection = $context->getDocumentNode()->getChildren()[0];
+        self::assertCount(1, $result->getChildren());
+        $updatedSection = $result->getChildren()[0];
         self::assertInstanceOf(SectionNode::class, $updatedSection);
         self::assertEquals([$node1, $sectionTitle, $subSection], $updatedSection->getChildren());
         $updatedSubSection = $updatedSection->getChildren()[2];
@@ -128,10 +128,10 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(1, $context->getDocumentNode()->getChildren());
-        self::assertSame($node, $context->getDocumentNode()->getChildren()[0]);
+        self::assertCount(1, $result->getChildren());
+        self::assertSame($node, $result->getChildren()[0]);
     }
 
     public function testMoveAnchorsAtTheEndOfSectionToNextSection(): void
@@ -150,10 +150,10 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(2, $context->getDocumentNode()->getChildren());
-        [$firstChild, $secondChild] = $context->getDocumentNode()->getChildren();
+        self::assertCount(2, $result->getChildren());
+        [$firstChild, $secondChild] = $result->getChildren();
         self::assertInstanceOf(SectionNode::class, $firstChild);
         self::assertInstanceOf(SectionNode::class, $secondChild);
         self::assertCount(1, $firstChild->getChildren());
@@ -178,10 +178,10 @@ final class MoveAnchorTransformerTest extends TestCase
 
         $context = (new CompilerContext(new ProjectNode('test', 'test')))->withDocumentShadowTree($document);
 
-        $this->documentNodeTraverser->traverse($document, $context);
+        $result = $this->documentNodeTraverser->traverse($document, $context);
 
-        self::assertCount(2, $context->getDocumentNode()->getChildren());
-        [$firstChild, $secondChild] = $context->getDocumentNode()->getChildren();
+        self::assertCount(2, $result->getChildren());
+        [$firstChild, $secondChild] = $result->getChildren();
         self::assertInstanceOf(SectionNode::class, $firstChild);
         self::assertInstanceOf(SectionNode::class, $secondChild);
         self::assertCount(2, $firstChild->getChildren());

@@ -28,6 +28,10 @@
         </properties>
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable">
+        <exclude-pattern>packages/guides/src/Compiler/CallableAccessor.php</exclude-pattern>
+    </rule>
+
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.NoAssignment">
         <exclude-pattern>packages/guides/src/Setup/QuickStart.php</exclude-pattern>
     </rule>

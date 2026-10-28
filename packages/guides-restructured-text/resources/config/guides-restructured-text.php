@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use phpDocumentor\Guides\RestructuredText\Compiler\Passes\DirectiveProcessPass;
+use phpDocumentor\Guides\RestructuredText\Compiler\RestructuredTextProvider;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\AttentionDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective;
@@ -417,6 +418,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(DirectiveProcessPass::class)
         ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
         ->tag('phpdoc.guides.compiler.nodeTransformers')
+        ->set(RestructuredTextProvider::class)
+        ->tag('phpdoc.guides.compiler.attached_node_provider')
         ->set(DefaultCodeNodeOptionMapper::class)
         ->alias(CodeNodeOptionMapper::class, DefaultCodeNodeOptionMapper::class);
 };

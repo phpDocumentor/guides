@@ -17,7 +17,7 @@ namespace phpDocumentor\Guides\Nodes;
 class AdmonitionNode extends CompoundNode
 {
     /** @param Node[] $value */
-    public function __construct(private readonly string $name, private readonly InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)
+    public function __construct(private readonly string $name, private InlineCompoundNode|null $title, private readonly string $text, array $value, private readonly bool $isTitled = false)
     {
         parent::__construct($value);
     }
@@ -40,5 +40,13 @@ class AdmonitionNode extends CompoundNode
     public function isTitled(): bool
     {
         return $this->isTitled;
+    }
+
+    public function withTitle(InlineCompoundNode|null $title): self
+    {
+        $result = clone $this;
+        $result->title = $title;
+
+        return $result;
     }
 }

@@ -30,4 +30,20 @@ final class FigureNode extends AbstractNode
     {
         return $this->document;
     }
+
+    public function withImage(ImageNode $image): self
+    {
+        $result = clone $this;
+        $result->value = $image;
+
+        return $result;
+    }
+
+    public function withDocument(Node|null $document): self
+    {
+        $result = clone $this;
+        $result->document = $document;
+
+        return $result;
+    }
 }

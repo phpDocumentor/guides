@@ -30,8 +30,8 @@ final class AccordionItemNode extends GeneralDirectiveNode implements LinkTarget
     public function __construct(
         protected readonly string $name,
         protected readonly string $plainContent,
-        protected readonly InlineCompoundNode $content,
-        protected readonly TitleNode $title,
+        protected InlineCompoundNode $content,
+        protected TitleNode $title,
         array $value = [],
         private readonly string $id = '',
         private readonly bool $show = false,
@@ -92,5 +92,21 @@ final class AccordionItemNode extends GeneralDirectiveNode implements LinkTarget
     public function isShow(): bool
     {
         return $this->show;
+    }
+
+    public function withContent(InlineCompoundNode $content): static
+    {
+        $result = clone $this;
+        $result->content = $content;
+
+        return $result;
+    }
+
+    public function withTitle(TitleNode $title): self
+    {
+        $result = clone $this;
+        $result->title = $title;
+
+        return $result;
     }
 }

@@ -33,12 +33,12 @@ final class CardNode extends GeneralDirectiveNode implements LinkTargetNode, Opt
     public function __construct(
         protected readonly string $name,
         protected readonly string $plainContent,
-        protected readonly InlineCompoundNode $content,
-        protected readonly TitleNode|null $title = null,
+        protected InlineCompoundNode $content,
+        protected TitleNode|null $title = null,
         array $value = [],
-        private readonly CardHeaderNode|null $cardHeader = null,
-        private readonly CardImageNode|null $cardImage = null,
-        private readonly CardFooterNode|null $cardFooter = null,
+        private CardHeaderNode|null $cardHeader = null,
+        private CardImageNode|null $cardImage = null,
+        private CardFooterNode|null $cardFooter = null,
         private readonly string $id = '',
         private int $cardHeight = 0,
     ) {
@@ -128,5 +128,45 @@ final class CardNode extends GeneralDirectiveNode implements LinkTargetNode, Opt
         $this->cardHeight = $cardHeight;
 
         return $this;
+    }
+
+    public function withContent(InlineCompoundNode $content): static
+    {
+        $result = clone $this;
+        $result->content = $content;
+
+        return $result;
+    }
+
+    public function withTitle(TitleNode|null $title): self
+    {
+        $result = clone $this;
+        $result->title = $title;
+
+        return $result;
+    }
+
+    public function withCardHeader(CardHeaderNode|null $header): self
+    {
+        $result = clone $this;
+        $result->cardHeader = $header;
+
+        return $result;
+    }
+
+    public function withCardImage(CardImageNode|null $image): self
+    {
+        $result = clone $this;
+        $result->cardImage = $image;
+
+        return $result;
+    }
+
+    public function withCardFooter(CardFooterNode|null $footer): self
+    {
+        $result = clone $this;
+        $result->cardFooter = $footer;
+
+        return $result;
     }
 }
