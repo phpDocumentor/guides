@@ -223,12 +223,6 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Directives/CodeBlockDirective.php
 
 		-
-			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ConfvalDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
-			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Directives/ConfvalDirective.php
-
-		-
 			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ContentsDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
 			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
 			count: 1

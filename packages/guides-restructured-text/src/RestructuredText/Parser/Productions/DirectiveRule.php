@@ -19,6 +19,7 @@ use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
 use phpDocumentor\Guides\RestructuredText\Directives\DirectiveValueType;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\OptionType;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveSourceLocation;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -107,6 +108,7 @@ final class DirectiveRule implements Rule
 
         $this->parseDirectiveValue($directive, $blockContext, $directiveHandler);
         $this->interpretDirectiveOptions($documentIterator, $directive);
+        $this->parseInlineMarkupOptions($directive, $directiveHandler, $blockContext);
 
         $contentLineOffset = $blockContext->getLineOffset($documentIterator->key() + 1);
         $buffer = $this->collectDirectiveContents($documentIterator);
@@ -214,6 +216,45 @@ final class DirectiveRule implements Rule
             null,
         );
         $directive->setDataNode($inlineNode);
+    }
+
+    /**
+     * Parses directive option values as inline markup during parsing, instead of
+     * leaving that to directives to do themselves at compile time (when the real
+     * BlockContext is no longer available).
+     *
+     * An option's value is parsed as inline markup when either:
+     * - the directive declares it with `#[Option(type: OptionType::InlineMarkup)]`, or
+     * - the option is not declared at all and the directive opted in via
+     *   `#[Directive(parseUndeclaredOptionsAsInlineMarkup: true)]`.
+     *
+     * The resulting node is stored on the DirectiveOption, retrievable via
+     * DirectiveOption::getNode() (or BaseDirective::readOption() for declared
+     * options).
+     */
+    private function parseInlineMarkupOptions(Directive $directive, DirectiveHandler $directiveHandler, BlockContext $blockContext): void
+    {
+        $optionAttributes = $directiveHandler->getOptionAttributes();
+
+        foreach ($directive->getOptions() as $option) {
+            $optionAttribute = $optionAttributes[$option->getName()] ?? null;
+            if ($optionAttribute !== null) {
+                if ($optionAttribute->type !== OptionType::InlineMarkup) {
+                    continue;
+                }
+            } elseif (!$directiveHandler->usesInlineMarkupForUndeclaredOptions()) {
+                continue;
+            }
+
+            $value = $option->toString();
+            if (trim($value) === '') {
+                continue;
+            }
+
+            $subContext = new BlockContext($blockContext->getDocumentParserContext(), $value, false, $blockContext->getDocumentIterator()->key());
+            $inlineNode = $this->inlineMarkupRule->apply($subContext, null);
+            $option->setNode($inlineNode);
+        }
     }
 
     /**

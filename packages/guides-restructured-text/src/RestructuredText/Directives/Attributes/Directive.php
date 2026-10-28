@@ -31,12 +31,18 @@ final class Directive
      *     after `::` -- see {@see DirectiveValueType}. Defaults to Inline, matching every
      *     directive's behavior before this was introduced: a non-empty value is
      *     always parsed as inline markup.
+     * @param bool $parseUndeclaredOptionsAsInlineMarkup If set, options that are not
+     *     declared with a #[Option] attribute are parsed as inline markup during
+     *     parsing, just like options explicitly declared with
+     *     OptionType::InlineMarkup. Useful for directives that accept arbitrary,
+     *     free-form options (e.g. confval's additional fields).
      */
     public function __construct(
         public readonly string $name,
         public readonly array $aliases = [],
         public readonly bool $rawContent = false,
         public readonly DirectiveValueType $valueType = DirectiveValueType::Inline,
+        public readonly bool $parseUndeclaredOptionsAsInlineMarkup = false,
     ) {
     }
 }
