@@ -1,0 +1,6 @@
+.. include:: content.txt
+   :literal:
+   :start-line: 1
+   :end-line: 5
+   :start-after: START
+   :end-before: END

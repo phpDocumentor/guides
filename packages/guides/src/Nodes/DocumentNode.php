@@ -194,6 +194,12 @@ final class DocumentNode extends CompoundNode
         $this->variables[$name] = $value;
     }
 
+    /** @return array<string, string|Node> */
+    public function getVariables(): array
+    {
+        return $this->variables;
+    }
+
     /** @param array<string, string> $links */
     public function setLinks(array $links): void
     {

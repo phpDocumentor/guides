@@ -16,7 +16,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
-use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\DefaultCodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\Validation\ReportsViolations;
@@ -26,26 +25,25 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function array_slice;
-use function array_values;
 use function count;
 use function explode;
 use function is_string;
-use function ksort;
-use function max;
-use function min;
 use function preg_match;
 use function sprintf;
 use function str_contains;
-use function trim;
 
 final class LiteralincludeDirective extends BaseDirective
 {
     use ReportsViolations;
 
+    private readonly IncludeLineSelector $lineSelector;
+
     public function __construct(
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
         private readonly LoggerInterface|ViolationReporter|null $logger = null,
+        IncludeLineSelector|null $lineSelector = null,
     ) {
+        $this->lineSelector = $lineSelector ?? new IncludeLineSelector();
     }
 
     public function getName(): string
@@ -182,7 +180,7 @@ final class LiteralincludeDirective extends BaseDirective
             return [];
         }
 
-        if (preg_match(DefaultCodeNodeOptionMapper::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
+        if (preg_match(IncludeLineSelector::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
             $this->reportViolation($this->logger, Violation::warning(
                 'rst.literalinclude.invalid-lines',
                 sprintf(
@@ -195,12 +193,10 @@ final class LiteralincludeDirective extends BaseDirective
             return [];
         }
 
-        $selected = [];
-        foreach (explode(',', $specification) as $range) {
-            $range = trim($range);
-            [$first, $last] = $this->parseRange($range, count($lines));
-
-            if ($first > $last) {
+        return $this->lineSelector->selectLineRanges(
+            $lines,
+            $specification,
+            function (string $range) use ($directive, $blockContext): void {
                 $this->reportViolation($this->logger, Violation::warning(
                     'rst.literalinclude.lines-out-of-range',
                     sprintf(
@@ -210,43 +206,8 @@ final class LiteralincludeDirective extends BaseDirective
                     ),
                     $blockContext->getLoggerInformation(),
                 ));
-
-                continue;
-            }
-
-            for ($lineNumber = $first; $lineNumber <= $last; $lineNumber++) {
-                $selected[$lineNumber] = $lines[$lineNumber - 1];
-            }
-        }
-
-        ksort($selected);
-
-        return array_values($selected);
-    }
-
-    /**
-     * Splits a single entry of the ``lines`` option into its first and last line number.
-     *
-     * Both are clamped to the lines actually available, so that a range far beyond the end of the file
-     * does not turn into a loop over the numbers the author wrote down. A first line greater than the
-     * last one means the range selects nothing.
-     *
-     * @return array{int, int}
-     */
-    private function parseRange(string $range, int $lineCount): array
-    {
-        if (!str_contains($range, '-')) {
-            $lineNumber = (int) $range;
-
-            return [max(1, $lineNumber), min($lineNumber, $lineCount)];
-        }
-
-        [$first, $last] = explode('-', $range, 2);
-
-        return [
-            max(1, (int) $first),
-            trim($last) === '' ? $lineCount : min((int) $last, $lineCount),
-        ];
+            },
+        );
     }
 
     /** Returns the text of an option, or null if the option was used without a usable value. */

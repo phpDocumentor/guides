@@ -26,7 +26,7 @@ class ParserContext
 {
     public function __construct(
         private readonly ProjectNode $projectNode,
-        private readonly string $currentFileName,
+        private string $currentFileName,
         private readonly string $currentDirectory,
         private readonly int $initialHeaderLevel,
         private readonly FilesystemInterface|FileSystem $origin,
@@ -46,11 +46,7 @@ class ParserContext
 
     public function absoluteRelativePath(string $url): string
     {
-        if (BaseUri::from($url)->isAbsolutePath()) {
-            return $this->currentDirectory . '/' . ltrim($url, '/');
-        }
-
-        return $this->currentDirectory . '/' . $this->getDirName() . '/' . ltrim($url, '/');
+        return $this->currentDirectory . '/' . $this->relativeFileName($url);
     }
 
     public function getDirName(): string
@@ -67,6 +63,20 @@ class ParserContext
     public function getCurrentFileName(): string
     {
         return $this->currentFileName;
+    }
+
+    public function setCurrentFileName(string $currentFileName): void
+    {
+        $this->currentFileName = $currentFileName;
+    }
+
+    public function relativeFileName(string $url): string
+    {
+        if (BaseUri::from($url)->isAbsolutePath()) {
+            return ltrim($url, '/');
+        }
+
+        return $this->documentNameResolver->canonicalUrl($this->getDirName(), $url);
     }
 
     /** @return array<string, string> */

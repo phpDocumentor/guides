@@ -1,0 +1,2 @@
+.. image:: images/example.svg
+    :alt: Nested example

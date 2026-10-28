@@ -1,0 +1,6 @@
+discarded before
+START
+selected one
+selected two
+END
+discarded after

@@ -32,6 +32,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\HintDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImageDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\ImportantDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\IncludeDirective;
+use phpDocumentor\Guides\RestructuredText\Directives\IncludeLineSelector;
 use phpDocumentor\Guides\RestructuredText\Directives\IndexDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\LaTeXMain;
 use phpDocumentor\Guides\RestructuredText\Directives\ListTableDirective;
@@ -224,8 +225,11 @@ return static function (ContainerConfigurator $container): void {
         ->set(HintDirective::class)
         ->set(ImageDirective::class)
         ->set(ImportantDirective::class)
+        ->set(IncludeLineSelector::class)
         ->set(IncludeDirective::class)
         ->arg('$startingRule', service(DocumentRule::class))
+        ->arg('$codeNodeOptionMapper', service(CodeNodeOptionMapper::class))
+        ->arg('$lineSelector', service(IncludeLineSelector::class))
         ->set(IndexDirective::class)
         ->set(GenIndexDirective::class)
         ->set(LaTeXMain::class)
@@ -235,6 +239,7 @@ return static function (ContainerConfigurator $container): void {
             '$codeNodeOptionMapper' => service(
                 CodeNodeOptionMapper::class,
             ),
+            '$lineSelector' => service(IncludeLineSelector::class),
         ])
         ->set(MathDirective::class)
         ->set(MetaDirective::class)
