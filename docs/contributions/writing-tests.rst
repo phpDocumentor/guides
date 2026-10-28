@@ -7,7 +7,7 @@ In this project we have 3 levels of tests:
 
 Integration tests:
   This level of tests allow you to test the whole process from parsing to rendering. Integration tests are
-  not split as the other packages are. They are located in the ``tests/Integration/tests`` directory. and do exist
+  not split as the other packages are. They are located below the ``tests/Integration/tests`` directory and consist
   of one or more input files and the expected output. They might even have their own configuration file if that's required.
 
 Functional tests:
@@ -28,9 +28,10 @@ Integration tests
 
 The integration tests can be seen as the easies way to write tests, as they are just like your normal use case. No internal
 knowledge of the parser or renderer is required. You just need to know what you want to test and how the input and output
-should look like. To create a new test you need to create a new directory in the ``tests/Integration/tests`` directory.
-The name of the directory should be the name of the test. The directory should contain at least one input file and one
-output file. Each test should have at least in index file.
+should look like. To create a new test you need to create a new directory below the ``tests/Integration/tests`` directory.
+Place it in the category that best matches the user-visible behavior being tested. The name of the directory should be
+the name of the test. The directory should contain at least one input file and one output file. Each test should have
+at least an index file.
 
 To make the output file more stable you can must use the following format::
 
