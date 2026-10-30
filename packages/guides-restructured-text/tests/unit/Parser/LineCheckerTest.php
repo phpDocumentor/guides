@@ -41,4 +41,18 @@ final class LineCheckerTest extends TestCase
             ['================================================', 2, '='],
         ];
     }
+
+    #[DataProvider('annotationProvider')]
+    public function testAnnotation(string $input, bool $expected): void
+    {
+        self::assertSame($expected, LineChecker::isAnnotation($input));
+    }
+
+    /** @return array<int, array{string, bool}> */
+    public static function annotationProvider(): array
+    {
+        return [
+            ['.. [included-note] This footnote is defined inside an included file.', true],
+        ];
+    }
 }

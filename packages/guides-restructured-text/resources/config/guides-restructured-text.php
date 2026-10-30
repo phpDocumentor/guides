@@ -134,6 +134,7 @@ use phpDocumentor\Guides\RestructuredText\Toc\GlobSearcher;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\Settings\SettingsManager;
 use phpDocumentor\Guides\Validation\ViolationReporter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
@@ -227,6 +228,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(IncludeDirective::class)
         ->arg('$startingRule', service(DocumentRule::class))
         ->arg('$codeNodeOptionMapper', service(CodeNodeOptionMapper::class))
+        ->arg('$logger', service(LoggerInterface::class))
         ->set(IndexDirective::class)
         ->set(GenIndexDirective::class)
         ->set(LaTeXMain::class)

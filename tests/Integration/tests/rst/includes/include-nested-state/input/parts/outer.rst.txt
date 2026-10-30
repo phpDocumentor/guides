@@ -1,0 +1,11 @@
+.. role:: outer-role(strong)
+
+.. _outer-target:
+
+Outer target
+
+The outer include uses :parent-role:`parent state` and defines :outer-role:`outer state`.
+
+.. include:: nested/inner.rst.txt
+
+The outer include uses :inner-role:`inner state` and links to `inner target`_.

@@ -1,0 +1,5 @@
+One before the cycle.
+
+.. include:: two.rst.txt
+
+One after the cycle.

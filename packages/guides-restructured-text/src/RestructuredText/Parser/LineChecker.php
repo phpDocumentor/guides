@@ -89,7 +89,7 @@ final class LineChecker
 
     public static function isAnnotation(string $line): bool
     {
-        return preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $line) > 0;
+        return preg_match('/^\.\.\s+\[([#a-zA-Z0-9-]*)\]\s(.*)$$/mUsi', $line) > 0;
     }
 
     /**

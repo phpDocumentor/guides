@@ -1,0 +1,8 @@
+.. role:: inner-role(emphasis)
+
+.. _inner-target:
+
+Inner target
+
+The inner include uses :parent-role:`parent state` and :outer-role:`outer state`.
+It links to `parent target`_ and `outer target`_.
