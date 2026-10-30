@@ -1,0 +1,5 @@
+discarded before
+START
+selected nested content
+END
+discarded after

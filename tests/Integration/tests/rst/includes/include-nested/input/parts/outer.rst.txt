@@ -1,0 +1,6 @@
+Outer section
+=============
+
+Content from the outer included file.
+
+.. include:: nested/inner.rst.txt

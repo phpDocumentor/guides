@@ -16,7 +16,6 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
-use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\DefaultCodeNodeOptionMapper;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\Validation\ReportsViolations;
@@ -41,6 +40,9 @@ use function trim;
 final class LiteralincludeDirective extends BaseDirective
 {
     use ReportsViolations;
+
+    /** @see https://regex101.com/r/czvfnV/2 */
+    private const LINE_NUMBER_RANGES_REGEX = '/^\d+(-\d*)?(?:,\s*\d+(-\d*)?)*$/';
 
     public function __construct(
         private readonly CodeNodeOptionMapper $codeNodeOptionMapper,
@@ -182,7 +184,7 @@ final class LiteralincludeDirective extends BaseDirective
             return [];
         }
 
-        if (preg_match(DefaultCodeNodeOptionMapper::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
+        if (preg_match(self::LINE_NUMBER_RANGES_REGEX, $specification) !== 1) {
             $this->reportViolation($this->logger, Violation::warning(
                 'rst.literalinclude.invalid-lines',
                 sprintf(

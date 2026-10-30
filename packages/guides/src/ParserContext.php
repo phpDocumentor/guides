@@ -18,15 +18,17 @@ use League\Uri\BaseUri;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use RuntimeException;
 
 use function dirname;
 use function ltrim;
+use function str_starts_with;
 
 class ParserContext
 {
     public function __construct(
         private readonly ProjectNode $projectNode,
-        private readonly string $currentFileName,
+        private string $currentFileName,
         private readonly string $currentDirectory,
         private readonly int $initialHeaderLevel,
         private readonly FilesystemInterface|FileSystem $origin,
@@ -46,11 +48,7 @@ class ParserContext
 
     public function absoluteRelativePath(string $url): string
     {
-        if (BaseUri::from($url)->isAbsolutePath()) {
-            return $this->currentDirectory . '/' . ltrim($url, '/');
-        }
-
-        return $this->currentDirectory . '/' . $this->getDirName() . '/' . ltrim($url, '/');
+        return $this->currentDirectory . '/' . $this->relativeFileName($url);
     }
 
     public function getDirName(): string
@@ -67,6 +65,33 @@ class ParserContext
     public function getCurrentFileName(): string
     {
         return $this->currentFileName;
+    }
+
+    public function setCurrentFileName(string $currentFileName): void
+    {
+        $this->currentFileName = $currentFileName;
+    }
+
+    public function relativeFileName(string $url): string
+    {
+        if (BaseUri::from($url)->isAbsolutePath()) {
+            return $this->ensureWithinOrigin(
+                $this->documentNameResolver->canonicalUrl('', ltrim($url, '/')),
+            );
+        }
+
+        return $this->ensureWithinOrigin(
+            $this->documentNameResolver->canonicalUrl($this->getDirName(), $url),
+        );
+    }
+
+    private function ensureWithinOrigin(string $relativeFileName): string
+    {
+        if ($relativeFileName === '..' || str_starts_with($relativeFileName, '../')) {
+            throw new RuntimeException('Path resolves outside the configured origin.');
+        }
+
+        return $relativeFileName;
     }
 
     /** @return array<string, string> */

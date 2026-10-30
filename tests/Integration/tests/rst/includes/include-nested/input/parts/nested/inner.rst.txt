@@ -1,0 +1,6 @@
+Inner section
+=============
+
+Content from the nested included file.
+
+.. include:: deeper/third.rst.txt

@@ -65,7 +65,7 @@ final class DocumentNode extends CompoundNode
      * The easiest example is the replace-directive that allows textual replacements in the document. But
      * also other directives may be prefixed with a name to replace a certain value in the text.
      *
-     * @var array<(string | Node)>
+     * @var array<string, (string | Node)>
      */
     private array $variables = [];
 
@@ -192,6 +192,12 @@ final class DocumentNode extends CompoundNode
     public function addVariable(string $name, string|Node $value): void
     {
         $this->variables[$name] = $value;
+    }
+
+    /** @return array<string, string|Node> */
+    public function getVariables(): array
+    {
+        return $this->variables;
     }
 
     /** @param array<string, string> $links */

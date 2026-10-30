@@ -1,0 +1,9 @@
+Literal:
+
+.. include:: content.txt
+   :literal:
+
+Code:
+
+.. include:: content.php
+   :code: php

@@ -226,6 +226,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(ImportantDirective::class)
         ->set(IncludeDirective::class)
         ->arg('$startingRule', service(DocumentRule::class))
+        ->arg('$codeNodeOptionMapper', service(CodeNodeOptionMapper::class))
         ->set(IndexDirective::class)
         ->set(GenIndexDirective::class)
         ->set(LaTeXMain::class)
