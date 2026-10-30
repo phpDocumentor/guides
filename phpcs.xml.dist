@@ -9,7 +9,7 @@
 
     <exclude-pattern>*/packages/filesystem/Flysystem/FilesystemInterface.php</exclude-pattern>
     <exclude-pattern>packages/*/examples/*</exclude-pattern>
-    <exclude-pattern>tests/*/_*</exclude-pattern>
+    <exclude-pattern>tests/*/input/*</exclude-pattern>
 
     <arg value="nps"/>
 

@@ -1,0 +1,7 @@
+Content from the nested file:
+
+.. include:: /shared/content.rst.txt
+
+Traversal-normalized content:
+
+.. include:: /../../shared/content.rst.txt

@@ -1,0 +1,5 @@
+.. _included-target:
+
+Included target
+
+The included file defines a target used by the parent.

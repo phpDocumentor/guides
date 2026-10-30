@@ -18,9 +18,11 @@ use League\Uri\BaseUri;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use RuntimeException;
 
 use function dirname;
 use function ltrim;
+use function str_starts_with;
 
 class ParserContext
 {
@@ -73,10 +75,23 @@ class ParserContext
     public function relativeFileName(string $url): string
     {
         if (BaseUri::from($url)->isAbsolutePath()) {
-            return ltrim($url, '/');
+            return $this->ensureWithinOrigin(
+                $this->documentNameResolver->canonicalUrl('', ltrim($url, '/')),
+            );
         }
 
-        return $this->documentNameResolver->canonicalUrl($this->getDirName(), $url);
+        return $this->ensureWithinOrigin(
+            $this->documentNameResolver->canonicalUrl($this->getDirName(), $url),
+        );
+    }
+
+    private function ensureWithinOrigin(string $relativeFileName): string
+    {
+        if ($relativeFileName === '..' || str_starts_with($relativeFileName, '../')) {
+            throw new RuntimeException('Path resolves outside the configured origin.');
+        }
+
+        return $relativeFileName;
     }
 
     /** @return array<string, string> */

@@ -15,5 +15,11 @@ Create Issues
 Make changes (create pull requests)
 ===================================
 
+Code style
+----------
+
+Prefer early returns over ``else`` branches when the early return makes the
+control flow clearer.
+
 See the `Contribution chapter <https://github.com/phpDocumentor/guides/tree/main/docs/contributions/index.rst>`__ in the
 `Documentation` <https://github.com/phpDocumentor/guides/tree/main/docs/index.rst>`__.

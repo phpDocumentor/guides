@@ -1,0 +1,3 @@
+Inside: :parent-role:`parent role`.
+
+.. role:: included-role(strong)
