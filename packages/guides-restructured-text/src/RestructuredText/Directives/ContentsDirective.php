@@ -13,19 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\SectionMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 
 /**
- * Standarad rst `contents` directive
+ * Standard rst `contents` directive
  *
  * Displays a table of content of the current page
  */
+#[Directive(name: 'contents')]
 #[Option(name: 'local', type: OptionType::Boolean, description: 'If set, the table of contents will only include sections that are local to the current document.', default: false)]
 #[Option(name: 'depth', description: 'The maximum depth of the table of contents.')]
 final class ContentsDirective extends BaseDirective
@@ -35,25 +37,17 @@ final class ContentsDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
-        return 'contents';
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        $options = $directive->getOptions();
+        $directive = $directiveNode->getDirective();
         $absoluteUrl = $this->documentNameResolver->absoluteUrl(
-            $blockContext->getDocumentParserContext()->getContext()->getDirName(),
-            $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
+            (string) $directiveNode->getSourceLocation()->documentDirectory,
+            (string) $directiveNode->getSourceLocation()->file,
         );
 
         return (new ContentMenuNode([new SectionMenuEntryNode($absoluteUrl)]))
-            ->withOptions($this->optionsToArray($options))
+            ->withOptions($this->readAllOptions($directive))
             ->withCaption($directive->getDataNode())
-            ->withLocal($directive->getOptionBool('local'));
+            ->withLocal((bool) $this->readOption($directive, 'local'));
     }
 }
