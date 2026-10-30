@@ -1,0 +1,17 @@
+<!-- content start -->
+    <div class="section" id="nested-include-parser-state">
+            <h1>Nested include parser state</h1>
+    <a id="parent-target"></a>
+    <p>Parent target</p>
+    <p>The parent defines <em class="parent-role">parent state</em> before the include.</p>
+    <a id="outer-target"></a>
+    <p>Outer target</p>
+    <p>The outer include uses <em class="parent-role">parent state</em> and defines <strong class="outer-role">outer state</strong>.</p>
+    <a id="inner-target"></a>
+    <p>Inner target</p>
+    <p>The inner include uses <em class="parent-role">parent state</em> and <strong class="outer-role">outer state</strong>.
+It links to <a href="/index.html#parent-target">parent target</a> and <a href="/index.html#outer-target">outer target</a>.</p>
+    <p>The outer include uses <em class="inner-role">inner state</em> and links to <a href="/index.html#inner-target">inner target</a>.</p>
+    <p>After the nested include, the parent uses <em class="inner-role">inner state</em> and links to <a href="/index.html#inner-target">inner target</a>.</p>
+    </div>
+<!-- content end -->

@@ -52,7 +52,7 @@ final class AnnotationRule implements Rule
         $openingLine = $documentIterator->current();
         [$annotationKey, $content] = $this->analyzeOpeningLine($openingLine);
         $lineOffset = $blockContext->getLineOffset($documentIterator->key());
-        
+
         $name = '';
         $buffer = new Buffer();
         $buffer->push($content);
@@ -83,7 +83,7 @@ final class AnnotationRule implements Rule
 
         return new AnnotationListNode($nodes, $name);
     }
-    
+
     private function createAnnotationNode(
         string $annotationKey,
         Buffer $buffer,
@@ -120,7 +120,7 @@ final class AnnotationRule implements Rule
     /** @return string[] */
     private function analyzeOpeningLine(string $openingLine): array
     {
-        preg_match('/^\.\.\s+\[([#a-zA-Z0-9]*)\]\s(.*)$$/mUsi', $openingLine, $matches);
+        preg_match('/^\.\.\s+\[([#a-zA-Z0-9-]*)\]\s(.*)$$/mUsi', $openingLine, $matches);
         $annotationKey = $matches[1] ?? '';
         $content = $matches[2] ?? '';
 

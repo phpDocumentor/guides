@@ -20,12 +20,19 @@ use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
 use RuntimeException;
 
+use function array_key_last;
+use function array_pop;
+use function count;
 use function dirname;
+use function in_array;
 use function ltrim;
 use function str_starts_with;
 
 class ParserContext
 {
+    /** @var string[] */
+    private array $activeIncludeChain = [];
+
     public function __construct(
         private readonly ProjectNode $projectNode,
         private string $currentFileName,
@@ -70,6 +77,51 @@ class ParserContext
     public function setCurrentFileName(string $currentFileName): void
     {
         $this->currentFileName = $currentFileName;
+    }
+
+    /** @return string[] */
+    public function getActiveIncludeChain(): array
+    {
+        return $this->activeIncludeChain === []
+            ? [$this->currentFileName]
+            : $this->activeIncludeChain;
+    }
+
+    public function isIncludeActive(string $path): bool
+    {
+        $normalizedPath = ltrim($path, '/');
+        if (in_array($path, $this->activeIncludeChain, true)) {
+            return true;
+        }
+
+        if ($this->activeIncludeChain !== []) {
+            return false;
+        }
+
+        return in_array($normalizedPath, [$this->currentFileName, $this->currentFileName . '.rst'], true);
+    }
+
+    public function enterInclude(string $path): void
+    {
+        $this->activeIncludeChain = $this->activeIncludeChain === []
+            ? [$this->currentFileName, $path]
+            : [...$this->activeIncludeChain, $path];
+        $this->currentFileName = $path;
+    }
+
+    public function leaveInclude(): void
+    {
+        array_pop($this->activeIncludeChain);
+        if ($this->activeIncludeChain === []) {
+            return;
+        }
+
+        $this->currentFileName = $this->activeIncludeChain[array_key_last($this->activeIncludeChain)];
+        if (count($this->activeIncludeChain) !== 1) {
+            return;
+        }
+
+        $this->activeIncludeChain = [];
     }
 
     public function relativeFileName(string $url): string

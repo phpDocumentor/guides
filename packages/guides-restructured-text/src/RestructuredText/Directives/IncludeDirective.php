@@ -22,6 +22,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOption
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\Directive;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function array_key_exists;
@@ -44,6 +45,7 @@ final class IncludeDirective extends BaseDirective
     public function __construct(
         private readonly DocumentRule $startingRule,
         private readonly CodeNodeOptionMapper|null $codeNodeOptionMapper = null,
+        private readonly LoggerInterface|null $logger = null,
     ) {
     }
 
@@ -58,6 +60,7 @@ final class IncludeDirective extends BaseDirective
         Directive $directive,
     ): Node {
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
+        $includeFileName = $parserContext->relativeFileName($directive->getData());
         $path = $parserContext->absoluteRelativePath($directive->getData());
 
         $origin = $parserContext->getOrigin();
@@ -100,14 +103,25 @@ final class IncludeDirective extends BaseDirective
         }
 
         $currentDocument = $blockContext->getDocumentParserContext()->getDocument();
-        $currentFileName = $parserContext->getCurrentFileName();
-        $parserContext->setCurrentFileName($parserContext->relativeFileName($directive->getData()));
+        if ($parserContext->isIncludeActive($includeFileName)) {
+            $this->logger?->error(
+                sprintf(
+                    'Recursive include detected: %s',
+                    implode(' -> ', [...$parserContext->getActiveIncludeChain(), $includeFileName]),
+                ),
+                $blockContext->getLoggerInformation(),
+            );
+
+            return new CollectionNode([]);
+        }
+
+        $parserContext->enterInclude($includeFileName);
 
         try {
             $subContext = new BlockContext($blockContext->getDocumentParserContext(), $contents);
             $document = $this->startingRule->apply($subContext);
         } finally {
-            $parserContext->setCurrentFileName($currentFileName);
+            $parserContext->leaveInclude();
             $blockContext->getDocumentParserContext()->setDocument($currentDocument);
         }
 

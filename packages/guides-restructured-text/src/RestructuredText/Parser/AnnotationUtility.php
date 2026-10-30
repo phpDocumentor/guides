@@ -34,7 +34,7 @@ final class AnnotationUtility
 
     public static function getFootnoteName(string $key): string|null
     {
-        preg_match('/^[#][a-zA-Z0-9]*$/msi', $key, $matches);
+        preg_match('/^[#][a-zA-Z0-9-]*$/msi', $key, $matches);
 
         return $matches[0] ?? null;
     }
