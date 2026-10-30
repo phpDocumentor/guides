@@ -25,7 +25,12 @@ use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use RuntimeException;
 
 use function array_key_exists;
+use function array_slice;
+use function count;
 use function explode;
+use function implode;
+use function max;
+use function preg_split;
 use function sprintf;
 use function str_replace;
 use function strlen;
@@ -36,14 +41,10 @@ use function substr;
 #[Option(name: 'code', description: 'If set, the contents will be rendered as a code block with the specified language.')]
 final class IncludeDirective extends BaseDirective
 {
-    private readonly IncludeLineSelector $lineSelector;
-
     public function __construct(
         private readonly DocumentRule $startingRule,
         private readonly CodeNodeOptionMapper|null $codeNodeOptionMapper = null,
-        IncludeLineSelector|null $lineSelector = null,
     ) {
-        $this->lineSelector = $lineSelector ?? new IncludeLineSelector();
     }
 
     public function getName(): string
@@ -125,7 +126,7 @@ final class IncludeDirective extends BaseDirective
                 ? $directive->getOptionInt('end-line')
                 : null;
 
-            $contents = $this->lineSelector->selectLines($contents, $start, $end);
+            $contents = $this->selectLines($contents, $start, $end);
         }
 
         if ($directive->hasOption('start-after')) {
@@ -157,5 +158,15 @@ final class IncludeDirective extends BaseDirective
         }
 
         return $contents;
+    }
+
+    private function selectLines(string $contents, int $start, int|null $end): string
+    {
+        $lines = preg_split('/\r\n|\r|\n/', $contents);
+        if ($lines === false) {
+            return '';
+        }
+
+        return implode("\n", array_slice($lines, $start, max(0, ($end ?? count($lines)) - $start)));
     }
 }
