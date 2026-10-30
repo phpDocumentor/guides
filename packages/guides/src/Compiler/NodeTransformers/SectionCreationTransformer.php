@@ -117,7 +117,7 @@ final class SectionCreationTransformer implements NodeTransformer
     public function getPriority(): int
     {
         // Should run as first transformer
-        return PHP_INT_MAX;
+        return PHP_INT_MAX - 1;
     }
 
     /**

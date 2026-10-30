@@ -15,6 +15,7 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
+use phpDocumentor\Guides\Nodes\IncludedContentNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
@@ -129,7 +130,7 @@ final class IncludeDirective extends BaseDirective
             $currentDocument->addVariable($name, $value);
         }
 
-        return new CollectionNode($document->getChildren());
+        return new IncludedContentNode($document->getChildren());
     }
 
     private function selectContents(string $contents, Directive $directive): string

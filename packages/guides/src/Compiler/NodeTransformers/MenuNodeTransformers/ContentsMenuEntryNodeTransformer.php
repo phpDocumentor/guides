@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\Compiler\NodeTransformers\MenuNodeTransformers;
 
 use phpDocumentor\Guides\Compiler\CompilerContextInterface;
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\DocumentTree\SectionEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\ContentMenuNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
@@ -76,10 +77,31 @@ final class ContentsMenuEntryNodeTransformer extends AbstractMenuEntryNodeTransf
                 $entryNode->getValue() ?? $documentEntry->getTitle(),
                 1,
             );
-            $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
+            if (!$compilerContext->getDocumentNode()->isTitleFound()) {
+                $this->addRootSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
+            } else {
+                $this->addSubSectionsToMenuEntries($documentEntry, $newEntryNode, $depth);
+            }
         }
 
         return array_values($newEntryNode->getSections());
+    }
+
+    private function addRootSectionsToMenuEntries(
+        DocumentEntryNode $documentEntry,
+        SectionMenuEntryNode $menuEntry,
+        int $maxLevel,
+    ): void {
+        foreach ($documentEntry->getSections() as $section) {
+            $sectionMenuEntry = new SectionMenuEntryNode(
+                $documentEntry->getFile(),
+                $section->getTitle(),
+                $menuEntry->getLevel(),
+                $section->getId(),
+            );
+            $menuEntry->addSection($sectionMenuEntry);
+            $this->addSubSections($sectionMenuEntry, $section, $documentEntry, $menuEntry->getLevel(), $maxLevel);
+        }
     }
 
     public function getPriority(): int

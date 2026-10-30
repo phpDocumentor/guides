@@ -42,6 +42,10 @@ final class SectionRule implements Rule
         $documentIterator = $blockContext->getDocumentIterator();
         $section = $this->createSection($blockContext);
         Assert::isInstanceOfAny($on, [DocumentNode::class, SectionNode::class]);
+        if ($on instanceof DocumentNode) {
+            $on->setTitleFound(true);
+        }
+
         $on->addChildNode($section);
 
         $stack->push($on);
