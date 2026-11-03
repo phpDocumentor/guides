@@ -1,0 +1,4 @@
+app.WARNING: The comment "confval::passwordPolicies" looks like a directive without a space after "::"; it is ignored. Write "..  confval:: passwordPolicies". {"rst-file":"index.rst",
+app.WARNING: The comment "code-block::php" looks like a directive without a space after "::"; it is ignored. Write "..  code-block:: php". {"rst-file":"index.rst",
+app.WARNING: The comment "index::Exceptions; ProductionExceptionHandler" looks like a directive without a space after "::"; it is ignored. Write "..  index:: Exceptions; ProductionExceptionHandler". {"rst-file":"index.rst",
+app.WARNING: The comment "index::triple:PSR-14 event; TCA; AfterTcaCompilationEvent;" looks like a directive without a space after "::"; it is ignored. Write "..  index:: triple:PSR-14 event; TCA; AfterTcaCompilationEvent;". {"rst-file":"index.rst",
