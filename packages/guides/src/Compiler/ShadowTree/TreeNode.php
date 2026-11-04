@@ -22,6 +22,8 @@ use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
 
 use function array_filter;
+use function array_map;
+use function array_splice;
 use function array_unshift;
 use function array_values;
 use function count;
@@ -132,6 +134,38 @@ final class TreeNode
 
         $this->children[] = self::createFromNode($child, $this, new ChildrenAccessor());
         $this->node->addChildNode($child);
+    }
+
+    /**
+     * Add children immediately before an existing ordinary child.
+     *
+     * @param Node[] $children
+     */
+    public function addChildrenBefore(Node $sibling, array $children): void
+    {
+        $child = $this->findEdge($sibling, 'add children before');
+        if ($child?->field === null || !$child->field instanceof ChildrenAccessor) {
+            return;
+        }
+
+        $position = $this->findPosition($sibling);
+        if ($position === null) {
+            return;
+        }
+
+        $treeChildren = [];
+        foreach ($children as $node) {
+            $treeChildren[] = self::createFromNode($node, $this, new ChildrenAccessor());
+        }
+
+        array_splice($this->children, $position, 0, $treeChildren);
+
+        $newNode = clone $this->node;
+        $newNode->setValue(array_map(
+            static fn (self $treeNode): Node => $treeNode->getNode(),
+            $this->children,
+        ));
+        $this->changeNode($newNode);
     }
 
     public function pushChild(Node $child): void

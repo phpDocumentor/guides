@@ -36,6 +36,10 @@ interface and you should register it in the dependency injection container.
     the priority of the node transformer, the earlier it will be executed. Where highest priority is `PHP_INT_MAX`, lower
     number is lower priority.
 
+Node transformers receive the compiler context while visiting a node. The context exposes a shadow tree that should be
+used when a transformation needs to add, remove, or move nodes. This keeps changes synchronized with the immutable AST
+and avoids rebuilding unrelated compound nodes.
+
 CompilerPass
 ============
 
