@@ -13,17 +13,22 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\NavMenuNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive as ParsedDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
 
 use function count;
+use function is_scalar;
 
 /**
  * A menu directives displays a menu in the page. In opposition to a toctree directive the menu
@@ -32,6 +37,12 @@ use function count;
  *
  * By default, it displays a menu of the pages on level 1 up to level 2.
  */
+#[Directive(name: 'menu')]
+#[Option(name: 'depth', type: OptionType::Integer, description: 'Maximum depth of the menu to display.')]
+#[Option(name: 'maxdepth', type: OptionType::Integer, description: 'Synonym for depth.')]
+#[Option(name: 'glob', type: OptionType::Boolean, description: 'Treat menu entries as glob patterns.')]
+#[Option(name: 'globExclude', description: 'Comma-separated paths to exclude from glob patterns.')]
+#[Option(name: 'titlesonly', type: OptionType::Boolean, description: 'Display only page titles.')]
 final class MenuDirective extends BaseDirective
 {
     private SettingsManager $settingsManager;
@@ -44,31 +55,47 @@ final class MenuDirective extends BaseDirective
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
-        return 'menu';
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
-        $options = $directive->getOptions();
-        $options['glob'] = new DirectiveOption('glob', true);
+        $directive = $directiveNode->getDirective();
+        $directive->addOption(new DirectiveOption('glob', true));
         $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
-        $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
+        if (!$directive->hasOption('globExclude')) {
+            $directive->addOption(new DirectiveOption('globExclude', $indexName));
+        }
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
-            $parserContext,
-            $blockContext->getDocumentIterator(),
-            $options,
+            $this->createLinesIterator($directiveNode->getRawContent()),
+            $directive->getOptions(),
         );
         if (count($toctreeFiles) === 0) {
             $toctreeFiles[] = new GlobMenuEntryNode('/*');
         }
 
-        return (new NavMenuNode($toctreeFiles))->withOptions($this->optionsToArray($options));
+        return (new NavMenuNode($toctreeFiles))->withOptions($this->readProvidedOptions($directive));
+    }
+
+    private function createLinesIterator(string $rawContent): LinesIterator
+    {
+        $lines = new LinesIterator();
+        $lines->load($rawContent, true);
+
+        return $lines;
+    }
+
+    /** @return array<string, scalar|scalar[]|null> */
+    private function readProvidedOptions(ParsedDirective $directive): array
+    {
+        $options = [];
+        foreach ($directive->getOptions() as $option) {
+            $value = $this->readOption($directive, $option->getName());
+            if (!is_scalar($value) && $value !== null) {
+                continue;
+            }
+
+            $options[$option->getName()] = $value;
+        }
+
+        return $options;
     }
 }

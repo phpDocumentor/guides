@@ -13,16 +13,21 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive as ParsedDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
-use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\Settings\ProjectSettings;
 use phpDocumentor\Guides\Settings\SettingsManager;
+
+use function is_scalar;
 
 /**
  * Sphinx based Toctree directive.
@@ -70,53 +75,81 @@ use phpDocumentor\Guides\Settings\SettingsManager;
  * :maxdepth:
  *     Synonym of :depth:, depth prevails if both are set.
  */
+#[Directive(name: 'toctree')]
+#[Option(name: 'caption', type: OptionType::InlineMarkup, description: 'Caption to be displayed above the table of contents.')]
+#[Option(name: 'depth', type: OptionType::Integer, description: 'Maximum depth of the menu to display.')]
+#[Option(name: 'maxdepth', type: OptionType::Integer, description: 'Synonym for depth; depth takes precedence if both are set.')]
+#[Option(name: 'glob', type: OptionType::Boolean, default: false, description: 'If true, glob patterns containing stars are considered.')]
+#[Option(name: 'globExclude', description: 'Comma-separated paths to exclude from glob patterns.')]
+#[Option(name: 'hidden', type: OptionType::Boolean, default: false, description: 'Do not display the menu within the content.')]
+#[Option(name: 'reversed', type: OptionType::Boolean, default: false, description: 'Display documents in reversed order.')]
+#[Option(name: 'titlesonly', type: OptionType::Boolean, default: false, description: 'Display only page titles.')]
 final class ToctreeDirective extends BaseDirective
 {
     private SettingsManager $settingsManager;
 
-    /** @param Rule<InlineCompoundNode> $startingRule */
     public function __construct(
         private readonly ToctreeBuilder $toctreeBuilder,
-        private readonly Rule $startingRule,
         SettingsManager|null $settingsManager = null,
     ) {
         // if for backward compatibility reasons no settings manager was passed, use the defaults
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
-        return 'toctree';
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
-        $options = $directive->getOptions();
+        $directive = $directiveNode->getDirective();
         $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
-        $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
+        if (!$directive->hasOption('globExclude')) {
+            $directive->addOption(new DirectiveOption('globExclude', $indexName));
+        }
+
+        $options = $directive->getOptions();
 
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
-            $parserContext,
-            $blockContext->getDocumentIterator(),
+            $this->createLinesIterator($directiveNode->getRawContent()),
             $options,
         );
 
-        $tocNode =  (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
+        $tocNode = (new TocNode($toctreeFiles))->withOptions($this->readProvidedOptions($directive));
 
-        if (isset($options['caption'])) {
-            $blockContextOfCaption = new BlockContext($blockContext->getDocumentParserContext(), (string) $options['caption']->getValue(), false, $blockContext->getLineOffset(0));
-            $inlineNode = $this->startingRule->apply($blockContextOfCaption);
-            $tocNode = $tocNode->withCaption($inlineNode);
+        $caption = $this->readOption($directive, 'caption');
+        if ($caption instanceof InlineCompoundNode) {
+            $tocNode = $tocNode->withCaption($caption);
         }
 
-        if ($directive->getOptionBool('reversed')) {
+        if ((bool) $this->readOption($directive, 'reversed')) {
             $tocNode = $tocNode->withReversed(true);
         }
 
         return $tocNode;
+    }
+
+    private function createLinesIterator(string $rawContent): LinesIterator
+    {
+        $lines = new LinesIterator();
+        $lines->load($rawContent, true);
+
+        return $lines;
+    }
+
+    /** @return array<string, scalar|scalar[]|null> */
+    private function readProvidedOptions(ParsedDirective $directive): array
+    {
+        $options = [];
+        foreach ($directive->getOptions() as $option) {
+            if ($option->getName() === 'caption') {
+                continue;
+            }
+
+            $value = $this->readOption($directive, $option->getName());
+            if (!is_scalar($value) && $value !== null) {
+                continue;
+            }
+
+            $options[$option->getName()] = $value;
+        }
+
+        return $options;
     }
 }

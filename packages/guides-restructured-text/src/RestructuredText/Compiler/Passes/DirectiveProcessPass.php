@@ -101,6 +101,6 @@ final class DirectiveProcessPass implements ReverseNodeTransformer
 
     public function getPriority(): int
     {
-        return 6000;
+        return PHP_INT_MAX;
     }
 }

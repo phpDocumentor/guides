@@ -18,7 +18,6 @@ use phpDocumentor\Guides\Nodes\Menu\GlobMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\InternalMenuEntryNode;
 use phpDocumentor\Guides\Nodes\Menu\MenuEntryNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
-use phpDocumentor\Guides\ParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\References\EmbeddedReferenceParser;
 
@@ -39,7 +38,6 @@ final class ToctreeBuilder
      * @return MenuEntryNode[]
      */
     public function buildToctreeEntries(
-        ParserContext $parserContext,
         LinesIterator $lines,
         array $options,
     ): array {
