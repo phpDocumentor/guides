@@ -60,7 +60,7 @@ final class ParsePagesListener
     {
         $parseDirectoryCommand = $event->getParseDirectoryCommand();
         $origin      = $parseDirectoryCommand->getOrigin();
-        $inputFormat = $parseDirectoryCommand->getInputFormat();
+        $inputFormats = $parseDirectoryCommand->getInputFormats();
         $projectNode = $parseDirectoryCommand->getProjectNode();
         $sourceDir   = ltrim($this->sourceDirectory, '/');
 
@@ -73,7 +73,7 @@ final class ParsePagesListener
             return;
         }
 
-        $files = $this->fileCollector->collect($origin, $sourceDir, $inputFormat);
+        $files = $this->fileCollector->collect($origin, $sourceDir, $inputFormats);
 
         if ($files->count() === 0) {
             return;
@@ -87,7 +87,7 @@ final class ParsePagesListener
                     $origin,
                     $sourceDir,
                     $file,
-                    $inputFormat,
+                    $files->getExtension($file) ?? $inputFormats[0],
                     1,
                     $projectNode,
                     false,

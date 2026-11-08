@@ -23,6 +23,7 @@ use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 use function sort;
 
@@ -90,6 +91,60 @@ final class FileCollectorTest extends TestCase
         );
 
         self::assertSame(['_build-notes', 'index'], $this->sorted($files));
+    }
+
+    public function testCollectRecordsTheExtensionOfEachDocumentWhenCollectingSeveralExtensions(): void
+    {
+        $filesystem = new LeagueFilesystem(new InMemoryFilesystemAdapter());
+        $filesystem->write('index.rst', '');
+        $filesystem->write('specs/spec.md', '');
+        $filesystem->write('notes.txt', '');
+
+        $files = (new FileCollector())->collect(
+            FlySystemAdapter::createFromFileSystem($filesystem),
+            '',
+            ['rst', 'md'],
+            new Exclude(),
+        );
+
+        self::assertSame(['index', 'specs/spec'], $this->sorted($files));
+        self::assertSame('rst', $files->getExtension('index'));
+        self::assertSame('md', $files->getExtension('specs/spec'));
+    }
+
+    public function testCollectFailsWhenTwoFilesOfDifferentExtensionsAreTheSameDocument(): void
+    {
+        $filesystem = new LeagueFilesystem(new InMemoryFilesystemAdapter());
+        $filesystem->write('index.rst', '');
+        $filesystem->write('guide/setup.rst', '');
+        $filesystem->write('guide/setup.md', '');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageMatches('~"guide/setup\.(rst|md)" and "guide/setup\.(rst|md)" are both the document "guide/setup"~');
+
+        (new FileCollector())->collect(
+            FlySystemAdapter::createFromFileSystem($filesystem),
+            '',
+            ['rst', 'md'],
+            new Exclude(),
+        );
+    }
+
+    public function testCollectWithOneExtensionLeavesFilesOfOtherExtensionsAlone(): void
+    {
+        $filesystem = new LeagueFilesystem(new InMemoryFilesystemAdapter());
+        $filesystem->write('index.rst', '');
+        $filesystem->write('index.md', '');
+
+        $files = (new FileCollector())->collect(
+            FlySystemAdapter::createFromFileSystem($filesystem),
+            '',
+            'rst',
+            new Exclude(),
+        );
+
+        self::assertSame(['index'], $this->sorted($files));
+        self::assertSame('rst', $files->getExtension('index'));
     }
 
     /** @return iterable<string, array{list<string>}> */

@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\ReferenceResolvers;
 
+use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\Inline\HyperLinkNode;
 use phpDocumentor\Guides\Nodes\Inline\LinkInlineNode;
 use phpDocumentor\Guides\Nodes\Inline\PlainTextInlineNode;
 use phpDocumentor\Guides\RenderContext;
 use phpDocumentor\Guides\Renderer\UrlGenerator\UrlGeneratorInterface;
+use phpDocumentor\Guides\Settings\SettingsManager;
 
 use function count;
 use function explode;
@@ -39,6 +41,7 @@ final class PageHyperlinkResolver implements ReferenceResolver
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly DocumentNameResolverInterface $documentNameResolver,
+        private readonly SettingsManager|null $settingsManager = null,
     ) {
     }
 
@@ -61,7 +64,8 @@ final class PageHyperlinkResolver implements ReferenceResolver
             $canonicalDocumentName = substr($canonicalDocumentName, 0, 0 - strlen('.' . $renderContext->getOutputFormat()));
         }
 
-        $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName);
+        $document = $renderContext->getProjectNode()->findDocumentEntry($canonicalDocumentName)
+            ?? $this->findDocumentEntryInOtherInputFormat($renderContext, $canonicalDocumentName);
         if ($document === null) {
             return false;
         }
@@ -72,6 +76,27 @@ final class PageHyperlinkResolver implements ReferenceResolver
         }
 
         return true;
+    }
+
+    /** Each markup parser removes only its own extension, so "page.rst" in Markdown still has it. */
+    private function findDocumentEntryInOtherInputFormat(RenderContext $renderContext, string $canonicalDocumentName): DocumentEntryNode|null
+    {
+        $inputFormats = $this->settingsManager?->getProjectSettings()->getInputFormats() ?? [];
+        if (count($inputFormats) < 2) {
+            return null;
+        }
+
+        foreach ($inputFormats as $inputFormat) {
+            if (!str_ends_with($canonicalDocumentName, '.' . $inputFormat)) {
+                continue;
+            }
+
+            return $renderContext->getProjectNode()->findDocumentEntry(
+                substr($canonicalDocumentName, 0, -strlen('.' . $inputFormat)),
+            );
+        }
+
+        return null;
     }
 
     public static function getPriority(): int

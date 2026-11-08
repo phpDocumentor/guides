@@ -43,6 +43,28 @@ directories.
         <path>drafts/*.rst</path>
     </exclude>
 
+reStructuredText and Markdown in one project
+============================================
+
+The ``input-format`` setting takes a comma-separated list. With ``rst,md``, every ``.rst`` file is parsed as
+reStructuredText and every ``.md`` file as Markdown.
+
+.. code-block:: xml
+
+    <guides input-format="rst,md">
+        <exclude>
+            <path>AGENTS.md</path>
+        </exclude>
+    </guides>
+
+*   The index file can be written in either format, ``index.rst`` or ``index.md``.
+*   A link to a page of the other format names its file, with the extension of that format: ``setup.rst`` in a
+    Markdown link, ``setup.md`` in a reStructuredText hyperlink.
+*   Two files that differ only in their extension, ``setup.rst`` and ``setup.md``, stop the run with an error; rename or
+    exclude one.
+*   Markdown files that are not documentation, like an ``AGENTS.md`` or a ``README.md`` next to the documentation,
+    become pages as soon as ``md`` is in the list. Exclude them.
+
 .. _violation_formats_ci:
 
 Annotations in GitHub Actions and GitLab CI

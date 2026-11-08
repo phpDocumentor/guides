@@ -18,6 +18,7 @@ use phpDocumentor\Guides\Validation\Violation;
 use Stringable;
 
 use function getcwd;
+use function is_file;
 use function is_int;
 use function is_scalar;
 use function is_string;
@@ -50,12 +51,28 @@ final class AnnotationDetails
         }
 
         $settings = $this->settingsManager->getProjectSettings();
+        $path = rtrim($settings->getInput(), '/') . '/' . ltrim($document, '/');
         // Depending on where a violation is found, the document is named with or without its extension
         if (preg_match('/\.(rst|md)$/', $document) !== 1) {
-            $document .= '.' . $settings->getInputFormat();
+            $path .= '.' . $this->getInputFormat($path);
         }
 
-        return self::fromWorkingDirectory(rtrim($settings->getInput(), '/') . '/' . ltrim($document, '/'));
+        return self::fromWorkingDirectory($path);
+    }
+
+    /**
+     * With several input formats, the format of a document is the first one a file exists for.
+     */
+    private function getInputFormat(string $pathWithoutExtension): string
+    {
+        $settings = $this->settingsManager->getProjectSettings();
+        foreach ($settings->getInputFormats() as $inputFormat) {
+            if (is_file($pathWithoutExtension . '.' . $inputFormat)) {
+                return $inputFormat;
+            }
+        }
+
+        return $settings->getInputFormat();
     }
 
     /**
