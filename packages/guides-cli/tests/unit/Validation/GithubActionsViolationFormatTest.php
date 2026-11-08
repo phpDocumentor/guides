@@ -23,7 +23,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function explode;
 use function getcwd;
+use function mkdir;
+use function rmdir;
 use function rtrim;
+use function sys_get_temp_dir;
+use function touch;
+use function uniqid;
+use function unlink;
 
 final class GithubActionsViolationFormatTest extends TestCase
 {
@@ -92,6 +98,36 @@ final class GithubActionsViolationFormatTest extends TestCase
         yield 'input relative to the working directory' => ['./docs', 'rst', 'index', 'docs/index.rst'];
         yield 'absolute input in the working directory' => [getcwd() . '/docs', 'rst', 'index', 'docs/index.rst'];
         yield 'absolute input elsewhere' => ['/srv/docs', 'rst', 'index', '/srv/docs/index.rst'];
+    }
+
+    public function testWithSeveralInputFormatsTheFileIsTheOneThatExists(): void
+    {
+        $input = sys_get_temp_dir() . '/guides-annotation-' . uniqid();
+        mkdir($input . '/specs', 0o777, true);
+        touch($input . '/index.rst');
+        touch($input . '/specs/spec.md');
+        $this->settings->setInput($input);
+        $this->settings->setInputFormat('rst,md');
+
+        try {
+            $this->format->report(Violation::warning('rst.code-block.empty', 'Empty', ['rst-file' => 'index']));
+            $this->format->report(Violation::warning('rst.code-block.empty', 'Empty', ['rst-file' => 'specs/spec']));
+            $this->format->report(Violation::warning('rst.code-block.empty', 'Empty', ['rst-file' => 'gone']));
+
+            self::assertSame(
+                [
+                    '::warning file=' . $input . '/index.rst,title=rst.code-block.empty::Empty',
+                    '::warning file=' . $input . '/specs/spec.md,title=rst.code-block.empty::Empty',
+                    '::warning file=' . $input . '/gone.rst,title=rst.code-block.empty::Empty',
+                ],
+                $this->finish(),
+            );
+        } finally {
+            unlink($input . '/index.rst');
+            unlink($input . '/specs/spec.md');
+            rmdir($input . '/specs');
+            rmdir($input);
+        }
     }
 
     public function testPlaceholdersAreReplacedFromTheContext(): void

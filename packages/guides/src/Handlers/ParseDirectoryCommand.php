@@ -19,6 +19,7 @@ use League\Flysystem\FilesystemInterface;
 use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\Guides\Nodes\ProjectNode;
+use phpDocumentor\Guides\Settings\ProjectSettings;
 
 final class ParseDirectoryCommand
 {
@@ -59,9 +60,16 @@ final class ParseDirectoryCommand
         return $this->directory;
     }
 
+    /** One file extension, or a comma-separated list such as "rst,md". */
     public function getInputFormat(): string
     {
         return $this->inputFormat;
+    }
+
+    /** @return non-empty-list<string> */
+    public function getInputFormats(): array
+    {
+        return ProjectSettings::splitInputFormats($this->inputFormat);
     }
 
     public function getProjectNode(): ProjectNode

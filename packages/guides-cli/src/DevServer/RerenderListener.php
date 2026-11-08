@@ -32,8 +32,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function array_find_key;
 use function assert;
 use function current;
+use function pathinfo;
 use function sprintf;
+use function strlen;
 use function substr;
+
+use const PATHINFO_EXTENSION;
 
 final class RerenderListener
 {
@@ -57,14 +61,15 @@ final class RerenderListener
                 $event->path,
             ),
         );
-        $file = substr($event->path, 0, -4);
+        $extension = pathinfo($event->path, PATHINFO_EXTENSION);
+        $file = substr($event->path, 0, -strlen('.' . $extension));
 
         $document = $this->commandBus->handle(
             new ParseFileCommand(
                 $this->sourceFileSystem,
                 '',
                 $file,
-                $this->settings->getInputFormat(),
+                $extension,
                 1,
                 $this->projectNode,
                 true,

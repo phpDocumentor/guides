@@ -58,18 +58,18 @@ final class ParseDirectoryHandler
 
         $origin = $command->getOrigin();
         $currentDirectory = $command->getDirectory();
-        $extension = $command->getInputFormat();
+        $extensions = $command->getInputFormats();
 
         $indexName = $this->getDirectoryIndexFile(
             $origin,
             $currentDirectory,
-            $extension,
+            $extensions,
         );
 
         $files = $this->fileCollector->collect(
             $origin,
             $currentDirectory,
-            $extension,
+            $extensions,
             match (true) {
                 $command->hasExclude() => $command->getExclude(),
                 $command->hasExcludedSpecification() => $command->getExcludedSpecification(),
@@ -82,7 +82,11 @@ final class ParseDirectoryHandler
         );
         assert($postCollectFilesForParsingEvent instanceof PostCollectFilesForParsingEvent);
         $documents = [];
-        foreach ($postCollectFilesForParsingEvent->getFiles() as $file) {
+        $filesToParse = $postCollectFilesForParsingEvent->getFiles();
+        foreach ($filesToParse as $file) {
+            // A listener that filters the files may build a new Files without extensions. A file it adds that was
+            // not collected is parsed with the first input format.
+            $extension = $filesToParse->getExtension($file) ?? $files->getExtension($file) ?? $extensions[0];
             $document = $this->commandBus->handle(
                 new ParseFileCommand($origin, $currentDirectory, $file, $extension, 1, $command->getProjectNode(), $indexName === $file),
             );
@@ -98,13 +102,12 @@ final class ParseDirectoryHandler
         return $documents;
     }
 
+    /** @param non-empty-list<string> $extensions */
     private function getDirectoryIndexFile(
         FilesystemInterface|FileSystem $filesystem,
         string $directory,
-        string $sourceFormat,
+        array $extensions,
     ): string {
-        $extension = $sourceFormat;
-
         // On macOS filesystems, a file-check against "index.rst"
         // using $filesystem->has() would return TRUE, when in fact
         // a file might be stored as "Index.rst". Thus, at this point
@@ -125,12 +128,14 @@ final class ParseDirectoryHandler
 
         $indexNamesNotFound = [];
         foreach ($indexFileNames as $indexName) {
-            $fullIndexFilename = sprintf('%s.%s', $indexName, $extension);
-            if (isset($hashedContentFromFilesystem[$fullIndexFilename])) {
-                return $indexName;
-            }
+            foreach ($extensions as $extension) {
+                $fullIndexFilename = sprintf('%s.%s', $indexName, $extension);
+                if (isset($hashedContentFromFilesystem[$fullIndexFilename])) {
+                    return $indexName;
+                }
 
-            $indexNamesNotFound[] = $fullIndexFilename;
+                $indexNamesNotFound[] = $fullIndexFilename;
+            }
         }
 
         throw new InvalidArgumentException(
