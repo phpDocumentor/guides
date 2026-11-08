@@ -71,7 +71,7 @@ final class ParseContentTypeListener
 
         $parseDirectoryCommand = $event->getParseDirectoryCommand();
         $origin      = $parseDirectoryCommand->getOrigin();
-        $inputFormat = $parseDirectoryCommand->getInputFormat();
+        $inputFormats = $parseDirectoryCommand->getInputFormats();
         $projectNode = $parseDirectoryCommand->getProjectNode();
 
         /** @var array<string, DocumentNode> $tempDocuments keyed by filePath across all collections */
@@ -88,7 +88,7 @@ final class ParseContentTypeListener
                 continue;
             }
 
-            $files = $this->fileCollector->collect($origin, $sourceDir, $inputFormat);
+            $files = $this->fileCollector->collect($origin, $sourceDir, $inputFormats);
 
             if ($files->count() === 0) {
                 continue;
@@ -106,7 +106,7 @@ final class ParseContentTypeListener
                         $origin,
                         $sourceDir,
                         $file,
-                        $inputFormat,
+                        $files->getExtension($file) ?? $inputFormats[0],
                         1,
                         $projectNode,
                         false,

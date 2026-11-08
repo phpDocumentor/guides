@@ -180,7 +180,7 @@ final class SettingsBuilder
             'input-format',
             null,
             InputOption::VALUE_REQUIRED,
-            'Format of the input can be "RST", or "Markdown"',
+            'Input format as file extension: "rst", "md", or a list such as "rst,md"',
         );
         $command->addOption(
             'output-format',
