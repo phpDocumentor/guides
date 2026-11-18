@@ -1,0 +1,24 @@
+{
+    "name": "phpdocumentor/guides-search",
+    "description": "Search extension for phpDocumentor Guides",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://www.phpdoc.org",
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "phpDocumentor\\Guides\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "phpdocumentor/guides": "^1.0 || ^2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    }
+}
