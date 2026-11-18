@@ -38,6 +38,14 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     /** @var SplStack<DocumentNode> */
     private readonly SplStack $documentStack;
 
+    /**
+     * The anchors registered for the document compiled right now. The project keeps the anchors of a document when it
+     * is compiled again, like by the dev server, so it cannot tell an anchor declared twice in the document by itself.
+     *
+     * @var array<string, true>
+     */
+    private array $anchorsInDocument = [];
+
     public function __construct(
         private readonly AnchorNormalizer $anchorReducer,
         private LoggerInterface|null $logger = null,
@@ -53,6 +61,10 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
     public function enterNode(Node $node, CompilerContextInterface $compilerContext): Node
     {
         if ($node instanceof DocumentNode) {
+            if ($this->documentStack->isEmpty()) {
+                $this->anchorsInDocument = [];
+            }
+
             $this->documentStack->push($node);
 
             return $node;
@@ -67,6 +79,20 @@ final class CollectLinkTargetsTransformer implements NodeTransformer
             }
 
             $anchorName = $this->anchorReducer->reduceAnchor($node->toString());
+            if (isset($this->anchorsInDocument[$anchorName])) {
+                $this->logger?->warning(
+                    sprintf(
+                        'Duplicate anchor "%s". There is already another anchor of that name in document "%s"',
+                        $anchorName,
+                        $currentDocument->getFilePath(),
+                    ),
+                    $compilerContext->getLoggerInformation(),
+                );
+
+                return $node;
+            }
+
+            $this->anchorsInDocument[$anchorName] = true;
             try {
                 $compilerContext->getProjectNode()->addLinkTarget(
                     $anchorName,

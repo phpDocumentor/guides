@@ -20,8 +20,10 @@ use phpDocumentor\Guides\Nodes\DocumentTree\DocumentEntryNode;
 use phpDocumentor\Guides\Nodes\ProjectNode;
 use phpDocumentor\Guides\Nodes\TitleNode;
 use phpDocumentor\Guides\ReferenceResolvers\AnchorNormalizer;
+use phpDocumentor\Guides\ReferenceResolvers\NullAnchorNormalizer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\Test\TestLogger;
 
 final class CollectLinkTargetsTransformerTest extends TestCase
 {
@@ -54,5 +56,56 @@ final class CollectLinkTargetsTransformerTest extends TestCase
 
         $this->anchorReducer->expects(self::once())->method('reduceAnchor');
         $transformer->enterNode($node, $this->context);
+    }
+
+    public function testAnchorDeclaredTwiceInADocumentIsADuplicate(): void
+    {
+        $logger = new TestLogger();
+        $transformer = new CollectLinkTargetsTransformer(new NullAnchorNormalizer(), $logger);
+
+        $this->compileDocument($transformer, ['examples', 'examples']);
+
+        self::assertTrue($logger->hasWarningThatContains('Duplicate anchor "examples"'));
+    }
+
+    public function testAnchorsOfADocumentCompiledAgainAreNoDuplicates(): void
+    {
+        $logger = new TestLogger();
+        $transformer = new CollectLinkTargetsTransformer(new NullAnchorNormalizer(), $logger);
+
+        // As the dev server compiles a changed document again, while the project keeps its anchors
+        $this->compileDocument($transformer, ['examples', 'more-examples']);
+        $this->compileDocument($transformer, ['examples', 'more-examples']);
+
+        self::assertFalse($logger->hasWarningRecords());
+    }
+
+    public function testAnchorDeclaredInAnotherDocumentIsADuplicate(): void
+    {
+        $logger = new TestLogger();
+        $transformer = new CollectLinkTargetsTransformer(new NullAnchorNormalizer(), $logger);
+
+        $this->compileDocument($transformer, ['examples']);
+        $this->compileDocument($transformer, ['examples'], $this->getCompilerContext('other-path'));
+
+        self::assertTrue($logger->hasWarningThatContains(
+            'Duplicate anchor "examples". There is already another anchor of that name in document "some-path"',
+        ));
+    }
+
+    /** @param list<string> $anchors */
+    private function compileDocument(
+        CollectLinkTargetsTransformer $transformer,
+        array $anchors,
+        CompilerContext|null $context = null,
+    ): void {
+        $context ??= $this->context;
+        $document = $context->getDocumentNode();
+        $transformer->enterNode($document, $context);
+        foreach ($anchors as $anchor) {
+            $transformer->enterNode(new AnchorNode($anchor), $context);
+        }
+
+        $transformer->leaveNode($document, $context);
     }
 }
