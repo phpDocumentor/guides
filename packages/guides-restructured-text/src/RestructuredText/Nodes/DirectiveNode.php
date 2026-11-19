@@ -22,6 +22,9 @@ final class DirectiveNode extends CompoundNode
 {
     private DirectiveSourceLocation $sourceLocation;
 
+    /** @var array<class-string<DirectiveNodeData>, DirectiveNodeData> */
+    private array $data = [];
+
     /**
      * @param Node[] $children
      * @param string $rawContent the directive's content exactly as written, before
@@ -62,5 +65,36 @@ final class DirectiveNode extends CompoundNode
     public function getRawContent(): string
     {
         return $this->rawContent;
+    }
+
+    public function addData(DirectiveNodeData $data): void
+    {
+        $this->data[$data::class] = $data;
+    }
+
+    /**
+     * @param class-string<T> $type
+     *
+     * @return T|null
+     *
+     * @template T of DirectiveNodeData
+     */
+    public function getData(string $type): mixed
+    {
+        $data = $this->data[$type] ?? null;
+        if ($data === null) {
+            foreach ($this->data as $candidate) {
+                if ($candidate instanceof $type) {
+                    $data = $candidate;
+                    break;
+                }
+            }
+        }
+
+        if ($data === null || !$data instanceof $type) {
+            return null;
+        }
+
+        return $data;
     }
 }

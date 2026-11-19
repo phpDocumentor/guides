@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use phpDocumentor\Guides\ReferenceResolvers\DocumentNameResolverInterface;
+use phpDocumentor\Guides\RestructuredText\Compiler\Passes\DirectiveNodeProcessTransformer;
 use phpDocumentor\Guides\RestructuredText\Compiler\Passes\DirectiveProcessPass;
 use phpDocumentor\Guides\RestructuredText\Compiler\RestructuredTextProvider;
 use phpDocumentor\Guides\RestructuredText\Directives\AdmonitionDirective;
@@ -419,6 +420,8 @@ return static function (ContainerConfigurator $container): void {
         ->set(InlineMarkupRule::class)
 
         ->set(DirectiveProcessPass::class)
+        ->tag('phpdoc.guides.compiler.passes')
+        ->set(DirectiveNodeProcessTransformer::class)
         ->arg('$directives', tagged_iterator('phpdoc.guides.directive'))
         ->tag('phpdoc.guides.compiler.nodeTransformers')
         ->set(RestructuredTextProvider::class)

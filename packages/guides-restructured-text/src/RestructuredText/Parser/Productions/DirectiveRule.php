@@ -20,6 +20,7 @@ use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveH
 use phpDocumentor\Guides\RestructuredText\Directives\DirectiveValueType;
 use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionType;
+use phpDocumentor\Guides\RestructuredText\Directives\ParserAwareDirective;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveSourceLocation;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
@@ -132,6 +133,27 @@ final class DirectiveRule implements Rule
             } else {
                 $subBlockContext = new BlockContext($blockContext->getDocumentParserContext(), $rawContent, true, $contentLineOffset);
                 $directiveNode = new DirectiveNode($directive, rawContent: $rawContent);
+
+                try {
+                    if ($directiveHandler instanceof ParserAwareDirective) {
+                        $directiveNode->addData($directiveHandler->parse($blockContext, $directive));
+                    }
+                } catch (Throwable $e) {
+                    $message = sprintf(
+                        'Error while parsing "%s" directive%s: %s',
+                        $directiveHandler->getName(),
+                        $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName() !== '' ? sprintf(
+                            ' in "%s"',
+                            $blockContext->getDocumentParserContext()->getContext()->getCurrentFileName(),
+                        ) : '',
+                        $e->getMessage(),
+                    );
+
+                    $this->logger->error($message, $blockContext->getLoggerInformation());
+
+                    return null;
+                }
+
                 $node = $this->startingRule->apply($subBlockContext, $directiveNode);
                 // Captured only after the sub-parse has fully consumed $subBlockContext's
                 // content, matching what a directive's own logging call would have seen

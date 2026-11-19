@@ -13,20 +13,28 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use LogicException;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\CollectionNode;
 use phpDocumentor\Guides\Nodes\IncludedContentNode;
 use phpDocumentor\Guides\Nodes\LiteralBlockNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
 use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNodeData;
+use phpDocumentor\Guides\RestructuredText\Nodes\IncludeDirectiveData;
+use phpDocumentor\Guides\RestructuredText\Nodes\IncludeSourceData;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive as ParserDirective;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\DocumentRule;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 use function array_key_exists;
+use function array_map;
 use function array_slice;
 use function count;
 use function explode;
@@ -41,7 +49,18 @@ use function substr;
 
 #[Option(name: 'literal', description: 'If set, the contents will be rendered as a literal block.')]
 #[Option(name: 'code', description: 'If set, the contents will be rendered as a code block with the specified language.')]
-final class IncludeDirective extends BaseDirective
+#[Option(name: 'start-line', type: OptionType::Integer)]
+#[Option(name: 'end-line', type: OptionType::Integer)]
+#[Option(name: 'start-after')]
+#[Option(name: 'end-before')]
+#[Option(name: 'language')]
+#[Option(name: 'caption', type: OptionType::InlineMarkup)]
+#[Option(name: 'emphasize-lines')]
+#[Option(name: 'linenos', type: OptionType::Boolean)]
+#[Option(name: 'lineno-start', type: OptionType::Integer)]
+#[Option(name: 'number-lines', type: OptionType::Integer)]
+#[Directive(name: 'include', valueType: DirectiveValueType::String)]
+final class IncludeDirective extends BaseDirective implements ParserAwareDirective
 {
     public function __construct(
         private readonly DocumentRule $startingRule,
@@ -50,16 +69,10 @@ final class IncludeDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
-    {
-        return 'include';
-    }
-
-    /** {@inheritDoc} */
-    public function processNode(
+    public function parse(
         BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
+        ParserDirective $directive,
+    ): DirectiveNodeData {
         $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $includeFileName = $parserContext->relativeFileName($directive->getData());
         $path = $parserContext->absoluteRelativePath($directive->getData());
@@ -80,27 +93,11 @@ final class IncludeDirective extends BaseDirective
         $contents = $this->selectContents($contents, $directive);
 
         if (array_key_exists('literal', $directive->getOptions())) {
-            $contents = str_replace("\r\n", "\n", $contents);
-
-            if (array_key_exists('number-lines', $directive->getOptions())) {
-                $codeNode = new CodeNode(explode("\n", $contents));
-                $this->codeNodeOptionMapper?->apply($codeNode, $directive->getOptions(), $blockContext);
-
-                return $codeNode;
-            }
-
-            return new LiteralBlockNode($contents);
+            return new IncludeSourceData(str_replace("\r\n", "\n", $contents), $path);
         }
 
         if (array_key_exists('code', $directive->getOptions())) {
-            $contents = str_replace("\r\n", "\n", $contents);
-            $codeNode = new CodeNode(
-                explode("\n", $contents),
-            );
-            $codeNode->setLanguage((string) $directive->getOption('code')->getValue());
-            $this->codeNodeOptionMapper?->apply($codeNode, $directive->getOptions(), $blockContext);
-
-            return $codeNode;
+            return new IncludeSourceData(str_replace("\r\n", "\n", $contents), $path);
         }
 
         $currentDocument = $blockContext->getDocumentParserContext()->getDocument();
@@ -113,7 +110,7 @@ final class IncludeDirective extends BaseDirective
                 $blockContext->getLoggerInformation(),
             );
 
-            return new CollectionNode([]);
+            return new IncludeDirectiveData(new CollectionNode([]), $path);
         }
 
         $parserContext->enterInclude($includeFileName);
@@ -130,10 +127,42 @@ final class IncludeDirective extends BaseDirective
             $currentDocument->addVariable($name, $value);
         }
 
-        return new IncludedContentNode($document->getChildren());
+        return new IncludeDirectiveData(new CollectionNode($document->getChildren()), $path);
     }
 
-    private function selectContents(string $contents, Directive $directive): string
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
+    {
+        $data = $directiveNode->getData(IncludeDirectiveData::class);
+        if ($data !== null) {
+            $children = array_map(
+                static fn ($child): Node => $child->getNode(),
+                $compilerContext->getShadowTree()->getChildren(),
+            );
+
+            return new IncludedContentNode($children);
+        }
+
+        $source = $directiveNode->getData(IncludeSourceData::class);
+        if ($source === null) {
+            throw new LogicException('Include directive parser data is missing.');
+        }
+
+        $directive = $directiveNode->getDirective();
+        if ($directive->hasOption('literal')) {
+            $node = new CodeNode(explode("\n", $source->contents));
+            $this->codeNodeOptionMapper?->apply($node, $directive->getOptions(), $compilerContext);
+
+            return $directive->hasOption('number-lines') ? $node : new LiteralBlockNode($source->contents);
+        }
+
+        $codeNode = new CodeNode(explode("\n", $source->contents));
+        $codeNode->setLanguage((string) $directive->getOption('code')->getValue());
+        $this->codeNodeOptionMapper?->apply($codeNode, $directive->getOptions(), $compilerContext);
+
+        return $codeNode;
+    }
+
+    private function selectContents(string $contents, ParserDirective $directive): string
     {
         if ($directive->hasOption('start-line') || $directive->hasOption('end-line')) {
             $start = $directive->hasOption('start-line') ? $directive->getOptionInt('start-line') : 0;

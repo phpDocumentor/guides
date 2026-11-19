@@ -14,93 +14,57 @@ declare(strict_types=1);
 namespace phpDocumentor\Guides\RestructuredText\Compiler\Passes;
 
 use phpDocumentor\Guides\Compiler\CompilerContext;
-use phpDocumentor\Guides\Compiler\ReverseNodeTransformer;
+use phpDocumentor\Guides\Compiler\CompilerPass;
+use phpDocumentor\Guides\Nodes\CompoundNode;
+use phpDocumentor\Guides\Nodes\DocumentNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Directives\BaseDirective as DirectiveHandler;
-use phpDocumentor\Guides\RestructuredText\Directives\GeneralDirective;
 use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNodeChildrenData;
 
-use function array_merge;
-use function explode;
-use function is_string;
-use function strtolower;
+use const PHP_INT_MAX;
 
-/** @implements ReverseNodeTransformer<DirectiveNode> */
-final class DirectiveProcessPass implements ReverseNodeTransformer
+final class DirectiveProcessPass implements CompilerPass
 {
-    /** @var array<string, DirectiveHandler> */
-    private array $directives;
-
-    /** @param iterable<DirectiveHandler> $directives */
-    public function __construct(
-        private readonly GeneralDirective $generalDirective,
-        iterable $directives = [],
-    ) {
-        foreach ($directives as $directive) {
-            $this->registerDirective($directive);
+    /**
+     * Materialize parser-produced children before the directive transformer
+     * walks the document. Parser data remains separate from the ordinary
+     * children of DirectiveNode.
+     *
+     * @param DocumentNode[] $documents
+     *
+     * @return DocumentNode[]
+     */
+    public function run(array $documents, CompilerContext $compilerContext): array
+    {
+        foreach ($documents as $document) {
+            $this->materializeChildren($document);
         }
+
+        return $documents;
     }
 
-    private function registerDirective(DirectiveHandler $directive): void
+    private function materializeChildren(Node $node): void
     {
-        $this->directives[strtolower($directive->getName())] = $directive;
-        foreach ($directive->getAliases() as $alias) {
-            $this->directives[strtolower($alias)] = $directive;
-        }
-    }
-
-    public function enterNode(Node $node, CompilerContext $compilerContext): Node
-    {
-        return $node;
-    }
-
-    public function leaveNode(Node $node, CompilerContext $compilerContext): Node|null
-    {
-        if ($node instanceof DirectiveNode === false) {
-            return $node;
-        }
-
-        $newNode = $this->getDirectiveHandler($node->getDirective())->createNode($node, $compilerContext);
-        if ($newNode === null) {
-            return null;
-        }
-
-        $newNode->setClasses(array_merge($newNode->getClasses(), $node->getClasses()));
-
-        // Matches DirectiveRule::postProcessNode() for the old (non-upgraded)
-        // dispatch: apply directive options createNode() didn't already consume
-        // itself as node options (`:class:` becomes CSS classes instead). Node
-        // options createNode() already set explicitly always win on collision.
-        $optionsForNode = [];
-        foreach ($node->getDirective()->getOptions() as $option) {
-            if (!is_string($option->getValue())) {
-                continue;
+        if ($node instanceof DirectiveNode) {
+            $data = $node->getData(DirectiveNodeChildrenData::class);
+            if ($data !== null) {
+                foreach ($data->getChildren() as $child) {
+                    $node->addChildNode($child);
+                }
             }
-
-            if ($option->getName() === 'class') {
-                $newNode->setClasses(array_merge($newNode->getClasses(), explode(' ', $option->getValue())));
-                continue;
-            }
-
-            $optionsForNode[$option->getName()] = $option->getValue();
         }
 
-        return $newNode->withOptions(array_merge($optionsForNode, $newNode->getOptions()));
-    }
+        if (!$node instanceof CompoundNode) {
+            return;
+        }
 
-    private function getDirectiveHandler(Directive $directive): DirectiveHandler
-    {
-        return $this->directives[strtolower($directive->getName())] ?? $this->generalDirective;
-    }
-
-    public function supports(Node $node): bool
-    {
-        return $node instanceof DirectiveNode;
+        foreach ($node->getChildren() as $child) {
+            $this->materializeChildren($child);
+        }
     }
 
     public function getPriority(): int
     {
-        return 6000;
+        return PHP_INT_MAX;
     }
 }

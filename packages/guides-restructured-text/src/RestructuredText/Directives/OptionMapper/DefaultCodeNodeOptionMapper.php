@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives\OptionMapper;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
@@ -50,15 +51,15 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
     public function apply(
         CodeNode $codeNode,
         array $directiveOptions,
-        BlockContext $blockContext,
+        BlockContext|CompilerContextInterface $context,
     ): void {
         if (isset($directiveOptions['language'])) {
             $codeNode->setLanguage(trim((string) $directiveOptions['language']->getValue()));
         }
 
         $this->setStartingLineNumberBasedOnOptions($directiveOptions, $codeNode);
-        $this->setCaptionBasedOnOptions($directiveOptions, $codeNode, $blockContext);
-        $this->setEmphasizeLinesBasedOnOptions($directiveOptions, $codeNode, $blockContext);
+        $this->setCaptionBasedOnOptions($directiveOptions, $codeNode, $context);
+        $this->setEmphasizeLinesBasedOnOptions($directiveOptions, $codeNode, $context);
 
         $this->setStartingLineNumberBasedOnOptions($directiveOptions, $codeNode);
     }
@@ -67,19 +68,25 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
     private function setCaptionBasedOnOptions(
         array $options,
         CodeNode $node,
-        BlockContext $blockContext,
+        BlockContext|CompilerContextInterface $context,
     ): void {
         $caption = null;
         if (isset($options['caption'])) {
-            $caption = $this->inlineParser->parse(strval($options['caption']->getValue()), $blockContext);
+            $caption = $options['caption']->getNode();
+            if ($caption === null && $context instanceof BlockContext) {
+                $caption = $this->inlineParser->parse(strval($options['caption']->getValue()), $context);
+            }
         }
 
         $node->setCaption($caption);
     }
 
     /** @param DirectiveOption[] $options */
-    private function setEmphasizeLinesBasedOnOptions(array $options, CodeNode $node, BlockContext $blockContext): void
-    {
+    private function setEmphasizeLinesBasedOnOptions(
+        array $options,
+        CodeNode $node,
+        BlockContext|CompilerContextInterface $context,
+    ): void {
         $emphasizeLines = null;
         if (isset($options['emphasize-lines'])) {
             $emphasizeLines = (string) $options['emphasize-lines']->getValue();
@@ -88,7 +95,7 @@ final class DefaultCodeNodeOptionMapper implements CodeNodeOptionMapper
                 $this->reportViolation($this->logger, Violation::warning(
                     'rst.code-block.invalid-emphasize-lines',
                     sprintf('Invalid value for option emphasize-lines: "%s". Expected format: \'1-5, 7, 33\'', $emphasizeLines),
-                    $blockContext->getLoggerInformation(),
+                    $context->getLoggerInformation(),
                 ));
             }
         }
