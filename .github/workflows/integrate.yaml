@@ -14,7 +14,7 @@ env:
 jobs:
   code-coverage:
     name: "Code Coverage"
-    uses: "phpDocumentor/.github/.github/workflows/code-coverage.yml@v0.9"
+    uses: "phpDocumentor/.github/.github/workflows/code-coverage.yml@v0.10"
     with:
       php-version: "8.2"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
@@ -27,7 +27,7 @@ jobs:
         uses: "actions/checkout@v7"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+        uses: "shivammathur/setup-php@2.40.0"
         with:
           coverage: "none"
           extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
@@ -44,7 +44,7 @@ jobs:
 
   lint-root:
     name: "Lint root"
-    uses: "phpDocumentor/.github/.github/workflows/lint.yml@main"
+    uses: "phpDocumentor/.github/.github/workflows/lint.yml@v0.10"
     with:
       composer-options: "--no-check-publish --ansi"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
@@ -52,7 +52,7 @@ jobs:
 
   static-analysis:
     name: "Static analysis"
-    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.9"
+    uses: "phpDocumentor/.github/.github/workflows/static-analysis.yml@v0.10"
     with:
       php-version: "8.2"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
@@ -60,14 +60,14 @@ jobs:
 
   unit-tests:
     name: "Unit test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.9"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.10"
     with:
       composer-root-version: "1.x-dev"
       php-extensions: "none, ctype, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter, fileinfo, iconv, inotify"
 
   functional-tests:
     name: "Functional test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.9"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.10"
     needs: "unit-tests"
     with:
       test-suite: "functional"
@@ -76,7 +76,7 @@ jobs:
 
   integration-tests-without-character-split:
     name: "integration test"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.9"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.10"
     needs: "unit-tests"
     with:
       test-suite: "integration"
@@ -85,7 +85,7 @@ jobs:
 
   integration-tests:
     name: "integration test: disable character split"
-    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@main"
+    uses: "phpDocumentor/.github/.github/workflows/continuous-integration.yml@v0.10"
     needs: "unit-tests"
     with:
       test-suite: "integration"
