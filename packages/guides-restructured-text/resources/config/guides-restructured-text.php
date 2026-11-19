@@ -261,7 +261,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(TabsDirective::class)
         ->set(TitleDirective::class)
         ->set(ToctreeDirective::class)
-        ->bind('$startingRule', service(InlineMarkupRule::class))
+        ->bind('$startingRule', inline_service(SettingsManager::class))
         ->set(MenuDirective::class)
         ->set(TodoDirective::class)
         ->set(VersionAddedDirective::class)

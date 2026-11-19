@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use Doctrine\Deprecations\Deprecation;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\InlineCompoundNode;
 use phpDocumentor\Guides\Nodes\Menu\TocNode;
 use phpDocumentor\Guides\Nodes\Node;
-use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive as DirectiveAttribute;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
+use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 use phpDocumentor\Guides\RestructuredText\Toc\ToctreeBuilder;
 use phpDocumentor\Guides\Settings\ProjectSettings;
@@ -70,50 +74,56 @@ use phpDocumentor\Guides\Settings\SettingsManager;
  * :maxdepth:
  *     Synonym of :depth:, depth prevails if both are set.
  */
+#[DirectiveAttribute(name: 'toctree', rawContent: true)]
+#[Option(name: 'caption', type: OptionType::InlineMarkup)]
+#[Option(name: 'depth', type: OptionType::Integer)]
+#[Option(name: 'glob', type: OptionType::Boolean)]
+#[Option(name: 'globExclude')]
+#[Option(name: 'hidden', type: OptionType::Boolean)]
+#[Option(name: 'reversed', type: OptionType::Boolean)]
+#[Option(name: 'titlesonly', type: OptionType::Boolean)]
+#[Option(name: 'maxdepth', type: OptionType::Integer)]
 final class ToctreeDirective extends BaseDirective
 {
     private SettingsManager $settingsManager;
 
-    /** @param Rule<InlineCompoundNode> $startingRule */
+    /** @param Rule<InlineCompoundNode>|SettingsManager $startingRule */
     public function __construct(
         private readonly ToctreeBuilder $toctreeBuilder,
-        private readonly Rule $startingRule,
+        Rule|SettingsManager $startingRule,
         SettingsManager|null $settingsManager = null,
     ) {
-        // if for backward compatibility reasons no settings manager was passed, use the defaults
+        if ($startingRule instanceof Rule) {
+            Deprecation::trigger(
+                'phpdocumentor/guide-restructured-text',
+                'https://github.com/phpDocumentor/guides/issues/1373',
+                'Passing a Rule to ToctreeDirective is deprecated; pass a SettingsManager instead.',
+            );
+        } else {
+            $settingsManager ??= $startingRule;
+        }
+
         $this->settingsManager = $settingsManager ?? new SettingsManager(new ProjectSettings());
     }
 
-    public function getName(): string
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
     {
-        return 'toctree';
-    }
-
-    /** {@inheritDoc} */
-    public function process(
-        BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
-        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
+        $directive = $directiveNode->getDirective();
         $options = $directive->getOptions();
         $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
         $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
 
-        $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
-            $parserContext,
-            $blockContext->getDocumentIterator(),
-            $options,
-        );
+        $lines = new LinesIterator();
+        $lines->load($directiveNode->getRawContent(), true);
+        $toctreeFiles = $this->toctreeBuilder->buildToctreeEntriesFromLines($lines, $options);
 
-        $tocNode =  (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
-
-        if (isset($options['caption'])) {
-            $blockContextOfCaption = new BlockContext($blockContext->getDocumentParserContext(), (string) $options['caption']->getValue(), false, $blockContext->getLineOffset(0));
-            $inlineNode = $this->startingRule->apply($blockContextOfCaption);
-            $tocNode = $tocNode->withCaption($inlineNode);
+        $tocNode = (new TocNode($toctreeFiles))->withOptions($this->optionsToArray($options));
+        $caption = $this->readOption($directive, 'caption');
+        if ($caption instanceof InlineCompoundNode) {
+            $tocNode = $tocNode->withCaption($caption);
         }
 
-        if ($directive->getOptionBool('reversed')) {
+        if ($this->readOption($directive, 'reversed') === true) {
             $tocNode = $tocNode->withReversed(true);
         }
 
