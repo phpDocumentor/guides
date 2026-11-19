@@ -54,12 +54,12 @@ final class MenuDirective extends BaseDirective
         BlockContext $blockContext,
         Directive $directive,
     ): Node {
-        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $options = $directive->getOptions();
         $options['glob'] = new DirectiveOption('glob', true);
         $indexName = $this->settingsManager->getProjectSettings()->getIndexName();
         $options['globExclude'] ??= new DirectiveOption('globExclude', $indexName);
 
+        $parserContext = $blockContext->getDocumentParserContext()->getParser()->getParserContext();
         $toctreeFiles = $this->toctreeBuilder->buildToctreeEntries(
             $parserContext,
             $blockContext->getDocumentIterator(),

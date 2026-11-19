@@ -29,6 +29,7 @@ use function str_contains;
 
 use const FILTER_VALIDATE_URL;
 
+/** @internal This class is not part of the public API and should not be used by third-party code. */
 final class ToctreeBuilder
 {
     use EmbeddedReferenceParser;
@@ -40,6 +41,20 @@ final class ToctreeBuilder
      */
     public function buildToctreeEntries(
         ParserContext $parserContext,
+        LinesIterator $lines,
+        array $options,
+    ): array {
+        return $this->buildToctreeEntriesFromLines($lines, $options);
+    }
+
+    /**
+     * Builds entries from directive content already captured by the parser.
+     *
+     * @param mixed[] $options
+     *
+     * @return MenuEntryNode[]
+     */
+    public function buildToctreeEntriesFromLines(
         LinesIterator $lines,
         array $options,
     ): array {
