@@ -49,6 +49,6 @@ final class IncludeContentNodeTransformer implements ReverseNodeTransformer
     {
         // Include nodes must be expanded after section creation so nested included
         // sections are processed in the same context as their parent document.
-        return PHP_INT_MAX - 2;
+        return PHP_INT_MAX - 3;
     }
 }

@@ -30,16 +30,19 @@ final class Compiler
         SubNodeAccessorRegistry $attachedNodeRegistry = new SubNodeAccessorRegistry([]),
     ) {
         $this->passes = new SplPriorityQueue();
-        foreach ($passes as $pass) {
-            $this->passes->insert($pass, $pass->getPriority());
-        }
-
         $transformerPriorities = $nodeTransformerFactory->getPriorities();
         foreach ($transformerPriorities as $transformerPriority) {
             $this->passes->insert(
                 new TransformerPass(new DocumentNodeTraverser($nodeTransformerFactory, $transformerPriority, $attachedNodeRegistry), $transformerPriority),
                 $transformerPriority,
             );
+        }
+
+        // Explicit compiler passes run before transformer passes at the same
+        // priority, allowing a pass to prepare the document tree for its
+        // corresponding transformer.
+        foreach ($passes as $pass) {
+            $this->passes->insert($pass, $pass->getPriority());
         }
     }
 

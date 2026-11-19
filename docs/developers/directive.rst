@@ -106,3 +106,42 @@ With the rule enabled, PHPStan reports type mismatches when a directive uses an 
 is incompatible with its declared ``#[Option]`` type (for example passing a possibly-``null`` ``string|null``
 title to a method that requires a ``string``).
 
+Parser-aware directives
+=======================
+
+Most upgraded directives only need :php:class:`\phpDocumentor\Guides\RestructuredText\Directives\BaseDirective::createNode()`
+to create their node during compilation. A directive that must access parser state, source context, or the document
+origin while parsing can additionally implement
+:php:class:`\phpDocumentor\Guides\RestructuredText\Directives\ParserAwareDirective`:
+
+.. code-block:: php
+
+    use phpDocumentor\Guides\RestructuredText\Directives\ParserAwareDirective;
+    use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNodeData;
+
+    final class ExampleDirective extends BaseDirective implements ParserAwareDirective
+    {
+        public function parse(
+            BlockContext $blockContext,
+            Directive $directive,
+        ): DirectiveNodeData {
+            return new ExampleDirectiveData(/* parser-derived data */);
+        }
+    }
+
+The parser attaches the returned :php:class:`\phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNodeData` object to the
+intermediate :php:class:`\phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode`. The directive retrieves its typed
+data object in ``createNode()``:
+
+.. code-block:: php
+
+    $data = $directiveNode->getData(ExampleDirectiveData::class);
+
+    if ($data === null) {
+        throw new LogicException('Directive parser data is missing.');
+    }
+
+Parser-aware work belongs in ``parse()``. Compiler-only transformations belong in ``createNode()``. For example, a
+directive can read a source file and parse included reStructuredText in ``parse()``, then use the resulting typed data
+object to create the final node in ``createNode()``. Parser errors are reported while parsing; the compiler must not
+recreate a ``BlockContext``.

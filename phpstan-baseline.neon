@@ -253,22 +253,10 @@ parameters:
 			path: packages/guides-restructured-text/src/RestructuredText/Directives/GeneralDirective.php
 
 		-
-			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\IncludeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
-			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Directives/IncludeDirective.php
-
-		-
 			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\ListTableDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
 			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
 			count: 1
 			path: packages/guides-restructured-text/src/RestructuredText/Directives/ListTableDirective.php
-
-		-
-			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\LiteralincludeDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'
-			identifier: phpat.testConcreteDirectivesHaveTheDirectiveAttribute
-			count: 1
-			path: packages/guides-restructured-text/src/RestructuredText/Directives/LiteralincludeDirective.php
 
 		-
 			message: '#^phpDocumentor\\Guides\\RestructuredText\\Directives\\MenuDirective should apply the attribute phpDocumentor\\Guides\\RestructuredText\\Directives\\Attributes\\Directive$#'

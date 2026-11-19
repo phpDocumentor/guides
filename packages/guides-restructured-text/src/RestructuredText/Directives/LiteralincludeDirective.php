@@ -13,11 +13,18 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives;
 
+use LogicException;
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\Nodes\Node;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Directive;
+use phpDocumentor\Guides\RestructuredText\Directives\Attributes\Option;
 use phpDocumentor\Guides\RestructuredText\Directives\OptionMapper\CodeNodeOptionMapper;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNode;
+use phpDocumentor\Guides\RestructuredText\Nodes\DirectiveNodeData;
+use phpDocumentor\Guides\RestructuredText\Nodes\LiteralincludeDirectiveData;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
-use phpDocumentor\Guides\RestructuredText\Parser\Directive;
+use phpDocumentor\Guides\RestructuredText\Parser\Directive as ParserDirective;
 use phpDocumentor\Guides\Validation\ReportsViolations;
 use phpDocumentor\Guides\Validation\Violation;
 use phpDocumentor\Guides\Validation\ViolationReporter;
@@ -37,7 +44,17 @@ use function sprintf;
 use function str_contains;
 use function trim;
 
-final class LiteralincludeDirective extends BaseDirective
+#[Directive(name: 'literalinclude', valueType: DirectiveValueType::String)]
+#[Option(name: 'language')]
+#[Option(name: 'caption', type: OptionType::InlineMarkup)]
+#[Option(name: 'start-after')]
+#[Option(name: 'end-before')]
+#[Option(name: 'lines')]
+#[Option(name: 'emphasize-lines')]
+#[Option(name: 'linenos', type: OptionType::Boolean)]
+#[Option(name: 'lineno-start', type: OptionType::Integer)]
+#[Option(name: 'number-lines', type: OptionType::Integer)]
+final class LiteralincludeDirective extends BaseDirective implements ParserAwareDirective
 {
     use ReportsViolations;
 
@@ -50,16 +67,10 @@ final class LiteralincludeDirective extends BaseDirective
     ) {
     }
 
-    public function getName(): string
-    {
-        return 'literalinclude';
-    }
-
-    /** {@inheritDoc} */
-    public function processNode(
+    public function parse(
         BlockContext $blockContext,
-        Directive $directive,
-    ): Node {
+        ParserDirective $directive,
+    ): DirectiveNodeData {
         $parser = $blockContext->getDocumentParserContext()->getParser();
         $parserContext = $parser->getParserContext();
         $path = $parserContext->absoluteRelativePath($directive->getData());
@@ -77,10 +88,26 @@ final class LiteralincludeDirective extends BaseDirective
             throw new RuntimeException(sprintf('Could not load file from path %s', $path));
         }
 
-        $lines = $this->selectLines(explode("\n", $contents), $directive, $blockContext);
+        return new LiteralincludeDirectiveData($contents, $path);
+    }
+
+    public function createNode(DirectiveNode $directiveNode, CompilerContextInterface $compilerContext): Node
+    {
+        $data = $directiveNode->getData(LiteralincludeDirectiveData::class);
+        if ($data === null) {
+            throw new LogicException('Literalinclude directive parser data is missing.');
+        }
+
+        $lines = $this->selectLines(explode("\n", $data->contents), $directiveNode->getDirective(), $compilerContext);
 
         $codeNode = new CodeNode($lines);
-        $this->codeNodeOptionMapper->apply($codeNode, $directive->getOptions(), $blockContext);
+        $language = $this->readOption($directiveNode->getDirective(), 'language');
+
+        if ($language !== null) {
+            $codeNode->setLanguage($language);
+        }
+
+        $this->codeNodeOptionMapper->apply($codeNode, $directiveNode->getDirective()->getOptions(), $compilerContext);
 
         return $codeNode;
     }
@@ -96,20 +123,20 @@ final class LiteralincludeDirective extends BaseDirective
      *
      * @return string[]
      */
-    private function selectLines(array $lines, Directive $directive, BlockContext $blockContext): array
+    private function selectLines(array $lines, ParserDirective $directive, CompilerContextInterface $compilerContext): array
     {
         $start = 0;
         $end = count($lines);
 
         if ($directive->hasOption('start-after')) {
-            $marker = $this->optionValue($directive, 'start-after', $blockContext);
+            $marker = $this->optionValue($directive, 'start-after', $compilerContext);
             if ($marker === null) {
                 return [];
             }
 
             $lineNumber = $this->findMarker($lines, $marker, $start);
             if ($lineNumber === null) {
-                $this->warnMarkerNotFound($directive, 'start-after', $marker, $blockContext);
+                $this->warnMarkerNotFound($directive, 'start-after', $marker, $compilerContext);
 
                 return [];
             }
@@ -118,7 +145,7 @@ final class LiteralincludeDirective extends BaseDirective
         }
 
         if ($directive->hasOption('end-before')) {
-            $marker = $this->optionValue($directive, 'end-before', $blockContext);
+            $marker = $this->optionValue($directive, 'end-before', $compilerContext);
             if ($marker === null) {
                 return [];
             }
@@ -126,7 +153,7 @@ final class LiteralincludeDirective extends BaseDirective
             $lineNumber = $this->findMarker($lines, $marker, $start);
             if ($lineNumber === null) {
                 if ($this->findMarker($lines, $marker, 0) === null) {
-                    $this->warnMarkerNotFound($directive, 'end-before', $marker, $blockContext);
+                    $this->warnMarkerNotFound($directive, 'end-before', $marker, $compilerContext);
                 } else {
                     $this->reportViolation($this->logger, Violation::warning(
                         'rst.literalinclude.markers-out-of-order',
@@ -135,7 +162,7 @@ final class LiteralincludeDirective extends BaseDirective
                             $marker,
                             $directive->getData(),
                         ),
-                        $blockContext->getLoggerInformation(),
+                        $compilerContext->getLoggerInformation(),
                     ));
                 }
 
@@ -154,14 +181,14 @@ final class LiteralincludeDirective extends BaseDirective
                     'Directive "literalinclude": the region marked in "%s" is empty, nothing was included.',
                     $directive->getData(),
                 ),
-                $blockContext->getLoggerInformation(),
+                $compilerContext->getLoggerInformation(),
             ));
 
             return [];
         }
 
         if ($directive->hasOption('lines')) {
-            $selection = $this->selectLineRanges($selection, $directive, $blockContext);
+            $selection = $this->selectLineRanges($selection, $directive, $compilerContext);
         }
 
         return $selection;
@@ -177,9 +204,9 @@ final class LiteralincludeDirective extends BaseDirective
      *
      * @return string[]
      */
-    private function selectLineRanges(array $lines, Directive $directive, BlockContext $blockContext): array
+    private function selectLineRanges(array $lines, ParserDirective $directive, CompilerContextInterface $compilerContext): array
     {
-        $specification = $this->optionValue($directive, 'lines', $blockContext);
+        $specification = $this->optionValue($directive, 'lines', $compilerContext);
         if ($specification === null) {
             return [];
         }
@@ -191,7 +218,7 @@ final class LiteralincludeDirective extends BaseDirective
                     'Invalid value for option ":lines:" of directive "literalinclude": "%s". Expected format: \'1-5, 7, 33\'. Nothing was included.',
                     $specification,
                 ),
-                $blockContext->getLoggerInformation(),
+                $compilerContext->getLoggerInformation(),
             ));
 
             return [];
@@ -210,7 +237,7 @@ final class LiteralincludeDirective extends BaseDirective
                         $range,
                         $directive->getData(),
                     ),
-                    $blockContext->getLoggerInformation(),
+                    $compilerContext->getLoggerInformation(),
                 ));
 
                 continue;
@@ -252,14 +279,14 @@ final class LiteralincludeDirective extends BaseDirective
     }
 
     /** Returns the text of an option, or null if the option was used without a usable value. */
-    private function optionValue(Directive $directive, string $option, BlockContext $blockContext): string|null
+    private function optionValue(ParserDirective $directive, string $option, CompilerContextInterface $compilerContext): string|null
     {
         $value = $directive->getOption($option)->getValue();
         if (!is_string($value) || $value === '') {
             $this->reportViolation($this->logger, Violation::warning(
                 'rst.literalinclude.missing-option-value',
                 sprintf('Option ":%s:" of directive "literalinclude" requires a value, nothing was included.', $option),
-                $blockContext->getLoggerInformation(),
+                $compilerContext->getLoggerInformation(),
             ));
 
             return null;
@@ -286,10 +313,10 @@ final class LiteralincludeDirective extends BaseDirective
     }
 
     private function warnMarkerNotFound(
-        Directive $directive,
+        ParserDirective $directive,
         string $option,
         string $marker,
-        BlockContext $blockContext,
+        CompilerContextInterface $compilerContext,
     ): void {
         $this->reportViolation($this->logger, Violation::warning(
             'rst.literalinclude.marker-not-found',
@@ -299,7 +326,7 @@ final class LiteralincludeDirective extends BaseDirective
                 $marker,
                 $directive->getData(),
             ),
-            $blockContext->getLoggerInformation(),
+            $compilerContext->getLoggerInformation(),
         ));
     }
 }

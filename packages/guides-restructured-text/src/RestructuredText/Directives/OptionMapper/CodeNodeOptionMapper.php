@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace phpDocumentor\Guides\RestructuredText\Directives\OptionMapper;
 
+use phpDocumentor\Guides\Compiler\CompilerContextInterface;
 use phpDocumentor\Guides\Nodes\CodeNode;
 use phpDocumentor\Guides\RestructuredText\Parser\BlockContext;
 use phpDocumentor\Guides\RestructuredText\Parser\DirectiveOption;
@@ -27,6 +28,6 @@ interface CodeNodeOptionMapper
     public function apply(
         CodeNode $codeNode,
         array $directiveOptions,
-        BlockContext $blockContext,
+        BlockContext|CompilerContextInterface $context,
     ): void;
 }
