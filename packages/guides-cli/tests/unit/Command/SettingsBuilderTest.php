@@ -115,7 +115,7 @@ final class SettingsBuilderTest extends TestCase
         self::assertTrue($this->inputDefinition->hasOption('input-format'));
         $option = $this->inputDefinition->getOption('input-format');
         self::assertTrue($option->isValueRequired());
-        self::assertSame('Format of the input can be "RST", or "Markdown"', $option->getDescription());
+        self::assertSame('Input format as file extension: "rst", "md", or a list such as "rst,md"', $option->getDescription());
     }
 
     public function testConfigureCommandAddsOutputFormatOption(): void

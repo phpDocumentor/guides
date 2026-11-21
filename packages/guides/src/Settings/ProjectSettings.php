@@ -16,6 +16,13 @@ namespace phpDocumentor\Guides\Settings;
 use phpDocumentor\FileSystem\Finder\Exclude;
 use Psr\Log\LogLevel;
 
+use function array_filter;
+use function array_map;
+use function array_unique;
+use function array_values;
+use function explode;
+use function trim;
+
 final class ProjectSettings
 {
     /** @var array<string, string> */
@@ -115,14 +122,37 @@ final class ProjectSettings
         $this->output = $output;
     }
 
+    /** The first configured input format; see {@see self::getInputFormats()}. */
     public function getInputFormat(): string
     {
-        return $this->inputFormat;
+        return $this->getInputFormats()[0];
     }
 
+    /** @return non-empty-list<string> */
+    public function getInputFormats(): array
+    {
+        return self::splitInputFormats($this->inputFormat);
+    }
+
+    /** One file extension, or a comma-separated list such as "rst,md". */
     public function setInputFormat(string $inputFormat): void
     {
         $this->inputFormat = $inputFormat;
+    }
+
+    /**
+     * @internal
+     *
+     * @return non-empty-list<string>
+     */
+    public static function splitInputFormats(string $inputFormat): array
+    {
+        $formats = array_values(array_unique(array_filter(
+            array_map(trim(...), explode(',', $inputFormat)),
+            static fn (string $format): bool => $format !== '',
+        )));
+
+        return $formats === [] ? [$inputFormat] : $formats;
     }
 
     public function getLogPath(): string

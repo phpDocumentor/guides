@@ -27,11 +27,15 @@ use phpDocumentor\FileSystem\Finder\SpecificationFactory;
 use phpDocumentor\FileSystem\Finder\SpecificationFactoryInterface;
 use phpDocumentor\FileSystem\Path;
 use phpDocumentor\FileSystem\StorageAttributes;
+use RuntimeException;
 
+use function pathinfo;
 use function sprintf;
 use function strlen;
 use function substr;
 use function trim;
+
+use const PATHINFO_EXTENSION;
 
 final class FileCollector
 {
@@ -51,10 +55,14 @@ final class FileCollector
      * objects, and avoids adding files to the parse queue that have
      * not changed and whose direct dependencies have not changed.
      *
+     * @param string|list<string> $extension
      * @param SpecificationInterface|Exclude|null $excludedSpecification specification that is used to exclude specific files/directories.
      *                                                                   Passing a {@see SpecificationInterface} is deprecated, use {@see Exclude} instead.
+     *
+     * @throws RuntimeException when two files with different extensions name the same document, such as "page.rst"
+     *                          and "page.md".
      */
-    public function collect(FilesystemInterface|FileSystem $filesystem, string $directory, string $extension, SpecificationInterface|Exclude|null $excludedSpecification = null): Files
+    public function collect(FilesystemInterface|FileSystem $filesystem, string $directory, string|array $extension, SpecificationInterface|Exclude|null $excludedSpecification = null): Files
     {
         if ($excludedSpecification instanceof SpecificationInterface) {
             Deprecation::triggerIfCalledFromOutside(
@@ -67,14 +75,16 @@ final class FileCollector
             );
         }
 
+        $extensions = (array) $extension;
         $directory = trim($directory, '/');
-        $specification = $this->getSpecification($excludedSpecification, $directory, $extension);
+        $specification = $this->getSpecification($excludedSpecification, $directory, $extensions);
 
         /** @var array<StorageAttributes> $files */
         $files = $filesystem->find($specification);
 
         // completely populate the splFileInfos property
         $this->fileInfos = [];
+        $fileExtensions = [];
         foreach ($files as $fileInfo) {
             $dirname = $fileInfo['dirname'];
 
@@ -84,8 +94,19 @@ final class FileCollector
             }
 
             $documentPath = $this->getFilenameFromFile($fileInfo['filename'], $dirname);
+            $fileExtension = pathinfo($fileInfo['basename'], PATHINFO_EXTENSION);
+
+            if (isset($fileExtensions[$documentPath]) && $fileExtensions[$documentPath] !== $fileExtension) {
+                throw new RuntimeException(sprintf(
+                    'The files "%1$s.%2$s" and "%1$s.%3$s" are both the document "%1$s". Rename or exclude one of them.',
+                    $documentPath,
+                    $fileExtensions[$documentPath],
+                    $fileExtension,
+                ));
+            }
 
             $this->fileInfos[$documentPath] = $fileInfo;
+            $fileExtensions[$documentPath] = $fileExtension;
         }
 
         $parseQueue = new Files();
@@ -94,7 +115,7 @@ final class FileCollector
                 continue;
             }
 
-            $parseQueue->add((string) $filename);
+            $parseQueue->add((string) $filename, $fileExtensions[$filename]);
         }
 
         return $parseQueue;
@@ -121,17 +142,18 @@ final class FileCollector
         return $directory . $filename;
     }
 
-    private function getSpecification(Exclude|SpecificationInterface|null $excludedSpecification, string $directory, string $extension): SpecificationInterface
+    /** @param list<string> $extensions */
+    private function getSpecification(Exclude|SpecificationInterface|null $excludedSpecification, string $directory, array $extensions): SpecificationInterface
     {
         if ($excludedSpecification instanceof Exclude) {
             if ($directory === '') {
                 $directory = new Path('./');
             }
 
-            return $this->specificationFactory->create([$directory], $excludedSpecification, [$extension]);
+            return $this->specificationFactory->create([$directory], $excludedSpecification, $extensions);
         }
 
-        $specification = new AndSpecification(new InPath(new \Flyfinder\Path($directory)), new HasExtension([$extension]));
+        $specification = new AndSpecification(new InPath(new \Flyfinder\Path($directory)), new HasExtension($extensions));
         if ($excludedSpecification) {
             $specification = new AndSpecification($specification, new NotSpecification($excludedSpecification));
         }

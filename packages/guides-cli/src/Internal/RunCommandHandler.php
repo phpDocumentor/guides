@@ -19,6 +19,7 @@ use Flyfinder\Specification\NotSpecification;
 use Flyfinder\Specification\OrSpecification;
 use Flyfinder\Specification\SpecificationInterface;
 use League\Tactician\CommandBus;
+use phpDocumentor\FileSystem\FileSystem;
 use phpDocumentor\FileSystem\Finder\Exclude;
 use phpDocumentor\FileSystem\FlySystemAdapter;
 use phpDocumentor\Guides\Compiler\CompilerContext;
@@ -37,6 +38,7 @@ use function array_map;
 use function array_reduce;
 use function array_shift;
 use function assert;
+use function implode;
 use function method_exists;
 
 class RunCommandHandler
@@ -61,7 +63,7 @@ class RunCommandHandler
                 new ParseDirectoryCommand(
                     $sourceFileSystem,
                     '',
-                    $settings->getInputFormat(),
+                    implode(',', $settings->getInputFormats()),
                     $projectNode,
                     $this->getExclude($settings, $command->input),
                 ),
@@ -72,7 +74,7 @@ class RunCommandHandler
                     $sourceFileSystem,
                     '',
                     $settings->getInputFile(),
-                    $settings->getInputFormat(),
+                    $this->getInputFileFormat($sourceFileSystem, $settings),
                     1,
                     $projectNode,
                     true,
@@ -105,6 +107,20 @@ class RunCommandHandler
         }
 
         return $documents;
+    }
+
+    /**
+     * With several input formats, the format of the input file is the first one a file exists for.
+     */
+    private function getInputFileFormat(FileSystem $sourceFileSystem, ProjectSettings $settings): string
+    {
+        foreach ($settings->getInputFormats() as $inputFormat) {
+            if ($sourceFileSystem->has($settings->getInputFile() . '.' . $inputFormat)) {
+                return $inputFormat;
+            }
+        }
+
+        return $settings->getInputFormat();
     }
 
     private function getExclude(ProjectSettings $settings, InputInterface|null $input = null): Exclude|SpecificationInterface|null

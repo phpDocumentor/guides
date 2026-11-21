@@ -31,13 +31,29 @@ final class Files implements IteratorAggregate, Countable
     /** @var string[] */
     private array $files = [];
 
-    public function add(string $filename): void
+    /** @var array<string, string> */
+    private array $extensions = [];
+
+    public function add(string $filename, string|null $extension = null): void
     {
         if (array_key_exists($filename, $this->files)) {
             return;
         }
 
         $this->files[$filename] = $filename;
+        if ($extension === null) {
+            return;
+        }
+
+        $this->extensions[$filename] = $extension;
+    }
+
+    /**
+     * The extension of the file the document was found in, or null when it was added without one.
+     */
+    public function getExtension(string $filename): string|null
+    {
+        return $this->extensions[$filename] ?? null;
     }
 
     /** @return Iterator<string> */
